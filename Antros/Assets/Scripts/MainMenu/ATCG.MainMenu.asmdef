@@ -1,0 +1,26 @@
+{
+    "name": "ATCG.MainMenu",
+    "rootNamespace": "ATCG.MainMenu",
+    "references": [
+        "GUID:609e78acfb7c5644c95699b15a2d8cf6",
+        "GUID:96c0b87a195bf3041a9ef494c47583fb",
+        "GUID:84d913bfb1fad4747bcfe6c2f30600f7",
+        "GUID:218d83f778a79c74791573f907cb34c7",
+        "GUID:1a67d8fe58b2eca48aa7ff289303663b",
+        "GUID:7f6fdd18b438ff245b7f869ddfb77b44",
+        "GUID:c08e6420a9402a248878197da69c4d9a",
+        "GUID:80ecb87cae9c44d19824e70ea7229748",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:37e17ffe38d86ae48bc3207e83ffef88"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

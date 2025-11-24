@@ -1,0 +1,26 @@
+{
+    "name": "ATCG.Core",
+    "rootNamespace": "ATCG",
+    "references": [
+        "Helteix.Tools",
+        "Helteix.Cards.Core",
+        "Helteix.Singletons.Runtime",
+        "Unity.TextMeshPro",
+        "Unity.Collections",
+        "Unity.Networking.Transport",
+        "Unity.Services.Core",
+        "Unity.Services.Authentication",
+        "Unity.Services.Multiplayer",
+        "PrimeTween.Runtime",
+        "Eflatun.SceneReference"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
