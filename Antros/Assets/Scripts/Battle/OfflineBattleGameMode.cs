@@ -1,5 +1,6 @@
 using ATCG.Battle.Metrics;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Metrics;
 using Eflatun.SceneReference;
 using Helteix.Tools;
@@ -27,7 +28,7 @@ namespace ATCG.Battle
             Display[] displays = Display.displays;
             for (int i = 0; i < Players.Length; i++)
             {
-                if (Players[i] is LocalBattlePlayer)
+                if (Players[i] is LocalBattlePlayer localBattlePlayer)
                 {
                     if (displays.Length > displayIndex)
                     {
@@ -35,6 +36,7 @@ namespace ATCG.Battle
                         if(!display.active)
                             display.Activate();
 
+                        localBattlePlayer.SetDisplay(displayIndex);
                         displayIndex++;
                     }
                     else

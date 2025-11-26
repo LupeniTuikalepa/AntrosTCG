@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: GameplayMetrics
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Metrics.GameplayMetrics
   <MaxMana>k__BackingField: 10
+  <MaxHealth>k__BackingField: 350
   <RecoveredManaOnTurnStart>k__BackingField: 2
   <PlayerHandSize>k__BackingField: 6
   <PlayerDeployedHeroCount>k__BackingField: 5
-  <LocalPlayerPrefab>k__BackingField: {fileID: 0}
+  <GridRadius>k__BackingField: 7
+  <CellRadius>k__BackingField: 5
   <HeroMovementDuration>k__BackingField: 0.2
   <HoveredLayerMaskName>k__BackingField: 

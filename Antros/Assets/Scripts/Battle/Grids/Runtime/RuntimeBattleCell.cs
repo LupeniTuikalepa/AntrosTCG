@@ -1,49 +1,63 @@
 ﻿using System;
-using ATCG.Battle.Cards;
 using ATCG.Battle.Metrics;
 using ATCG.Battle.Players;
-using Helteix.Cards.UI.Physical.Drag;
-using PrimeTween;
+using ATCG.HexGrids;
+using Helteix.Tools.Phases;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.HexGrids.Runtime
 {
     public partial class RuntimeBattleCell : MonoBehaviour
     {
-
-        private static uint OutlineRenderingLayerMask =>
-            RenderingLayerMask.GetMask(GameplayMetrics.Current.HoveredLayerMaskName);
+        private static uint OutlineRenderingLayerMask => RenderingLayerMask.GetMask(GameplayMetrics.Current.HoveredLayerMaskName);
 
         [SerializeField]
         private MeshRenderer meshRenderer;
 
-        public BattleCell Cell { get; private set; }
-        public RuntimeBattleGrid BattleGrid { get; private set; }
+        public BattleCell BattleCell { get; private set; }
+        public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
 
+        public HexCoordinates Coordinates => BattleCell.cell.coordinates;
 
         private void Awake()
         {
             meshRenderer = GetComponent<MeshRenderer>();
         }
 
+        private void OnEnable()
+        {
+            dragCardPhase = ListPool<PlayerDragBattleCardPhase>.Get();
+
+            this.Register();
+        }
+
+        private void OnDisable()
+        {
+            ListPool<PlayerDragBattleCardPhase>.Release(dragCardPhase);
+
+            this.Unregister();
+        }
+
+
         private void SetGrid(RuntimeBattleGrid grid)
         {
-            BattleGrid = grid;
+            RuntimeBattleGrid = grid;
         }
 
         public void Connect(BattleGameMode currentGameMode, BattleCell battleCell)
         {
-            if (Cell != null)
+            if (BattleCell != null)
                 Disconnect(currentGameMode, battleCell);
-            Cell = battleCell;
+            BattleCell = battleCell;
         }
 
         public void Disconnect(BattleGameMode currentGameMode, BattleCell battleCell)
         {
-            if (Cell != battleCell)
+            if (BattleCell != battleCell)
                 return;
 
-            Cell = null;
+            BattleCell = null;
         }
     }
 }

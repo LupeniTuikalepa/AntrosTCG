@@ -14,5 +14,6 @@ namespace ATCG.Battle.HexGrids
         }
 
 
+        public bool CanBeDeployedOn() => true;
     }
 }

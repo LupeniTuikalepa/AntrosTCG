@@ -10,28 +10,22 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.HexGrids.Runtime
 {
     [RequireComponent(typeof(RuntimeHexGrid))]
-    [RequireComponent(typeof(DeployCardPhaseListener))]
-    [RequireComponent(typeof(PlayerTurnPhaseListener))]
     public class RuntimeBattleGrid : MonoBehaviour, IPhaseListener<BattleGameMode>
     {
         [SerializeField]
         private RuntimeHexGrid runtimeHexGrid;
 
+
+        public BattleGrid BattleGrid => CurrentGameMode?.BattleGrid;
+
         public BattleGameMode CurrentGameMode { get; private set; }
 
         private Dictionary<HexCell, RuntimeBattleCell> battleCells;
-
-        private DeployCardPhaseListener deployCardPhaseListener;
-
-        public bool IsInDeployPhase => deployCardPhaseListener != null;
-
-        private List<DeployCardPhase> deployCardPhases = new List<DeployCardPhase>();
 
 
         private void Reset()
         {
             runtimeHexGrid = GetComponent<RuntimeHexGrid>();
-            deployCardPhaseListener = GetComponent<DeployCardPhaseListener>();
         }
 
         private void OnEnable()
@@ -50,27 +44,26 @@ namespace ATCG.Battle.HexGrids.Runtime
 
         void IPhaseListener<BattleGameMode>.OnPhaseBegin(BattleGameMode phase)
         {
-            currentGameMode = phase;
-            runtimeHexGrid.Connect(currentGameMode.HexGrid);
+            CurrentGameMode = phase;
+            runtimeHexGrid.Connect(CurrentGameMode.HexGrid);
         }
 
         void IPhaseListener<BattleGameMode>.OnPhaseEnd(BattleGameMode phase)
         {
-            if (currentGameMode == phase)
+            if (CurrentGameMode == phase)
             {
-                currentGameMode = null;
+                CurrentGameMode = null;
                 runtimeHexGrid.Disconnect();
             }
         }
-
 
         private void OnCellAdded(RuntimeHexCell runtimeCell)
         {
             RuntimeBattleCell runtimeBattleCell = runtimeCell.gameObject.AddComponent<RuntimeBattleCell>();
 
-            if (currentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
+            if (CurrentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
             {
-                runtimeBattleCell.Connect(currentGameMode, battleCell);
+                runtimeBattleCell.Connect(CurrentGameMode, battleCell);
                 battleCells.Add(runtimeCell.Cell, runtimeBattleCell);
             }
         }
@@ -79,8 +72,8 @@ namespace ATCG.Battle.HexGrids.Runtime
         {
             if (battleCells.Remove(runtimeCell.Cell, out RuntimeBattleCell cell))
             {
-                if (currentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
-                    cell.Disconnect(currentGameMode, battleCell);
+                if (CurrentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
+                    cell.Disconnect(CurrentGameMode, battleCell);
 
                 Destroy(cell);
             }

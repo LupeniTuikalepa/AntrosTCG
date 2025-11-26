@@ -12,7 +12,6 @@ namespace ATCG.Battle.Metrics
         [field: SerializeField, BoxGroup("Game")]
         public int MaxHealth { get; private set; } = 200;
 
-
         [field: SerializeField, BoxGroup("Game"), PropertyRange(0, nameof(MaxMana))]
         public int RecoveredManaOnTurnStart { get; private set; } = 2;
         [field: SerializeField, BoxGroup("Game"), PropertyRange(0, nameof(MaxMana))]
@@ -26,12 +25,11 @@ namespace ATCG.Battle.Metrics
 
         [field: SerializeField, BoxGroup("Grid"), Range(0, 50)]
         public uint CellRadius { get; private set; } = 5;
-        
+
         [field: SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         public float HeroMovementDuration { get; private set; } = .2f;
 
         [field: SerializeField, BoxGroup("FX")]
         public string HoveredLayerMaskName { get; private set; }
-
     }
 }

@@ -1,43 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Metrics;
 using ATCG.Battle.Players;
+using ATCG.HexGrids;
 using Helteix.Cards.UI.Physical.Drag;
+using Helteix.Tools.Phases;
 using PrimeTween;
 using UnityEngine;
 
 namespace ATCG.Battle.HexGrids.Runtime
 {
-    public partial class RuntimeBattleCell : ICardDropTarget<IBattleCard>
+    public partial class RuntimeBattleCell : ICardDropTarget<IBattleCard>,
+        IPhaseListener<PlayerDragBattleCardPhase>
     {
+        #region Phases
+
+        private List<PlayerDragBattleCardPhase> dragCardPhase;
+
+        void IPhaseListener<PlayerDragBattleCardPhase>.OnPhaseBegin(PlayerDragBattleCardPhase phase)
+        {
+            dragCardPhase.Add(phase);
+        }
+
+        void IPhaseListener<PlayerDragBattleCardPhase>.OnPhaseEnd(PlayerDragBattleCardPhase phase)
+        {
+            dragCardPhase.Remove(phase);
+        }
+
+        #endregion
+
+        #region Drag and drop
+
         int ICardDropTarget<IBattleCard>.Priority => 1;
 
         bool ICardDropTarget<IBattleCard>.Accepts(IBattleCard cardUICurrent)
         {
-            if (BattleGrid.IsInDeployPhase)
+            return true;
+        }
+
+        void ICardDropTarget<IBattleCard>.OnCardEnter(IBattleCard card)
+        {
+
+        }
+
+        void ICardDropTarget<IBattleCard>.OnCardExit(IBattleCard card)
+        {
+
+        }
+
+        void ICardDropTarget<IBattleCard>.OnCardDrop(IBattleCard card)
+        {
+            foreach (PlayerDragBattleCardPhase phase in dragCardPhase)
             {
-                
+                if (phase.card == card && phase.IsCoordValid(Coordinates))
+                    phase.SetResult(BattleCell);
             }
         }
 
-        void ICardDropTarget<IBattleCard>.OnCardEnter(IBattleCard cardUI)
+        void ICardDropTarget<IBattleCard>.OnCardHover(IBattleCard card)
         {
 
         }
 
-        void ICardDropTarget<IBattleCard>.OnCardExit(IBattleCard cardUI)
-        {
+        #endregion
 
-        }
-
-        void ICardDropTarget<IBattleCard>.OnCardDrop(IBattleCard cardUI)
-        {
-
-        }
-
-        void ICardDropTarget<IBattleCard>.OnCardHover(IBattleCard cardUICurrent)
-        {
-
-        }
     }
 }

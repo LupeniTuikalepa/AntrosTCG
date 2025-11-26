@@ -18,9 +18,8 @@ namespace ATCG.GameModes
         public T Result { get; private set; }
 
         Awaitable<T> IPhase<T>.Execute(CancellationToken token) => Execute(token);
-        Awaitable IBasePhase.Initialize(CancellationToken token) => Initialize();
-        Awaitable IBasePhase.Dispose(CancellationToken token) => Dispose();
-
+        Awaitable IPhase<T>.Initialize(CancellationToken token) => Initialize();
+        Awaitable IPhase<T>.Dispose(CancellationToken token) => Dispose();
 
         protected abstract Awaitable Initialize();
         protected abstract Awaitable<T> Execute(CancellationToken token);

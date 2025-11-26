@@ -54,18 +54,6 @@ namespace ATCG.Battle.HexGrids
             }
         }
 
-        public void DeployCard(IBattleCard card, HexCoordinates coordinates)
-        {
-            if (CanDeploy(coordinates) && cards.TryAddCard(card))
-            {
-                cardCoordinates.Add(card, coordinates);
-                card.Deploy(this, coordinates);
-                if(Grid.TryGetCell(coordinates, out HexCell cell))
-                    cell.SetMember(card);
-
-                OnBattleCardDeployed?.Invoke(card);
-            }
-        }
 
         public void RemoveCard(IBattleCard card)
         {
@@ -78,6 +66,20 @@ namespace ATCG.Battle.HexGrids
                 OnBattleCardLeft?.Invoke(card);
             }
         }
+
+        public void DeployCard(IBattleCard card, HexCoordinates coordinates)
+        {
+            if (CanDeploy(coordinates) && cards.TryAddCard(card))
+            {
+                cardCoordinates.Add(card, coordinates);
+                card.Deploy(this, coordinates);
+                if(Grid.TryGetCell(coordinates, out HexCell cell))
+                    cell.SetMember(card);
+
+                OnBattleCardDeployed?.Invoke(card);
+            }
+        }
+        
         public bool MoveCardTo(IBattleCard card, HexCoordinates destination)
         {
             if (!cardCoordinates.TryGetValue(card, out HexCoordinates lastCoordinates))
@@ -86,14 +88,21 @@ namespace ATCG.Battle.HexGrids
             if (lastCoordinates == destination)
                 return false;
 
-            if (HasMember(destination))
-                return false;
-
             cardCoordinates[card] = destination;
             card.OnCardMoved(lastCoordinates, destination);
             return true;
         }
 
+        public IEnumerable<BattleCell> GetCells(Func<BattleCell, bool> filter)
+        {
+            foreach (var cell in GetCells())
+            {
+                if(filter(cell))
+                    yield return cell;
+            }
+        }
+
+        public IEnumerable<BattleCell> GetCells() => battleCells.Values;
         public bool TryGetBattleCell(HexCell hexCell, out BattleCell cell) =>
             battleCells.TryGetValue(hexCell, out cell);
 
@@ -112,15 +121,20 @@ namespace ATCG.Battle.HexGrids
         public bool TryGetCardCoordinates(IBattleCard battleCard, out HexCoordinates coordinates) =>
             cardCoordinates.TryGetValue(battleCard, out coordinates);
 
-
-
         public IEnumerable<IHexMember> GetAllMembers()
             => Grid.GetMembers();
 
         public bool TryGetMembers(HexCoordinates coord, out IHexMember member)
             => Grid.TryGetHexMember(coord, out member);
 
-        public bool CanDeploy(HexCoordinates coordinates) => Grid.HasMember(coordinates);
+        public bool CanDeploy(HexCoordinates coordinates)
+        {
+            if (!TryGetBattleCell(coordinates, out BattleCell cell))
+                return false;
+
+            return cell.CanBeDeployedOn();
+        }
+
         public bool HasMember(HexCoordinates coordinates) => Grid.HasMember(coordinates);
 
         void IDisposable.Dispose()
