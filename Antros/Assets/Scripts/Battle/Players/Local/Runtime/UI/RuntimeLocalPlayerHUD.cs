@@ -9,7 +9,7 @@ namespace ATCG.Battle.Players.Local.Runtime.UI
 
         private IRuntimeLocalPlayerHUDElement[] elements;
 
-        private void Start()
+        protected override void Awake()
         {
             elements = GetComponentsInChildren<IRuntimeLocalPlayerHUDElement>();
             for (int i = 0; i < elements.Length; i++)
@@ -18,7 +18,6 @@ namespace ATCG.Battle.Players.Local.Runtime.UI
 
         public override void Connect(IBattlePlayer player)
         {
-            Canvas.targetDisplay = Player.Display;
             for (int i = 0; i < elements.Length; i++)
                 elements[i].Disconnect(Player);
         }

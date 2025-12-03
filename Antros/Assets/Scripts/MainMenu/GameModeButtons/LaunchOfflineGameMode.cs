@@ -1,45 +1,61 @@
-﻿using System.Linq;
+﻿
+using System.Linq;
 using ATCG.Battle;
 using ATCG.Battle.Players;
 using ATCG.Cards;
+using ATCG.Databases;
+using ATCG.Metrics;
 using ATCG.Players;
+using ATCG.Players.InputAssigning;
 using Helteix.Tools;
+using Helteix.Tools.Phases;
 using UnityEngine;
 
 namespace ATCG.MainMenu.MainMenu.GameModeButtons
 {
     public class LaunchOfflineGameMode : LaunchGameMode<OfflineBattleGameMode, BattleGameModeResults>
     {
-        [SerializeField]
-        private GameCardData[] cards;
         protected override async Awaitable<OfflineBattleGameMode> GetGameMode()
         {
             await Awaitables.CompletedAwaitable;
-            string[] deck = cards
-                .Select(ctx => ctx.ID.ToString())
-                .ToArray();
-
             int seed = Random.Range(int.MinValue, int.MaxValue);
-            return new OfflineBattleGameMode(seed,
-                new BattlePlayerProfile()
-                {
-                    id = 0,
-                    playerDeck = deck,
-                    playerProfile = new PlayerProfile()
-                    {
-                        name = "Player 1"
-                    }
-                },
-                new BattlePlayerProfile()
-                {
-                    id = 1,
-                    playerDeck = deck,
-                    playerProfile = new PlayerProfile()
-                    {
-                        name = "Player 2"
-                    }
-                });
 
+            PlayerProfile[] players = new PlayerProfile[]
+            {
+                new PlayerProfile()
+                {
+                    name = "Player 1"
+                },
+                new PlayerProfile()
+                {
+                    name = "Player 2"
+                }
+            };
+                string[] allCards =
+                    GameController.GameDatabase.GetAll<GameCardData>()
+                        .Select(ctx => ctx.ID.ToString())
+                        .ToArray();
+
+                //PlayerInputPairing[] pairings = result.result;
+                LocalPlayerProfile[] localPlayerProfiles = new LocalPlayerProfile[players.Length];
+                for (int i = 0; i < players.Length; i++)
+                {
+                    localPlayerProfiles[i] = new LocalPlayerProfile()
+                    {
+                        ID = i,
+                        Profile = players[i],
+                        Deck = new PlayerDeck()
+                        {
+                            cards = allCards,
+                        },
+                    };
+                }
+                return new OfflineBattleGameMode(seed, localPlayerProfiles);
+                /*
+            }
+            */
+
+            return null;
         }
     }
 }

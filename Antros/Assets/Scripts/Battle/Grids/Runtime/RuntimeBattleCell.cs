@@ -2,7 +2,9 @@
 using ATCG.Battle.Metrics;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Runtime;
 using Helteix.Tools.Phases;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -11,19 +13,14 @@ namespace ATCG.Battle.HexGrids.Runtime
     public partial class RuntimeBattleCell : MonoBehaviour
     {
         private static uint OutlineRenderingLayerMask => RenderingLayerMask.GetMask(GameplayMetrics.Current.HoveredLayerMaskName);
-
-        [SerializeField]
-        private MeshRenderer meshRenderer;
-
         public BattleCell BattleCell { get; private set; }
         public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
-
+        public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
         public HexCoordinates Coordinates => BattleCell.cell.coordinates;
 
-        private void Awake()
-        {
-            meshRenderer = GetComponent<MeshRenderer>();
-        }
+        [field: SerializeField]
+        public SpriteRenderer SpriteRenderer { get; private set; }
+
 
         private void OnEnable()
         {
@@ -40,16 +37,20 @@ namespace ATCG.Battle.HexGrids.Runtime
         }
 
 
-        private void SetGrid(RuntimeBattleGrid grid)
-        {
-            RuntimeBattleGrid = grid;
-        }
-
-        public void Connect(BattleGameMode currentGameMode, BattleCell battleCell)
+        public void Connect(RuntimeBattleGrid grid, BattleGameMode currentGameMode, BattleCell battleCell)
         {
             if (BattleCell != null)
                 Disconnect(currentGameMode, battleCell);
+
+            RuntimeBattleGrid = grid;
             BattleCell = battleCell;
+
+            Vector3 targetScale = Vector3.one * RuntimeGrid.Current.OuterCellRadius * 1.8f;
+            var coordinates = battleCell.cell.coordinates;
+
+            float delay = coordinates.Length() * .08f;
+            Tween.Scale(transform, targetScale, new TweenSettings() { startDelay = delay, ease = Ease.OutElastic, duration = 1f});
+            transform.localScale = Vector3.zero;
         }
 
         public void Disconnect(BattleGameMode currentGameMode, BattleCell battleCell)

@@ -23,7 +23,7 @@ namespace ATCG.Battle.HexGrids
 
         private Dictionary<IBattleCard, HexCoordinates> cardCoordinates;
 
-        private Dictionary<HexCell, BattleCell> battleCells;
+        private readonly Dictionary<HexCell, BattleCell> battleCells;
 
         public BattleGrid(uint cellRadius, uint gridRadius)
         {
@@ -31,11 +31,11 @@ namespace ATCG.Battle.HexGrids
             Grid.OnCellAdded += CreateBattleCell;
             Grid.OnCellRemoved += DestroyBattleCell;
 
-            HexagonalShapeBuilder shapeBuilder = new HexagonalShapeBuilder(gridRadius);
-            shapeBuilder.Build(Grid);
-
             cardCoordinates = DictionaryPool<IBattleCard, HexCoordinates>.Get();
             battleCells = DictionaryPool<HexCell, BattleCell>.Get();
+
+            HexagonalShapeBuilder shapeBuilder = new HexagonalShapeBuilder(gridRadius);
+            shapeBuilder.Build(Grid);
         }
 
         private void CreateBattleCell(HexCell cell)
@@ -79,7 +79,7 @@ namespace ATCG.Battle.HexGrids
                 OnBattleCardDeployed?.Invoke(card);
             }
         }
-        
+
         public bool MoveCardTo(IBattleCard card, HexCoordinates destination)
         {
             if (!cardCoordinates.TryGetValue(card, out HexCoordinates lastCoordinates))

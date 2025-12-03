@@ -5,6 +5,7 @@
         "Helteix.Tools",
         "Helteix.Cards.Core",
         "Helteix.Singletons.Runtime",
+        "Unity.InputSystem",
         "Unity.TextMeshPro",
         "Unity.Collections",
         "Unity.Networking.Transport",

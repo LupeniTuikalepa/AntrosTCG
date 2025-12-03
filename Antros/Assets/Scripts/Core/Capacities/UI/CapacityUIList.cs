@@ -2,7 +2,7 @@
 
 namespace ATCG.Capacities.UI
 {
-    public class CapacityUIList : UIList<ICapacityDescriptions, CapacityUI>
+    public class CapacityUIList : UIList<CapacityData, CapacityUI>
     {
 
     }

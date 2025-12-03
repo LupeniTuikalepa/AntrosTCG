@@ -3,6 +3,7 @@ using Linework.Common.Utils;
 using Linework.Editor.Common.Utils;
 using Linework.SurfaceFill;
 using UnityEditor;
+using UnityEngine;
 
 namespace Linework.Editor.SurfaceFill
 {
@@ -14,7 +15,12 @@ namespace Linework.Editor.SurfaceFill
         private SerializedProperty renderQueue;
         private SerializedProperty materialType;
         private SerializedProperty customMaterial;
+        
+        // Occlusion.
         private SerializedProperty occlusion;
+        private SerializedProperty occludedBy;
+        private SerializedProperty occludersRenderingLayer;
+        
         private SerializedProperty blendMode;
         private SerializedProperty pattern;
         private SerializedProperty primaryColor;
@@ -40,7 +46,12 @@ namespace Linework.Editor.SurfaceFill
             renderQueue = serializedObject.FindProperty(nameof(Fill.renderQueue));
             materialType = serializedObject.FindProperty(nameof(Fill.materialType));
             customMaterial = serializedObject.FindProperty(nameof(Fill.customMaterial));
+            
+            // Occlusion.
             occlusion = serializedObject.FindProperty(nameof(Fill.occlusion));
+            occludersRenderingLayer = serializedObject.FindProperty(nameof(Fill.OccludersRenderingLayer));
+            occludedBy = serializedObject.FindProperty(nameof(Fill.occludedBy));
+            
             blendMode = serializedObject.FindProperty(nameof(Fill.blendMode));
             pattern = serializedObject.FindProperty(nameof(Fill.pattern));
             primaryColor = serializedObject.FindProperty(nameof(Fill.primaryColor));
@@ -69,22 +80,25 @@ namespace Linework.Editor.SurfaceFill
             EditorGUILayout.PropertyField(layerMask, EditorUtils.CommonStyles.LayerMask);
             EditorGUILayout.PropertyField(renderQueue, EditorUtils.CommonStyles.RenderQueue);
             EditorGUILayout.Space();
-            
+
             EditorGUILayout.LabelField("Render", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(occlusion, EditorUtils.CommonStyles.FillOcclusion);
+            // TODO: enable in future update (had some bugs still)
+            // if ((Occlusion) occlusion.intValue == Occlusion.WhenOccluded)
+            // {
+            //     EditorGUI.indentLevel++;
+            //     EditorGUILayout.BeginHorizontal();
+            //     EditorGUILayout.PropertyField(occludedBy, EditorUtils.CommonStyles.OccludedBy);
+            //     if (occludedBy.boolValue)
+            //     {
+            //         EditorGUILayout.PropertyField(occludersRenderingLayer, GUIContent.none);
+            //     }
+            //     EditorGUILayout.EndHorizontal();
+            //     EditorGUI.indentLevel--;
+            // }
             EditorGUILayout.PropertyField(blendMode, EditorUtils.CommonStyles.FillBlendMode);
             EditorGUILayout.PropertyField(vertexAnimation, EditorUtils.CommonStyles.VertexAnimation);
 
-            // TODO: enable in future update
-            // EditorGUILayout.PropertyField(alphaCutout, EditorUtils.CommonStyles.AlphaCutout);
-            // if (alphaCutout.boolValue)
-            // {
-            //     EditorGUI.indentLevel++;
-            //     EditorGUILayout.PropertyField(alphaCutoutTexture, EditorUtils.CommonStyles.AlphaCutoutTexture); 
-            //     EditorGUILayout.PropertyField(alphaCutoutThreshold, EditorUtils.CommonStyles.AlphaCutoutThreshold);
-            //     EditorGUI.indentLevel--;
-            // }
-            
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Fill", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(materialType, EditorUtils.CommonStyles.MaterialType);
@@ -102,10 +116,11 @@ namespace Linework.Editor.SurfaceFill
             }
             if ((MaterialType) materialType.intValue == MaterialType.Custom)
             {
-                EditorGUILayout.HelpBox("A custom fill material should use a Fullscreen Shader Graph shader with 'Allow Material Override' and 'Enable Stencil' enabled. Also set 'Blend Mode' to 'Custom'.", MessageType.Warning);
+                EditorGUILayout.HelpBox("A custom fill material should use a Fullscreen Shader Graph shader with 'Allow Material Override' and 'Enable Stencil' enabled. Also set 'Blend Mode' to 'Custom'.",
+                    MessageType.Warning);
             }
             EditorGUILayout.Space();
-            
+
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -147,6 +162,19 @@ namespace Linework.Editor.SurfaceFill
                     EditorGUI.indentLevel--;
                     break;
                 case Pattern.Stripes:
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(primaryColor, EditorUtils.CommonStyles.PrimaryFillColor);
+                    EditorGUILayout.PropertyField(secondaryColor, EditorUtils.CommonStyles.SecondaryFillColor);
+                    EditorGUILayout.PropertyField(frequency, EditorUtils.CommonStyles.Frequency);
+                    EditorGUILayout.PropertyField(density, EditorUtils.CommonStyles.Density);
+                    EditorGUILayout.PropertyField(rotation, EditorUtils.CommonStyles.Rotation);
+                    EditorGUI.indentLevel--;
+                    EditorGUILayout.LabelField("Movement");
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(speed, EditorUtils.CommonStyles.Speed);
+                    EditorGUI.indentLevel--;
+                    break;
+                case Pattern.Squares:
                     EditorGUI.indentLevel++;
                     EditorGUILayout.PropertyField(primaryColor, EditorUtils.CommonStyles.PrimaryFillColor);
                     EditorGUILayout.PropertyField(secondaryColor, EditorUtils.CommonStyles.SecondaryFillColor);

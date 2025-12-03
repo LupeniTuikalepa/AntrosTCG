@@ -20,6 +20,13 @@ namespace Linework.SurfaceFill
         public LayerMask layerMask = ~0;
         public OutlineRenderQueue renderQueue = OutlineRenderQueue.Opaque;
         public Occlusion occlusion = Occlusion.Always;
+        public bool occludedBy = false;
+#if UNITY_6000_0_OR_NEWER
+        public RenderingLayerMask OccludersRenderingLayer = RenderingLayerMask.defaultRenderingLayerMask;
+#else
+        [RenderingLayerMask]
+        public uint OccludersRenderingLayer = 1;
+#endif
         public BlendingMode blendMode = BlendingMode.Alpha;
         public bool alphaCutout;
         public Texture2D alphaCutoutTexture;
@@ -75,7 +82,7 @@ namespace Linework.SurfaceFill
         {
             return isActive;
         }
-
+        
         public void SetActive(bool active)
         {
             isActive = active;

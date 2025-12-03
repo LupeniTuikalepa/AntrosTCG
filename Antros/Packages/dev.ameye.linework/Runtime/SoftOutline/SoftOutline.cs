@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Linework.Common.Utils;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -145,7 +144,16 @@ namespace Linework.SoftOutline
                 if (settings.type == OutlineType.Hard) composite.EnableKeyword(ShaderFeature.HardOutline);
                 else composite.DisableKeyword(ShaderFeature.HardOutline);
 
-                return settings.Outlines.Any(ShouldRenderOutline);
+                // Return true if any of the outlines should be rendered (are active). Otherwise return false.
+                // Same as `return settings.Outlines.Any(ShouldRenderOutline);`
+                foreach (var outline in settings.Outlines)
+                {
+                    if (ShouldRenderOutline(outline))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
             
             private static bool ShouldRenderOutline(Outline outline)

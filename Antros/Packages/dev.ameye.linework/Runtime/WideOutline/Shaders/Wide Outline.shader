@@ -125,7 +125,6 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
             #pragma multi_compile_local _ SCALE_WITH_RESOLUTION
             
             CBUFFER_START(UnityPerMaterial)
-                float _ReferenceResolution;
                 #if UNITY_VERSION < 202300
                 float4 _BlitTexture_TexelSize;
                 #endif
@@ -135,13 +134,6 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
             half2 frag(Varyings IN) : SV_TARGET
             {
-                float scale = 1;
-                #if defined(SCALE_WITH_RESOLUTION)
-                scale = 1 * _ScreenParams.y / _ReferenceResolution;
-                #endif
-
-                int2 scaledAxis = int2((float2)_AxisWidth * scale);
-                
                 // integer pixel position
                 int2 uvInt = int2(IN.positionCS.xy);
 
@@ -153,7 +145,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                 UNITY_UNROLL
                 for (int u = -1; u <= 1; u++) {
                     // calculate offset sample position
-                    int2 offset_uv = uvInt + scaledAxis * u;
+                    int2 offset_uv = uvInt + int2((float2)_AxisWidth) * u;
 
                     // .Load() acts funny when sampling outside of bounds, so don't
                     offset_uv = clamp(offset_uv, int2(0, 0), (int2)_BlitTexture_TexelSize.zw - 1);
@@ -284,7 +276,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
                 // distance in pixels to closest position
                 half dist = length(nearestPos - currentPos);
-
+                
                 // if(SampleSilhouetteDepthBuffer(IN.texcoord) > 0) {
                 //     return 0;
                 // }
@@ -315,12 +307,13 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                 
                 #else
                 
-                #if defined(VERTEX_ANIMATION)
-                half4 color = _OutlineColor;
-                #else
+                // #if defined(VERTEX_ANIMATION)
+                // half4 color = _OutlineColor;
+                // #else
                 half4 color = SampleSilhouetteBuffer(nearestPos / _ScreenParams.xy);
-                #endif
+                // #endif
                 color *= outline;
+
                 return color;
                 
                  #endif

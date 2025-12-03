@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.UI
 {
-    public class CapacityUI : UIItem<ICapacityDescriptions>
+    public class CapacityUI : UIItem<CapacityData>
     {
         private const string NULL = "NULL";
 
@@ -16,12 +16,12 @@ namespace ATCG.Capacities.UI
         [SerializeField]
         private CanvasGroup group;
 
-        protected override void SyncUI(ICapacityDescriptions current)
+        protected override void SyncUI(CapacityData current)
         {
             title.text = current.Name;
             cost.text = current.Cost.ToString();
 
-            group.interactable = current.IsValid;
+            group.interactable = true;
         }
 
         protected override void ClearUI()

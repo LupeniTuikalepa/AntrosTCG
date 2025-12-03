@@ -1,11 +1,12 @@
 ﻿using ATCG.Battle.Actions;
 using UnityEngine;
+using UnityEngine.InputSystem.Users;
 
 namespace ATCG.Battle.Players
 {
     public interface IBattlePlayer
     {
-        public BattlePlayerProfile Profile { get; }
+        public IBattlePlayerProfile Profile { get; }
 
         bool IsDefeated();
 

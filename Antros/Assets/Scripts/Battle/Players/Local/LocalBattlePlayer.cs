@@ -8,24 +8,27 @@ using Helteix.Cards.Collections;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.Tools.Phases;
 using UnityEngine;
+using UnityEngine.InputSystem.Users;
 
 namespace ATCG.Battle.Players.Local
 {
     public class LocalBattlePlayer : IBattlePlayer
     {
+        IBattlePlayerProfile IBattlePlayer.Profile => Profile;
+
         public event Action<LocalBattlePlayer, int, int> OnPlayerHealthChanges;
         public event Action<LocalBattlePlayer, int, int> OnPlayerManaChanges;
         public event Action<LocalBattlePlayer, int> OnPlayerDisplayChanges;
 
-        public int Display { get; private set; }
-        public BattlePlayerProfile Profile { get; }
+        public int ID => Profile.ID;
+        public LocalPlayerProfile Profile { get; private set; }
         public int CurrentMana { get; private set; }
+
         public Hand<IBattleCard> Hand { get; private set; }
         public Deck<IBattleCard> Deck { get; private set; }
 
         public DefaultCardCollection<IBattleCard> DeadCards { get; private set; }
         public int CurrentHealth { get; private set; }
-
 
         private readonly BattleGameMode gameMode;
 
@@ -33,7 +36,7 @@ namespace ATCG.Battle.Players.Local
         public readonly Condition canMoveHeroes;
         public readonly Condition canUseHeroesAbilities;
 
-        public LocalBattlePlayer(BattleGameMode gameMode, BattlePlayerProfile profile)
+        public LocalBattlePlayer(BattleGameMode gameMode, LocalPlayerProfile profile)
         {
             this.gameMode = gameMode;
             Profile = profile;
@@ -43,12 +46,6 @@ namespace ATCG.Battle.Players.Local
 
             CurrentHealth = GameplayMetrics.Current.MaxHealth;
             CurrentMana = GameplayMetrics.Current.MaxMana;
-        }
-
-        public void SetDisplay(int display)
-        {
-            this.Display = display;
-            OnPlayerDisplayChanges?.Invoke(this, display);
         }
 
 

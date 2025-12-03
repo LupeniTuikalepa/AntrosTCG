@@ -25,9 +25,10 @@ namespace Linework.WideOutline
         [Range(0.0f, 1.0f)] public float gap = 0.0f;
         public BlendingMode blendMode;
         public bool customDepthBuffer;
+        public SilhouetteBufferFormat silhouetteBufferFormat;
         [ColorUsage(true, true)] public Color occludedColor = Color.red;
         public bool clearStencil = false;
-        public bool scaleWithResolution = true;
+        public bool scaleWithResolution = false;
         public Resolution referenceResolution = Resolution._1080;
         public float customResolution;
         

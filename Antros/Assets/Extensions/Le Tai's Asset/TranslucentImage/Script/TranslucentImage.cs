@@ -324,14 +324,10 @@ public partial class TranslucentImage : Image, IActiveRegionProvider, IMeshModif
     {
 #if !UNITY_EDITOR
         return false;
-#else // UNITY_EDITOR
-#if UNITY_2021_2_OR_NEWER
-        var stage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
 #else
-        var stage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
-#endif
+        var stage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
         return stage != null;
-#endif // !UNITY_EDITOR
+#endif
     }
 
     bool sourceAcquiredOnStart = false;

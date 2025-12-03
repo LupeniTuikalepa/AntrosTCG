@@ -21,7 +21,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             "RenderPipeline" = "UniversalPipeline"
         }
 
-        ZWrite Off
+        ZWrite On
         Cull [_Cull]
         ZTest [_ZTest]
         Blend [_SrcBlend] [_DstBlend]

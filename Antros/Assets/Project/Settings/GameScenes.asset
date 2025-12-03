@@ -18,4 +18,4 @@ MonoBehaviour:
   <Game>k__BackingField:
     asset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
     guid: 99c9720ab356a0642a771bea13969a05
-  <LoaderPrefab>k__BackingField: {fileID: 0}
+  <LoaderPrefab>k__BackingField: {fileID: 9152545301318268665, guid: a8a3fb148c1a92640a1361dc6d41e4d3, type: 3}

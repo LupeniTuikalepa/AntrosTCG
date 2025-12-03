@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Linework.Common.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -124,7 +123,16 @@ namespace Linework.FastOutline
                     }
                 }
 
-                return settings.Outlines.Any(ShouldRenderOutline);
+                // Return true if any of the outlines should be rendered (are active). Otherwise return false.
+                // Same as `return settings.Outlines.Any(ShouldRenderOutline);`
+                foreach (var outline in settings.Outlines)
+                {
+                    if (ShouldRenderOutline(outline))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
             
             private static bool ShouldRenderStencilMask(Outline outline)
@@ -140,7 +148,7 @@ namespace Linework.FastOutline
 #if UNITY_6000_0_OR_NEWER
             private class PassData
             {
-                internal RendererListHandle MaskRendererListHandle;
+                internal List<RendererListHandle> MaskRendererListHandles = new();
                 internal readonly List<RendererListHandle> OutlineRendererListHandles = new();
             }
             
@@ -156,11 +164,20 @@ namespace Linework.FastOutline
                     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
                 
                     InitMaskRendererList(renderGraph, frameData, ref passData);
-                    builder.UseRendererList(passData.MaskRendererListHandle);
-                
+                    foreach (var rendererListHandle in passData.MaskRendererListHandles)
+                    {
+                        builder.UseRendererList(rendererListHandle);
+                    }
+                    
                     builder.AllowPassCulling(false);
-                
-                    builder.SetRenderFunc((PassData data, RasterGraphContext context) => { context.cmd.DrawRendererList(data.MaskRendererListHandle); });
+                    
+                    builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
+                    {
+                        foreach (var handle in data.MaskRendererListHandles)
+                        {
+                            context.cmd.DrawRendererList(handle);
+                        }
+                    });
                 }
 
                 // 2. Outline.
@@ -194,41 +211,50 @@ namespace Linework.FastOutline
 
             private void InitMaskRendererList(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
+                passData.MaskRendererListHandles.Clear();
+                
                 var renderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
                 var lightData = frameData.Get<UniversalLightData>();
-
+                
                 var sortingCriteria = cameraData.defaultOpaqueSortFlags;
-                var renderQueueRange = RenderQueueRange.opaque;
-                var layer = new RenderingLayerMask();
-                layer = settings.Outlines
-                    .Where(ShouldRenderStencilMask)
-                    .Aggregate(layer, (current, outline) => current | outline.RenderingLayer);
-                var layerMask = settings.Outlines
-                    .Where(ShouldRenderStencilMask)
-                    .Aggregate(0, (current, outline) => current | outline.layerMask.value);
-                var filteringSettings = new FilteringSettings(renderQueueRange, layerMask, layer);
-                var drawingSettings = RenderingUtils.CreateDrawingSettings(RenderUtils.DefaultShaderTagIds, renderingData, cameraData, lightData, sortingCriteria);
-                drawingSettings.overrideMaterial = mask;
 
-                var renderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
+                foreach (var outline in settings.Outlines)
+                {
+                    var drawingSettings = RenderingUtils.CreateDrawingSettings(RenderUtils.DefaultShaderTagIds, renderingData, cameraData, lightData, sortingCriteria);
+                    drawingSettings.overrideMaterial = mask;
+                    
+                    var renderQueueRange = outline.renderQueue switch
+                    {
+                        OutlineRenderQueue.Opaque => RenderQueueRange.opaque,
+                        OutlineRenderQueue.Transparent => RenderQueueRange.transparent,
+                        OutlineRenderQueue.OpaqueAndTransparent => RenderQueueRange.all,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    
+                    var filteringSettings = new FilteringSettings(renderQueueRange, outline.layerMask, outline.RenderingLayer);
+                    var renderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
 
-                var blendState = BlendState.defaultValue;
-                blendState.blendState0 = new RenderTargetBlendState(0);
-                renderStateBlock.blendState = blendState;
-
-                var stencilState = StencilState.defaultValue;
-                stencilState.enabled = true;
-                stencilState.SetCompareFunction(CompareFunction.Always);
-                stencilState.SetPassOperation(StencilOp.Replace);
-                stencilState.SetFailOperation(StencilOp.Replace);
-                stencilState.SetZFailOperation(StencilOp.Replace);
-                renderStateBlock.mask |= RenderStateMask.Stencil;
-                renderStateBlock.stencilReference = 1;
-                renderStateBlock.stencilState = stencilState;
-
-                RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
-                    ref passData.MaskRendererListHandle);
+                    var blendState = BlendState.defaultValue;
+                    blendState.blendState0 = new RenderTargetBlendState(0);
+                    renderStateBlock.blendState = blendState;
+                    
+                    // Set stencil state.
+                    var stencilState = StencilState.defaultValue;
+                    stencilState.enabled = true;
+                    stencilState.SetCompareFunction(CompareFunction.Always);
+                    stencilState.SetPassOperation(StencilOp.Replace);
+                    stencilState.SetFailOperation(StencilOp.Replace);
+                    stencilState.SetZFailOperation(outline.closedLoop ? StencilOp.Keep : StencilOp.Replace);
+                    renderStateBlock.mask |= RenderStateMask.Stencil;
+                    renderStateBlock.stencilReference = 1;
+                    renderStateBlock.stencilState = stencilState;
+                    
+                    var handle = new RendererListHandle();
+                    RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
+                        ref handle);
+                    passData.MaskRendererListHandles.Add(handle);
+                }
             }
 
             private void InitOutlineRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
@@ -314,36 +340,38 @@ namespace Linework.FastOutline
 
                     var sortingCriteria = renderingData.cameraData.defaultOpaqueSortFlags;
 
-                    uint layer = 0;
-                    layer = settings.Outlines
-                        .Where(ShouldRenderStencilMask)
-                        .Aggregate(layer, (current, outline) => current | outline.RenderingLayer);
-                    var layerMask = settings.Outlines
-                        .Where(ShouldRenderStencilMask)
-                        .Aggregate(0, (current, outline) => current | outline.layerMask.value);
-                    var renderQueueRange = RenderQueueRange.all; // FIXME: This does not take into account the setting of the outline.
-                    var filteringSettings = new FilteringSettings(renderQueueRange, layerMask, layer);
-                    var drawingSettings = RenderingUtils.CreateDrawingSettings(RenderUtils.DefaultShaderTagIds, ref renderingData, sortingCriteria);
-                   
-                    drawingSettings.overrideMaterial = mask;
+                    foreach (var outline in settings.Outlines)
+                    {
+                        var renderQueueRange = outline.renderQueue switch
+                        {
+                            OutlineRenderQueue.Opaque => RenderQueueRange.opaque,
+                            OutlineRenderQueue.Transparent => RenderQueueRange.transparent,
+                            OutlineRenderQueue.OpaqueAndTransparent => RenderQueueRange.all,
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
 
-                    var renderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
+                        var drawingSettings = RenderingUtils.CreateDrawingSettings(RenderUtils.DefaultShaderTagIds, ref renderingData, sortingCriteria);
+                        drawingSettings.overrideMaterial = mask;
 
-                    var blendState = BlendState.defaultValue;
-                    blendState.blendState0 = new RenderTargetBlendState(0);
-                    renderStateBlock.blendState = blendState;
+                        var filteringSettings = new FilteringSettings(renderQueueRange, outline.layerMask, outline.RenderingLayer);
+                        var renderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
 
-                    var stencilState = StencilState.defaultValue;
-                    stencilState.enabled = true;
-                    stencilState.SetCompareFunction(CompareFunction.Always);
-                    stencilState.SetPassOperation(StencilOp.Replace);
-                    stencilState.SetFailOperation(StencilOp.Replace);
-                    stencilState.SetZFailOperation(StencilOp.Replace);
-                    renderStateBlock.mask |= RenderStateMask.Stencil;
-                    renderStateBlock.stencilReference = 1;
-                    renderStateBlock.stencilState = stencilState;
+                        var blendState = BlendState.defaultValue;
+                        blendState.blendState0 = new RenderTargetBlendState(0);
+                        renderStateBlock.blendState = blendState;
 
-                    context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings, ref renderStateBlock);
+                        var stencilState = StencilState.defaultValue;
+                        stencilState.enabled = true;
+                        stencilState.SetCompareFunction(CompareFunction.Always);
+                        stencilState.SetPassOperation(StencilOp.Replace);
+                        stencilState.SetFailOperation(StencilOp.Replace);
+                        stencilState.SetZFailOperation(outline.closedLoop ? StencilOp.Keep : StencilOp.Replace);
+                        renderStateBlock.mask |= RenderStateMask.Stencil;
+                        renderStateBlock.stencilReference = 1;
+                        renderStateBlock.stencilState = stencilState;
+
+                        context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings, ref renderStateBlock);
+                    }
                 }
 
                 context.ExecuteCommandBuffer(maskCmd);
@@ -368,12 +396,20 @@ namespace Linework.FastOutline
                         {
                             continue;
                         }
+                        
+                        renderQueueRange = outline.renderQueue switch
+                        {
+                            OutlineRenderQueue.Opaque => RenderQueueRange.opaque,
+                            OutlineRenderQueue.Transparent => RenderQueueRange.transparent,
+                            OutlineRenderQueue.OpaqueAndTransparent => RenderQueueRange.all,
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
 
                         var drawingSettings = RenderingUtils.CreateDrawingSettings(RenderUtils.DefaultShaderTagIds, ref renderingData, sortingCriteria);
-                        drawingSettings.overrideMaterial = outline.material;
+                        drawingSettings.overrideMaterial = outline.gpuInstancing ? outline.materialInstanced : outline.material;
                         drawingSettings.overrideMaterialPassIndex = (int) outline.extrusionMethod;
                         drawingSettings.perObjectData = PerObjectData.None;
-                        drawingSettings.enableInstancing = false;
+                        drawingSettings.enableInstancing = outline.gpuInstancing;
 
                         var filteringSettings = new FilteringSettings(renderQueueRange, outline.layerMask, outline.RenderingLayer);
                         

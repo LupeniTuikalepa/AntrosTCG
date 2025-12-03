@@ -23,6 +23,7 @@ namespace Linework.Editor.WideOutline
         private SerializedProperty gap;
         private SerializedProperty customDepthBuffer;
         private SerializedProperty occludedColor;
+        private SerializedProperty silhouetteBufferFormat;
         private SerializedProperty clearStencil;
         private SerializedProperty scaleWithResolution;
         private SerializedProperty referenceResolution;
@@ -44,6 +45,7 @@ namespace Linework.Editor.WideOutline
             gap = serializedObject.FindProperty(nameof(WideOutlineSettings.gap));
             customDepthBuffer = serializedObject.FindProperty(nameof(WideOutlineSettings.customDepthBuffer));
             occludedColor = serializedObject.FindProperty(nameof(WideOutlineSettings.occludedColor));
+            silhouetteBufferFormat = serializedObject.FindProperty(nameof(WideOutlineSettings.silhouetteBufferFormat));
             clearStencil = serializedObject.FindProperty(nameof(WideOutlineSettings.clearStencil));
             scaleWithResolution = serializedObject.FindProperty(nameof(WideOutlineSettings.scaleWithResolution));
             referenceResolution = serializedObject.FindProperty(nameof(WideOutlineSettings.referenceResolution));
@@ -115,6 +117,7 @@ namespace Linework.Editor.WideOutline
                         EditorGUILayout.PropertyField(occludedColor,EditorUtils.CommonStyles.OutlineOccludedColor);
                         EditorGUI.indentLevel--;
                     }
+                    EditorGUILayout.PropertyField(silhouetteBufferFormat, EditorUtils.CommonStyles.SilhouetteBufferFormat);
                     EditorGUI.BeginChangeCheck();
                     break;
                 case MaterialType.Custom:

@@ -36,12 +36,6 @@ Shader "Hidden/Outlines/Soft Outline/Gaussian Blur"
             float variance = _KernelSpread * _KernelSpread;
             return 1 / sqrt(2 * PI * variance) * pow(E, -(x * x) / (2 * variance));
         }
-
-        float kernel_weight(int x, int y)
-        {
-            float variance = _KernelSpread * _KernelSpread;
-            return 1 / sqrt(2 * PI * variance) * pow(E, -(x * x + y * y) / (2 * variance));
-        }
         ENDHLSL
 
         Pass // 0: VERTICAL BLUR

@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace ATCG.Cards
 {
-    public interface IGameCard : ICard, IUIListSource<ICapacityDescriptions>
+    public interface IGameCard : ICard, IUIListSource<CapacityData>
     {
         GameCardData CardData { get; }
-        IEnumerable<ICapacityDescriptions> Capacities { get; }
+        IEnumerable<CapacityData> Capacities { get; }
 
         string Title { get; }
         string Description { get; }

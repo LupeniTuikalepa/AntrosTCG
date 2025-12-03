@@ -7,20 +7,19 @@ using UnityEngine;
 
 namespace ATCG.Cards
 {
-    [CreateAssetMenu(fileName = "GameCardData", menuName = "ATCG/GameCardData")]
     public abstract class GameCardData : GameDatabaseObject
     {
         [field: SerializeField]
         public string Title { get; private set; }
 
-        [field: SerializeField]
+        [field: SerializeField, TextArea]
         public string Description { get; private set; }
 
         [field: SerializeField]
         public Element Element { get; private set; }
 
         [field: SerializeReference]
-        public ICapacityDescriptions[] Capacities { get; private set; }
+        public CapacityData[] Capacities { get; private set; }
 
     }
 }

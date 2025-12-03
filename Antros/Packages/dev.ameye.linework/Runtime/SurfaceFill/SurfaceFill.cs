@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Linework.Common.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -63,8 +62,8 @@ namespace Linework.SurfaceFill
                     fill.material.CopyPropertiesFromMaterial(fillBase); 
                     
                     var (srcBlend, dstBlend) = RenderUtils.GetSrcDstBlend(fill.blendMode);
-                    fill.material.SetInt(CommonShaderPropertyId.FullScreenColorBlendModeSource, srcBlend);
-                    fill.material.SetInt(CommonShaderPropertyId.FullScreenColorBlendModeDestination, dstBlend);
+                    fill.material.SetInt(CommonShaderPropertyId.BlendModeSource, srcBlend);
+                    fill.material.SetInt(CommonShaderPropertyId.BlendModeDestination, dstBlend);
                     if (fill.materialType == MaterialType.Custom && fill.customMaterial != null)
                     {
                         fill.customMaterial.SetInt(CommonShaderPropertyId.FullScreenColorBlendModeSource, srcBlend);
@@ -115,6 +114,7 @@ namespace Linework.SurfaceFill
                             fill.material.DisableKeyword(ShaderFeature.PatternCheckerboard);
                             fill.material.DisableKeyword(ShaderFeature.PatternDots);
                             fill.material.DisableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.DisableKeyword(ShaderFeature.PatternSquares);
                             fill.material.DisableKeyword(ShaderFeature.PatternGlow);
                             fill.material.DisableKeyword(ShaderFeature.PatternTexture);
                             break;
@@ -123,6 +123,7 @@ namespace Linework.SurfaceFill
                             fill.material.EnableKeyword(ShaderFeature.PatternCheckerboard);
                             fill.material.DisableKeyword(ShaderFeature.PatternDots);
                             fill.material.DisableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.DisableKeyword(ShaderFeature.PatternSquares);
                             fill.material.DisableKeyword(ShaderFeature.PatternGlow);
                             fill.material.DisableKeyword(ShaderFeature.PatternTexture);
                             break;
@@ -131,6 +132,7 @@ namespace Linework.SurfaceFill
                             fill.material.DisableKeyword(ShaderFeature.PatternCheckerboard);
                             fill.material.EnableKeyword(ShaderFeature.PatternDots);
                             fill.material.DisableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.DisableKeyword(ShaderFeature.PatternSquares);
                             fill.material.DisableKeyword(ShaderFeature.PatternGlow);
                             fill.material.DisableKeyword(ShaderFeature.PatternTexture);
                             break;
@@ -139,6 +141,16 @@ namespace Linework.SurfaceFill
                             fill.material.DisableKeyword(ShaderFeature.PatternCheckerboard);
                             fill.material.DisableKeyword(ShaderFeature.PatternDots);
                             fill.material.EnableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.DisableKeyword(ShaderFeature.PatternSquares);
+                            fill.material.DisableKeyword(ShaderFeature.PatternGlow);
+                            fill.material.DisableKeyword(ShaderFeature.PatternTexture);
+                            break;
+                        case Pattern.Squares:
+                            fill.material.DisableKeyword(ShaderFeature.PatternSolid);
+                            fill.material.DisableKeyword(ShaderFeature.PatternCheckerboard);
+                            fill.material.DisableKeyword(ShaderFeature.PatternDots);
+                            fill.material.DisableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.EnableKeyword(ShaderFeature.PatternSquares);
                             fill.material.DisableKeyword(ShaderFeature.PatternGlow);
                             fill.material.DisableKeyword(ShaderFeature.PatternTexture);
                             break;
@@ -147,6 +159,7 @@ namespace Linework.SurfaceFill
                             fill.material.DisableKeyword(ShaderFeature.PatternCheckerboard);
                             fill.material.DisableKeyword(ShaderFeature.PatternDots);
                             fill.material.DisableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.DisableKeyword(ShaderFeature.PatternSquares);
                             fill.material.EnableKeyword(ShaderFeature.PatternGlow);
                             fill.material.DisableKeyword(ShaderFeature.PatternTexture);
                             break;
@@ -155,6 +168,7 @@ namespace Linework.SurfaceFill
                             fill.material.DisableKeyword(ShaderFeature.PatternCheckerboard);
                             fill.material.DisableKeyword(ShaderFeature.PatternDots);
                             fill.material.DisableKeyword(ShaderFeature.PatternStripes);
+                            fill.material.DisableKeyword(ShaderFeature.PatternSquares);
                             fill.material.DisableKeyword(ShaderFeature.PatternGlow);
                             fill.material.EnableKeyword(ShaderFeature.PatternTexture);
                             break;
@@ -178,9 +192,9 @@ namespace Linework.SurfaceFill
                     fill.material.SetFloat(ShaderPropertyId.Scale, fill.scale);
 
                     // Set stencil properties for fill.
-                    fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilComparison, (float) CompareFunction.Equal);
-                    fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilReference, 1 << i);
-                    fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilReadMask, 1 << i);
+                    fill.material.SetFloat(CommonShaderPropertyId.StencilComp, (float) CompareFunction.Equal);
+                    fill.material.SetFloat(CommonShaderPropertyId.StencilRef, 1 << i);
+                    fill.material.SetFloat(CommonShaderPropertyId.StencilReadMask, 1 << i);
                     if (fill.materialType == MaterialType.Custom && fill.customMaterial != null)
                     {
                         fill.customMaterial.SetFloat(CommonShaderPropertyId.FullScreenStencilComparison, (float) CompareFunction.Equal);
@@ -193,13 +207,23 @@ namespace Linework.SurfaceFill
                     i++;
                 }
 
-                return settings.Fills.Any(fill => fill.IsActive());
+                // Return true if any of the fills should be rendered (are active). Otherwise return false.
+                // Same as `return settings.Fills.Any(fill => fill.IsActive());`
+                foreach (var fill in settings.Fills)
+                {
+                    if (fill.IsActive())
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
             
 
 #if UNITY_6000_0_OR_NEWER
             private class PassData
             {
+                internal readonly List<RendererListHandle> OccludersMaskRendererListHandles = new();
                 internal readonly List<(RendererListHandle handle, bool vertexAnimated)> MaskRendererListHandles = new();
             }
             
@@ -207,7 +231,32 @@ namespace Linework.SurfaceFill
             {
                 var resourceData = frameData.Get<UniversalResourceData>();
 
-                // 1. Mask.
+                // 1. (Optional) Occluders Mask.
+                // -> Render a mask to the stencil buffer for the occluders.
+                // TODO: enable in future update (had some bugs still)
+                // using (var builder = renderGraph.AddRasterRenderPass<PassData>(ShaderPassName.Mask, out var passData))
+                // {
+                //     builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
+                //     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
+                //
+                //     InitOccludersMaskRendererLists(renderGraph, frameData, ref passData);
+                //     foreach (var rendererListHandle in passData.OccludersMaskRendererListHandles)
+                //     {
+                //         builder.UseRendererList(rendererListHandle);
+                //     }
+                //
+                //     builder.AllowPassCulling(false);
+                //
+                //     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
+                //     {
+                //         foreach (var handle in data.OccludersMaskRendererListHandles)
+                //         {
+                //             context.cmd.DrawRendererList(handle);
+                //         }
+                //     });
+                // }
+                
+                // 2. Mask.
                 // -> Render a mask to the stencil buffer.
                 using (var builder = renderGraph.AddRasterRenderPass<PassData>(ShaderPassName.Mask, out var passData))
                 {
@@ -231,7 +280,7 @@ namespace Linework.SurfaceFill
                     });
                 }
 
-                // 2. Fill.
+                // 3. Fill.
                 // -> Render a fill.
                 using (var builder = renderGraph.AddRasterRenderPass<PassData>(ShaderPassName.Fill, out _))
                 {
@@ -254,8 +303,8 @@ namespace Linework.SurfaceFill
                             // If this is the last render operation, clear the stencil.
                             if (i == lastActiveFillIndex)
                             {
-                                fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilPass, (float) StencilOp.Zero);
-                                fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilFail, (float) StencilOp.Zero);
+                                fill.material.SetFloat(CommonShaderPropertyId.StencilPass, (float) StencilOp.Zero);
+                                fill.material.SetFloat(CommonShaderPropertyId.StencilFail, (float) StencilOp.Zero);
 
                                 if (fill.materialType == MaterialType.Custom && fill.customMaterial != null)
                                 {
@@ -279,7 +328,65 @@ namespace Linework.SurfaceFill
                     });
                 }
             }
+
+            /**
+             * This pass is for configuring the occluders for the 'When Occluded' setting.
+             */
+            private void InitOccludersMaskRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
+            {
+                passData.OccludersMaskRendererListHandles.Clear();
+                
+                var renderingData = frameData.Get<UniversalRenderingData>();
+                var cameraData = frameData.Get<UniversalCameraData>();
+                var lightData = frameData.Get<UniversalLightData>();
+
+                var sortingCriteria = cameraData.defaultOpaqueSortFlags;
+                
+                var i = 0;
+                foreach (var fill in settings.Fills)
+                {
+                    if (!fill.IsActive() || !fill.occludedBy)
+                    {
+                        i++;
+                        continue;
+                    }
+                    
+                    var drawingSettings = RenderingUtils.CreateDrawingSettings(RenderUtils.DefaultShaderTagIds, renderingData, cameraData, lightData, sortingCriteria);
+                    drawingSettings.overrideMaterial = mask;
+                    drawingSettings.overrideMaterialPassIndex = ShaderPass.Mask;
+                    var renderQueueRange = RenderQueueRange.all;
+
+                    var filteringSettings = new FilteringSettings(renderQueueRange, fill.layerMask, fill.OccludersRenderingLayer);
+                    var renderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
+
+                    var blendState = BlendState.defaultValue;
+                    blendState.blendState0 = new RenderTargetBlendState(0);
+                    renderStateBlock.blendState = blendState;
+
+                    var stencilState = StencilState.defaultValue;
+                    stencilState.enabled = true;
+                    stencilState.SetCompareFunction(CompareFunction.Always);
+                    stencilState.SetPassOperation(StencilOp.Replace);
+                    stencilState.SetFailOperation(StencilOp.Zero);
+                    stencilState.SetZFailOperation(StencilOp.Zero);
+                    stencilState.writeMask = (byte) (1 << (i+1));
+                    renderStateBlock.mask |= RenderStateMask.Stencil;
+                    renderStateBlock.stencilReference = 1 << (i+1);
+                    renderStateBlock.stencilState = stencilState;
+                    
+                    var handle = new RendererListHandle();
+                    RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
+                        ref handle);
+                    passData.OccludersMaskRendererListHandles.Add(handle);
+
+                }
+            }
             
+            /**
+             * The mask pass writes meshes into the stencil buffer to configure the regions that should receive a surface fill.
+             * Each fill uses their own bit (see read/write mask).
+             * An optional second pass is added to fix self-occlusion.
+             */
             private void InitMaskRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
                 passData.MaskRendererListHandles.Clear();
@@ -323,10 +430,17 @@ namespace Linework.SurfaceFill
 
                     var stencilState = StencilState.defaultValue;
                     stencilState.enabled = true;
+                    // TODO: enable in future update (had some bugs still)
+                    // stencilState.SetCompareFunction(fill.occludedBy ? CompareFunction.Less : CompareFunction.Always);
                     stencilState.SetCompareFunction(CompareFunction.Always);
                     stencilState.SetPassOperation(StencilOp.Replace);
                     stencilState.SetFailOperation(StencilOp.Keep);
                     stencilState.SetZFailOperation(StencilOp.Keep);
+                    // TODO: enable in future update (had some bugs still)
+                    // if (fill.occludedBy)
+                    // {
+                    //     stencilState.readMask = (byte) (1 << i+1);
+                    // }
                     stencilState.writeMask = (byte) (1 << i);
                     renderStateBlock.mask |= RenderStateMask.Stencil;
                     renderStateBlock.stencilReference = 1 << i;
@@ -340,20 +454,21 @@ namespace Linework.SurfaceFill
                         Occlusion.WhenNotOccluded => new DepthState(false, CompareFunction.LessEqual),
                         _ => throw new ArgumentOutOfRangeException()
                     };
-
+                    
+                    // 1. Render regular mask for outline.
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
                     passData.MaskRendererListHandles.Add((handle, fill.vertexAnimation));
 
-                    // Mask out again to fix self-occlusion.
+                   // 2. Mask out again to fix self-occlusion.
                     if (fill.occlusion is Occlusion.WhenOccluded)
                     {
                         renderStateBlock.depthState = new DepthState(false, CompareFunction.LessEqual);
                         renderStateBlock.stencilReference = 0;
                         stencilState.SetPassOperation(StencilOp.Replace);
                         renderStateBlock.stencilState = stencilState;
-
+                    
                         var handle2 = new RendererListHandle();
                         RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                             ref handle2);
@@ -435,16 +550,16 @@ namespace Linework.SurfaceFill
                             Occlusion.WhenNotOccluded => new DepthState(false, CompareFunction.LessEqual),
                             _ => throw new ArgumentOutOfRangeException()
                         };
-
+                        
                         context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings, ref renderStateBlock);
-
+                        
                         if (fill.occlusion is Occlusion.WhenOccluded)
                         {
                             renderStateBlock.depthState = new DepthState(false, CompareFunction.LessEqual);
                             renderStateBlock.stencilReference = 0;
                             stencilState.SetPassOperation(StencilOp.Replace);
                             renderStateBlock.stencilState = stencilState;
-
+                        
                             context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings, ref renderStateBlock);
                         }
 
@@ -473,8 +588,8 @@ namespace Linework.SurfaceFill
                         // If this is the last render operation, clear the stencil.
                         if (i == lastActiveFillIndex)
                         {
-                            fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilPass, (float) StencilOp.Zero);
-                            fill.material.SetFloat(CommonShaderPropertyId.FullScreenStencilFail, (float) StencilOp.Zero);
+                            fill.material.SetFloat(CommonShaderPropertyId.StencilPass, (float) StencilOp.Zero);
+                            fill.material.SetFloat(CommonShaderPropertyId.StencilFail, (float) StencilOp.Zero);
                             
                             if (fill.materialType == MaterialType.Custom && fill.customMaterial != null)
                             {
@@ -573,9 +688,16 @@ namespace Linework.SurfaceFill
             }
             
             var input = ScriptableRenderPassInput.None;
-            if (settings.Fills.Any(fill => fill.pattern == Pattern.Glow))
+            
+            // If any of the fills use a glow pattern, required the normals as an input for this renderer pass.
+            // Same as `if (settings.Fills.Any(fill => fill.pattern == Pattern.Glow))`
+            foreach (var fill in settings.Fills)
             {
-                input |= ScriptableRenderPassInput.Normal;
+                if (fill.pattern == Pattern.Glow)
+                {
+                    input |= ScriptableRenderPassInput.Normal;
+                    break;
+                }
             }
             surfaceFillPass.ConfigureInput(input);
 

@@ -142,7 +142,7 @@ namespace Linework.Editor.Common.Windows
                     paddingLeft = 2
                 }
             };
-            var versionLabel = new Label("1.4.12 • July 2025")
+            var versionLabel = new Label("1.5.1 • November 2025")
             {
                 style =
                 {
@@ -480,21 +480,13 @@ namespace Linework.Editor.Common.Windows
             var unityVersion = Application.unityVersion;
             var alpha = unityVersion.Contains("a");
             var beta = unityVersion.Contains("b");
-            if (unityVersion.StartsWith("6000.1"))
-            {
-                if (alpha || beta)
-                {
-                    return new CheckResult(ResultEnum.Info, unityVersion, "Linework is compatible with Unity 6.1. However, alpha/beta versions of Unity may be unstable.");
-                }
-                return new CheckResult(ResultEnum.Pass, unityVersion, "Linework is compatible with Unity 6.1.");
-            }
             if (unityVersion.StartsWith("6000"))
             {
                 if (alpha || beta)
                 {
-                    return new CheckResult(ResultEnum.Info, unityVersion, "Linework is compatible with Unity 6.0. However, alpha/beta versions of Unity may be unstable.");
+                    return new CheckResult(ResultEnum.Info, unityVersion, "Linework is compatible with Unity 6+. However, alpha/beta versions of Unity may be unstable.");
                 }
-                return new CheckResult(ResultEnum.Pass, unityVersion, "Linework is compatible with Unity 6.0.");
+                return new CheckResult(ResultEnum.Pass, unityVersion, "Linework is compatible with Unity 6+.");
             }
             if (unityVersion.StartsWith("2022.3"))
             {

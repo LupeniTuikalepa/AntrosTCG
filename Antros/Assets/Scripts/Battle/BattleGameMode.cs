@@ -22,23 +22,22 @@ namespace ATCG.Battle
 
         public readonly int seed;
 
-        public readonly BattlePlayerProfile[] playerProfiles;
+        public readonly LocalPlayerProfile[] playerProfiles;
 
 
-        public BattleGameModeResults Results { get; private set; }
         public BattleGrid BattleGrid { get; private set; }
         public IBattlePlayer[] Players { get; private set; }
-
         public int Round { get; private set; }
         public int Turn { get; private set; }
+
 
         public int CurrentPlayerID { get; private set; }
         public IBattlePlayer CurrentPlayer { get; private set; }
 
         public abstract string ID { get; }
-
         public HexGrid HexGrid => BattleGrid.Grid;
-        protected BattleGameMode(int seed, params BattlePlayerProfile[] playerProfiles)
+        public int PlayerCount => playerProfiles.Length;
+        protected BattleGameMode(int seed, params LocalPlayerProfile[] playerProfiles)
         {
             this.seed = seed;
             this.playerProfiles = playerProfiles;
@@ -47,17 +46,17 @@ namespace ATCG.Battle
 
         protected override async Awaitable Initialize()
         {
-            SceneReference gameScene = GetGameScene();
+            GameModeController.Global.StartGameMode(this);
             Random.InitState(seed);
-
-            Scene mainScene = await GameController.GameSceneController.LoadScenesWithLoadingScreen(gameScene);
-            await Awaitable.MainThreadAsync();
+            SceneReference gameScene = GetGameScene();
+            await GameController.GameSceneController.LoadScenesWithLoadingScreen(gameScene);
 
             Players = new IBattlePlayer[playerProfiles.Length];
             for (int i = 0; i < playerProfiles.Length; i++)
             {
-                IBattlePlayer battlePlayer = CreatePlayer(playerProfiles[i]);
+                LocalPlayerProfile playerProfile = playerProfiles[i];
 
+                IBattlePlayer battlePlayer = CreatePlayer(playerProfile);
                 Players[i] = battlePlayer;
             }
 
@@ -102,6 +101,7 @@ namespace ATCG.Battle
 
         protected override Awaitable Dispose()
         {
+            GameModeController.Global.EndGameMode(this);
             //"reset" of seed
             Random.InitState(DateTime.Today.GetHashCode());
             ((IDisposable)BattleGrid).Dispose();
@@ -131,7 +131,7 @@ namespace ATCG.Battle
                     case 1:
                         battleGameModeResults = new BattleGameModeResults()
                         {
-                            winningPlayerID = winningPlayers[0].Profile.id,
+                            winningPlayerID = winningPlayers[0].Profile.ID,
                         };
                         return true;
                     default:
@@ -140,7 +140,7 @@ namespace ATCG.Battle
                 }
             }
         }
-        protected abstract IBattlePlayer CreatePlayer(BattlePlayerProfile playerProfile);
+        protected abstract IBattlePlayer CreatePlayer(LocalPlayerProfile playerProfile);
         protected abstract SceneReference GetGameScene();
     }
 }

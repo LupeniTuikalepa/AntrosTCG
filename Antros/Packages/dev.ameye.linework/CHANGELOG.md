@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Headers should be listed in this order: Added, Changed, Deprecated, Removed, Fixed, Security -->
 
+## [1.5.1] - 2025-11-27
+
+### Added
+
+- Edge Detection: Added option to set render queue for section map
+- - TODO: make sure RG section map is generated when using breakup!!
+
+### Fixed
+
+- Edge Detection: Fixed the section shader no longer being SRP-batcher compatible
+- Edge Detection: Reduced number of shader variants being included in build
+- Edge Detection: Keep the section map from being generated when not necessary
+- Wide Outline: Fixed issue with 'Scale With Resolution' option causing excessive draw calls during flood step
+- Surface Fill: Fixed not all necessary variants being included in build
+
+## [1.5.0] - 2025-11-20
+
+### Added
+
+- Surface Fill: Added the option to set the occluders when using the 'Render When Occluded' option
+- Surface Fill: Added 'Squares' pattern option
+- Fast Outline: Added Closed Loop option matching the Closed Loop options in Soft/Wide outline
+- Wide Outline: Added support for HDR outline colors
+- Edge Detection: Added experimental 'hand-drawn effect' settings (edge distortion + edge break up)
+- Edge Detection: Added new 'circular' edge detection operator which looks nicer at a performance cost
+
+### Changed
+
+- Improved section map object ID hash function to reduce ID collisions
+- Surface Fill: Rewrote from Shader Graph to hlsl for improved performance and stability
+- Edge Detection: Changed debug view of section map to display all channels
+- Removed package samples since they had little use
+
+### Fixed
+
+- Fast Outline: Fixed render queues not always being respected
+- Unity 2022/Compatibility Mode: Fixed GPU instancing not working for Fast Outline
+- Removed usage of `System.Linq` in runtime scripts to reduce allocated garbage
+- Wide Outline: Fixed issue with 'Scale With Resolution' option
+
 ## [1.4.12] - 2025-07-29
 
 ### Added

@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Cards;
+using ATCG.Players;
 using Helteix.Tools;
+using Helteix.Tools.Phases;
 using Helteix.Tools.Phases.Listeners;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
+using UnityEngine.InputSystem.Utilities;
+using Random = UnityEngine.Random;
 
 namespace ATCG.Battle
 {
     public class BattlePlayerSceneSetup : MonoPhaseListener<BattleGameMode>
     {
-        [SerializeField, AssetsOnly]
-        private RuntimeBattlePlayer[] playersPrefab;
+        [SerializeField]
+        private RuntimeLocalBattlePlayer localBattlePlayerPrefab;
 
         [SerializeField, ChildGameObjectsOnly]
         private Transform container;
+
+        [SerializeField]
+        private PlayerInputManager manager;
 
         private Dictionary<IBattlePlayer, RuntimeBattlePlayer> runtimeBattlePlayers;
 
@@ -23,38 +36,108 @@ namespace ATCG.Battle
             runtimeBattlePlayers = new Dictionary<IBattlePlayer, RuntimeBattlePlayer>();
         }
 
+        private async void Start()
+        {
+            await Awaitable.EndOfFrameAsync();
+            if (GameController.GameModeController.Current == null)
+            {
+                PlayerProfile[] players = new PlayerProfile[]
+                {
+                    new PlayerProfile()
+                    {
+                        name = "Player 1"
+                    },
+                    new PlayerProfile()
+                    {
+                        name = "Player 2"
+                    }
+                };
+                string[] allCards =
+                    GameController.GameDatabase.GetAll<GameCardData>()
+                        .Select(ctx => ctx.ID.ToString())
+                        .ToArray();
+
+                //PlayerInputPairing[] pairings = result.result;
+                LocalPlayerProfile[] localPlayerProfiles = new LocalPlayerProfile[players.Length];
+                for (int i = 0; i < players.Length; i++)
+                {
+                    localPlayerProfiles[i] = new LocalPlayerProfile()
+                    {
+                        ID = i,
+                        Profile = players[i],
+                        Deck = new PlayerDeck()
+                        {
+                            cards = allCards,
+                        },
+                    };
+                }
+                int seed = Random.Range(int.MinValue, int.MaxValue);
+                _ = new OfflineBattleGameMode(seed, localPlayerProfiles).Run();
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            manager.onPlayerJoined += OnPlayerJoined;
+            manager.onPlayerLeft += OnPlayerLeft;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            manager.onPlayerJoined -= OnPlayerJoined;
+            manager.onPlayerLeft -= OnPlayerLeft;
+        }
+
+
+        private void OnPlayerJoined(PlayerInput playerInput)
+        {
+            Debug.Log($"New player joined {playerInput.name}_{playerInput.playerIndex}_{playerInput.user.valid}", playerInput);
+        }
+
+        private void OnPlayerLeft(PlayerInput playerInput)
+        {
+            Debug.Log($"Player left {playerInput.name}_{playerInput.playerIndex}_{playerInput.user.valid}", playerInput);
+        }
+
+
         protected override void OnPhaseBegin(BattleGameMode phase)
         {
             base.OnPhaseBegin(phase);
 
             runtimeBattlePlayers.Clear();
             container.ClearChildren();
-            
+
+            manager.EnableJoining();
             for (int i = 0; i < phase.Players.Length; i++)
             {
-                var player = phase.Players[i];
-                for (int j = 0; j < playersPrefab.Length; j++)
+                IBattlePlayer player = phase.Players[i];
+                RuntimeBattlePlayer runtimeBattlePlayer = null;
+                switch (player)
                 {
-                    RuntimeBattlePlayer prefab = playersPrefab[j];
+                    case LocalBattlePlayer localBattlePlayer:
+                        InputDevice[] inputDevices = InputUser.all[i].pairedDevices.ToArray();
+                        PlayerInput playerInput = PlayerInput.Instantiate(localBattlePlayerPrefab.gameObject, playerIndex:i, splitScreenIndex:i, pairWithDevices: inputDevices);
+                        runtimeBattlePlayer = playerInput.GetComponent<RuntimeBattlePlayer>();
+                        break;
+                }
 
-                    if (!prefab.IsCompatibleWith(player))
-                        continue;
-
-                    RuntimeBattlePlayer instance = Instantiate(prefab, container);
-                    instance.Connect(player);
-
-                    runtimeBattlePlayers.Add(player, instance);
-                    break;
+                if (runtimeBattlePlayer)
+                {
+                    runtimeBattlePlayer.transform.SetParent(container);
+                    runtimeBattlePlayer.Connect(player);
+                    runtimeBattlePlayers.Add(player, runtimeBattlePlayer);
                 }
             }
+            manager.DisableJoining();
         }
 
         protected override void OnPhaseEnd(BattleGameMode phase)
         {
             foreach ((IBattlePlayer battlePlayer, RuntimeBattlePlayer runtimeBattlePlayer) in runtimeBattlePlayers)
-            {
                 runtimeBattlePlayer.Disconnect(battlePlayer);
-            }
 
             runtimeBattlePlayers.Clear();
 

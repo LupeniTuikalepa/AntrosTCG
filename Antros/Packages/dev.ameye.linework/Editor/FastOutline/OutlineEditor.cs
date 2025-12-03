@@ -16,6 +16,7 @@ namespace Linework.Editor.FastOutline
         private SerializedProperty layerMask;
         private SerializedProperty renderQueue;
         private SerializedProperty occlusion;
+        private SerializedProperty closedLoop;
         private SerializedProperty maskingStrategy;
         private SerializedProperty blendMode;
         private SerializedProperty gpuInstancing;
@@ -38,6 +39,7 @@ namespace Linework.Editor.FastOutline
             layerMask = serializedObject.FindProperty(nameof(Outline.layerMask));
             renderQueue = serializedObject.FindProperty(nameof(Outline.renderQueue));
             occlusion = serializedObject.FindProperty(nameof(Outline.occlusion));
+            closedLoop = serializedObject.FindProperty(nameof(Outline.closedLoop));
             maskingStrategy = serializedObject.FindProperty(nameof(Outline.maskingStrategy));
             blendMode = serializedObject.FindProperty(nameof(Outline.blendMode));
             gpuInstancing = serializedObject.FindProperty(nameof(Outline.gpuInstancing));
@@ -70,6 +72,7 @@ namespace Linework.Editor.FastOutline
             EditorGUILayout.PropertyField(blendMode, EditorUtils.CommonStyles.OutlineBlendMode);
             if ((Occlusion) occlusion.intValue == Occlusion.WhenNotOccluded)
             {
+                EditorGUILayout.PropertyField(closedLoop, EditorUtils.CommonStyles.ClosedLoop);
                 EditorGUILayout.PropertyField(maskingStrategy, EditorUtils.CommonStyles.MaskingStrategy);
             }
             EditorGUILayout.PropertyField(gpuInstancing, EditorUtils.CommonStyles.GpuInstancing);

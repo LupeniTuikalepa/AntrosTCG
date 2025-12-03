@@ -20,7 +20,7 @@ namespace Linework.SurfaceFill
     static class ShaderPath
     {
         public const string Mask = "Hidden/Outlines/Surface Fill/Mask";
-        public const string Fill = "Hidden/Outlines/Fill";
+        public const string Fill = "Hidden/Outlines/Surface Fill/Fill";
     }
 
     static class ShaderPass
@@ -36,8 +36,8 @@ namespace Linework.SurfaceFill
     
     static class ShaderPropertyId
     {
-        public static readonly int PrimaryColor = Shader.PropertyToID("_Primary_Color");
-        public static readonly int SecondaryColor = Shader.PropertyToID("_Secondary_Color");
+        public static readonly int PrimaryColor = Shader.PropertyToID("_PrimaryColor");
+        public static readonly int SecondaryColor = Shader.PropertyToID("_SecondaryColor");
         public static readonly int FrequencyX = Shader.PropertyToID("_FrequencyX");
         public static readonly int FrequencyY = Shader.PropertyToID("_FrequencyY");
         public static readonly int Density = Shader.PropertyToID("_Density");
@@ -65,6 +65,7 @@ namespace Linework.SurfaceFill
         public const string PatternCheckerboard = "_PATTERN_CHECKERBOARD";
         public const string PatternDots = "_PATTERN_DOTS";
         public const string PatternStripes = "_PATTERN_STRIPES";
+        public const string PatternSquares= "_PATTERN_SQUARES";
         public const string PatternGlow = "_PATTERN_GLOW";
         public const string PatternTexture = "_PATTERN_TEXTURE";
     }
@@ -75,6 +76,7 @@ namespace Linework.SurfaceFill
         Checkerboard,
         Dots,
         Stripes,
+        Squares,
         Glow,
         Texture
     }

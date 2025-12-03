@@ -21,6 +21,7 @@ namespace Linework.FastOutline
         public LayerMask layerMask = ~0;
         public OutlineRenderQueue renderQueue = OutlineRenderQueue.Opaque;
         public Occlusion occlusion = Occlusion.WhenNotOccluded;
+        public bool closedLoop;
         public MaskingStrategy maskingStrategy = MaskingStrategy.Stencil;
         [ColorUsage(true, true)] public Color color = Color.green;
         public bool enableOcclusion = false;

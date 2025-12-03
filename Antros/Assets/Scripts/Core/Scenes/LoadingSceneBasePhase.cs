@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ATCG.Metrics;
 using Helteix.Tools.Phases;
@@ -55,6 +56,17 @@ namespace ATCG.Scenes
 
         async Awaitable<bool> IPhase<bool>.Execute(CancellationToken token)
         {
+            int loadedSceneCount = SceneManager.loadedSceneCount;
+            Scene[] loadedScenes = new Scene[loadedSceneCount];
+            for (int i = 0; i < loadedSceneCount; i++)
+                loadedScenes[i] = SceneManager.GetSceneAt(i);
+
+            for (int i = 0; i < loadedSceneCount; i++)
+            {
+                if(loadedScenes[i] != loadingScene)
+                    await SceneManager.UnloadSceneAsync(loadedScenes[i]);
+            }
+            scenesProcesses.Clear();
             for (int i = 0; i < scenesIndices.Length; i++)
             {
                 int sceneIndex = scenesIndices[i];
@@ -62,20 +74,17 @@ namespace ATCG.Scenes
                 if (op == null)
                     continue;
 
-                op.allowSceneActivation = false;
                 scenesProcesses.Add(op);
             }
 
-            while (!scenesProcesses.TrueForAll(ctx => !ctx.isDone))
+            while (scenesProcesses.Any(ctx => !ctx.isDone))
                 await Awaitable.NextFrameAsync(token);
 
-            foreach (var scenesProcess in scenesProcesses)
-                scenesProcess.allowSceneActivation = true;
-
             await Awaitable.EndOfFrameAsync(token);
+            scenesProcesses.Clear();
+
             Scene newActiveScene = SceneManager.GetSceneByBuildIndex(scenesIndices[0]);
             SceneManager.SetActiveScene(newActiveScene);
-
             return true;
         }
 

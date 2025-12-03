@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Players;
+﻿using System;
+using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using Helteix.Cards;
 using Helteix.Tools.Phases;
@@ -11,6 +12,15 @@ namespace ATCG.Battle.Cards.UI
     {
         public LocalBattlePlayer LocalBattlePlayer { get; private set; }
 
+        private void OnEnable()
+        {
+            this.Register();
+        }
+
+        private void OnDisable()
+        {
+            this.Unregister();
+        }
 
         protected override bool CanCardBeDragged(ICard card)
         {

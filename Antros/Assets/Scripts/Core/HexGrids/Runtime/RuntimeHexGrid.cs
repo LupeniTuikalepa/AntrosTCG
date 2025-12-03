@@ -20,7 +20,6 @@ namespace ATCG.HexGrids.Runtime
 
         public void Connect(HexGrid grid)
         {
-            //Debug.Log("Et la");
             Disconnect();
             Current = grid;
             Current.OnCellAdded += AddCell;
@@ -59,6 +58,7 @@ namespace ATCG.HexGrids.Runtime
             else
                 view.Disconnect();
 
+            //Debug.Log("Adding cell " + cell.coordinates);
             view.Connect(cell.coordinates);
             OnCellAdded?.Invoke(view);
         }
@@ -72,11 +72,6 @@ namespace ATCG.HexGrids.Runtime
             }
         }
 
-        public Vector3 GetPositionAt(HexCoordinates coordinates)
-        {
-            Vector2 flat = Current.GetPositionAt(coordinates);
-            return transform.position + Vector3.forward * flat.y + Vector3.right * flat.x;
-        }
-
+        public Vector2 GetPositionAt(HexCoordinates coordinates) => Current.GetPositionAt(coordinates);
     }
 }

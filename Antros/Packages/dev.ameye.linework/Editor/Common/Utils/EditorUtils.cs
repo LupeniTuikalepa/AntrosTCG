@@ -44,6 +44,7 @@ namespace Linework.Editor.Common.Utils
             public static readonly GUIContent Fills = EditorGUIUtility.TrTextContent("Fills", "The list of fills to render.");
             public static readonly GUIContent FillLayer = EditorGUIUtility.TrTextContent("Layer", "The rendering layer(s) which will get a fill rendered for them.");
             public static readonly GUIContent FillOcclusion = EditorGUIUtility.TrTextContent("Render", "For which occlusion states to render the fill.");
+            public static readonly GUIContent OccludedBy = EditorGUIUtility.TrTextContent("By", "OccludedBy");
             public static readonly GUIContent FillBlendMode = EditorGUIUtility.TrTextContent("Blend", "How to blend the fill with the rest of the scene.");
             public static readonly GUIContent Pattern = EditorGUIUtility.TrTextContent("Pattern", "The fill pattern that is used.");
             public static readonly GUIContent FillColor = EditorGUIUtility.TrTextContent("Color", "The color of the fill.");
@@ -81,21 +82,23 @@ namespace Linework.Editor.Common.Utils
             public static readonly GUIContent MaterialType = EditorGUIUtility.TrTextContent("Type", "The alpha clip threshold.");
             public static readonly GUIContent CustomMaterial = EditorGUIUtility.TrTextContent("Material", "The alpha clip threshold.");
             public static readonly GUIContent WidthControl = EditorGUIUtility.TrTextContent("Width Control", "Use a shared width or a width per outline.");
-
+            public static readonly GUIContent SilhouetteBufferFormat = EditorGUIUtility.TrTextContent("Silhouette Buffer Format", "The format of the silhouette buffer. Use R16G16B16A16_SFloat if you need to support HDR outline colors.");
+            
             // Edge detection.
             public static readonly GUIContent DiscontinuityInput = EditorGUIUtility.TrTextContent("Sources", "Which inputs to use as discontinuity sources for the edge detection.");
             public static readonly GUIContent Sensitivity = EditorGUIUtility.TrTextContent("Sensitivity", "The sensitivity used to detect this type of discontinuity.");
             public static readonly GUIContent DepthDistanceModulation = EditorGUIUtility.TrTextContent("Distance Mask", "Adjust how sensitive the edge detection is to changes in depth based on the distance from the camera.");
             public static readonly GUIContent GrazingAngleMaskPower = EditorGUIUtility.TrTextContent("Sharp Angle Mask", "Helps prevent edges from being falsely detected when the camera views a surface at a shallow angle.");
             public static readonly GUIContent GrazingAngleMaskHardness = EditorGUIUtility.TrTextContent("Sharp Angle Mask Multiplier", "Helps prevent edges from being falsely detected when the camera views a surface at a shallow angle.");
-            public static readonly GUIContent SectionsRawValues = EditorGUIUtility.TrTextContent("Raw Values", "Renderers on these layers which will render to the section map.");
+            public static readonly GUIContent DebugSectionsChannels = EditorGUIUtility.TrTextContent("Channels", "Which channels of the section map to display.");
+            public static readonly GUIContent DebugPerceptualSections = EditorGUIUtility.TrTextContent("Perceptual Values", "Use perceptual values to display the section map R channel.");
             public static readonly GUIContent SectionLayer = EditorGUIUtility.TrTextContent("Layer", "Renderers on these layers which will render to the section map.");
             public static readonly GUIContent MaskLayer = EditorGUIUtility.TrTextContent("Exclude", "Renderers on these layers which will render to the section map as a mask.");
             public static readonly GUIContent MaskInfluence = EditorGUIUtility.TrTextContent("From", "Use the section map to mask out regions where edges should not show up.");
             public static readonly GUIContent ObjectId = EditorGUIUtility.TrTextContent("Object ID", "Whether to render each object with a unique ID to the section map.");
             public static readonly GUIContent Particles = EditorGUIUtility.TrTextContent("Particles", "Whether to render each object with a unique ID to the section map.");
             public static readonly GUIContent SectionMapInput = EditorGUIUtility.TrTextContent("Source", "The input used for the section map.");
-            public static readonly GUIContent SectionMapPrecision = EditorGUIUtility.TrTextContent("Precision", "The precision of the section map.");
+            public static readonly GUIContent SectionMapFormat = EditorGUIUtility.TrTextContent("Format", "The format and precision of the section map.");
             public static readonly GUIContent SectionMapClearValue = EditorGUIUtility.TrTextContent("Skybox Value", "The clear value of the section map.");
             public static readonly GUIContent VertexColorChannel = EditorGUIUtility.TrTextContent("Channel", "Which vertex color channel to render to the section map.");
             public static readonly GUIContent SectionTexture = EditorGUIUtility.TrTextContent("Texture", "Which texture to sample when rendering to the section map.");
@@ -112,6 +115,16 @@ namespace Linework.Editor.Common.Utils
             public static readonly GUIContent FadeDistance = EditorGUIUtility.TrTextContent("Distance (meters)", "The distance/height over which the edges are faded.");
             public static readonly GUIContent FadeByHeight = EditorGUIUtility.TrTextContent("Fade By Height", "Fade the edges by height.");
             public static readonly GUIContent FadeColor = EditorGUIUtility.TrTextContent("Color", "The color to fade to.");
+            public static readonly GUIContent Distort = EditorGUIUtility.TrTextContent("Distort Edges", "Distort the edges in world space.");
+            public static readonly GUIContent DistortionTexture = EditorGUIUtility.TrTextContent("Texture", "The texture that is used to distort the outline.");
+            public static readonly GUIContent DistortionScale = EditorGUIUtility.TrTextContent("Scale", "The scale of the distortion.");
+            public static readonly GUIContent DistortionStrength = EditorGUIUtility.TrTextContent("Strength", "The strength of the distortion.");
+            public static readonly GUIContent DistortionStepRate = EditorGUIUtility.TrTextContent("Step Rate", "Animate the distortion X times per second.");
+            public static readonly GUIContent DistortionThicknessInfluence = EditorGUIUtility.TrTextContent("Thickness Influence", "How much the distortion should influence the thickness of the edges.");
+            public static readonly GUIContent BreakUp = EditorGUIUtility.TrTextContent("Break Up Edges", "Break up the edges.");
+            public static readonly GUIContent BreakUpAmount = EditorGUIUtility.TrTextContent("Amount", "How much to break up the edges.");
+            public static readonly GUIContent BreakUpScale = EditorGUIUtility.TrTextContent("Frequency", "How often to break up the edges.");
+            public static readonly GUIContent SectionRenderQueue = EditorGUIUtility.TrTextContent("Queue", "Only gameobjects using this render queue will render to the section map.");
         }
 
         public static void SectionGUI(string title, SerializedProperty expanded, Action drawAction, SerializedObject serializedObject, SerializedProperty enabled = null)

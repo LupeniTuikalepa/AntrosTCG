@@ -1,5 +1,12 @@
 Changelog:
 
+v6.5.0:
+ - Add selector to swap between multiple Sources on the same Camera
+ - Fix multiple sources not working in URP
+ - Fix editor error when using Source without Config
+ - Improve URP compatibility in certain configurations
+ - Fix demo looking incorrect
+
 v6.4.1:
  - Fix compilation error in URP
  - Fix brightness control not working correctly in gamma space

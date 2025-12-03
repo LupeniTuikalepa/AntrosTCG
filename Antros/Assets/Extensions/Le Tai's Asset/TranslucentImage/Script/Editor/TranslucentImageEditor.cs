@@ -47,6 +47,7 @@ public class TranslucentImageEditor : ImageEditor
     bool needValidateMaterial;
     bool materialUsedInDifferentSource;
     bool usingIncorrectShader;
+    int  smallFontSize;
 
     const bool HAVE_PARAFORM =
 #if LETAI_PARAFORM
@@ -94,6 +95,8 @@ public class TranslucentImageEditor : ImageEditor
             alignment = TextAnchor.MiddleLeft,
             richText  = true,
         };
+
+        smallFontSize = Mathf.RoundToInt(styleBtnSource.fontSize * .8f);
     }
 
     public override void OnInspectorGUI()
@@ -149,23 +152,14 @@ public class TranslucentImageEditor : ImageEditor
             if (existingSources.Length > 0)
             {
                 using (new EditorGUI.IndentLevelScope())
-                using (new EditorGUILayout.HorizontalScope())
                 {
+                    using var h = new EditorGUILayout.HorizontalScope();
+
                     EditorGUILayout.PrefixLabel("From current Scene");
-                    using (new EditorGUILayout.VerticalScope())
+                    using var v = new EditorGUILayout.VerticalScope();
+                    foreach (var s in existingSources)
                     {
-                        int smallFontSize = Mathf.RoundToInt(styleBtnSource.fontSize * .8f);
-                        foreach (var s in existingSources)
-                        {
-                            var label = $"{s.gameObject.name}\t<size={smallFontSize}>STR: </size>{s.BlurConfig.Strength:0.#}";
-                            if (GUILayout.Button(label, styleBtnSource))
-                            {
-                                Undo.RecordObject(target, $"Set source to {s.gameObject.name}");
-                                source.serializedProperty.objectReferenceValue = s;
-                                source.CallSetters(s);
-                                needValidateSource = true;
-                            }
-                        }
+                        SetSourceBtn($"{s.gameObject.name}\t{GetSourceDescriptionLabel(s)}", s);
                     }
                 }
 
@@ -180,20 +174,62 @@ public class TranslucentImageEditor : ImageEditor
         {
             using var _ = new EditorGUI.IndentLevelScope(1);
 
-            var sourceObj   = (TranslucentImageSource)source.serializedProperty.objectReferenceValue;
-            var config      = sourceObj.BlurConfig;
-            var oldStrength = config.Strength;
-            var newStrength = EditorGUILayout.FloatField("Blur Strength", oldStrength);
+            var sourceObj = (TranslucentImageSource)source.serializedProperty.objectReferenceValue;
+            var config    = sourceObj.BlurConfig;
 
-            if (!Mathf.Approximately(newStrength, oldStrength))
+            if (config)
             {
-                Undo.RecordObject(config, "Change blur config");
-                config.Strength = newStrength;
-                EditorUtility.SetDirty(config);
+                var oldStrength = config.Strength;
+                var newStrength = EditorGUILayout.FloatField("Blur Strength", oldStrength);
+
+                if (!Mathf.Approximately(newStrength, oldStrength))
+                {
+                    Undo.RecordObject(config, "Change blur config");
+                    config.Strength = newStrength;
+                    EditorUtility.SetDirty(config);
+                }
+            }
+            else
+            {
+                using var h = new EditorGUILayout.HorizontalScope();
+                EditorGUILayout.LabelField(" ", "No Blur Config");
+            }
+
+            var sameCameraSources = sourceObj.GetComponents<TranslucentImageSource>();
+            if (sameCameraSources.Length > 1)
+            {
+                using var h = new EditorGUILayout.HorizontalScope();
+                EditorGUILayout.PrefixLabel("Other Sources");
+                foreach (var s in sameCameraSources)
+                {
+                    if (s == sourceObj)
+                        continue;
+
+                    SetSourceBtn(GetSourceDescriptionLabel(s), s);
+                }
             }
         }
     }
 
+    string GetSourceDescriptionLabel(TranslucentImageSource s)
+    {
+        if (s.BlurConfig)
+            return $"<size={smallFontSize}>STR: </size>{s.BlurConfig.Strength:0.#}";
+
+        return $"<size={smallFontSize}>No Blur Config</size>";
+    }
+
+    void SetSourceBtn(string label, TranslucentImageSource newSource)
+    {
+        if (GUILayout.Button(label, styleBtnSource, GUILayout.ExpandWidth(false)))
+        {
+            Undo.RecordObject(target, $"Set source to {newSource.gameObject.name}");
+            source.serializedProperty.objectReferenceValue = newSource;
+            source.CallSetters(newSource);
+            needValidateSource   = true;
+            needValidateMaterial = true;
+        }
+    }
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]

@@ -13,7 +13,7 @@ public static class Migration
     [SuppressMessage("ReSharper", "Unity.PreferAddressByIdToGraphicsParams")]
     static void MigrateTo60()
     {
-        var tiArr = Object.FindObjectsOfType<TranslucentImage>();
+        var tiArr = Shims.FindObjectsOfType<TranslucentImage>();
         foreach (var ti in tiArr)
         {
             Undo.RecordObject(ti, "Migrate to 6.0");

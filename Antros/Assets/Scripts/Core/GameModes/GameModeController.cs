@@ -4,46 +4,38 @@ using UnityEngine;
 
 namespace ATCG.GameModes
 {
-    public class GameModeController : IPhaseListener<IGameMode>, IDisposable
+    public class GameModeController
     {
         public static GameModeController Global => GameController.GameModeController;
         public IGameMode Current { get; private set; }
 
         public event Action<IGameMode> OnGameModeBegins;
-
         public event Action<IGameMode> OnGameModeEnds;
 
         public GameModeController()
         {
-            this.Register();
         }
 
-        void IPhaseListener<IGameMode>.OnPhaseBegin(IGameMode phase)
+        public void StartGameMode(IGameMode mode)
         {
             if (Current != null)
             {
-                Debug.LogError("Beginning a new game mode while one is not done yet. Cancelling the running one");
+                EndGameMode(mode);
                 Current.Cancel();
             }
-
-            OnGameModeBegins?.Invoke(Current);
-            Current = phase;
+            Current = mode;
+            OnGameModeBegins?.Invoke(mode);
         }
 
-        void IPhaseListener<IGameMode>.OnPhaseEnd(IGameMode phase)
+        public void EndGameMode(IGameMode mode)
         {
-            if (Current == phase)
+            if (Current == mode)
             {
-                OnGameModeEnds?.Invoke(Current);
                 Current = null;
+                OnGameModeEnds?.Invoke(mode);
             }
         }
 
         public bool CanStartGameMode() => Current == null;
-
-        public void Dispose()
-        {
-            this.Unregister();
-        }
     }
 }

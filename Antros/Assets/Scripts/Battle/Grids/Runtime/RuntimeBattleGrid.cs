@@ -12,16 +12,20 @@ namespace ATCG.Battle.HexGrids.Runtime
     [RequireComponent(typeof(RuntimeHexGrid))]
     public class RuntimeBattleGrid : MonoBehaviour, IPhaseListener<BattleGameMode>
     {
+        public event Action<RuntimeBattleCell> OnBattleCellAdded;
+        public event Action<RuntimeBattleCell> OnBattleCellRemoved;
+
         [SerializeField]
         private RuntimeHexGrid runtimeHexGrid;
 
+        public RuntimeHexGrid RuntimeHexGrid => runtimeHexGrid;
 
         public BattleGrid BattleGrid => CurrentGameMode?.BattleGrid;
 
         public BattleGameMode CurrentGameMode { get; private set; }
 
         private Dictionary<HexCell, RuntimeBattleCell> battleCells;
-
+        public IReadOnlyCollection<RuntimeBattleCell> BattleCells => battleCells.Values;
 
         private void Reset()
         {
@@ -31,15 +35,19 @@ namespace ATCG.Battle.HexGrids.Runtime
         private void OnEnable()
         {
             battleCells = DictionaryPool<HexCell, RuntimeBattleCell>.Get();
-            runtimeHexGrid.OnCellAdded += OnCellAdded;
-            runtimeHexGrid.OnCellRemoved += OnCellRemoved;
+            runtimeHexGrid.OnCellAdded += OnGridCellAdded;
+            runtimeHexGrid.OnCellRemoved += OnGridCellRemoved;
+
+            this.Register();
         }
 
         private void OnDisable()
         {
             DictionaryPool<HexCell, RuntimeBattleCell>.Release(battleCells);
-            runtimeHexGrid.OnCellAdded -= OnCellAdded;
-            runtimeHexGrid.OnCellRemoved -= OnCellRemoved;
+            runtimeHexGrid.OnCellAdded -= OnGridCellAdded;
+            runtimeHexGrid.OnCellRemoved -= OnGridCellRemoved;
+
+            this.Unregister();
         }
 
         void IPhaseListener<BattleGameMode>.OnPhaseBegin(BattleGameMode phase)
@@ -57,24 +65,26 @@ namespace ATCG.Battle.HexGrids.Runtime
             }
         }
 
-        private void OnCellAdded(RuntimeHexCell runtimeCell)
+        private void OnGridCellAdded(RuntimeHexCell runtimeCell)
         {
-            RuntimeBattleCell runtimeBattleCell = runtimeCell.gameObject.AddComponent<RuntimeBattleCell>();
+            RuntimeBattleCell runtimeBattleCell = runtimeCell.GetComponent<RuntimeBattleCell>();
 
             if (CurrentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
             {
-                runtimeBattleCell.Connect(CurrentGameMode, battleCell);
+                runtimeBattleCell.Connect(this, CurrentGameMode, battleCell);
                 battleCells.Add(runtimeCell.Cell, runtimeBattleCell);
+                OnBattleCellAdded?.Invoke(runtimeBattleCell);
             }
         }
 
-        private void OnCellRemoved(RuntimeHexCell runtimeCell)
+        private void OnGridCellRemoved(RuntimeHexCell runtimeCell)
         {
             if (battleCells.Remove(runtimeCell.Cell, out RuntimeBattleCell cell))
             {
                 if (CurrentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
                     cell.Disconnect(CurrentGameMode, battleCell);
 
+                OnBattleCellRemoved?.Invoke(cell);
                 Destroy(cell);
             }
         }

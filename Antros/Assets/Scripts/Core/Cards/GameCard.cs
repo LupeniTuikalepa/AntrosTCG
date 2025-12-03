@@ -9,16 +9,16 @@ namespace ATCG.Cards
 {
     public abstract class GameCard<T> : Card, IGameCard where T : GameCardData
     {
-        IEnumerable<ICapacityDescriptions> IUIListSource<ICapacityDescriptions>.Items => Capacities;
+        IEnumerable<CapacityData> IUIListSource<CapacityData>.Items => Capacities;
 
-        public event Action<ICapacityDescriptions> ItemAdded;
+        public event Action<CapacityData> ItemAdded;
 
-        public event Action<ICapacityDescriptions> ItemRemoved;
+        public event Action<CapacityData> ItemRemoved;
 
         GameCardData IGameCard.CardData => Data;
         public string Title => Data.Title;
         public string Description => Data.Description;
-        public IEnumerable<ICapacityDescriptions> Capacities
+        public IEnumerable<CapacityData> Capacities
         {
             get
             {
@@ -29,7 +29,7 @@ namespace ATCG.Cards
             }
         }
 
-        private HashSet<ICapacityDescriptions> additionalCapacities;
+        private HashSet<CapacityData> additionalCapacities;
         public T Data { get; }
 
         protected GameCard(T data)
@@ -38,16 +38,16 @@ namespace ATCG.Cards
             additionalCapacities = new();
         }
 
-        public void AddCapacity(ICapacityDescriptions capacityDescriptions)
+        public void AddCapacity(CapacityData capacityData)
         {
-            if(additionalCapacities.Add(capacityDescriptions))
-                ItemAdded?.Invoke(capacityDescriptions);
+            if(additionalCapacities.Add(capacityData))
+                ItemAdded?.Invoke(capacityData);
         }
 
-        public void RemoveCapacity(ICapacityDescriptions capacityDescriptions)
+        public void RemoveCapacity(CapacityData capacityData)
         {
-            if (additionalCapacities.Remove(capacityDescriptions))
-                ItemRemoved?.Invoke(capacityDescriptions);
+            if (additionalCapacities.Remove(capacityData))
+                ItemRemoved?.Invoke(capacityData);
         }
     }
 }

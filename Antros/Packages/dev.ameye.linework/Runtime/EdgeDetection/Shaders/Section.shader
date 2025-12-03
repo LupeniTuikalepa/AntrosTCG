@@ -3,8 +3,11 @@ Shader "Hidden/Outlines/Edge Detection/Section"
     Properties
     {
         _SectionTexture ("Section Texture", 2D) = "white" {}
+        _BreakUpAmount ("Break up amount", Range(0, 1)) = 0
+        _BreakUpScale ("Break up scale", Range(0, 20)) = 0
         [Toggle(OBJECT_ID)] OBJECT_ID ("Object Id", Float) = 0
         [Toggle(PARTICLES)] PARTICLES ("Particles", Float) = 0
+        [Toggle(BREAKUP)] BREAKUP ("Breakup", Float) = 0
         [KeywordEnum(NONE, VERTEX_COLOR, TEXTURE)] INPUT("Input", Float) = 0
         [KeywordEnum(R, G, B, A)] VERTEX_COLOR_CHANNEL("Vertex Color Channel", Float) = 0
         [KeywordEnum(R, G, B, A)] TEXTURE_CHANNEL("Texture Channel", Float) = 0
@@ -46,7 +49,8 @@ Shader "Hidden/Outlines/Edge Detection/Section"
             #pragma multi_compile_local VERTEX_COLOR_CHANNEL_R VERTEX_COLOR_CHANNEL_G VERTEX_COLOR_CHANNEL_B VERTEX_COLOR_CHANNEL_A
             #pragma multi_compile_local TEXTURE_CHANNEL_R TEXTURE_CHANNEL_G TEXTURE_CHANNEL_B TEXTURE_CHANNEL_A
             #pragma multi_compile_local TEXTURE_UV_SET_UV0 TEXTURE_UV_SET_UV1 TEXTURE_UV_SET_UV2 TEXTURE_UV_SET_UV3
-
+            #pragma multi_compile_local _ BREAKUP
+            
             struct Attributes
             {
                 float4 positionOS : POSITION;
@@ -80,6 +84,7 @@ Shader "Hidden/Outlines/Edge Detection/Section"
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
+                float3 positionWS:TEXCOORD1;
 
                 #if defined(INPUT_VERTEX_COLOR)
                 float4 color : COLOR0;
@@ -96,6 +101,8 @@ Shader "Hidden/Outlines/Edge Detection/Section"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _SectionTexture_ST;
+                float _BreakUpAmount;
+                float _BreakUpScale;
             CBUFFER_END
 
             Varyings vert(Attributes IN)
@@ -112,6 +119,8 @@ Shader "Hidden/Outlines/Edge Detection/Section"
                 OUT.uv.xy = TRANSFORM_TEX(IN.uv, _SectionTexture);
                 OUT.uv.zw = IN.uv.zw;
                 #endif
+
+                OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 return OUT;
             }
 
@@ -121,13 +130,27 @@ Shader "Hidden/Outlines/Edge Detection/Section"
                 return frac(sin(dot(p, float3(12.9898, 78.233, 45.164))) * 43758.5453);
             }
 
+            float noise(float3 p)
+            {
+                float s = 0.0;
+                s += sin(dot(p, float3(1.5, 3.4598, 1.234)));
+                s += sin(dot(p, float3(3.12, -3.234, 4.221)));
+                s += sin(dot(p, float3(0.355, 2.3, -1.375)));
+                s += sin(dot(p, float3(-0.156, -3.34, -0.4566)));
+                s += sin(dot(p, float3(-4.1235, -0.485, -1.45)));
+                s += sin(dot(p, float3(2.54, -0.879, -2.123)));
+                return s / 6.0;
+            }
+
             half4 frag(Varyings IN) : SV_TARGET
             {
                 float id = 0.5;
 
                 // Object id.
                 #if defined(OBJECT_ID)
-                id = hash(GetAbsolutePositionWS(UNITY_MATRIX_M._m03_m13_m23)) + 0.01;
+                id = hash(GetAbsolutePositionWS(UNITY_MATRIX_M._m03_m13_m23));
+                const float epsilon = 1e-3;
+                id = clamp(id, epsilon, 1.0-epsilon);
                 #if defined(PARTICLES)
                 float particle_id = frac(dot(IN.uv.zw, IN.uv.zw) * 0.3);
                 id = max(id, particle_id);
@@ -175,7 +198,17 @@ Shader "Hidden/Outlines/Edge Detection/Section"
                 id = sample;
                 #endif
 
+                // Keep values of 1 as a 1.
                 if (sample == 1) id = 1;
+                
+                // Add noise-based break up to the sections and store in B channel.
+                #if defined(BREAKUP)
+                float3 noise_uvs = IN.positionWS * _BreakUpScale + float3(3.324, 34.2, 56.343);
+                float contribution = noise(noise_uvs) * 0.5 + 0.5;
+                contribution = 1.0 - step(_BreakUpAmount, contribution);
+                return half4(id, contribution, 0.0, 1.0);
+                #endif
+                
                 return half4(id, 0.0, 0.0, 1.0);
             }
             ENDHLSL

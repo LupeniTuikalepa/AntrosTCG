@@ -67,6 +67,14 @@ namespace Linework.Common.Utils
         [InspectorName("Custom (experimental)")]
         Custom
     }
+
+    public enum SilhouetteBufferFormat
+    {
+        [InspectorName("R8G8B8A8_UNorm")]
+        R8,
+        [InspectorName("R16G16B16A16_SFloat")]
+        R16
+    }
     
     public enum WidthControl
     {
@@ -89,16 +97,21 @@ namespace Linework.Common.Utils
         public static readonly int CullMode = Shader.PropertyToID("_Cull");
         public static readonly int BlendModeSource = Shader.PropertyToID("_SrcBlend");
         public static readonly int BlendModeDestination = Shader.PropertyToID("_DstBlend");
+    
+        public static readonly int StencilRef = Shader.PropertyToID("_StencilRef");
+        public static readonly int StencilComp = Shader.PropertyToID("_StencilComp");
+        public static readonly int StencilReadMask = Shader.PropertyToID("_StencilReadMask");
+        public static readonly int StencilPass = Shader.PropertyToID("_StencilPass");
+        public static readonly int StencilFail = Shader.PropertyToID("_StencilFail");
+
         public static readonly int FullScreenColorBlendModeSource = Shader.PropertyToID("_Fullscreen_SrcColorBlend");
         public static readonly int FullScreenColorBlendModeDestination = Shader.PropertyToID("_Fullscreen_DstColorBlend");
-
         public static readonly int FullScreenStencilReference = Shader.PropertyToID("_Fullscreen_StencilReference");
         public static readonly int FullScreenStencilComparison = Shader.PropertyToID("_Fullscreen_StencilComparison");
         public static readonly int FullScreenStencilReadMask = Shader.PropertyToID("_Fullscreen_StencilReadMask");
-
         public static readonly int FullScreenStencilPass = Shader.PropertyToID("_Fullscreen_StencilPass");
         public static readonly int FullScreenStencilFail = Shader.PropertyToID("_Fullscreen_StencilFail");
-
+        
         public static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
         public static readonly int AlphaCutoutTexture = Shader.PropertyToID("_AlphaCutoutTexture");
         public static readonly int AlphaCutoutThreshold = Shader.PropertyToID("_AlphaCutoutThreshold");

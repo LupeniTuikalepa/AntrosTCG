@@ -54,6 +54,17 @@ namespace Linework.EdgeDetection
         public static readonly int HeightFadeDistance = Shader.PropertyToID("_HeightFadeDistance");
         public static readonly int HeightFadeColor = Shader.PropertyToID("_HeightFadeColor");
         
+        // Distortion.
+        public static readonly int DistortionTexture = Shader.PropertyToID("_DistortionTexture");
+        public static readonly int DistortionScale = Shader.PropertyToID("_DistortionScale");
+        public static readonly int DistortionThicknessInfluence = Shader.PropertyToID("_DistortionThicknessInfluence");
+        public static readonly int DistortionStrength = Shader.PropertyToID("_DistortionStrength");
+        public static readonly int DistortionStepRate = Shader.PropertyToID("_DistortionStepRate");
+        
+        // Break up.
+        public static readonly int BreakupScale = Shader.PropertyToID("_BreakUpScale");
+        public static readonly int BreakupAmount = Shader.PropertyToID("_BreakUpAmount");
+        
         // Edge detection.
         public static readonly int DepthSensitivity = Shader.PropertyToID("_DepthSensitivity");
         public static readonly int DepthDistanceModulation = Shader.PropertyToID("_DepthDistanceModulation");
@@ -80,6 +91,16 @@ namespace Linework.EdgeDetection
         Normals = 1 << 1,
         Luminance = 1 << 2,
         Sections = 1 << 3,
+        All = ~0,
+    }
+    
+    [Flags]
+    public enum DebugSectionsChannels
+    {
+        Nothing = 0,
+        R = 1 << 0,
+        G = 1 << 1,
+        B = 1 << 2,
         All = ~0,
     }
     
@@ -130,12 +151,16 @@ namespace Linework.EdgeDetection
 
         public const string OperatorCross = "OPERATOR_CROSS";
         public const string OperatorSobel = "OPERATOR_SOBEL";
+        public const string OperatorCircular = "OPERATOR_CIRCULAR";
+
+        public const string Distortion = "DISTORTION";
+        public const string Breakup = "BREAKUP";
 
         public const string DebugDepth = "DEBUG_DEPTH";
         public const string DebugNormals = "DEBUG_NORMALS";
         public const string DebugLuminance = "DEBUG_LUMINANCE";
         public const string DebugSections = "DEBUG_SECTIONS";
-        public const string DebugSectionsRawValues = "DEBUG_SECTIONS_RAW_VALUES";
+        public const string DebugSectionsPerceptual = "DEBUG_SECTIONS_PERCEPTUAL";
         public const string OverrideShadow = "OVERRIDE_SHADOW";
         public const string ScaleWithResolution = "SCALE_WITH_RESOLUTION";
         public const string FadeByDistance = "FADE_BY_DISTANCE";
@@ -144,6 +169,10 @@ namespace Linework.EdgeDetection
         public const string NormalsMask = "NORMALS_MASK";
         public const string LuminanceMask = "LUMINANCE_MASK";
         public const string Fill = "FILL";
+        
+        public const string DebugSectionsR = "DEBUG_SECTIONS_R";
+        public const string DebugSectionsG = "DEBUG_SECTIONS_G";
+        public const string DebugSectionsB = "DEBUG_SECTIONS_B";
 
         public const string ObjectId = "OBJECT_ID";
         public const string Particles = "PARTICLES";
@@ -166,7 +195,9 @@ namespace Linework.EdgeDetection
     public enum Kernel
     {
         RobertsCross,
-        Sobel
+        Sobel,
+        [InspectorName("Circular (sections only)")]
+        Circular
     }
     
     public enum UVSet
@@ -189,11 +220,13 @@ namespace Linework.EdgeDetection
         Custom
     }
 
-    public enum SectionMapPrecision
+    public enum SectionMapFormat
     {
-        [InspectorName("8-bit")]
-        _8bit,
-        [InspectorName("16-bit")]
-        _16bit
+        [InspectorName("R8")]
+        R8,
+        [InspectorName("R16")]
+        R16,
+        [InspectorName("RGBA8")]
+        RGBA8,
     }
 }

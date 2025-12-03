@@ -16,5 +16,7 @@
         Light,
         Air,
         Frost,
+
+        None,
     }
 }
