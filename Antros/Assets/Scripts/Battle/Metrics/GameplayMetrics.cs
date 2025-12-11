@@ -15,8 +15,8 @@ namespace ATCG.Battle.Metrics
         [field: SerializeField, BoxGroup("Game"), PropertyRange(0, nameof(MaxMana))]
         public int RecoveredManaOnTurnStart { get; private set; } = 2;
         [field: SerializeField, BoxGroup("Game"), PropertyRange(0, nameof(MaxMana))]
-        public int PlayerHandSize { get; private set; } = 6;
-        [field: SerializeField, BoxGroup("Game"), PropertyRange(1, nameof(PlayerHandSize))]
+        public int MinPlayerHandSize { get; private set; } = 6;
+        [field: SerializeField, BoxGroup("Game"), PropertyRange(1, nameof(MinPlayerHandSize))]
         public int PlayerDeployedHeroCount { get; private set; } = 5;
 
 

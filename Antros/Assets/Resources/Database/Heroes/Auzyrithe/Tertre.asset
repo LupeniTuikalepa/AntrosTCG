@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1803131ed50f4deda696f2ef1722e15d, type: 3}
   m_Name: Tertre
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
-  guidText: 9a0557a7-0446-40b3-bc4b-133d5a1d93ce
+  guidText: 25ee017b-ebfd-4af1-ba8d-a9b8d333e780
   <Title>k__BackingField: Tertre
   <Description>k__BackingField: 
   <Element>k__BackingField: 8

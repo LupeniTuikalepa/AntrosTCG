@@ -40,7 +40,10 @@ namespace ATCG.Databases
         public bool TryGetObject<T>(string id, out T item) where T : GameDatabaseObject
         {
             if (!guidCache.TryGetValue(id, out Guid guid))
-                guidCache.Add(id, Guid.Parse(id));
+            {
+                guid = Guid.Parse(id);
+                guidCache.Add(id, guid);
+            }
 
             return TryGetObject(guid, out item);
         }

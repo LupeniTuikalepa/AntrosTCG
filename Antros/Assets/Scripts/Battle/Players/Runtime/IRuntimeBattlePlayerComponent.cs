@@ -1,4 +1,4 @@
-﻿namespace ATCG.Battle.Players
+﻿namespace ATCG.Battle.Players.Runtime
 {
     public interface IRuntimeBattlePlayerComponent
     {

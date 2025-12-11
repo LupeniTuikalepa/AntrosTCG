@@ -20,13 +20,13 @@ namespace ATCG.MainMenu.MainMenu.GameModeButtons
             await Awaitables.CompletedAwaitable;
             int seed = Random.Range(int.MinValue, int.MaxValue);
 
-            PlayerProfile[] players = new PlayerProfile[]
+            PlayerInfos[] players = new PlayerInfos[]
             {
-                new PlayerProfile()
+                new PlayerInfos()
                 {
                     name = "Player 1"
                 },
-                new PlayerProfile()
+                new PlayerInfos()
                 {
                     name = "Player 2"
                 }
@@ -37,13 +37,13 @@ namespace ATCG.MainMenu.MainMenu.GameModeButtons
                         .ToArray();
 
                 //PlayerInputPairing[] pairings = result.result;
-                LocalPlayerProfile[] localPlayerProfiles = new LocalPlayerProfile[players.Length];
+                IBattlePlayerProfile[] localPlayerProfiles = new IBattlePlayerProfile[players.Length];
                 for (int i = 0; i < players.Length; i++)
                 {
                     localPlayerProfiles[i] = new LocalPlayerProfile()
                     {
                         ID = i,
-                        Profile = players[i],
+                        Infos = players[i],
                         Deck = new PlayerDeck()
                         {
                             cards = allCards,
@@ -54,8 +54,6 @@ namespace ATCG.MainMenu.MainMenu.GameModeButtons
                 /*
             }
             */
-
-            return null;
         }
     }
 }

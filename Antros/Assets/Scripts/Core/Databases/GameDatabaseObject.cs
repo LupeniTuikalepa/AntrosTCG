@@ -27,6 +27,12 @@ namespace ATCG.Databases
 
         private Guid guid = Guid.Empty;
 
+        private void Reset()
+        {
+            guidText = string.Empty;
+            OnValidate();
+        }
+
         private void OnValidate()
         {
             if(string.IsNullOrEmpty(guidText))

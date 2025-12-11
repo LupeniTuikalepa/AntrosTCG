@@ -7,7 +7,7 @@ namespace ATCG.Battle.Cards
     public class HeroBattleCard : BattleCard<HeroCardData>
     {
 
-        public HeroBattleCard(HeroCardData data, uint playerID) : base(data, playerID)
+        public HeroBattleCard(HeroCardData data, int playerID) : base(data, playerID)
         {
 
         }

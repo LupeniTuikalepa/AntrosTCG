@@ -1,10 +1,11 @@
-﻿using Sirenix.OdinInspector;
+﻿using ATCG.Databases;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Capacities
 {
 
-    public abstract class CapacityData : ScriptableObject
+    public abstract class CapacityData : GameDatabaseObject
     {
         [field: SerializeField, PropertyRange(0, 10)]
         public int Cost { get; private set; }

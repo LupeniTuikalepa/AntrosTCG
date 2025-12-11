@@ -1,6 +1,7 @@
 ﻿using System;
 using ATCG.Battle.Metrics;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Phases;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
 using Helteix.Tools.Phases;

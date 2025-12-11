@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using ATCG.Battle.Cards;
 using ATCG.Battle.HexGrids;
 using ATCG.HexGrids;
@@ -8,7 +7,7 @@ using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Players
+namespace ATCG.Battle.Players.Phases
 {
     public sealed class PlayerDragBattleCardPhase : PhaseCompletionSource<BattleCell>
     {

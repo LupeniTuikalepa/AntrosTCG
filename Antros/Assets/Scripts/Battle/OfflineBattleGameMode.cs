@@ -1,9 +1,9 @@
-
 using ATCG.Battle.Players;
-using ATCG.Battle.Players.Local;
 using ATCG.Metrics;
 using ATCG.Players.InputAssigning;
+
 using Eflatun.SceneReference;
+
 using Helteix.Tools.Phases;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace ATCG.Battle
     public class OfflineBattleGameMode : BattleGameMode
     {
         public override string ID => "OfflineBattleGameMode";
-        public OfflineBattleGameMode(int seed, params LocalPlayerProfile[] playerProfiles) : base(seed, playerProfiles)
+        public OfflineBattleGameMode(int seed, params IBattlePlayerProfile[] playerProfiles) : base(seed, playerProfiles)
         {
 
         }
@@ -24,9 +24,6 @@ namespace ATCG.Battle
             await base.Initialize();
         }
 
-
-        protected override IBattlePlayer CreatePlayer(LocalPlayerProfile localPlayerProfile)
-            => new LocalBattlePlayer(this, localPlayerProfile);
 
         protected override SceneReference GetGameScene() => GameScenes.Current.Game;
     }

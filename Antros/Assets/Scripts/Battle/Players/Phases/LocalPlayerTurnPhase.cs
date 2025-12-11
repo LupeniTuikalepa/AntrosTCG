@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.Actions;
 using ATCG.Battle.Metrics;
-using ATCG.Battle.Players.Local;
 using Helteix.ChanneledProperties;
-using Helteix.Tools;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Players
+namespace ATCG.Battle.Players.Phases
 {
     public class LocalPlayerTurnPhase : PhaseCompletionSource<BattleTurn>
     {
@@ -35,15 +33,16 @@ namespace ATCG.Battle.Players
         protected override Awaitable Initialize(CancellationToken token)
         {
             actionInfosList = ListPool<IBattleActionInfos>.Get();
-
             battlePlayer.AddOrRemoveMana(GameplayMetrics.Current.RecoveredManaOnTurnStart);
 
             battlePlayer.canDeployHeroes.AddCondition(channelKey);
             battlePlayer.canMoveHeroes.AddCondition(channelKey);
             battlePlayer.canUseHeroesAbilities.AddCondition(channelKey);
 
+            battlePlayer.FillHand();
             return base.Initialize(token);
         }
+
         protected override Awaitable Dispose(CancellationToken token)
         {
             ListPool<IBattleActionInfos>.Release(actionInfosList);

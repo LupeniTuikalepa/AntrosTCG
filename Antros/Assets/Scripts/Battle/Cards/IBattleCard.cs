@@ -6,7 +6,7 @@ namespace ATCG.Battle.Cards
 {
     public interface IBattleCard : IGameCard, IHexMember
     {
-        uint PlayerID { get; }
+        int PlayerID { get; }
         public BattleGrid Grid { get; }
 
         void Deploy(BattleGrid grid, HexCoordinates coordinates);

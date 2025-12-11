@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ATCG.Battle.Players;
-using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Battle.Players.Runtime;
+using ATCG.Battle.Players.Runtime.Local;
 using ATCG.Cards;
 using ATCG.Players;
 using Helteix.Tools;
@@ -13,10 +12,9 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
-using UnityEngine.InputSystem.Utilities;
 using Random = UnityEngine.Random;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.Players
 {
     public class BattlePlayerSceneSetup : MonoPhaseListener<BattleGameMode>
     {
@@ -36,18 +34,19 @@ namespace ATCG.Battle
             runtimeBattlePlayers = new Dictionary<IBattlePlayer, RuntimeBattlePlayer>();
         }
 
-        private async void Start()
+        private IEnumerator Start()
         {
-            await Awaitable.EndOfFrameAsync();
+            yield return new WaitForEndOfFrame();
+
             if (GameController.GameModeController.Current == null)
             {
-                PlayerProfile[] players = new PlayerProfile[]
+                PlayerInfos[] players = new PlayerInfos[]
                 {
-                    new PlayerProfile()
+                    new PlayerInfos()
                     {
                         name = "Player 1"
                     },
-                    new PlayerProfile()
+                    new PlayerInfos()
                     {
                         name = "Player 2"
                     }
@@ -58,13 +57,13 @@ namespace ATCG.Battle
                         .ToArray();
 
                 //PlayerInputPairing[] pairings = result.result;
-                LocalPlayerProfile[] localPlayerProfiles = new LocalPlayerProfile[players.Length];
+                IBattlePlayerProfile[] localPlayerProfiles = new IBattlePlayerProfile[players.Length];
                 for (int i = 0; i < players.Length; i++)
                 {
                     localPlayerProfiles[i] = new LocalPlayerProfile()
                     {
                         ID = i,
-                        Profile = players[i],
+                        Infos = players[i],
                         Deck = new PlayerDeck()
                         {
                             cards = allCards,

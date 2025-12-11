@@ -22,7 +22,7 @@ namespace ATCG.Battle
 
         public readonly int seed;
 
-        public readonly LocalPlayerProfile[] playerProfiles;
+        public readonly IBattlePlayerProfile[] playerProfiles;
 
 
         public BattleGrid BattleGrid { get; private set; }
@@ -37,7 +37,7 @@ namespace ATCG.Battle
         public abstract string ID { get; }
         public HexGrid HexGrid => BattleGrid.Grid;
         public int PlayerCount => playerProfiles.Length;
-        protected BattleGameMode(int seed, params LocalPlayerProfile[] playerProfiles)
+        protected BattleGameMode(int seed, params IBattlePlayerProfile[] playerProfiles)
         {
             this.seed = seed;
             this.playerProfiles = playerProfiles;
@@ -54,9 +54,10 @@ namespace ATCG.Battle
             Players = new IBattlePlayer[playerProfiles.Length];
             for (int i = 0; i < playerProfiles.Length; i++)
             {
-                LocalPlayerProfile playerProfile = playerProfiles[i];
+                IBattlePlayerProfile playerProfile = playerProfiles[i];
 
-                IBattlePlayer battlePlayer = CreatePlayer(playerProfile);
+                IBattlePlayer battlePlayer = playerProfile.Convert(this);
+                battlePlayer.OnBattleBegins(this);
                 Players[i] = battlePlayer;
             }
 
@@ -70,7 +71,6 @@ namespace ATCG.Battle
             Round = 1;
             Turn = 1;
             BattleGameModeResults results = default;
-
             while (true)
             {
                 bool isGameDone = false;
@@ -140,7 +140,6 @@ namespace ATCG.Battle
                 }
             }
         }
-        protected abstract IBattlePlayer CreatePlayer(LocalPlayerProfile playerProfile);
         protected abstract SceneReference GetGameScene();
     }
 }

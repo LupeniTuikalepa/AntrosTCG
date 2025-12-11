@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace ATCG.Battle.Players
+namespace ATCG.Battle.Players.Runtime
 {
     public abstract class RuntimeBattlePlayer : MonoBehaviour
     {

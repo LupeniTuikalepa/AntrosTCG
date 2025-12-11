@@ -9,13 +9,13 @@ namespace ATCG.Battle.Cards
     public abstract class BattleCard<T> : GameCard<T>, IBattleCard where T : GameCardData
     {
         public bool IsDeployed => Grid != null;
-        uint IBattleCard.PlayerID => playerID;
+        int IBattleCard.PlayerID => playerID;
 
         public BattleGrid Grid { get; private set; }
 
-        public readonly uint playerID;
+        public readonly int playerID;
 
-        protected BattleCard(T data, uint playerID) : base(data)
+        protected BattleCard(T data, int playerID) : base(data)
         {
             this.playerID = playerID;
         }

@@ -1,0 +1,17 @@
+{
+    "name": "ATCG.Editor",
+    "rootNamespace": "",
+    "references": [
+        "ATCG.Core",
+        "Helteix.Tools.Editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

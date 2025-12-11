@@ -11,5 +11,7 @@ namespace ATCG.Battle.Players
         bool IsDefeated();
 
         Awaitable<BattleTurn> PlayTurn(int round, int turnNumber);
+        void OnBattleBegins(BattleGameMode battleGameMode);
+        void OnBattleEnds(BattleGameMode battleGameMode);
     }
 }

@@ -180,6 +180,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -316,6 +317,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -638,6 +640,7 @@ GameObject:
   - component: {fileID: 8840698550750326937}
   - component: {fileID: 4915859274674836535}
   - component: {fileID: 4488357812467242325}
+  - component: {fileID: 5229182672180385720}
   m_Layer: 5
   m_Name: CardUI
   m_TagString: Untagged
@@ -666,7 +669,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 930, y: 260.9781}
-  m_SizeDelta: {x: 275.7606, y: 392.8595}
+  m_SizeDelta: {x: 0, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5101686473429030470
 CanvasRenderer:
@@ -696,8 +699,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: -3
+  m_SortingLayerID: -1623620319
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!225 &8840698550750326937
 CanvasGroup:
@@ -739,6 +742,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1367b36f559a482e89bf68759d9a13e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.UI.Components.GameCardUIEffects
+--- !u!114 &5229182672180385720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6549682902922353533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 2
+  m_AspectRatio: 0.7
 --- !u!1 &7893384038302923113
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +987,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1227,4 +1245,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.UI.CapacityUIList
   prefab: {fileID: -3177010058685027742, guid: f25b8a3123115f741bff0d6aaa164b0b, type: 3}
+  dividerPrefab: {fileID: 0}
   root: {fileID: 0}
