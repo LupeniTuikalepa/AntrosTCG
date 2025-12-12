@@ -1,7 +1,5 @@
-﻿using System;
-using ATCG.Battle.Metrics;
-using ATCG.Battle.Players;
-using ATCG.Battle.Players.Phases;
+﻿using ATCG.Battle.Metrics;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
 using Helteix.Tools.Phases;
@@ -9,7 +7,7 @@ using PrimeTween;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.HexGrids.Runtime
+namespace ATCG.Battle.Grids.Runtime
 {
     public partial class RuntimeBattleCell : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 ﻿using ATCG.HexGrids;
 
-namespace ATCG.Battle.HexGrids
+namespace ATCG.Battle.Grids
 {
     public class BattleCell
     {

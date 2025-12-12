@@ -147,6 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6058428231086725944}
   - component: {fileID: 6487420179101549729}
+  - component: {fileID: 7381279630049310231}
   m_Layer: 5
   m_Name: ManaBar
   m_TagString: Untagged
@@ -195,6 +196,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7381279630049310231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748126904850116038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bcbf64fc4a940a180bf873545b1845c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Runtime.UI.PlayerManaBar
+  valueText: {fileID: 4341350376463831979}
+  fill: {fileID: 4925816133167428855}
+  fillDuration: 0.2
 --- !u!1 &786432317496708395
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +297,7 @@ GameObject:
   - component: {fileID: 7508832650734410740}
   - component: {fileID: 9040403834463595618}
   - component: {fileID: 3166219311252217152}
+  - component: {fileID: 451120828789161386}
   m_Layer: 5
   m_Name: OtherPlayerStats
   m_TagString: Untagged
@@ -351,6 +368,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &451120828789161386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2960878225617329466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a309d7f36b401d93cbab1eca8530b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Runtime.UI.SimplePlayerStats
+  healthBar: {fileID: 1476616050989665134}
+  manaBar: {fileID: 7381279630049310231}
+  playerName: {fileID: 3682045676926431330}
 --- !u!1 &3328346000984653261
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,6 +791,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8601865685184709577}
   - component: {fileID: 276148483287565481}
+  - component: {fileID: 1476616050989665134}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -807,6 +840,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1476616050989665134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7559155563789271402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8308f362da4843a652fadf359f5511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Runtime.UI.PlayerHealthBar
+  valueText: {fileID: 94553710632232854}
+  fill: {fileID: 5794035894295713737}
+  fillDuration: 0.2
 --- !u!1 &7571128855947134672
 GameObject:
   m_ObjectHideFlags: 0

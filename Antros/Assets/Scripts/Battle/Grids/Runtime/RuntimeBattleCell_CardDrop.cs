@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Metrics;
-using ATCG.Battle.Players;
-using ATCG.Battle.Players.Phases;
-using ATCG.HexGrids;
+using ATCG.Battle.Players.Local.Phases;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.Tools.Phases;
-using PrimeTween;
-using UnityEngine;
 
-namespace ATCG.Battle.HexGrids.Runtime
+namespace ATCG.Battle.Grids.Runtime
 {
     public partial class RuntimeBattleCell : ICardDropTarget<IBattleCard>,
         IPhaseListener<PlayerDragBattleCardPhase>

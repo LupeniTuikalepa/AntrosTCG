@@ -72,7 +72,7 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Content Header", 6);
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                    EditorGUILayout.LabelField(new GUIContent("Current Percent"), customSkin.FindStyle("Text"), GUILayout.Width(100));
+                    EditorGUILayout.LabelField(new GUIContent("Player Percent"), customSkin.FindStyle("Text"), GUILayout.Width(100));
                     pbTarget.currentPercent = EditorGUILayout.Slider(pbTarget.currentPercent, minValue.floatValue, maxValue.floatValue);
                     currentPercent.floatValue = pbTarget.currentPercent;
                  

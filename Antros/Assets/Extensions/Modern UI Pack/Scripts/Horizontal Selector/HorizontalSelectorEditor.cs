@@ -98,7 +98,7 @@ namespace Michsky.MUIP
                         GUILayout.BeginHorizontal();
                         GUI.enabled = false;
 
-                        EditorGUILayout.LabelField(new GUIContent("Current Item:"), customSkin.FindStyle("Text"), GUILayout.Width(74));
+                        EditorGUILayout.LabelField(new GUIContent("Player Item:"), customSkin.FindStyle("Text"), GUILayout.Width(74));
                         EditorGUILayout.LabelField(new GUIContent(hsTarget.items[hsTarget.index].itemTitle), customSkin.FindStyle("Text"));
 
                         GUILayout.EndHorizontal();

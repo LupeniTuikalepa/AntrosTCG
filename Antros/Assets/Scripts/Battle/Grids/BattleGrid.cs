@@ -8,7 +8,7 @@ using Helteix.Cards.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.HexGrids
+namespace ATCG.Battle.Grids
 {
     public class BattleGrid : IDisposable
     {

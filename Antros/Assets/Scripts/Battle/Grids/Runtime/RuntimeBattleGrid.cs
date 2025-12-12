@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using ATCG.Battle.Players;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.HexGrids.Runtime
+namespace ATCG.Battle.Grids.Runtime
 {
     [RequireComponent(typeof(RuntimeHexGrid))]
     public class RuntimeBattleGrid : MonoBehaviour, IPhaseListener<BattleGameMode>

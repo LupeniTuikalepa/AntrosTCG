@@ -1,8 +1,8 @@
 ﻿namespace ATCG.Battle.Players.Runtime
 {
-    public interface IRuntimeBattlePlayerComponent
+    public interface IRuntimeBattlePlayerComponent<in T> where T : IBattlePlayer
     {
-        void Connect(IBattlePlayer player);
-        void Disconnect(IBattlePlayer battlePlayer);
+        void Connect(RuntimeBattlePlayer runtimeBattlePlayer, T player);
+        void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, T battlePlayer);
     }
 }

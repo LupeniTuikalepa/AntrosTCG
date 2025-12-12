@@ -4,47 +4,45 @@ namespace ATCG.Battle.Players.Runtime
 {
     public abstract class RuntimeBattlePlayer : MonoBehaviour
     {
-        public abstract Awaitable Connect(IBattlePlayer player);
-        public abstract Awaitable Disconnect(IBattlePlayer player);
+        public abstract void Disconnect();
     }
 
     public abstract class RuntimeBattlePlayer<T> : RuntimeBattlePlayer where T : class, IBattlePlayer
     {
-        public T Current { get; private set; }
+        public T Player { get; private set; }
 
-        private IRuntimeBattlePlayerComponent[] runtimeComponents;
+        private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
 
         private void Awake()
         {
-            runtimeComponents = GetComponentsInChildren<IRuntimeBattlePlayerComponent>();
+            runtimeComponents = GetComponentsInChildren<IRuntimeBattlePlayerComponent<T>>();
         }
 
-        public sealed override async Awaitable Connect(IBattlePlayer player)
-        {
-            if(Current != null)
-                await Disconnect(Current);
 
-            Current = (T)player;
+        public void Connect(T player)
+        {
+            if(Player != null)
+                Disconnect();
+
+            Player = player;
             OnConnected();
 
-            await Awaitable.EndOfFrameAsync();
             for (int i = 0; i < runtimeComponents.Length; i++)
-                runtimeComponents[i].Connect(player);
+                runtimeComponents[i].Connect(this, player);
         }
 
-        public sealed override async Awaitable Disconnect(IBattlePlayer player)
+
+        public sealed override void Disconnect()
         {
-            if (player == Current)
+            if (Player != null)
             {
                 OnDisconnected();
-                Current = null;
+                Player = null;
             }
 
-            await Awaitable.EndOfFrameAsync();
             for (int i = 0; i < runtimeComponents.Length; i++)
-                runtimeComponents[i].Disconnect(player);
+                runtimeComponents[i].Disconnect(this, Player);
         }
-
         protected abstract void OnConnected();
         protected abstract void OnDisconnected();
     }

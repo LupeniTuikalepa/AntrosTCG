@@ -6,6 +6,7 @@ using Eflatun.SceneReference;
 
 using Helteix.Tools.Phases;
 using UnityEngine;
+using UnityEngine.InputSystem.Users;
 
 namespace ATCG.Battle
 {
@@ -19,7 +20,17 @@ namespace ATCG.Battle
 
         protected override async Awaitable Initialize()
         {
-            await new PlayerInputsPairingPhase(PlayerCount, GameAssets.Current.PlayerControls).Run();
+            PhaseResult<InputUser[]> result = await new PlayerInputsPairingPhase(PlayerCount, GameAssets.Current.PlayerControls).Run();
+            int userIndex = 0;
+            
+            for (int i = 0; i < PlayerCount; i++)
+            {
+                if (playerProfiles[i] is LocalPlayerProfile localPlayerProfile)
+                {
+                    localPlayerProfile.InputUser = result.result[userIndex++];
+                    playerProfiles[i] = localPlayerProfile;
+                }
+            }
 
             await base.Initialize();
         }

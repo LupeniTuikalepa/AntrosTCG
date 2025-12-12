@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ATCG.Databases;
-using Helteix.Tools.Editor.Serialisation;
 using UnityEditor;
 using UnityEngine;
 

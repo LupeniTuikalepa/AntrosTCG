@@ -65,7 +65,7 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Content Header", 6);
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                    EditorGUILayout.LabelField(new GUIContent("Current Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
+                    EditorGUILayout.LabelField(new GUIContent("Player Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
                     currentValue.floatValue = EditorGUILayout.Slider(currentValue.floatValue, rsTarget.minValue, rsTarget.maxValue);
 
                     GUILayout.EndHorizontal();

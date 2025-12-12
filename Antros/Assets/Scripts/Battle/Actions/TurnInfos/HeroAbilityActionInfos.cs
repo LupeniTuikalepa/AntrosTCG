@@ -1,4 +1,4 @@
-﻿namespace ATCG.Battle.Actions
+﻿namespace ATCG.Battle.Actions.TurnInfos
 {
     public struct HeroAbilityActionInfos
     {
