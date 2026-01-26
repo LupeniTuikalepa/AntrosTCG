@@ -30,6 +30,7 @@ namespace ATCG.Battle.Grids
             Grid = new HexGrid(cellRadius, Vector2.zero);
             Grid.OnCellAdded += CreateBattleCell;
             Grid.OnCellRemoved += DestroyBattleCell;
+            cards = new DefaultCardCollection<IBattleCard>();
 
             cardCoordinates = DictionaryPool<IBattleCard, HexCoordinates>.Get();
             battleCells = DictionaryPool<HexCell, BattleCell>.Get();
@@ -59,8 +60,8 @@ namespace ATCG.Battle.Grids
         {
             if (cards.TryRemoveCard(card) && cardCoordinates.TryGetValue(card, out HexCoordinates coordinates))
             {
-                if(Grid.TryGetCell(coordinates, out HexCell cell) && cell.CurrentMember == card)
-                    cell.SetMember(null);
+                if(Grid.TryGetCell(coordinates, out HexCell cell))
+                    cell.RemoveMember(null);
 
                 card.Leave();
                 OnBattleCardLeft?.Invoke(card);
@@ -74,7 +75,7 @@ namespace ATCG.Battle.Grids
                 cardCoordinates.Add(card, coordinates);
                 card.Deploy(this, coordinates);
                 if(Grid.TryGetCell(coordinates, out HexCell cell))
-                    cell.SetMember(card);
+                    cell.AddMember(card);
 
                 OnBattleCardDeployed?.Invoke(card);
             }
@@ -89,7 +90,15 @@ namespace ATCG.Battle.Grids
                 return false;
 
             cardCoordinates[card] = destination;
-            card.OnCardMoved(lastCoordinates, destination);
+            if(Grid.TryGetCell(lastCoordinates, out HexCell cell))
+                cell.RemoveMember(null);
+
+            if (Grid.TryGetCell(destination, out cell) && cell.Members == null)
+            {
+                cell.AddMember(card);
+                card.MoveCard(lastCoordinates, destination);
+            }
+
             return true;
         }
 

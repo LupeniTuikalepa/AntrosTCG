@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Michsky.MUIP
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("Modern UI Pack/Effects/UI Gradient")]
+    [AddComponentMenu("Modern Prefab Pack/Effects/Prefab Gradient")]
     public class UIGradient : BaseMeshEffect
     {
         [SerializeField]

@@ -4,9 +4,14 @@ using UnityEngine;
 
 namespace ATCG.Battle.Metrics
 {
-    [AutoGenerateGameSettings]
+    [AutoGenerateGameSettings, GameSettingsPath("Antros/Gameplay Metrics")]
     public class GameplayMetrics : GameSettings<GameplayMetrics>
     {
+        private struct CardCostPair
+        {
+
+        }
+
         [field: SerializeField, BoxGroup("Game"), Range(0, 30)]
         public int MaxMana { get; private set; } = 10;
         [field: SerializeField, BoxGroup("Game")]
@@ -29,7 +34,9 @@ namespace ATCG.Battle.Metrics
         [field: SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         public float HeroMovementDuration { get; private set; } = .2f;
 
-        [field: SerializeField, BoxGroup("FX")]
-        public string HoveredLayerMaskName { get; private set; }
+        [field: SerializeField, BoxGroup("GameFeel")]
+        public Gradient PlayerColors { get; private set; }
+
+        public Color GetPlayerColor(int playerID, int playerCount = 2) => PlayerColors.Evaluate(playerID / (float)playerCount - 1);
     }
 }

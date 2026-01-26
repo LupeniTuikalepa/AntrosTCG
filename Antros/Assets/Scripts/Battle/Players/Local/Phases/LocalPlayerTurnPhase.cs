@@ -11,36 +11,31 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public class LocalPlayerTurnPhase : PhaseCompletionSource<BattleTurn>
+    public class LocalPlayerTurnPhase : PlayerTurnPhase
     {
         private static ChannelKey channelKey = ChannelKey.GetUniqueChannelKey($"Turn phase");
 
-        public readonly int turnNumber;
+        public readonly LocalBattlePlayer localPlayerTurn;
         public readonly string turnID;
-
-        public readonly LocalBattlePlayer battlePlayer;
 
         private List<IBattleActionInfos> actionInfosList;
 
-        private AwaitableCompletionSource<BattleTurn> completionSource;
-
-        public LocalPlayerTurnPhase(int turnNumber, LocalBattlePlayer battlePlayer)
+        public LocalPlayerTurnPhase(int turnNumber, LocalBattlePlayer localPlayerTurn) : base(turnNumber, localPlayerTurn)
         {
-            this.turnNumber = turnNumber;
-            this.battlePlayer = battlePlayer;
+            this.localPlayerTurn = localPlayerTurn;
             turnID = Guid.NewGuid().ToString();
         }
 
         protected override Awaitable Initialize(CancellationToken token)
         {
             actionInfosList = ListPool<IBattleActionInfos>.Get();
-            battlePlayer.AddOrRemoveMana(GameplayMetrics.Current.RecoveredManaOnTurnStart);
+            localPlayerTurn.AddOrRemoveMana(GameplayMetrics.Current.RecoveredManaOnTurnStart);
 
-            battlePlayer.canDeployHeroes.AddCondition(channelKey);
-            battlePlayer.canMoveHeroes.AddCondition(channelKey);
-            battlePlayer.canUseHeroesAbilities.AddCondition(channelKey);
+            localPlayerTurn.canDeployHeroes.AddCondition(channelKey);
+            localPlayerTurn.canMoveHeroes.AddCondition(channelKey);
+            localPlayerTurn.canUseHeroesAbilities.AddCondition(channelKey);
 
-            battlePlayer.FillHand();
+            localPlayerTurn.FillHand();
             return base.Initialize(token);
         }
 
@@ -48,9 +43,9 @@ namespace ATCG.Battle.Players.Local.Phases
         {
             ListPool<IBattleActionInfos>.Release(actionInfosList);
 
-            battlePlayer.canDeployHeroes.RemoveCondition(channelKey);
-            battlePlayer.canMoveHeroes.RemoveCondition(channelKey);
-            battlePlayer.canUseHeroesAbilities.RemoveCondition(channelKey);
+            localPlayerTurn.canDeployHeroes.RemoveCondition(channelKey);
+            localPlayerTurn.canMoveHeroes.RemoveCondition(channelKey);
+            localPlayerTurn.canUseHeroesAbilities.RemoveCondition(channelKey);
 
             return base.Dispose(token);
         }
@@ -60,7 +55,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
         }
 
-        public void ValidatePhase()
+        public void EndTurn()
         {
             BattleTurn infos = new BattleTurn()
             {
@@ -68,6 +63,14 @@ namespace ATCG.Battle.Players.Local.Phases
                 turnID = turnID,
             };
 
+            SetResult(infos);
         }
+
+        public void GiveUp()
+        {
+            Debug.Log("Giving up is not implemented yet");
+            return;
+        }
+
     }
 }

@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: 50706743-9c1f-4974-b68e-e9c1848d9e2a
   <Title>k__BackingField: Trian
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 9
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 4c33316959bc5404b92c4ce6915a4bda, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaBar")]
     public class PlayerManaBar : BarUI, IPlayerStatUI
     {
         public void Connect(IBattlePlayer player)
         {
             player.OnPlayerManaChanges += Refresh;
-            Refresh(player, player.CurrentHealth, player.CurrentHealth);
+            Refresh(player, player.CurrentMana, player.CurrentMana);
         }
 
         public void Disconnect(IBattlePlayer player)
@@ -23,6 +24,8 @@ namespace ATCG.Battle.Players.Runtime.UI
         {
             MaxValue = player.MaxMana;
             CurrentValue = current;
+
+            Refresh();
         }
     }
 }

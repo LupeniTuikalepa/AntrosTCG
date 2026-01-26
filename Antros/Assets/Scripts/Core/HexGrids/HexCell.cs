@@ -7,12 +7,12 @@ namespace ATCG.HexGrids
 {
     public class HexCell
     {
-        public IHexMember CurrentMember { get; private set; }
-
-        public event Action<IHexMember> OnNewMember;
+        public IEnumerable<IHexMember> Members => members;
 
         public readonly HexGrid hexGrid;
         public readonly HexCoordinates coordinates;
+
+        private HashSet<IHexMember> members = new();
 
         public HexCell(HexGrid hexGrid, HexCoordinates coordinates)
         {
@@ -38,13 +38,16 @@ namespace ATCG.HexGrids
             yield return new Vector2(-hexGrid.InnerRadius, 0.5f * hexGrid.OuterCellRadius);
         }
 
-        public void SetMember(IHexMember member)
+        public void AddMember(IHexMember member)
         {
-            CurrentMember?.LeaveCell(this);
-            CurrentMember = member;
-            CurrentMember?.EnterCell(this);
+            if(member != null)
+                members.Add(member);
+        }
 
-            OnNewMember?.Invoke(member);
+        public void RemoveMember(IHexMember member)
+        {
+            if(member != null)
+                members.Remove(member);
         }
 
         public void Dispose()

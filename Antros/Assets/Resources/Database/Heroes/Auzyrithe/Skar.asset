@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: 745c7b17-4751-47fb-a4a4-9b70aee93b8f
   <Title>k__BackingField: Skar
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 5
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 63673eac212f56d45a37b9692adf9c6b, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

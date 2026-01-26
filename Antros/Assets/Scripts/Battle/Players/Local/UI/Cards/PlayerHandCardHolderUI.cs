@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Players.Local.UI.Cards
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/Player Hand CardHolder")]
     public class PlayerHandCardHolderUI : CardHolderUI
     {
         [SerializeField]

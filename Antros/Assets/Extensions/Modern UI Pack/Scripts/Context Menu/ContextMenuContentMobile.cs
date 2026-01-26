@@ -8,7 +8,7 @@ using TMPro;
 
 namespace Michsky.MUIP
 {
-    [AddComponentMenu("Modern UI Pack/Context Menu/Context Menu Content (Mobile)")]
+    [AddComponentMenu("Modern Prefab Pack/Context Menu/Context Menu Content (Mobile)")]
     public class ContextMenuContentMobile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [Header("Resources")]

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Michsky.MUIP
 {
-    [AddComponentMenu("Modern UI Pack/Notification/Notification Stacking")]
+    [AddComponentMenu("Modern Prefab Pack/Notification/Notification Stacking")]
     public class NotificationStacking : MonoBehaviour
     {
         [Header("Settings")]
@@ -41,7 +41,7 @@ namespace Michsky.MUIP
         IEnumerator StartNotification()
         {
             yield return new WaitForSecondsRealtime(notifications[currentNotification].timer + delay);
-           
+
             Destroy(notifications[currentNotification].gameObject);
 
             if (currentNotification == notifications.Count - 1)

@@ -46,6 +46,9 @@ namespace Linework.EdgeDetection
         public static readonly int OutlineColorShadow = Shader.PropertyToID("_OutlineColorShadow");
         public static readonly int FillColor = Shader.PropertyToID("_FillColor");
         public static readonly int OutlineThickness = Shader.PropertyToID("_OutlineThickness");
+        public static readonly int DistanceScaleStart = Shader.PropertyToID("_DistanceScaleStart");
+        public static readonly int DistanceScaleDistance = Shader.PropertyToID("_DistanceScaleDistance");
+        public static readonly int DistanceScaleMin = Shader.PropertyToID("_DistanceScaleMin");
         public static readonly int ReferenceResolution = Shader.PropertyToID("_ReferenceResolution");
         public static readonly int DistanceFadeStart = Shader.PropertyToID("_DistanceFadeStart");
         public static readonly int DistanceFadeDistance = Shader.PropertyToID("_DistanceFadeDistance");
@@ -162,6 +165,7 @@ namespace Linework.EdgeDetection
         public const string DebugSections = "DEBUG_SECTIONS";
         public const string DebugSectionsPerceptual = "DEBUG_SECTIONS_PERCEPTUAL";
         public const string OverrideShadow = "OVERRIDE_SHADOW";
+        public const string ScaleWithDistance = "SCALE_WITH_DISTANCE";
         public const string ScaleWithResolution = "SCALE_WITH_RESOLUTION";
         public const string FadeByDistance = "FADE_BY_DISTANCE";
         public const string FadeByHeight = "FADE_BY_HEIGHT";
@@ -220,13 +224,11 @@ namespace Linework.EdgeDetection
         Custom
     }
 
-    public enum SectionMapFormat
+    public enum SectionMapPrecision
     {
-        [InspectorName("R8")]
-        R8,
-        [InspectorName("R16")]
-        R16,
-        [InspectorName("RGBA8")]
-        RGBA8,
+        [InspectorName("8-bit")]
+        Bits8,
+        [InspectorName("16-bit")]
+        Bits16
     }
 }

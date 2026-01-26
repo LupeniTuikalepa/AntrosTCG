@@ -12,7 +12,7 @@ namespace ATCG.Battle.Players
         event PlayerStatChange OnPlayerHealthChanges;
         event PlayerStatChange OnPlayerManaChanges;
 
-        public IBattlePlayerProfile Profile { get; }
+        IBattlePlayerProfile Profile { get; }
         int CurrentHealth { get; }
         int MaxHealth { get; }
         int CurrentMana { get; }
@@ -20,7 +20,7 @@ namespace ATCG.Battle.Players
         Hand<IBattleCard> Hand { get; }
         Deck<IBattleCard> Deck { get; }
         DefaultCardCollection<IBattleCard> DeadCards { get; }
-
+        BattleGameMode BattleGameMode { get; }
         bool IsDefeated();
         Awaitable<BattleTurn> PlayTurn(int round, int turnNumber);
         void OnBattleBegins(BattleGameMode battleGameMode);

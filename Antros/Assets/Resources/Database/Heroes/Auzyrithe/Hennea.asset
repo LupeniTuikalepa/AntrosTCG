@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: 3eeecc15-bee6-4c05-bf9e-b75e7659b0c5
   <Title>k__BackingField: Hennea
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 4
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: a03749c7330c0b54090fcfdc4605130f, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

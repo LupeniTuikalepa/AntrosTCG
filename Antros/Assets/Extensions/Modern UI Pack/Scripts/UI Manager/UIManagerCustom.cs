@@ -6,7 +6,7 @@ namespace Michsky.MUIP
 {
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Modern UI Pack/UI Manager/UI Manager (Custom Object)")]
+    [AddComponentMenu("Modern Prefab Pack/Prefab Manager/Prefab Manager (Custom Object)")]
     public class UIManagerCustom : MonoBehaviour
     {
         [Header("Resources")]
@@ -15,7 +15,7 @@ namespace Michsky.MUIP
         [Header("Settings")]
         public ObjectType objectType;
 
-        [Header("Color")]
+        [Header("color")]
         public ColorType colorType = ColorType.Primary;
         public bool keepAlphaValue = false;
         public bool useCustomColor = false;

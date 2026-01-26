@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 
 namespace Michsky.MUIP
 {
-    [AddComponentMenu("Modern UI Pack/Context Menu/Context Menu Content")]
+    [AddComponentMenu("Modern Prefab Pack/Context Menu/Context Menu Content")]
     public class ContextMenuContent : MonoBehaviour, IPointerClickHandler
     {
         // Resources
@@ -93,7 +93,7 @@ namespace Michsky.MUIP
                 {
                     Debug.LogError("<b>[Context Menu]</b> At least one of the item presets is missing. " +
                         "You can assign a new variable in Resources (Context Menu) tab. All default presets can be found in " +
-                        "<b>Modern UI Pack > Prefabs > Context Menu</b> folder.", this);
+                        "<b>Modern Prefab Pack > Prefabs > Context Menu</b> folder.", this);
                     nulLVariable = true;
                 }
 

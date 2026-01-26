@@ -167,7 +167,7 @@ Shader "Hidden/Outlines/Surface Fill/Fill"
                 float3 normal = SampleSceneNormals(IN.texcoord);
                 float3 view = normalize(_WorldSpaceCameraPos - positionWS);
                 float ndotv = pow(1.0 - saturate(dot(normal, view)), _Power);
-                return lerp(1, smoothstep(1.0 - _Width, 1.0 - _Width + _Softness, ndotv), step(0, 1.0 - _Width));
+                pattern = lerp(1, smoothstep(1.0 - _Width, 1.0 - _Width + _Softness, ndotv), step(0, 1.0 - _Width));
                 #elif _PATTERN_TEXTURE
                 float2 texture_uvs = rotated_uvs * _Scale;
                 float4 texture_sample = SAMPLE_TEXTURE2D(_Texture, sampler_Texture, texture_uvs * _Scale);
@@ -181,7 +181,6 @@ Shader "Hidden/Outlines/Surface Fill/Fill"
                 pattern = texture_sample.a;
                 #endif
                 #endif
-
                 
                 // Color
                 half4 color = _PrimaryColor * pattern + _SecondaryColor * (1.0 - pattern);

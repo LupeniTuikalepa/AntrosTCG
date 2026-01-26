@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: e809983a-8275-4386-b88b-48989bee8e01
   <Title>k__BackingField: Kubo
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 5
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 76b79a3d5752f47469bd72d78fdcfed6, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

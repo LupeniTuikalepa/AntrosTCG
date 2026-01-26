@@ -1,7 +1,9 @@
-﻿using ATCG.Battle.Metrics;
+﻿using System;
+using ATCG.Battle.Metrics;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
+using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
 using PrimeTween;
 using UnityEngine;
@@ -11,7 +13,6 @@ namespace ATCG.Battle.Grids.Runtime
 {
     public partial class RuntimeBattleCell : MonoBehaviour
     {
-        private static uint OutlineRenderingLayerMask => RenderingLayerMask.GetMask(GameplayMetrics.Current.HoveredLayerMaskName);
         public BattleCell BattleCell { get; private set; }
         public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
         public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
@@ -20,19 +21,21 @@ namespace ATCG.Battle.Grids.Runtime
         [field: SerializeField]
         public SpriteRenderer SpriteRenderer { get; private set; }
 
-
-        private void OnEnable()
+        private void Awake()
         {
-            dragCardPhase = ListPool<PlayerDragBattleCardPhase>.Get();
+            CellColor = new Priority<Color>(SpriteRenderer.color);
+            CellColor.AddOnValueChangeCallback(ctx =>
+            {
+                Tween.StopAll(SpriteRenderer);
+                Tween.Color(SpriteRenderer, ctx, 0.2f, Ease.OutExpo);
+            });
 
-            this.Register();
-        }
-
-        private void OnDisable()
-        {
-            ListPool<PlayerDragBattleCardPhase>.Release(dragCardPhase);
-
-            this.Unregister();
+            CellSize = new Priority<Vector3>(Vector3.one);
+            CellSize.AddOnValueChangeCallback(ctx =>
+            {
+                Tween.StopAll(SpriteRenderer.transform);
+                Tween.Scale(SpriteRenderer.transform, ctx, 0.2f, Ease.OutExpo);
+            });
         }
 
 
@@ -43,13 +46,14 @@ namespace ATCG.Battle.Grids.Runtime
 
             RuntimeBattleGrid = grid;
             BattleCell = battleCell;
-
-            Vector3 targetScale = Vector3.one * RuntimeGrid.Current.OuterCellRadius * 1.8f;
-            var coordinates = battleCell.cell.coordinates;
-
-            float delay = coordinates.Length() * .08f;
-            Tween.Scale(transform, targetScale, new TweenSettings() { startDelay = delay, ease = Ease.OutElastic, duration = 1f});
             transform.localScale = Vector3.zero;
+            Tween.Scale(transform, GetTargetScale(), .3f, Easing.Overshoot(.3f),
+                startDelay: Coordinates.Length() * .2f);
+        }
+
+        public Vector3 GetTargetScale()
+        {
+            return Vector3.one * RuntimeGrid.Current.OuterCellRadius * 1.8f;
         }
 
         public void Disconnect(BattleGameMode currentGameMode, BattleCell battleCell)
@@ -59,5 +63,6 @@ namespace ATCG.Battle.Grids.Runtime
 
             BattleCell = null;
         }
+
     }
 }

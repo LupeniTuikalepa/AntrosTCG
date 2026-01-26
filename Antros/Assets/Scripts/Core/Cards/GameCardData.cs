@@ -17,6 +17,9 @@ namespace ATCG.Cards
 
         [field: SerializeField]
         public Element Element { get; private set; }
+        [field: SerializeField, Min(0)]
+        public int InvocationCost { get; private set; }
+
 
         [field: SerializeReference]
         public CapacityData[] Capacities { get; private set; }

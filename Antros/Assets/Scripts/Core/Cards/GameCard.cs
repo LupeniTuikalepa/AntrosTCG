@@ -18,6 +18,8 @@ namespace ATCG.Cards
         GameCardData IGameCard.CardData => Data;
         public string Title => Data.Title;
         public string Description => Data.Description;
+        public int InvocationCost => Data.InvocationCost;
+
         public IEnumerable<CapacityData> Capacities
         {
             get

@@ -26,6 +26,10 @@
         // Outline sampling.
         [KeywordEnum(Cross, Sobel, Circular)] _Operator("Edge Detection Operator", Float) = 0
         _OutlineThickness ("Outline Thickness", Float) = 1
+        [Toggle(SCALE_WITH_DISTANCE)] _ScaleWithDistance ("Scale Outline Thickness With Distance", Float) = 0
+        _DistanceScaleStart ("Distance Scale Start", Float) = 100
+        _DistanceScaleDistance ("Distance Scale Distance", Float) = 10
+        _DistanceScaleMin ("Distance Scale Min", Float) = 10
         [Toggle(SCALE_WITH_RESOLUTION)] _ResolutionDependent ("Resolution Dependent", Float) = 0
         _ReferenceResolution ("Reference Resolution", Float) = 1080
         
@@ -75,6 +79,7 @@
         #pragma multi_compile _ SECTIONS
 
         #pragma multi_compile _ OVERRIDE_SHADOW
+        #pragma multi_compile _ SCALE_WITH_DISTANCE
         #pragma multi_compile _ SCALE_WITH_RESOLUTION
         #pragma multi_compile _ FILL
         #pragma multi_compile _ FADE_BY_DISTANCE
@@ -102,7 +107,7 @@
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
-            #if defined(DEPTH) || defined(OVERRIDE_SHADOW) || defined(FADE_BY_DISTANCE) || defined(FADE_BY_HEIGHT) || defined(DEBUG_DEPTH) || defined(DISTORTION) || defined(OPERATOR_CIRCULAR)
+            #if defined(DEPTH) || defined(OVERRIDE_SHADOW) || defined(SCALE_WITH_DISTANCE) || defined(FADE_BY_DISTANCE) || defined(FADE_BY_HEIGHT) || defined(DEBUG_DEPTH) || defined(DISTORTION) || defined(OPERATOR_CIRCULAR)
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
             #endif
 
@@ -121,6 +126,7 @@
             float _OverrideOutlineColorShadow;
             float _OutlineThickness;
             float _ReferenceResolution;
+            float _DistanceScaleStart, _DistanceScaleDistance, _DistanceScaleMin;
             float _DistanceFadeStart, _DistanceFadeDistance;
             float _HeightFadeStart, _HeightFadeDistance;
             float _DepthSensitivity, _DepthDistanceModulation, _GrazingAngleMaskPower, _GrazingAngleMaskHardness;
@@ -210,7 +216,7 @@
                 /// DISCONTINUITY SOURCES
                 ///
 
-                #if defined(DEPTH) || defined(OVERRIDE_SHADOW) || defined(FADE_BY_DISTANCE) || defined(FADE_BY_HEIGHT) || defined(DEBUG_DEPTH) || defined(DISTORTION) || defined(OPERATOR_CIRCULAR)
+                #if defined(DEPTH) || defined(OVERRIDE_SHADOW) || defined(SCALE_WITH_DISTANCE) || defined(FADE_BY_DISTANCE) || defined(FADE_BY_HEIGHT) || defined(DEBUG_DEPTH) || defined(DISTORTION) || defined(OPERATOR_CIRCULAR)
                 float center_depth = SampleSceneDepth(uv);
                 #if !UNITY_REVERSED_Z // Transform depth from [0, 1] to [-1, 1] on OpenGL.
                 center_depth = lerp(UNITY_NEAR_CLIP_VALUE, 1.0, center_depth); // Alternatively: depth = 1.0 - depth
@@ -273,7 +279,16 @@
                 float scaled_outline_thickness = _OutlineThickness;
                 #endif
                 
-
+                // Fade/scale by distance
+                #if defined(SCALE_WITH_DISTANCE) || defined(FADE_BY_DISTANCE)
+                float worldSpaceDistance = length(positionWS - _WorldSpaceCameraPos);
+                #endif
+                
+                #if defined(SCALE_WITH_DISTANCE)
+                float distance_scale = saturate((worldSpaceDistance - _DistanceScaleStart) / _DistanceScaleDistance);
+                scaled_outline_thickness *= lerp(1.0, _DistanceScaleMin, distance_scale);
+                #endif
+                
                 #if defined(OPERATOR_CROSS)
                 const float half_width_f = floor(scaled_outline_thickness * 0.5);
                 const float half_width_c = ceil(scaled_outline_thickness * 0.5);
@@ -396,7 +411,7 @@
                 float rotation_step = 2 * PI / 20;
                 for (int index = 0; index < 20 ; index++) {
                     float rotation = index * rotation_step;
-                    float2 offset = float2(cos(rotation), sin(rotation)) * _OutlineThickness * texel_size;
+                    float2 offset = float2(cos(rotation), sin(rotation)) * scaled_outline_thickness * texel_size;
                     float2 sample_uv = uv + offset;
 
                     #if defined(SECTIONS)
@@ -441,10 +456,10 @@
                 #endif
 
                 #if defined(SECTIONS)
-                edge_section = section_center.g == 1 ? 0 : edge_section > 0 ? 1 : 0;
+                edge_section = edge_section > 0 ? 1 : 0;
                 #endif
 
-                float edge = max(edge_depth, max(edge_normal, max(edge_luminance, edge_section)));
+                float edge = section_center.g == 1 ? 0 : max(edge_depth, max(edge_normal, max(edge_luminance, edge_section)));
                 
                 ///
                 /// DEBUG VIEWS
@@ -478,7 +493,7 @@
                 #if !defined(DEBUG_SECTIONS_B)
                     col.b = 0;
                 #endif
-                return lerp(half4(col, 1.0), half4(1,1,1,1), edge_section);
+                return section_center.g == 1 ? half4(col, 1.0) : lerp(half4(col, 1.0), half4(1,1,1,1), edge_section);
                 #else // perceptual
                 half4 section_perceptual = half4(HSVToRGB(half3(section_center.r * 360.0, 0.5, 1.0)), 1.0);
                 if(mask) section_perceptual = half4(1.0, 1.0, 1.0, 1.0);
@@ -508,7 +523,6 @@
                 #endif
 
                 #if defined(FADE_BY_DISTANCE)
-                float worldSpaceDistance = length(positionWS - _WorldSpaceCameraPos);
                 float distance_fade = 1.0 - saturate(1.0 - (worldSpaceDistance - _DistanceFadeStart) / _DistanceFadeDistance);
                 line_color = lerp(line_color, _DistanceFadeColor * _DistanceFadeColor.a, distance_fade);
                 #endif

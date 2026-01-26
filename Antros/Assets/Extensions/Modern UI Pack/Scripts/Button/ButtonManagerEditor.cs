@@ -222,7 +222,7 @@ namespace Michsky.MUIP
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
 
-                    useUINavigation.boolValue = MUIPEditorHandler.DrawTogglePlain(useUINavigation.boolValue, customSkin, "Use UI Navigation");
+                    useUINavigation.boolValue = MUIPEditorHandler.DrawTogglePlain(useUINavigation.boolValue, customSkin, "Use Prefab Navigation");
 
                     GUILayout.Space(4);
 
@@ -231,7 +231,7 @@ namespace Michsky.MUIP
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         MUIPEditorHandler.DrawPropertyPlain(navigationMode, customSkin, "Navigation Mode");
 
-                        if (buttonTarget.navigationMode == UnityEngine.UI.Navigation.Mode.Horizontal) 
+                        if (buttonTarget.navigationMode == UnityEngine.UI.Navigation.Mode.Horizontal)
                         {
                             EditorGUI.indentLevel = 1;
                          //   GUILayout.Space(-3);
@@ -240,18 +240,20 @@ namespace Michsky.MUIP
                             EditorGUI.indentLevel = 0;
                         }
 
-                        else if (buttonTarget.navigationMode == UnityEngine.UI.Navigation.Mode.Vertical) 
-                        { 
+                        else if (buttonTarget.navigationMode == UnityEngine.UI.Navigation.Mode.Vertical)
+                        {
                             wrapAround.boolValue = MUIPEditorHandler.DrawTogglePlain(wrapAround.boolValue, customSkin, "Wrap Around");
                         }
 
-                        else if (buttonTarget.navigationMode == UnityEngine.UI.Navigation.Mode.Explicit) 
+                        else if (buttonTarget.navigationMode == UnityEngine.UI.Navigation.Mode.Explicit)
                         {
                             EditorGUI.indentLevel = 1;
+
                             MUIPEditorHandler.DrawPropertyPlain(selectOnUp, customSkin, "Select On Up");
                             MUIPEditorHandler.DrawPropertyPlain(selectOnDown, customSkin, "Select On Down");
                             MUIPEditorHandler.DrawPropertyPlain(selectOnLeft, customSkin, "Select On Left");
                             MUIPEditorHandler.DrawPropertyPlain(selectOnRight, customSkin, "Select On Right");
+
                             EditorGUI.indentLevel = 0;
                         }
 
@@ -298,8 +300,8 @@ namespace Michsky.MUIP
                         MUIPEditorHandler.DrawProperty(rippleShape, customSkin, "Shape");
                         MUIPEditorHandler.DrawProperty(speed, customSkin, "Speed");
                         MUIPEditorHandler.DrawProperty(maxSize, customSkin, "Max Size");
-                        MUIPEditorHandler.DrawProperty(startColor, customSkin, "Start Color");
-                        MUIPEditorHandler.DrawProperty(transitionColor, customSkin, "Transition Color");
+                        MUIPEditorHandler.DrawProperty(startColor, customSkin, "Start color");
+                        MUIPEditorHandler.DrawProperty(transitionColor, customSkin, "Transition color");
                     }
 
                     GUILayout.EndVertical();
@@ -311,16 +313,16 @@ namespace Michsky.MUIP
                         tempUIM.overrideColors = MUIPEditorHandler.DrawToggle(tempUIM.overrideColors, customSkin, "Override Colors");
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
-                        if (GUILayout.Button("Open UI Manager", customSkin.button))
+                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Horizontal Selector]</b> Failed to delete UI Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Horizontal Selector]</b> Failed to delete Prefab Manager connection.", this); }
                             }
                         }
                     }
@@ -332,7 +334,7 @@ namespace Michsky.MUIP
                         {
                             MUIPEditorHandler.DrawUIManagerDisconnectedHeader();
 
-                            if (GUILayout.Button("Restore UI Manager", customSkin.button))
+                            if (GUILayout.Button("Restore Prefab Manager", customSkin.button))
                             {
                                 UIManagerButton uimb = buttonTarget.gameObject.AddComponent<UIManagerButton>();
 
@@ -341,7 +343,11 @@ namespace Michsky.MUIP
                                     //
                                 }
 
-                                catch { DestroyImmediate(uimb); Debug.LogError("<b>[Modern UI Pack]</b> Cannot restore the UI Manager connection."); }
+                                catch
+                                {
+                                    DestroyImmediate(uimb);
+                                    Debug.LogError("<b>[Modern Prefab Pack]</b> Cannot restore the Prefab Manager connection.");
+                                }
                             }
                         }
                     }

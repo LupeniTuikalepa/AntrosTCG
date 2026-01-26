@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Grids;
+﻿using System;
+using ATCG.Battle.Grids;
 using ATCG.Cards;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
@@ -7,9 +8,11 @@ namespace ATCG.Battle.Cards
 {
     public abstract class BattleCard<T> : GameCard<T>, IBattleCard where T : GameCardData
     {
+        public event Action<HexCoordinates, HexCoordinates> OnCardMoved;
+
         public bool IsDeployed => Grid != null;
         int IBattleCard.PlayerID => playerID;
-
+        public HexCoordinates Coordinates { get; private set; }
         public BattleGrid Grid { get; private set; }
 
         public readonly int playerID;
@@ -21,13 +24,17 @@ namespace ATCG.Battle.Cards
 
         void IBattleCard.Deploy(BattleGrid grid, HexCoordinates coordinates)
         {
+            Coordinates = coordinates;
             Grid = grid;
             OnDeploy();
         }
 
-        void IBattleCard.OnCardMoved(HexCoordinates from, HexCoordinates to)
+        void IBattleCard.MoveCard(HexCoordinates from, HexCoordinates to)
         {
-            OnCardMoved(from, to);
+            Coordinates = to;
+            MoveCard(from, to);
+
+            OnCardMoved?.Invoke(from, to);
         }
 
         void IBattleCard.Leave()
@@ -48,7 +55,7 @@ namespace ATCG.Battle.Cards
         }
 
         protected virtual void OnDeploy() { }
-        protected virtual void OnCardMoved(HexCoordinates from, HexCoordinates to) { }
+        protected virtual void MoveCard(HexCoordinates from, HexCoordinates to) { }
         protected virtual void EnterCell(BattleCell cell) { }
         protected virtual void LeaveCell(BattleCell cell) { }
 

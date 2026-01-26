@@ -51,7 +51,7 @@ namespace Linework.EdgeDetection
         public UVSet sectionTextureUvSet;
         public Channel sectionTextureChannel;
         public Channel vertexColorChannel;
-        public SectionMapFormat sectionMapFormat = SectionMapFormat.R16;
+        public SectionMapPrecision sectionMapPrecision = SectionMapPrecision.Bits16;
         [Range(0, 256)] public int sectionMapClearValue = 1;
         public OutlineRenderQueue sectionRenderQueue = OutlineRenderQueue.Opaque;
         public List<SectionPass> additionalSectionPasses = new();
@@ -82,6 +82,13 @@ namespace Linework.EdgeDetection
 #endif
         public Kernel kernel = Kernel.RobertsCross;
         [Range(0, 15)] public int outlineThickness = 3;
+#if UNITY_EDITOR
+        [ShaderKeywordFilter.SelectIf(true, overridePriority: true, keywordNames: ShaderFeature.ScaleWithDistance)]
+#endif
+        public bool scaleWithDistance;
+        [Range(0.0f, 200.0f)] public float distanceScaleStart = 100.0f;
+        [Range(0.1f, 100.0f)] public float distanceScaleDistance = 10.0f;
+        [Range(0.1f, 1.0f)] public float distanceScaleMin = 0.1f;
 #if UNITY_EDITOR
         [ShaderKeywordFilter.SelectIf(true, overridePriority: true, keywordNames: ShaderFeature.ScaleWithResolution)]
 #endif

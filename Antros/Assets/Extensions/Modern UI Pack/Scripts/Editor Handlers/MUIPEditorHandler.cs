@@ -6,7 +6,7 @@ namespace Michsky.MUIP
 {
     public class MUIPEditorHandler : Editor
     {
-        public const string UIM_SHORTCUT = "Tools/Modern UI Pack/Open UI Manager %#M";
+        public const string UIM_SHORTCUT = "Tools/Modern Prefab Pack/Open Prefab Manager %#M";
 
         public static GUISkin GetDarkEditor(GUISkin tempSkin)
         {
@@ -115,19 +115,19 @@ namespace Michsky.MUIP
 
         public static void DrawUIManagerConnectedHeader()
         {
-            EditorGUILayout.HelpBox("This object is connected with the UI Manager. Some parameters (such as colors, " +
+            EditorGUILayout.HelpBox("This object is connected with the Prefab Manager. Some parameters (such as colors, " +
                                "fonts or booleans) are managed by the manager.", MessageType.Info);
         }
 
         public static void DrawUIManagerPresetHeader()
         {
-            EditorGUILayout.HelpBox("This object is subject to a custom preset and cannot be used with the UI Manager. " +
-                                         "You can use the standard preset for UI Manager connection.", MessageType.Info);
+            EditorGUILayout.HelpBox("This object is subject to a custom preset and cannot be used with the Prefab Manager. " +
+                                         "You can use the standard preset for Prefab Manager connection.", MessageType.Info);
         }
 
         public static void DrawUIManagerDisconnectedHeader()
         {
-            EditorGUILayout.HelpBox("This object does not have any connection with the UI Manager.", MessageType.Info);
+            EditorGUILayout.HelpBox("This object does not have any connection with the Prefab Manager.", MessageType.Info);
         }
     }
 }

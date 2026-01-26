@@ -9,7 +9,6 @@ namespace ATCG.Battle.Players
         int ID { get; }
         PlayerInfos Infos { get; }
         PlayerDeck Deck { get; }
-
         IBattlePlayer Convert(BattleGameMode gameMode);
     }
 

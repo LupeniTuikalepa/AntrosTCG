@@ -1,4 +1,6 @@
-﻿using ATCG.HexGrids;
+﻿using System.Linq;
+using ATCG.Battle.Cards;
+using ATCG.HexGrids;
 
 namespace ATCG.Battle.Grids
 {
@@ -14,6 +16,6 @@ namespace ATCG.Battle.Grids
         }
 
 
-        public bool CanBeDeployedOn() => true;
+        public bool CanBeDeployedOn() => cell.Members.All(ctx => ctx is not HeroBattleCard);
     }
 }

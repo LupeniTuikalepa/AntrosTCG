@@ -14,6 +14,7 @@ namespace ATCG.Cards.UI.Components
         public Canvas CardCanvas => CardUI.CardCanvas;
         public CanvasGroup CanvasGroup => CardUI.CanvasGroup;
 
+        private int lastSortingOrder;
         public void OnPointerEnter(PointerEventData eventData)
         {
 
@@ -39,6 +40,7 @@ namespace ATCG.Cards.UI.Components
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            lastSortingOrder = CardCanvas.sortingOrder;
             CardCanvas.sortingOrder = 100;
             Tween.StopAll(CanvasGroup);
             Tween.Alpha(CanvasGroup, .2f, .25f);
@@ -46,7 +48,7 @@ namespace ATCG.Cards.UI.Components
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            CardCanvas.sortingOrder = -3;
+            CardCanvas.sortingOrder = lastSortingOrder;
 
             Tween.StopAll(CanvasGroup);
             Tween.Alpha(CanvasGroup, 1f, .25f);

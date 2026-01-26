@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerHealthBar")]
     public class PlayerHealthBar : BarUI, IPlayerStatUI
     {
         public void Connect(IBattlePlayer player)
@@ -23,6 +24,7 @@ namespace ATCG.Battle.Players.Runtime.UI
         {
             MaxValue = player.MaxHealth;
             CurrentValue = current;
+            Refresh();
         }
     }
 }

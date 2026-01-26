@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: 9b2301be-ab66-44fe-b02d-97810eade17e
   <Title>k__BackingField: Cedem
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 4
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: edf825d761e813546a1b78276343844b, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

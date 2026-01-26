@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Michsky.MUIP
 {
-    [AddComponentMenu("Modern UI Pack/Layout Group/Radial Layout Group")]
+    [AddComponentMenu("Modern Prefab Pack/Layout Group/Radial Layout Group")]
     public class RadialLayoutGroup : LayoutGroup
     {
         public enum Direction { Clockwise = 0, Counterclockwise = 1, Bidirectional = 2 }

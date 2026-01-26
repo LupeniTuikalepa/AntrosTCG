@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/SimplePlayerStats")]
     public class SimplePlayerStats : MonoBehaviour
     {
         [SerializeField]
@@ -14,7 +15,9 @@ namespace ATCG.Battle.Players.Runtime.UI
 
         public virtual void Connect(IBattlePlayer player)
         {
-            playerName.text = player.Profile.Infos.name;
+            playerName.text = player.GetPlayerName();
+            playerName.color = player.GetPlayerColor();
+
             healthBar.Connect(player);
             manaBar.Connect(player);
         }

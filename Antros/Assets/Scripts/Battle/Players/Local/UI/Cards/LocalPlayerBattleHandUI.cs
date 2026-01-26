@@ -1,10 +1,17 @@
-﻿using ATCG.Battle.Cards;
+﻿using System;
+using ATCG.Battle.Cards;
 using ATCG.Battle.Cards.UI;
+using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Runtime;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Battle.Players.Runtime.UI;
+using ATCG.HexGrids;
 using Helteix.Cards;
 using Helteix.Cards.Collections;
 using Helteix.Cards.UI.Physical;
+using Helteix.Cards.UI.Physical.Drag;
+using Helteix.Tools.Phases;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,6 +31,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         private PlayerHUD hud;
 
+        public BattleCardCellLookupPhase BattleCardCellLookupPhase { get; private set; }
 
         private void OnEnable()
         {
@@ -35,12 +43,32 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             InputUser.onChange -= OnInputUserChange;
         }
 
+
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        {
+            if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
+            {
+                if (RuntimeLocalBattlePlayer != null)
+                    Disconnect();
+
+                RuntimeLocalBattlePlayer = runtimeLocalBattlePlayer;
+                Connect(LocalBattlePlayer.Hand);
+            }
+        }
+
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer battlePlayer)
+        {
+            if (runtimeBattlePlayer == RuntimeLocalBattlePlayer)
+            {
+                Disconnect();
+                RuntimeLocalBattlePlayer = null;
+            }
+        }
         protected override bool CanCardBeDragged(ICard card)
         {
             if (LocalBattlePlayer == null)
                 return base.CanCardBeDragged(card);
 
-            return true;
             return LocalBattlePlayer.canDeployHeroes;
         }
 
@@ -49,7 +77,6 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             if (LocalBattlePlayer == null)
                 return base.CanCardBeClicked(card);
 
-            return true;
             return LocalBattlePlayer.canDeployHeroes;
         }
 
@@ -58,7 +85,14 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             if (LocalBattlePlayer == null)
                 return base.CanCardBeSelected(card);
 
-            return true;
+            return LocalBattlePlayer.canDeployHeroes;
+        }
+
+        public override bool CanCardBeSubmitted(ICard card)
+        {
+            if (LocalBattlePlayer == null)
+                return base.CanCardBeSelected(card);
+
             return LocalBattlePlayer.canDeployHeroes;
         }
 
@@ -105,38 +139,10 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             base.OnCardDeselect(holder, eventData);
         }
 
-
-        private void OnControlsChanged(PlayerInput playerInput)
-        {
-
-        }
-
-        [Button]
         private void SelectFirstAvailableHolder()
         {
             if(TryGetHolderFor(LocalBattlePlayer.Hand.GetCard(0), out var holder))
                 SelectHolder(holder, null);
-        }
-
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
-        {
-            if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
-            {
-                if (RuntimeLocalBattlePlayer != null)
-                    Disconnect();
-
-                RuntimeLocalBattlePlayer = runtimeLocalBattlePlayer;
-                Connect(LocalBattlePlayer.Hand);
-            }
-        }
-
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer battlePlayer)
-        {
-            if (runtimeBattlePlayer == RuntimeLocalBattlePlayer)
-            {
-                Disconnect();
-                RuntimeLocalBattlePlayer = null;
-            }
         }
 
         private void OnInputUserChange(InputUser inputUser, InputUserChange change, InputDevice device)
@@ -150,9 +156,56 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             switch (change)
             {
                 case InputUserChange.ControlSchemeChanged:
-                    if (device is Gamepad)
+                    if (inputUser.controlScheme is {name: "Gamepad"})
                         SelectFirstAvailableHolder();
                     break;
+            }
+        }
+
+        protected override void OnCardBeginDrag(CardHolderUI holder, PointerEventData eventData)
+        {
+            base.OnCardBeginDrag(holder, eventData);
+            if (LocalBattlePlayer.canDeployHeroes && BattleCardCellLookupPhase == null && holder.CardUI.Current is IBattleCard card)
+            {
+                _ = DeployPlayerCard(card);
+            }
+        }
+
+        protected override void OnCardDrop(IBattleCard card, DragResult<IBattleCard> result)
+        {
+            if (BattleCardCellLookupPhase != null && card == BattleCardCellLookupPhase.card)
+            {
+                if (result is { Target: RuntimeBattleCell runtimeBattleCell })
+                    BattleCardCellLookupPhase.SetResult(runtimeBattleCell.BattleCell);
+                else
+                    BattleCardCellLookupPhase.SetResult(null);
+            }
+
+            base.OnCardDrop(card, result);
+        }
+
+        private async Awaitable DeployPlayerCard(IBattleCard card)
+        {
+            try
+            {
+                BattleCardCellLookupPhase = new BattleCardCellLookupPhase(new DeployCardCellFilter(), LocalBattlePlayer.BattleGameMode.BattleGrid, card);
+                PhaseResult<BattleCell> phaseResult = await BattleCardCellLookupPhase.Run();
+
+                if (phaseResult is { type: PhaseResultType.Success, result: not null })
+                {
+                    HexCell resultCell = phaseResult.result.cell;
+                    if(resultCell != null)
+                        LocalBattlePlayer.DeployBattleCard(card, resultCell.coordinates);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+            finally
+            {
+                BattleCardCellLookupPhase = null;
+
             }
         }
 

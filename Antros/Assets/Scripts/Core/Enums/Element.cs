@@ -14,9 +14,11 @@
         //Secondary
         Thunder,
         Light,
-        Air,
+        Wind,
         Frost,
 
-        None,
+        //Other
+        Synthetic,
+        Unknown,
     }
 }

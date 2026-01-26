@@ -42,7 +42,7 @@ namespace Michsky.MUIP
             if (customSkin == null)
             {
                 EditorGUILayout.HelpBox("Editor variables are missing. You can manually fix this by deleting " +
-                    "Modern UI Pack > Resources folder and then re-import the package. \n\nIf you're still seeing this " +
+                    "Modern Prefab Pack > Resources folder and then re-import the package. \n\nIf you're still seeing this " +
                     "dialog even after the re-import, contact me with this ID: " + buildID, MessageType.Error);
               
                 if (GUILayout.Button("Contact")) { Email(); }
@@ -68,7 +68,7 @@ namespace Michsky.MUIP
 
             if (showAnimatedIcon)
             {
-                MUIPEditorHandler.DrawProperty(animatedIconColor, customSkin, "Color");
+                MUIPEditorHandler.DrawProperty(animatedIconColor, customSkin, "color");
             }
 
             GUILayout.EndVertical();
@@ -92,8 +92,8 @@ namespace Michsky.MUIP
             if (showButton)
             {
                 MUIPEditorHandler.DrawProperty(buttonFont, customSkin, "Font");
-                MUIPEditorHandler.DrawProperty(buttonNormalColor, customSkin, "Normal Color");
-                MUIPEditorHandler.DrawProperty(buttonAccentColor, customSkin, "Accent Color");
+                MUIPEditorHandler.DrawProperty(buttonNormalColor, customSkin, "Normal color");
+                MUIPEditorHandler.DrawProperty(buttonAccentColor, customSkin, "Accent color");
                 MUIPEditorHandler.DrawProperty(buttonDisabledAlpha, customSkin, "Disabled Alpha");
             }
 
@@ -115,7 +115,7 @@ namespace Michsky.MUIP
 
             if (showContext)
             {
-                MUIPEditorHandler.DrawProperty(contextBackgroundColor, customSkin, "Background Color");
+                MUIPEditorHandler.DrawProperty(contextBackgroundColor, customSkin, "Background color");
             }
 
             GUILayout.EndVertical();
@@ -172,8 +172,8 @@ namespace Michsky.MUIP
             if (showHorSelector)
             {
                 MUIPEditorHandler.DrawProperty(selectorFont, customSkin, "Font");
-                MUIPEditorHandler.DrawProperty(selectorColor, customSkin, "Color");
-                MUIPEditorHandler.DrawProperty(selectorHighlightedColor, customSkin, "Highlighted Color");
+                MUIPEditorHandler.DrawProperty(selectorColor, customSkin, "color");
+                MUIPEditorHandler.DrawProperty(selectorHighlightedColor, customSkin, "Highlighted color");
             }
 
             GUILayout.EndVertical();
@@ -196,7 +196,7 @@ namespace Michsky.MUIP
             if (showInputField)
             {
                 MUIPEditorHandler.DrawProperty(inputFieldFont, customSkin, "Font");
-                MUIPEditorHandler.DrawProperty(inputFieldColor, customSkin, "Color");
+                MUIPEditorHandler.DrawProperty(inputFieldColor, customSkin, "color");
             }
 
             GUILayout.EndVertical();
@@ -225,11 +225,11 @@ namespace Michsky.MUIP
             {
                 MUIPEditorHandler.DrawProperty(modalWindowTitleFont, customSkin, "Title Font");
                 MUIPEditorHandler.DrawProperty(modalWindowContentFont, customSkin, "Content Font");
-                MUIPEditorHandler.DrawProperty(modalWindowTitleColor, customSkin, "Title Color");
-                MUIPEditorHandler.DrawProperty(modalWindowDescriptionColor, customSkin, "Description Color");
-                MUIPEditorHandler.DrawProperty(modalWindowIconColor, customSkin, "Icon Color");
-                MUIPEditorHandler.DrawProperty(modalWindowBackgroundColor, customSkin, "Background Color");
-                MUIPEditorHandler.DrawProperty(modalWindowContentPanelColor, customSkin, "Content Panel Color");
+                MUIPEditorHandler.DrawProperty(modalWindowTitleColor, customSkin, "Title color");
+                MUIPEditorHandler.DrawProperty(modalWindowDescriptionColor, customSkin, "Description color");
+                MUIPEditorHandler.DrawProperty(modalWindowIconColor, customSkin, "Icon color");
+                MUIPEditorHandler.DrawProperty(modalWindowBackgroundColor, customSkin, "Background color");
+                MUIPEditorHandler.DrawProperty(modalWindowContentPanelColor, customSkin, "Content Panel color");
                 EditorGUILayout.HelpBox("These values will only affect 'Style 1 - Standard' window.", MessageType.Info);
             }
 
@@ -268,10 +268,10 @@ namespace Michsky.MUIP
                 EditorGUILayout.PropertyField(notificationDescriptionFontSize, new GUIContent(""), GUILayout.Width(40));
                 EditorGUILayout.PropertyField(notificationDescriptionFont, new GUIContent(""));
                 GUILayout.EndHorizontal();
-                MUIPEditorHandler.DrawProperty(notificationBackgroundColor, customSkin, "Background Color");
-                MUIPEditorHandler.DrawProperty(notificationTitleColor, customSkin, "Title Color");
-                MUIPEditorHandler.DrawProperty(notificationDescriptionColor, customSkin, "Description Color");
-                MUIPEditorHandler.DrawProperty(notificationIconColor, customSkin, "Icon Color");
+                MUIPEditorHandler.DrawProperty(notificationBackgroundColor, customSkin, "Background color");
+                MUIPEditorHandler.DrawProperty(notificationTitleColor, customSkin, "Title color");
+                MUIPEditorHandler.DrawProperty(notificationDescriptionColor, customSkin, "Description color");
+                MUIPEditorHandler.DrawProperty(notificationIconColor, customSkin, "Icon color");
             }
 
             GUILayout.EndVertical();
@@ -297,10 +297,10 @@ namespace Michsky.MUIP
             if (showProgressBar)
             {
                 MUIPEditorHandler.DrawProperty(progressBarLabelFont, customSkin, "Label Font");
-                MUIPEditorHandler.DrawProperty(progressBarColor, customSkin, "Color");
-                MUIPEditorHandler.DrawProperty(progressBarLabelColor, customSkin, "Label Color");
-                MUIPEditorHandler.DrawProperty(progressBarBackgroundColor, customSkin, "Background Color");
-                MUIPEditorHandler.DrawProperty(progressBarLoopBackgroundColor, customSkin, "Loop BG Color");
+                MUIPEditorHandler.DrawProperty(progressBarColor, customSkin, "color");
+                MUIPEditorHandler.DrawProperty(progressBarLabelColor, customSkin, "Label color");
+                MUIPEditorHandler.DrawProperty(progressBarBackgroundColor, customSkin, "Background color");
+                MUIPEditorHandler.DrawProperty(progressBarLoopBackgroundColor, customSkin, "Loop BG color");
             }
 
             GUILayout.EndVertical();
@@ -322,8 +322,8 @@ namespace Michsky.MUIP
 
             if (showScrollbar)
             {
-                MUIPEditorHandler.DrawProperty(scrollbarColor, customSkin, "Bar Color");
-                MUIPEditorHandler.DrawProperty(scrollbarBackgroundColor, customSkin, "Background Color");
+                MUIPEditorHandler.DrawProperty(scrollbarColor, customSkin, "Bar color");
+                MUIPEditorHandler.DrawProperty(scrollbarBackgroundColor, customSkin, "Background color");
             }
 
             GUILayout.EndVertical();
@@ -352,20 +352,20 @@ namespace Michsky.MUIP
             {
                 MUIPEditorHandler.DrawProperty(sliderThemeType, customSkin, "Theme Type");
                 MUIPEditorHandler.DrawProperty(sliderLabelFont, customSkin, "Label Font");
-                MUIPEditorHandler.DrawProperty(sliderColor, customSkin, "Primary Color");
-                MUIPEditorHandler.DrawProperty(sliderBackgroundColor, customSkin, "Secondary Color");
-                MUIPEditorHandler.DrawProperty(sliderLabelColor, customSkin, "Label Popup Color");
+                MUIPEditorHandler.DrawProperty(sliderColor, customSkin, "Primary color");
+                MUIPEditorHandler.DrawProperty(sliderBackgroundColor, customSkin, "Secondary color");
+                MUIPEditorHandler.DrawProperty(sliderLabelColor, customSkin, "Label Popup color");
             }
 
             if (showSlider && sliderThemeType.enumValueIndex == 1)
             {
                 MUIPEditorHandler.DrawProperty(sliderThemeType, customSkin, "Theme Type");
                 MUIPEditorHandler.DrawProperty(sliderLabelFont, customSkin, "Label Font");
-                MUIPEditorHandler.DrawProperty(sliderColor, customSkin, "Color");
-                MUIPEditorHandler.DrawProperty(sliderLabelColor, customSkin, "Label Color");
-                MUIPEditorHandler.DrawProperty(sliderPopupLabelColor, customSkin, "Label Popup Color");
-                MUIPEditorHandler.DrawProperty(sliderHandleColor, customSkin, "Handle Color");
-                MUIPEditorHandler.DrawProperty(sliderBackgroundColor, customSkin, "Background Color");
+                MUIPEditorHandler.DrawProperty(sliderColor, customSkin, "color");
+                MUIPEditorHandler.DrawProperty(sliderLabelColor, customSkin, "Label color");
+                MUIPEditorHandler.DrawProperty(sliderPopupLabelColor, customSkin, "Label Popup color");
+                MUIPEditorHandler.DrawProperty(sliderHandleColor, customSkin, "Handle color");
+                MUIPEditorHandler.DrawProperty(sliderBackgroundColor, customSkin, "Background color");
             }
 
             GUILayout.EndVertical();
@@ -389,10 +389,10 @@ namespace Michsky.MUIP
 
             if (showSwitch)
             {
-                MUIPEditorHandler.DrawProperty(switchBorderColor, customSkin, "Border Color");
-                MUIPEditorHandler.DrawProperty(switchBackgroundColor, customSkin, "Background Color");
-                MUIPEditorHandler.DrawProperty(switchHandleOnColor, customSkin, "Handle On Color");
-                MUIPEditorHandler.DrawProperty(switchHandleOffColor, customSkin, "Handle Off Color");
+                MUIPEditorHandler.DrawProperty(switchBorderColor, customSkin, "Border color");
+                MUIPEditorHandler.DrawProperty(switchBackgroundColor, customSkin, "Background color");
+                MUIPEditorHandler.DrawProperty(switchHandleOnColor, customSkin, "Handle On color");
+                MUIPEditorHandler.DrawProperty(switchHandleOffColor, customSkin, "Handle Off color");
             }
 
             GUILayout.EndVertical();
@@ -418,10 +418,10 @@ namespace Michsky.MUIP
             if (showToggle)
             {
                 MUIPEditorHandler.DrawProperty(toggleFont, customSkin, "Font");
-                MUIPEditorHandler.DrawProperty(toggleTextColor, customSkin, "Text Color");
-                MUIPEditorHandler.DrawProperty(toggleBorderColor, customSkin, "Border Color");
-                MUIPEditorHandler.DrawProperty(toggleBackgroundColor, customSkin, "Background Color");
-                MUIPEditorHandler.DrawProperty(toggleCheckColor, customSkin, "Check Color");
+                MUIPEditorHandler.DrawProperty(toggleTextColor, customSkin, "Text color");
+                MUIPEditorHandler.DrawProperty(toggleBorderColor, customSkin, "Border color");
+                MUIPEditorHandler.DrawProperty(toggleBackgroundColor, customSkin, "Background color");
+                MUIPEditorHandler.DrawProperty(toggleCheckColor, customSkin, "Check color");
             }
 
             GUILayout.EndVertical();
@@ -450,8 +450,8 @@ namespace Michsky.MUIP
                 EditorGUILayout.PropertyField(tooltipFontSize, new GUIContent(""), GUILayout.Width(40));
                 EditorGUILayout.PropertyField(tooltipFont, new GUIContent(""));
                 GUILayout.EndHorizontal();
-                MUIPEditorHandler.DrawProperty(tooltipTextColor, customSkin, "Text Color");
-                MUIPEditorHandler.DrawProperty(tooltipBackgroundColor, customSkin, "Background Color");
+                MUIPEditorHandler.DrawProperty(tooltipTextColor, customSkin, "Text color");
+                MUIPEditorHandler.DrawProperty(tooltipBackgroundColor, customSkin, "Background color");
             }
 
             GUILayout.EndVertical();
@@ -476,8 +476,8 @@ namespace Michsky.MUIP
             {
                 MUIPEditorHandler.DrawProperty(customObjPrimaryFont, customSkin, "Primary Font");
                 MUIPEditorHandler.DrawProperty(customObjSecondaryFont, customSkin, "Secondary Font");
-                MUIPEditorHandler.DrawProperty(customObjPrimaryColor, customSkin, "Primary Color");
-                MUIPEditorHandler.DrawProperty(customObjSecondaryColor, customSkin, "Secondary Color");
+                MUIPEditorHandler.DrawProperty(customObjPrimaryColor, customSkin, "Primary color");
+                MUIPEditorHandler.DrawProperty(customObjSecondaryColor, customSkin, "Secondary color");
             }
 
             GUILayout.EndVertical();
@@ -512,13 +512,13 @@ namespace Michsky.MUIP
             var editorHints = serializedObject.FindProperty("editorHints");
             GUILayout.BeginVertical(EditorStyles.helpBox);
             GUILayout.Space(-3);
-            editorHints.boolValue = MUIPEditorHandler.DrawTogglePlain(editorHints.boolValue, customSkin, "UI Manager Hints");
+            editorHints.boolValue = MUIPEditorHandler.DrawTogglePlain(editorHints.boolValue, customSkin, "Prefab Manager Hints");
             GUILayout.Space(3);
 
             if (editorHints.boolValue == true)
             {
-                EditorGUILayout.HelpBox("These values are universal and affect all objects containing 'UI Manager' component.", MessageType.Info);
-                EditorGUILayout.HelpBox("If want to assign unique values, remove 'UI Manager' component from the object ", MessageType.Info);
+                EditorGUILayout.HelpBox("These values are universal and affect all objects containing 'Prefab Manager' component.", MessageType.Info);
+                EditorGUILayout.HelpBox("If want to assign unique values, remove 'Prefab Manager' component from the object ", MessageType.Info);
 				EditorGUILayout.HelpBox("You can press 'Control/Command + Shift + M' to open the manager quickly.", MessageType.Info);
             }
 
@@ -560,17 +560,17 @@ namespace Michsky.MUIP
 
         void ResetToDefaults()
         {
-            if (EditorUtility.DisplayDialog("Reset to defaults", "Are you sure you want to reset UI Manager values to default?", "Yes", "Cancel"))
+            if (EditorUtility.DisplayDialog("Reset to defaults", "Are you sure you want to reset Prefab Manager values to default?", "Yes", "Cancel"))
             {
                 try
                 {
-                    Preset defaultPreset = Resources.Load<Preset>("UI Manager Presets/Default");
+                    Preset defaultPreset = Resources.Load<Preset>("Prefab Manager Presets/Default");
                     defaultPreset.ApplyTo(Resources.Load("MUIP Manager"));
                     Selection.activeObject = null;
-                    Debug.Log("<b>[UI Manager]</b> Resetting successful.");
+                    Debug.Log("<b>[Prefab Manager]</b> Resetting successful.");
                 }
 
-                catch { Debug.LogWarning("<b>[UI Manager]</b> Resetting failed. Default preset seems to be missing"); }
+                catch { Debug.LogWarning("<b>[Prefab Manager]</b> Resetting failed. Default preset seems to be missing"); }
             }    
         }
     }

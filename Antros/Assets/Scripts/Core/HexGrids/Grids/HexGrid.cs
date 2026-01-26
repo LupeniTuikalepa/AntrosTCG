@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ATCG.HexGrids.Utility;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -11,7 +12,6 @@ namespace ATCG.HexGrids.Grids
     {
         public event Action<HexCell> OnCellAdded;
         public event Action<HexCell> OnCellRemoved;
-
         public float InnerRadius => OuterCellRadius * 0.866025404f;
         public float OuterCellRadius { get; private set; }
         public Vector2 Center { get; private set; }
@@ -72,6 +72,37 @@ namespace ATCG.HexGrids.Grids
             }
         }
 
+
+        #region Utility
+
+
+        public IEnumerable<HexCoordinates> GetSpiral(HexCoordinates center, int radius)
+        {
+            for (int k = 1; k <= radius; k++)
+            {
+                foreach (var coord in GetRing(center, k))
+                    yield return coord;
+            }
+        }
+
+        public IEnumerable<HexCoordinates> GetRing(HexCoordinates center, int radius)
+        {
+            if (radius <= 0)
+                yield return center;
+
+            HexCoordinates hex =  HexOperations.Offset(center, HexDirection.BottomLeft, radius);
+
+            for (int direction = 0; direction < 6; direction++)
+            {
+                for (int j = 0; j < radius; j++)
+                {
+                    yield return hex;
+                    hex = HexOperations.Offset(hex, (HexDirection)direction);
+                }
+            }
+        }
+
+        #endregion
         #region Members
 
         public bool HasMember(HexCoordinates coordinates)
@@ -82,7 +113,7 @@ namespace ATCG.HexGrids.Grids
             => TryGetHexMember<IHexMember>(coordinates, out member);
         public bool TryGetHexMember<T>(HexCoordinates coordinates, out T member) where T : IHexMember
         {
-            if (TryGetCell(coordinates, out HexCell cell) && cell.CurrentMember is T m)
+            if (TryGetCell(coordinates, out HexCell cell) && cell.Members is T m)
             {
                 member = m;
                 return true;
@@ -100,13 +131,16 @@ namespace ATCG.HexGrids.Grids
                     yield return hexMember;
             }
         }
-        
+
         public IEnumerable<IHexMember> GetMembers()
         {
             foreach (HexCell hexCell in cells.Values)
             {
-                if(hexCell.CurrentMember != null)
-                    yield return hexCell.CurrentMember;
+                if (hexCell.Members == null)
+                    continue;
+
+                foreach (var member in hexCell.Members)
+                    yield return member;
             }
 
         }

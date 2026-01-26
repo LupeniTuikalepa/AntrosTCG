@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
+
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/Player HUD")]
     public class PlayerHUD : RuntimeLocalPlayerComponent
     {
         [field: SerializeField]

@@ -28,7 +28,6 @@ namespace ATCG.Battle
 
         public readonly IBattlePlayerProfile[] playerProfiles;
 
-
         public BattleGrid BattleGrid { get; private set; }
         public IBattlePlayer[] Players { get; private set; }
         public int Round { get; private set; }
@@ -71,6 +70,7 @@ namespace ATCG.Battle
 
         protected override async Awaitable<BattleGameModeResults> Execute(CancellationToken token)
         {
+            await Awaitable.EndOfFrameAsync(token);
             BattleHistory history = new BattleHistory(seed, ID);
             Round = 1;
             Turn = 1;

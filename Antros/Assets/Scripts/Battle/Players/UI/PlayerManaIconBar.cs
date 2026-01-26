@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIconBar")]
     public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI
     {
         [SerializeField]

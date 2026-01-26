@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: 96afa597-8b61-41f2-bf89-566b51e56ee1
   <Title>k__BackingField: Kamp
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 2
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: eed0e9fd3d7b571488ae27cedd7813dd, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

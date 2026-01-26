@@ -125,6 +125,10 @@ namespace Linework.Editor.Common.Utils
             public static readonly GUIContent BreakUpAmount = EditorGUIUtility.TrTextContent("Amount", "How much to break up the edges.");
             public static readonly GUIContent BreakUpScale = EditorGUIUtility.TrTextContent("Frequency", "How often to break up the edges.");
             public static readonly GUIContent SectionRenderQueue = EditorGUIUtility.TrTextContent("Queue", "Only gameobjects using this render queue will render to the section map.");
+            public static readonly GUIContent ScaleWithDistance = EditorGUIUtility.TrTextContent("Scale With Distance", "Scale the thickness of the edges inversely with the distance from the camera.");
+            public static readonly GUIContent DistanceScaleStart = EditorGUIUtility.TrTextContent("Start (meters)", "The distance from which to start scaling the edges.");
+            public static readonly GUIContent DistanceScaleDistance = EditorGUIUtility.TrTextContent("Distance (meters)", "The distance over which the edges are scaled.");
+            public static readonly GUIContent DistanceScaleMin = EditorGUIUtility.TrTextContent("Minimum", "The minimum thickness of the edges.");
         }
 
         public static void SectionGUI(string title, SerializedProperty expanded, Action drawAction, SerializedObject serializedObject, SerializedProperty enabled = null)

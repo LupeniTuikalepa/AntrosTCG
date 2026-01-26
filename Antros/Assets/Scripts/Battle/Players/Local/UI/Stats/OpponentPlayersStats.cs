@@ -1,43 +1,40 @@
 ﻿using System.Collections.Generic;
+using ATCG.GameModes;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
-    public class OpponentPlayersStats : PlayerHUDElement, IPhaseListener<BattleGameMode>
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/OpponentPlayersStats")]
+    public class OpponentPlayersStats : PlayerHUDElement
     {
         public BattleGameMode CurrentPhase { get; private set; }
 
         [SerializeField]
         private SimplePlayerStats simplePlayerStatsPrefab;
         [SerializeField]
-        private Transform container;
+        private RectTransform container;
 
         private Dictionary<IBattlePlayer, SimplePlayerStats> simplePlayerStats;
 
         private void Awake()
         {
             simplePlayerStats = new Dictionary<IBattlePlayer, SimplePlayerStats>();
-            Disconnect();
+            Clear();
         }
 
-        private void OnEnable()
-        {
-            this.Register(-10);
-        }
-
-        private void OnDisable()
-        {
-            this.Unregister();
-        }
 
         protected override void OnConnect()
         {
-            Disconnect();
-
-            if(CurrentPhase == null)
+            if (GameModeController.Global.Current is BattleGameMode bgm)
+                CurrentPhase = bgm;
+            else
+            {
+                CurrentPhase = null;
                 return;
+            }
 
             for (int i = 0; i < CurrentPhase.PlayerCount; i++)
             {
@@ -49,27 +46,23 @@ namespace ATCG.Battle.Players.Runtime.UI
                 simplePlayerStats.Add(player, instance);
 
                 instance.Connect(player);
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(container);
             }
         }
 
         protected override void OnDisconnect()
+        {
+            Clear();
+        }
+
+        private void Clear()
         {
             foreach ((IBattlePlayer battlePlayer, SimplePlayerStats stats) in simplePlayerStats)
                 stats.Disconnect(battlePlayer);
 
             container.ClearChildren();
             simplePlayerStats.Clear();
-        }
-
-        void IPhaseListener<BattleGameMode>.OnPhaseBegin(BattleGameMode phase)
-        {
-            CurrentPhase = phase;
-            Debug.Log("Phase Begin");
-        }
-
-
-        void IPhaseListener<BattleGameMode>.OnPhaseEnd(BattleGameMode phase)
-        {
         }
     }
 }

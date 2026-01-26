@@ -4,9 +4,13 @@ using Sirenix.OdinInspector;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.Users;
 
 namespace ATCG.Battle.Players.Local.CameraControls
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player Camera")]
     public class RuntimeLocalPlayerCamera : RuntimeLocalPlayerComponent
     {
         [Serializable]
@@ -68,11 +72,16 @@ namespace ATCG.Battle.Players.Local.CameraControls
         [ShowInInspector, HideInEditorMode, ReadOnly]
         private RuntimeBattleGrid grid;
 
-        private InputAction panAction;
-        private InputAction moveAction;
-        private InputAction zoomAction;
+        [SerializeField]
+        private Transform moveTarget;
 
+        private InputAction PanAction => RuntimeLocalPlayer.Controls.Pan;
+        private InputAction MoveAction => RuntimeLocalPlayer.Controls.Move;
+        private InputAction ZoomAction => RuntimeLocalPlayer.Controls.Zoom;
 
+        private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.PlayerInputUser;
+
+        private bool isManualMode = true;
 
         protected override void Awake()
         {
@@ -80,22 +89,15 @@ namespace ATCG.Battle.Players.Local.CameraControls
             grid = FindFirstObjectByType<RuntimeBattleGrid>();
         }
 
-        private void Start()
-        {
-            panAction = RuntimeLocalPlayer.Controls.Pan;
-            moveAction = RuntimeLocalPlayer.Controls.Move;
-            zoomAction = RuntimeLocalPlayer.Controls.Zoom;
-        }
-
         private void LateUpdate()
         {
-            Vector2 input = moveAction.ReadValue<Vector2>();
+            Vector2 input = MoveAction.ReadValue<Vector2>();
+
             MoveCameraWithPlayerInput(input);
 
-            float zoom = zoomAction.ReadValue<float>();
+            float zoom = ZoomAction.ReadValue<float>();
             ZoomCamera(zoom);
         }
-
 
         private void MoveCameraWithPlayerInput(Vector2 input)
         {
@@ -132,30 +134,32 @@ namespace ATCG.Battle.Players.Local.CameraControls
             if(!bounds.Contains(nextPosition))
                 nextPosition = bounds.ClosestPoint(nextPosition);
 
-            moveableTarget.position = nextPosition;
+            moveableTarget.position = new Vector3()
+            {
+                x = nextPosition.x,
+                y = nextPosition.y,
+                z = -10
+            };
         }
 
-        private void ZoomCamera(float zoom)
+        private void ZoomCamera(float zoomInput)
         {
+            float targetZoomSpeed = currentZoomSpeed;
+
             //Debug.Log(currentZoomSpeed);
-            if (Mathf.Approximately(0, zoom))
-            {
-                if(currentZoomSpeed > 0)
-                    Debug.Log("decelerating");
-
-                currentZoomSpeed = Mathf.MoveTowards(currentZoomSpeed, 0, decelerationSpeed * Time.deltaTime);
-            }
+            if (Mathf.Approximately(0, zoomInput))
+                targetZoomSpeed = Mathf.MoveTowards(currentZoomSpeed, 0, zoomDeceleration * Time.deltaTime);
             else
-                currentZoomSpeed += zoom * zoomAcceleration * Time.deltaTime;
+                targetZoomSpeed += zoomInput * zoomAcceleration * Time.deltaTime;
 
-            if(currentZoomSpeed > maxZoomSpeed)
-                currentZoomSpeed = maxZoomSpeed;
-            if(currentZoomSpeed < -maxZoomSpeed)
-                currentZoomSpeed = -maxZoomSpeed;
+            if(targetZoomSpeed > maxZoomSpeed)
+                targetZoomSpeed = maxZoomSpeed;
+            if(targetZoomSpeed < -maxZoomSpeed)
+                targetZoomSpeed = -maxZoomSpeed;
 
-            float targetZoom = Mathf.Clamp(cinemachineCamera.Lens.OrthographicSize + currentZoomSpeed, minMaxZoom.x, minMaxZoom.y);
-
+            float targetZoom = Mathf.Clamp(cinemachineCamera.Lens.OrthographicSize + targetZoomSpeed, minMaxZoom.x, minMaxZoom.y);
             cinemachineCamera.Lens.OrthographicSize = targetZoom;
+            currentZoomSpeed = targetZoomSpeed;
         }
 
         protected override void Connect(LocalBattlePlayer player)
@@ -172,7 +176,7 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
             cinemachineCamera.OutputChannel = outputChannels;
             renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
-            renderCamera.OutputCamera.targetDisplay = (int)RuntimeLocalPlayer.Controls.InputUser.index;
+            renderCamera.OutputCamera.targetDisplay = (int)RuntimeLocalPlayer.Controls.PlayerInputUser.index;
         }
 
         protected override void Disconnect(LocalBattlePlayer battlePlayer)

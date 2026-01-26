@@ -100,6 +100,7 @@ namespace SingularityGroup.HotReload.Editor {
                 return;
             }
             Translations.LoadDefaultLocalization();
+            SingularityGroup.HotReload.Localization.Translations.LoadDefaultLocalization();
             if (File.Exists(PackageConst.ConfigFileName)) {
                 config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(PackageConst.ConfigFileName));
             } else {
@@ -1060,13 +1061,26 @@ namespace SingularityGroup.HotReload.Editor {
             var disableConsoleWindow = HotReloadPrefs.DisableConsoleWindow;
             var isReleaseMode = RequestHelper.IsReleaseMode();
             var detailedErrorReporting = !HotReloadPrefs.DisableDetailedErrorReporting;
+#if UNITY_EDITOR_WIN
+            var useWatchman = HotReloadPrefs.UseWatchman;
+#endif
             CodePatcher.I.ClearPatchedMethods();
             RecordActiveDaysForRateApp();
             try {
                 requestingStart = true;
                 startupProgress = Tuple.Create(0f, Translations.UI.StartingHotReloadMessage);
                 serverStartedAt = DateTime.UtcNow;
-                await HotReloadCli.StartAsync(exposeToNetwork, allAssetChanges, disableConsoleWindow, isReleaseMode, detailedErrorReporting, loginData).ConfigureAwait(false);
+                await HotReloadCli.StartAsync(
+                    exposeToNetwork, 
+                    allAssetChanges, 
+                    disableConsoleWindow, 
+                    isReleaseMode, 
+                    detailedErrorReporting,
+#if UNITY_EDITOR_WIN
+                    useWatchman,
+#endif
+                    loginData
+                ).ConfigureAwait(false);
             }
             catch (Exception ex) {
                 ThreadUtility.LogException(ex);

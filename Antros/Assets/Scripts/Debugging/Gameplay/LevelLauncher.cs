@@ -29,7 +29,7 @@ namespace ATCG.Debugging.Debugging.Gameplay
                 {
                     new PlayerInfos()
                     {
-                        name = "Player 1"
+                        name = "Player 1",
                     },
                     new PlayerInfos()
                     {

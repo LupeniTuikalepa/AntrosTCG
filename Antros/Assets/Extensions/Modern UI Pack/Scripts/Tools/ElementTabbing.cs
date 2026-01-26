@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Michsky.MUIP
 {
-    [AddComponentMenu("Modern UI Pack/Tools/Element Tabbing")]
+    [AddComponentMenu("Modern Prefab Pack/Tools/Element Tabbing")]
     public class ElementTabbing : MonoBehaviour
     {
         // Helpers

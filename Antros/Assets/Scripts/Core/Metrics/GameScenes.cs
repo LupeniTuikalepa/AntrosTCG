@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATCG.Metrics
 {
-    [System.Serializable, AutoGenerateGameSettings, GameSettingsTitle("Scenes")]
+    [System.Serializable, AutoGenerateGameSettings, GameSettingsTitle("Scenes"), GameSettingsPath("Antros/Game Scenes")]
     public class GameScenes : GameSettings<GameScenes>
     {
         [field: SerializeField]

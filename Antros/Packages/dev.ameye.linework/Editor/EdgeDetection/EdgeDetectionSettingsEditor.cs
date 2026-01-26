@@ -60,6 +60,10 @@ namespace Linework.Editor.EdgeDetection
         // Outline.
         private SerializedProperty kernel;
         private SerializedProperty outlineThickness;
+        private SerializedProperty scaleWithDistance;
+        private SerializedProperty distanceScaleStart;
+        private SerializedProperty distanceScaleDistance;
+        private SerializedProperty distanceScaleMin;
         private SerializedProperty scaleWithResolution;
         private SerializedProperty referenceResolution;
         private SerializedProperty customReferenceResolution;
@@ -96,7 +100,7 @@ namespace Linework.Editor.EdgeDetection
             debugPerceptualSections = serializedObject.FindProperty(nameof(EdgeDetectionSettings.debugPerceptualSections));
 
             // Section map.
-            sectionMapFormat = serializedObject.FindProperty(nameof(EdgeDetectionSettings.sectionMapFormat));
+            sectionMapFormat = serializedObject.FindProperty(nameof(EdgeDetectionSettings.sectionMapPrecision));
             sectionMapClearValue = serializedObject.FindProperty(nameof(EdgeDetectionSettings.sectionMapClearValue));
             sectionRenderingLayer = serializedObject.FindProperty(nameof(EdgeDetectionSettings.SectionRenderingLayer));
             maskRenderingLayer = serializedObject.FindProperty(nameof(EdgeDetectionSettings.SectionMaskRenderingLayer));
@@ -145,6 +149,10 @@ namespace Linework.Editor.EdgeDetection
             // Outline.
             kernel = serializedObject.FindProperty(nameof(EdgeDetectionSettings.kernel));
             outlineThickness = serializedObject.FindProperty(nameof(EdgeDetectionSettings.outlineThickness));
+            scaleWithDistance = serializedObject.FindProperty(nameof(EdgeDetectionSettings.scaleWithDistance));
+            distanceScaleStart = serializedObject.FindProperty(nameof(EdgeDetectionSettings.distanceScaleStart));
+            distanceScaleDistance = serializedObject.FindProperty(nameof(EdgeDetectionSettings.distanceScaleDistance));
+            distanceScaleMin = serializedObject.FindProperty(nameof(EdgeDetectionSettings.distanceScaleMin));
             scaleWithResolution = serializedObject.FindProperty(nameof(EdgeDetectionSettings.scaleWithResolution));
             referenceResolution = serializedObject.FindProperty(nameof(EdgeDetectionSettings.referenceResolution));
             customReferenceResolution = serializedObject.FindProperty(nameof(EdgeDetectionSettings.customResolution));
@@ -329,6 +337,15 @@ namespace Linework.Editor.EdgeDetection
                     EditorGUILayout.HelpBox("The circular kernel will only pick up on differences within the section map.", MessageType.Info);
                 }
                 EditorGUILayout.PropertyField(outlineThickness, EditorUtils.CommonStyles.OutlineThickness);
+                EditorGUILayout.PropertyField(scaleWithDistance, EditorUtils.CommonStyles.ScaleWithDistance);
+                if (scaleWithDistance.boolValue)
+                {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(distanceScaleStart, EditorUtils.CommonStyles.DistanceScaleStart);
+                    EditorGUILayout.PropertyField(distanceScaleDistance, EditorUtils.CommonStyles.DistanceScaleDistance);
+                    EditorGUILayout.PropertyField(distanceScaleMin, EditorUtils.CommonStyles.DistanceScaleMin);
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(scaleWithResolution, EditorUtils.CommonStyles.ScaleWithResolution);
                 if (scaleWithResolution.boolValue)

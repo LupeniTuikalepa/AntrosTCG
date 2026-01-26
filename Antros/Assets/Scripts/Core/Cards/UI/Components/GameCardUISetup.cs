@@ -12,18 +12,12 @@ namespace ATCG.Cards.UI.Components
         [SerializeField]
         private TMP_Text title;
         [SerializeField]
-        private TMP_Text speed;
-        [SerializeField]
-        private TMP_Text health;
-
-        [SerializeField]
         private CapacityUIList capacities;
 
         public override void Connect(IGameCard current)
         {
             base.Connect(current);
             title.text = Current.Title;
-
             capacities.Connect(Current);
         }
 

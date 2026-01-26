@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ATCG.Battle.Cards.UI
 {
 
-    [AddComponentMenu("ATCG/Gameplay/Cards/Hand")]
+    [AddComponentMenu("ATCG/Gameplay/Cards/Battle Hand")]
     public class BattleHandUI : PhysicalCardCollectionUI<IBattleCard>, IRuntimeBattlePlayerComponent<IBattlePlayer>
     {
         protected override bool CanCardBeDragged(ICard card) => false;

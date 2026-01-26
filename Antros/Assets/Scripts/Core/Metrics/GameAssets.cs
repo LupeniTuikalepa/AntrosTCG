@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace ATCG.Metrics
 {
-    [AutoGenerateGameSettings]
+    [AutoGenerateGameSettings, GameSettingsPath("Antros/Game Assets")]
     public class GameAssets : GameSettings<GameAssets>
     {
         [field: SerializeField, BoxGroup("Controls"), PreviewField]
@@ -22,8 +22,11 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("Controls"), PreviewField]
         public Sprite Keyboard { get; private set; }
-        
+
         [field: SerializeField, BoxGroup("Inputs")]
         public InputActionAsset PlayerControls { get; private set; }
+
+        [field: SerializeField, BoxGroup("Prefabs")]
+        public GameObject HeroPawnPrefab { get; private set; }
     }
 }

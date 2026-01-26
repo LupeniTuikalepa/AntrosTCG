@@ -33,7 +33,7 @@ namespace ATCG.Battle.Players
         public int CurrentMana { get; private set; }
         public int MaxMana => GameplayMetrics.Current.MaxMana;
 
-        private readonly BattleGameMode gameMode;
+        public BattleGameMode BattleGameMode { get; }
 
         public readonly Condition canDeployHeroes;
         public readonly Condition canMoveHeroes;
@@ -41,7 +41,8 @@ namespace ATCG.Battle.Players
 
         public LocalBattlePlayer(BattleGameMode gameMode, LocalPlayerProfile profile)
         {
-            this.gameMode = gameMode;
+            BattleGameMode = gameMode;
+
             Profile = profile;
             canDeployHeroes = new Condition(false);
             canMoveHeroes = new Condition(false);
@@ -97,10 +98,12 @@ namespace ATCG.Battle.Players
 
         public void DeployBattleCard(IBattleCard card, HexCoordinates coordinates)
         {
-            BattleGrid battleGrid = gameMode.BattleGrid;
+            BattleGrid battleGrid = BattleGameMode.BattleGrid;
 
             if (Hand.TryRemoveCard(card))
+            {
                 battleGrid.DeployCard(card, coordinates);
+            }
         }
 
         public void FillHand()

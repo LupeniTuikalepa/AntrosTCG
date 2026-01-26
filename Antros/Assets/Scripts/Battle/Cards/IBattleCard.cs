@@ -8,9 +8,12 @@ namespace ATCG.Battle.Cards
     {
         int PlayerID { get; }
         public BattleGrid Grid { get; }
+        public bool IsDeployed { get; }
+
+        public HexCoordinates Coordinates => IsDeployed && Grid != null ? Grid.GetCardCoordinates(this) : HexCoordinates.None;
 
         void Deploy(BattleGrid grid, HexCoordinates coordinates);
-        void OnCardMoved(HexCoordinates from, HexCoordinates to);
+        void MoveCard(HexCoordinates from, HexCoordinates to);
         void Leave();
     }
 }

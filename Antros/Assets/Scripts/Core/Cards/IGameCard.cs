@@ -15,5 +15,6 @@ namespace ATCG.Cards
 
         string Title { get; }
         string Description { get; }
+        int InvocationCost { get; }
     }
 }

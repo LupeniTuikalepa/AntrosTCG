@@ -18,6 +18,9 @@ namespace ATCG.HexGrids.Runtime
         [SerializeField]
         private RuntimeHexCell prefab;
 
+        [SerializeField]
+        private Transform cellContainer;
+
         public void Connect(HexGrid grid)
         {
             Disconnect();
@@ -52,7 +55,7 @@ namespace ATCG.HexGrids.Runtime
         {
             if (!cells.TryGetValue(cell.coordinates, out RuntimeHexCell view))
             {
-                view = Instantiate(prefab, transform);
+                view = Instantiate(prefab, cellContainer);
                 view.Init(this);
             }
             else
@@ -72,6 +75,7 @@ namespace ATCG.HexGrids.Runtime
             }
         }
 
+        public bool TryGetCellAt(HexCoordinates coordinates, out HexCell cell) => Current.TryGetCell(coordinates, out cell);
         public Vector2 GetPositionAt(HexCoordinates coordinates) => Current.GetPositionAt(coordinates);
     }
 }

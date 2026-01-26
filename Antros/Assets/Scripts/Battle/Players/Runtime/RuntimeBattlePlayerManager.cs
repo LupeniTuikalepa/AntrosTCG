@@ -15,6 +15,7 @@ using Random = UnityEngine.Random;
 
 namespace ATCG.Battle.Players
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/Runtime/PlayerManager")]
     public class RuntimeBattlePlayerManager : MonoPhaseListener<BattleGameMode>
     {
         [Header("References")]

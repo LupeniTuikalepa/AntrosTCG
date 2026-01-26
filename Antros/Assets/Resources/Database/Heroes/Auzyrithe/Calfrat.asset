@@ -15,10 +15,11 @@ MonoBehaviour:
   guidText: 9a0557a7-0446-40b3-bc4b-133d5a1d93ce
   <Title>k__BackingField: Calfrat
   <Description>k__BackingField: 
-  <Element>k__BackingField: 8
+  <Element>k__BackingField: 1
+  <InvocationCost>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 3d22912580a10fc4c804faea36b46dc0, type: 2}
   <Health>k__BackingField: 2
+  <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 0}

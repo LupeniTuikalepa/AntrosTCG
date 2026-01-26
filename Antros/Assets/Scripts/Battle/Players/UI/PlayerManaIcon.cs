@@ -2,6 +2,7 @@
 
 namespace ATCG.Battle.Players.Runtime.UI
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIcon")]
     public class PlayerManaIcon : MonoBehaviour
     {
         public bool IsActive { get; private set; }

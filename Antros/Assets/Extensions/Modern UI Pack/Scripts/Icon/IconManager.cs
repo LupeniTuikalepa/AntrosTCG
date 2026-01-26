@@ -5,7 +5,7 @@ namespace Michsky.MUIP
 {
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Modern UI Pack/Image/Icon Manager")]
+    [AddComponentMenu("Modern Prefab Pack/Image/Icon Manager")]
     [RequireComponent(typeof(Image))]
     public class IconManager : MonoBehaviour
     {

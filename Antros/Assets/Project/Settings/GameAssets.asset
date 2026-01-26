@@ -18,3 +18,4 @@ MonoBehaviour:
   <DefaultGamepad>k__BackingField: {fileID: 21300000, guid: 7cebdeb6afb339849a0ad769e818b4df, type: 3}
   <Keyboard>k__BackingField: {fileID: 21300000, guid: 586c072beae54b143830fe2f29c7d11b, type: 3}
   <PlayerControls>k__BackingField: {fileID: -944628639613478452, guid: 7965ecfddd070794d92e9dd365c830c7, type: 3}
+  <HeroPawnPrefab>k__BackingField: {fileID: 2771192464520882885, guid: 8b588bf71fa8a20488cadfd2e018138e, type: 3}

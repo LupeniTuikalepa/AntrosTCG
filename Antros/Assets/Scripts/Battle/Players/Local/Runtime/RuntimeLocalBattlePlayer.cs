@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Players.Local
 {
+    [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player")]
     public class RuntimeLocalBattlePlayer : RuntimeBattlePlayer<LocalBattlePlayer>
     {
         [field: SerializeField]
@@ -18,7 +19,10 @@ namespace ATCG.Battle.Players.Local
 
         protected override void OnConnected()
         {
-
+            transform.position = new Vector3()
+            {
+                x = Player.ID * 200
+            };
         }
 
         protected override void OnDisconnected()
