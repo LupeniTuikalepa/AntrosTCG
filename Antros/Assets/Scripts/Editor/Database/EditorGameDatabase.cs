@@ -8,7 +8,6 @@ public static class EditorGameDatabase
 {
     private static Dictionary<Guid, GameDatabaseObject> existings = new();
 
-
     [InitializeOnLoadMethod]
     [MenuItem("Tools/ATCG/Ensure unique GUIDs")]
     private static void Initialize()

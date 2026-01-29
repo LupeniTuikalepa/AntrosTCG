@@ -3,7 +3,7 @@
     "com.eflatun.scenereference": "git+https://github.com/starikcetin/Eflatun.SceneReference.git#upm",
     "com.helteix.cards": "file:D:/Unity/Projets/Perso/LTX/Packages/com.helteix.cards",
     "com.helteix.channeled-properties": "file:D:/Unity/Projets/Perso/LTX/Packages/com.helteix.channeled-properties",
-    "com.helteix.controls-display": "file:D:/Unity/Projets/Perso/LTX/Packages/com.helteix.control-display",
+    "com.helteix.bindings-display": "file:D:/Unity/Projets/Perso/LTX/Packages/com.helteix.bindings-display",
     "com.helteix.singletons": "file:D:/Unity/Projets/Perso/LTX/Packages/com.helteix.singletons",
     "com.helteix.tools": "file:D:/Unity/Projets/Perso/LTX/Packages/com.helteix.tools",
     "com.kyrylokuzyk.primetween": "file:../Assets/Plugins/PrimeTween/internal/com.kyrylokuzyk.primetween.tgz",
