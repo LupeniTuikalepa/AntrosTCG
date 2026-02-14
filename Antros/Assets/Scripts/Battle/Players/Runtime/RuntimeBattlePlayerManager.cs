@@ -16,7 +16,7 @@ using Random = UnityEngine.Random;
 namespace ATCG.Battle.Players
 {
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/PlayerManager")]
-    public class RuntimeBattlePlayerManager : MonoPhaseListener<BattleGameMode>
+    public class RuntimeBattlePlayerManager : MonoPhaseListener<BattlePhase>
     {
         [Header("References")]
         [SerializeField, ChildGameObjectsOnly]
@@ -31,7 +31,7 @@ namespace ATCG.Battle.Players
             runtimeBattlePlayers = new Dictionary<IBattlePlayer, RuntimeBattlePlayer>();
         }
 
-        protected override void OnPhaseBegin(BattleGameMode phase)
+        protected override void OnPhaseBegin(BattlePhase phase)
         {
             base.OnPhaseBegin(phase);
 
@@ -54,7 +54,7 @@ namespace ATCG.Battle.Players
             }
         }
 
-        protected override void OnPhaseEnd(BattleGameMode phase)
+        protected override void OnPhaseEnd(BattlePhase phase)
         {
             foreach ((IBattlePlayer battlePlayer, RuntimeBattlePlayer runtimeBattlePlayer) in runtimeBattlePlayers)
                 runtimeBattlePlayer.Disconnect();

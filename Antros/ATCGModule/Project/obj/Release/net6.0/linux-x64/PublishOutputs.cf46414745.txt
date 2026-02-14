@@ -1,0 +1,13 @@
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\ATCGModule.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\ATCGModule.deps.json
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\ATCGModule.pdb
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Unity.Services.CloudCode.Apis.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Unity.Services.CloudCode.Core.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Google.Protobuf.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Grpc.Core.Api.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Grpc.Net.Client.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Grpc.Net.Common.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\JsonSubTypes.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\lupen\AppData\Local\Temp\ATCGModule\module-compilation\Newtonsoft.Json.dll

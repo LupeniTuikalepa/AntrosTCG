@@ -505,17 +505,6 @@
                 },
                 {
                     "name": "",
-                    "id": "8493562d-6c20-4850-b923-82c24437ccfd",
-                    "path": "<VirtualMouse>/{Point}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Point",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4fe25ecc-d7aa-4aed-b6fb-21bd9349afd8",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",

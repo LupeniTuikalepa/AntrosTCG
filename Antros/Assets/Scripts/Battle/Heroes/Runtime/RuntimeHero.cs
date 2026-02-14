@@ -48,7 +48,7 @@ namespace ATCG.Battle.Heroes.Runtime
             }
 
             GameplayMetrics metrics = GameplayMetrics.Current;
-            Color playerColor = metrics.GetPlayerColor(card.playerID, RuntimeBattleGrid.CurrentGameMode.PlayerCount);
+            Color playerColor = metrics.GetPlayerColor(card.playerID, RuntimeBattleGrid.CurrentBattlePhase.PlayerCount);
 
             outline.color = playerColor;
         }

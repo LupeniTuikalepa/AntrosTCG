@@ -4,8 +4,6 @@ using Sirenix.OdinInspector;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
 
 namespace ATCG.Battle.Players.Local.CameraControls
@@ -157,9 +155,10 @@ namespace ATCG.Battle.Players.Local.CameraControls
             if(targetZoomSpeed < -maxZoomSpeed)
                 targetZoomSpeed = -maxZoomSpeed;
 
-            float targetZoom = Mathf.Clamp(cinemachineCamera.Lens.OrthographicSize + targetZoomSpeed, minMaxZoom.x, minMaxZoom.y);
+            float currentZoom = cinemachineCamera.Lens.OrthographicSize;
+            float targetZoom = Mathf.Clamp(currentZoom + targetZoomSpeed, minMaxZoom.x, minMaxZoom.y);
             cinemachineCamera.Lens.OrthographicSize = targetZoom;
-            currentZoomSpeed = targetZoomSpeed;
+            currentZoomSpeed = targetZoom - currentZoom;
         }
 
         protected override void Connect(LocalBattlePlayer player)
@@ -176,7 +175,7 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
             cinemachineCamera.OutputChannel = outputChannels;
             renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
-            renderCamera.OutputCamera.targetDisplay = (int)RuntimeLocalPlayer.Controls.PlayerInputUser.index;
+            renderCamera.OutputCamera.targetDisplay = RuntimeLocalPlayer.LocalID;
         }
 
         protected override void Disconnect(LocalBattlePlayer battlePlayer)

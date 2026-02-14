@@ -36,8 +36,8 @@ namespace ATCG.Battle.Grids.Runtime
         public LocalBattlePlayer LocalBattlePlayer { get; private set; }
 
         public RuntimeHexGrid RuntimeHexGrid => runtimeHexGrid;
-        public BattleGrid BattleGrid => CurrentGameMode?.BattleGrid;
-        public BattleGameMode CurrentGameMode => LocalBattlePlayer.BattleGameMode;
+        public BattleGrid BattleGrid => CurrentBattlePhase?.BattleGrid;
+        public BattlePhase CurrentBattlePhase => LocalBattlePlayer.BattlePhase;
         public IReadOnlyCollection<RuntimeBattleCell> BattleCells => battleCells.Values;
 
         private Dictionary<HeroBattleCard, RuntimeHero> heroCards = new();
@@ -60,7 +60,7 @@ namespace ATCG.Battle.Grids.Runtime
         {
             LocalBattlePlayer = player;
             BattleGrid.OnBattleCardDeployed += OnCardDeployed;
-            runtimeHexGrid.Connect(CurrentGameMode.HexGrid);
+            runtimeHexGrid.Connect(CurrentBattlePhase.HexGrid);
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer battlePlayer)
@@ -94,9 +94,9 @@ namespace ATCG.Battle.Grids.Runtime
         {
             RuntimeBattleCell runtimeBattleCell = runtimeCell.GetComponent<RuntimeBattleCell>();
 
-            if (CurrentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
+            if (CurrentBattlePhase.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
             {
-                runtimeBattleCell.Connect(this, CurrentGameMode, battleCell);
+                runtimeBattleCell.Connect(this, CurrentBattlePhase, battleCell);
                 battleCells.Add(runtimeCell.Cell, runtimeBattleCell);
                 OnBattleCellAdded?.Invoke(runtimeBattleCell);
             }
@@ -106,8 +106,8 @@ namespace ATCG.Battle.Grids.Runtime
         {
             if (battleCells.Remove(runtimeCell.Cell, out RuntimeBattleCell cell))
             {
-                if (CurrentGameMode.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
-                    cell.Disconnect(CurrentGameMode, battleCell);
+                if (CurrentBattlePhase.BattleGrid.TryGetBattleCell(runtimeCell.Cell, out BattleCell battleCell))
+                    cell.Disconnect(CurrentBattlePhase, battleCell);
 
                 OnBattleCellRemoved?.Invoke(cell);
                 Destroy(cell);

@@ -20,11 +20,11 @@ namespace ATCG.Battle.Players
         Hand<IBattleCard> Hand { get; }
         Deck<IBattleCard> Deck { get; }
         DefaultCardCollection<IBattleCard> DeadCards { get; }
-        BattleGameMode BattleGameMode { get; }
+        BattlePhase BattlePhase { get; }
         bool IsDefeated();
         Awaitable<BattleTurn> PlayTurn(int round, int turnNumber);
-        void OnBattleBegins(BattleGameMode battleGameMode);
-        void OnBattleEnds(BattleGameMode battleGameMode);
+        void OnBattleBegins(BattlePhase battlePhase);
+        void OnBattleEnds(BattlePhase battlePhase);
         void AddOrRemoveMana(int mana);
         void AddOrRemoveHealth(int health);
     }

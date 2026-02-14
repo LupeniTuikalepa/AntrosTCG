@@ -27,15 +27,15 @@ namespace ATCG.Battle.Players.Runtime.UI
 
 
         protected override void OnConnect()
-        {
+        {/*
             if (GameModeController.Global.Current is BattleGameMode bgm)
                 CurrentPhase = bgm;
             else
             {
+            */
                 CurrentPhase = null;
                 return;
-            }
-
+            /*}
             for (int i = 0; i < CurrentPhase.PlayerCount; i++)
             {
                 IBattlePlayer player = CurrentPhase.Players[i];
@@ -48,7 +48,7 @@ namespace ATCG.Battle.Players.Runtime.UI
                 instance.Connect(player);
 
                 LayoutRebuilder.ForceRebuildLayoutImmediate(container);
-            }
+            }*/
         }
 
         protected override void OnDisconnect()

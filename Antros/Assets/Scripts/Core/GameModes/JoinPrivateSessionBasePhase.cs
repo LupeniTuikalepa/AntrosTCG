@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using Unity.Services.Multiplayer;
@@ -40,14 +41,14 @@ namespace ATCG.GameModes
             return await MultiplayerService.Instance.CreateOrJoinSessionAsync(SessionID, sessionOptions);
         }
 
-        Awaitable IPhase<ISession>.Initialize(CancellationToken token)
+        async Awaitable IPhase<ISession>.Initialize(CancellationToken token)
         {
-            return Awaitables.CompletedAwaitable;
+            await Task.CompletedTask;
         }
 
-        Awaitable IPhase<ISession>.Dispose(CancellationToken token)
+        async Awaitable IPhase<ISession>.Dispose(CancellationToken token)
         {
-            return Awaitables.CompletedAwaitable;
+            await Task.CompletedTask;
         }
     }
 }

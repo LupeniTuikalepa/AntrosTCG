@@ -39,10 +39,10 @@ namespace ATCG.Battle.Grids.Runtime
         }
 
 
-        public void Connect(RuntimeBattleGrid grid, BattleGameMode currentGameMode, BattleCell battleCell)
+        public void Connect(RuntimeBattleGrid grid, BattlePhase phase, BattleCell battleCell)
         {
             if (BattleCell != null)
-                Disconnect(currentGameMode, battleCell);
+                Disconnect(phase, battleCell);
 
             RuntimeBattleGrid = grid;
             BattleCell = battleCell;
@@ -56,7 +56,7 @@ namespace ATCG.Battle.Grids.Runtime
             return Vector3.one * RuntimeGrid.Current.OuterCellRadius * 1.8f;
         }
 
-        public void Disconnect(BattleGameMode currentGameMode, BattleCell battleCell)
+        public void Disconnect(BattlePhase phase, BattleCell battleCell)
         {
             if (BattleCell != battleCell)
                 return;

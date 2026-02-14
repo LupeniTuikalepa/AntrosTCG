@@ -26,9 +26,6 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected RuntimeLocalBattlePlayer RuntimeLocalBattlePlayer { get; private set; }
         protected LocalBattlePlayer LocalBattlePlayer => RuntimeLocalBattlePlayer.Player;
 
-        [SerializeField]
-        private EventSystem eventSystem;
-
         private PlayerHUD hud;
 
         public BattleCardCellLookupPhase BattleCardCellLookupPhase { get; private set; }
@@ -85,7 +82,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             if (LocalBattlePlayer == null)
                 return base.CanCardBeSelected(card);
 
-            return LocalBattlePlayer.canDeployHeroes;
+            return true;
         }
 
         public override bool CanCardBeSubmitted(ICard card)
@@ -123,7 +120,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         protected override void SelectHolder(CardHolderUI holderUI, BaseEventData eventData)
         {
-            EventSystem target = eventSystem == null ? EventSystem.current : eventSystem;
+            EventSystem target = EventSystem;
             target.SetSelectedGameObject(holderUI == null ? null : holderUI.gameObject, eventData);
         }
 
@@ -147,10 +144,10 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         private void OnInputUserChange(InputUser inputUser, InputUserChange change, InputDevice device)
         {
-            if(RuntimeLocalBattlePlayer == null || RuntimeLocalBattlePlayer.Player == null)
+            if(RuntimeLocalBattlePlayer == null)
                 return;
 
-            if(inputUser.index != RuntimeLocalBattlePlayer.Player.Profile.InputUser.index)
+            if(inputUser != RuntimeLocalBattlePlayer.Controls.PlayerInputUser)
                 return;
 
             switch (change)
@@ -188,7 +185,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         {
             try
             {
-                BattleCardCellLookupPhase = new BattleCardCellLookupPhase(new DeployCardCellFilter(), LocalBattlePlayer.BattleGameMode.BattleGrid, card);
+                BattleCardCellLookupPhase = new BattleCardCellLookupPhase(new DeployCardCellFilter(), LocalBattlePlayer.BattlePhase.BattleGrid, card);
                 PhaseResult<BattleCell> phaseResult = await BattleCardCellLookupPhase.Run();
 
                 if (phaseResult is { type: PhaseResultType.Success, result: not null })

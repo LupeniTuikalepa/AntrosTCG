@@ -1,6 +1,6 @@
 {
     "name": "ATCG.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "ATCG.Editor",
     "references": [
         "ATCG.Core",
         "Helteix.Tools.Editor"

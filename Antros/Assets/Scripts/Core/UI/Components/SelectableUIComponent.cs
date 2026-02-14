@@ -1,19 +1,17 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ATCG.UI
 {
-    [RequireComponent(typeof(CustomSelectableForUIComponent))]
+    [RequireComponent(typeof(CustomSelectable))]
     public class SelectableUIComponent : UIComponent
     {
         [field: SerializeField, ReadOnly]
-        protected CustomSelectableForUIComponent Selectable { get; private set; }
+        protected CustomSelectable Selectable { get; private set; }
 
         private void Reset()
         {
-            Selectable = GetComponent<CustomSelectableForUIComponent>();
+            Selectable = GetComponent<CustomSelectable>();
         }
 
     }

@@ -17,11 +17,12 @@ namespace ATCG.Battle.Players
 {
     public class LocalBattlePlayer : IBattlePlayer
     {
+        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
+        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
+
 
         IBattlePlayerProfile IBattlePlayer.Profile => Profile;
 
-        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
-        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
 
         public int ID => Profile.ID;
         public LocalPlayerProfile Profile { get; private set; }
@@ -33,15 +34,15 @@ namespace ATCG.Battle.Players
         public int CurrentMana { get; private set; }
         public int MaxMana => GameplayMetrics.Current.MaxMana;
 
-        public BattleGameMode BattleGameMode { get; }
+        public BattlePhase BattlePhase { get; }
 
         public readonly Condition canDeployHeroes;
         public readonly Condition canMoveHeroes;
         public readonly Condition canUseHeroesAbilities;
 
-        public LocalBattlePlayer(BattleGameMode gameMode, LocalPlayerProfile profile)
+        public LocalBattlePlayer(BattlePhase battle, LocalPlayerProfile profile)
         {
-            BattleGameMode = gameMode;
+            BattlePhase = battle;
 
             Profile = profile;
             canDeployHeroes = new Condition(false);
@@ -55,14 +56,11 @@ namespace ATCG.Battle.Players
             Deck = new Deck<IBattleCard>();
             DeadCards = new DefaultCardCollection<IBattleCard>();
 
-            string[] deckCards = profile.Deck.cards;
+            GameCardData[] deckCards = profile.Cards;
             for (int i = 0; i < deckCards.Length; i++)
             {
-                if (GameController.GameDatabase.TryGetObject(deckCards[i], out GameCardData data))
-                {
-                    IBattleCard card = GameplayCardManager.CreateCardFor(data, ID);
-                    Deck.TryAddCard(card);
-                }
+                IBattleCard card = GameplayCardManager.CreateCardFor(deckCards[i], ID);
+                Deck.TryAddCard(card);
             }
         }
 
@@ -98,7 +96,7 @@ namespace ATCG.Battle.Players
 
         public void DeployBattleCard(IBattleCard card, HexCoordinates coordinates)
         {
-            BattleGrid battleGrid = BattleGameMode.BattleGrid;
+            BattleGrid battleGrid = BattlePhase.BattleGrid;
 
             if (Hand.TryRemoveCard(card))
             {
@@ -162,12 +160,12 @@ namespace ATCG.Battle.Players
             return result;
         }
 
-        public void OnBattleBegins(BattleGameMode battleGameMode)
+        void IBattlePlayer.OnBattleBegins(BattlePhase battlePhase)
         {
             FillHand();
         }
 
-        public void OnBattleEnds(BattleGameMode battleGameMode)
+        void IBattlePlayer.OnBattleEnds(BattlePhase battlePhase)
         {
 
         }

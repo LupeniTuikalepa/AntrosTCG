@@ -1,0 +1,13 @@
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\bin\Release\net6.0\linux-x64\ATCGModule.deps.json
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\bin\Release\net6.0\linux-x64\ATCGModule.dll
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\bin\Release\net6.0\linux-x64\ATCGModule.pdb
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.csproj.AssemblyReference.cache
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.GeneratedMSBuildEditorConfig.editorconfig
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.AssemblyInfoInputs.cache
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.AssemblyInfo.cs
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.csproj.CoreCompileInputs.cache
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.sourcelink.json
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.dll
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\refint\ATCGModule.dll
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ATCGModule.pdb
+D:\Unity\Projets\Perso\AntrosTCG\Antros\ATCGModule\Project\obj\Release\net6.0\linux-x64\ref\ATCGModule.dll

@@ -6,6 +6,7 @@ namespace ATCG.Battle.Players.Local
     public abstract class RuntimeLocalPlayerComponent : MonoBehaviour, IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
         public LocalBattlePlayer Player => RuntimeLocalPlayer.Player;
+
         public RuntimeLocalBattlePlayer RuntimeLocalPlayer { get; private set; }
 
         protected virtual void Awake()

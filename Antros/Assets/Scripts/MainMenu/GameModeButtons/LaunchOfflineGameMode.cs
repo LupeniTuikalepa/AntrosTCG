@@ -6,15 +6,16 @@ using ATCG.Cards;
 using ATCG.Databases;
 using ATCG.Metrics;
 using ATCG.Players;
-using ATCG.Players.InputAssigning;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using UnityEngine;
 
 namespace ATCG.MainMenu.MainMenu.GameModeButtons
 {
-    public class LaunchOfflineGameMode : LaunchGameMode<OfflineBattleGameMode, BattleGameModeResults>
+    public class LaunchOfflineGameMode : MonoBehaviour
+    //LaunchGameMode<OfflineBattleGameMode, BattleGameModeResults>
     {
+        /*
         protected override async Awaitable<OfflineBattleGameMode> GetGameMode()
         {
             await Awaitables.CompletedAwaitable;
@@ -53,7 +54,7 @@ namespace ATCG.MainMenu.MainMenu.GameModeButtons
                 return new OfflineBattleGameMode(seed, localPlayerProfiles);
                 /*
             }
-            */
         }
+            */
     }
 }

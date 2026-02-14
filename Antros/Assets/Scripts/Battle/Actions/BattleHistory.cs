@@ -12,9 +12,6 @@ namespace ATCG.Battle.Actions
         public int Seed { get; private set; }
 
         [field: SerializeField]
-        public string GameMode { get; private set; }
-
-        [field: SerializeField]
         public int WinningPlayer { get; private set; }
 
         [SerializeField]
@@ -22,10 +19,9 @@ namespace ATCG.Battle.Actions
 
 
 
-        public BattleHistory(int seed, string gameMode)
+        public BattleHistory(int seed)
         {
             Seed = seed;
-            GameMode = gameMode;
             turns = ListPool<BattleTurn>.Get();
             WinningPlayer = -1;
         }

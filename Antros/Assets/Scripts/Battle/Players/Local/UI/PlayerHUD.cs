@@ -23,12 +23,14 @@ namespace ATCG.Battle.Players.Runtime.UI
 
         protected override void Connect(LocalBattlePlayer player)
         {
+            Canvas.targetDisplay = RuntimeLocalPlayer.LocalID;
             for (int i = 0; i < elements.Length; i++)
                 elements[i].Connect(player);
         }
 
         protected override void Disconnect(LocalBattlePlayer player)
         {
+            Canvas.targetDisplay = 0;
             for (int i = 0; i < elements.Length; i++)
             {
                 if(player == elements[i].Player)

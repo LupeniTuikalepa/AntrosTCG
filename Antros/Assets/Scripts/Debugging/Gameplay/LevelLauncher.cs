@@ -25,39 +25,21 @@ namespace ATCG.Debugging.Debugging.Gameplay
         {
             if (GameController.GameModeController.Current == null)
             {
-                PlayerInfos[] players = new PlayerInfos[]
+                PlayerInfos[] players =
                 {
-                    new PlayerInfos()
-                    {
-                        name = "Player 1",
-                    },
-                    new PlayerInfos()
-                    {
-                        name = "Player 2"
-                    }
+                    new() { name = "Player 1" },
+                    new() { name = "Player 2" }
                 };
-                string[] allCards =
-                    GameController.GameDatabase.GetAll<GameCardData>()
-                        .Select(ctx => ctx.ID.ToString())
-                        .ToArray();
 
-                //PlayerInputPairing[] pairings = result.result;
+                GameCardData[] allCards = GameController.GameDatabase.GetAll<GameCardData>().ToArray();
                 IBattlePlayerProfile[] localPlayerProfiles = new IBattlePlayerProfile[players.Length];
+
                 for (int i = 0; i < players.Length; i++)
-                {
-                    localPlayerProfiles[i] = new LocalPlayerProfile()
-                    {
-                        ID = i,
-                        Infos = players[i],
-                        Deck = new PlayerDeck()
-                        {
-                            cards = allCards,
-                        },
-                    };
-                }
+                    localPlayerProfiles[i] = new LocalPlayerProfile(i, players[i], allCards);
 
                 int seed = Random.Range(int.MinValue, int.MaxValue);
-                _ = new OfflineBattleGameMode(seed, localPlayerProfiles).Run();
+                BattlePhase battlePhase = new BattlePhase(seed, localPlayerProfiles);
+                battlePhase.Run();
             }
         }
     }
