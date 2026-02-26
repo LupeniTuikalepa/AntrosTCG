@@ -90,8 +90,8 @@ public partial class TranslucentImage
         MaterialUtils.CopyVector(src, dst, ShaderID.REFRACTIVE_INDEX_RATIOS);
 
         MaterialUtils.CopyVector(src, dst, ShaderID.EDGE_GLINT_DIRECTIONS);
-        MaterialUtils.CopyFloat(src, dst, ShaderID.EDGE_GLINT1_STRENGTH);
-        MaterialUtils.CopyFloat(src, dst, ShaderID.EDGE_GLINT2_STRENGTH);
+        MaterialUtils.CopyFloat(src, dst, ShaderID.EDGE_GLINT1_COLOR);
+        MaterialUtils.CopyFloat(src, dst, ShaderID.EDGE_GLINT2_COLOR);
         MaterialUtils.CopyFloat(src, dst, ShaderID.EDGE_GLINT_WRAP_RAW);
         MaterialUtils.CopyFloat(src, dst, ShaderID.EDGE_GLINT_SHARPNESS_RAW);
     }

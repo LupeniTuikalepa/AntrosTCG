@@ -13,6 +13,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 294140
   packageName: 'Linework: Outlines and Edge Detection'
-  packageVersion: 1.5.3
+  packageVersion: 1.5.4
   assetPath: Packages/dev.ameye.linework/Runtime/SurfaceFill/SurfaceFill.cs
-  uploadId: 831886
+  uploadId: 864658

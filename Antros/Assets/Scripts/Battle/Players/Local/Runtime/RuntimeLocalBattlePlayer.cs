@@ -10,10 +10,8 @@ namespace ATCG.Battle.Players.Local
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player")]
     public class RuntimeLocalBattlePlayer : RuntimeBattlePlayer<LocalBattlePlayer>
     {
-        private static readonly List<RuntimeLocalBattlePlayer> localBattlePlayers = new();
-
         [ShowInInspector, ReadOnly]
-        public int LocalID => localBattlePlayers.IndexOf(this);
+        public int LocalID => runtimeBattlePlayers.IndexOf(this);
 
         [field: SerializeField]
         public PlayerHUD HUD { get; private set; }
@@ -25,15 +23,6 @@ namespace ATCG.Battle.Players.Local
         public RuntimeLocalPlayerCamera Camera { get; private set; }
 
 
-        private void OnEnable()
-        {
-            localBattlePlayers.Add(this);
-        }
-
-        private void OnDisable()
-        {
-            localBattlePlayers.Remove(this);
-        }
 
         protected override void OnConnected()
         {
@@ -47,5 +36,6 @@ namespace ATCG.Battle.Players.Local
         {
 
         }
+
     }
 }

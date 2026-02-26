@@ -1,4 +1,5 @@
 ﻿using System;
+using ATCG.Battle.Cards;
 using ATCG.Battle.Metrics;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
@@ -46,23 +47,35 @@ namespace ATCG.Battle.Grids.Runtime
 
             RuntimeBattleGrid = grid;
             BattleCell = battleCell;
+            battleCell.Attacked += BattleCellOnAttacked;
+
             transform.localScale = Vector3.zero;
+
             Tween.Scale(transform, GetTargetScale(), .3f, Easing.Overshoot(.3f),
                 startDelay: Coordinates.Length() * .2f);
         }
+        public void Disconnect(BattlePhase phase, BattleCell battleCell)
+        {
+            if (BattleCell != battleCell)
+                return;
+
+            BattleCell.Attacked -= BattleCellOnAttacked;
+            BattleCell = null;
+        }
+
 
         public Vector3 GetTargetScale()
         {
             return Vector3.one * RuntimeGrid.Current.OuterCellRadius * 1.8f;
         }
 
-        public void Disconnect(BattlePhase phase, BattleCell battleCell)
-        {
-            if (BattleCell != battleCell)
-                return;
 
-            BattleCell = null;
+        private void BattleCellOnAttacked(HeroBattleCard card)
+        {
+            Tween.StopAll(transform);
+            Tween.PunchScale(transform, - Vector3.one * 3, .5f);
         }
+
 
     }
 }

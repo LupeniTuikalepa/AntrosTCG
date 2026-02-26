@@ -33,17 +33,23 @@ public partial class TranslucentImageBlurRenderPass
 
     readonly Dictionary<RenderTexture, RTHandle> blurredScreenHdlDict = new();
 
-    TextureHandle[] scratches;
-    string[]        scratchNames;
+    List<TextureHandle[]> scratchesList;
+    string[]              scratchNames;
 
     void RenderGraphInit()
     {
-        scratches    = new TextureHandle[14];
+        scratchesList = new List<TextureHandle[]>(2);
+        AddScratchList();
         scratchNames = new string[14];
         for (var i = 0; i < scratchNames.Length; i++)
         {
             scratchNames[i] = $"TI_intermediate_rt_{i}";
         }
+    }
+
+    void AddScratchList()
+    {
+        scratchesList.Add(new TextureHandle[14]);
     }
 
     void RenderGraphDispose()
@@ -56,82 +62,90 @@ public partial class TranslucentImageBlurRenderPass
 
     public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
     {
-        var blurSource = currentPassData.blurSource;
+        var blurSources   = currentPassData.blurSources;
+        var blurAlgorithm = currentPassData.blurAlgorithm;
 
-        if (currentPassData.shouldUpdateBlur)
+        for (var i = 0; i < blurSources.Count; i++)
         {
-            if (blurSource.CompleteCull())
+            var blurSource = blurSources[i];
+            if (!blurSource
+             || !blurSource.BlurConfig)
+                continue;
+            if ((currentPassData.shouldUpdateBlurMask & (1 << i)) == 0)
+                continue;
+
+            blurSource.ReallocateBlurTexIfNeeded(currentPassData.camPixelRect);
+
+            var blurredScreen = blurSource.BlurredScreen;
+            blurredScreenHdlDict.TryGetValue(blurredScreen, out var blurredScreenHdl);
+            if (blurredScreenHdl == null || blurredScreenHdl.rt != blurredScreen)
             {
-                blurSource.ReallocateBlurTexIfNeeded(currentPassData.camPixelRect);
+                blurredScreenHdl?.Release();
+                blurredScreenHdl = RTHandles.Alloc(blurredScreen);
 
-                var blurredScreen = blurSource.BlurredScreen;
-                blurredScreenHdlDict.TryGetValue(blurredScreen, out var blurredScreenHdl);
-                if (blurredScreenHdl == null || blurredScreenHdl.rt != blurredScreen)
+                blurredScreenHdlDict[blurredScreen] = blurredScreenHdl;
+            }
+
+            // ReSharper disable once ConvertToUsingDeclaration
+            using (var builder = renderGraph.AddUnsafePass<BlurRGPassData>(PROFILER_TAG, out var data))
+            {
+                blurAlgorithm.Init(blurSource.BlurConfig, false);
+
+                var desc           = blurSource.BlurredScreen.descriptor;
+                var cropRegionSize = blurSource.BlurRegion.size;
+                var scratchesCount = blurAlgorithm.GetScratchesCount(desc.width / cropRegionSize.x,
+                                                                     desc.height / cropRegionSize.y);
+
+                var resourceData = frameData.Get<UniversalResourceData>();
+                data.sourceTex = resourceData.activeColorTexture;
+                if (scratchesList.Count <= i)
+                    AddScratchList();
+                data.scratches      = scratchesList[i];
+                data.blurSource     = blurSource;
+                data.blurAlgorithm  = blurAlgorithm;
+                data.scratchesCount = scratchesCount;
+
+                builder.UseTexture(data.sourceTex, AccessFlags.Read);
+
+
+                for (int j = 0; j < scratchesCount; j++)
                 {
-                    blurredScreenHdl?.Release();
-                    blurredScreenHdl = RTHandles.Alloc(blurredScreen);
-
-                    blurredScreenHdlDict[blurredScreen] = blurredScreenHdl;
+                    blurAlgorithm.GetNextScratchDescriptor(ref desc);
+                    data.scratches[j] = UniversalRenderer.CreateRenderGraphTexture(renderGraph,
+                                                                                   desc,
+                                                                                   scratchNames[j],
+                                                                                   false,
+                                                                                   FilterMode.Bilinear,
+                                                                                   TextureWrapMode.Clamp);
+                    builder.UseTexture(data.scratches[j], AccessFlags.ReadWrite);
                 }
 
-                // ReSharper disable once ConvertToUsingDeclaration
-                using (var builder = renderGraph.AddUnsafePass<BlurRGPassData>(PROFILER_TAG, out var data))
+                var blurredScreenTHdl = renderGraph.ImportTexture(blurredScreenHdl);
+                builder.UseTexture(blurredScreenTHdl, AccessFlags.Write);
+
+                builder.SetRenderFunc(static (BlurRGPassData data, UnsafeGraphContext context) =>
                 {
-                    var blurAlgorithm = currentPassData.blurAlgorithm;
+                    data.blurAlgorithm.Init(data.blurSource.BlurConfig, true);
+                    for (int j = 0; j < data.scratchesCount; j++)
+                        data.blurAlgorithm.SetScratch(j, data.scratches[j]);
 
-                    var desc           = blurSource.BlurredScreen.descriptor;
-                    var cropRegionSize = blurSource.BlurRegion.size;
-                    var scratchesCount = blurAlgorithm.GetScratchesCount(desc.width / cropRegionSize.x,
-                                                                         desc.height / cropRegionSize.y);
-
-                    var resourceData = frameData.Get<UniversalResourceData>();
-                    data.sourceTex      = resourceData.activeColorTexture;
-                    data.scratches      = scratches;
-                    data.blurSource     = blurSource;
-                    data.blurAlgorithm  = blurAlgorithm;
-                    data.scratchesCount = scratchesCount;
-
-                    builder.UseTexture(data.sourceTex, AccessFlags.Read);
-
-
-                    for (int i = 0; i < scratchesCount; i++)
-                    {
-                        blurAlgorithm.GetNextScratchDescriptor(ref desc);
-                        data.scratches[i] = UniversalRenderer.CreateRenderGraphTexture(renderGraph,
-                                                                                       desc,
-                                                                                       scratchNames[i],
-                                                                                       false,
-                                                                                       FilterMode.Bilinear,
-                                                                                       TextureWrapMode.Clamp);
-                        builder.UseTexture(data.scratches[i], AccessFlags.ReadWrite);
-                    }
-
-                    var blurredScreenTHdl = renderGraph.ImportTexture(blurredScreenHdl);
-                    builder.UseTexture(blurredScreenTHdl, AccessFlags.Write);
-
-                    builder.SetRenderFunc(static (BlurRGPassData data, UnsafeGraphContext context) =>
-                    {
-                        for (int i = 0; i < data.scratchesCount; i++)
-                            data.blurAlgorithm.SetScratch(i, data.scratches[i]);
-
-                        var blurExecData = new BlurExecutor.BlurExecutionData(
-                            data.sourceTex,
-                            data.blurSource,
-                            data.blurAlgorithm
-                        );
-                        BlurExecutor.ExecuteBlur(CommandBufferHelpers.GetNativeCommandBuffer(context.cmd), ref blurExecData);
-                    });
-                }
+                    var blurExecData = new BlurExecutor.BlurExecutionData(
+                        data.sourceTex,
+                        data.blurSource,
+                        data.blurAlgorithm
+                    );
+                    BlurExecutor.ExecuteBlur(CommandBufferHelpers.GetNativeCommandBuffer(context.cmd), ref blurExecData);
+                });
             }
         }
 
-        if (currentPassData.isPreviewing)
+        if (currentPassData.previewIndex != -1)
         {
             // ReSharper disable once ConvertToUsingDeclaration
             using (var builder = renderGraph.AddUnsafePass<PreviewRGPassData>(PROFILER_TAG, out var data))
             {
                 var resourceData = frameData.Get<UniversalResourceData>();
-                data.blurSource      = blurSource;
+                data.blurSource      = blurSources[currentPassData.previewIndex];
                 data.previewMaterial = currentPassData.previewMaterial;
                 data.previewTarget   = resourceData.activeColorTexture;
 

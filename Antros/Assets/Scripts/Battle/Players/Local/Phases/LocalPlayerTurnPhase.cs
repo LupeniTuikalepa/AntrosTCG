@@ -20,6 +20,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private List<IBattleActionInfos> actionInfosList;
 
+
         public LocalPlayerTurnPhase(int turnNumber, LocalBattlePlayer localPlayerTurn) : base(turnNumber, localPlayerTurn)
         {
             this.localPlayerTurn = localPlayerTurn;
@@ -34,6 +35,7 @@ namespace ATCG.Battle.Players.Local.Phases
             localPlayerTurn.canDeployHeroes.AddCondition(channelKey);
             localPlayerTurn.canMoveHeroes.AddCondition(channelKey);
             localPlayerTurn.canUseHeroesAbilities.AddCondition(channelKey);
+            localPlayerTurn.canDoBasicAttack.AddCondition(channelKey);
 
             localPlayerTurn.FillHand();
             return base.Initialize(token);
@@ -43,6 +45,7 @@ namespace ATCG.Battle.Players.Local.Phases
         {
             ListPool<IBattleActionInfos>.Release(actionInfosList);
 
+            localPlayerTurn.canDoBasicAttack.RemoveCondition(channelKey);
             localPlayerTurn.canDeployHeroes.RemoveCondition(channelKey);
             localPlayerTurn.canMoveHeroes.RemoveCondition(channelKey);
             localPlayerTurn.canUseHeroesAbilities.RemoveCondition(channelKey);

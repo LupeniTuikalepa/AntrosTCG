@@ -8,6 +8,7 @@
 
 // ReSharper disable once RedundantUsingDirective
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -26,12 +27,12 @@ public partial class TranslucentImageBlurRenderPass : ScriptableRenderPass
 {
     internal struct PassData
     {
-        public TranslucentImageSource blurSource;
-        public IBlurAlgorithm         blurAlgorithm;
-        public Rect                   camPixelRect;
-        public bool                   shouldUpdateBlur;
-        public bool                   isPreviewing;
-        public Material               previewMaterial;
+        public IReadOnlyList<TranslucentImageSource> blurSources;
+        public IBlurAlgorithm                        blurAlgorithm;
+        public Rect                                  camPixelRect;
+        public uint                                  shouldUpdateBlurMask;
+        public int                                   previewIndex;
+        public Material                              previewMaterial;
     }
 
     internal struct SRPassData
@@ -74,6 +75,9 @@ public partial class TranslucentImageBlurRenderPass : ScriptableRenderPass
         this.urpRendererInternal = urpRendererInternal;
 
         RenderGraphInit();
+#if UNITY_6000_0_OR_NEWER
+        requiresIntermediateTexture = true;
+#endif
     }
 
 #if !HAS_DOUBLEBUFFER_BOTH
@@ -96,8 +100,15 @@ public partial class TranslucentImageBlurRenderPass : ScriptableRenderPass
     internal void Setup(PassData passData)
     {
         currentPassData = passData;
+
+#if !UNITY_6000_0_OR_NEWER
+        // Doesn't seem necessary after pretty comprehensive testing.
+        // Leaving it out avoids significant cost. Keeping it here in case any problem arises.
+        // ConfigureInput(ScriptableRenderPassInput.Color);
+#endif
     }
 
+#if !UNITY_6000_4_OR_NEWER
 #if HAS_RENDERGRAPH
     [Obsolete("This rendering path is for compatibility mode only (when Render Graph is disabled). Use Render Graph API instead.", false)]
 #endif
@@ -131,38 +142,41 @@ public partial class TranslucentImageBlurRenderPass : ScriptableRenderPass
         }
 #endif
 
-        var  blurSource        = currentPassData.blurSource;
         bool shouldResetTarget = currentSRPassData.canvasDisappearWorkaround && renderingData.cameraData.resolveFinalTarget;
 
-        if (currentPassData.shouldUpdateBlur)
+        var blurSources = currentPassData.blurSources;
+        for (var i = 0; i < blurSources.Count; i++)
         {
-            if (blurSource.CompleteCull())
-            {
-                blurSource.ReallocateBlurTexIfNeeded(currentPassData.camPixelRect);
-                var blurExecData = new BlurExecutor.BlurExecutionData(sourceTex,
-                                                                      blurSource,
-                                                                      currentPassData.blurAlgorithm);
-                BlurExecutor.ExecuteBlurWithTempTextures(cmd, ref blurExecData);
+            var blurSource = blurSources[i];
 
-                if (shouldResetTarget)
-                    CoreUtils.SetRenderTarget(cmd, BuiltinRenderTextureType.CameraTarget);
-            }
+            if ((currentPassData.shouldUpdateBlurMask & (1 << i)) == 0)
+                continue;
+
+            blurSource.ReallocateBlurTexIfNeeded(currentPassData.camPixelRect);
+            currentPassData.blurAlgorithm.Init(blurSource.BlurConfig, false);
+            var blurExecData = new BlurExecutor.BlurExecutionData(sourceTex,
+                                                                  blurSource,
+                                                                  currentPassData.blurAlgorithm);
+            BlurExecutor.ExecuteBlurWithTempTextures(cmd, ref blurExecData);
+
+            if (shouldResetTarget)
+                CoreUtils.SetRenderTarget(cmd, BuiltinRenderTextureType.CameraTarget);
         }
 
 
-        if (currentPassData.isPreviewing)
+        if (currentPassData.previewIndex != -1)
         {
             var previewTarget = shouldResetTarget ? BuiltinRenderTextureType.CameraTarget : sourceTex;
-            var previewExecData = new PreviewExecutionData(blurSource,
+            var previewExecData = new PreviewExecutionData(blurSources[currentPassData.previewIndex],
                                                            previewTarget,
                                                            currentPassData.previewMaterial);
             ExecutePreview(cmd, ref previewExecData);
         }
 
-
         context.ExecuteCommandBuffer(cmd);
         CommandBufferPool.Release(cmd);
     }
+#endif
 
     public static void ExecutePreview(CommandBuffer cmd, ref PreviewExecutionData data)
     {

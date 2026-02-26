@@ -43,8 +43,9 @@ Shader "Hidden/Outlines/Surface Fill/Fill"
             "RenderType"="Opaque"
         }
         
-        ZTest Off
+        ZTest Always
         ZWrite Off
+        Cull Off
         Blend [_SrcBlend] [_DstBlend]
         
         Stencil
@@ -62,13 +63,12 @@ Shader "Hidden/Outlines/Surface Fill/Fill"
             
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
             #ifdef _PATTERN_GLOW
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareNormalsTexture.hlsl" 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl" 
             #endif
             
-            #pragma vertex Vert
+            #pragma vertex vert
             #pragma fragment frag
 
             #pragma multi_compile_local _PATTERN_SOLID _PATTERN_STRIPES _PATTERN_SQUARES _PATTERN_DOTS _PATTERN_CHECKERBOARD _PATTERN_TEXTURE _PATTERN_GLOW
@@ -112,6 +112,33 @@ Shader "Hidden/Outlines/Surface Fill/Fill"
                 sincos(rotation, s, c);
                 float3 r = float3(-s, c, s);
                 return float2(dot(uv, r.yz), dot(uv, r.xy)) + center;
+            }
+            
+            struct Attributes
+            {
+                uint vertexID : SV_VertexID;
+            };
+            
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 texcoord : TEXCOORD0;
+            };
+            
+            Varyings vert(Attributes input)
+            {
+                Varyings output;
+                
+                // Fullscreen triangle
+                float2 uv = float2((input.vertexID << 1) & 2, input.vertexID & 2);
+                output.positionCS = float4(uv * 2.0 - 1.0, 0.0, 1.0);
+                output.texcoord = uv;
+                
+                #if UNITY_UV_STARTS_AT_TOP
+                output.texcoord.y = 1.0 - output.texcoord.y;
+                #endif
+                
+                return output;
             }
             
             half4 frag(Varyings IN) : SV_TARGET

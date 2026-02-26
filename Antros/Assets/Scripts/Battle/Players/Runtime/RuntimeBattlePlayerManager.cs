@@ -31,6 +31,7 @@ namespace ATCG.Battle.Players
             runtimeBattlePlayers = new Dictionary<IBattlePlayer, RuntimeBattlePlayer>();
         }
 
+
         protected override void OnPhaseBegin(BattlePhase phase)
         {
             base.OnPhaseBegin(phase);

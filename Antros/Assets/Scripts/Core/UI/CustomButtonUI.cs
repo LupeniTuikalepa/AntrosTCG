@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace ATCG.UI
 {
-    public class CustomButtonUI : SelectableUIComponent
+    public class CustomButtonUI : SelectableUIComponent, IPointerClickHandler, ISubmitHandler
     {
         public UnityEvent<BaseEventData> OnClick => onClick;
 
@@ -65,7 +65,20 @@ namespace ATCG.UI
 
         private void DisconnectToAction(InputAction inputAction)
         {
+
         }
 
+
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        {
+            if(Interactable)
+                onClick.Invoke(eventData);
+        }
+
+        void ISubmitHandler.OnSubmit(BaseEventData eventData)
+        {
+            if(Interactable)
+                onClick.Invoke(eventData);
+        }
     }
 }

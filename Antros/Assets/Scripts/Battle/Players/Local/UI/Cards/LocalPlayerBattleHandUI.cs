@@ -4,6 +4,7 @@ using ATCG.Battle.Cards.UI;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Local.Phases.CardDeploy;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Battle.Players.Runtime.UI;
 using ATCG.HexGrids;
@@ -28,7 +29,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         private PlayerHUD hud;
 
-        public BattleCardCellLookupPhase BattleCardCellLookupPhase { get; private set; }
+        public DeployCardPhase SelectCellPhase { get; private set; }
 
         private void OnEnable()
         {
@@ -162,7 +163,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected override void OnCardBeginDrag(CardHolderUI holder, PointerEventData eventData)
         {
             base.OnCardBeginDrag(holder, eventData);
-            if (LocalBattlePlayer.canDeployHeroes && BattleCardCellLookupPhase == null && holder.CardUI.Current is IBattleCard card)
+            if (LocalBattlePlayer.canDeployHeroes && SelectCellPhase == null && holder.CardUI.Current is IBattleCard card)
             {
                 _ = DeployPlayerCard(card);
             }
@@ -170,12 +171,12 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         protected override void OnCardDrop(IBattleCard card, DragResult<IBattleCard> result)
         {
-            if (BattleCardCellLookupPhase != null && card == BattleCardCellLookupPhase.card)
+            if (SelectCellPhase != null && card == SelectCellPhase.card)
             {
                 if (result is { Target: RuntimeBattleCell runtimeBattleCell })
-                    BattleCardCellLookupPhase.SetResult(runtimeBattleCell.BattleCell);
+                    SelectCellPhase.SetResult(runtimeBattleCell.BattleCell);
                 else
-                    BattleCardCellLookupPhase.SetResult(null);
+                    SelectCellPhase.SetResult(null);
             }
 
             base.OnCardDrop(card, result);
@@ -185,12 +186,13 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         {
             try
             {
-                BattleCardCellLookupPhase = new BattleCardCellLookupPhase(new DeployCardCellFilter(), LocalBattlePlayer.BattlePhase.BattleGrid, card);
-                PhaseResult<BattleCell> phaseResult = await BattleCardCellLookupPhase.Run();
+                SelectCellPhase = new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
 
-                if (phaseResult is { type: PhaseResultType.Success, result: not null })
+                PhaseResult<BattleCell> phaseResult = await SelectCellPhase.Run();
+
+                if (phaseResult is { type: PhaseResultType.Success, value: not null })
                 {
-                    HexCell resultCell = phaseResult.result.cell;
+                    HexCell resultCell = phaseResult.value.cell;
                     if(resultCell != null)
                         LocalBattlePlayer.DeployBattleCard(card, resultCell.coordinates);
                 }
@@ -201,8 +203,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             }
             finally
             {
-                BattleCardCellLookupPhase = null;
-
+                SelectCellPhase = null;
             }
         }
 

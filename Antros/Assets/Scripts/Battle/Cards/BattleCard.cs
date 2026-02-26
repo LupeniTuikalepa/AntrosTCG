@@ -1,61 +1,85 @@
 ﻿using System;
+using System.Collections.Generic;
+using ATCG.Battle.Cards.Capacities;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Players;
 using ATCG.Cards;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
+using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Cards
 {
     public abstract class BattleCard<T> : GameCard<T>, IBattleCard where T : GameCardData
     {
-        public event Action<HexCoordinates, HexCoordinates> OnCardMoved;
+        public bool IsDeployed => BattleGrid != null;
+        public HexCoordinates Coordinates { get; protected set; }
+        public BattleGrid BattleGrid { get; private set; }
 
-        public bool IsDeployed => Grid != null;
-        int IBattleCard.PlayerID => playerID;
-        public HexCoordinates Coordinates { get; private set; }
-        public BattleGrid Grid { get; private set; }
+        public IBattlePlayer Player { get; private set; }
 
-        public readonly int playerID;
+        private List<object> eventRunners = new();
 
-        protected BattleCard(T data, int playerID) : base(data)
+        protected BattleCard(T data, IBattlePlayer player) : base(data)
         {
-            this.playerID = playerID;
+            Player = player;
         }
 
         void IBattleCard.Deploy(BattleGrid grid, HexCoordinates coordinates)
         {
             Coordinates = coordinates;
-            Grid = grid;
+            BattleGrid = grid;
+
+            Player.AddOrRemoveMana(-Data.InvocationCost);
             OnDeploy();
-        }
-
-        void IBattleCard.MoveCard(HexCoordinates from, HexCoordinates to)
-        {
-            Coordinates = to;
-            MoveCard(from, to);
-
-            OnCardMoved?.Invoke(from, to);
         }
 
         void IBattleCard.Leave()
         {
-            Grid = null;
+            BattleGrid = null;
         }
 
         void IHexMember.EnterCell(HexCell hexCell)
         {
-            if(Grid.TryGetBattleCell(hexCell, out BattleCell cell))
+            if(BattleGrid.TryGetBattleCell(hexCell, out BattleCell cell))
                 EnterCell(cell);
         }
 
         void IHexMember.LeaveCell(HexCell hexCell)
         {
-            if(Grid.TryGetBattleCell(hexCell, out BattleCell cell))
+            if(BattleGrid.TryGetBattleCell(hexCell, out BattleCell cell))
                 LeaveCell(cell);
         }
 
+        public void RegisterEventRunner<TEventRunner>(TEventRunner runner) where TEventRunner : ICardEventRunner
+        {
+            eventRunners.Add(runner);
+        }
+
+        public void UnregisterEventRunner<TEventRunner>(TEventRunner runner) where TEventRunner : ICardEventRunner
+        {
+            eventRunners.Remove(runner);
+        }
+
+        protected async Awaitable RunEvent<TCardEvent, TEventRunner>(TCardEvent cardEvent)
+            where TCardEvent: ICardEvent<TEventRunner>
+            where TEventRunner : ICardEventRunner
+        {
+            using (ListPool<TEventRunner>.Get(out List<TEventRunner> runners))
+            {
+                foreach (var er in eventRunners)
+                {
+                    if(er is TEventRunner tr)
+                        runners.Add(tr);
+                }
+
+                await cardEvent.Run(runners);
+            }
+        }
+
+
         protected virtual void OnDeploy() { }
-        protected virtual void MoveCard(HexCoordinates from, HexCoordinates to) { }
         protected virtual void EnterCell(BattleCell cell) { }
         protected virtual void LeaveCell(BattleCell cell) { }
 

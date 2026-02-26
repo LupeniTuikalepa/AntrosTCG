@@ -10,7 +10,7 @@ namespace ATCG.Battle.Players.Runtime.UI
     [AddComponentMenu("ATCG/Gameplay/Player/UI/OpponentPlayersStats")]
     public class OpponentPlayersStats : PlayerHUDElement
     {
-        public BattleGameMode CurrentPhase { get; private set; }
+        public BattlePhase CurrentPhase { get; private set; }
 
         [SerializeField]
         private SimplePlayerStats simplePlayerStatsPrefab;
@@ -27,15 +27,8 @@ namespace ATCG.Battle.Players.Runtime.UI
 
 
         protected override void OnConnect()
-        {/*
-            if (GameModeController.Global.Current is BattleGameMode bgm)
-                CurrentPhase = bgm;
-            else
-            {
-            */
-                CurrentPhase = null;
-                return;
-            /*}
+        {
+            CurrentPhase = Player.BattlePhase;
             for (int i = 0; i < CurrentPhase.PlayerCount; i++)
             {
                 IBattlePlayer player = CurrentPhase.Players[i];
@@ -48,7 +41,7 @@ namespace ATCG.Battle.Players.Runtime.UI
                 instance.Connect(player);
 
                 LayoutRebuilder.ForceRebuildLayoutImmediate(container);
-            }*/
+            }
         }
 
         protected override void OnDisconnect()

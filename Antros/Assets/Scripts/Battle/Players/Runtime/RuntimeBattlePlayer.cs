@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ATCG.Battle.Players.Runtime
 {
@@ -9,6 +10,8 @@ namespace ATCG.Battle.Players.Runtime
 
     public abstract class RuntimeBattlePlayer<T> : RuntimeBattlePlayer where T : class, IBattlePlayer
     {
+        protected static readonly List<RuntimeBattlePlayer<T>> runtimeBattlePlayers = new();
+
         public T Player { get; private set; }
 
         private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
@@ -16,6 +19,17 @@ namespace ATCG.Battle.Players.Runtime
         private void Awake()
         {
             runtimeComponents = GetComponentsInChildren<IRuntimeBattlePlayerComponent<T>>();
+        }
+
+
+        private void OnEnable()
+        {
+            runtimeBattlePlayers.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            runtimeBattlePlayers.Remove(this);
         }
 
 
@@ -45,5 +59,21 @@ namespace ATCG.Battle.Players.Runtime
         }
         protected abstract void OnConnected();
         protected abstract void OnDisconnected();
+
+        public static bool TryGetRuntimeLocalPlayerFor<TRuntimePlayer>(T player, out TRuntimePlayer runtimePlayer)
+            where TRuntimePlayer : RuntimeBattlePlayer<T>
+        {
+            foreach (var runtimeBattlePlayer in runtimeBattlePlayers)
+            {
+                if (runtimeBattlePlayer.Player == player && runtimeBattlePlayer is TRuntimePlayer rtp)
+                {
+                    runtimePlayer = rtp;
+                    return true;
+                }
+            }
+
+            runtimePlayer = null;
+            return false;
+        }
     }
 }

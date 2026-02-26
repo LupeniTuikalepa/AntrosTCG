@@ -36,7 +36,7 @@ namespace ATCG.Cards.UI.Components
             {
                 case (StatType.Health, IHeroCard heroCard):
                     gameObject.SetActive(true);
-                    tmpText.text = heroCard.Health.ToString();
+                    tmpText.text = heroCard.MaxHealth.ToString();
                     break;
                 case (StatType.DeathCost, IHeroCard heroCard):
                     gameObject.SetActive(true);

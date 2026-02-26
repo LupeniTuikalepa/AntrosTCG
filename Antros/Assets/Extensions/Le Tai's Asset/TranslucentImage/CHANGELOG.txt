@@ -1,5 +1,18 @@
 Changelog:
 
+v6.6.1:
+ - Support Paraform 1.2.0
+
+v6.6.0:
+ - Support URP out of the box without manual package import. Requires 2020.3.16+ (patch version matter)
+ - Improve support for Unity 6000.4
+ - Improve world space UI demo to be more clear
+ - Add a convenient button to create new Material in case of source conflict\
+ - Fix allocation in the render graph path from residual debugging codes
+ - Tune algorithm to improve quality at the cost of less strength control. This is a temporary workaround. The next version should improve quality and control greatly
+ - Fix compilation error if the XR module is manually disabled
+ - Silent some harmless errors and warnings
+
 v6.5.0:
  - Add selector to swap between multiple Sources on the same Camera
  - Fix multiple sources not working in URP

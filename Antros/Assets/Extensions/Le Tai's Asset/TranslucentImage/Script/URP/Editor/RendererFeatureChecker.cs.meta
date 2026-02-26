@@ -9,3 +9,10 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 78464
+  packageName: Translucent Image - Fast UI Background Blur
+  packageVersion: 6.6.1
+  assetPath: Assets/Extensions/Le Tai's Asset/TranslucentImage/Script/URP/Editor/RendererFeatureChecker.cs
+  uploadId: 870140

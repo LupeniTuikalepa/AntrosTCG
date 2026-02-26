@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Battle.Cards;
+using ATCG.Battle.Players.Local.Phases.Filters;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using ATCG.HexGrids.Shapes;
@@ -21,8 +22,6 @@ namespace ATCG.Battle.Grids
 
         private DefaultCardCollection<IBattleCard> cards;
 
-        private Dictionary<IBattleCard, HexCoordinates> cardCoordinates;
-
         private readonly Dictionary<HexCell, BattleCell> battleCells;
 
         public BattleGrid(uint cellRadius, uint gridRadius)
@@ -32,7 +31,6 @@ namespace ATCG.Battle.Grids
             Grid.OnCellRemoved += DestroyBattleCell;
             cards = new DefaultCardCollection<IBattleCard>();
 
-            cardCoordinates = DictionaryPool<IBattleCard, HexCoordinates>.Get();
             battleCells = DictionaryPool<HexCell, BattleCell>.Get();
 
             HexagonalShapeBuilder shapeBuilder = new HexagonalShapeBuilder(gridRadius);
@@ -55,24 +53,10 @@ namespace ATCG.Battle.Grids
             }
         }
 
-
-        public void RemoveCard(IBattleCard card)
-        {
-            if (cards.TryRemoveCard(card) && cardCoordinates.TryGetValue(card, out HexCoordinates coordinates))
-            {
-                if(Grid.TryGetCell(coordinates, out HexCell cell))
-                    cell.RemoveMember(null);
-
-                card.Leave();
-                OnBattleCardLeft?.Invoke(card);
-            }
-        }
-
         public void DeployCard(IBattleCard card, HexCoordinates coordinates)
         {
             if (CanDeploy(coordinates) && cards.TryAddCard(card))
             {
-                cardCoordinates.Add(card, coordinates);
                 card.Deploy(this, coordinates);
                 if(Grid.TryGetCell(coordinates, out HexCell cell))
                     cell.AddMember(card);
@@ -81,25 +65,30 @@ namespace ATCG.Battle.Grids
             }
         }
 
-        public bool MoveCardTo(IBattleCard card, HexCoordinates destination)
+
+        public void RemoveCard(IBattleCard card)
         {
-            if (!cardCoordinates.TryGetValue(card, out HexCoordinates lastCoordinates))
-                return false;
+            if (cards.TryRemoveCard(card))
+            {
+                if(Grid.TryGetCell(card.Coordinates, out HexCell cell))
+                    cell.RemoveMember(null);
 
-            if (lastCoordinates == destination)
-                return false;
+                card.Leave();
 
-            cardCoordinates[card] = destination;
-            if(Grid.TryGetCell(lastCoordinates, out HexCell cell))
+                OnBattleCardLeft?.Invoke(card);
+            }
+        }
+        private void OnCardMoved(HeroBattleCard card, HexCoordinates from, HexCoordinates to)
+        {
+            if (from == to)
+                return ;
+
+            if(Grid.TryGetCell(from, out HexCell cell))
                 cell.RemoveMember(null);
 
-            if (Grid.TryGetCell(destination, out cell) && cell.Members == null)
-            {
+            if (Grid.TryGetCell(to, out cell) && cell.Members == null)
                 cell.AddMember(card);
-                card.MoveCard(lastCoordinates, destination);
-            }
 
-            return true;
         }
 
         public IEnumerable<BattleCell> GetCells(Func<BattleCell, bool> filter)
@@ -124,11 +113,6 @@ namespace ATCG.Battle.Grids
             return false;
         }
 
-        public HexCoordinates GetCardCoordinates(IBattleCard battleCard) =>
-            TryGetCardCoordinates(battleCard, out HexCoordinates c) ? c : HexCoordinates.None;
-
-        public bool TryGetCardCoordinates(IBattleCard battleCard, out HexCoordinates coordinates) =>
-            cardCoordinates.TryGetValue(battleCard, out coordinates);
 
         public IEnumerable<IHexMember> GetAllMembers()
             => Grid.GetMembers();
@@ -145,10 +129,19 @@ namespace ATCG.Battle.Grids
         }
 
         public bool HasMember(HexCoordinates coordinates) => Grid.HasMember(coordinates);
+        public void SearchThroughGrid(ICellFilter filter, List<HexCoordinates> results)
+        {
+            filter.Initialize(this);
+            foreach (HexCell cell in battleCells.Keys)
+            {
+                if (filter.Accepts(this, cell.coordinates))
+                    results.Add(cell.coordinates);
+            }
+            filter.Dispose(this);
+        }
 
         void IDisposable.Dispose()
         {
-            DictionaryPool<IBattleCard, HexCoordinates>.Release(cardCoordinates);
             DictionaryPool<HexCell, BattleCell>.Release(battleCells);
         }
 

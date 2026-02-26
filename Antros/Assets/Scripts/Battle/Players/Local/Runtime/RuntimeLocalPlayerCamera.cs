@@ -81,6 +81,8 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
         private bool isManualMode = true;
 
+        public Camera OutputCamera => renderCamera.OutputCamera;
+
         protected override void Awake()
         {
             base.Awake();
@@ -89,12 +91,25 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
         private void LateUpdate()
         {
-            Vector2 input = MoveAction.ReadValue<Vector2>();
+            if (cinemachineCamera.IsLive)
+            {
+                Vector2 input = MoveAction.ReadValue<Vector2>();
 
-            MoveCameraWithPlayerInput(input);
+                MoveCameraWithPlayerInput(input);
 
-            float zoom = ZoomAction.ReadValue<float>();
-            ZoomCamera(zoom);
+                float zoom = ZoomAction.ReadValue<float>();
+                ZoomCamera(zoom);
+            }
+            else
+            {
+                currentZoomSpeed = 0;
+                lastSpeed = Vector2.zero;
+
+                CinemachineBrain brain = CinemachineCore.FindPotentialTargetBrain(cinemachineCamera);
+                Plane plane = new Plane(brain.transform.forward, cinemachineCamera.transform.position);
+
+                cinemachineCamera.Target.TrackingTarget.transform.position = plane.ClosestPointOnPlane(brain.transform.position);
+            }
         }
 
         private void MoveCameraWithPlayerInput(Vector2 input)
@@ -113,7 +128,7 @@ namespace ATCG.Battle.Players.Local.CameraControls
             Vector2 targetSpeed = normInput.normalized * (isAccelerating ? maxSpeed : 0);
 
             Vector2 nextSpeed = Vector3.MoveTowards(lastSpeed, targetSpeed, delta * Time.deltaTime);
-            Transform moveableTarget = cinemachineCamera.transform;
+            Transform moveableTarget = cinemachineCamera.Target.TrackingTarget;
 
             Vector2 currentPosition = moveableTarget.position;
             Vector2 nextPosition = currentPosition + nextSpeed * Time.deltaTime;
@@ -163,10 +178,17 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
         protected override void Connect(LocalBattlePlayer player)
         {
+            OutputChannels outputChannels = GetOutputChannel();
+            renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
+            renderCamera.OutputCamera.targetDisplay = RuntimeLocalPlayer.LocalID;
+        }
+
+        public OutputChannels GetOutputChannel()
+        {
             OutputChannels outputChannels = OutputChannels.Channel01;
             for (int i = 0; i < channels.Length; i++)
             {
-                if (channels[i].PlayerID == player.Profile.ID)
+                if (channels[i].PlayerID == Player.Profile.ID)
                 {
                     outputChannels = channels[i].Channels;
                     break;
@@ -174,8 +196,7 @@ namespace ATCG.Battle.Players.Local.CameraControls
             }
 
             cinemachineCamera.OutputChannel = outputChannels;
-            renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
-            renderCamera.OutputCamera.targetDisplay = RuntimeLocalPlayer.LocalID;
+            return outputChannels;
         }
 
         protected override void Disconnect(LocalBattlePlayer battlePlayer)

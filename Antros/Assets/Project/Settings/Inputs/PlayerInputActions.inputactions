@@ -124,7 +124,7 @@
                     "id": "a6826f6b-75f6-47dd-bc54-3071f1f0d69e",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Invert",
                     "groups": ";Keyboard&Mouse",
                     "action": "Zoom",
                     "isComposite": false,
@@ -268,7 +268,7 @@
                     "name": "Cancel",
                     "type": "Button",
                     "id": "6c7ab684-47c6-4a66-ab33-f5ae11e16218",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

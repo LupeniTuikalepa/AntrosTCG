@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ATCG.Battle.Cards;
 using ATCG.HexGrids;
 
@@ -6,6 +7,8 @@ namespace ATCG.Battle.Grids
 {
     public class BattleCell
     {
+        public event Action<HeroBattleCard> Attacked;
+
         public readonly BattleGrid battleGrid;
         public readonly HexCell cell;
 
@@ -17,5 +20,11 @@ namespace ATCG.Battle.Grids
 
 
         public bool CanBeDeployedOn() => cell.Members.All(ctx => ctx is not HeroBattleCard);
+
+        public void OnBasicAttackPerformed(HeroBattleCard card)
+        {
+            Attacked?.Invoke(card);
+        }
+
     }
 }

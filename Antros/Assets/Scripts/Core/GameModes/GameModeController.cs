@@ -1,6 +1,5 @@
 ﻿using System;
 using Helteix.Tools.Phases;
-using UnityEngine;
 
 namespace ATCG.GameModes
 {
@@ -14,6 +13,7 @@ namespace ATCG.GameModes
 
         public GameModeController()
         {
+
         }
 
         public void StartGameMode(IGameMode mode)

@@ -315,13 +315,15 @@ public class TranslucentImageEditor : ImageEditor
 
         if (usingIncorrectShader)
         {
-            EditorGUILayout.HelpBox("Material is using unsupported shader", MessageType.Warning);
+            EditorGUILayout.HelpBox("Material is using an unsupported shader", MessageType.Warning);
         }
         if (materialUsedInDifferentSource)
         {
+            using var _ = new EditorGUILayout.HorizontalScope();
             EditorGUILayout.HelpBox("Translucent Images with different Sources" +
                                     " should also use different Materials",
                                     MessageType.Error);
+            BtnCreateMaterial();
         }
     }
 
@@ -341,18 +343,7 @@ public class TranslucentImageEditor : ImageEditor
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         EditorGUILayout.HelpBox("Create a new Material to edit", MessageType.Info);
-                        if (GUILayout.Button("Create Material", GUILayout.ExpandHeight(true)))
-                        {
-                            var path = EditorUtility.SaveFilePanelInProject("Save New Material", "Translucent Image Material", "mat", "");
-                            if (!string.IsNullOrEmpty(path))
-                            {
-                                var material = Instantiate(HAVE_PARAFORM
-                                                               ? DefaultResources.Instance.paraformMaterial
-                                                               : DefaultResources.Instance.material);
-                                m_Material.objectReferenceValue = material;
-                                AssetDatabase.CreateAsset(material, path);
-                            }
-                        }
+                        BtnCreateMaterial();
                     }
                     GUI.enabled = false;
                 }
@@ -376,6 +367,22 @@ public class TranslucentImageEditor : ImageEditor
                     Undo.RecordObject(ti.materialForRendering, $"Modify material {ti.material.name}");
                     TranslucentImage.CopyMaterialPropertiesTo(ti.material, ti.materialForRendering);
                 }
+            }
+        }
+    }
+
+    void BtnCreateMaterial()
+    {
+        if (GUILayout.Button("Create Material", GUILayout.ExpandHeight(true)))
+        {
+            var path = EditorUtility.SaveFilePanelInProject("Save New Material", "Translucent Image Material", "mat", "");
+            if (!string.IsNullOrEmpty(path))
+            {
+                var material = Instantiate(HAVE_PARAFORM
+                                               ? DefaultResources.Instance.paraformMaterial
+                                               : DefaultResources.Instance.material);
+                m_Material.objectReferenceValue = material;
+                AssetDatabase.CreateAsset(material, path);
             }
         }
     }

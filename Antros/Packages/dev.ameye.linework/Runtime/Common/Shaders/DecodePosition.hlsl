@@ -19,7 +19,7 @@ void DecodePosition_float(
     float2 encodedPos = Source.Load(int3(UV, 0)).rg;
 
     if (encodedPos.y == -1) {
-        NearestPosition = float2(0, 0);
+        NearestPosition = float2(1e9, 1e9);
         return;
     }
 

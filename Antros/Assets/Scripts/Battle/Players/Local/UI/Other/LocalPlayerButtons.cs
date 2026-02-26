@@ -9,19 +9,14 @@ using UnityEngine.UI;
 namespace ATCG.Battle.Players.Runtime.UI.Other
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/LocalPlayerButtons")]
-    public class LocalPlayerButtons : PlayerHUDElement, IPhaseListener<LocalPlayerTurnPhase>
+    public class LocalPlayerButtons : PlayerHUDElement, IPhaseListener<PlayerTurnPhase>
     {
         [SerializeField]
         private CustomButtonUI endTurnButton;
         [SerializeField]
         private CustomButtonUI giveUpButton;
-        public LocalPlayerTurnPhase CurrentPhase { get; private set; }
+        public PlayerTurnPhase CurrentPhase { get; private set; }
 
-        private void Awake()
-        {
-            endTurnButton.OnClick.AddListener(EndTurn);
-            giveUpButton.OnClick.AddListener(GiveUp);
-        }
 
         private void OnEnable()
         {
@@ -34,8 +29,21 @@ namespace ATCG.Battle.Players.Runtime.UI.Other
             this.Unregister();
         }
 
-        public void EndTurn(BaseEventData arg0) => CurrentPhase?.EndTurn();
-        private void GiveUp(BaseEventData arg0) => CurrentPhase?.GiveUp();
+        public void EndTurn(BaseEventData arg0)
+        {
+            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == Player)
+            {
+                localPlayerTurnPhase.EndTurn();
+            }
+        }
+
+        public void GiveUp(BaseEventData arg0)
+        {
+            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == Player)
+            {
+                localPlayerTurnPhase.GiveUp();
+            }
+        }
 
         protected override void OnConnect()
         {
@@ -47,15 +55,16 @@ namespace ATCG.Battle.Players.Runtime.UI.Other
 
         }
 
-        void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseBegin(LocalPlayerTurnPhase phase)
+        void IPhaseListener<PlayerTurnPhase>.OnPhaseBegin(PlayerTurnPhase phase)
         {
-            endTurnButton.Interactable = phase.localPlayerTurn == Player;
+            endTurnButton.Interactable = phase.player == Player;
             CurrentPhase = phase;
         }
 
-        void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseEnd(LocalPlayerTurnPhase phase)
+        void IPhaseListener<PlayerTurnPhase>.OnPhaseEnd(PlayerTurnPhase phase)
         {
             endTurnButton.Interactable = false;
+            CurrentPhase = null;
         }
     }
 }

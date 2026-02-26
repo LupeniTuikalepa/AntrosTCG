@@ -36,9 +36,10 @@ namespace ATCG.Battle.Players
 
         public BattlePhase BattlePhase { get; }
 
+        public readonly Condition canUseHeroesAbilities;
+        public readonly Condition canDoBasicAttack;
         public readonly Condition canDeployHeroes;
         public readonly Condition canMoveHeroes;
-        public readonly Condition canUseHeroesAbilities;
 
         public LocalBattlePlayer(BattlePhase battle, LocalPlayerProfile profile)
         {
@@ -48,6 +49,7 @@ namespace ATCG.Battle.Players
             canDeployHeroes = new Condition(false);
             canMoveHeroes = new Condition(false);
             canUseHeroesAbilities = new Condition(false);
+            canDoBasicAttack = new Condition(false);
 
             CurrentHealth = MaxHealth;
             CurrentMana = MaxMana;
@@ -59,7 +61,7 @@ namespace ATCG.Battle.Players
             GameCardData[] deckCards = profile.Cards;
             for (int i = 0; i < deckCards.Length; i++)
             {
-                IBattleCard card = GameplayCardManager.CreateCardFor(deckCards[i], ID);
+                IBattleCard card = GameplayCardManager.CreateCardFor(deckCards[i], this);
                 Deck.TryAddCard(card);
             }
         }

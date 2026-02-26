@@ -126,8 +126,8 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
 
     internal RendererType rendererType;
 
-    readonly Dictionary<Camera, TranslucentImageSource> blurSourceCache = new Dictionary<Camera, TranslucentImageSource>();
-    readonly Dictionary<Camera, Camera>                 baseCameraCache = new Dictionary<Camera, Camera>();
+    readonly Dictionary<Camera, List<TranslucentImageSource>> blurSourceCache = new();
+    readonly Dictionary<Camera, Camera>                       baseCameraCache = new();
 
     URPRendererInternal            urpRendererInternal;
     TranslucentImageBlurRenderPass pass;
@@ -148,11 +148,16 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
     /// <summary>
     /// When adding new Translucent Image Source to existing Camera at run time, the new Source must be registered here
     /// </summary>
-    /// <param name="source"></param>
-    public void RegisterSource(TranslucentImageSource source)
+    public void RegisterSource(Camera camera, TranslucentImageSource source)
     {
-        blurSourceCache[source.GetComponent<Camera>()] = source;
+        if (!blurSourceCache.TryGetValue(camera, out var srcList))
+        {
+            srcList = new List<TranslucentImageSource>();
+            blurSourceCache.Add(camera, srcList);
+        }
+        srcList.Add(source);
     }
+
 
     public override void Create()
     {
@@ -160,8 +165,8 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
         urpRendererInternal = new URPRendererInternal();
 
         var renderPassEvent = renderOrder == RenderOrder.BeforePostProcessing
-                                  ? RenderPassEvent.BeforeRenderingPostProcessing
-                                  : RenderPassEvent.AfterRenderingPostProcessing;
+            ? RenderPassEvent.BeforeRenderingPostProcessing
+            : RenderPassEvent.AfterRenderingPostProcessing;
         pass = new TranslucentImageBlurRenderPass(urpRendererInternal) {
             renderPassEvent = renderPassEvent
         };
@@ -179,18 +184,11 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
     {
         urpRendererInternal.CacheRenderer(renderer);
 
-#if UNITY_2021_3_OR_NEWER
         if (renderer is UniversalRenderer)
-#else
-        if (renderer is ForwardRenderer)
-#endif
-        {
             rendererType = RendererType.Universal;
-        }
         else
-        {
             rendererType = RendererType.Renderer2D;
-        }
+
 
         pass.SetupSRP(new TranslucentImageBlurRenderPass.SRPassData {
 #if !HAS_DOUBLEBUFFER_BOTH
@@ -206,17 +204,19 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
         });
     }
 
+#if !UNITY_6000_4_OR_NEWER
 #if HAS_SETUP_OVERRIDE
     public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
     {
         var cameraData = renderingData.cameraData;
-        var blurSource = GetBlurSource(cameraData.camera);
+        var sourceList = GetBlurSources(cameraData.camera);
 
-        if (blurSource == null)
+        if (sourceList.Count == 0)
             return;
 
         SetupSRP(renderer);
     }
+#endif
 #endif
 
     public override void AddRenderPasses(
@@ -229,26 +229,57 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
         if (cameraData.cameraType != CameraType.Game)
             return;
 
-        var camera     = renderingData.cameraData.camera;
-        var blurSource = GetBlurSource(camera);
+        var camera      = renderingData.cameraData.camera;
+        var blurSources = GetBlurSources(camera);
 
-        if (blurSource == null)
-            return;
-        if (blurSource.BlurConfig == null)
+        if (blurSources.Count == 0)
             return;
 
-        blurSource.CamRectOverride = Rect.zero;
+        if (blurSources.Count > 32)
+            Debug.LogWarning("Only 32 Translucent Image Sources is supported per camera");
+
+        bool needAddPass          = false;
+        uint shouldUpdateBlurMask = 0;
+        int  previewIndex         = -1;
+
+
+        for (int i = 0; i < blurSources.Count; i++)
+        {
+            if (!blurSources[i])
+                continue;
+            if (!blurSources[i].BlurConfig)
+                continue;
+
+            blurSources[i].CamRectOverride = Rect.zero;
+
+            var shouldUpdate = blurSources[i].ShouldUpdateBlur();
+
+            if (shouldUpdate)
+                shouldUpdate = blurSources[i].CompleteCull();
+
+            if (shouldUpdate)
+                shouldUpdateBlurMask |= 1u << i;
+
+            var needPreview = blurSources[i].Preview;
+            if (needPreview)
+                previewIndex = i;
+
+            needAddPass |= shouldUpdate || needPreview;
+        }
+
+        if (!needAddPass)
+            return;
+
 #if BUGGY_OVERLAY_CAM_PIXEL_RECT
         if (cameraData.renderType == CameraRenderType.Overlay)
         {
             var baseCam = GetBaseCamera(camera);
             if (baseCam)
-                blurSource.CamRectOverride = baseCam.rect;
+            {
+                foreach (var source in blurSources) source.CamRectOverride = baseCam.rect;
+            }
         }
 #endif
-
-        blurAlgorithm.Init(blurSource.BlurConfig, false);
-
 
 #if UNITY_BUGGED_HAS_PASSES_AFTER_POSTPROCESS
         bool applyFinalPostProcessing = renderingData.postProcessingEnabled
@@ -257,13 +288,16 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
         pass.renderPassEvent = applyFinalPostProcessing ? RenderPassEvent.AfterRenderingPostProcessing : RenderPassEvent.AfterRendering;
 #endif
 
+        if (renderer is not UniversalRenderer)
+            pass.ConfigureInput(ScriptableRenderPassInput.Color);
+
         pass.Setup(new TranslucentImageBlurRenderPass.PassData {
-            blurAlgorithm    = blurAlgorithm,
-            blurSource       = blurSource,
-            camPixelRect     = GetPixelRect(cameraData),
-            shouldUpdateBlur = blurSource.ShouldUpdateBlur(),
-            isPreviewing     = blurSource.Preview,
-            previewMaterial  = PreviewMaterial
+            blurAlgorithm        = blurAlgorithm,
+            blurSources          = blurSources,
+            camPixelRect         = GetPixelRect(cameraData),
+            shouldUpdateBlurMask = shouldUpdateBlurMask,
+            previewIndex         = previewIndex,
+            previewMaterial      = PreviewMaterial
         });
 
 #if !HAS_SETUP_OVERRIDE
@@ -273,14 +307,16 @@ public class TranslucentImageBlurSource : ScriptableRendererFeature
         renderer.EnqueuePass(pass);
     }
 
-    TranslucentImageSource GetBlurSource(Camera camera)
+    IReadOnlyList<TranslucentImageSource> GetBlurSources(Camera camera)
     {
-        if (!blurSourceCache.ContainsKey(camera))
+        if (!blurSourceCache.TryGetValue(camera, out var srcList))
         {
-            blurSourceCache.Add(camera, camera.GetComponent<TranslucentImageSource>());
+            srcList = new List<TranslucentImageSource>();
+            srcList.AddRange(camera.GetComponents<TranslucentImageSource>());
+            blurSourceCache.Add(camera, srcList);
         }
 
-        return blurSourceCache[camera];
+        return srcList;
     }
 
 #if BUGGY_OVERLAY_CAM_PIXEL_RECT

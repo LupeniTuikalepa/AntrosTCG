@@ -5,6 +5,7 @@ namespace ATCG.Battle.Players.Runtime.UI
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIcon")]
     public class PlayerManaIcon : MonoBehaviour
     {
+        private static readonly int Active = Animator.StringToHash("IsActive");
         public bool IsActive { get; private set; }
 
         [SerializeField]
@@ -17,7 +18,7 @@ namespace ATCG.Battle.Players.Runtime.UI
                 return;
 
             IsActive = true;
-            animator.Play("OnActivate");
+            animator.SetBool(Active, true);
 
         }
 
@@ -27,7 +28,7 @@ namespace ATCG.Battle.Players.Runtime.UI
                 return;
 
             IsActive = false;
-            animator.Play("OnDeactivate");
+            animator.SetBool(Active, false);
         }
     }
 }

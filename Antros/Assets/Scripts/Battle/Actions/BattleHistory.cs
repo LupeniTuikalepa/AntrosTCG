@@ -17,8 +17,6 @@ namespace ATCG.Battle.Actions
         [SerializeField]
         private List<BattleTurn> turns;
 
-
-
         public BattleHistory(int seed)
         {
             Seed = seed;
@@ -32,7 +30,6 @@ namespace ATCG.Battle.Actions
         }
 
         public void SetWinningPlayer(int winningPlayer) => WinningPlayer = winningPlayer;
-
 
         public void Dispose()
         {

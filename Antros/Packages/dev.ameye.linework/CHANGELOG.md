@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Headers should be listed in this order: Added, Changed, Deprecated, Removed, Fixed, Security -->
 
+## [1.5.4] - 2026-02-17
+
+### Fixed
+
+- Surface Fill: Fixed surface fill not showing on WebGL builds
+- Wide Outline: Fixed issue with custom wide outline shaders showing up in the corner of the screen
+
 ## [1.5.3] - 2025-12-09
 
 ### Added

@@ -119,21 +119,28 @@ namespace ATCG.Battle
         {
             using (ListPool<IBattlePlayer>.Get(out var winningPlayers))
             {
+                winningPlayers.AddRange(Players);
                 for (int i = 0; i < Players.Length; i++)
                 {
                     IBattlePlayer player = Players[i];
-                    if (!player.IsDefeated())
-                        winningPlayers.Add(player);
+                    if (player.IsDefeated())
+                        winningPlayers.Remove(player);
+                }
+
+                if (winningPlayers.Count == 1)
+                {
+                    history.SetWinningPlayer(winningPlayers[0].Profile.ID);
+                    return true;
                 }
 
                 if (winningPlayers.Count == 0)
                 {
                     history.SetWinningPlayer(-1);
-                    return false;
+                    return true;
                 }
 
-                history.SetWinningPlayer(winningPlayers[0].Profile.ID);
-                return true;
+                history.SetWinningPlayer(-2);
+                return false;
             }
         }
     }

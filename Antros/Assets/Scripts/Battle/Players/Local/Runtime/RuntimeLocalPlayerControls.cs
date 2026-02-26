@@ -17,6 +17,7 @@ namespace ATCG.Battle.Players.Local
         public InputAction Use { get; private set; }
 
         public InputUser PlayerInputUser => PlayerInput.user;
+        [field: SerializeField]
         public PlayerInput PlayerInput { get; private set; }
 
         protected override void Awake()
