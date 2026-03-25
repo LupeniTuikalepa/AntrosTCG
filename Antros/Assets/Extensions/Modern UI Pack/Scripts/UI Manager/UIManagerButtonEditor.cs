@@ -1,8 +1,8 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-using TMPro;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Michsky.MUIP
 {
@@ -22,11 +22,11 @@ namespace Michsky.MUIP
             EditorGUI.indentLevel++;
 
             if (uimTarget.buttonManager == null) { return; }
-
+           
             uimTarget.disabledBackground = EditorGUILayout.ObjectField("Background Disabled", uimTarget.disabledBackground, typeof(Image), true) as Image;
             uimTarget.normalBackground = EditorGUILayout.ObjectField("Background Normal", uimTarget.normalBackground, typeof(Image), true) as Image;
             uimTarget.highlightedBackground = EditorGUILayout.ObjectField("Background Highlighted", uimTarget.highlightedBackground, typeof(Image), true) as Image;
-
+            
             if (uimTarget.buttonManager.enableIcon)
             {
                 uimTarget.disabledIcon = EditorGUILayout.ObjectField("Icon Disabled", uimTarget.disabledIcon, typeof(Image), true) as Image;

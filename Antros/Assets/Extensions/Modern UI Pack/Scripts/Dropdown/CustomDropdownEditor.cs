@@ -118,7 +118,7 @@ namespace Michsky.MUIP
                         GUILayout.BeginHorizontal();
                         GUI.enabled = false;
 
-                        EditorGUILayout.LabelField(new GUIContent("Player Item:"), customSkin.FindStyle("Text"), GUILayout.Width(74));
+                        EditorGUILayout.LabelField(new GUIContent("Current Item:"), customSkin.FindStyle("Text"), GUILayout.Width(74));
                         EditorGUILayout.LabelField(new GUIContent(dTarget.items[dTarget.selectedItemIndex].itemName), customSkin.FindStyle("Text"));
 
                         GUILayout.EndHorizontal();
@@ -134,12 +134,12 @@ namespace Michsky.MUIP
 
                     GUILayout.BeginVertical();
                     EditorGUI.indentLevel = 1;
-                    EditorGUILayout.PropertyField(items, new GUIContent("Dropdown Items"), true);
+                    EditorGUILayout.PropertyField(items, new GUIContent("Dropdown Items"), true);          
                     EditorGUI.indentLevel = 0;
                     GUILayout.EndVertical();
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"), true);
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"), true);
 
                     if (extendEvents.boolValue == true)
                     {
@@ -181,7 +181,7 @@ namespace Michsky.MUIP
                     EditorGUILayout.PropertyField(itemPaddingBottom, new GUIContent("Bottom"));
                     EditorGUILayout.PropertyField(itemPaddingLeft, new GUIContent("Left"));
                     EditorGUILayout.PropertyField(itemPaddingRight, new GUIContent("Right"));
-
+                    
                     EditorGUI.indentLevel = 0;
                     GUILayout.EndVertical();
 
@@ -213,7 +213,7 @@ namespace Michsky.MUIP
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Selected Image' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
-                        }
+                        }                       
                     }
 
                     enableTrigger.boolValue = MUIPEditorHandler.DrawToggle(enableTrigger.boolValue, customSkin, "Enable Trigger");
@@ -223,12 +223,12 @@ namespace Michsky.MUIP
                     if (setHighPriority.boolValue == true) { EditorGUILayout.HelpBox("Set High Priority; renders the content above all objects when the dropdown is open.", MessageType.Info); }
 
                     outOnPointerExit.boolValue = MUIPEditorHandler.DrawToggle(outOnPointerExit.boolValue, customSkin, "Out On Pointer Exit");
-
+                   
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-
+                   
                     enableDropdownSounds.boolValue = MUIPEditorHandler.DrawTogglePlain(enableDropdownSounds.boolValue, customSkin, "Enable Dropdown Sounds");
-
+                   
                     GUILayout.Space(3);
 
                     if (enableDropdownSounds.boolValue == true)
@@ -237,7 +237,7 @@ namespace Michsky.MUIP
                         GUILayout.Space(-3);
 
                         useHoverSound.boolValue = MUIPEditorHandler.DrawTogglePlain(useHoverSound.boolValue, customSkin, "Enable Hover Sound");
-
+                     
                         GUILayout.Space(3);
 
                         if (useHoverSound.boolValue == true)
@@ -246,9 +246,9 @@ namespace Michsky.MUIP
                         GUILayout.EndVertical();
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         GUILayout.Space(-3);
-
+                        
                         useClickSound.boolValue = MUIPEditorHandler.DrawTogglePlain(useClickSound.boolValue, customSkin, "Enable Click Sound");
-
+                       
                         GUILayout.Space(3);
 
                         if (useClickSound.boolValue == true)
@@ -264,7 +264,7 @@ namespace Michsky.MUIP
 
                             if (GUILayout.Button("+ Create a new one", customSkin.button))
                             {
-                                dTarget.soundSource = dTarget.gameObject.SetOrAddComponent(typeof(AudioSource)) as AudioSource;
+                                dTarget.soundSource = dTarget.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
                                 currentTab = 2;
                             }
                         }
@@ -275,7 +275,7 @@ namespace Michsky.MUIP
                     GUILayout.Space(-3);
 
                     saveSelected.boolValue = MUIPEditorHandler.DrawTogglePlain(saveSelected.boolValue, customSkin, "Save Selected");
-
+                  
                     GUILayout.Space(3);
 
                     if (saveSelected.boolValue == true)
@@ -294,22 +294,22 @@ namespace Michsky.MUIP
                         tempUIM.overrideColors = MUIPEditorHandler.DrawToggle(tempUIM.overrideColors, customSkin, "Override Colors");
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Dropdown]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Dropdown]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }
 
                     else if (tempUIM == null) { MUIPEditorHandler.DrawUIManagerDisconnectedHeader(); }
-
+                    
                     break;
             }
 

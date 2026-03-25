@@ -60,7 +60,7 @@ namespace Michsky.MUIP
 
                     EditorGUI.indentLevel = 0;
 
-                    if (GUILayout.Button("+  With a new item", customSkin.button))
+                    if (GUILayout.Button("+  Add a new item", customSkin.button))
                         cmcTarget.AddNewItem();
 
                     GUILayout.EndVertical();

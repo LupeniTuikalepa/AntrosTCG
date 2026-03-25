@@ -111,13 +111,13 @@ namespace Michsky.MUIP
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (showPopupValue == true && sliderAnimator != null)
-                sliderAnimator.Play("ID In");
+                sliderAnimator.Play("Value In");
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             if (showPopupValue == true && sliderAnimator != null)
-                sliderAnimator.Play("ID Out");
+                sliderAnimator.Play("Value Out");
         }
     }
 }

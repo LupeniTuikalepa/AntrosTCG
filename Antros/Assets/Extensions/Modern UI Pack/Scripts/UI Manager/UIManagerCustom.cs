@@ -6,7 +6,7 @@ namespace Michsky.MUIP
 {
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Modern Prefab Pack/Prefab Manager/Prefab Manager (Custom Object)")]
+    [AddComponentMenu("Modern UI Pack/UI Manager/UI Manager (Custom Object)")]
     public class UIManagerCustom : MonoBehaviour
     {
         [Header("Resources")]
@@ -15,7 +15,7 @@ namespace Michsky.MUIP
         [Header("Settings")]
         public ObjectType objectType;
 
-        [Header("color")]
+        [Header("Color")]
         public ColorType colorType = ColorType.Primary;
         public bool keepAlphaValue = false;
         public bool useCustomColor = false;
@@ -61,7 +61,7 @@ namespace Michsky.MUIP
 
         public void UpdateElement()
         {
-            // GetRef objects
+            // Get objects
             if (objectType == ObjectType.Image && imageObject == null) { imageObject = gameObject.GetComponent<Image>(); }
             else if (objectType == ObjectType.Text && textObject == null) { textObject = gameObject.GetComponent<TextMeshProUGUI>(); }
 

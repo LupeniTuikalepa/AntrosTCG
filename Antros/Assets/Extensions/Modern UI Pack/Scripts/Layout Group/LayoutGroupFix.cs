@@ -6,7 +6,7 @@ namespace Michsky.MUIP
 {
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Modern Prefab Pack/Layout/Layout Group Fix")]
+    [AddComponentMenu("Modern UI Pack/Layout/Layout Group Fix")]
     public class LayoutGroupFix : MonoBehaviour
     {
         [SerializeField] private bool fixOnEnable = true;

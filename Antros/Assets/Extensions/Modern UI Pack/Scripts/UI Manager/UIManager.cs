@@ -3,7 +3,7 @@ using TMPro;
 
 namespace Michsky.MUIP
 {
-    [CreateAssetMenu(fileName = "New Prefab Manager", menuName = "Modern Prefab Pack/New Prefab Manager")]
+    [CreateAssetMenu(fileName = "New UI Manager", menuName = "Modern UI Pack/New UI Manager")]
     public class UIManager : ScriptableObject
     {
         // Settings

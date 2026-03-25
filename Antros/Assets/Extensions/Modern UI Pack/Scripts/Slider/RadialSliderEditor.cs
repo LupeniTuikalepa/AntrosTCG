@@ -65,13 +65,13 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Content Header", 6);
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                    EditorGUILayout.LabelField(new GUIContent("Player ID"), customSkin.FindStyle("Text"), GUILayout.Width(120));
+                    EditorGUILayout.LabelField(new GUIContent("Current Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
                     currentValue.floatValue = EditorGUILayout.Slider(currentValue.floatValue, rsTarget.minValue, rsTarget.maxValue);
 
                     GUILayout.EndHorizontal();
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"), true);
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"), true);
                     EditorGUILayout.PropertyField(onPointerEnter, new GUIContent("On Pointer Enter"), true);
                     EditorGUILayout.PropertyField(onPointerExit, new GUIContent("On Pointer Exit"), true);
                     break;
@@ -85,11 +85,11 @@ namespace Michsky.MUIP
 
                 case 2:
                     MUIPEditorHandler.DrawHeader(customSkin, "Options Header", 6);
-                    MUIPEditorHandler.DrawProperty(minValue, customSkin, "Min ID");
-                    MUIPEditorHandler.DrawProperty(maxValue, customSkin, "Max ID");
+                    MUIPEditorHandler.DrawProperty(minValue, customSkin, "Min Value");
+                    MUIPEditorHandler.DrawProperty(maxValue, customSkin, "Max Value");
                     MUIPEditorHandler.DrawProperty(decimals, customSkin, "Decimals");
                     isPercent.boolValue = MUIPEditorHandler.DrawToggle(isPercent.boolValue, customSkin, "Is Percent");
-                    rememberValue.boolValue = MUIPEditorHandler.DrawToggle(rememberValue.boolValue, customSkin, "Save ID");
+                    rememberValue.boolValue = MUIPEditorHandler.DrawToggle(rememberValue.boolValue, customSkin, "Save Value");
 
                     if (rememberValue.boolValue == true)
                     {
@@ -106,16 +106,16 @@ namespace Michsky.MUIP
                     {
                         MUIPEditorHandler.DrawUIManagerConnectedHeader();
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Pie Chart]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Pie Chart]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }

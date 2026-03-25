@@ -72,7 +72,7 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Content Header", 6);
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                    EditorGUILayout.LabelField(new GUIContent("Player Percent"), customSkin.FindStyle("Text"), GUILayout.Width(100));
+                    EditorGUILayout.LabelField(new GUIContent("Current Percent"), customSkin.FindStyle("Text"), GUILayout.Width(100));
                     pbTarget.currentPercent = EditorGUILayout.Slider(pbTarget.currentPercent, minValue.floatValue, maxValue.floatValue);
                     currentPercent.floatValue = pbTarget.currentPercent;
                  
@@ -90,7 +90,7 @@ namespace Michsky.MUIP
                     }
 
                     GUILayout.BeginVertical(EditorStyles.helpBox);
-                    EditorGUILayout.LabelField(new GUIContent("Min / Max ID"), customSkin.FindStyle("Text"), GUILayout.Width(110));
+                    EditorGUILayout.LabelField(new GUIContent("Min / Max Value"), customSkin.FindStyle("Text"), GUILayout.Width(110));
                     GUILayout.BeginHorizontal();
                     GUILayout.Space(2);
 
@@ -99,11 +99,11 @@ namespace Michsky.MUIP
 
                     GUILayout.EndHorizontal();
                     GUILayout.Space(2);
-                    EditorGUILayout.HelpBox("You can increase the max value limit by changing 'ID Limit' in the settings tab.", MessageType.Info);
+                    EditorGUILayout.HelpBox("You can increase the max value limit by changing 'Value Limit' in the settings tab.", MessageType.Info);
                     GUILayout.EndVertical();
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"));
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"));
                     break;
 
                 case 1:
@@ -120,7 +120,7 @@ namespace Michsky.MUIP
 
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-                    addPrefix.boolValue = MUIPEditorHandler.DrawTogglePlain(addPrefix.boolValue, customSkin, "With Prefix");
+                    addPrefix.boolValue = MUIPEditorHandler.DrawTogglePlain(addPrefix.boolValue, customSkin, "Add Prefix");
                     GUILayout.Space(3);
 
                     if (addPrefix.boolValue == true)
@@ -129,7 +129,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-                    addSuffix.boolValue = MUIPEditorHandler.DrawTogglePlain(addSuffix.boolValue, customSkin, "With Suffix");
+                    addSuffix.boolValue = MUIPEditorHandler.DrawTogglePlain(addSuffix.boolValue, customSkin, "Add Suffix");
                     GUILayout.Space(3);
 
                     if (addSuffix.boolValue == true)
@@ -138,7 +138,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                    EditorGUILayout.LabelField(new GUIContent("ID Limit"), customSkin.FindStyle("Text"), GUILayout.Width(80));
+                    EditorGUILayout.LabelField(new GUIContent("Value Limit"), customSkin.FindStyle("Text"), GUILayout.Width(80));
                     EditorGUILayout.PropertyField(valueLimit, new GUIContent(""));
                    
                     if (valueLimit.floatValue <= minValue.floatValue) { valueLimit.floatValue = minValue.floatValue + 1; }
@@ -151,22 +151,22 @@ namespace Michsky.MUIP
 
                     if (tempUIM != null && pbTarget.isLooped == false)
                     {
-                        EditorGUILayout.HelpBox("This object is connected with Prefab Manager. Some parameters (such as colors, " +
+                        EditorGUILayout.HelpBox("This object is connected with UI Manager. Some parameters (such as colors, " +
                             "fonts or booleans) are managed by the manager.", MessageType.Info);
 
                         tempUIM.overrideColors = MUIPEditorHandler.DrawToggle(tempUIM.overrideColors, customSkin, "Override Colors");
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Progress Bar]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Progress Bar]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }
@@ -177,16 +177,16 @@ namespace Michsky.MUIP
 
                         tempUIM.overrideColors = MUIPEditorHandler.DrawToggle(tempUIM.overrideColors, customSkin, "Override Colors");
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Progress Bar]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Progress Bar]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }

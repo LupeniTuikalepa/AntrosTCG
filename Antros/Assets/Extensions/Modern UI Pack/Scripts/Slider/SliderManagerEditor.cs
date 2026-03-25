@@ -67,13 +67,13 @@ namespace Michsky.MUIP
                     {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                        EditorGUILayout.LabelField(new GUIContent("Player ID"), customSkin.FindStyle("Text"), GUILayout.Width(120));
+                        EditorGUILayout.LabelField(new GUIContent("Current Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
                         sTarget.mainSlider.value = EditorGUILayout.Slider(sTarget.mainSlider.value, sTarget.mainSlider.minValue, sTarget.mainSlider.maxValue);
 
                         GUILayout.EndHorizontal();
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                        EditorGUILayout.LabelField(new GUIContent("Min ID"), customSkin.FindStyle("Text"), GUILayout.Width(120));
+                        EditorGUILayout.LabelField(new GUIContent("Min Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
 
                         if (sTarget.mainSlider.wholeNumbers == false)
                             sTarget.mainSlider.minValue = EditorGUILayout.FloatField(sTarget.mainSlider.minValue);
@@ -83,7 +83,7 @@ namespace Michsky.MUIP
                         GUILayout.EndHorizontal();
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                        EditorGUILayout.LabelField(new GUIContent("Max ID"), customSkin.FindStyle("Text"), GUILayout.Width(120));
+                        EditorGUILayout.LabelField(new GUIContent("Max Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
 
                         if (sTarget.mainSlider.wholeNumbers == false)
                             sTarget.mainSlider.maxValue = EditorGUILayout.FloatField(sTarget.mainSlider.maxValue);
@@ -103,7 +103,7 @@ namespace Michsky.MUIP
                         EditorGUILayout.HelpBox("'Main Slider' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(sliderEvent, new GUIContent("On ID Changed"), true);
+                    EditorGUILayout.PropertyField(sliderEvent, new GUIContent("On Value Changed"), true);
                     break;
 
                 case 1:
@@ -119,9 +119,9 @@ namespace Michsky.MUIP
                     usePercent.boolValue = MUIPEditorHandler.DrawToggle(usePercent.boolValue, customSkin, "Use Percent");
                     showValue.boolValue = MUIPEditorHandler.DrawToggle(showValue.boolValue, customSkin, "Show Label");
                     showPopupValue.boolValue = MUIPEditorHandler.DrawToggle(showPopupValue.boolValue, customSkin, "Show Popup Label");
-                    useRoundValue.boolValue = MUIPEditorHandler.DrawToggle(useRoundValue.boolValue, customSkin, "Use Round ID");
+                    useRoundValue.boolValue = MUIPEditorHandler.DrawToggle(useRoundValue.boolValue, customSkin, "Use Round Value");
                     invokeOnAwake.boolValue = MUIPEditorHandler.DrawToggle(invokeOnAwake.boolValue, customSkin, "Invoke On Awake");
-                    enableSaving.boolValue = MUIPEditorHandler.DrawToggle(enableSaving.boolValue, customSkin, "Save ID");
+                    enableSaving.boolValue = MUIPEditorHandler.DrawToggle(enableSaving.boolValue, customSkin, "Save Value");
 
                     if (enableSaving.boolValue == true)
                     {
@@ -142,16 +142,16 @@ namespace Michsky.MUIP
                         tempUIM.overrideColors = MUIPEditorHandler.DrawToggle(tempUIM.overrideColors, customSkin, "Override Colors");
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Horizontal Selector]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Horizontal Selector]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }

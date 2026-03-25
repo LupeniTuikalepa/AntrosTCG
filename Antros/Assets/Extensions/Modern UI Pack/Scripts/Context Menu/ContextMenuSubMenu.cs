@@ -35,16 +35,16 @@ namespace Michsky.MUIP
         {
             if (cmManager.subMenuBehaviour == ContextMenuManager.SubMenuBehaviour.Click)
             {
-                if (subMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Menu In"))
-                {
+                if (subMenuAnimator.GetCurrentAnimatorStateInfo(0).IsName("Menu In")) 
+                { 
                     subMenuAnimator.Play("Menu Out");
                     if (trigger != null) { trigger.SetActive(false); }
                 }
 
-                else
-                {
-                    subMenuAnimator.Play("Menu In");
-                    if (trigger != null) { trigger.SetActive(true); }
+                else 
+                { 
+                    subMenuAnimator.Play("Menu In"); 
+                    if (trigger != null) { trigger.SetActive(true); } 
                 }
             }
         }
@@ -65,8 +65,8 @@ namespace Michsky.MUIP
                 else
                 {
                     Debug.LogError("<b>[Context Menu]</b> At least one of the item presets is missing. " +
-                        "You can assign a new variable in Resources (Context Menu) tab. All defaultComponent presets can be found in " +
-                        "<b>Modern Prefab Pack > Prefabs > Context Menu</b> folder.", this);
+                        "You can assign a new variable in Resources (Context Menu) tab. All default presets can be found in " +
+                        "<b>Modern UI Pack > Prefabs > Context Menu</b> folder.", this);
                     nulLVariable = true;
                 }
 
@@ -101,7 +101,7 @@ namespace Michsky.MUIP
             {
                 if (cmManager.horizontalBound == ContextMenuManager.CursorBoundHorizontal.Left) { listParent.pivot = new Vector2(0f, listParent.pivot.y); }
                 else if (cmManager.horizontalBound == ContextMenuManager.CursorBoundHorizontal.Right) { listParent.pivot = new Vector2(1f, listParent.pivot.y); }
-
+               
                 if (cmManager.verticalBound == ContextMenuManager.CursorBoundVertical.Top) { listParent.pivot = new Vector2(listParent.pivot.x, 0f); }
                 else if (cmManager.verticalBound == ContextMenuManager.CursorBoundVertical.Bottom) { listParent.pivot = new Vector2(listParent.pivot.x, 1f); }
             }

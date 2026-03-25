@@ -162,16 +162,16 @@ namespace Michsky.MUIP
                     {
                         MUIPEditorHandler.DrawUIManagerConnectedHeader();
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Modal Window]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Modal Window]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }

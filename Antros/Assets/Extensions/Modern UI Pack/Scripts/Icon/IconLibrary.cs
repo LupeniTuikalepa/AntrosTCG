@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Michsky.MUIP
 {
-    [CreateAssetMenu(fileName = "New Icon Library", menuName = "Modern Prefab Pack/New Icon Library")]
+    [CreateAssetMenu(fileName = "New Icon Library", menuName = "Modern UI Pack/New Icon Library")]
     public class IconLibrary : ScriptableObject
     {
         // Settings

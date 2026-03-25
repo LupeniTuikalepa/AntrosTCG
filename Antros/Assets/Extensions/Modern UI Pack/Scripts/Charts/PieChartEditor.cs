@@ -55,11 +55,11 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Content Header", 6);
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     EditorGUI.indentLevel = 1;
-
+                  
                     EditorGUILayout.PropertyField(chartData, new GUIContent("Chart Items"));
                     chartData.isExpanded = true;
 
-                    if (GUILayout.Button("+  With a new item", customSkin.button))
+                    if (GUILayout.Button("+  Add a new item", customSkin.button))
                         pieTarget.AddNewItem();
 
                     EditorGUI.indentLevel = 0;
@@ -74,18 +74,18 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Customization Header", 6);
                     MUIPEditorHandler.DrawProperty(indicatorParent, customSkin, "Indicator Parent");
                     MUIPEditorHandler.DrawProperty(borderThickness, customSkin, "Border Thickness");
-                    addValueToIndicator.boolValue = MUIPEditorHandler.DrawToggle(addValueToIndicator.boolValue, customSkin, "With ID To Indicator");
+                    addValueToIndicator.boolValue = MUIPEditorHandler.DrawToggle(addValueToIndicator.boolValue, customSkin, "Add Value To Indicator");
 
                     if (addValueToIndicator.boolValue == true)
                     {
-                        MUIPEditorHandler.DrawPropertyCW(valuePrefix, customSkin, "ID Prefix:", 75);
-                        MUIPEditorHandler.DrawPropertyCW(valueSuffix, customSkin, "ID Suffix:", 75);
+                        MUIPEditorHandler.DrawPropertyCW(valuePrefix, customSkin, "Value Prefix:", 75);
+                        MUIPEditorHandler.DrawPropertyCW(valueSuffix, customSkin, "Value Suffix:", 75);
                     }
 
-                    enableBorderColor.boolValue = MUIPEditorHandler.DrawToggle(enableBorderColor.boolValue, customSkin, "Enable Border color (Experimental)");
+                    enableBorderColor.boolValue = MUIPEditorHandler.DrawToggle(enableBorderColor.boolValue, customSkin, "Enable Border Color (Experimental)");
 
                     if (enableBorderColor.boolValue == true)
-                        MUIPEditorHandler.DrawProperty(borderColor, customSkin, "Border color");
+                        MUIPEditorHandler.DrawProperty(borderColor, customSkin, "Border Color");
 
                     MUIPEditorHandler.DrawHeader(customSkin, "UIM Header", 10);
 
@@ -93,16 +93,16 @@ namespace Michsky.MUIP
                     {
                         MUIPEditorHandler.DrawUIManagerConnectedHeader();
 
-                        if (GUILayout.Button("Open Prefab Manager", customSkin.button))
+                        if (GUILayout.Button("Open UI Manager", customSkin.button))
                             EditorApplication.ExecuteMenuItem(MUIPEditorHandler.UIM_SHORTCUT);
 
-                        if (GUILayout.Button("Disable Prefab Manager Connection", customSkin.button))
+                        if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
-                            if (EditorUtility.DisplayDialog("Modern Prefab Pack", "Are you sure you want to disable Prefab Manager connection with the object? " +
+                            if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +
                                 "This operation cannot be undone.", "Yes", "Cancel"))
                             {
                                 try { DestroyImmediate(tempUIM); }
-                                catch { Debug.LogError("<b>[Pie Chart]</b> Failed to delete Prefab Manager connection.", this); }
+                                catch { Debug.LogError("<b>[Pie Chart]</b> Failed to delete UI Manager connection.", this); }
                             }
                         }
                     }
