@@ -22,32 +22,25 @@ namespace ATCG.Battle.Grids.Runtime
         public event Action<SelectCellPhase> OnNewLookupPhaseActivated;
         public event Action<RuntimeBattleCell> OnBattleCellAdded;
         public event Action<RuntimeBattleCell> OnBattleCellRemoved;
-        public event Action<RuntimeHero> OnRuntimeHeroCreated;
-        public event Action<RuntimeHero> OnRuntimeHeroDestroyed;
-
-        [SerializeField]
-        private RuntimeHexGrid runtimeHexGrid;
-
-        [SerializeField]
-        private Transform heroContainer;
-
-        private Dictionary<HexCell, RuntimeBattleCell> battleCells;
-
 
         public RuntimeHexGrid RuntimeHexGrid => runtimeHexGrid;
         public BattleGrid BattleGrid => CurrentBattlePhase?.BattleGrid;
         public BattlePhase CurrentBattlePhase => LocalBattlePlayer.BattlePhase;
         public IReadOnlyCollection<RuntimeBattleCell> BattleCells => battleCells.Values;
-
-        private Dictionary<HeroBattleCard, RuntimeHero> heroCards = new();
-
-        private List<SelectCellPhase> lookupPhases = new();
         public SelectCellPhase CurrentLookupPhase => lookupPhases.Count > 0 ? lookupPhases[0] : null;
 
+        [SerializeField]
+        private RuntimeHexGrid runtimeHexGrid;
+
+        [SerializeField]
+        private RuntimeHeroManager heroManager;
+
+        public LocalBattlePlayer LocalBattlePlayer { get; private set; }
+
+        private Dictionary<HexCell, RuntimeBattleCell> battleCells;
+        private List<SelectCellPhase> lookupPhases = new();
         private SelectCellPhase lastLookupPhase;
 
-        public RuntimeHero SelectedCard { get; private set; }
-        public LocalBattlePlayer LocalBattlePlayer { get; private set; }
 
 
         private void Reset()
@@ -59,15 +52,12 @@ namespace ATCG.Battle.Grids.Runtime
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
             LocalBattlePlayer = player;
-            BattleGrid.OnBattleCardDeployed += OnCardDeployed;
             runtimeHexGrid.Connect(CurrentBattlePhase.HexGrid);
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer battlePlayer)
         {
-            BattleGrid.OnBattleCardDeployed -= OnCardDeployed;
             runtimeHexGrid.Disconnect();
-
             LocalBattlePlayer = null;
         }
         private void OnEnable()
@@ -114,28 +104,6 @@ namespace ATCG.Battle.Grids.Runtime
             }
         }
 
-        private void OnCardDeployed(IBattleCard card)
-        {
-            switch (card)
-            {
-                case HeroBattleCard heroBattleCard:
-                    if(heroCards.ContainsKey(heroBattleCard))
-                        break;
-
-                    GameObject instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(heroContainer);
-                    if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
-                    {
-                        runtimeHeroBattleCard.Initialize(this);
-                        runtimeHeroBattleCard.Connect(heroBattleCard);
-
-                        heroCards.Add(heroBattleCard, runtimeHeroBattleCard);
-                        OnRuntimeHeroCreated?.Invoke(runtimeHeroBattleCard);
-                    }
-
-                    break;
-            }
-        }
-
         public bool TryGetBattleCellAt(HexCoordinates hexCoordinates, out RuntimeBattleCell battleCell)
         {
             if (RuntimeHexGrid.TryGetCellAt(hexCoordinates, out var cell))
@@ -145,6 +113,7 @@ namespace ATCG.Battle.Grids.Runtime
             return false;
         }
 
+        
 
         void IPhaseListener<SelectCellPhase>.OnPhaseBegin(SelectCellPhase phase)
         {
@@ -176,5 +145,7 @@ namespace ATCG.Battle.Grids.Runtime
             OnNewLookupPhaseActivated?.Invoke(newCurrentPhase);
             lastLookupPhase = newCurrentPhase;
         }
+
+        public Vector3 GetTargetScale() => RuntimeHexGrid.GetTargetScale();
     }
 }

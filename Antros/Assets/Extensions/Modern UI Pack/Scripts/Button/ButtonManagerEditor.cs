@@ -336,7 +336,7 @@ namespace Michsky.MUIP
 
                             if (GUILayout.Button("Restore Prefab Manager", customSkin.button))
                             {
-                                UIManagerButton uimb = buttonTarget.gameObject.AddComponent<UIManagerButton>();
+                                UIManagerButton uimb = buttonTarget.gameObject.SetOrAddComponent<UIManagerButton>();
 
                                 try
                                 {

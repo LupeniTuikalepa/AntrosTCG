@@ -24,7 +24,6 @@ namespace ATCG
 
             GameModeController = new GameModeController();
             GameDatabase = new GameDatabase();
-
             GameDatabase.Load();
 
             UnityServices.Instance.InitializeAsync();

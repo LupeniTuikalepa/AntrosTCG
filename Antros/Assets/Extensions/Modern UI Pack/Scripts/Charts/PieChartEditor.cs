@@ -55,11 +55,11 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Content Header", 6);
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     EditorGUI.indentLevel = 1;
-                  
+
                     EditorGUILayout.PropertyField(chartData, new GUIContent("Chart Items"));
                     chartData.isExpanded = true;
 
-                    if (GUILayout.Button("+  Add a new item", customSkin.button))
+                    if (GUILayout.Button("+  With a new item", customSkin.button))
                         pieTarget.AddNewItem();
 
                     EditorGUI.indentLevel = 0;
@@ -74,12 +74,12 @@ namespace Michsky.MUIP
                     MUIPEditorHandler.DrawHeader(customSkin, "Customization Header", 6);
                     MUIPEditorHandler.DrawProperty(indicatorParent, customSkin, "Indicator Parent");
                     MUIPEditorHandler.DrawProperty(borderThickness, customSkin, "Border Thickness");
-                    addValueToIndicator.boolValue = MUIPEditorHandler.DrawToggle(addValueToIndicator.boolValue, customSkin, "Add Value To Indicator");
+                    addValueToIndicator.boolValue = MUIPEditorHandler.DrawToggle(addValueToIndicator.boolValue, customSkin, "With ID To Indicator");
 
                     if (addValueToIndicator.boolValue == true)
                     {
-                        MUIPEditorHandler.DrawPropertyCW(valuePrefix, customSkin, "Value Prefix:", 75);
-                        MUIPEditorHandler.DrawPropertyCW(valueSuffix, customSkin, "Value Suffix:", 75);
+                        MUIPEditorHandler.DrawPropertyCW(valuePrefix, customSkin, "ID Prefix:", 75);
+                        MUIPEditorHandler.DrawPropertyCW(valueSuffix, customSkin, "ID Suffix:", 75);
                     }
 
                     enableBorderColor.boolValue = MUIPEditorHandler.DrawToggle(enableBorderColor.boolValue, customSkin, "Enable Border color (Experimental)");

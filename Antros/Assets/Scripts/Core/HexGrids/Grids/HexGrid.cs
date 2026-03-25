@@ -41,8 +41,11 @@ namespace ATCG.HexGrids.Grids
             return position + Center;
         }
 
-        public void AddCell(HexCoordinates coordinates)
+        public bool AddCell(HexCoordinates coordinates)
         {
+            if (!coordinates.IsValid)
+                return false;
+
             //Debug.Log("Adding new cell");
             if (Cells.ContainsKey(coordinates))
                 RemoveCell(coordinates);
@@ -50,15 +53,22 @@ namespace ATCG.HexGrids.Grids
             HexCell cell = new HexCell(this, coordinates);
             Cells.Add(coordinates, cell);
             OnCellAdded?.Invoke(cell);
+            return true;
         }
 
-        private void RemoveCell(HexCoordinates coordinates)
+        private bool RemoveCell(HexCoordinates coordinates)
         {
+            if (!coordinates.IsValid)
+                return false;
+
             if (Cells.Remove(coordinates, out HexCell cell))
             {
                 OnCellRemoved?.Invoke(cell);
                 cell.Dispose();
+                return true;
             }
+
+            return false;
         }
 
 
@@ -76,14 +86,6 @@ namespace ATCG.HexGrids.Grids
         #region Utility
 
 
-        public IEnumerable<HexCoordinates> GetSpiral(HexCoordinates center, int radius)
-        {
-            for (int k = 1; k <= radius; k++)
-            {
-                foreach (var coord in GetRing(center, k))
-                    yield return coord;
-            }
-        }
 
         public IEnumerable<HexCoordinates> GetRing(HexCoordinates center, int radius)
         {
@@ -103,52 +105,18 @@ namespace ATCG.HexGrids.Grids
         }
 
         #endregion
-        #region Members
-
-        public bool HasMember(HexCoordinates coordinates)
-            => HasMember<IHexMember>(coordinates);
-        public bool HasMember<T>(HexCoordinates coordinates) where T : IHexMember
-            => TryGetHexMember<T>(coordinates, out _);
-        public bool TryGetHexMember(HexCoordinates coordinates, out IHexMember member)
-            => TryGetHexMember<IHexMember>(coordinates, out member);
-        public bool TryGetHexMember<T>(HexCoordinates coordinates, out T member) where T : IHexMember
-        {
-            if (TryGetCell(coordinates, out HexCell cell) && cell.Members is T m)
-            {
-                member = m;
-                return true;
-            }
-
-            member = default;
-            return false;
-        }
-
-        public IEnumerable<T> GetMembers<T>() where T : IHexMember
-        {
-            foreach (var member in GetMembers())
-            {
-                if (member is T hexMember)
-                    yield return hexMember;
-            }
-        }
-
-        public IEnumerable<IHexMember> GetMembers()
-        {
-            foreach (HexCell hexCell in cells.Values)
-            {
-                if (hexCell.Members == null)
-                    continue;
-
-                foreach (var member in hexCell.Members)
-                    yield return member;
-            }
-
-        }
-
-        #endregion
 
         public HexCell GetCell(HexCoordinates coordinates) => TryGetCell(coordinates, out var cell) ? cell : null;
-        public bool TryGetCell(HexCoordinates coordinates, out HexCell cell) => Cells.TryGetValue(coordinates, out cell);
+        public bool TryGetCell(HexCoordinates coordinates, out HexCell cell)
+        {
+            if (!coordinates.IsValid)
+            {
+                cell = null;
+                return false;
+            }
+
+            return Cells.TryGetValue(coordinates, out cell);
+        }
 
         public IEnumerable<HexCell> GetCells() => Cells.Values;
 

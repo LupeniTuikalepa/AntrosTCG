@@ -8,11 +8,8 @@ namespace ATCG.HexGrids
     [System.Serializable]
     public struct HexCoordinates : IEquatable<HexCoordinates>
     {
-        public static HexCoordinates None => new HexCoordinates()
-        {
-            X = 0,
-            Y = 0,
-        };
+        public static HexCoordinates None => new();
+        public bool IsValid { get; }
 
         [field: SerializeField]
         public int X { get; private set; }
@@ -25,6 +22,7 @@ namespace ATCG.HexGrids
         public HexCoordinates (int x, int y) {
             X = x;
             Y = y;
+            IsValid = true;
         }
 
         public static HexCoordinates FromOffsetCoordinates (int x, int z) {

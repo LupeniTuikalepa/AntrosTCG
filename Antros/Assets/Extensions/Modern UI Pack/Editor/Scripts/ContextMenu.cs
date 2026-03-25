@@ -297,7 +297,7 @@ namespace Michsky.MUIP
         static void BGRED()
         {
             CreateButton("Button/Basic - Gradient/Red");
-        }  
+        }
 
         [MenuItem("GameObject/Modern Prefab Pack/Button/Basic - Outline/Standard", false, 8)]
         static void BOWHS()
@@ -839,10 +839,10 @@ namespace Michsky.MUIP
             CreateObject("Progress Bar/PB - Radial Filled Vertical");
         }
 
-        [MenuItem("GameObject/Modern Prefab Pack/Spinner/Standard Fill", false, 8)]
+        [MenuItem("GameObject/Modern Prefab Pack/Spinner/Standard Evaluate", false, 8)]
         static void PBLSF()
         {
-            CreateObject("Spinner/Spinner - Standard Fill");
+            CreateObject("Spinner/Spinner - Standard Evaluate");
         }
 
         [MenuItem("GameObject/Modern Prefab Pack/Spinner/Standard Run", false, 8)]
@@ -899,10 +899,10 @@ namespace Michsky.MUIP
             CreateObject("Slider/Standard/Slider - Standard (Popup)");
         }
 
-        [MenuItem("GameObject/Modern Prefab Pack/Slider/Standard/Standard (Value)", false, 8)]
+        [MenuItem("GameObject/Modern Prefab Pack/Slider/Standard/Standard (ID)", false, 8)]
         static void SLSV()
         {
-            CreateObject("Slider/Standard/Slider - Standard (Value)");
+            CreateObject("Slider/Standard/Slider - Standard (ID)");
         }
 
         [MenuItem("GameObject/Modern Prefab Pack/Slider/Gradient/Gradient", false, 8)]
@@ -923,10 +923,10 @@ namespace Michsky.MUIP
             CreateObject("Slider/Gradient/Slider - Gradient (Popup)");
         }
 
-        [MenuItem("GameObject/Modern Prefab Pack/Slider/Gradient/Gradient (Value)", false, 8)]
+        [MenuItem("GameObject/Modern Prefab Pack/Slider/Gradient/Gradient (ID)", false, 8)]
         static void SLGV()
         {
-            CreateObject("Slider/Gradient/Slider - Gradient (Value)");
+            CreateObject("Slider/Gradient/Slider - Gradient (ID)");
         }
 
         [MenuItem("GameObject/Modern Prefab Pack/Slider/Outline/Outline", false, 8)]
@@ -947,10 +947,10 @@ namespace Michsky.MUIP
             CreateObject("Slider/Outline/Slider - Outline (Popup)");
         }
 
-        [MenuItem("GameObject/Modern Prefab Pack/Slider/Outline/Outline (Value)", false, 8)]
+        [MenuItem("GameObject/Modern Prefab Pack/Slider/Outline/Outline (ID)", false, 8)]
         static void SLOV()
         {
-            CreateObject("Slider/Outline/Slider - Outline (Value)");
+            CreateObject("Slider/Outline/Slider - Outline (ID)");
         }
 
         [MenuItem("GameObject/Modern Prefab Pack/Slider/Radial/Radial", false, 8)]

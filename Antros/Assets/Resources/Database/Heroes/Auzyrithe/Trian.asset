@@ -16,7 +16,7 @@ MonoBehaviour:
   <Title>k__BackingField: Trian
   <Description>k__BackingField: 
   <Element>k__BackingField: 9
-  <InvocationCost>k__BackingField: 0
+  <Rarity>k__BackingField: 1
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 4c33316959bc5404b92c4ce6915a4bda, type: 2}
   <Health>k__BackingField: 2

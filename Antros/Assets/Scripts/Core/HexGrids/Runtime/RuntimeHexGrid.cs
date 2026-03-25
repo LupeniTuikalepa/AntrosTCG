@@ -75,6 +75,12 @@ namespace ATCG.HexGrids.Runtime
             }
         }
 
+        public Vector3 GetTargetScale()
+        {
+            return Vector3.one * Current.OuterCellRadius * 1.8f;
+        }
+
+
         public bool TryGetCellAt(HexCoordinates coordinates, out HexCell cell) => Current.TryGetCell(coordinates, out cell);
         public Vector2 GetPositionAt(HexCoordinates coordinates) => Current.GetPositionAt(coordinates);
     }

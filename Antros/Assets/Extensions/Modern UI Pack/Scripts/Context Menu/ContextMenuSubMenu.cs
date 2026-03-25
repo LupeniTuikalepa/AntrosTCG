@@ -65,7 +65,7 @@ namespace Michsky.MUIP
                 else
                 {
                     Debug.LogError("<b>[Context Menu]</b> At least one of the item presets is missing. " +
-                        "You can assign a new variable in Resources (Context Menu) tab. All default presets can be found in " +
+                        "You can assign a new variable in Resources (Context Menu) tab. All defaultComponent presets can be found in " +
                         "<b>Modern Prefab Pack > Prefabs > Context Menu</b> folder.", this);
                     nulLVariable = true;
                 }

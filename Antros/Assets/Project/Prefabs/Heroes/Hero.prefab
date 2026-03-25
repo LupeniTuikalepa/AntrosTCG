@@ -211,8 +211,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293322470
-  m_fontColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    rgba: 4282335039
+  m_fontColor: {r: 0.24705884, g: 0.24705884, b: 0.24705884, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -559,9 +559,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Cards.Runtime.RuntimeHeroBattleCard
   heroName: {fileID: 7597443000293378960}
   outline: {fileID: 1150989587190754157}
+  baseScale: 0.85
   hoverScale: 1.15
   hoverAnimationDuration: 0.25
-  moveAnimationDuration: 0.25
+  windUpDuration: 0
+  windUpScale: 0
+  movementDuration: 0
 --- !u!58 &2854938731345879177
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1107,6 +1110,7 @@ GameObject:
   - component: {fileID: 5480520401654165345}
   - component: {fileID: 1817413780167134301}
   - component: {fileID: 5678100837278160691}
+  - component: {fileID: 5248041706629793340}
   m_Layer: 5
   m_Name: Abilities
   m_TagString: Untagged
@@ -1174,8 +1178,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c646b1f93314a00aa1b77ca24de2d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Heroes.Deployed.HeroCapacityGroupUI
-  container: {fileID: 0}
-  capacityButtonsUI: {fileID: 0}
+  container: {fileID: 5480520401654165345}
+  capacityButtonsUI: {fileID: 2452309319912275167, guid: 7e359ded8eb49e8418591a7fa5edcd19, type: 3}
+--- !u!114 &5248041706629793340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5569388937814982139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 0
+  m_MinWidth: 250
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &5948822042681386947
 GameObject:
   m_ObjectHideFlags: 0

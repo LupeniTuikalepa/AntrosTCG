@@ -139,7 +139,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"), true);
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"), true);
 
                     if (extendEvents.boolValue == true)
                     {
@@ -264,7 +264,7 @@ namespace Michsky.MUIP
 
                             if (GUILayout.Button("+ Create a new one", customSkin.button))
                             {
-                                dTarget.soundSource = dTarget.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+                                dTarget.soundSource = dTarget.gameObject.SetOrAddComponent(typeof(AudioSource)) as AudioSource;
                                 currentTab = 2;
                             }
                         }

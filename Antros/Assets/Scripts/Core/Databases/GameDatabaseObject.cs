@@ -6,7 +6,7 @@ namespace ATCG.Databases
 {
     public abstract class GameDatabaseObject : ScriptableObject
     {
-        [SerializeField, ReadOnly]
+        [SerializeField, ReadOnly, HideLabel]
         private string guidText;
 
         public Guid ID
@@ -27,7 +27,7 @@ namespace ATCG.Databases
 
         private Guid guid = Guid.Empty;
 
-        private void Reset()
+        protected virtual void Reset()
         {
             guidText = string.Empty;
             OnValidate();

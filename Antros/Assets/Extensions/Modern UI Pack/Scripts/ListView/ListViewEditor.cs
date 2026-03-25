@@ -75,7 +75,7 @@ namespace Michsky.MUIP
                     EditorGUILayout.PropertyField(listItems, new GUIContent("List Items"), true);
                     EditorGUI.indentLevel = 0;
 
-                    if (GUILayout.Button("+ Add a new list item", customSkin.button))
+                    if (GUILayout.Button("+ With a new list item", customSkin.button))
                     {
                         ListView.ListItem item = new ListView.ListItem();
                         lvTarget.listItems.Add(item);

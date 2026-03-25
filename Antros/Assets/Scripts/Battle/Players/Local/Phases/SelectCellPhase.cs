@@ -1,6 +1,6 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Players.Local.Phases.Filters;
 using ATCG.HexGrids;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -10,36 +10,35 @@ namespace ATCG.Battle.Players.Local.Phases
 {
     public class SelectCellPhase : PhaseCompletionSource<BattleCell>
     {
+        private const string SELECT_CELL_PHASE_NAME = nameof(SelectCellPhase);
+
         public ChannelKey MainChannelKey { get; }
         public ChannelKey SecondaryChannelKey { get; }
-        public ICellFilter Filter { get; }
         public LocalBattlePlayer Player { get;  }
 
         public readonly BattleGrid battleGrid;
 
-        public SelectCellPhase(ICellFilter filter, BattleGrid battleGrid, LocalBattlePlayer player)
+        protected readonly List<HexCoordinates> choices;
+
+        public SelectCellPhase(List<HexCoordinates> choices, BattleGrid battleGrid, LocalBattlePlayer player)
         {
-            this.Filter = filter;
+            this.choices = choices;
             this.battleGrid = battleGrid;
             Player = player;
-            string selectCellPhaseName = nameof(SelectCellPhase);
-            MainChannelKey = ChannelKey.GetUniqueChannelKey($"{selectCellPhaseName}_Main");
-            SecondaryChannelKey = ChannelKey.GetUniqueChannelKey($"{selectCellPhaseName}_Secondary");
+
+            MainChannelKey = ChannelKey.GetUniqueChannelKey($"{SELECT_CELL_PHASE_NAME}_Main");
+            SecondaryChannelKey = ChannelKey.GetUniqueChannelKey($"{SELECT_CELL_PHASE_NAME}_Secondary");
 
         }
+        public bool IsCoordValid(HexCoordinates coord) => choices.Contains(coord);
 
-        protected override Awaitable Initialize(CancellationToken token)
+        public void SetResult(HexCoordinates coord)
         {
-            Filter?.Initialize(battleGrid);
-            return base.Initialize(token);
-        }
+            if(IsCoordValid(coord))
+                return;
 
-        public bool IsCoordValid(HexCoordinates coord) => Filter != null && Filter.Accepts(battleGrid, coord);
-
-        protected override Awaitable Dispose(CancellationToken token)
-        {
-            Filter?.Dispose(battleGrid);
-            return base.Dispose(token);
+            if(battleGrid.TryGetBattleCell(coord, out var cell))
+                SetResult(cell);
         }
     }
 }

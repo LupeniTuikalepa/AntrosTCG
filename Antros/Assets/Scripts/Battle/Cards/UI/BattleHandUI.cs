@@ -2,7 +2,6 @@
 using ATCG.Battle.Players.Runtime;
 using Helteix.Cards;
 using Helteix.Cards.UI.Physical;
-using Helteix.Tools.Phases;
 using UnityEngine;
 
 namespace ATCG.Battle.Cards.UI
@@ -16,7 +15,6 @@ namespace ATCG.Battle.Cards.UI
         protected override bool CanCardBeClicked(ICard card) => false;
 
         public IBattlePlayer Player { get; private set; }
-
 
         public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
         {

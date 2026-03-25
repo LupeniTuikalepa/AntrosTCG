@@ -61,7 +61,7 @@ namespace Michsky.MUIP
 
         public void UpdateElement()
         {
-            // Get objects
+            // GetRef objects
             if (objectType == ObjectType.Image && imageObject == null) { imageObject = gameObject.GetComponent<Image>(); }
             else if (objectType == ObjectType.Text && textObject == null) { textObject = gameObject.GetComponent<TextMeshProUGUI>(); }
 

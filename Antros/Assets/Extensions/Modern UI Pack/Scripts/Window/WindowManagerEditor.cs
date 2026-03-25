@@ -91,7 +91,7 @@ namespace Michsky.MUIP
 
                     EditorGUILayout.PropertyField(windows, new GUIContent("Window Items"), true);
 
-                    if (GUILayout.Button("+  Add a new window", customSkin.button))
+                    if (GUILayout.Button("+  With a new window", customSkin.button))
                         wmTarget.AddNewItem();
 
                     GUILayout.EndVertical();

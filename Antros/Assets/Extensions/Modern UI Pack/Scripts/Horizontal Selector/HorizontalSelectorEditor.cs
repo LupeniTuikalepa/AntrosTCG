@@ -119,7 +119,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"), true);
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"), true);
                     break;
 
                 case 1:

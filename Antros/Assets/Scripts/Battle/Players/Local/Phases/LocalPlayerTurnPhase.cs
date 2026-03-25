@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.Actions;
 using ATCG.Battle.Actions.TurnInfos;
-using ATCG.Battle.Metrics;
+using ATCG.Metrics;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
 using UnityEngine;
@@ -30,7 +30,7 @@ namespace ATCG.Battle.Players.Local.Phases
         protected override Awaitable Initialize(CancellationToken token)
         {
             actionInfosList = ListPool<IBattleActionInfos>.Get();
-            localPlayerTurn.AddOrRemoveMana(GameplayMetrics.Current.RecoveredManaOnTurnStart);
+            localPlayerTurn.AddOrRemoveMana(GameMetrics.Current.RecoveredManaOnTurnStart);
 
             localPlayerTurn.canDeployHeroes.AddCondition(channelKey);
             localPlayerTurn.canMoveHeroes.AddCondition(channelKey);

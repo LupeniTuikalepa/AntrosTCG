@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ATCG.Battle.Actions;
+using ATCG.Battle.Entities.Core;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Metrics;
 using ATCG.Battle.Players;
 using ATCG.HexGrids.Grids;
 using ATCG.Metrics;
@@ -19,8 +19,8 @@ namespace ATCG.Battle
     {
         public readonly int seed;
 
-        public uint CellRadius => GameplayMetrics.Current.CellRadius;
-        public uint GridRadius => GameplayMetrics.Current.GridRadius;
+        public uint CellRadius => GameMetrics.Current.CellRadius;
+        public uint GridRadius => GameMetrics.Current.GridRadius;
 
 
         public readonly IBattlePlayerProfile[] playerProfiles;
@@ -39,8 +39,12 @@ namespace ATCG.Battle
         public HexGrid HexGrid => BattleGrid.Grid;
         public int PlayerCount => playerProfiles.Length;
 
+        public World World { get; }
+
         public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
         {
+            World = new World(maxComponentStores: 128, maxEntities: 128);
+
             this.seed = seed;
             this.playerProfiles = playerProfiles;
         }

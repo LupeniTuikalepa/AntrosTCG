@@ -1,6 +1,5 @@
 ﻿using System;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Metrics;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
@@ -51,7 +50,7 @@ namespace ATCG.Battle.Grids.Runtime
 
             transform.localScale = Vector3.zero;
 
-            Tween.Scale(transform, GetTargetScale(), .3f, Easing.Overshoot(.3f),
+            Tween.Scale(transform, grid.GetTargetScale(), .3f, Easing.Overshoot(.3f),
                 startDelay: Coordinates.Length() * .2f);
         }
         public void Disconnect(BattlePhase phase, BattleCell battleCell)
@@ -61,12 +60,6 @@ namespace ATCG.Battle.Grids.Runtime
 
             BattleCell.Attacked -= BattleCellOnAttacked;
             BattleCell = null;
-        }
-
-
-        public Vector3 GetTargetScale()
-        {
-            return Vector3.one * RuntimeGrid.Current.OuterCellRadius * 1.8f;
         }
 
 

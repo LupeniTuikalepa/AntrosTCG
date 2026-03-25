@@ -240,7 +240,7 @@ namespace Unity.Services.Authentication.Samples
             var localDateTime = playerInfo?.CreatedAt.Value.ToLocalTime();
 
             builder.AppendLine($"CreatedAt: {localDateTime.Value}");
-            builder.AppendLine($"Id: {playerInfo.Id}");
+            builder.AppendLine($"ID: {playerInfo.Id}");
             builder.AppendLine();
 
             if (playerInfo.Identities?.Count > 0)

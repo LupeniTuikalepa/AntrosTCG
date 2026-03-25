@@ -34,7 +34,7 @@ namespace Michsky.MUIP
             EditorGUILayout.PropertyField(icons, new GUIContent("Icon List"), true);
             EditorGUI.indentLevel = 0;
 
-            if (GUILayout.Button("+  Add a new icon", customSkin.button))
+            if (GUILayout.Button("+  With a new icon", customSkin.button))
                 icons.arraySize += 1;
 
             GUILayout.EndVertical();

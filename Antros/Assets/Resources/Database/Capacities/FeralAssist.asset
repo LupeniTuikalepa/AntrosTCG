@@ -9,11 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12e757e9cff149f8bddd58c0f48726f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cc4786b8aad4ad19c34ba65d7989e31, type: 3}
   m_Name: FeralAssist
-  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.DebugCapacityData
-  <Cost>k__BackingField: 4
-  <Name>k__BackingField: Aide sauvage
-  <Description>k__BackingField: "Invoque une cr\xE9ature pr\xEAt de l'utilisateur.\nSa
-    puissance est inversement proportionnelle a la vie restante de l'utilisateur."
-  <Message>k__BackingField: Test
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.CapacityData
+  guidText: 8aed28e8-5f03-458b-9c7e-9c1b24a19510
+  <Cost>k__BackingField: 0
+  <Name>k__BackingField: 
+  <Description>k__BackingField: 
+  <CastPatterns>k__BackingField: []
+  <FirePatterns>k__BackingField: []
+  <CasterEffects>k__BackingField: []
+  <HitEffects>k__BackingField: []
+  references:
+    version: 2
+    RefIds: []

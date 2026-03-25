@@ -29,7 +29,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         private PlayerHUD hud;
 
-        public DeployCardPhase SelectCellPhase { get; private set; }
+        public DeployCardPhase DeployCardPhase { get; private set; }
 
         private void OnEnable()
         {
@@ -163,32 +163,19 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected override void OnCardBeginDrag(CardHolderUI holder, PointerEventData eventData)
         {
             base.OnCardBeginDrag(holder, eventData);
-            if (LocalBattlePlayer.canDeployHeroes && SelectCellPhase == null && holder.CardUI.Current is IBattleCard card)
+            if (LocalBattlePlayer.canDeployHeroes && DeployCardPhase == null && holder.CardUI.Current is IBattleCard card)
             {
                 _ = DeployPlayerCard(card);
             }
-        }
-
-        protected override void OnCardDrop(IBattleCard card, DragResult<IBattleCard> result)
-        {
-            if (SelectCellPhase != null && card == SelectCellPhase.card)
-            {
-                if (result is { Target: RuntimeBattleCell runtimeBattleCell })
-                    SelectCellPhase.SetResult(runtimeBattleCell.BattleCell);
-                else
-                    SelectCellPhase.SetResult(null);
-            }
-
-            base.OnCardDrop(card, result);
         }
 
         private async Awaitable DeployPlayerCard(IBattleCard card)
         {
             try
             {
-                SelectCellPhase = new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
+                DeployCardPhase = new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
 
-                PhaseResult<BattleCell> phaseResult = await SelectCellPhase.Run();
+                PhaseResult<BattleCell> phaseResult = await DeployCardPhase.Run();
 
                 if (phaseResult is { type: PhaseResultType.Success, value: not null })
                 {
@@ -203,7 +190,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             }
             finally
             {
-                SelectCellPhase = null;
+                DeployCardPhase = null;
             }
         }
 

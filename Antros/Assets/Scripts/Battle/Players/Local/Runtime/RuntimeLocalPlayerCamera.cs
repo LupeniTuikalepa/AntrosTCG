@@ -79,8 +79,6 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
         private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.PlayerInputUser;
 
-        private bool isManualMode = true;
-
         public Camera OutputCamera => renderCamera.OutputCamera;
 
         protected override void Awake()

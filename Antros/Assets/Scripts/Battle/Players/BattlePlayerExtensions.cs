@@ -1,4 +1,4 @@
-﻿using ATCG.Battle.Metrics;
+﻿using ATCG.Metrics;
 using UnityEngine;
 
 namespace ATCG.Battle.Players
@@ -7,6 +7,6 @@ namespace ATCG.Battle.Players
     {
         public static string GetPlayerName(this IBattlePlayer player) => player.Profile.Infos.name;
         public static Color GetPlayerColor(this IBattlePlayer player) =>
-            GameplayMetrics.Current.GetPlayerColor(player.Profile.ID, player.BattlePhase.PlayerCount);
+            GameMetrics.Current.GetPlayerColor(player.Profile.ID, player.BattlePhase.PlayerCount);
     }
 }

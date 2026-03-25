@@ -2,10 +2,10 @@
 using ATCG.Battle.Actions;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Metrics;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Cards;
 using ATCG.HexGrids;
+using ATCG.Metrics;
 using Helteix.Cards.Collections;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.Tools.Phases;
@@ -30,9 +30,9 @@ namespace ATCG.Battle.Players
         public Deck<IBattleCard> Deck { get; private set; }
         public DefaultCardCollection<IBattleCard> DeadCards { get; private set; }
         public int CurrentHealth { get; private set; }
-        public int MaxHealth => GameplayMetrics.Current.MaxHealth;
+        public int MaxHealth => GameMetrics.Current.MaxHealth;
         public int CurrentMana { get; private set; }
-        public int MaxMana => GameplayMetrics.Current.MaxMana;
+        public int MaxMana => GameMetrics.Current.MaxMana;
 
         public BattlePhase BattlePhase { get; }
 
@@ -102,14 +102,14 @@ namespace ATCG.Battle.Players
 
             if (Hand.TryRemoveCard(card))
             {
-                battleGrid.DeployCard(card, coordinates);
+                //battleGrid.DeployCard(card, coordinates);
             }
         }
 
         public void FillHand()
         {
             Debug.Log($"[Player Turn] Filling {Profile.Infos.name} player's hand.");
-            int missingCards = GameplayMetrics.Current.MinPlayerHandSize - Hand.CurrentSize;
+            int missingCards = GameMetrics.Current.MinPlayerHandSize - Hand.CurrentSize;
             if (missingCards > 0)
             {
                 for (int i = 0; i < missingCards; i++)

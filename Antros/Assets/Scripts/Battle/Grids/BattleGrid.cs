@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Players.Local.Phases.Filters;
+using ATCG.Battle.Players;
+using ATCG.Cards;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using ATCG.HexGrids.Shapes;
@@ -52,10 +53,10 @@ namespace ATCG.Battle.Grids
                 OnBattleCellRemoved?.Invoke(value);
             }
         }
-
+/*
         public void DeployCard(IBattleCard card, HexCoordinates coordinates)
         {
-            if (CanDeploy(coordinates) && cards.TryAddCard(card))
+            if (CanDeploy(card.Player, coordinates) && cards.TryAddCard(card))
             {
                 card.Deploy(this, coordinates);
                 if(Grid.TryGetCell(coordinates, out HexCell cell))
@@ -78,18 +79,7 @@ namespace ATCG.Battle.Grids
                 OnBattleCardLeft?.Invoke(card);
             }
         }
-        private void OnCardMoved(HeroBattleCard card, HexCoordinates from, HexCoordinates to)
-        {
-            if (from == to)
-                return ;
-
-            if(Grid.TryGetCell(from, out HexCell cell))
-                cell.RemoveMember(null);
-
-            if (Grid.TryGetCell(to, out cell) && cell.Members == null)
-                cell.AddMember(card);
-
-        }
+        */
 
         public IEnumerable<BattleCell> GetCells(Func<BattleCell, bool> filter)
         {
@@ -101,6 +91,11 @@ namespace ATCG.Battle.Grids
         }
 
         public IEnumerable<BattleCell> GetCells() => battleCells.Values;
+
+
+        public BattleCell GetBattleCell(HexCoordinates coordinates) => TryGetBattleCell(coordinates, out BattleCell cell) ?
+            cell :
+            null;
         public bool TryGetBattleCell(HexCell hexCell, out BattleCell cell) =>
             battleCells.TryGetValue(hexCell, out cell);
 
@@ -111,33 +106,6 @@ namespace ATCG.Battle.Grids
 
             cell = null;
             return false;
-        }
-
-
-        public IEnumerable<IHexMember> GetAllMembers()
-            => Grid.GetMembers();
-
-        public bool TryGetMembers(HexCoordinates coord, out IHexMember member)
-            => Grid.TryGetHexMember(coord, out member);
-
-        public bool CanDeploy(HexCoordinates coordinates)
-        {
-            if (!TryGetBattleCell(coordinates, out BattleCell cell))
-                return false;
-
-            return cell.CanBeDeployedOn();
-        }
-
-        public bool HasMember(HexCoordinates coordinates) => Grid.HasMember(coordinates);
-        public void SearchThroughGrid(ICellFilter filter, List<HexCoordinates> results)
-        {
-            filter.Initialize(this);
-            foreach (HexCell cell in battleCells.Keys)
-            {
-                if (filter.Accepts(this, cell.coordinates))
-                    results.Add(cell.coordinates);
-            }
-            filter.Dispose(this);
         }
 
         void IDisposable.Dispose()

@@ -90,7 +90,7 @@ namespace Michsky.MUIP
                     }
 
                     GUILayout.BeginVertical(EditorStyles.helpBox);
-                    EditorGUILayout.LabelField(new GUIContent("Min / Max Value"), customSkin.FindStyle("Text"), GUILayout.Width(110));
+                    EditorGUILayout.LabelField(new GUIContent("Min / Max ID"), customSkin.FindStyle("Text"), GUILayout.Width(110));
                     GUILayout.BeginHorizontal();
                     GUILayout.Space(2);
 
@@ -99,11 +99,11 @@ namespace Michsky.MUIP
 
                     GUILayout.EndHorizontal();
                     GUILayout.Space(2);
-                    EditorGUILayout.HelpBox("You can increase the max value limit by changing 'Value Limit' in the settings tab.", MessageType.Info);
+                    EditorGUILayout.HelpBox("You can increase the max value limit by changing 'ID Limit' in the settings tab.", MessageType.Info);
                     GUILayout.EndVertical();
 
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 10);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"));
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"));
                     break;
 
                 case 1:
@@ -120,7 +120,7 @@ namespace Michsky.MUIP
 
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-                    addPrefix.boolValue = MUIPEditorHandler.DrawTogglePlain(addPrefix.boolValue, customSkin, "Add Prefix");
+                    addPrefix.boolValue = MUIPEditorHandler.DrawTogglePlain(addPrefix.boolValue, customSkin, "With Prefix");
                     GUILayout.Space(3);
 
                     if (addPrefix.boolValue == true)
@@ -129,7 +129,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-                    addSuffix.boolValue = MUIPEditorHandler.DrawTogglePlain(addSuffix.boolValue, customSkin, "Add Suffix");
+                    addSuffix.boolValue = MUIPEditorHandler.DrawTogglePlain(addSuffix.boolValue, customSkin, "With Suffix");
                     GUILayout.Space(3);
 
                     if (addSuffix.boolValue == true)
@@ -138,7 +138,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-                    EditorGUILayout.LabelField(new GUIContent("Value Limit"), customSkin.FindStyle("Text"), GUILayout.Width(80));
+                    EditorGUILayout.LabelField(new GUIContent("ID Limit"), customSkin.FindStyle("Text"), GUILayout.Width(80));
                     EditorGUILayout.PropertyField(valueLimit, new GUIContent(""));
                    
                     if (valueLimit.floatValue <= minValue.floatValue) { valueLimit.floatValue = minValue.floatValue + 1; }

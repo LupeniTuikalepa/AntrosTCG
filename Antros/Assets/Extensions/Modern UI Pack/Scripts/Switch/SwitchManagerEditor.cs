@@ -58,7 +58,7 @@ namespace Michsky.MUIP
             {
                 case 0:
                     MUIPEditorHandler.DrawHeader(customSkin, "Events Header", 6);
-                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On Value Changed"), true);
+                    EditorGUILayout.PropertyField(onValueChanged, new GUIContent("On ID Changed"), true);
                     EditorGUILayout.PropertyField(OnEvents, new GUIContent("On Events"), true);
                     EditorGUILayout.PropertyField(OffEvents, new GUIContent("Off Events"), true);
 
@@ -96,7 +96,7 @@ namespace Michsky.MUIP
                     GUILayout.EndVertical();
                     GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Space(-3);
-                    saveValue.boolValue = MUIPEditorHandler.DrawTogglePlain(saveValue.boolValue, customSkin, "Save Value");
+                    saveValue.boolValue = MUIPEditorHandler.DrawTogglePlain(saveValue.boolValue, customSkin, "Save ID");
                     GUILayout.Space(3);
 
                     if (saveValue.boolValue == true)
