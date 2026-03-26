@@ -11,8 +11,8 @@
             this.id = id;
         }
 
-        public ref T Value => ref store.GetRef(id);
+        public ref T GetValue() => ref store.GetRef(id);
 
-        public static implicit operator T(ComponentRef<T> @ref) => @ref.Value;
+        public static implicit operator T(ComponentRef<T> @ref) => @ref.GetValue();
     }
 }
