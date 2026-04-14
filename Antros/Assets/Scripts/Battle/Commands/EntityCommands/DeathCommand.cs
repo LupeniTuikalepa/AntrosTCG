@@ -11,7 +11,7 @@ namespace ATCG.Battle.Commands.EntityCommands
         {
         }
 
-        protected override void Execute(in GameCommandContext context)
+        public override void Process(in GameCommandContext context)
         {
             EntityAddress address = TargetEntityAddress(context.World);
             if (address.ToAspect(out HeroEntityAspect aspect))

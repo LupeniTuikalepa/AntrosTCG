@@ -35,14 +35,17 @@ namespace ATCG.Battle.Grids
 
             foreach (HexCoordinates coordinate in grid.CellsCoordinates)
             {
-                BattleCellAspect cellAspect = World.CreateEntity<BattleCellAspect>();
+                EntityAspectBuilder<BattleCellAspect> builder = new EntityAspectBuilder<BattleCellAspect>()
+                {
+                    new ComponentFactory<BattleCellComponent>(() => new BattleCellComponent(coordinate))
+                };
 
-                cellAspect.BattleCellComponent.coordinates = coordinate;
+                BattleCellAspect cellAspect = builder.CreateAndDispose(World);
                 battleCellsEntities.Add(coordinate, cellAspect);
             }
         }
 
-        public World World => battlePhase.World;
+        public World World => battlePhase.world;
 
         public IEnumerable<HexCoordinates> AllCellsCoordinates => battleCellsEntities.Keys;
 
@@ -98,8 +101,6 @@ namespace ATCG.Battle.Grids
                     yield return cell;
             }
         }
-
-
 
         public BattleCell GetBattleCell(HexCoordinates coordinates) => TryGetBattleCell(coordinates, out BattleCell cell) ? cell : default;
         */

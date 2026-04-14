@@ -15,7 +15,6 @@ namespace ATCG.Battle.Commands.GameCommands
     [Serializable]
     public class DeployCardCommand : GameCommand
     {
-
         [field: SerializeField]
         public int PlayerId { get; private set; }
         [field: SerializeField]
@@ -30,9 +29,9 @@ namespace ATCG.Battle.Commands.GameCommands
             PlayerId = playerId;
         }
 
-        protected override void Execute(in GameCommandContext context)
+        public override void Process(in GameCommandContext context)
         {
-            IBattlePlayer player = context.GetPlayer(PlayerId);
+            IBattlePlayer player = context.GetBattlePlayer(PlayerId);
             IBattleCard card = player.Hand.GetCard(CardId);
 
             if (card.InvocationCost > player.CurrentMana)
@@ -43,16 +42,16 @@ namespace ATCG.Battle.Commands.GameCommands
             {
                 case HeroBattleCard heroBattleCard:
 
-                    EntityAspectBuilder<HeroEntityAspect> builder = new EntityAspectBuilder<HeroEntityAspect>()
+                    using (EntityAspectBuilder<HeroEntityAspect> builder = new())
                     {
-                        new ComponentFactory<BattleCardComponent>(() => new BattleCardComponent(heroBattleCard)),
-                        new ComponentFactory<HeroComponent>(() => new HeroComponent(heroBattleCard))
-                    };
+                        builder.Add(new ComponentFactory<BattleCardComponent>(() => new BattleCardComponent(heroBattleCard)));
+                        builder.Add(new ComponentFactory<HeroComponent>(() => new HeroComponent(heroBattleCard)));
 
-                    HeroEntityAspect hero = builder.Create(context.World);
+                        HeroEntityAspect hero = builder.CreateAndDispose(context.World);
 
-                    Embed(in context, new MoveCommand(hero.ToEntity(), Destination));
-                    break;
+                        Embed(in context, new MoveCommand(hero.ToEntity(), Destination));
+                        break;
+                    }
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 
 namespace ATCG.Battle.Entities

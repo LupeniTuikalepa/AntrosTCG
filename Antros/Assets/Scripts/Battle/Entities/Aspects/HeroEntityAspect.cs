@@ -9,7 +9,7 @@ namespace ATCG.Battle.Entities.Aspects
     {
         public ref HeroComponent HeroComponent => ref EntityAddress.GetComponent<HeroComponent>();
         public ref BattleCardComponent BattleCardComponent => ref EntityAddress.GetComponent<BattleCardComponent>();
-        public ref GridMehermberComponent GridMemberComponent => ref EntityAddress.GetComponent<GridMemberComponent>();
+        public ref GridMemberComponent GridMemberComponent => ref EntityAddress.GetComponent<GridMemberComponent>();
 
         public string Name => HeroCard.Title;
         public IBattlePlayer Player => HeroCard.Player;

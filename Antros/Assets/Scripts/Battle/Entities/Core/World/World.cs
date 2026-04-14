@@ -48,7 +48,7 @@ namespace ATCG.Battle.Entities
         {
             return builder.Create(this);
         }
-        
+
         public Entity CreateEntity()
         {
             int id = nextId++;

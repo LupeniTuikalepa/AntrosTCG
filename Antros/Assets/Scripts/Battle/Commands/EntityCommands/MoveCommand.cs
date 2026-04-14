@@ -14,7 +14,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             this.destination = destination;
         }
 
-        protected override void Execute(in GameCommandContext context)
+        public override void Process(in GameCommandContext context)
         {
             if (TargetEntity.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))
             {

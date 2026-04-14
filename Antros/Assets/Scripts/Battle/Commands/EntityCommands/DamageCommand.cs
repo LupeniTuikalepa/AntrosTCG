@@ -16,7 +16,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             this.triggerDealDamageReactions = triggerDealDamageReactions;
         }
 
-        protected override void Execute(in GameCommandContext context)
+        public override void Process(in GameCommandContext context)
         {
             EntityAddress address = TargetEntityAddress(context.World);
 
@@ -25,7 +25,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
             componentHealth.AddOrRemoveHealth(-quantity);
-            if (componentHealth.currentHealth <= 0)
+            if (componentHealth.CurrentHealth <= 0)
                 Embed(context, new DeathCommand(TargetEntity));
         }
     }

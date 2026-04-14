@@ -9,20 +9,20 @@ namespace ATCG.Battle.Commands.Core
     [Serializable]
     public abstract class GameCommand : IDisposable
     {
-        public IReadOnlyList<GameCommand> SubCommands => subCommands;
+        public IReadOnlyList<GameCommand> Embeds => embeds;
 
         [field: SerializeReference]
         public GameCommand Parent { get; private set; }
-        
+
         [ShowInInspector]
-        private List<GameCommand> subCommands;
+        private List<GameCommand> embeds;
 
         protected GameCommand()
         {
-            subCommands = ListPool<GameCommand>.Get();
+            embeds = ListPool<GameCommand>.Get();
         }
 
-        protected abstract void Execute(in GameCommandContext context);
+        public abstract void Process(in GameCommandContext context);
 
         public void Embed<T>(in GameCommandContext context) where T : GameCommand, new()
         {
@@ -31,14 +31,16 @@ namespace ATCG.Battle.Commands.Core
 
         public void Embed<T>(in GameCommandContext context, T command) where T : GameCommand
         {
-            subCommands.Add(command);
+            context.Register(command);
+
+            embeds.Add(command);
             command.Parent = this;
-            command.Execute(in context);
+            command.Process(in context);
         }
 
         public IEnumerable<GameCommand> GetChildren()
         {
-            foreach (GameCommand command in subCommands)
+            foreach (GameCommand command in embeds)
             {
                 yield return command;
 
@@ -99,8 +101,8 @@ namespace ATCG.Battle.Commands.Core
         void IDisposable.Dispose()
         {
             OnDispose();
-            ListPool<GameCommand>.Release(subCommands);
-            foreach (GameCommand subEvent in subCommands)
+            ListPool<GameCommand>.Release(embeds);
+            foreach (GameCommand subEvent in embeds)
                 ((IDisposable)subEvent).Dispose();
 
         }

@@ -19,12 +19,25 @@ namespace ATCG.Battle.Entities
 
         void IDisposable.Dispose()
         {
+            Dispose();
+        }
+
+        private void Dispose()
+        {
             DictionaryPool<int, IComponentFactory>.Release(factories);
         }
 
         public void Add<TComponent>(ComponentFactory<TComponent> factory) where TComponent : struct, IEntityComponent
             => factories[factory.ComponentID] = factory;
 
+        public T CreateAndDispose(World world)
+        {
+            T  aspect = Create(world);
+            Dispose();
+
+            return aspect;
+        }
+        
         public T Create(World world)
         {
             EntityAddress address = new EntityAddress(world, world.CreateEntity());
@@ -35,7 +48,7 @@ namespace ATCG.Battle.Entities
 
             ComponentMask mask = aspect.ComponentMask;
             world.EnsureStores(mask);
-            
+
             foreach (int id in mask)
             {
                 if (factories.TryGetValue(id, out IComponentFactory factory))

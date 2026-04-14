@@ -1,6 +1,7 @@
 ﻿using System;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Cards.UI;
+using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
@@ -169,9 +170,14 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         {
             try
             {
-                DeployCardPhase =
-                    new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
+                int id = LocalBattlePlayer.Hand.GetCardIndex(card);
+                if(id == -1)
+                    return;
+
+                DeployCardPhase = new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
                 PhaseResult<HexCoordinates> phaseResult = await DeployCardPhase.Run();
+
+                DeployCardCommand deployCardCommand = new DeployCardCommand(id, phaseResult.value, LocalBattlePlayer.ID);
 
                 /*
                 if (phaseResult is { type: PhaseResultType.Success, value: { IsValid: true } })

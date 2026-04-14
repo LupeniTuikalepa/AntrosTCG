@@ -20,38 +20,33 @@ namespace ATCG.Battle.GameModes
 {
     public class BattlePhase : IPhase<BattleHistory>
     {
-        public readonly IBattlePlayerProfile[] playerProfiles;
-        public readonly int seed;
-
-        public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
-        {
-            World = new World(maxComponentStores: 128, maxEntities: 128);
-            CommandManager = new GameCommandManager(this);
-
-            this.seed = seed;
-            this.playerProfiles = playerProfiles;
-        }
-
         public uint CellRadius => GameMetrics.Current.CellRadius;
         public uint GridRadius => GameMetrics.Current.GridRadius;
-
-        public BattleGrid BattleGrid { get; private set; }
-
-        public IBattlePlayer[] Players { get; private set; }
-
-        public int Round { get; private set; }
-        public int Turn { get; private set; }
-
-        public int CurrentPlayerID { get; private set; }
-
-        public IBattlePlayer CurrentPlayer { get; private set; }
 
         public HexGrid HexGrid => BattleGrid.grid;
         public int PlayerCount => playerProfiles.Length;
 
-        public World World { get; }
+        public BattleGrid BattleGrid { get; private set; }
+        public IBattlePlayer[] Players { get; private set; }
+        public IBattlePlayer CurrentPlayer { get; private set; }
+        public int CurrentPlayerID => CurrentPlayer.Profile.ID;
 
-        public GameCommandManager CommandManager { get; }
+        public int Round { get; private set; }
+        public int Turn { get; private set; }
+
+        public readonly IBattlePlayerProfile[] playerProfiles;
+        public readonly GameCommandManager commandManager;
+        public readonly World world;
+        public readonly int seed;
+
+        public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
+        {
+            world = new World(maxComponentStores: 128, maxEntities: 128);
+            commandManager = new GameCommandManager(this);
+
+            this.seed = seed;
+            this.playerProfiles = playerProfiles;
+        }
 
         async Awaitable IPhase<BattleHistory>.Initialize(CancellationToken token)
         {

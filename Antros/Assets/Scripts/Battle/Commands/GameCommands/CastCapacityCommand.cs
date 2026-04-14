@@ -24,7 +24,7 @@ namespace ATCG.Battle.Commands.GameCommands
 
             public BattleGrid Grid => gameCommandContext.Grid;
 
-            public World World => gameCommandContext.battlePhase.World;
+            public World World => gameCommandContext.battlePhase.world;
 
             public Context(CastCapacityCommand evt, Capacity capacity,
                 GameCommandContext gameCommandContext)
@@ -53,7 +53,7 @@ namespace ATCG.Battle.Commands.GameCommands
             this.capacity = capacity;
         }
 
-        protected override void Execute(in GameCommandContext gameCommandContext)
+        public override void Process(in GameCommandContext gameCommandContext)
         {
             Context context = new(this, capacity, gameCommandContext);
 
