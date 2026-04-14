@@ -140,7 +140,7 @@ namespace Michsky.MUIP
                         GUILayout.EndHorizontal();
                     }
 
-                    setHighPriority.boolValue = MUIPEditorHandler.DrawToggle(setHighPriority.boolValue, customSkin, "Set High Priority");
+                    setHighPriority.boolValue = MUIPEditorHandler.DrawToggle(setHighPriority.boolValue, customSkin, "Add High Priority");
                     outOnPointerExit.boolValue = MUIPEditorHandler.DrawToggle(outOnPointerExit.boolValue, customSkin, "Out On Pointer Exit");
                    
                     GUILayout.BeginVertical(EditorStyles.helpBox);

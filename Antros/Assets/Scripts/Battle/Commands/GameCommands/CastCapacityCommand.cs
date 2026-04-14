@@ -1,0 +1,132 @@
+﻿using System;
+using System.Collections.Generic;
+using ATCG.Battle.Cards.Capacities;
+using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
+using ATCG.Battle.Cards.Capacities.Behaviours.Patterns;
+using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Grids;
+using ATCG.Capacities;
+using ATCG.Capacities.Data;
+using UnityEngine.Pool;
+
+namespace ATCG.Battle.Commands.GameCommands
+{
+    public sealed class CastCapacityCommand : GameCommand
+    {
+        public readonly struct Context
+        {
+            public readonly CastCapacityCommand evt;
+            public readonly GameCommandContext gameCommandContext;
+            public readonly Capacity capacity;
+
+            public BattleGrid Grid => gameCommandContext.Grid;
+
+            public World World => gameCommandContext.battlePhase.World;
+
+            public Context(CastCapacityCommand evt, Capacity capacity,
+                GameCommandContext gameCommandContext)
+            {
+                this.evt = evt;
+                this.capacity = capacity;
+                this.gameCommandContext = gameCommandContext;
+            }
+
+            /// <summary>
+            ///     Shortcut to embed a command to the main cast capacity command.
+            /// </summary>
+            /// <param name="command"></param>
+            /// <typeparam name="T"></typeparam>
+            /// <returns></returns>
+            public void EmbedCommand<T>(T command) where T : GameCommand
+            {
+                evt.Embed(in gameCommandContext, command);
+            }
+        }
+
+        private readonly Capacity capacity;
+
+        public CastCapacityCommand(in Capacity capacity)
+        {
+            this.capacity = capacity;
+        }
+
+        protected override void Execute(in GameCommandContext gameCommandContext)
+        {
+            Context context = new(this, capacity, gameCommandContext);
+
+            using (HashSetPool<BattleCellAspect>.Get(out HashSet<BattleCellAspect> targetedCells))
+            {
+                FillTargetedCells(targetedCells, in context);
+                HitCells(targetedCells, in context);
+            }
+        }
+
+        private void FillTargetedCells(HashSet<BattleCellAspect> targetedCells, in Context context)
+        {
+            ICapacityCastPatternData[] firePatternsData = capacity.data.FirePatterns;
+            for (int i = 0; i < firePatternsData.Length; i++)
+            {
+                ICapacityCastPatternData firePatternData = firePatternsData[i];
+                if (CapacityManager.TryGetFor(firePatternData, out ICapacityCastPattern castPattern))
+                    castPattern.FillTargetedCells(firePatternData, in capacity, targetedCells);
+            }
+        }
+
+        private void HitCells(IEnumerable<BattleCellAspect> targetedCells, in Context context)
+        {
+            using IDisposable disposable = FillMapping(out Dictionary<IEffectData, ICapacityEffect> mapping);
+            CapacityData capacityData = capacity.data;
+
+            foreach (BattleCellAspect battleCell in targetedCells)
+            {
+                //apply effects
+                for (int i = 0; i < capacityData.CellsHitEffects.Length; i++)
+                {
+                    IEffectData hitData = capacityData.CellsHitEffects[i];
+                    if (mapping.TryGetValue(hitData, out ICapacityEffect hitEffect))
+                        hitEffect.Hit(hitData, battleCell.EntityAddress, in context);
+                }
+
+                foreach (ComponentRef<GridMemberComponent> member in battleCell.GetMembers())
+                {
+                    if (!member.Address.TryGetComponent<BelongsToPlayerComponent>(out var belongsToPlayer))
+                        continue;
+
+                    BelongsToPlayerComponent toPlayerComponent = belongsToPlayer.GetValue();
+
+                    IEffectData[] effects = toPlayerComponent.IsAllieOf(context.capacity.card.Player)
+                        ? capacityData.AlliesHitEffects
+                        : capacityData.OpponentsHitEffects;
+
+                    for (int i = 0; i < effects.Length; i++)
+                    {
+                        IEffectData data = effects[i];
+                        if (mapping.TryGetValue(data, out ICapacityEffect effect))
+                            effect.Hit(data, battleCell.EntityAddress, in context);
+                    }
+                }
+            }
+        }
+
+        private IDisposable FillMapping(out Dictionary<IEffectData, ICapacityEffect> hitEffectsMapping)
+        {
+            CapacityData data = capacity.data;
+            var disposable = DictionaryPool<IEffectData, ICapacityEffect>.Get(out hitEffectsMapping);
+            foreach (IEffectData hitEffectData in data.AlliesHitEffects)
+                if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
+                    hitEffectsMapping[hitEffectData] = hitEffect;
+            foreach (IEffectData hitEffectData in data.OpponentsHitEffects)
+                if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
+                    hitEffectsMapping[hitEffectData] = hitEffect;
+            foreach (IEffectData hitEffectData in data.CellsHitEffects)
+                if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
+                    hitEffectsMapping[hitEffectData] = hitEffect;
+
+            return disposable;
+        }
+
+    }
+}

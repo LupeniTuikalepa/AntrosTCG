@@ -6,72 +6,57 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
-namespace ATCG.Battle.Players.Local.CameraControls
+namespace ATCG.Battle.Players.Local.Runtime
 {
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player Camera")]
     public class RuntimeLocalPlayerCamera : RuntimeLocalPlayerComponent
     {
-        [Serializable]
-        public struct CinemachineOutputChannels
-        {
-            [field: SerializeField]
-            public int PlayerID { get; private set; }
-
-            [field: SerializeField]
-            public OutputChannels Channels { get; private set; }
-        }
-
-        [BoxGroup("Setup")]
-        [SerializeField, Range(0, 10)]
+        [BoxGroup("Setup"), SerializeField, Range(0, 10)]
         private float boundsExpansion;
 
-        [BoxGroup("Movements")]
-        [SerializeField, Min(0)]
+        [BoxGroup("Movements"), SerializeField, Min(0)]
         private float accelerationSpeed = 5;
-        [BoxGroup("Movements")]
-        [SerializeField, Min(0)]
+
+        [BoxGroup("Movements"), SerializeField, Min(0)]
         private float decelerationSpeed = 2;
-        [BoxGroup("Movements")]
-        [SerializeField, Min(0)]
+
+        [BoxGroup("Movements"), SerializeField, Min(0)]
         private float maxSpeed = 15;
 
-        [BoxGroup("Zoom")]
-        [SerializeField, MinMaxSlider(0, 100)]
+        [BoxGroup("Zoom"), SerializeField, MinMaxSlider(0, 100)]
         private Vector2 minMaxZoom;
-        [BoxGroup("Zoom")]
-        [SerializeField]
+
+        [BoxGroup("Zoom"), SerializeField]
         private float maxZoomSpeed = 10;
-        [BoxGroup("Zoom")]
-        [SerializeField]
+
+        [BoxGroup("Zoom"), SerializeField]
         private float zoomAcceleration;
-        [BoxGroup("Zoom")]
-        [SerializeField]
+
+        [BoxGroup("Zoom"), SerializeField]
         private float zoomDeceleration;
 
-        [BoxGroup("Cinemachine")]
-        [SerializeField]
+        [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineBrain renderCamera;
 
-        [BoxGroup("Cinemachine")]
-        [SerializeField]
+        [BoxGroup("Cinemachine"), SerializeField]
         private BoxCollider2D confiner;
 
-        [BoxGroup("Cinemachine")]
-        [SerializeField, ListDrawerSettings(ShowFoldout = false)]
+        [BoxGroup("Cinemachine"), SerializeField, ListDrawerSettings(ShowFoldout = false)]
         private CinemachineCamera cinemachineCamera;
 
-        [BoxGroup("Cinemachine")]
-        [SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
+        [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true),
+         ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
 
-        private Vector3 lastSpeed;
+        [SerializeField]
+        private Transform moveTarget;
+
         private float currentZoomSpeed;
 
         [ShowInInspector, HideInEditorMode, ReadOnly]
         private RuntimeBattleGrid grid;
 
-        [SerializeField]
-        private Transform moveTarget;
+        private Vector3 lastSpeed;
 
         private InputAction PanAction => RuntimeLocalPlayer.Controls.Pan;
         private InputAction MoveAction => RuntimeLocalPlayer.Controls.Move;
@@ -104,9 +89,10 @@ namespace ATCG.Battle.Players.Local.CameraControls
                 lastSpeed = Vector2.zero;
 
                 CinemachineBrain brain = CinemachineCore.FindPotentialTargetBrain(cinemachineCamera);
-                Plane plane = new Plane(brain.transform.forward, cinemachineCamera.transform.position);
+                Plane plane = new(brain.transform.forward, cinemachineCamera.transform.position);
 
-                cinemachineCamera.Target.TrackingTarget.transform.position = plane.ClosestPointOnPlane(brain.transform.position);
+                cinemachineCamera.Target.TrackingTarget.transform.position =
+                    plane.ClosestPointOnPlane(brain.transform.position);
             }
         }
 
@@ -133,8 +119,8 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
             lastSpeed = (nextPosition - currentPosition) / Time.deltaTime;
 
-            Bounds bounds = new Bounds(Vector3.zero, Vector3.one);
-            foreach (var r in grid.BattleCells)
+            Bounds bounds = new(Vector3.zero, Vector3.one);
+            foreach (RuntimeBattleCell r in grid.BattleCells)
                 bounds.Encapsulate(r.SpriteRenderer.bounds);
 
             bounds.Expand(boundsExpansion);
@@ -142,10 +128,10 @@ namespace ATCG.Battle.Players.Local.CameraControls
             confiner.transform.position = bounds.center;
             confiner.size = bounds.size;
 
-            if(!bounds.Contains(nextPosition))
+            if (!bounds.Contains(nextPosition))
                 nextPosition = bounds.ClosestPoint(nextPosition);
 
-            moveableTarget.position = new Vector3()
+            moveableTarget.position = new Vector3
             {
                 x = nextPosition.x,
                 y = nextPosition.y,
@@ -163,9 +149,9 @@ namespace ATCG.Battle.Players.Local.CameraControls
             else
                 targetZoomSpeed += zoomInput * zoomAcceleration * Time.deltaTime;
 
-            if(targetZoomSpeed > maxZoomSpeed)
+            if (targetZoomSpeed > maxZoomSpeed)
                 targetZoomSpeed = maxZoomSpeed;
-            if(targetZoomSpeed < -maxZoomSpeed)
+            if (targetZoomSpeed < -maxZoomSpeed)
                 targetZoomSpeed = -maxZoomSpeed;
 
             float currentZoom = cinemachineCamera.Lens.OrthographicSize;
@@ -185,13 +171,11 @@ namespace ATCG.Battle.Players.Local.CameraControls
         {
             OutputChannels outputChannels = OutputChannels.Channel01;
             for (int i = 0; i < channels.Length; i++)
-            {
                 if (channels[i].PlayerID == Player.Profile.ID)
                 {
                     outputChannels = channels[i].Channels;
                     break;
                 }
-            }
 
             cinemachineCamera.OutputChannel = outputChannels;
             return outputChannels;
@@ -205,7 +189,16 @@ namespace ATCG.Battle.Players.Local.CameraControls
 
         public void SetMovementInput(InputAction.CallbackContext context)
         {
+        }
 
+        [Serializable]
+        public struct CinemachineOutputChannels
+        {
+            [field: SerializeField]
+            public int PlayerID { get; private set; }
+
+            [field: SerializeField]
+            public OutputChannels Channels { get; private set; }
         }
     }
 }

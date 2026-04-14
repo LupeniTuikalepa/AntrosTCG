@@ -6,14 +6,9 @@ using UnityEngine;
 
 namespace ATCG.Battle.Cards.UI
 {
-
     [AddComponentMenu("ATCG/Gameplay/Cards/Battle Hand")]
     public class BattleHandUI : PhysicalCardCollectionUI<IBattleCard>, IRuntimeBattlePlayerComponent<IBattlePlayer>
     {
-        protected override bool CanCardBeDragged(ICard card) => false;
-
-        protected override bool CanCardBeClicked(ICard card) => false;
-
         public IBattlePlayer Player { get; private set; }
 
         public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
@@ -26,6 +21,16 @@ namespace ATCG.Battle.Cards.UI
         {
             Disconnect();
             Player = null;
+        }
+
+        protected override bool CanCardBeDragged(ICard card)
+        {
+            return false;
+        }
+
+        protected override bool CanCardBeClicked(ICard card)
+        {
+            return false;
         }
     }
 }

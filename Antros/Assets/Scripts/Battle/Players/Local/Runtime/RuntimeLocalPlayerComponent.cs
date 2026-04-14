@@ -1,7 +1,7 @@
 ﻿using ATCG.Battle.Players.Runtime;
 using UnityEngine;
 
-namespace ATCG.Battle.Players.Local
+namespace ATCG.Battle.Players.Local.Runtime
 {
     public abstract class RuntimeLocalPlayerComponent : MonoBehaviour, IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
@@ -14,10 +14,6 @@ namespace ATCG.Battle.Players.Local
             RuntimeLocalPlayer = GetComponentInParent<RuntimeLocalBattlePlayer>();
         }
 
-
-        protected abstract void Connect(LocalBattlePlayer player);
-        protected abstract void Disconnect(LocalBattlePlayer player);
-
         public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
@@ -29,11 +25,16 @@ namespace ATCG.Battle.Players.Local
 
         public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer battlePlayer)
         {
-            if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer && runtimeLocalBattlePlayer == RuntimeLocalPlayer)
+            if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer &&
+                runtimeLocalBattlePlayer == RuntimeLocalPlayer)
             {
                 Disconnect(battlePlayer);
                 RuntimeLocalPlayer = null;
             }
         }
+
+
+        protected abstract void Connect(LocalBattlePlayer player);
+        protected abstract void Disconnect(LocalBattlePlayer player);
     }
 }

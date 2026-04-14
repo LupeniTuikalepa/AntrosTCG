@@ -1,26 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using ATCG.Battle.Players.Runtime;
-using ATCG.Cards;
-using ATCG.Players;
+﻿using System.Collections.Generic;
+using ATCG.Battle.GameModes;
 using Helteix.Tools;
-using Helteix.Tools.Phases;
 using Helteix.Tools.Phases.Listeners;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
-using Random = UnityEngine.Random;
 
-namespace ATCG.Battle.Players
+namespace ATCG.Battle.Players.Runtime
 {
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/PlayerManager")]
     public class RuntimeBattlePlayerManager : MonoPhaseListener<BattlePhase>
     {
-        [Header("References")]
-        [SerializeField, ChildGameObjectsOnly]
+        [Header("References"), SerializeField, ChildGameObjectsOnly]
         private Transform container;
+
         [SerializeReference]
         private IRuntimePlayerFactory[] factories;
 
@@ -44,7 +36,7 @@ namespace ATCG.Battle.Players
                 IBattlePlayer player = phase.Players[i];
                 for (int j = 0; j < factories.Length; j++)
                 {
-                    var factory = factories[j];
+                    IRuntimePlayerFactory factory = factories[j];
                     if (factory.TryCreateRuntimeFor(player, out RuntimeBattlePlayer runtimeBattlePlayer))
                     {
                         runtimeBattlePlayers.Add(player, runtimeBattlePlayer);

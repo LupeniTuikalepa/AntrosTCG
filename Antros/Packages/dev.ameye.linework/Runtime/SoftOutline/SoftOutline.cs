@@ -25,15 +25,21 @@ namespace Linework.SoftOutline
         {
             private SoftOutlineSettings settings;
             private Material mask, silhouetteBase, silhouetteInstancedBase, blur, composite;
+#if UNITY_6000_0_OR_NEWER
+#else
             private readonly ProfilingSampler maskSampler, silhouetteSampler, blurSampler, outlineSampler;
+#endif
             
             public SoftOutlinePass()
             {
                 profilingSampler = new ProfilingSampler(nameof(SoftOutlinePass));
+#if UNITY_6000_0_OR_NEWER
+#else
                 maskSampler = new ProfilingSampler(ShaderPassName.Mask);
                 silhouetteSampler = new ProfilingSampler(ShaderPassName.Silhouette);
                 blurSampler = new ProfilingSampler(ShaderPassName.Blur);
                 outlineSampler = new ProfilingSampler(ShaderPassName.Outline);
+#endif
             }
             
             public bool Setup(ref SoftOutlineSettings softOutlineSettings, ref Material maskMaterial, ref Material silhouetteMaterial, ref Material silhouetteInstancedMaterial, ref Material blurMaterial, ref Material compositeMaterial)
@@ -169,14 +175,13 @@ namespace Linework.SoftOutline
 #if UNITY_6000_0_OR_NEWER
             private class PassData
             {
-                internal readonly List<RendererListHandle> MaskRendererListHandles = new();
-                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> SilhouetteRendererListHandles = new();
+                internal readonly List<RendererListHandle> maskRendererListHandles = new();
+                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> silhouetteRendererListHandles = new();
             }
             
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
             {
                 var resourceData = frameData.Get<UniversalResourceData>();
-                var cameraData = frameData.Get<UniversalCameraData>();
 
                 // Ensure that the render pass doesn't blit from the back buffer.
                 if (resourceData.isActiveTargetBackBuffer) return;
@@ -192,7 +197,7 @@ namespace Linework.SoftOutline
                     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
                     InitMaskRendererLists(renderGraph, frameData, ref passData);
-                    foreach (var rendererListHandle in passData.MaskRendererListHandles)
+                    foreach (var rendererListHandle in passData.maskRendererListHandles)
                     {
                         builder.UseRendererList(rendererListHandle);
                     }
@@ -201,7 +206,7 @@ namespace Linework.SoftOutline
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                     {
-                        foreach (var handle in data.MaskRendererListHandles)
+                        foreach (var handle in data.maskRendererListHandles)
                         {
                             context.cmd.DrawRendererList(handle);
                         }
@@ -218,7 +223,7 @@ namespace Linework.SoftOutline
                     builder.SetGlobalTextureAfterPass(silhouetteHandle, ShaderPropertyId.SilhouetteBuffer);
                     
                     InitSilhouetteRendererLists(renderGraph, frameData, ref passData);
-                    foreach (var rendererListHandle in passData.SilhouetteRendererListHandles)
+                    foreach (var rendererListHandle in passData.silhouetteRendererListHandles)
                     {
                         builder.UseRendererList(rendererListHandle.handle);
                     }
@@ -228,7 +233,7 @@ namespace Linework.SoftOutline
                 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                     {
-                        foreach (var handle in data.SilhouetteRendererListHandles)
+                        foreach (var handle in data.silhouetteRendererListHandles)
                         {
                             if (handle.vertexAnimated)
                             {
@@ -304,7 +309,7 @@ namespace Linework.SoftOutline
 
             private void InitMaskRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.MaskRendererListHandles.Clear();
+                passData.maskRendererListHandles.Clear();
                 
                 var renderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -354,13 +359,13 @@ namespace Linework.SoftOutline
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.MaskRendererListHandles.Add(handle);
+                    passData.maskRendererListHandles.Add(handle);
                 }
             }
 
             private void InitSilhouetteRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.SilhouetteRendererListHandles.Clear();
+                passData.silhouetteRendererListHandles.Clear();
 
                 var renderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -382,7 +387,7 @@ namespace Linework.SoftOutline
                     {
                         drawingSettings.overrideMaterial = outline.gpuInstancing ? outline.materialInstanced : outline.material;
                         drawingSettings.overrideMaterialPassIndex = ShaderPass.Silhouette;
-                        drawingSettings.enableInstancing = outline.gpuInstancing;;
+                        drawingSettings.enableInstancing = outline.gpuInstancing;
                     }
                     
                     var renderQueueRange = outline.renderQueue switch
@@ -434,7 +439,7 @@ namespace Linework.SoftOutline
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.SilhouetteRendererListHandles.Add((handle, outline.vertexAnimation));
+                    passData.silhouetteRendererListHandles.Add((handle, outline.vertexAnimation));
                     
                     i++;
                 }
@@ -465,7 +470,7 @@ namespace Linework.SoftOutline
                 descriptor.name = Buffer.Blur;
                 blurHandle = renderGraph.CreateTexture(descriptor);
             }
-#endif
+#else
             private RTHandle cameraDepthRTHandle, silhouetteRTHandle, blurRTHandle;
             private RTHandle[] handles;
             
@@ -729,13 +734,17 @@ namespace Linework.SoftOutline
 
                 cameraDepthRTHandle = null;
             }
+#endif
             
             public void Dispose()
             {
                 settings = null; // de-reference settings to allow them to be freed from memory
                 
+#if UNITY_6000_0_OR_NEWER
+#else
                 silhouetteRTHandle?.Release();
                 blurRTHandle?.Release();
+#endif
             }
         }
 
@@ -789,6 +798,8 @@ namespace Linework.SoftOutline
             if (render) renderer.EnqueuePass(softOutlinePass);
         }
         
+#if UNITY_6000_0_OR_NEWER
+#else
         #pragma warning disable 618, 672
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
@@ -799,11 +810,12 @@ namespace Linework.SoftOutline
             softOutlinePass.SetTarget(renderer.cameraDepthTargetHandle);
         }
         #pragma warning restore 618, 672
+#endif
 
         /// <summary>
         /// Clean up resources allocated to the Scriptable Renderer Feature such as materials.
         /// </summary>
-        override protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             softOutlinePass?.Dispose();
             softOutlinePass = null;

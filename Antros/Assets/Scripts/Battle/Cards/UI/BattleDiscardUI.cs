@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace ATCG.Battle.Cards.UI
 {
-
     [AddComponentMenu("ATCG/Gameplay/Cards/Battle Discard")]
     public class BattleDiscardUI : CardCollectionUI<IBattleCard>
     {

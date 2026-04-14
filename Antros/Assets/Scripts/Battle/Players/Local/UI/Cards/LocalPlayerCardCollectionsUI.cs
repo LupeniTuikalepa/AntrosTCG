@@ -1,14 +1,14 @@
 ﻿using ATCG.Battle.Cards.UI;
-using ATCG.Battle.Players.Runtime.UI;
 using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.UI.Cards
 {
-    [AddComponentMenu("ATCG/Gameplay/Player/UI/Player Card Collection ")]
+    [AddComponentMenu("ATCG/Gameplay/Player/UI/Player HeroCard Collection ")]
     public class LocalPlayerCardCollectionsUI : PlayerHUDElement
     {
         [SerializeField]
         private BattleDeckUI deckUI;
+
         [SerializeField]
         private BattleDiscardUI discardUI;
 

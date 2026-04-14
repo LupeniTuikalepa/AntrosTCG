@@ -1,6 +1,6 @@
 ﻿using ATCG.Metrics;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI.Buttons
 {
     public class BasicAttackButtonUI : HeroButtonUI
     {
@@ -9,6 +9,9 @@ namespace ATCG.Battle.Heroes.Deployed
             return GameMetrics.Current.BasicAttackCost;
         }
 
-        public override void OnClick() => _ = RuntimeHero.DoBasicAttack();
+        public override void OnClick()
+        {
+            _ = RuntimeHero.DoBasicAttack();
+        }
     }
 }

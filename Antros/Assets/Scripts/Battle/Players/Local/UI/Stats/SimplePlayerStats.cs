@@ -1,15 +1,18 @@
-﻿using TMPro;
+﻿using ATCG.Battle.Players.UI;
+using TMPro;
 using UnityEngine;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.Local.UI.Stats
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/SimplePlayerStats")]
     public class SimplePlayerStats : MonoBehaviour
     {
         [SerializeField]
         private PlayerHealthBar healthBar;
+
         [SerializeField]
         private PlayerManaBar manaBar;
+
         [SerializeField]
         private TMP_Text playerName;
 

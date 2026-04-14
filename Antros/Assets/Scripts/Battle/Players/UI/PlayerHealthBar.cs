@@ -1,10 +1,7 @@
 ﻿using ATCG.UI;
-using PrimeTween;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.UI
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerHealthBar")]
     public class PlayerHealthBar : BarUI, IPlayerStatUI

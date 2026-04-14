@@ -1,20 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using ATCG.Battle.Grids;
 using ATCG.HexGrids;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
-using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public class SelectCellPhase : PhaseCompletionSource<BattleCell>
+    public class SelectCellPhase : PhaseCompletionSource<HexCoordinates>
     {
         private const string SELECT_CELL_PHASE_NAME = nameof(SelectCellPhase);
-
-        public ChannelKey MainChannelKey { get; }
-        public ChannelKey SecondaryChannelKey { get; }
-        public LocalBattlePlayer Player { get;  }
 
         public readonly BattleGrid battleGrid;
 
@@ -28,17 +22,29 @@ namespace ATCG.Battle.Players.Local.Phases
 
             MainChannelKey = ChannelKey.GetUniqueChannelKey($"{SELECT_CELL_PHASE_NAME}_Main");
             SecondaryChannelKey = ChannelKey.GetUniqueChannelKey($"{SELECT_CELL_PHASE_NAME}_Secondary");
-
         }
-        public bool IsCoordValid(HexCoordinates coord) => choices.Contains(coord);
+
+        public ChannelKey MainChannelKey { get; }
+        public ChannelKey SecondaryChannelKey { get; }
+        public LocalBattlePlayer Player { get; }
+
+        public bool IsCoordValid(HexCoordinates coord)
+        {
+            return choices.Contains(coord);
+        }
+
+
+        public override void SetResult(in HexCoordinates value)
+        {
+            base.SetResult(in value);
+        }
 
         public void SetResult(HexCoordinates coord)
         {
-            if(IsCoordValid(coord))
+            if (IsCoordValid(coord))
                 return;
 
-            if(battleGrid.TryGetBattleCell(coord, out var cell))
-                SetResult(cell);
+            SetResult(coord);
         }
     }
 }

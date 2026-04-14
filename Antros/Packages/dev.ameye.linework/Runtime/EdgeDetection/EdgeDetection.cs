@@ -24,13 +24,19 @@ namespace Linework.EdgeDetection
         {
             private EdgeDetectionSettings settings;
             private Material section, mask, outline;
+#if UNITY_6000_0_OR_NEWER
+#else
             private readonly ProfilingSampler sectionSampler, outlineSampler;
+#endif
 
             public EdgeDetectionPass()
             {
                 profilingSampler = new ProfilingSampler(nameof(EdgeDetectionPass));
+#if UNITY_6000_0_OR_NEWER
+#else
                 sectionSampler = new ProfilingSampler(ShaderPassName.Section);
                 outlineSampler = new ProfilingSampler(ShaderPassName.Outline);
+#endif
             }
 
             public bool Setup(ref EdgeDetectionSettings edgeDetectionSettings, ref Material sectionMaterial, ref Material sectionMaskMaterial, ref Material outlineMaterial)
@@ -316,13 +322,32 @@ namespace Linework.EdgeDetection
 
                 return true;
             }
+            
+            private static GraphicsFormat GetSectionBufferFormat(SectionMapPrecision precision, bool multicolor)
+            {
+                switch (precision)
+                {
+                    case SectionMapPrecision.Bits8:
+                        return multicolor ? GraphicsFormat.R8G8B8A8_UNorm : GraphicsFormat.R8_UNorm;
+                    case SectionMapPrecision.Bits16:
+#if UNITY_2023_2_OR_NEWER
+                        // WebGPU does not support R16_UNorm.
+                        return SystemInfo.graphicsDeviceType == GraphicsDeviceType.WebGPU ? multicolor ? GraphicsFormat.R32G32B32A32_SFloat : GraphicsFormat.R32_SFloat :
+                            multicolor ? GraphicsFormat.R16G16B16A16_UNorm : GraphicsFormat.R16_UNorm;
+#else
+                        return multicolor ? GraphicsFormat.R16G16B16A16_UNorm : GraphicsFormat.R16_UNorm;
+#endif
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
 
 #if UNITY_6000_0_OR_NEWER
             private class PassData
             {
-                internal RendererListHandle SectionRendererListHandle;
-                internal RendererListHandle SectionMaskRendererListHandle;
-                internal List<RendererListHandle> AdditionalSectionRendererListHandles = new();
+                internal RendererListHandle sectionRendererListHandle;
+                internal RendererListHandle sectionMaskRendererListHandle;
+                internal readonly List<RendererListHandle> additionalSectionRendererListHandles = new();
             }
 
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -344,18 +369,18 @@ namespace Linework.EdgeDetection
                         builder.SetGlobalTextureAfterPass(sectionHandle, ShaderPropertyId.CameraSectioningTexture);
 
                         InitSectionRendererList(renderGraph, frameData, ref passData);
-                        builder.UseRendererList(passData.SectionRendererListHandle);
+                        builder.UseRendererList(passData.sectionRendererListHandle);
                         if (settings.SectionMaskRenderingLayer != 0 && settings.maskInfluence != MaskInfluence.Nothing)
                         {
-                            builder.UseRendererList(passData.SectionMaskRendererListHandle);
+                            builder.UseRendererList(passData.sectionMaskRendererListHandle);
                         }
-                        foreach (var handle in passData.AdditionalSectionRendererListHandles)
+                        foreach (var handle in passData.additionalSectionRendererListHandles)
                         {
                             builder.UseRendererList(handle);
                         }
 
                         var setSectionPassKeyword = settings.sectionMapInput == SectionMapInput.Custom
-                                                    || passData.AdditionalSectionRendererListHandles.Count > 0;
+                                                    || passData.additionalSectionRendererListHandles.Count > 0;
                         if (setSectionPassKeyword) builder.AllowGlobalStateModification(true);
 
                         builder.AllowPassCulling(false);
@@ -370,18 +395,18 @@ namespace Linework.EdgeDetection
                             }
 
                             // Section pass.
-                            context.cmd.DrawRendererList(data.SectionRendererListHandle);
+                            context.cmd.DrawRendererList(data.sectionRendererListHandle);
 
                             // Section mask pass.
                             // NOTE: The section mask can only be used to mask out other discontinuities if sectioning itself is not used as an input.
                             if (!settings.discontinuityInput.HasFlag(DiscontinuityInput.Sections) && settings.SectionMaskRenderingLayer != 0 &&
                                 settings.maskInfluence != MaskInfluence.Nothing)
                             {
-                                context.cmd.DrawRendererList(data.SectionMaskRendererListHandle);
+                                context.cmd.DrawRendererList(data.sectionMaskRendererListHandle);
                             }
 
                             // Additional section passes.
-                            foreach (var handle in data.AdditionalSectionRendererListHandles)
+                            foreach (var handle in data.additionalSectionRendererListHandles)
                             {
                                 context.cmd.DrawRendererList(handle);
                             }
@@ -411,7 +436,7 @@ namespace Linework.EdgeDetection
 
             private void InitSectionRendererList(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.AdditionalSectionRendererListHandles.Clear();
+                passData.additionalSectionRendererListHandles.Clear();
 
                 var universalRenderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -438,7 +463,7 @@ namespace Linework.EdgeDetection
                     drawingSettings.overrideMaterial = section;
                 }
                 RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref universalRenderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
-                    ref passData.SectionRendererListHandle);
+                    ref passData.sectionRendererListHandle);
 
                 // Section mask pass.
                 if (settings.SectionMaskRenderingLayer != 0 && settings.maskInfluence != MaskInfluence.Nothing)
@@ -446,7 +471,7 @@ namespace Linework.EdgeDetection
                     filteringSettings = new FilteringSettings(renderQueueRange, -1, settings.SectionMaskRenderingLayer);
                     drawingSettings.overrideMaterial = mask;
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref universalRenderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
-                        ref passData.SectionMaskRendererListHandle);
+                        ref passData.sectionMaskRendererListHandle);
                 }
 
                 // Additional section passes.
@@ -460,7 +485,7 @@ namespace Linework.EdgeDetection
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref universalRenderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.AdditionalSectionRendererListHandles.Add(handle);
+                    passData.additionalSectionRendererListHandles.Add(handle);
                 }
             }
 
@@ -489,7 +514,7 @@ namespace Linework.EdgeDetection
                 baseDescriptor.wrapMode = TextureWrapMode.Clamp;
                 sectionHandle = renderGraph.CreateTexture(baseDescriptor);
             }
-#endif
+#else
             private RTHandle cameraDepthRTHandle, sectionRTHandle;
             private RTHandle[] handles;
 
@@ -514,25 +539,6 @@ namespace Linework.EdgeDetection
                 sectionBufferDescriptor.depthBufferBits = (int) DepthBits.None;
                 sectionBufferDescriptor.msaaSamples = 1;
                 RenderingUtils.ReAllocateIfNeeded(ref sectionRTHandle, sectionBufferDescriptor, FilterMode.Point, TextureWrapMode.Clamp, name: Buffer.Section);
-            }
-
-            private static GraphicsFormat GetSectionBufferFormat(SectionMapPrecision precision, bool multicolor)
-            {
-                switch (precision)
-                {
-                    case SectionMapPrecision.Bits8:
-                        return multicolor ? GraphicsFormat.R8G8B8A8_UNorm : GraphicsFormat.R8_UNorm;
-                    case SectionMapPrecision.Bits16:
-#if UNITY_2023_2_OR_NEWER
-                        // WebGPU does not support R16_UNorm.
-                        return SystemInfo.graphicsDeviceType == GraphicsDeviceType.WebGPU ? multicolor ? GraphicsFormat.R32G32B32A32_SFloat : GraphicsFormat.R32_SFloat :
-                            multicolor ? GraphicsFormat.R16G16B16A16_UNorm : GraphicsFormat.R16_UNorm;
-#else
-                        return multicolor ? GraphicsFormat.R16G16B16A16_UNorm : GraphicsFormat.R16_UNorm;
-#endif
-                    default:
-                        throw new NotImplementedException();
-                }
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -637,12 +643,16 @@ namespace Linework.EdgeDetection
 
                 cameraDepthRTHandle = null;
             }
-
+#endif
+            
             public void Dispose()
             {
                 settings = null; // de-reference settings to allow them to be freed from memory
 
+#if UNITY_6000_0_OR_NEWER
+#else
                 sectionRTHandle?.Release();
+#endif
             }
         }
 
@@ -716,8 +726,9 @@ namespace Linework.EdgeDetection
             if (render) renderer.EnqueuePass(edgeDetectionPass);
         }
 
+#if UNITY_6000_0_OR_NEWER
+#else
         #pragma warning disable 618, 672
-
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
             if (settings == null || edgeDetectionPass == null || renderingData.cameraData.cameraType == CameraType.SceneView && !settings.ShowInSceneView) return;
@@ -726,13 +737,13 @@ namespace Linework.EdgeDetection
             edgeDetectionPass.CreateHandles(renderingData);
             edgeDetectionPass.SetTarget(renderer.cameraDepthTargetHandle);
         }
-
         #pragma warning restore 618, 672
+#endif
 
         /// <summary>
         /// Clean up resources allocated to the Scriptable Renderer Feature such as materials.
         /// </summary>
-        override protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             edgeDetectionPass?.Dispose();
             edgeDetectionPass = null;

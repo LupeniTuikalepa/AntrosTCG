@@ -1,85 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Players;
-using ATCG.Cards;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Queries;
+using ATCG.Battle.GameModes;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using ATCG.HexGrids.Shapes;
 using Helteix.Cards.Collections;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
 {
-    public class BattleGrid : IDisposable
+    public class BattleGrid
     {
-        public event Action<BattleCell> OnBattleCellAdded;
-        public event Action<BattleCell> OnBattleCellRemoved;
+        private readonly Dictionary<HexCoordinates, BattleCellAspect> battleCellsEntities;
 
-        public event Action<IBattleCard> OnBattleCardDeployed;
-        public event Action<IBattleCard> OnBattleCardLeft;
-        public HexGrid Grid { get; }
+        public readonly BattlePhase battlePhase;
+        public readonly HexGrid grid;
 
         private DefaultCardCollection<IBattleCard> cards;
 
-        private readonly Dictionary<HexCell, BattleCell> battleCells;
-
-        public BattleGrid(uint cellRadius, uint gridRadius)
+        public BattleGrid(BattlePhase battlePhase, uint cellRadius, uint gridRadius)
         {
-            Grid = new HexGrid(cellRadius, Vector2.zero);
-            Grid.OnCellAdded += CreateBattleCell;
-            Grid.OnCellRemoved += DestroyBattleCell;
+            this.battlePhase = battlePhase;
+            grid = new HexGrid(cellRadius, Vector2.zero);
+
+            HexagonalShapeBuilder shapeBuilder = new(gridRadius);
+            shapeBuilder.Build(grid);
+
             cards = new DefaultCardCollection<IBattleCard>();
+            battleCellsEntities = new Dictionary<HexCoordinates, BattleCellAspect>();
 
-            battleCells = DictionaryPool<HexCell, BattleCell>.Get();
-
-            HexagonalShapeBuilder shapeBuilder = new HexagonalShapeBuilder(gridRadius);
-            shapeBuilder.Build(Grid);
-        }
-
-        private void CreateBattleCell(HexCell cell)
-        {
-            BattleCell battleCell = new BattleCell(this, cell);
-            battleCells.Add(cell, battleCell);
-
-            OnBattleCellAdded?.Invoke(battleCell);
-        }
-
-        private void DestroyBattleCell(HexCell cell)
-        {
-            if (battleCells.Remove(cell, out BattleCell value))
+            foreach (HexCoordinates coordinate in grid.CellsCoordinates)
             {
-                OnBattleCellRemoved?.Invoke(value);
+                BattleCellAspect cellAspect = World.CreateEntity<BattleCellAspect>();
+
+                cellAspect.BattleCellComponent.coordinates = coordinate;
+                battleCellsEntities.Add(coordinate, cellAspect);
             }
         }
-/*
-        public void DeployCard(IBattleCard card, HexCoordinates coordinates)
+
+        public World World => battlePhase.World;
+
+        public IEnumerable<HexCoordinates> AllCellsCoordinates => battleCellsEntities.Keys;
+
+        public bool TryGetBattleCell(HexCoordinates coordinates, out BattleCellAspect cellAspect)
         {
-            if (CanDeploy(card.Player, coordinates) && cards.TryAddCard(card))
+            return battleCellsEntities.TryGetValue(coordinates, out cellAspect);
+        }
+
+        public EntityQueryResult GetGridMembers()
+        {
+            return World.Query(Query.With<GridMemberComponent>());
+        }
+
+        public bool TryGetCellFor(HexCoordinates coordinates, out BattleCellAspect battleCellAspect)
+        {
+            return battleCellsEntities.TryGetValue(coordinates, out battleCellAspect);
+        }
+
+        /*
+        public void DeployCard(IBattleCard HeroCard, HexCoordinates coordinates)
+        {
+            if (CanDeploy(HeroCard.Player, coordinates) && cards.TryAddCard(HeroCard))
             {
-                card.Deploy(this, coordinates);
+                HeroCard.Deploy(this, coordinates);
                 if(Grid.TryGetCell(coordinates, out HexCell cell))
-                    cell.AddMember(card);
+                    cell.AddMember(HeroCard);
 
-                OnBattleCardDeployed?.Invoke(card);
+                OnBattleCardDeployed?.Invoke(HeroCard);
             }
         }
 
 
-        public void RemoveCard(IBattleCard card)
+        public void RemoveCard(IBattleCard HeroCard)
         {
-            if (cards.TryRemoveCard(card))
+            if (cards.TryRemoveCard(HeroCard))
             {
-                if(Grid.TryGetCell(card.Coordinates, out HexCell cell))
+                if(Grid.TryGetCell(HeroCard.AllCellsCoordinates, out HexCell cell))
                     cell.RemoveMember(null);
 
-                card.Leave();
+                HeroCard.Leave();
 
-                OnBattleCardLeft?.Invoke(card);
+                OnBattleCardLeft?.Invoke(HeroCard);
             }
         }
-        */
+
+        public IEnumerable<BattleCell> GetCells() => battleCells.Values;
 
         public IEnumerable<BattleCell> GetCells(Func<BattleCell, bool> filter)
         {
@@ -90,28 +99,9 @@ namespace ATCG.Battle.Grids
             }
         }
 
-        public IEnumerable<BattleCell> GetCells() => battleCells.Values;
 
 
-        public BattleCell GetBattleCell(HexCoordinates coordinates) => TryGetBattleCell(coordinates, out BattleCell cell) ?
-            cell :
-            null;
-        public bool TryGetBattleCell(HexCell hexCell, out BattleCell cell) =>
-            battleCells.TryGetValue(hexCell, out cell);
-
-        public bool TryGetBattleCell(HexCoordinates coordinates, out BattleCell cell)
-        {
-            if (Grid.TryGetCell(coordinates, out HexCell hexCell))
-                return TryGetBattleCell(hexCell, out cell);
-
-            cell = null;
-            return false;
-        }
-
-        void IDisposable.Dispose()
-        {
-            DictionaryPool<HexCell, BattleCell>.Release(battleCells);
-        }
-
+        public BattleCell GetBattleCell(HexCoordinates coordinates) => TryGetBattleCell(coordinates, out BattleCell cell) ? cell : default;
+        */
     }
 }

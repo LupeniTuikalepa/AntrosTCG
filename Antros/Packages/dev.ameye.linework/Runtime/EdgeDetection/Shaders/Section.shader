@@ -50,7 +50,7 @@ Shader "Hidden/Outlines/Edge Detection/Section"
             #pragma multi_compile_local TEXTURE_CHANNEL_R TEXTURE_CHANNEL_G TEXTURE_CHANNEL_B TEXTURE_CHANNEL_A
             #pragma multi_compile_local TEXTURE_UV_SET_UV0 TEXTURE_UV_SET_UV1 TEXTURE_UV_SET_UV2 TEXTURE_UV_SET_UV3
             #pragma multi_compile_local _ BREAKUP
-            
+
             struct Attributes
             {
                 float4 positionOS : POSITION;
@@ -200,15 +200,15 @@ Shader "Hidden/Outlines/Edge Detection/Section"
 
                 // Keep values of 1 as a 1.
                 if (sample == 1) id = 1;
-                
-                // Add noise-based break up to the sections and store in B channel.
+
+                // Add noise-based break up to the sections and store in G channel.
                 #if defined(BREAKUP)
                 float3 noise_uvs = IN.positionWS * _BreakUpScale + float3(3.324, 34.2, 56.343);
                 float contribution = noise(noise_uvs) * 0.5 + 0.5;
                 contribution = 1.0 - step(_BreakUpAmount, contribution);
                 return half4(id, contribution, 0.0, 1.0);
                 #endif
-                
+
                 return half4(id, 0.0, 0.0, 1.0);
             }
             ENDHLSL

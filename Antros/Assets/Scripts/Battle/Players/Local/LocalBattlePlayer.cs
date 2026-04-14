@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using ATCG.Battle.Actions;
 using ATCG.Battle.Cards;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Turns;
 using ATCG.Cards;
 using ATCG.HexGrids;
 using ATCG.Metrics;
@@ -13,33 +15,15 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Players
+namespace ATCG.Battle.Players.Local
 {
     public class LocalBattlePlayer : IBattlePlayer
     {
-        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
-        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
-
-
-        IBattlePlayerProfile IBattlePlayer.Profile => Profile;
-
-
-        public int ID => Profile.ID;
-        public LocalPlayerProfile Profile { get; private set; }
-        public Hand<IBattleCard> Hand { get; private set; }
-        public Deck<IBattleCard> Deck { get; private set; }
-        public DefaultCardCollection<IBattleCard> DeadCards { get; private set; }
-        public int CurrentHealth { get; private set; }
-        public int MaxHealth => GameMetrics.Current.MaxHealth;
-        public int CurrentMana { get; private set; }
-        public int MaxMana => GameMetrics.Current.MaxMana;
-
-        public BattlePhase BattlePhase { get; }
+        public readonly Condition canDeployHeroes;
+        public readonly Condition canDoBasicAttack;
+        public readonly Condition canMoveHeroes;
 
         public readonly Condition canUseHeroesAbilities;
-        public readonly Condition canDoBasicAttack;
-        public readonly Condition canDeployHeroes;
-        public readonly Condition canMoveHeroes;
 
         public LocalBattlePlayer(BattlePhase battle, LocalPlayerProfile profile)
         {
@@ -66,6 +50,24 @@ namespace ATCG.Battle.Players
             }
         }
 
+
+        public int ID => Profile.ID;
+        public LocalPlayerProfile Profile { get; }
+        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
+        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
+
+
+        IBattlePlayerProfile IBattlePlayer.Profile => Profile;
+        public Hand<IBattleCard> Hand { get; }
+        public Deck<IBattleCard> Deck { get; }
+        public DefaultCardCollection<IBattleCard> DeadCards { get; }
+        public int CurrentHealth { get; private set; }
+        public int MaxHealth => GameMetrics.Current.MaxHealth;
+        public int CurrentMana { get; private set; }
+        public int MaxMana => GameMetrics.Current.MaxMana;
+
+        public BattlePhase BattlePhase { get; }
+
         [Button]
         public void AddOrRemoveMana(int mana)
         {
@@ -73,7 +75,7 @@ namespace ATCG.Battle.Players
             CurrentMana += mana;
             if (CurrentMana > MaxMana)
                 CurrentMana = MaxMana;
-            if(CurrentMana < 0)
+            if (CurrentMana < 0)
                 CurrentMana = 0;
 
             if (last != CurrentMana)
@@ -87,38 +89,49 @@ namespace ATCG.Battle.Players
             CurrentHealth += health;
             if (CurrentHealth > MaxHealth)
                 CurrentHealth = MaxHealth;
-            if(CurrentHealth < 0)
+            if (CurrentHealth < 0)
                 CurrentHealth = 0;
 
             if (last != CurrentHealth)
                 OnPlayerHealthChanges?.Invoke(this, CurrentMana, last);
         }
 
-        public bool IsDefeated() => CurrentHealth <= 0;
-
-        public void DeployBattleCard(IBattleCard card, HexCoordinates coordinates)
+        public bool IsDefeated()
         {
-            BattleGrid battleGrid = BattlePhase.BattleGrid;
-
-            if (Hand.TryRemoveCard(card))
-            {
-                //battleGrid.DeployCard(card, coordinates);
-            }
+            return CurrentHealth <= 0;
         }
+
+        public async Awaitable<BattleTurn> PlayTurn(int round, int turnNumber)
+        {
+            LocalPlayerTurnPhase localPlayerTurnPhase = new(turnNumber, this);
+
+            PhaseResult<BattleTurn> result = await localPlayerTurnPhase.Run();
+            return result;
+        }
+
+        void IBattlePlayer.OnBattleBegins(BattlePhase battlePhase)
+        {
+            FillHand();
+        }
+
+        void IBattlePlayer.OnBattleEnds(BattlePhase battlePhase)
+        {
+        }
+
 
         public void FillHand()
         {
             Debug.Log($"[Player Turn] Filling {Profile.Infos.name} player's hand.");
             int missingCards = GameMetrics.Current.MinPlayerHandSize - Hand.CurrentSize;
-            if (missingCards > 0)
+            if (missingCards <= 0)
+                return;
+
+            for (int i = 0; i < missingCards; i++)
             {
-                for (int i = 0; i < missingCards; i++)
-                {
-                    if (!TryDrawCardFromDeck(out IBattleCard card))
-                        break;
-                    if(!Hand.TryAddCard(card))
-                        break;
-                }
+                if (!TryDrawCardFromDeck(out IBattleCard card))
+                    break;
+                if (!Hand.TryAddCard(card))
+                    break;
             }
         }
 
@@ -138,7 +151,7 @@ namespace ATCG.Battle.Players
             using (ListPool<IBattleCard>.Get(out List<IBattleCard> cards))
             {
                 cards.AddRange(DeadCards.Cards);
-                if(cards.Count <= 0)
+                if (cards.Count <= 0)
                     return false;
 
                 foreach (IBattleCard card in cards)
@@ -152,24 +165,6 @@ namespace ATCG.Battle.Players
             }
 
             return true;
-        }
-
-        public async Awaitable<BattleTurn> PlayTurn(int round, int turnNumber)
-        {
-            LocalPlayerTurnPhase localPlayerTurnPhase = new LocalPlayerTurnPhase(turnNumber, this);
-
-            PhaseResult<BattleTurn> result = await localPlayerTurnPhase.Run();
-            return result;
-        }
-
-        void IBattlePlayer.OnBattleBegins(BattlePhase battlePhase)
-        {
-            FillHand();
-        }
-
-        void IBattlePlayer.OnBattleEnds(BattlePhase battlePhase)
-        {
-
         }
     }
 }

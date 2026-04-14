@@ -1,13 +1,9 @@
-﻿using System;
-using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Phases;
-using Helteix.Tools.Phases;
+﻿using ATCG.Battle.Players.Local.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.Local.UI
 {
-
     [AddComponentMenu("ATCG/Gameplay/Player/UI/Player HUD")]
     public class PlayerHUD : RuntimeLocalPlayerComponent
     {
@@ -36,10 +32,8 @@ namespace ATCG.Battle.Players.Runtime.UI
         {
             Canvas.targetDisplay = 0;
             for (int i = 0; i < elements.Length; i++)
-            {
-                if(player == elements[i].Player)
+                if (player == elements[i].Player)
                     elements[i].Disconnect();
-            }
         }
     }
 }

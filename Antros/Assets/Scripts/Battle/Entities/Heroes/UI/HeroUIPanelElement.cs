@@ -1,6 +1,6 @@
-﻿using ATCG.Battle.Heroes.Runtime;
+﻿using ATCG.Battle.Entities.Heroes.Runtime;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI
 {
     public interface IHeroUIPanelElement
     {

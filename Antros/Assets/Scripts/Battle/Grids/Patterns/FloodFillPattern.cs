@@ -14,7 +14,7 @@ namespace ATCG.Battle.Grids.Patterns
         public readonly HexCoordinates center;
 
 
-        public FloodFillPattern(int distance, HexCoordinates center)
+        public FloodFillPattern(HexCoordinates center, int distance)
         {
             this.center = center;
             this.distance = distance;
@@ -34,19 +34,17 @@ namespace ATCG.Battle.Grids.Patterns
 
         private void FloodFill(HexCoordinates coordinates, int budget, Dictionary<HexCoordinates, int> foundCells)
         {
-            if(budget <= 0)
+            if (budget <= 0)
                 return;
 
             foreach (HexCoordinates neighbor in coordinates.GetRing(1))
             {
                 if (foundCells.TryGetValue(neighbor, out int lastBudget))
-                {
                     //Someone already found the cell with the same budget or more, so no need to check it
-                    if(lastBudget >= budget)
+                    if (lastBudget >= budget)
                         continue;
-                }
 
-                if(ValidateCell != null && !ValidateCell(neighbor))
+                if (ValidateCell != null && !ValidateCell(neighbor))
                     continue;
 
                 foundCells[neighbor] = budget;

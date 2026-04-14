@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ATCG.Battle.Actions;
-using ATCG.Battle.Entities.Core;
+using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
+using ATCG.Battle.Turns;
 using ATCG.HexGrids.Grids;
 using ATCG.Metrics;
 using Eflatun.SceneReference;
@@ -13,17 +16,24 @@ using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.GameModes
 {
     public class BattlePhase : IPhase<BattleHistory>
     {
+        public readonly IBattlePlayerProfile[] playerProfiles;
         public readonly int seed;
+
+        public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
+        {
+            World = new World(maxComponentStores: 128, maxEntities: 128);
+            CommandManager = new GameCommandManager(this);
+
+            this.seed = seed;
+            this.playerProfiles = playerProfiles;
+        }
 
         public uint CellRadius => GameMetrics.Current.CellRadius;
         public uint GridRadius => GameMetrics.Current.GridRadius;
-
-
-        public readonly IBattlePlayerProfile[] playerProfiles;
 
         public BattleGrid BattleGrid { get; private set; }
 
@@ -36,18 +46,12 @@ namespace ATCG.Battle
 
         public IBattlePlayer CurrentPlayer { get; private set; }
 
-        public HexGrid HexGrid => BattleGrid.Grid;
+        public HexGrid HexGrid => BattleGrid.grid;
         public int PlayerCount => playerProfiles.Length;
 
         public World World { get; }
 
-        public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
-        {
-            World = new World(maxComponentStores: 128, maxEntities: 128);
-
-            this.seed = seed;
-            this.playerProfiles = playerProfiles;
-        }
+        public GameCommandManager CommandManager { get; }
 
         async Awaitable IPhase<BattleHistory>.Initialize(CancellationToken token)
         {
@@ -65,14 +69,14 @@ namespace ATCG.Battle
                 Players[i] = battlePlayer;
             }
 
-            BattleGrid = new BattleGrid(CellRadius, GridRadius);
+            BattleGrid = new BattleGrid(this, CellRadius, GridRadius);
         }
 
 
         async Awaitable<BattleHistory> IPhase<BattleHistory>.Execute(CancellationToken token)
         {
             await Awaitable.EndOfFrameAsync(token);
-            BattleHistory history = new BattleHistory(seed);
+            BattleHistory history = new(seed);
             Round = 1;
             Turn = 1;
             while (true)
@@ -82,7 +86,7 @@ namespace ATCG.Battle
                 {
                     CurrentPlayer = Players[i];
 
-                    BattleTurn turn =  await CurrentPlayer.PlayTurn(Round, Turn);
+                    BattleTurn turn = await CurrentPlayer.PlayTurn(Round, Turn);
                     history.RegisterTurn(turn);
                     Turn++;
 
@@ -93,7 +97,7 @@ namespace ATCG.Battle
                     break;
                 }
 
-                if(isGameDone)
+                if (isGameDone)
                     break;
 
                 Round++;
@@ -114,14 +118,17 @@ namespace ATCG.Battle
                 battlePlayer.OnBattleEnds(this);
                 Players[i] = battlePlayer;
             }
+
             ((IDisposable)BattleGrid).Dispose();
 
             await Task.CompletedTask;
         }
 
+        public IBattlePlayer GetPlayer(int playerID) => Players[playerID];
+
         protected virtual bool IsGameDone(ref BattleHistory history)
         {
-            using (ListPool<IBattlePlayer>.Get(out var winningPlayers))
+            using (ListPool<IBattlePlayer>.Get(out List<IBattlePlayer> winningPlayers))
             {
                 winningPlayers.AddRange(Players);
                 for (int i = 0; i < Players.Length; i++)

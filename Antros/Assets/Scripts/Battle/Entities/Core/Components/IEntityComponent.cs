@@ -1,7 +1,6 @@
-﻿namespace ATCG.Battle.Entities.Core.Components
+﻿namespace ATCG.Battle.Entities.Components
 {
     public interface IEntityComponent
     {
-
     }
 }

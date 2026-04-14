@@ -1,9 +1,9 @@
-using ATCG.Battle.Heroes.Runtime;
+using ATCG.Battle.Entities.Heroes.Runtime;
 using ATCG.Cards.UI.Components;
 using ATCG.UI;
 using UnityEngine;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI.Buttons
 {
     public abstract class HeroButtonUI : MonoBehaviour, IHeroUIPanelElement
     {

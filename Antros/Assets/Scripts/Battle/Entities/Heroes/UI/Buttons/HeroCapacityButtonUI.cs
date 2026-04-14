@@ -1,22 +1,26 @@
-﻿using ATCG.Battle.Heroes.Runtime;
+﻿using ATCG.Battle.Entities.Heroes.Runtime;
 using ATCG.Capacities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI.Buttons
 {
     public class HeroCapacityButtonUI : HeroButtonUI, ILayoutElement
     {
         [SerializeField]
         private RectTransform target;
+
         [SerializeField]
         private RectTransform source;
 
         [SerializeField]
         private TMP_Text title;
+
         [SerializeField]
         private TMP_Text description;
+
+        public CapacityData CurrentCapacity { get; private set; }
 
         void ILayoutElement.CalculateLayoutInputHorizontal()
         {
@@ -40,8 +44,6 @@ namespace ATCG.Battle.Heroes.Deployed
 
         int ILayoutElement.layoutPriority => 1;
 
-        public CapacityData CurrentCapacity { get; private set; }
-
         protected override int GetCost()
         {
             return CurrentCapacity.Cost;
@@ -49,7 +51,7 @@ namespace ATCG.Battle.Heroes.Deployed
 
         public override void OnClick()
         {
-            if(RuntimeHero)
+            if (RuntimeHero)
                 RuntimeHero.UseCapacity(CurrentCapacity);
         }
 
@@ -61,7 +63,9 @@ namespace ATCG.Battle.Heroes.Deployed
             ((IHeroUIPanelElement)this).OnOpen(hero, panel);
         }
 
-        public void OnClose(RuntimeHero hero, HeroUIPanel panel) =>
+        public void OnClose(RuntimeHero hero, HeroUIPanel panel)
+        {
             ((IHeroUIPanelElement)this).OnClose(hero, panel);
+        }
     }
 }

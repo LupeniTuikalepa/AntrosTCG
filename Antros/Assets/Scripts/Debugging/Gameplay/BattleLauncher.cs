@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ATCG.Battle;
-using ATCG.Battle.Actions;
+using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
+using ATCG.Battle.Turns;
 using ATCG.Cards;
 using ATCG.GameModes;
 using ATCG.Players;

@@ -1,17 +1,15 @@
-﻿using System;
-using ATCG.Battle.Players.Local.Phases;
-using Helteix.Tools.Phases;
-using Helteix.Tools.Phases.Listeners;
+﻿using Helteix.Tools.Phases;
 using TMPro;
 using UnityEngine;
 
-namespace ATCG.Battle.Players.Runtime.UI.Other
+namespace ATCG.Battle.Players.Local.UI.Other
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/LocalPlayerTurnInfosUI")]
     public class LocalPlayerTurnInfosUI : PlayerHUDElement, IPhaseListener<PlayerTurnPhase>
     {
         [SerializeField]
         private TMP_Text playerName;
+
         [SerializeField]
         private TMP_Text turnNumber;
 
@@ -23,16 +21,6 @@ namespace ATCG.Battle.Players.Runtime.UI.Other
         private void OnDisable()
         {
             this.Unregister();
-        }
-
-        protected override void OnConnect()
-        {
-
-        }
-
-        protected override void OnDisconnect()
-        {
-
         }
 
         public void OnPhaseBegin(PlayerTurnPhase phase)
@@ -47,7 +35,14 @@ namespace ATCG.Battle.Players.Runtime.UI.Other
 
         public void OnPhaseEnd(PlayerTurnPhase phase)
         {
+        }
 
+        protected override void OnConnect()
+        {
+        }
+
+        protected override void OnDisconnect()
+        {
         }
     }
 }

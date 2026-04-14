@@ -25,13 +25,19 @@ namespace Linework.SurfaceFill
             private Material mask, fillBase;
             private RenderStateBlock fillRenderStateBlock;
             private int lastActiveFillIndex;
+#if UNITY_6000_0_OR_NEWER
+#else
             private readonly ProfilingSampler maskSampler, fillSampler;
+#endif
             
             public SurfaceFillPass()
             {
                 profilingSampler = new ProfilingSampler(nameof(SurfaceFillPass));
+#if UNITY_6000_0_OR_NEWER
+#else
                 maskSampler = new ProfilingSampler(ShaderPassName.Mask);
                 fillSampler = new ProfilingSampler(ShaderPassName.Fill);
+#endif
             }
 
             public bool Setup(ref SurfaceFillSettings surfaceFillSettings, ref Material maskMaterial, ref Material fillMaterial)
@@ -223,8 +229,8 @@ namespace Linework.SurfaceFill
 #if UNITY_6000_0_OR_NEWER
             private class PassData
             {
-                internal readonly List<RendererListHandle> OccludersMaskRendererListHandles = new();
-                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> MaskRendererListHandles = new();
+                internal readonly List<RendererListHandle> occludersMaskRendererListHandles = new();
+                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> maskRendererListHandles = new();
             }
             
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -264,7 +270,7 @@ namespace Linework.SurfaceFill
                     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
                     InitMaskRendererLists(renderGraph, frameData, ref passData);
-                    foreach (var rendererListHandle in passData.MaskRendererListHandles)
+                    foreach (var rendererListHandle in passData.maskRendererListHandles)
                     {
                         builder.UseRendererList(rendererListHandle.handle);
                     }
@@ -273,7 +279,7 @@ namespace Linework.SurfaceFill
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                     {
-                        foreach (var handle in data.MaskRendererListHandles)
+                        foreach (var handle in data.maskRendererListHandles)
                         {
                             context.cmd.DrawRendererList(handle.handle);
                         }
@@ -334,7 +340,7 @@ namespace Linework.SurfaceFill
              */
             private void InitOccludersMaskRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.OccludersMaskRendererListHandles.Clear();
+                passData.occludersMaskRendererListHandles.Clear();
                 
                 var renderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -377,7 +383,7 @@ namespace Linework.SurfaceFill
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.OccludersMaskRendererListHandles.Add(handle);
+                    passData.occludersMaskRendererListHandles.Add(handle);
 
                 }
             }
@@ -389,7 +395,7 @@ namespace Linework.SurfaceFill
              */
             private void InitMaskRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.MaskRendererListHandles.Clear();
+                passData.maskRendererListHandles.Clear();
 
                 var renderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -459,7 +465,7 @@ namespace Linework.SurfaceFill
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.MaskRendererListHandles.Add((handle, fill.vertexAnimation));
+                    passData.maskRendererListHandles.Add((handle, fill.vertexAnimation));
 
                    // 2. Mask out again to fix self-occlusion.
                     if (fill.occlusion is Occlusion.WhenOccluded)
@@ -472,13 +478,13 @@ namespace Linework.SurfaceFill
                         var handle2 = new RendererListHandle();
                         RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                             ref handle2);
-                        passData.MaskRendererListHandles.Add((handle2, fill.vertexAnimation));
+                        passData.maskRendererListHandles.Add((handle2, fill.vertexAnimation));
                     }
 
                     i++;
                 }
             }
-#endif
+#else
             private RTHandle cameraDepthRTHandle;
 
             #pragma warning disable 618, 672
@@ -634,7 +640,8 @@ namespace Linework.SurfaceFill
                 
                 cameraDepthRTHandle = null;
             }
-
+#endif
+            
             public void Dispose()
             {
                 settings = null; // de-reference settings to allow them to be freed from memory
@@ -705,6 +712,8 @@ namespace Linework.SurfaceFill
             if (render) renderer.EnqueuePass(surfaceFillPass);
         }
         
+#if UNITY_6000_0_OR_NEWER
+#else
         #pragma warning disable 618, 672
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
@@ -716,11 +725,12 @@ namespace Linework.SurfaceFill
             surfaceFillPass.SetTarget(renderer.cameraDepthTargetHandle);
         }
         #pragma warning restore 618, 672
-
+#endif
+        
         /// <summary>
         /// Clean up resources allocated to the Scriptable Renderer Feature such as materials.
         /// </summary>
-        override protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             surfaceFillPass?.Dispose();
             surfaceFillPass = null;

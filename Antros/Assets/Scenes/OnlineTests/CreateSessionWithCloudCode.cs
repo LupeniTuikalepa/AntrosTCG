@@ -32,12 +32,12 @@ public class CreateSessionWithCloudCode : MonoBehaviour
                     {
                         new PlayerCardInDeckInfos()
                         {
-                            cardID = "Card 1",
+                            cardID = "HeroCard 1",
                             quantity = 15
                         },
                         new PlayerCardInDeckInfos()
                         {
-                            cardID = "Card 2",
+                            cardID = "HeroCard 2",
                             quantity = 15
                         }
                     }
@@ -49,12 +49,12 @@ public class CreateSessionWithCloudCode : MonoBehaviour
                     {
                         new PlayerCardInDeckInfos()
                         {
-                            cardID = "Card 1",
+                            cardID = "HeroCard 1",
                             quantity = 15
                         },
                         new PlayerCardInDeckInfos()
                         {
-                            cardID = "Card 2",
+                            cardID = "HeroCard 2",
                             quantity = 15
                         }
                     }

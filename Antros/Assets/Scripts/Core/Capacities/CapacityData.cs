@@ -19,29 +19,40 @@ namespace ATCG.Capacities
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
 
-        [field: BoxGroup("Behaviour")]
+        [field: BoxGroup("Behaviour/Patterns")]
         [field: SerializeReference, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public ICapacityCastPatternData[] CastPatterns { get; private set; }
 
-        [field: BoxGroup("Behaviour")]
+        [field: BoxGroup("Behaviour/Patterns")]
         [field: SerializeReference, Tooltip("Patterns of cells affected by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public ICapacityCastPatternData[] FirePatterns { get; private set; }
 
-        [field: BoxGroup("Behaviour")]
+        [field: BoxGroup("Behaviours/Effects")]
         [field: SerializeReference, Tooltip("Effect applied on the caster."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public ICapacityHitEffectData[] CasterEffects { get; private set; }
+        public IEffectData[] CasterEffects { get; private set; }
 
-        [field: BoxGroup("Behaviour")]
-        [field: SerializeReference, Tooltip("Effects applied on cells and actors hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public ICapacityHitEffectData[] HitEffects { get; private set; }
+        [field: BoxGroup("Behaviour/Effects"), PropertySpace]
+        [field: SerializeReference, Tooltip("Effects applied on cells hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
+        public IEffectData[] CellsHitEffects { get; private set; }
+
+        [field: BoxGroup("Behaviour/Effects")]
+        [field: SerializeReference, Tooltip("Effects applied on actors hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
+        public IEffectData[] AlliesHitEffects { get; private set; }
+
+        [field: BoxGroup("Behaviour/Effects")]
+        [field: SerializeReference, Tooltip("Effects applied on actors hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
+        public IEffectData[] OpponentsHitEffects { get; private set; }
 
         protected override void Reset()
         {
             base.Reset();
-            CastPatterns  = Array.Empty<ICapacityCastPatternData>();
+            CastPatterns = Array.Empty<ICapacityCastPatternData>();
             FirePatterns = Array.Empty<ICapacityCastPatternData>();
-            CasterEffects = Array.Empty<ICapacityHitEffectData>();
-            HitEffects = Array.Empty<ICapacityHitEffectData>();
+            CasterEffects = Array.Empty<IEffectData>();
+
+            CellsHitEffects = Array.Empty<IEffectData>();
+            AlliesHitEffects = Array.Empty<IEffectData>();
+            OpponentsHitEffects = Array.Empty<IEffectData>();
         }
     }
 }

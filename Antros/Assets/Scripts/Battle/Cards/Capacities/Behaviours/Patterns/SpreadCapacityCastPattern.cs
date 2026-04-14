@@ -1,61 +1,38 @@
-﻿using ATCG.Battle.Grids;
+﻿using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids.Patterns;
 using ATCG.Capacities.Data;
-using ATCG.Cards;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
 
-namespace ATCG.Battle.Cards.Capacities.Patterns
+namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
 {
     //TODO
-    public class SpreadCapacityCastPattern : ComplexCapacityCastPattern<SpreadPatternData, FloodFillPattern>
+    public class SpreadCapacityCastPattern : ComplexCapacityCastPattern<SpreadPatternData, SpreadPattern>
     {
-        /*
-        private static bool ValidateLineOfSight<T>(BattleCard<T> card, HexCoordinates origin, HexCoordinates coord, BattleCell cell)
-            where T : GameCardData
+        protected override SpreadPattern GetCellPattern(SpreadPatternData castData, Capacity context)
         {
-            HexCoordinates last = origin;
-            foreach (HexCoordinates lineCoord in origin.GetLine(coord))
-            {
-                if(lineCoord == last)
-                    continue;
-
-                if (!cell.CanBeAttacked(card))
-                    return false;
-            }
-
-            return true;
+            return new SpreadPattern(context.castPoint, castData.Distance);
         }
 
-        protected override bool ValidateCell<TCardData>(Capacity context, BattleCell battleCell)
+        protected override bool ValidateCell(Capacity context, BattleCellAspect battleCellAspect)
         {
-            if (!base.ValidateCell(context, battleCell))
+            if (!base.ValidateCell(context, battleCellAspect))
                 return false;
 
-            HexCoordinates origin = context.origin;
-            HexCoordinates cellCoordinates = battleCell.cell.coordinates;
+            HexCoordinates castPoint = context.castPoint;
+            HexCoordinates cellCoordinates = battleCellAspect.Coordinate;
 
-            foreach (HexCoordinates lineCoord in origin.GetLine(cellCoordinates))
+            foreach (HexCoordinates lineCoord in castPoint.GetLine(cellCoordinates))
             {
-                if(lineCoord == origin)
+                if (lineCoord == castPoint)
                     continue;
 
-                if (!battleCell.CanBeAttacked(context.card))
+                if (!battleCellAspect.CanBeAttacked(context.card))
                     return false;
             }
 
             return true;
-        }
-
-        protected override FloodFillPattern GetCellPattern<TCardData>(SpreadPatternData castPatternData,
-            Capacity context)
-        {
-            return new FloodFillPattern(castPatternData.Distance, context.card.Coordinates);
-        }*/
-
-        protected override FloodFillPattern GetCellPattern(SpreadPatternData castData, Capacity context)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

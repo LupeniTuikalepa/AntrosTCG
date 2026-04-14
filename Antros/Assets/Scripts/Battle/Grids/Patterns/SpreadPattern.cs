@@ -5,7 +5,7 @@ using ATCG.HexGrids.Utility;
 
 namespace ATCG.Battle.Grids.Patterns
 {
-    public class SpreadPattern : ICellPattern
+    public struct SpreadPattern : ICellPattern
     {
         public Func<HexCoordinates, bool> ValidateCell { get; set; }
 
@@ -16,6 +16,7 @@ namespace ATCG.Battle.Grids.Patterns
         {
             this.center = center;
             this.distance = distance;
+            ValidateCell = null;
         }
 
         void ICellPattern.Evaluate(List<HexCoordinates> coordinatesList)
@@ -27,7 +28,7 @@ namespace ATCG.Battle.Grids.Patterns
                 //Adds every valid coord between the center and the extremity by drawing a line between.
                 foreach (HexCoordinates lineCoord in line)
                 {
-                    if(coordinatesList.Contains(lineCoord))
+                    if (coordinatesList.Contains(lineCoord))
                         continue;
 
                     //Once an invalid cell is encountered, the line evaluation stops

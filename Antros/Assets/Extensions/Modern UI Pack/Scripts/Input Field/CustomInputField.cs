@@ -20,7 +20,7 @@ namespace Michsky.MUIP
         [Header("Settings")]
         public bool processSubmit = false;
         public bool clearOnSubmit = true;
-        [Tooltip("Set the current event system object as null.")]
+        [Tooltip("Add the current event system object as null.")]
         [SerializeField] private bool setEventSystem = false;
 
         [Header("Events")]

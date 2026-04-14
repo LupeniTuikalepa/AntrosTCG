@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using ATCG.Battle.Heroes.Runtime;
-using ATCG.Battle.Players;
+using ATCG.Battle.Entities.Heroes.Runtime;
 using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Runtime;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI
 {
     public class HeroUIController : MonoBehaviour
     {
@@ -21,9 +21,10 @@ namespace ATCG.Battle.Heroes.Deployed
         [SerializeField]
         private Canvas canvas;
 
-        private Stack<int> openedPanels = new Stack<int>();
+        private readonly Stack<int> openedPanels = new();
 
         public LocalBattlePlayer LocalBattlePlayer => runtimeHero.Manager.RuntimeBattleGrid.LocalBattlePlayer;
+
         private void Awake()
         {
             heroVCam.gameObject.SetActive(false);
@@ -34,7 +35,6 @@ namespace ATCG.Battle.Heroes.Deployed
             runtimeHero.OnHeroSelected += OnHeroSelected;
             runtimeHero.OnHeroDeselected += OnHeroDeselected;
             runtimeHero.OnConnected += OnConnected;
-            runtimeHero.OnDisconnected += OnDisconnected;
         }
 
         private void OnDisable()
@@ -42,23 +42,19 @@ namespace ATCG.Battle.Heroes.Deployed
             runtimeHero.OnHeroSelected -= OnHeroSelected;
             runtimeHero.OnHeroDeselected -= OnHeroDeselected;
             runtimeHero.OnConnected -= OnConnected;
-            runtimeHero.OnDisconnected -= OnDisconnected;
         }
 
 
         private void OnConnected()
         {
-            if (RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(LocalBattlePlayer, out RuntimeLocalBattlePlayer rlbp))
+            if (RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(LocalBattlePlayer,
+                    out RuntimeLocalBattlePlayer rlbp))
             {
                 heroVCam.OutputChannel = rlbp.Camera.GetOutputChannel();
                 canvas.worldCamera = rlbp.Camera.OutputCamera;
             }
         }
 
-        private void OnDisconnected()
-        {
-            heroVCam.OutputChannel = OutputChannels.Default;
-        }
 
         private void OnHeroSelected()
         {
@@ -74,10 +70,7 @@ namespace ATCG.Battle.Heroes.Deployed
             if (runtimeHero.Hero.Player == LocalBattlePlayer)
             {
                 heroVCam.gameObject.SetActive(false);
-                while (openedPanels.TryPeek(out int panelIndex))
-                {
-                    CloseLast();
-                }
+                while (openedPanels.TryPeek(out int panelIndex)) CloseLast();
             }
         }
 
@@ -86,7 +79,7 @@ namespace ATCG.Battle.Heroes.Deployed
             int idx = panels.IndexOf(panel);
             if (idx != -1)
             {
-                if(openedPanels.TryPeek(out int openedPanelIndex))
+                if (openedPanels.TryPeek(out int openedPanelIndex))
                     panels[openedPanelIndex].Close();
 
                 openedPanels.Push(idx);

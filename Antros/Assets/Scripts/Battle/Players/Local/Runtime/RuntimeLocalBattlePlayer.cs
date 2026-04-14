@@ -1,18 +1,13 @@
-﻿using System.Collections.Generic;
-using ATCG.Battle.Players.Local.CameraControls;
+﻿using ATCG.Battle.Players.Local.UI;
 using ATCG.Battle.Players.Runtime;
-using ATCG.Battle.Players.Runtime.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ATCG.Battle.Players.Local
+namespace ATCG.Battle.Players.Local.Runtime
 {
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player")]
     public class RuntimeLocalBattlePlayer : RuntimeBattlePlayer<LocalBattlePlayer>
     {
-        [ShowInInspector, ReadOnly]
-        public int LocalID => runtimeBattlePlayers.IndexOf(this);
-
         [field: SerializeField]
         public PlayerHUD HUD { get; private set; }
 
@@ -22,11 +17,13 @@ namespace ATCG.Battle.Players.Local
         [field: SerializeField]
         public RuntimeLocalPlayerCamera Camera { get; private set; }
 
+        [ShowInInspector, ReadOnly]
+        public int LocalID => runtimeBattlePlayers.IndexOf(this);
 
 
         protected override void OnConnected()
         {
-            transform.position = new Vector3()
+            transform.position = new Vector3
             {
                 x = Player.ID * 200
             };
@@ -34,8 +31,6 @@ namespace ATCG.Battle.Players.Local
 
         protected override void OnDisconnected()
         {
-
         }
-
     }
 }

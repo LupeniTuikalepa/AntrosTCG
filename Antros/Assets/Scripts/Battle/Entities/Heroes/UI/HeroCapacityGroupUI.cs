@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using ATCG.Battle.Heroes.Runtime;
+using ATCG.Battle.Entities.Heroes.Runtime;
+using ATCG.Battle.Entities.Heroes.UI.Buttons;
 using ATCG.Capacities;
 using Helteix.Tools;
 using UnityEngine;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI
 {
-    public class HeroCapacityGroupUI :MonoBehaviour, IHeroUIPanelElement
+    public class HeroCapacityGroupUI : MonoBehaviour, IHeroUIPanelElement
     {
         [SerializeField]
         private Transform container;
@@ -14,7 +15,7 @@ namespace ATCG.Battle.Heroes.Deployed
         [SerializeField]
         private HeroCapacityButtonUI capacityButtonsUI;
 
-        private List<HeroCapacityButtonUI> capacityButtonUis = new List<HeroCapacityButtonUI>();
+        private readonly List<HeroCapacityButtonUI> capacityButtonUis = new();
 
 
         private void Awake()
@@ -39,7 +40,7 @@ namespace ATCG.Battle.Heroes.Deployed
 
         void IHeroUIPanelElement.OnClose(RuntimeHero hero, HeroUIPanel panel)
         {
-            foreach (var capacityButtonUi in capacityButtonUis)
+            foreach (HeroCapacityButtonUI capacityButtonUi in capacityButtonUis)
                 capacityButtonUi.OnClose(hero, panel);
 
             container.ClearChildren();

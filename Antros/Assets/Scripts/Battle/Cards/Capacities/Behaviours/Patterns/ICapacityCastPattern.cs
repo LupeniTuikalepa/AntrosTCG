@@ -1,23 +1,30 @@
 ﻿using System.Collections.Generic;
-using ATCG.Battle.Grids;
+using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Capacities.Data;
 
-namespace ATCG.Battle.Cards.Capacities.Patterns
+namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
 {
     public interface ICapacityCastPattern : ICapacityBehaviour<ICapacityCastPatternData>
     {
-        void FillTargetedCells(ICapacityCastPatternData castData, in Capacity context, HashSet<BattleCell> targetedCells);
+        void FillTargetedCells(ICapacityCastPatternData castData, in Capacity context,
+            HashSet<BattleCellAspect> targetedCells);
     }
+
     public interface ICapacityCastPattern<in T> : ICapacityCastPattern where T : ICapacityCastPatternData
     {
-        bool ICapacityBehaviour<ICapacityCastPatternData>.Accepts(ICapacityCastPatternData data) => data is T;
-
-        void ICapacityCastPattern.FillTargetedCells(ICapacityCastPatternData castData, in Capacity context, HashSet<BattleCell> targetedCells)
+        bool ICapacityBehaviour<ICapacityCastPatternData>.Accepts(ICapacityCastPatternData data)
         {
-            if(castData is T t)
+            return data is T;
+        }
+
+        void ICapacityCastPattern.FillTargetedCells(ICapacityCastPatternData castData, in Capacity context,
+            HashSet<BattleCellAspect> targetedCells)
+        {
+            if (castData is T t)
                 FillTargetedCells(t, context, targetedCells);
         }
 
-        void FillTargetedCells(T castData, in Capacity context, HashSet<BattleCell> targetedCells);
+        void FillTargetedCells(T castData, in Capacity context, HashSet<BattleCellAspect> targetedCells);
     }
 }

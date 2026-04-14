@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.Local.UI
 {
     public abstract class PlayerHUDElement : MonoBehaviour
     {
@@ -14,15 +14,16 @@ namespace ATCG.Battle.Players.Runtime.UI
 
         public void Connect(LocalBattlePlayer player)
         {
-            if(Player != null)
+            if (Player != null)
                 Disconnect();
 
             Player = player;
             OnConnect();
         }
+
         public void Disconnect()
         {
-            if(Player == null)
+            if (Player == null)
                 return;
 
             OnDisconnect();

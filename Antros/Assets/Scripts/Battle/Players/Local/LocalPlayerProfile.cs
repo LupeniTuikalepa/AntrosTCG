@@ -1,9 +1,10 @@
-﻿using ATCG.Cards;
+﻿using System;
+using ATCG.Battle.GameModes;
+using ATCG.Cards;
 using ATCG.Players;
 using UnityEngine;
-using UnityEngine.InputSystem.Users;
 
-namespace ATCG.Battle.Players
+namespace ATCG.Battle.Players.Local
 {
     public interface IBattlePlayerProfile
     {
@@ -14,13 +15,12 @@ namespace ATCG.Battle.Players
         IBattlePlayer Convert(BattlePhase phase);
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct LocalPlayerProfile : IBattlePlayerProfile
     {
-
-
         [field: SerializeField]
         public int ID { get; private set; }
+
         [field: SerializeField]
         public PlayerInfos Infos { get; private set; }
 
@@ -35,6 +35,9 @@ namespace ATCG.Battle.Players
             Cards = cards;
         }
 
-        public IBattlePlayer Convert(BattlePhase phase) => new LocalBattlePlayer(phase, this);
+        public IBattlePlayer Convert(BattlePhase phase)
+        {
+            return new LocalBattlePlayer(phase, this);
+        }
     }
 }

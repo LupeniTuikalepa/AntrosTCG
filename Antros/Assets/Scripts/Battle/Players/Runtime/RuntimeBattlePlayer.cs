@@ -12,9 +12,9 @@ namespace ATCG.Battle.Players.Runtime
     {
         protected static readonly List<RuntimeBattlePlayer<T>> runtimeBattlePlayers = new();
 
-        public T Player { get; private set; }
-
         private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
+
+        public T Player { get; private set; }
 
         private void Awake()
         {
@@ -35,7 +35,7 @@ namespace ATCG.Battle.Players.Runtime
 
         public void Connect(T player)
         {
-            if(Player != null)
+            if (Player != null)
                 Disconnect();
 
             Player = player;
@@ -57,20 +57,19 @@ namespace ATCG.Battle.Players.Runtime
             for (int i = 0; i < runtimeComponents.Length; i++)
                 runtimeComponents[i].Disconnect(this, Player);
         }
+
         protected abstract void OnConnected();
         protected abstract void OnDisconnected();
 
         public static bool TryGetRuntimeLocalPlayerFor<TRuntimePlayer>(T player, out TRuntimePlayer runtimePlayer)
             where TRuntimePlayer : RuntimeBattlePlayer<T>
         {
-            foreach (var runtimeBattlePlayer in runtimeBattlePlayers)
-            {
+            foreach (RuntimeBattlePlayer<T> runtimeBattlePlayer in runtimeBattlePlayers)
                 if (runtimeBattlePlayer.Player == player && runtimeBattlePlayer is TRuntimePlayer rtp)
                 {
                     runtimePlayer = rtp;
                     return true;
                 }
-            }
 
             runtimePlayer = null;
             return false;

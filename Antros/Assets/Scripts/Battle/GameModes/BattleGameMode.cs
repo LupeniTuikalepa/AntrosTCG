@@ -3,12 +3,10 @@ using System.Threading.Tasks;
 using ATCG.GameModes;
 using UnityEngine;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.GameModes
 {
     public class BattleGameMode : GameMode<BattleGameModeResults>
     {
-
-
         protected override async Awaitable Initialize()
         {
             await Task.CompletedTask;

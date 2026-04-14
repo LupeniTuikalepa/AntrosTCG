@@ -1,28 +1,27 @@
 ﻿using System;
 
-namespace ATCG.Battle.Entities.Core.Components
+namespace ATCG.Battle.Entities.Components
 {
     public class SparseSet<T>
     {
         private T[] dense;
         private int[] denseToElement;
         private int[] sparse;
-        private int count;
-
-        public int Count => count;
-
-        public Span<T> AllElements => dense.AsSpan(0, count);
-        public Span<int> AllIDs => denseToElement.AsSpan(0, count);
 
         public SparseSet(int initialCapacity = 64)
         {
             dense = new T[initialCapacity];
             denseToElement = new int[initialCapacity];
             sparse = new int[initialCapacity];
-            count = 0;
+            Count = 0;
 
             Array.Fill(sparse, -1);
         }
+
+        public int Count { get; private set; }
+
+        public ReadOnlySpan<T> AllElements => dense.AsSpan(0, Count);
+        public ReadOnlySpan<int> AllIDs => denseToElement.AsSpan(0, Count);
 
 
         public ref T this[int id] => ref GetRef(id);
@@ -54,18 +53,18 @@ namespace ATCG.Battle.Entities.Core.Components
 
         public void Set(int id, in T component)
         {
-            // Resize sparse si l'id dépasse
+            // Resize sparse si l'entityID dépasse
             if (id >= sparse.Length)
                 GrowSparse(id + 1);
 
-            var index = sparse[id];
+            int index = sparse[id];
             if (index == -1)
             {
                 // Resize dense si plus de place
-                if (count >= dense.Length)
+                if (Count >= dense.Length)
                     GrowDense();
 
-                index = count++;
+                index = Count++;
                 sparse[id] = index;
                 denseToElement[index] = id;
             }
@@ -77,18 +76,18 @@ namespace ATCG.Battle.Entities.Core.Components
         {
             if (id >= sparse.Length) return;
 
-            var index = sparse[id];
+            int index = sparse[id];
             if (index == -1) return;
 
-            var lastIndex = count - 1;
-            var lastEntityId = denseToElement[lastIndex];
+            int lastIndex = Count - 1;
+            int lastEntityId = denseToElement[lastIndex];
 
             dense[index] = dense[lastIndex];
             denseToElement[index] = lastEntityId;
             sparse[lastEntityId] = index;
 
             sparse[id] = -1;
-            count--;
+            Count--;
         }
 
 
@@ -97,7 +96,7 @@ namespace ATCG.Battle.Entities.Core.Components
             int newSize = sparse.Length;
             while (newSize < minCapacity) newSize *= 2;
 
-            var newSparse = new int[newSize];
+            int[] newSparse = new int[newSize];
             Array.Copy(sparse, newSparse, sparse.Length);
             Array.Fill(newSparse, -1, sparse.Length, newSize - sparse.Length);
             sparse = newSparse;
@@ -108,10 +107,10 @@ namespace ATCG.Battle.Entities.Core.Components
             int newSize = dense.Length * 2;
 
             var newDense = new T[newSize];
-            var newDenseToElement = new int[newSize];
+            int[] newDenseToElement = new int[newSize];
 
-            Array.Copy(dense, newDense, count);
-            Array.Copy(denseToElement, newDenseToElement, count);
+            Array.Copy(dense, newDense, Count);
+            Array.Copy(denseToElement, newDenseToElement, Count);
 
             dense = newDense;
             denseToElement = newDenseToElement;

@@ -26,17 +26,23 @@ namespace Linework.WideOutline
         {
             private WideOutlineSettings settings;
             private Material mask, silhouetteBase, silhouetteInstancedBase, composite, clear;
+#if UNITY_6000_0_OR_NEWER
+#else
             private readonly ProfilingSampler maskSampler, silhouetteSampler, informationSampler, floodSampler, outlineSampler;
-            private float maxwidth;
+#endif
+            private float maxWidth;
 
             public WideOutlinePass()
             {
                 profilingSampler = new ProfilingSampler(nameof(WideOutlinePass));
+#if UNITY_6000_0_OR_NEWER
+#else
                 maskSampler = new ProfilingSampler(ShaderPassName.Mask);
                 silhouetteSampler = new ProfilingSampler(ShaderPassName.Silhouette);
                 informationSampler = new ProfilingSampler(ShaderPassName.Information);
                 floodSampler = new ProfilingSampler(ShaderPassName.Flood);
                 outlineSampler = new ProfilingSampler(ShaderPassName.Outline);
+#endif
             }
 
             public bool Setup(ref WideOutlineSettings wideOutlineSettings, ref Material maskMaterial, ref Material silhouetteMaterial, ref Material silhouetteInstancedMaterial,
@@ -119,7 +125,7 @@ namespace Linework.WideOutline
                     // Information buffer.
                     if (settings.widthControl == WidthControl.PerOutline) information.EnableKeyword(ShaderFeature.InformationBuffer);
                     else information.DisableKeyword(ShaderFeature.InformationBuffer);
-                    if (outline.width > maxwidth) maxwidth = outline.width;
+                    if (outline.width > maxWidth) maxWidth = outline.width;
                     information.SetVector(CommonShaderPropertyId.Information, new Vector4(outline.width / 100.0f, 0.0f, 0.0f, 0.0f));
                 }
 
@@ -164,7 +170,7 @@ namespace Linework.WideOutline
                     settings.customMaterial.SetFloat(ShaderPropertyId.OutlineWidth, settings.sharedWidth);
                 }
 
-                // Return true if any of the outlines should be rendered (are active). Otherwise return false.
+                // Return true if any of the outlines should be rendered (are active). Otherwise, return false.
                 // Same as `return settings.Outlines.Any(ShouldRenderOutline);`
                 foreach (var outline in settings.Outlines)
                 {
@@ -189,9 +195,9 @@ namespace Linework.WideOutline
 #if UNITY_6000_0_OR_NEWER
             private class PassData
             {
-                internal readonly List<RendererListHandle> MaskRendererListHandles = new();
-                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> SilhouetteRendererListHandles = new();
-                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> InformationRendererListHandles = new();
+                internal readonly List<RendererListHandle> maskRendererListHandles = new();
+                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> silhouetteRendererListHandles = new();
+                internal readonly List<(RendererListHandle handle, bool vertexAnimated)> informationRendererListHandles = new();
             }
 
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -221,7 +227,7 @@ namespace Linework.WideOutline
                     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
                     InitMaskRendererLists(renderGraph, frameData, ref passData);
-                    foreach (var rendererListHandle in passData.MaskRendererListHandles)
+                    foreach (var rendererListHandle in passData.maskRendererListHandles)
                     {
                         builder.UseRendererList(rendererListHandle);
                     }
@@ -230,7 +236,7 @@ namespace Linework.WideOutline
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                     {
-                        foreach (var handle in data.MaskRendererListHandles)
+                        foreach (var handle in data.maskRendererListHandles)
                         {
                             context.cmd.DrawRendererList(handle);
                         }
@@ -248,7 +254,7 @@ namespace Linework.WideOutline
                     if (settings.customDepthBuffer) builder.SetGlobalTextureAfterPass(silhouetteDepthHandle, ShaderPropertyId.SilhouetteDepthBuffer);
 
                     InitSilhouetteRendererLists(renderGraph, frameData, ref passData);
-                    foreach (var rendererListHandle in passData.SilhouetteRendererListHandles)
+                    foreach (var rendererListHandle in passData.silhouetteRendererListHandles)
                     {
                         builder.UseRendererList(rendererListHandle.handle);
                     }
@@ -258,10 +264,10 @@ namespace Linework.WideOutline
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                     {
-                        foreach (var handle in data.SilhouetteRendererListHandles)
+                        foreach (var handle in data.silhouetteRendererListHandles)
                         {
                             // NOTE: In case of vertex animation: the object's (animated) shader is used to draw the silhouette.
-                            // NOTE: The outline color is then defined within that shader and we render it by toggling this global keyword.
+                            // NOTE: The outline color is then defined within that shader, and we render it by toggling this global keyword.
 
                             if (handle.vertexAnimated)
                             {
@@ -289,7 +295,7 @@ namespace Linework.WideOutline
                     builder.SetGlobalTextureAfterPass(informationHandle, ShaderPropertyId.InformationBuffer);
 
                     InitInformationRendererList(renderGraph, frameData, ref passData);
-                    foreach (var rendererListHandle in passData.InformationRendererListHandles)
+                    foreach (var rendererListHandle in passData.informationRendererListHandles)
                     {
                         builder.UseRendererList(rendererListHandle.handle);
                     }
@@ -299,7 +305,7 @@ namespace Linework.WideOutline
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                     {
-                        foreach (var handle in data.InformationRendererListHandles)
+                        foreach (var handle in data.informationRendererListHandles)
                         {
                             context.cmd.DrawRendererList(handle.handle);
                         }
@@ -322,7 +328,7 @@ namespace Linework.WideOutline
 
                         Blitter.BlitCameraTexture(cmd, silhouetteHandle, pingHandle, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, composite, ShaderPass.FloodInit);
 
-                        var width = (settings.widthControl == WidthControl.Shared ? settings.sharedWidth : maxwidth) * cameraData.renderScale;
+                        var width = (settings.widthControl == WidthControl.Shared ? settings.sharedWidth : maxWidth) * cameraData.renderScale;
                         if (settings.scaleWithResolution)
                         {
                             // Analogue to scaling in shader.
@@ -378,7 +384,7 @@ namespace Linework.WideOutline
 
             private void InitMaskRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.MaskRendererListHandles.Clear();
+                passData.maskRendererListHandles.Clear();
 
                 var renderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -429,13 +435,13 @@ namespace Linework.WideOutline
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.MaskRendererListHandles.Add(handle);
+                    passData.maskRendererListHandles.Add(handle);
                 }
             }
 
             private void InitSilhouetteRendererLists(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.SilhouetteRendererListHandles.Clear();
+                passData.silhouetteRendererListHandles.Clear();
 
                 var universalRenderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -513,7 +519,7 @@ namespace Linework.WideOutline
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref universalRenderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
 
-                    passData.SilhouetteRendererListHandles.Add((handle, outline.vertexAnimation));
+                    passData.silhouetteRendererListHandles.Add((handle, outline.vertexAnimation));
 
                     i++;
                 }
@@ -521,7 +527,7 @@ namespace Linework.WideOutline
 
             private void InitInformationRendererList(RenderGraph renderGraph, ContextContainer frameData, ref PassData passData)
             {
-                passData.InformationRendererListHandles.Clear();
+                passData.informationRendererListHandles.Clear();
 
                 var universalRenderingData = frameData.Get<UniversalRenderingData>();
                 var cameraData = frameData.Get<UniversalCameraData>();
@@ -595,7 +601,7 @@ namespace Linework.WideOutline
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref universalRenderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
                         ref handle);
-                    passData.InformationRendererListHandles.Add((handle, outline.vertexAnimation));
+                    passData.informationRendererListHandles.Add((handle, outline.vertexAnimation));
 
                     i++;
                 }
@@ -657,7 +663,7 @@ namespace Linework.WideOutline
                 baseDescriptor.name = Buffer.Pong;
                 pongHandle = renderGraph.CreateTexture(baseDescriptor);
             }
-#endif
+#else
             private RTHandle cameraDepthRTHandle, silhouetteRTHandle, silhouetteDepthRTHandle, informationRTHandle, pingRTHandle, pongRTHandle;
 
             #pragma warning disable 618, 672
@@ -1037,15 +1043,19 @@ namespace Linework.WideOutline
 
                 cameraDepthRTHandle = null;
             }
-
+#endif
+            
             public void Dispose()
             {
                 settings = null; // de-reference settings to allow them to be freed from memory
 
+#if UNITY_6000_0_OR_NEWER
+#else
                 silhouetteRTHandle?.Release();
                 silhouetteDepthRTHandle?.Release();
                 pingRTHandle?.Release();
                 pongRTHandle?.Release();
+#endif
             }
         }
 
@@ -1100,6 +1110,8 @@ namespace Linework.WideOutline
             if (render) renderer.EnqueuePass(wideOutlinePass);
         }
 
+#if UNITY_6000_0_OR_NEWER
+#else
         #pragma warning disable 618, 672
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
@@ -1112,11 +1124,12 @@ namespace Linework.WideOutline
             wideOutlinePass.SetTarget(renderer.cameraDepthTargetHandle);
         }
         #pragma warning restore 618, 672
-
+#endif
+        
         /// <summary>
         /// Clean up resources allocated to the Scriptable Renderer Feature such as materials.
         /// </summary>
-        override protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             wideOutlinePass?.Dispose();
             wideOutlinePass = null;

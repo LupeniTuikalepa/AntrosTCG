@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Runtime;
-using ATCG.Battle.Heroes.Runtime;
-using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Metrics;
@@ -13,21 +11,20 @@ using Helteix.Tools.Phases;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.Entities.Heroes.Runtime
 {
     public class RuntimeHeroManager : MonoBehaviour,
         IRuntimeBattlePlayerComponent<LocalBattlePlayer>,
         IPhaseListener<SelectCellPhase>
     {
-
-        private Dictionary<HeroBattleCard, RuntimeHero> heroCards = new();
-
         [field: SerializeField]
 
         public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
 
         [SerializeField]
         private Transform heroContainer;
+
+        private readonly Dictionary<HeroBattleCard, RuntimeHero> heroCards = new();
 
         [ShowInInspector, ReadOnly]
         public RuntimeHero SelectedCard { get; private set; }
@@ -47,37 +44,52 @@ namespace ATCG.Battle
             });
         }
 
+
+        void IPhaseListener<SelectCellPhase>.OnPhaseBegin(SelectCellPhase phase)
+        {
+            Selectable.AddCondition(phase.MainChannelKey, false);
+        }
+
+        void IPhaseListener<SelectCellPhase>.OnPhaseEnd(SelectCellPhase phase)
+        {
+            Selectable.RemoveCondition(phase.MainChannelKey);
+        }
+
+        public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        {
+            /*
+            BattleGrid battleGrid = RuntimeBattleGrid.BattleGrid;
+            battleGrid.OnBattleCardDeployed += OnCardDeployed;
+            */
+        }
+
+        public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        {
+            /*
+            BattleGrid battleGrid = RuntimeBattleGrid.BattleGrid;
+            battleGrid.OnBattleCardDeployed -= OnCardDeployed;
+            */
+        }
+
         private void OnCardDeployed(IBattleCard card)
         {
             switch (card)
             {
                 case HeroBattleCard heroBattleCard:
-                    if(heroCards.ContainsKey(heroBattleCard))
+                    if (heroCards.ContainsKey(heroBattleCard))
                         break;
 
                     GameObject instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(heroContainer);
                     if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
                     {
                         runtimeHeroBattleCard.Initialize(this);
-                        //runtimeHeroBattleCard.Connect(Card);
+                        //runtimeHeroBattleCard.Connect(HeroCard);
 
                         heroCards.Add(heroBattleCard, runtimeHeroBattleCard);
                     }
 
                     break;
             }
-        }
-
-        public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
-        {
-            BattleGrid battleGrid = RuntimeBattleGrid.BattleGrid;
-            battleGrid.OnBattleCardDeployed += OnCardDeployed;
-        }
-
-        public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
-        {
-            BattleGrid battleGrid = RuntimeBattleGrid.BattleGrid;
-            battleGrid.OnBattleCardDeployed -= OnCardDeployed;
         }
 
         public void Select(RuntimeHero runtimeHero)
@@ -92,21 +104,10 @@ namespace ATCG.Battle
 
         public void Unselect()
         {
-            if(SelectedCard)
+            if (SelectedCard)
                 SelectedCard.OnDeselected();
 
             SelectedCard = null;
-        }
-
-
-        void IPhaseListener<SelectCellPhase>.OnPhaseBegin(SelectCellPhase phase)
-        {
-            Selectable.AddCondition(phase.MainChannelKey, false);
-        }
-
-        void IPhaseListener<SelectCellPhase>.OnPhaseEnd(SelectCellPhase phase)
-        {
-            Selectable.RemoveCondition(phase.MainChannelKey);
         }
     }
 }

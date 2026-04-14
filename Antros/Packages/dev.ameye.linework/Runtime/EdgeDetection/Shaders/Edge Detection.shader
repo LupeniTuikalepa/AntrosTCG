@@ -73,6 +73,26 @@
         Cull Off
 
         HLSLINCLUDE
+        // SHADER_FEATURE: UNUSED VARIANTS NOT INCLUDED IN FINAL BUILD -> KEYWORDS THAT ARE SET FROM MATERIALS
+        // MULTI_COMPILE: UNUSED VARIANTS INCLUDED IN FINAL BUILD -> KEYWORDS THAT ARE SET FROM CODE GLOBALLY
+        // LOCAL: DO NOT COUNT TOWARDS GLOBAL KEYWORD COUNT LIMIT
+        // #pragma multi_compile_local _ DEPTH
+        // #pragma multi_compile_local _ NORMALS
+        // #pragma multi_compile_local _ LUMINANCE
+        // #pragma multi_compile_local _ SECTIONS
+        // #pragma multi_compile_local _ DEPTH_MASK
+        // #pragma multi_compile_local _ NORMALS_MASK
+        // #pragma multi_compile_local _ LUMINANCE_MASK
+        // #pragma multi_compile_local OPERATOR_CROSS OPERATOR_SOBEL OPERATOR_CIRCULAR
+        //
+        // #pragma multi_compile_local _ OVERRIDE_SHADOW
+        // #pragma multi_compile_local _ SCALE_WITH_DISTANCE
+        // #pragma multi_compile_local _ SCALE_WITH_RESOLUTION
+        // #pragma multi_compile_local _ FILL
+        // #pragma multi_compile_local _ FADE_BY_DISTANCE
+        // #pragma multi_compile_local _ FADE_BY_HEIGHT
+        // #pragma multi_compile_local _ DISTORTION
+        
         #pragma multi_compile _ DEPTH
         #pragma multi_compile _ NORMALS
         #pragma multi_compile _ LUMINANCE
@@ -218,9 +238,11 @@
 
                 #if defined(DEPTH) || defined(OVERRIDE_SHADOW) || defined(SCALE_WITH_DISTANCE) || defined(FADE_BY_DISTANCE) || defined(FADE_BY_HEIGHT) || defined(DEBUG_DEPTH) || defined(DISTORTION) || defined(OPERATOR_CIRCULAR)
                 float center_depth = SampleSceneDepth(uv);
+                
                 #if !UNITY_REVERSED_Z // Transform depth from [0, 1] to [-1, 1] on OpenGL.
                 center_depth = lerp(UNITY_NEAR_CLIP_VALUE, 1.0, center_depth); // Alternatively: depth = 1.0 - depth
                 #endif
+                
                 float3 positionWS = ComputeWorldSpacePosition(uv, center_depth, UNITY_MATRIX_I_VP); // Calculate world position from depth.
                 #endif
 
@@ -429,11 +451,15 @@
                 #if defined(DEPTH)
                 float depth_threshold = 1 / _DepthSensitivity;
 
-                // 1. The depth buffer is non-linear so two objects 1m apart close to camera will have much larger depth difference than two
+                bool orthoCamera = unity_OrthoParams.w > 0.0; // w is 1.0 if camera is orthographic
+                
+                // 1. Perspective camera: the depth buffer is non-linear so two objects 1m apart close to camera will have much larger depth difference than two
                 //    objects 1m apart far away from the camera. For this, we multiply the threshold by the depth buffer so that nearby objects
                 //    will have to have a larger discontinuity in order to be detected as an 'edge'.
-                depth_threshold = max(depth_threshold * 0.01, depth_threshold * _DepthDistanceModulation * SampleSceneDepth(uv));
-
+                float depth = orthoCamera ? LinearEyeDepth(center_depth, _ZBufferParams) / _ProjectionParams.z // normalized linear depth
+                                          : center_depth; // non-linear, perspective depth
+                depth_threshold = max(depth_threshold * 0.01, depth_threshold * _DepthDistanceModulation * depth);
+              
                 // 2. At small grazing angles, the depth difference will grow larger and so faces can be wrongly detected. For this, the depth threshold
                 //    can be modulated by the grazing angle, given by the dot product between the normal vector and the view direction. If the normal vector
                 //    and the view direction are almost perpendicular, the depth threshold should be increased.
@@ -466,7 +492,7 @@
                 ///
 
                 #if defined(DEBUG_DEPTH)
-                return lerp(half4(center_depth, center_depth, center_depth, 1), half4(1,1,1,1), edge_depth);
+                return lerp(half4(center_depth, center_depth, center_depth, 1), half4(1,0,0,1), edge_depth);
                 #endif
 
                 #if defined(DEBUG_NORMALS)

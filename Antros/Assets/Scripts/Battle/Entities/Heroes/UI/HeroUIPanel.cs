@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using ATCG.Battle.Heroes.Runtime;
+using ATCG.Battle.Entities.Heroes.Runtime;
 using PrimeTween;
 using UnityEngine;
 
-namespace ATCG.Battle.Heroes.Deployed
+namespace ATCG.Battle.Entities.Heroes.UI
 {
     public class HeroUIPanel : MonoBehaviour
     {
@@ -12,6 +12,7 @@ namespace ATCG.Battle.Heroes.Deployed
 
         [SerializeField]
         private float animationDuration = .3f;
+
         [SerializeField]
         private float xOffset = 25;
 
@@ -49,10 +50,8 @@ namespace ATCG.Battle.Heroes.Deployed
             Tween.Alpha(canvasGroup, 1, animationDuration);
             Tween.LocalPosition(transform, localPosition, animationDuration);
             for (int i = 0; i < panelElements.Length; i++)
-            {
-                if(panelElements[i] != null)
+                if (panelElements[i] != null)
                     panelElements[i].OnOpen(runtimeHero, this);
-            }
         }
 
         public void Close()
@@ -67,13 +66,11 @@ namespace ATCG.Battle.Heroes.Deployed
 
             Tween.Alpha(canvasGroup, 0, animationDuration);
             Tween.LocalPosition(transform, localPosition + Vector3.right * xOffset, animationDuration)
-                .OnComplete(() => transform.localPosition =localPosition);
+                .OnComplete(() => transform.localPosition = localPosition);
 
             for (int i = 0; i < panelElements.Length; i++)
-            {
-                if(panelElements[i] != null)
+                if (panelElements[i] != null)
                     panelElements[i]?.OnClose(runtimeHero, this);
-            }
         }
     }
 }

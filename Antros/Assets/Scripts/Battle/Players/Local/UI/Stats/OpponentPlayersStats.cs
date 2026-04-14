@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
-using ATCG.GameModes;
+using ATCG.Battle.GameModes;
 using Helteix.Tools;
-using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.Local.UI.Stats
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/OpponentPlayersStats")]
     public class OpponentPlayersStats : PlayerHUDElement
     {
-        public BattlePhase CurrentPhase { get; private set; }
-
         [SerializeField]
         private SimplePlayerStats simplePlayerStatsPrefab;
+
         [SerializeField]
         private RectTransform container;
 
         private Dictionary<IBattlePlayer, SimplePlayerStats> simplePlayerStats;
+        public BattlePhase CurrentPhase { get; private set; }
 
         private void Awake()
         {
@@ -32,7 +31,7 @@ namespace ATCG.Battle.Players.Runtime.UI
             for (int i = 0; i < CurrentPhase.PlayerCount; i++)
             {
                 IBattlePlayer player = CurrentPhase.Players[i];
-                if(player == Player)
+                if (player == Player)
                     continue;
 
                 SimplePlayerStats instance = simplePlayerStatsPrefab.InstantiatePrefab(container);

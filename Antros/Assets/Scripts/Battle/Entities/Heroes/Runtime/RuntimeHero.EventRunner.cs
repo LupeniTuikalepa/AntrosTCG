@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ATCG.Battle.Players.Local.Phases;
-using ATCG.HexGrids;
 using Helteix.Tools.Phases;
-using PrimeTween;
-using UnityEngine;
 
-namespace ATCG.Battle.Heroes.Runtime
+namespace ATCG.Battle.Entities.Heroes.Runtime
 {
     public partial class RuntimeHero : IPhaseListener<SelectCellPhase>
     {
-        private List<SelectCellPhase> selectCellPhases = new List<SelectCellPhase>();
+        private readonly List<SelectCellPhase> selectCellPhases = new();
 
         /*
         async Awaitable IBasicAttackCommandListener.BeginBasicAttack(BasicAttackCommand basicAttackCommand)
@@ -19,7 +15,7 @@ namespace ATCG.Battle.Heroes.Runtime
             {
                 Tween.CompleteAll(transform);
 
-                if (RuntimeBattleGrid.TryGetBattleCellAt(Card.Coordinates, out var cell))
+                if (RuntimeBattleGrid.TryGetBattleCellAt(HeroCard.AllCellsCoordinates, out var cell))
                     await Tween.PunchScale(transform, Vector3.one * 1.5f, .25f);
             }
             catch (Exception e)
@@ -70,7 +66,6 @@ namespace ATCG.Battle.Heroes.Runtime
 
         private void RefreshSelectCellPhaseState()
         {
-
         }
     }
 }

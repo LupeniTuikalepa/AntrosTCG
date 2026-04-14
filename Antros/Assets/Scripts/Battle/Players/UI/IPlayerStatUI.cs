@@ -1,4 +1,4 @@
-﻿namespace ATCG.Battle.Players.Runtime.UI
+﻿namespace ATCG.Battle.Players.UI
 {
     public interface IPlayerStatUI
     {

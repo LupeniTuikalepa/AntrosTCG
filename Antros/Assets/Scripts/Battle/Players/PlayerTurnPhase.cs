@@ -1,12 +1,12 @@
-﻿using ATCG.Battle.Actions;
+﻿using ATCG.Battle.Turns;
 using Helteix.Tools.Phases;
 
 namespace ATCG.Battle.Players
 {
     public abstract class PlayerTurnPhase : PhaseCompletionSource<BattleTurn>
     {
-        public readonly int turnNumber;
         public readonly IBattlePlayer player;
+        public readonly int turnNumber;
 
         protected PlayerTurnPhase(int turnNumber, IBattlePlayer player)
         {

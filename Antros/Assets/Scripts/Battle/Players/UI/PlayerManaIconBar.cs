@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.UI
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIconBar")]
     public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI
@@ -12,6 +12,7 @@ namespace ATCG.Battle.Players.Runtime.UI
 
         [SerializeField]
         private PlayerManaIcon iconPrefab;
+
         [SerializeField]
         private Transform container;
 
@@ -40,8 +41,8 @@ namespace ATCG.Battle.Players.Runtime.UI
         {
             for (int i = 0; i < player.MaxMana; i++)
             {
-                var icon = manaIcons[i];
-                if(i < current)
+                PlayerManaIcon icon = manaIcons[i];
+                if (i < current)
                     icon.Activate();
                 else
                     icon.Deactivate();

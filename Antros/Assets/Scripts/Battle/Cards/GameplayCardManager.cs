@@ -6,10 +6,13 @@ namespace ATCG.Battle.Cards
 {
     public static class GameplayCardManager
     {
-        public static IBattleCard CreateCardFor(GameCardData data, IBattlePlayer player) => data switch
+        public static IBattleCard CreateCardFor(GameCardData data, IBattlePlayer player)
         {
-            HeroCardData heroCardData => new HeroBattleCard(heroCardData, player),
-            _ => null
-        };
+            return data switch
+            {
+                HeroCardData heroCardData => new HeroBattleCard(heroCardData, player),
+                _ => null
+            };
+        }
     }
 }

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Headers should be listed in this order: Added, Changed, Deprecated, Removed, Fixed, Security -->
 
+## [1.5.5] - 2026-03-21
+
+### Fixed
+
+- Edge Detection: Fix depth-based edge detection for orthographic cameras
+- Unity 6.4: Fixed console errors
+
 ## [1.5.4] - 2026-02-17
 
 ### Fixed

@@ -16,9 +16,13 @@ namespace ATCG.HexGrids.Grids
         public float OuterCellRadius { get; private set; }
         public Vector2 Center { get; private set; }
 
+        public int Size => Cells.Count;
+
         private Dictionary<HexCoordinates, HexCell> cells;
         private Dictionary<HexCoordinates, HexCell> Cells => cells??=new();
 
+        public IEnumerable<HexCoordinates> CellsCoordinates => cells.Keys;
+        public IEnumerable<HexCell> CellsValues => cells.Values;
 
         public HexGrid(float outerCellRadius = 10f, Vector2 center = default)
         {

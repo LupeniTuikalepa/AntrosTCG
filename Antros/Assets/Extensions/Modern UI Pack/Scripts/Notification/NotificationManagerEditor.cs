@@ -118,7 +118,7 @@ namespace Michsky.MUIP
 
                     if (ntfTarget.GetComponent<CanvasGroup>().alpha == 0)
                     {
-                        if (GUILayout.Button("Set Visible", customSkin.button))
+                        if (GUILayout.Button("Add Visible", customSkin.button))
                         {
                             ntfTarget.GetComponent<CanvasGroup>().alpha = 1;
                             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
@@ -127,7 +127,7 @@ namespace Michsky.MUIP
 
                     else
                     {
-                        if (GUILayout.Button("Set Invisible", customSkin.button))
+                        if (GUILayout.Button("Add Invisible", customSkin.button))
                         {
                             ntfTarget.GetComponent<CanvasGroup>().alpha = 0;
                             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());

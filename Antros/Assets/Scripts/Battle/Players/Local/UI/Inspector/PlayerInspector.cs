@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
-using ATCG.Battle.Grids.Runtime;
-using ATCG.Battle.Heroes.Runtime;
-using ATCG.Battle.Players.Runtime.UI;
+using ATCG.Battle.Entities.Heroes.Runtime;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.Players.Local.UI.Inspector
 {
     public class PlayerInspector : PlayerHUDElement
     {
@@ -23,15 +20,6 @@ namespace ATCG.Battle
             pointerEventData = new PointerEventData(eventSystem);
         }
 
-        protected override void OnConnect()
-        {
-        }
-
-        protected override void OnDisconnect()
-        {
-
-        }
-
         private void Update()
         {
             Vector2 mousePosition = eventSystem.currentInputModule.input.mousePosition;
@@ -40,13 +28,18 @@ namespace ATCG.Battle
             {
                 eventSystem.RaycastAll(pointerEventData, raycastsResults);
                 foreach (RaycastResult result in raycastsResults)
-                {
                     if (result.gameObject.CompareTag("Hero") && result.gameObject.TryGetComponent(out RuntimeHero hero))
                     {
-
                     }
-                }
             }
+        }
+
+        protected override void OnConnect()
+        {
+        }
+
+        protected override void OnDisconnect()
+        {
         }
     }
 }

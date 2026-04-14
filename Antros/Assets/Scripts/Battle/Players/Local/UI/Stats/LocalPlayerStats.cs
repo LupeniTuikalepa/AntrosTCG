@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using ATCG.Battle.Players.UI;
+using UnityEngine;
 
-namespace ATCG.Battle.Players.Runtime.UI
+namespace ATCG.Battle.Players.Local.UI.Stats
 {
-
     [AddComponentMenu("ATCG/Gameplay/Player/UI/LocalPlayerStats")]
     public class LocalPlayerStats : PlayerHUDElement
     {
         [SerializeField]
         private PlayerHealthBar healthBar;
+
         [SerializeField]
         private PlayerManaIconBar manaBar;
 

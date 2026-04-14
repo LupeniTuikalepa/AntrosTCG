@@ -1,25 +1,25 @@
-﻿using System;
-using ATCG.Battle.Cards;
-using ATCG.Battle.Players.Local.Phases;
+﻿using ATCG.Battle.Cards;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.GameModes;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
 using Helteix.ChanneledProperties.Priorities;
-using Helteix.Tools.Phases;
 using PrimeTween;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Runtime
 {
     public partial class RuntimeBattleCell : MonoBehaviour
     {
-        public BattleCell BattleCell { get; private set; }
-        public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
-        public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
-        public HexCoordinates Coordinates => BattleCell.cell.coordinates;
-
         [field: SerializeField]
         public SpriteRenderer SpriteRenderer { get; private set; }
+
+        public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
+        public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
+        public HexCoordinates Coordinates => BattleCellAspect.BattleCellComponent.coordinates;
+
+        public BattleCellAspect BattleCellAspect { get; private set; }
 
         private void Awake()
         {
@@ -39,36 +39,35 @@ namespace ATCG.Battle.Grids.Runtime
         }
 
 
-        public void Connect(RuntimeBattleGrid grid, BattlePhase phase, BattleCell battleCell)
+        public void Connect(RuntimeBattleGrid grid, BattlePhase phase, BattleCellAspect battleCellAspect)
         {
-            if (BattleCell != null)
-                Disconnect(phase, battleCell);
+            if (BattleCellAspect.IsValid())
+                Disconnect(phase, battleCellAspect);
 
             RuntimeBattleGrid = grid;
-            BattleCell = battleCell;
-            battleCell.Attacked += BattleCellOnAttacked;
+            BattleCellAspect = battleCellAspect;
+            //battleCellAspect.Attacked += BattleCellOnAttacked;
 
             transform.localScale = Vector3.zero;
 
             Tween.Scale(transform, grid.GetTargetScale(), .3f, Easing.Overshoot(.3f),
                 startDelay: Coordinates.Length() * .2f);
         }
-        public void Disconnect(BattlePhase phase, BattleCell battleCell)
+
+        public void Disconnect(BattlePhase phase, BattleCellAspect battleCellAspect)
         {
-            if (BattleCell != battleCell)
+            if (BattleCellAspect.IsNot(battleCellAspect))
                 return;
 
-            BattleCell.Attacked -= BattleCellOnAttacked;
-            BattleCell = null;
+            //BattleCellAspect.Attacked -= BattleCellOnAttacked;
+            BattleCellAspect = default;
         }
 
 
         private void BattleCellOnAttacked(HeroBattleCard card)
         {
             Tween.StopAll(transform);
-            Tween.PunchScale(transform, - Vector3.one * 3, .5f);
+            Tween.PunchScale(transform, -Vector3.one * 3, .5f);
         }
-
-
     }
 }
