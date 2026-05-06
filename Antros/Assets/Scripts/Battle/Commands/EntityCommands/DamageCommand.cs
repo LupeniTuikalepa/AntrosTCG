@@ -16,7 +16,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             this.triggerDealDamageReactions = triggerDealDamageReactions;
         }
 
-        public override void Process(in GameCommandContext context)
+        protected override void Process(in GameCommandContext context)
         {
             EntityAddress address = TargetEntityAddress(context.World);
 

@@ -1,5 +1,8 @@
 Changelog:
 
+v6.6.2:
+ - Fix VR support
+
 v6.6.1:
  - Support Paraform 1.2.0
 

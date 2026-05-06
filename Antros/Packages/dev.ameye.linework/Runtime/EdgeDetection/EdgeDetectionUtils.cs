@@ -46,6 +46,7 @@ namespace Linework.EdgeDetection
         public static readonly int OutlineColorShadow = Shader.PropertyToID("_OutlineColorShadow");
         public static readonly int FillColor = Shader.PropertyToID("_FillColor");
         public static readonly int OutlineThickness = Shader.PropertyToID("_OutlineThickness");
+        public static readonly int CircularKernelSamples = Shader.PropertyToID("_CircularKernelSamples");
         public static readonly int DistanceScaleStart = Shader.PropertyToID("_DistanceScaleStart");
         public static readonly int DistanceScaleDistance = Shader.PropertyToID("_DistanceScaleDistance");
         public static readonly int DistanceScaleMin = Shader.PropertyToID("_DistanceScaleMin");

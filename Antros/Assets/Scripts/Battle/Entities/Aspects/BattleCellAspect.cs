@@ -1,13 +1,16 @@
 ﻿using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Lookups;
+using ATCG.Battle.Grids;
 using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public struct BattleCellAspect : IEntityAspect<BattleCellComponent>
+    public partial struct BattleCellAspect :
+        IEntityAspect<BattleGridElementComponent>,
+        ICreateEntityAspect<BattleCellAspect.Setup>
     {
-        public readonly struct IsCellMemberFilter : IComponentLookupFilter<GridMemberComponent>
+        public readonly struct IsCellMemberFilter : IComponentLookupFilter<BattleGridElementComponent>
         {
             private readonly HexCoordinates coordinates;
 
@@ -16,31 +19,33 @@ namespace ATCG.Battle.Entities.Aspects
                 this.coordinates = coordinates;
             }
 
-            public bool IsValid(in ComponentRef<GridMemberComponent> componentRef)
+            public bool IsValid(in ComponentRef<BattleGridElementComponent> componentRef)
             {
-                return componentRef.GetValue().Coordinates == coordinates;
+                return componentRef.GetValue().coordinates == coordinates;
             }
         }
 
-        public EntityAddress EntityAddress { get; set; }
-
-        public HexCoordinates Coordinate => BattleCellComponent.coordinates;
-
-        public ref BattleCellComponent BattleCellComponent => ref EntityAddress.GetComponent<BattleCellComponent>();
-
-
-        public ComponentsLookupResult<GridMemberComponent, IsCellMemberFilter> GetMembers()
+        public struct Setup
         {
-            IsCellMemberFilter filter = new(BattleCellComponent.coordinates);
-            return EntityAddress.world.LookupComponents<IsCellMemberFilter, GridMemberComponent>(filter);
+            public HexCoordinates coordinates;
+            public BattleGrid battleGrid;
+        }
+
+        public HexCoordinates Coordinate => BattleGridElementComponent.coordinates;
+
+
+        public ComponentsLookupResult<BattleGridElementComponent, IsCellMemberFilter> GetMembers()
+        {
+            IsCellMemberFilter filter = new(BattleGridElementComponent.coordinates);
+            return EntityAddress.world.LookupComponents<IsCellMemberFilter, BattleGridElementComponent>(filter);
         }
 
 
         public bool HasPhysicalMember()
         {
-            foreach (ComponentRef<GridMemberComponent> member in GetMembers())
+            foreach (ComponentRef<BattleGridElementComponent> member in GetMembers())
             {
-                if (!member.Entity.TryConvertToAspect(member.world, out GridMemberAspect aspect))
+                if (!member.Address.IsGridMemberAspect(out GridMemberAspect aspect))
                     continue;
 
                 if (aspect.IsPhysical)
@@ -52,9 +57,9 @@ namespace ATCG.Battle.Entities.Aspects
 
         public bool CanBeDeployedOn(IBattleCard card)
         {
-            foreach (ComponentRef<GridMemberComponent> member in GetMembers())
+            foreach (ComponentRef<BattleGridElementComponent> member in GetMembers())
             {
-                if (!member.Entity.TryConvertToAspect(member.world, out GridMemberAspect aspect))
+                if (!member.Address.IsGridMemberAspect(out GridMemberAspect aspect))
                     continue;
 
                 if (aspect.IsPhysical || aspect.PreventsDeployment)
@@ -67,6 +72,11 @@ namespace ATCG.Battle.Entities.Aspects
         public bool CanBeAttacked(IBattleCard contextCard)
         {
             return true;
+        }
+
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        {
+            componentsFactory.BattleGridElementComponent = new BattleGridElementComponent(setup.battleGrid, setup.coordinates);
         }
     }
 }

@@ -106,6 +106,7 @@ namespace Linework.Editor.Common.Utils
             public static readonly GUIContent SectionTextureChannel = EditorGUIUtility.TrTextContent("Channel", "Which color channel of the section texture to render to the section map.");
             public static readonly GUIContent Kernel = EditorGUIUtility.TrTextContent("Kernel", "The kernel that is used to detect edges.");
             public static readonly GUIContent OutlineThickness = EditorGUIUtility.TrTextContent("Thickness (pixels)", "The thickness of the edges.");
+            public static readonly GUIContent CircularKernelSamples = EditorGUIUtility.TrTextContent("Samples", "How many circular samples to use.");
             public static readonly GUIContent EdgeColor = EditorGUIUtility.TrTextContent("Edge Color", "The color of the outline.");
             public static readonly GUIContent OverrideShadow = EditorGUIUtility.TrTextContent("Override Shadow", "The color of the outline when it is in an area that lies within a shadow.");
             public static readonly GUIContent OutlineFillColor = EditorGUIUtility.TrTextContent("Fill Color", "The color of the outline for fill in regions in the section map.");

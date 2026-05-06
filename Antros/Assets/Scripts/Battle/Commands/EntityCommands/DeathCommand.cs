@@ -11,10 +11,11 @@ namespace ATCG.Battle.Commands.EntityCommands
         {
         }
 
-        public override void Process(in GameCommandContext context)
+        protected override void Process(in GameCommandContext context)
         {
             EntityAddress address = TargetEntityAddress(context.World);
-            if (address.ToAspect(out HeroEntityAspect aspect))
+
+            if (address.IsHeroEntityAspect(out HeroEntityAspect aspect))
             {
                 IBattlePlayer player = aspect.Player;
                 player.AddOrRemoveHealth(-aspect.HeroCard.DeathCost);

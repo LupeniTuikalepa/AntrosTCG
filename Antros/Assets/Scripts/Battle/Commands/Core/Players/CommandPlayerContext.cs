@@ -7,9 +7,9 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Commands.Core
 {
-    public class CommandPlayerContext<T> : ICommandPlayerContext where T: GameCommand
+    public class CommandPlayerContext<T> : ICommandPlayerContext where T: IGameCommand
     {
-        GameCommand ICommandPlayerContext.Command => command;
+        IGameCommand ICommandPlayerContext.Command => command;
 
         private T command;
 

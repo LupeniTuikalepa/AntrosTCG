@@ -47,7 +47,8 @@ namespace ATCG.Battle.Entities
 
         public bool HasComponent<T>(Entity e) where T : struct, IEntityComponent
         {
-            return e.HasComponent<T>(this);
+            EntityMeta meta = entities[e];
+            return meta.HasComponent<T>();
         }
 
         public bool TryGetROComponent<T>(Entity e, out T component) where T : struct, IEntityComponent
@@ -93,12 +94,12 @@ namespace ATCG.Battle.Entities
             return ref ComponentStore<T>.DefaultComponent;
         }
 
-        public bool AddComponent<T>(Entity e) where T : struct, IEntityComponent
+        public bool AddOrSetComponent<T>(Entity e) where T : struct, IEntityComponent
         {
-            return AddComponent(e, new T());
+            return AddOrSetComponent(e, new T());
         }
 
-        public bool AddComponent<T>(Entity e, in T component) where T : struct, IEntityComponent
+        public bool AddOrSetComponent<T>(Entity e, in T component) where T : struct, IEntityComponent
         {
             ref EntityMeta meta = ref entities[e];
             if (meta.HasComponent<T>())

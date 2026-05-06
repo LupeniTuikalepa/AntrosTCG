@@ -60,6 +60,7 @@ namespace Linework.Editor.EdgeDetection
         // Outline.
         private SerializedProperty kernel;
         private SerializedProperty outlineThickness;
+        private SerializedProperty circularKernelSamples;
         private SerializedProperty scaleWithDistance;
         private SerializedProperty distanceScaleStart;
         private SerializedProperty distanceScaleDistance;
@@ -149,6 +150,7 @@ namespace Linework.Editor.EdgeDetection
             // Outline.
             kernel = serializedObject.FindProperty(nameof(EdgeDetectionSettings.kernel));
             outlineThickness = serializedObject.FindProperty(nameof(EdgeDetectionSettings.outlineThickness));
+            circularKernelSamples = serializedObject.FindProperty(nameof(EdgeDetectionSettings.circularKernelSamples));
             scaleWithDistance = serializedObject.FindProperty(nameof(EdgeDetectionSettings.scaleWithDistance));
             distanceScaleStart = serializedObject.FindProperty(nameof(EdgeDetectionSettings.distanceScaleStart));
             distanceScaleDistance = serializedObject.FindProperty(nameof(EdgeDetectionSettings.distanceScaleDistance));
@@ -337,6 +339,10 @@ namespace Linework.Editor.EdgeDetection
                     EditorGUILayout.HelpBox("The circular kernel will only pick up on differences within the section map.", MessageType.Info);
                 }
                 EditorGUILayout.PropertyField(outlineThickness, EditorUtils.CommonStyles.OutlineThickness);
+                if ((Kernel) kernel.intValue == Kernel.Circular)
+                {
+                    EditorGUILayout.PropertyField(circularKernelSamples, EditorUtils.CommonStyles.CircularKernelSamples);
+                }
                 EditorGUILayout.PropertyField(scaleWithDistance, EditorUtils.CommonStyles.ScaleWithDistance);
                 if (scaleWithDistance.boolValue)
                 {

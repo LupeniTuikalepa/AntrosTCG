@@ -2,11 +2,13 @@
 {
     public static class EntityAspectExtensions
     {
+
         public static Entity ToAddress<T>(this T aspect) where T : IEntityAspect
             => aspect.EntityAddress;
 
         public static Entity ToEntity<T>(this T aspect) where T : IEntityAspect
             => ToAddress(aspect);
+
         public static bool IsValid<T>(this T aspect) where T : IEntityAspect
         {
             return aspect.IsValid;

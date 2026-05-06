@@ -44,10 +44,6 @@ namespace ATCG.Battle.Entities
             }
         }
 
-        public T CreateEntity<T>(EntityAspectBuilder<T> builder) where T : struct, IEntityAspect
-        {
-            return builder.Create(this);
-        }
 
         public Entity CreateEntity()
         {

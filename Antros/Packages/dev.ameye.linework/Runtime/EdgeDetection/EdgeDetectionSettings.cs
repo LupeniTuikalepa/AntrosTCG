@@ -82,6 +82,7 @@ namespace Linework.EdgeDetection
 #endif
         public Kernel kernel = Kernel.RobertsCross;
         [Range(0, 15)] public int outlineThickness = 3;
+        [Range(0, 20)] public int circularKernelSamples = 10;
 #if UNITY_EDITOR
         [ShaderKeywordFilter.SelectIf(true, overridePriority: true, keywordNames: ShaderFeature.ScaleWithDistance)]
 #endif

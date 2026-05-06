@@ -72,3 +72,9 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
+  <CellLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+  <HeroesLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 8

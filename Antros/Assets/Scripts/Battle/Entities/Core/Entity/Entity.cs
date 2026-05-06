@@ -7,12 +7,15 @@ namespace ATCG.Battle.Entities
     [Serializable]
     public readonly struct Entity : IEquatable<Entity>
     {
+        public static readonly Entity None = new Entity(-1);
+
         public readonly int id;
 
         public Entity(int id)
         {
             this.id = id;
         }
+
 
         public bool IsAlive(World world)
         {
@@ -49,27 +52,12 @@ namespace ATCG.Battle.Entities
 
         public bool AddComponent<T>(World world, in T component) where T : struct, IEntityComponent
         {
-            return world.AddComponent(this, component);
+            return world.AddOrSetComponent(this, component);
         }
 
         public bool RemoveComponent<T>(World world) where T : struct, IEntityComponent
         {
             return world.RemoveComponent<T>(this);
-        }
-
-
-        public bool TryConvertToAspect<T>(World world, out T aspect) where T : IEntityAspect, new()
-        {
-            aspect = ToAspect<T>(world);
-            return aspect.IsValid;
-        }
-
-        public T ToAspect<T>(World world) where T : IEntityAspect, new()
-        {
-            return new T
-            {
-                EntityAddress = new EntityAddress(world, this)
-            };
         }
 
         public static implicit operator int(Entity entity)

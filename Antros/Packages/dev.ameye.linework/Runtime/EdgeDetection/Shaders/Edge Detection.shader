@@ -26,6 +26,7 @@
         // Outline sampling.
         [KeywordEnum(Cross, Sobel, Circular)] _Operator("Edge Detection Operator", Float) = 0
         _OutlineThickness ("Outline Thickness", Float) = 1
+        _CircularKernelSamples ("Circular Kernel Samples", Float) = 1
         [Toggle(SCALE_WITH_DISTANCE)] _ScaleWithDistance ("Scale Outline Thickness With Distance", Float) = 0
         _DistanceScaleStart ("Distance Scale Start", Float) = 100
         _DistanceScaleDistance ("Distance Scale Distance", Float) = 10
@@ -145,6 +146,7 @@
             float4 _BackgroundColor, _OutlineColor, _FillColor, _OutlineColorShadow, _DistanceFadeColor, _HeightFadeColor;
             float _OverrideOutlineColorShadow;
             float _OutlineThickness;
+            float _CircularKernelSamples;
             float _ReferenceResolution;
             float _DistanceScaleStart, _DistanceScaleDistance, _DistanceScaleMin;
             float _DistanceFadeStart, _DistanceFadeDistance;
@@ -430,18 +432,20 @@
 
                 #elif defined(OPERATOR_CIRCULAR)
                 float sum_section = 0;
-                float rotation_step = 2 * PI / 20;
-                for (int index = 0; index < 20 ; index++) {
+                float rotation_step = 2 * PI / _CircularKernelSamples;
+                for (int index = 0; index < _CircularKernelSamples ; index++) {
                     float rotation = index * rotation_step;
                     float2 offset = float2(cos(rotation), sin(rotation)) * scaled_outline_thickness * texel_size;
                     float2 sample_uv = uv + offset;
 
                     #if defined(SECTIONS)
-                    float section_diff = SampleSceneSection(sample_uv).r - section_center.r;
+                    float section_sample = SampleSceneSection(sample_uv).r;
+                    if(section_sample == 0) mask = true;
+                    float section_diff = section_sample - section_center.r;
                     sum_section += section_diff * section_diff;
                     #endif
                 }
-                edge_section = sqrt(sum_section) > 0.0;
+                edge_section = mask ? 0 : sqrt(sum_section) > 0.0;
                 #endif
 
                 ///

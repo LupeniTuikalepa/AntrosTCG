@@ -5,6 +5,7 @@ namespace ATCG.Battle.Players
 {
     public static class BattlePlayerExtensions
     {
+        public static int GetPlayerID(this IBattlePlayer player) => player.Profile.ID;
         public static string GetPlayerName(this IBattlePlayer player)
         {
             return player.Profile.Infos.name;

@@ -35,14 +35,12 @@ namespace ATCG.Battle.GameModes
         public int Turn { get; private set; }
 
         public readonly IBattlePlayerProfile[] playerProfiles;
-        public readonly GameCommandManager commandManager;
         public readonly World world;
         public readonly int seed;
 
         public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
         {
             world = new World(maxComponentStores: 128, maxEntities: 128);
-            commandManager = new GameCommandManager(this);
 
             this.seed = seed;
             this.playerProfiles = playerProfiles;

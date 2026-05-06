@@ -6,6 +6,8 @@ namespace ATCG.Battle.Entities
 {
     public readonly struct EntityAddress : IEquatable<EntityAddress>
     {
+        public static readonly EntityAddress None = new EntityAddress(null, Entity.None);
+
         public EntityMeta Meta => world.GetMeta(entity);
 
         public readonly World world;
@@ -44,26 +46,17 @@ namespace ATCG.Battle.Entities
             return ref world.GetComponent<T>(entity);
         }
 
+        public void AddOrSetComponent<T>(T component = default) where T : struct, IEntityComponent
+        {
+            world.AddOrSetComponent(entity, in component);
+        }
+
+
         public bool TryGetComponent<T>(out ComponentRef<T> componentRef) where T : struct, IEntityComponent
         {
             return world.TryGetComponent(entity, out componentRef);
         }
 
-        public bool TryConvertToAspect<T>(out T aspect) where T : IEntityAspect, new()
-        {
-            return entity.TryConvertToAspect(world, out aspect);
-        }
-
-        public T ToAspect<T>() where T : IEntityAspect, new()
-        {
-            return entity.ToAspect<T>(world);
-        }
-
-        public bool ToAspect<T>(out T aspect) where T : IEntityAspect, new()
-        {
-            aspect = ToAspect<T>();
-            return aspect.IsValid;
-        }
 
         public void Destroy()
         {

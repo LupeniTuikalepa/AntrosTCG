@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Players;
+﻿using System;
+using ATCG.Battle.Players;
 using ATCG.Cards;
 
 namespace ATCG.Battle.Cards

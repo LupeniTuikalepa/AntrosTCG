@@ -262,7 +262,7 @@ namespace Michsky.MUIP
                         {
                             EditorGUILayout.HelpBox("'Sound Source' is not assigned. Go to Resources tab or click the button to create a new audio source.", MessageType.Warning);
 
-                            if (GUILayout.Button("+ Create a new one", customSkin.button))
+                            if (GUILayout.Button("+ CreateAspect a new one", customSkin.button))
                             {
                                 dTarget.soundSource = dTarget.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
                                 currentTab = 2;

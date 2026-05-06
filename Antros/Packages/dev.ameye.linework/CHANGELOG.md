@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Headers should be listed in this order: Added, Changed, Deprecated, Removed, Fixed, Security -->
 
+## [1.5.6] - 2026-04-21
+
+### Added
+
+- Edge Detection: Exposed setting to control circular kernel sample count
+
+### Fixed
+
+- Unity 6.4: Fixed obsolete code
+
 ## [1.5.5] - 2026-03-21
 
 ### Fixed

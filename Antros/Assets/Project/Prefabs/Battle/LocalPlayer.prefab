@@ -223,6 +223,7 @@ MonoBehaviour:
   - <PlayerID>k__BackingField: 1
     <Channels>k__BackingField: 4
   moveTarget: {fileID: 0}
+  physicsRaycaster: {fileID: 0}
 --- !u!1 &3664716065981829095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1939,11 +1940,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7516957116047579520, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4252518110930111559, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5155999664563015534}
   m_SourcePrefab: {fileID: 100100000, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
+--- !u!1 &636918602715792909 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4252518110930111559, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
+  m_PrefabInstance: {fileID: 3734944967631637066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5155999664563015534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636918602715792909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a6df4427160c34bb6bd12642961fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.RuntimeHeroManager
+  <RuntimeBattleGrid>k__BackingField: {fileID: 839748599908605577}
+  container: {fileID: 0}
+--- !u!114 &839748599908605577 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4067403916306683075, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
+  m_PrefabInstance: {fileID: 3734944967631637066}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636918602715792909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1c03404d5bc4d8f8632fb0398f4cd35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.HexGrids.Runtime.RuntimeBattleGrid
 --- !u!4 &7921446243769101048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6790181165470097586, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}

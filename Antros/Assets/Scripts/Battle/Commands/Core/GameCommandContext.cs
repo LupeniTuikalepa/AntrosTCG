@@ -18,20 +18,21 @@ namespace ATCG.Battle.Commands.Core
         public World World => battlePhase.world;
 
         private readonly List<object> commandPlayers;
-        private readonly Dictionary<GameCommand, ICommandPlayerContext> pairings;
+        private readonly Dictionary<IGameCommand, ICommandPlayerContext> pairings;
 
         public GameCommandContext(BattlePhase battlePhase, List<object> commandPlayers)
         {
-            pairings = DictionaryPool<GameCommand, ICommandPlayerContext>.Get();
+            pairings = DictionaryPool<IGameCommand, ICommandPlayerContext>.Get();
             this.battlePhase = battlePhase;
             this.commandPlayers = commandPlayers;
         }
 
         public IBattlePlayer GetBattlePlayer(int playerID) => battlePhase.GetPlayer(playerID);
-        public bool TryGetCommandPlayerContext(GameCommand gameCommand, out ICommandPlayerContext commandPlayerContext)
+
+        public bool TryGetCommandPlayerContext(IGameCommand gameCommand, out ICommandPlayerContext commandPlayerContext)
             => pairings.TryGetValue(gameCommand, out commandPlayerContext);
 
-        public void Register<T>(T command) where T : GameCommand
+        public void Register<T>(T command) where T : IGameCommand
         {
             CommandPlayerContext<T> playerContext = new(command);
             pairings[command]= playerContext;
@@ -53,7 +54,7 @@ namespace ATCG.Battle.Commands.Core
             foreach (var value in pairings.Values)
                 value.Dispose();
 
-            DictionaryPool<GameCommand, ICommandPlayerContext>.Release(pairings);
+            DictionaryPool<IGameCommand, ICommandPlayerContext>.Release(pairings);
         }
     }
 }

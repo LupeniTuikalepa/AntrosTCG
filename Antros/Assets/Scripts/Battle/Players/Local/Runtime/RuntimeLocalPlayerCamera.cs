@@ -1,8 +1,14 @@
 using System;
+using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids.Runtime;
+using ATCG.Battle.Players.Local.Phases;
+using ATCG.Metrics;
+using Helteix.ChanneledProperties.Priorities;
+using Helteix.Tools.Phases;
 using Sirenix.OdinInspector;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
@@ -41,15 +47,20 @@ namespace ATCG.Battle.Players.Local.Runtime
         [BoxGroup("Cinemachine"), SerializeField]
         private BoxCollider2D confiner;
 
-        [BoxGroup("Cinemachine"), SerializeField, ListDrawerSettings(ShowFoldout = false)]
+        [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineCamera cinemachineCamera;
 
-        [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true),
-         ListDrawerSettings(ShowFoldout = false)]
+        [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
 
         [SerializeField]
         private Transform moveTarget;
+
+        [BoxGroup("Interactions"), SerializeField]
+        private PhysicsRaycaster physicsRaycaster;
+
+        [field: SerializeField]
+        public Priority<LayerMask> InteractableLayer { get; private set; }
 
         private float currentZoomSpeed;
 
@@ -70,7 +81,11 @@ namespace ATCG.Battle.Players.Local.Runtime
         {
             base.Awake();
             grid = FindFirstObjectByType<RuntimeBattleGrid>();
+            var metrics = GameMetrics.Current;
+            InteractableLayer = new Priority<LayerMask>(metrics.CellLayer | metrics.HeroesLayer);
+            InteractableLayer.OnValueChanged += mask => physicsRaycaster.eventMask = mask;
         }
+
 
         private void LateUpdate()
         {
@@ -187,9 +202,6 @@ namespace ATCG.Battle.Players.Local.Runtime
             renderCamera.ChannelMask = OutputChannels.Default;
         }
 
-        public void SetMovementInput(InputAction.CallbackContext context)
-        {
-        }
 
         [Serializable]
         public struct CinemachineOutputChannels

@@ -84,7 +84,7 @@ namespace Michsky.MUIP
                         GUILayout.EndVertical();
                     }
 
-                    else { EditorGUILayout.HelpBox("Window List is empty. Create a new item to see more options.", MessageType.Info); }
+                    else { EditorGUILayout.HelpBox("Window List is empty. CreateAspect a new item to see more options.", MessageType.Info); }
 
                     GUILayout.BeginVertical();
                     EditorGUI.indentLevel = 1;

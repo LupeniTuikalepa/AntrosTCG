@@ -17,8 +17,10 @@ namespace ATCG.Battle.Commands.GameCommands
     {
         [field: SerializeField]
         public int PlayerId { get; private set; }
+
         [field: SerializeField]
         public int CardId { get; private set; }
+
         [field: SerializeField]
         public HexCoordinates Destination { get; private set; }
 
@@ -29,7 +31,7 @@ namespace ATCG.Battle.Commands.GameCommands
             PlayerId = playerId;
         }
 
-        public override void Process(in GameCommandContext context)
+        protected override void Process(in GameCommandContext context)
         {
             IBattlePlayer player = context.GetBattlePlayer(PlayerId);
             IBattleCard card = player.Hand.GetCard(CardId);
@@ -41,17 +43,8 @@ namespace ATCG.Battle.Commands.GameCommands
             switch (card)
             {
                 case HeroBattleCard heroBattleCard:
-
-                    using (EntityAspectBuilder<HeroEntityAspect> builder = new())
-                    {
-                        builder.Add(new ComponentFactory<BattleCardComponent>(() => new BattleCardComponent(heroBattleCard)));
-                        builder.Add(new ComponentFactory<HeroComponent>(() => new HeroComponent(heroBattleCard)));
-
-                        HeroEntityAspect hero = builder.CreateAndDispose(context.World);
-
-                        Embed(in context, new MoveCommand(hero.ToEntity(), Destination));
-                        break;
-                    }
+                    Embed(in context, new SpawnHeroCommand(player, heroBattleCard));
+                    break;
             }
         }
 

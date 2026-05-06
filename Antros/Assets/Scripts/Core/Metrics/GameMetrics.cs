@@ -74,6 +74,11 @@ namespace ATCG.Metrics
         [field: SerializeField, BoxGroup("GameFeel")]
         public Gradient PlayerColors { get; private set; }
 
+        [field: SerializeField, BoxGroup("Layers")]
+        public LayerMask CellLayer { get; private set; }
+        [field: SerializeField, BoxGroup("Layers")]
+        public LayerMask HeroesLayer { get; private set; }
+
         public Color GetPlayerColor(int playerID, int playerCount = 2)
         {
             float max = (float)playerCount - 1;

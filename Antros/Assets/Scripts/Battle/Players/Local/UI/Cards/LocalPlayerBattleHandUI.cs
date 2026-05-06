@@ -1,6 +1,7 @@
 ﻿using System;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Cards.UI;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
@@ -162,8 +163,8 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected override void OnCardBeginDrag(CardHolderUI holder, PointerEventData eventData)
         {
             base.OnCardBeginDrag(holder, eventData);
-            if (LocalBattlePlayer.canDeployHeroes && DeployCardPhase == null &&
-                holder.CardUI.Current is IBattleCard card) _ = DeployPlayerCard(card);
+            if (LocalBattlePlayer.canDeployHeroes && DeployCardPhase == null && holder.CardUI.Current is IBattleCard card)
+                _ = DeployPlayerCard(card);
         }
 
         private async Awaitable DeployPlayerCard(IBattleCard card)
@@ -177,12 +178,13 @@ namespace ATCG.Battle.Players.Local.UI.Cards
                 DeployCardPhase = new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
                 PhaseResult<HexCoordinates> phaseResult = await DeployCardPhase.Run();
 
-                DeployCardCommand deployCardCommand = new DeployCardCommand(id, phaseResult.value, LocalBattlePlayer.ID);
 
-                /*
                 if (phaseResult is { type: PhaseResultType.Success, value: { IsValid: true } })
-                    LocalBattlePlayer.DeployBattleCard(card, phaseResult.value);
-                */
+                {
+                    DeployCardCommand deployCardCommand = new DeployCardCommand(id, phaseResult.value, LocalBattlePlayer.ID);
+
+                    await GameCommandManager.Instance.ExecuteGameCommand(deployCardCommand, LocalBattlePlayer.BattlePhase);
+                }
             }
             catch (Exception e)
             {

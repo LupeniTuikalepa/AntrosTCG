@@ -53,7 +53,7 @@ namespace ATCG.Battle.Commands.GameCommands
             this.capacity = capacity;
         }
 
-        public override void Process(in GameCommandContext gameCommandContext)
+        protected override void Process(in GameCommandContext gameCommandContext)
         {
             Context context = new(this, capacity, gameCommandContext);
 
@@ -90,7 +90,7 @@ namespace ATCG.Battle.Commands.GameCommands
                         hitEffect.Hit(hitData, battleCell.EntityAddress, in context);
                 }
 
-                foreach (ComponentRef<GridMemberComponent> member in battleCell.GetMembers())
+                foreach (ComponentRef<BattleGridElementComponent> member in battleCell.GetMembers())
                 {
                     if (!member.Address.TryGetComponent<BelongsToPlayerComponent>(out var belongsToPlayer))
                         continue;

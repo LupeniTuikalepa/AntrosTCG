@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ATCG.Battle.Entities.Heroes.Runtime;
+using ATCG.Battle.Entities.Runtime.Heroes;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Pool;

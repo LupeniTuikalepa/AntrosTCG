@@ -34,17 +34,13 @@ namespace ATCG.Battle.Players.Local.Phases
         }
 
 
-        public override void SetResult(in HexCoordinates value)
-        {
-            base.SetResult(in value);
-        }
-
-        public void SetResult(HexCoordinates coord)
+        public override void SetResult(in HexCoordinates coord)
         {
             if (IsCoordValid(coord))
                 return;
 
-            SetResult(coord);
+            base.SetResult(in coord);
         }
+
     }
 }

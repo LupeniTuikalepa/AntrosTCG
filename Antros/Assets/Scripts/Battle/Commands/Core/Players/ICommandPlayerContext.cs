@@ -7,11 +7,11 @@ namespace ATCG.Battle.Commands.Core
 {
     public interface ICommandPlayerContext: IDisposable
     {
-        GameCommand Command { get; }
+        IGameCommand Command { get; }
         Awaitable Initiate(GameCommandContext context);
 
-        async Awaitable WaitBeforePlayingEmbed(GameCommand embed) => await Task.CompletedTask;
+        async Awaitable WaitBeforePlayingEmbed(IGameCommand embed) => await Task.CompletedTask;
 
-        async Awaitable WaitAfterPlayingEmbed(GameCommand embed) => await Task.CompletedTask;
+        async Awaitable WaitAfterPlayingEmbed(IGameCommand embed) => await Task.CompletedTask;
     }
 }

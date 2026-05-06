@@ -14,12 +14,13 @@ namespace ATCG.Battle.Commands.EntityCommands
             this.destination = destination;
         }
 
-        public override void Process(in GameCommandContext context)
+        //TODO use correct component
+        protected override void Process(in GameCommandContext context)
         {
-            if (TargetEntity.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))
+            if (TargetEntity.TryGetComponent<BattleGridElementComponent>(context.World, out var gridEntityComponentRef))
             {
-                ref GridMemberComponent component = ref gridEntityComponentRef.GetValue();
-                component.SetCoordinates(destination);
+                ref BattleGridElementComponent component = ref gridEntityComponentRef.GetValue();
+                component.coordinates =destination;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace ATCG.Battle.Entities.Components
 {
-    public struct CapacityCasterComponent
+    public struct CapacityCasterComponent : IEntityComponent
     {
 
     }

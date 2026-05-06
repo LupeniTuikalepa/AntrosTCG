@@ -1,13 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using ATCG.Battle.GameModes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Commands.Core
 {
+    public interface IGameCommand
+    {
+        void Process(in GameCommandContext context);
+        IReadOnlyList<GameCommand> Embeds { get; }
+        GameCommand Parent { get; }
+        IEnumerable<GameCommand> GetChildren();
+        IEnumerable<T> GetChildren<T>() where T : GameCommand;
+        bool HasAnyChildrenOfType<T>(out T firstFound);
+        bool HasAnyAncestorOfType<T>(out T firstFound) where T : GameCommand;
+        IEnumerable<T> GetAncestorsOfType<T>() where T : GameCommand;
+        IEnumerable<GameCommand> GetAncestors();
+    }
     [Serializable]
-    public abstract class GameCommand : IDisposable
+    public abstract class GameCommand : IDisposable, IGameCommand
     {
         public IReadOnlyList<GameCommand> Embeds => embeds;
 
@@ -22,14 +35,16 @@ namespace ATCG.Battle.Commands.Core
             embeds = ListPool<GameCommand>.Get();
         }
 
-        public abstract void Process(in GameCommandContext context);
+        void IGameCommand.Process(in GameCommandContext context) => Process(in context);
 
-        public void Embed<T>(in GameCommandContext context) where T : GameCommand, new()
+        protected abstract void Process(in GameCommandContext context);
+
+        protected void Embed<T>(in GameCommandContext context) where T : GameCommand, new()
         {
             Embed(context, new T());
         }
 
-        public void Embed<T>(in GameCommandContext context, T command) where T : GameCommand
+        protected void Embed<T>(in GameCommandContext context, T command) where T : GameCommand
         {
             context.Register(command);
 

@@ -4,35 +4,31 @@ using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public struct GridMemberAspect : IEntityAspect<GridMemberComponent>
+    public partial struct GridMemberAspect : IEntityAspect<BattleGridElementComponent>
     {
-        public EntityAddress EntityAddress { get; set; }
-
-        public ref GridMemberComponent GridMemberComponent => ref EntityAddress.GetComponent<GridMemberComponent>();
 
         public bool IsPhysical => EntityAddress.HasComponent<PhysicalCellMemberTag>();
 
         public bool PreventsDeployment => EntityAddress.HasComponents<PreventDeploymentTag>();
 
-
         public HexCoordinates Coordinates
         {
             get
             {
-                if (EntityAddress.TryGetComponent(out ComponentRef<GridMemberComponent> componentRef))
+                if (EntityAddress.TryGetComponent(out ComponentRef<BattleGridElementComponent> componentRef))
                 {
-                    ref GridMemberComponent component = ref componentRef.GetValue();
-                    return component.Coordinates;
+                    ref BattleGridElementComponent component = ref componentRef.GetValue();
+                    return component.coordinates;
                 }
 
                 return HexCoordinates.None;
             }
             set
             {
-                if (EntityAddress.TryGetComponent(out ComponentRef<GridMemberComponent> componentRef))
+                if (EntityAddress.TryGetComponent(out ComponentRef<BattleGridElementComponent> componentRef))
                 {
-                    ref GridMemberComponent component = ref componentRef.GetValue();
-                    component.SetCoordinates(value);
+                    ref BattleGridElementComponent component = ref componentRef.GetValue();
+                    component.coordinates = value;
                 }
             }
         }

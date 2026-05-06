@@ -142,7 +142,7 @@ namespace Linework.Editor.Common.Windows
                     paddingLeft = 2
                 }
             };
-            var versionLabel = new Label("1.5.5 • March 2025")
+            var versionLabel = new Label("1.5.6 • April 2025")
             {
                 style =
                 {
@@ -577,7 +577,9 @@ namespace Linework.Editor.Common.Windows
 
         private CheckResult CheckRenderGraph()
         {
-#if UNITY_6000_0_OR_NEWER
+#if UNITY_6000_4_OR_NEWER
+            return new CheckResult(ResultEnum.Pass, "Enabled", "Render Graph is enabled.");
+#elif UNITY_6000_0_OR_NEWER
             var renderGraphSettings = GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>();
             var usingRenderGraph = !renderGraphSettings.enableRenderCompatibilityMode;
             return usingRenderGraph
@@ -654,7 +656,11 @@ namespace Linework.Editor.Common.Windows
         
         private CheckResult CheckSRPBatcher()
         {
+#if UNITY_6000_4_OR_NEWER
+            var overrides = FindObjectsByType<OutlineOverride>();
+#else
             var overrides = FindObjectsByType<OutlineOverride>(FindObjectsSortMode.None);
+#endif
             if (overrides.Length != 0 && overrides.Any(o => o.enabled))
             {
                 return new CheckResult(

@@ -1,21 +1,22 @@
-﻿using Helteix.ChanneledProperties.Formulas;
+﻿using Helteix.ChanneledProperties.Conditions;
+using Helteix.ChanneledProperties.Formulas;
 
 namespace ATCG.Battle.Entities.Components
 {
     public struct HealthComponent : IEntityComponent
     {
         public int CurrentHealth { get; private set; }
-        public Formula<int> maxHealth;
-
-        public bool canBeHealed;
-        public bool canBeDamaged;
+        public Formula<int> MaxHealth { get; private set; }
+        public Condition CanBeHealed { get; private set; }
+        public Condition CanBeDamaged { get; private set; }
 
         public HealthComponent(int maxHealth)
         {
-            this.maxHealth = new Formula<int>(maxHealth);
+            this.MaxHealth = new Formula<int>(maxHealth);
             CurrentHealth = maxHealth;
-            canBeDamaged = true;
-            canBeHealed = true;
+
+            CanBeDamaged = new Condition(true);
+            CanBeHealed = new Condition(true);
         }
 
         public void AddOrRemoveHealth(int qtt)
@@ -23,14 +24,14 @@ namespace ATCG.Battle.Entities.Components
             if (qtt < 0 && CurrentHealth <= 0)
                 return;
 
-            if(qtt > 0 && !canBeHealed || qtt < 0 && !canBeDamaged)
+            if(qtt > 0 && !CanBeHealed || qtt < 0 && !CanBeDamaged)
                 return;
 
             CurrentHealth += qtt;
             if (CurrentHealth < 0)
                 CurrentHealth = 0;
-            else if (CurrentHealth >= maxHealth)
-                CurrentHealth = maxHealth;
+            else if (CurrentHealth >= MaxHealth)
+                CurrentHealth = MaxHealth;
         }
     }
 }

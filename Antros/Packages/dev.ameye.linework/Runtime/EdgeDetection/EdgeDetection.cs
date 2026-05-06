@@ -242,6 +242,7 @@ namespace Linework.EdgeDetection
 
                 // Outline thickness.
                 outline.SetFloat(ShaderPropertyId.OutlineThickness, edgeDetectionSettings.outlineThickness);
+                outline.SetFloat(ShaderPropertyId.CircularKernelSamples, edgeDetectionSettings.circularKernelSamples);
                 if (edgeDetectionSettings.scaleWithDistance)
                 {
                     outline.EnableKeyword(ShaderFeature.ScaleWithDistance);

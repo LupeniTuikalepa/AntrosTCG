@@ -20,7 +20,7 @@ namespace ATCG.Battle.Commands.GameCommands.Players
             Amount = amount;
         }
 
-        public override void Process(in GameCommandContext context)
+        protected override void Process(in GameCommandContext context)
         {
             IBattlePlayer player = context.GetBattlePlayer(PlayerId);
             player.AddOrRemoveHealth(Amount);

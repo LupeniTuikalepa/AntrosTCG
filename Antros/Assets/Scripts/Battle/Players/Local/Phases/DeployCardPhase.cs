@@ -58,8 +58,8 @@ namespace ATCG.Battle.Players.Local.Phases
         private void RemoveOccupiedCells(List<HexCoordinates> list)
         {
             foreach (Entity entity in battleGrid.World.Query(Query.With<PhysicalCellMemberTag>()))
-                if (entity.TryGetROComponent(battleGrid.World, out GridMemberComponent gridEntityComponent))
-                    list.Remove(gridEntityComponent.Coordinates);
+                if (entity.TryGetROComponent(battleGrid.World, out BattleGridElementComponent gridEntityComponent))
+                    list.Remove(gridEntityComponent.coordinates);
         }
     }
 }
