@@ -23,12 +23,12 @@ namespace ATCG.Battle.Players.Local.Runtime
             }
         }
 
-        public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer battlePlayer)
+        public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer &&
                 runtimeLocalBattlePlayer == RuntimeLocalPlayer)
             {
-                Disconnect(battlePlayer);
+                Disconnect(player);
                 RuntimeLocalPlayer = null;
             }
         }

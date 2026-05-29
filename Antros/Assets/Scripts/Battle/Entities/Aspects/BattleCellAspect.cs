@@ -1,13 +1,14 @@
-﻿using ATCG.Battle.Cards;
+﻿using System;
+using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Lookups;
 using ATCG.Battle.Grids;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public partial struct BattleCellAspect :
-        IEntityAspect<BattleGridElementComponent>,
+    public partial struct BattleCellAspect : IEntityAspect<BattleGridElementComponent>,
         ICreateEntityAspect<BattleCellAspect.Setup>
     {
         public readonly struct IsCellMemberFilter : IComponentLookupFilter<BattleGridElementComponent>
@@ -76,7 +77,15 @@ namespace ATCG.Battle.Entities.Aspects
 
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
         {
-            componentsFactory.BattleGridElementComponent = new BattleGridElementComponent(setup.battleGrid, setup.coordinates);
+            try
+            {
+                BattleGridElementComponent elementComponent = new BattleGridElementComponent(setup.battleGrid, setup.coordinates);
+                componentsFactory.BattleGridElementComponent = elementComponent;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
     }
 }

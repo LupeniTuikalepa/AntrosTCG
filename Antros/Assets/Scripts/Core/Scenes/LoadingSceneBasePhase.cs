@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace ATCG.Scenes
 {
-    public class LoadingScenePhase : IPhase<bool>
+    public class LoadingScenePhase : Phase<IEnumerable<Scene>>
     {
         public readonly int[] scenesIndices;
 
@@ -41,7 +41,7 @@ namespace ATCG.Scenes
         }
 
 
-        async Awaitable IPhase<bool>.Initialize(CancellationToken token)
+        protected override async Awaitable Initialize(CancellationToken token)
         {
             loadingScene = SceneManager.CreateScene("LoadingScene");
             loaderUI = Object.Instantiate(GameScenes.Current.LoaderPrefab, new InstantiateParameters()
@@ -54,7 +54,8 @@ namespace ATCG.Scenes
             SceneManager.SetActiveScene(loadingScene);
         }
 
-        async Awaitable<bool> IPhase<bool>.Execute(CancellationToken token)
+
+        protected override async Awaitable<IEnumerable<Scene>> Execute(CancellationToken token)
         {
             int loadedSceneCount = SceneManager.loadedSceneCount;
             Scene[] loadedScenes = new Scene[loadedSceneCount];
@@ -85,11 +86,12 @@ namespace ATCG.Scenes
 
             Scene newActiveScene = SceneManager.GetSceneByBuildIndex(scenesIndices[0]);
             SceneManager.SetActiveScene(newActiveScene);
-            return true;
+
+            return scenesIndices.Select(SceneManager.GetSceneByBuildIndex);
         }
 
 
-        async Awaitable IPhase<bool>.Dispose(CancellationToken token)
+        protected override async Awaitable Dispose(CancellationToken token)
         {
             await loaderUI.OnPhaseBegin(this);
             await SceneManager.UnloadSceneAsync(loadingScene);

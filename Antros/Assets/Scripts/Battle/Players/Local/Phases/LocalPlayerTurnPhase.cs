@@ -9,7 +9,7 @@ namespace ATCG.Battle.Players.Local.Phases
 {
     public class LocalPlayerTurnPhase : PlayerTurnPhase
     {
-        private static readonly ChannelKey channelKey = ChannelKey.GetUniqueChannelKey("Turn phase");
+        private static readonly ChannelKey ChannelKey = ChannelKey.GetUniqueChannelKey("Turn phase");
 
         public readonly LocalBattlePlayer localPlayerTurn;
         public readonly string turnID;
@@ -29,10 +29,10 @@ namespace ATCG.Battle.Players.Local.Phases
             //actionInfosList = ListPool<IBattleActionInfos>.Get();
             localPlayerTurn.AddOrRemoveMana(GameMetrics.Current.RecoveredManaOnTurnStart);
 
-            localPlayerTurn.canDeployHeroes.AddCondition(channelKey);
-            localPlayerTurn.canMoveHeroes.AddCondition(channelKey);
-            localPlayerTurn.canUseHeroesAbilities.AddCondition(channelKey);
-            localPlayerTurn.canDoBasicAttack.AddCondition(channelKey);
+            localPlayerTurn.canDeployHeroes.AddCondition(ChannelKey);
+            localPlayerTurn.canMoveHeroes.AddCondition(ChannelKey);
+            localPlayerTurn.canUseHeroesAbilities.AddCondition(ChannelKey);
+            localPlayerTurn.canDoBasicAttack.AddCondition(ChannelKey);
 
             localPlayerTurn.FillHand();
             return base.Initialize(token);
@@ -42,10 +42,10 @@ namespace ATCG.Battle.Players.Local.Phases
         {
             //ListPool<IBattleActionInfos>.Release(actionInfosList);
 
-            localPlayerTurn.canDoBasicAttack.RemoveCondition(channelKey);
-            localPlayerTurn.canDeployHeroes.RemoveCondition(channelKey);
-            localPlayerTurn.canMoveHeroes.RemoveCondition(channelKey);
-            localPlayerTurn.canUseHeroesAbilities.RemoveCondition(channelKey);
+            localPlayerTurn.canDoBasicAttack.RemoveCondition(ChannelKey);
+            localPlayerTurn.canDeployHeroes.RemoveCondition(ChannelKey);
+            localPlayerTurn.canMoveHeroes.RemoveCondition(ChannelKey);
+            localPlayerTurn.canUseHeroesAbilities.RemoveCondition(ChannelKey);
 
             return base.Dispose(token);
         }

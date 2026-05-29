@@ -19,11 +19,6 @@ namespace ATCG.Debugging.Debugging.Gameplay
     {
         private class DebugBattleGameMode : GameMode<object>
         {
-            protected override async Awaitable Initialize()
-            {
-                await Task.CompletedTask;
-            }
-
             protected override async Awaitable<object> Execute(CancellationToken token)
             {
                 PlayerInfos[] players =
@@ -45,10 +40,6 @@ namespace ATCG.Debugging.Debugging.Gameplay
                 return result.value.WinningPlayer == 0;
             }
 
-            protected override async Awaitable Dispose()
-            {
-                await Task.CompletedTask;
-            }
         }
         [SerializeField]
         private bool launchOnStart = true;

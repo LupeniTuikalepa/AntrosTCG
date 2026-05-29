@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Cards.UI;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Runtime.Grid;
+using ATCG.Battle.Grids;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
 using ATCG.HexGrids;
+using ATCG.Utilities;
 using Helteix.Cards;
 using Helteix.Cards.Collections;
 using Helteix.Cards.UI.Physical;
+using Helteix.Cards.UI.Physical.Drag;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.UI.Cards
 {
@@ -25,17 +32,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected RuntimeLocalBattlePlayer RuntimeLocalBattlePlayer { get; private set; }
         protected LocalBattlePlayer LocalBattlePlayer => RuntimeLocalBattlePlayer.Player;
 
-        public DeployCardPhase DeployCardPhase { get; private set; }
-
-        private void OnEnable()
-        {
-            InputUser.onChange += OnInputUserChange;
-        }
-
-        private void OnDisable()
-        {
-            InputUser.onChange -= OnInputUserChange;
-        }
+        public SelectCellPhase DeployCard { get; private set; }
 
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer,
@@ -49,19 +46,23 @@ namespace ATCG.Battle.Players.Local.UI.Cards
                 RuntimeLocalBattlePlayer = runtimeLocalBattlePlayer;
                 Connect(LocalBattlePlayer.Hand);
             }
+
+            (this as IRuntimeBattlePlayerComponent<IBattlePlayer>).Connect(runtimeBattlePlayer, player);
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer,
-            LocalBattlePlayer battlePlayer)
+            LocalBattlePlayer player)
         {
             if (runtimeBattlePlayer == RuntimeLocalBattlePlayer)
             {
                 Disconnect();
                 RuntimeLocalBattlePlayer = null;
             }
+
+            (this as IRuntimeBattlePlayerComponent<IBattlePlayer>).Disconnect(runtimeBattlePlayer, player);
         }
 
-        protected override bool CanCardBeDragged(ICard card)
+        public override bool CanCardBeDragged(ICard card)
         {
             if (LocalBattlePlayer == null)
                 return base.CanCardBeDragged(card);
@@ -69,7 +70,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             return LocalBattlePlayer.canDeployHeroes;
         }
 
-        protected override bool CanCardBeClicked(ICard card)
+        public override bool CanCardBeClicked(ICard card)
         {
             if (LocalBattlePlayer == null)
                 return base.CanCardBeClicked(card);
@@ -77,7 +78,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             return LocalBattlePlayer.canDeployHeroes;
         }
 
-        protected override bool CanCardBeSelected(ICard card)
+        public override bool CanCardBeSelected(ICard card)
         {
             if (LocalBattlePlayer == null)
                 return base.CanCardBeSelected(card);
@@ -96,7 +97,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected override bool TryGetCardAtDirection(CardHolderUI cardHolderUI, Vector2 moveVector,
             out CardHolderUI holderUI)
         {
-            if (LocalBattlePlayer != null && cardHolderUI.CardUI.Current is IBattleCard gameCard)
+            if (LocalBattlePlayer != null && cardHolderUI.CardUI.Card is IBattleCard gameCard)
             {
                 Hand<IBattleCard> hand = LocalBattlePlayer.Hand;
                 int index = hand.GetCardIndex(gameCard);
@@ -119,80 +120,63 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             return base.TryGetCardAtDirection(cardHolderUI, moveVector, out holderUI);
         }
 
-        protected override void SelectHolder(CardHolderUI holderUI, BaseEventData eventData)
+
+
+        public override bool BeginCardDrag(CardHolderUI holderUI)
         {
-            EventSystem target = EventSystem;
-            target.SetSelectedGameObject(holderUI == null ? null : holderUI.gameObject, eventData);
-        }
+            if (holderUI.CardUI.Card is not IBattleCard card)
+                return false;
 
-        protected override void OnCardSelect(CardHolderUI holder, BaseEventData eventData)
-        {
-            holder.transform.localScale = Vector3.one * 1.2f;
-            base.OnCardSelect(holder, eventData);
-        }
+            if (LocalBattlePlayer.canDeployHeroes && DeployCard == null)
+                return false;
 
-        protected override void OnCardDeselect(CardHolderUI holder, BaseEventData eventData)
-        {
-            holder.transform.localScale = Vector3.one;
-            base.OnCardDeselect(holder, eventData);
-        }
-
-        private void SelectFirstAvailableHolder()
-        {
-            if (TryGetHolderFor(LocalBattlePlayer.Hand.GetCard(0), out CardHolderUI holder))
-                SelectHolder(holder, null);
-        }
-
-        private void OnInputUserChange(InputUser inputUser, InputUserChange change, InputDevice device)
-        {
-            if (RuntimeLocalBattlePlayer == null)
-                return;
-
-            if (inputUser != RuntimeLocalBattlePlayer.Controls.PlayerInputUser)
-                return;
-
-            switch (change)
+            if (base.BeginCardDrag(holderUI) && TryGetDragPhase(card, out CardDragPhase<IBattleCard> phase))
             {
-                case InputUserChange.ControlSchemeChanged:
-                    if (inputUser.controlScheme is { name: "Gamepad" })
-                        SelectFirstAvailableHolder();
-                    break;
+                _ = DoCardDeploy(card, phase);
+                return true;
             }
+
+            return false;
         }
 
-        protected override void OnCardBeginDrag(CardHolderUI holder, PointerEventData eventData)
+        public override bool OnCardDrop(CardHolderUI holderUI, DragResult<IBattleCard> result)
         {
-            base.OnCardBeginDrag(holder, eventData);
-            if (LocalBattlePlayer.canDeployHeroes && DeployCardPhase == null && holder.CardUI.Current is IBattleCard card)
-                _ = DeployPlayerCard(card);
-        }
-
-        private async Awaitable DeployPlayerCard(IBattleCard card)
-        {
-            try
+            if (base.OnCardDrop(holderUI, result) && DeployCard != null)
             {
-                int id = LocalBattlePlayer.Hand.GetCardIndex(card);
-                if(id == -1)
+                if (result.Target is RuntimeBattleCell runtimeBattleCell)
+                {
+                    DeployCard.SetResult(runtimeBattleCell.Address);
+                    return true;
+                }
+
+                DeployCard.Cancel();
+            }
+            return false;
+        }
+
+        private async Awaitable DoCardDeploy(IBattleCard card, CardDragPhase<IBattleCard> phase)
+        {
+            if (DeployCard != null)
+                return;
+
+            using (ListPool<HexCoordinates>.Get(out List<HexCoordinates> cells))
+            {
+                BattleGrid battleGrid = LocalBattlePlayer.BattlePhase.BattleGrid;
+                battleGrid.FillDeployableCells(cells);
+
+                DeployCard = new SelectCellPhase(cells, battleGrid, LocalBattlePlayer);
+
+                var result = await DeployCard.Run();
+                DeployCard = null;
+                if (result.type != PhaseResultType.Success)
                     return;
 
-                DeployCardPhase = new DeployCardPhase(LocalBattlePlayer, LocalBattlePlayer.BattlePhase.BattleGrid, card);
-                PhaseResult<HexCoordinates> phaseResult = await DeployCardPhase.Run();
-
-
-                if (phaseResult is { type: PhaseResultType.Success, value: { IsValid: true } })
+                int cardID = LocalBattlePlayer.Hand.GetCardIndex(card);
+                if (cardID != -1 && result.value.IsBattleCellAspect(out BattleCellAspect aspect))
                 {
-                    DeployCardCommand deployCardCommand = new DeployCardCommand(id, phaseResult.value, LocalBattlePlayer.ID);
-
-                    await GameCommandManager.Instance.ExecuteGameCommand(deployCardCommand, LocalBattlePlayer.BattlePhase);
+                    DeployCardCommand deployCardCommand = new DeployCardCommand(cardID, aspect.Coordinate, LocalBattlePlayer.ID);
+                    deployCardCommand.RunAndForget(Player.BattlePhase);
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-            finally
-            {
-                DeployCardPhase = null;
             }
         }
     }

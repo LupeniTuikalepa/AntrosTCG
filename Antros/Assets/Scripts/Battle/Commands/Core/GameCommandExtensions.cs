@@ -5,7 +5,10 @@ namespace ATCG.Battle.Commands.Core
 {
     public static class GameCommandExtensions
     {
-        public static Awaitable Execute<T>(this T command, BattlePhase battlePhase) where T : GameCommand
+        public static void RunAndForget<T>(this T command, BattlePhase battlePhase) where T : GameCommand =>
+            Run(command, battlePhase);
+
+        public static Awaitable Run<T>(this T command, BattlePhase battlePhase) where T : GameCommand
         {
             return GameCommandManager.Instance.ExecuteGameCommand(command, battlePhase);
         }

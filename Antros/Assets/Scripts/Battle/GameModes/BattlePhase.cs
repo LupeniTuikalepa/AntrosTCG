@@ -18,7 +18,7 @@ using Random = UnityEngine.Random;
 
 namespace ATCG.Battle.GameModes
 {
-    public class BattlePhase : IPhase<BattleHistory>
+    public class BattlePhase : Phase<BattleHistory>
     {
         public uint CellRadius => GameMetrics.Current.CellRadius;
         public uint GridRadius => GameMetrics.Current.GridRadius;
@@ -46,7 +46,7 @@ namespace ATCG.Battle.GameModes
             this.playerProfiles = playerProfiles;
         }
 
-        async Awaitable IPhase<BattleHistory>.Initialize(CancellationToken token)
+        protected override async Awaitable Initialize(CancellationToken token)
         {
             Random.InitState(seed);
             SceneReference gameScene = GameScenes.Current.Game;
@@ -66,7 +66,7 @@ namespace ATCG.Battle.GameModes
         }
 
 
-        async Awaitable<BattleHistory> IPhase<BattleHistory>.Execute(CancellationToken token)
+        protected override async Awaitable<BattleHistory> Execute(CancellationToken token)
         {
             await Awaitable.EndOfFrameAsync(token);
             BattleHistory history = new(seed);
@@ -99,7 +99,7 @@ namespace ATCG.Battle.GameModes
             return history;
         }
 
-        async Awaitable IPhase<BattleHistory>.Dispose(CancellationToken token)
+        protected override async Awaitable Dispose(CancellationToken token)
         {
             //"reset" of seed
             Random.InitState(DateTime.Today.GetHashCode());
@@ -112,8 +112,7 @@ namespace ATCG.Battle.GameModes
                 Players[i] = battlePlayer;
             }
 
-            ((IDisposable)BattleGrid).Dispose();
-
+            // (BattleGrid as IDisposable).Dispose();
             await Task.CompletedTask;
         }
 

@@ -1,0 +1,41 @@
+{
+  "name": "com.helteix.tools",
+  "version": "1.6.2",
+  "displayName": "Helteix-Tools",
+  "description": "Common tools used across Helteix's packages that can help your productivity when developing your game.",
+  "documentationUrl": "https://helteix.github.io/Docs/category/tools",
+  "unity": "6000.2",
+  "keywords": [
+    "Scripts",
+    "Tools",
+    "Advanced"
+  ],
+  "author": {
+    "name": "Helteix",
+    "url": "https://www.unity3d.com",
+    "email": "lupeni.tuikalepa@gmail.com"
+  },
+  "samples": [
+    {
+      "displayName": "Game Settings",
+      "description": "A scene that showcase how to setup a new GameSettings class and how to swap the active one at runtime",
+      "path": "Samples~/GameSettings"
+    },
+    {
+      "displayName": "Serialized Components",
+      "description": "A scene that showcase how to setup serialized components on GameObjects",
+      "path": "Samples~/SerializedComponents"
+    },
+    {
+      "displayName": "Type Mapping",
+      "description": "A scene that showcase how to setup type mapping inside a scene.",
+      "path": "Samples~/TypeMapping"
+    },
+    {
+      "displayName": "MultiColumnList",
+      "description": "A scene that showcase how to setup a MultiColumnList UI.",
+      "path": "Samples~/MultiColumnList"
+    }
+  ],
+  "_fingerprint": "4ae9b7ed0a3e005c9605622daf93099ad002d7e6"
+}

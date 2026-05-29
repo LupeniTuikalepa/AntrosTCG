@@ -11,24 +11,24 @@ namespace ATCG.Battle.Cards.UI
     {
         public IBattlePlayer Player { get; private set; }
 
-        public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<IBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
         {
             Player = player;
             Connect(Player.Hand);
         }
 
-        public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer battlePlayer)
+        void IRuntimeBattlePlayerComponent<IBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
         {
             Disconnect();
             Player = null;
         }
 
-        protected override bool CanCardBeDragged(ICard card)
+        public override bool CanCardBeDragged(ICard card)
         {
             return false;
         }
 
-        protected override bool CanCardBeClicked(ICard card)
+        public override bool CanCardBeClicked(ICard card)
         {
             return false;
         }

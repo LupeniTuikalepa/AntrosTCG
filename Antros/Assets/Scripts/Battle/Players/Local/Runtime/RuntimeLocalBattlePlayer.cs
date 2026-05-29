@@ -8,18 +8,23 @@ namespace ATCG.Battle.Players.Local.Runtime
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player")]
     public class RuntimeLocalBattlePlayer : RuntimeBattlePlayer<LocalBattlePlayer>
     {
-        [field: SerializeField]
-        public PlayerHUD HUD { get; private set; }
+        public ComponentCache<PlayerHUD> HUD { get; private set; }
+        public ComponentCache<PlayerControls> Controls { get; private set; }
+        public ComponentCache<PlayerCamera> Camera { get; private set; }
 
-        [field: SerializeField]
-        public RuntimeLocalPlayerControls Controls { get; private set; }
-
-        [field: SerializeField]
-        public RuntimeLocalPlayerCamera Camera { get; private set; }
+        public ComponentCache<PlayerInteractions> Interactions { get; private set; }
 
         [ShowInInspector, ReadOnly]
         public int LocalID => runtimeBattlePlayers.IndexOf(this);
 
+        protected override void Awake()
+        {
+            base.Awake();
+            HUD = new ComponentCache<PlayerHUD>(this);
+            Controls = new ComponentCache<PlayerControls>(this);
+            Camera = new ComponentCache<PlayerCamera>(this);
+            Interactions = new ComponentCache<PlayerInteractions>(this);
+        }
 
         protected override void OnConnected()
         {
@@ -31,6 +36,7 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         protected override void OnDisconnected()
         {
+
         }
     }
 }

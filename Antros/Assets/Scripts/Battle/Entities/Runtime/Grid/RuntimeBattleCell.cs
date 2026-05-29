@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Cards;
+﻿using System;
+using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.HexGrids;
@@ -6,6 +7,7 @@ using ATCG.HexGrids.Runtime;
 using Helteix.ChanneledProperties.Priorities;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.Grid
 {
@@ -14,14 +16,29 @@ namespace ATCG.Battle.Entities.Runtime.Grid
         [field: SerializeField]
         public SpriteRenderer SpriteRenderer { get; private set; }
 
+        [field: SerializeField]
+        public Color DefaultColor { get; private set; }
+        [field: SerializeField]
+        public Color HoverColor { get; private set; }
+        [field: SerializeField]
+        public Color SelectedColor { get; private set; }
+        [field: SerializeField]
+        public Color DisabledColor { get; private set; }
+
         public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
         public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
         public HexCoordinates Coordinates => Aspect.BattleGridElementComponent.coordinates;
 
+        private Vector3 baseSpriteSize;
 
-        private void Awake()
+        private void OnValidate()
         {
-            CellColor = new Priority<Color>(SpriteRenderer.color);
+            SpriteRenderer.color = DefaultColor;
+        }
+
+        protected override void Awake()
+        {/*
+            CellColor = new Priority<Color>(DisabledColor);
             CellColor.AddOnValueChangeCallback(ctx =>
             {
                 Tween.StopAll(SpriteRenderer);
@@ -34,19 +51,26 @@ namespace ATCG.Battle.Entities.Runtime.Grid
                 Tween.StopAll(SpriteRenderer.transform);
                 Tween.Scale(SpriteRenderer.transform, ctx, 0.2f, Ease.OutExpo);
             });
+*/
+            base.Awake();
         }
 
-
-        public void Spawn(RuntimeBattleGrid grid, BattleCellAspect aspect)
+        public void SetGrid(RuntimeBattleGrid battleGrid)
         {
-            Connect(grid.EntityManager, aspect);
+            RuntimeBattleGrid = battleGrid;
+        }
 
-            RuntimeBattleGrid = grid;
+        public override async Awaitable Spawn(RuntimeEntityManager manager, BattleCellAspect aspect)
+        {
+            await base.Spawn(RuntimeBattleGrid.EntityManager, aspect);
             transform.localScale = Vector3.zero;
 
-            Tween.Scale(transform, grid.GetTargetScale(), .3f, Easing.Overshoot(.3f),
-                startDelay: Coordinates.Length() * .2f);
+            float delay = Coordinates.Length() * .2f;
+            Easing overshoot = Easing.Overshoot(.3f);
+
+            await Tween.Scale(transform, RuntimeBattleGrid.GetTargetScale(), .3f, overshoot, startDelay: delay);
         }
+
 
         public void Despawn(RuntimeBattleGrid grid)
         {

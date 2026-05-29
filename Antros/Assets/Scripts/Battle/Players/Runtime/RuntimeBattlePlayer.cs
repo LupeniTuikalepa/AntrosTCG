@@ -8,15 +8,41 @@ namespace ATCG.Battle.Players.Runtime
         public abstract void Disconnect();
     }
 
+
     public abstract class RuntimeBattlePlayer<T> : RuntimeBattlePlayer where T : class, IBattlePlayer
     {
+        public class ComponentCache<TComponent> where TComponent : IRuntimeBattlePlayerComponent<T>
+        {
+            private readonly RuntimeBattlePlayer<T> player;
+
+            public TComponent Component
+            {
+                get
+                {
+                    if(component == null)
+                        player.TryGetPlayerComponent(out component);
+
+                    return component;
+                }
+            }
+
+            private TComponent component;
+
+            public ComponentCache(RuntimeBattlePlayer<T> player)
+            {
+                this.player = player;
+            }
+
+            public static implicit operator TComponent(ComponentCache<TComponent> cache) => cache.Component;
+        }
+
         protected static readonly List<RuntimeBattlePlayer<T>> runtimeBattlePlayers = new();
 
         private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
 
         public T Player { get; private set; }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             runtimeComponents = GetComponentsInChildren<IRuntimeBattlePlayerComponent<T>>();
         }
@@ -60,6 +86,22 @@ namespace ATCG.Battle.Players.Runtime
 
         protected abstract void OnConnected();
         protected abstract void OnDisconnected();
+
+
+        public bool TryGetPlayerComponent<TComponent>(out TComponent component) where TComponent : IRuntimeBattlePlayerComponent<T>
+        {
+            for (int i = 0; i < runtimeComponents.Length; i++)
+            {
+                if (runtimeComponents[i] is TComponent c)
+                {
+                    component = c;
+                    return true;
+                }
+            }
+
+            component = default;
+            return false;
+        }
 
         public static bool TryGetRuntimeLocalPlayerFor<TRuntimePlayer>(T player, out TRuntimePlayer runtimePlayer)
             where TRuntimePlayer : RuntimeBattlePlayer<T>

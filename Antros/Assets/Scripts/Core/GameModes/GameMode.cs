@@ -1,28 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using ATCG.Multiplayer;
+﻿using System.Threading;
 using Helteix.Tools.Phases;
-using Unity.Services.Multiplayer;
 using UnityEngine;
 
 namespace ATCG.GameModes
 {
-    public interface IGameMode : IBasePhase
+    public interface IGameMode : IPhase
     {
         public const string SESSION_GAME_MODE = "GAME_MODE";
     }
 
-    public abstract class GameMode<T> : IPhase<T>, IGameMode
+    public abstract class GameMode<T> : Phase<T>, IGameMode
     {
-        public T Result { get; private set; }
-
-        Awaitable<T> IPhase<T>.Execute(CancellationToken token) => Execute(token);
-        Awaitable IPhase<T>.Initialize(CancellationToken token) => Initialize();
-        Awaitable IPhase<T>.Dispose(CancellationToken token) => Dispose();
-
-        protected abstract Awaitable Initialize();
-        protected abstract Awaitable<T> Execute(CancellationToken token);
-        protected abstract Awaitable Dispose();
+        
     }
 }

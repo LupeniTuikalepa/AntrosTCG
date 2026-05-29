@@ -1,14 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Helteix.Tools;
 using Helteix.Tools.Phases;
 using Unity.Services.Multiplayer;
 using UnityEngine;
 
 namespace ATCG.GameModes
 {
-    public class JoinPrivateSessionPhase : ISessionSetupPhase
+    public class JoinPrivateSessionPhase : Phase<ISession>
     {
         private string SessionID { get; }
         public string GameMode { get; }
@@ -23,7 +21,8 @@ namespace ATCG.GameModes
             Password = password;
         }
 
-        async Awaitable<ISession> IPhase<ISession>.Execute(CancellationToken token)
+
+        protected override async Awaitable<ISession> Execute(CancellationToken token)
         {
             SessionOptions sessionOptions = new()
             {
@@ -39,16 +38,7 @@ namespace ATCG.GameModes
             };
 
             return await MultiplayerService.Instance.CreateOrJoinSessionAsync(SessionID, sessionOptions);
-        }
 
-        async Awaitable IPhase<ISession>.Initialize(CancellationToken token)
-        {
-            await Task.CompletedTask;
-        }
-
-        async Awaitable IPhase<ISession>.Dispose(CancellationToken token)
-        {
-            await Task.CompletedTask;
         }
     }
 }

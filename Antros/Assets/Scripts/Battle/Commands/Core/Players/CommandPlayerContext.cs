@@ -31,9 +31,22 @@ namespace ATCG.Battle.Commands.Core
             using (ListPool<Awaitable>.Get(out var tasks))
             {
                 foreach (ICommandPlayer<T> player in players)
-                    tasks.Add(player.Play(command));
+                    tasks.Add(PlayCommandPlayer(player));
 
                 await tasks.WhenAll();
+            }
+        }
+
+        private async Awaitable PlayCommandPlayer(ICommandPlayer<T> commandPlayer)
+        {
+            try
+            {
+                await commandPlayer.Play(command);
+            }
+            catch (Exception e)
+            {
+                await Awaitable.MainThreadAsync();
+                Debug.LogException(e);
             }
         }
 

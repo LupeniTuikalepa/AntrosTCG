@@ -113,6 +113,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.HexGrids.Runtime.RuntimeBattleCell
   <SpriteRenderer>k__BackingField: {fileID: 5636964668621341696}
+  <DefaultColor>k__BackingField: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+  <HoverColor>k__BackingField: {r: 0.8679245, g: 0.84728444, b: 0.7328231, a: 1}
+  <SelectedColor>k__BackingField: {r: 0.19624422, g: 0.2830189, b: 0.26239622, a: 1}
+  <DisabledColor>k__BackingField: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 0.5019608}
   hoverScaleMultiplier: 0.85
   invalidScaleMultiplier: 0.9
   validDeployCellColor: {r: 0.42352942, g: 0.6039216, b: 0.46666667, a: 1}
@@ -200,7 +204,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2135585597343286014, guid: 4b2a04fdbe0ef4d8da8f90eaca817cd1, type: 3}
-  m_Color: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
+  m_Color: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

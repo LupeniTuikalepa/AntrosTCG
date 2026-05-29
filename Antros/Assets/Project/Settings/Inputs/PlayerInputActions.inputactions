@@ -16,6 +16,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Point",
+                    "type": "Value",
+                    "id": "6027001b-6e4d-453f-a24e-d6098d8ad219",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Zoom",
                     "type": "Value",
                     "id": "152bdcec-e9ff-4119-ae9b-1eb476a5c7d3",
@@ -237,6 +246,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "EndTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c5077f47-ee22-4bf4-ac5b-c9bc3a48b8d0",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f47bb63-e5d1-40ea-aca4-686823269fa5",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Point",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

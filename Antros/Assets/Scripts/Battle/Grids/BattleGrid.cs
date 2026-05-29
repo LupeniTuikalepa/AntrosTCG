@@ -3,6 +3,7 @@ using ATCG.Battle.Cards;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.GameModes;
 using ATCG.HexGrids;
@@ -22,6 +23,12 @@ namespace ATCG.Battle.Grids
 
         private DefaultCardCollection<IBattleCard> cards;
 
+
+        public World World => battlePhase.world;
+
+        public IEnumerable<HexCoordinates> AllCellsCoordinates => battleCellsEntities.Keys;
+
+
         public BattleGrid(BattlePhase battlePhase, uint cellRadius, uint gridRadius)
         {
             this.battlePhase = battlePhase;
@@ -38,16 +45,12 @@ namespace ATCG.Battle.Grids
                 BattleCellAspect cellAspect = BattleCellAspect.CreateAspect(World, new BattleCellAspect.Setup()
                 {
                     coordinates = coordinate,
+                    battleGrid = this
                 });
 
                 battleCellsEntities.Add(coordinate, cellAspect);
             }
         }
-
-        public World World => battlePhase.world;
-
-        public IEnumerable<HexCoordinates> AllCellsCoordinates => battleCellsEntities.Keys;
-
         public bool TryGetBattleCell(HexCoordinates coordinates, out BattleCellAspect cellAspect)
         {
             return battleCellsEntities.TryGetValue(coordinates, out cellAspect);
@@ -58,9 +61,18 @@ namespace ATCG.Battle.Grids
             return World.Query(Query.With<BattleGridElementComponent>());
         }
 
-        public bool TryGetCellFor(HexCoordinates coordinates, out BattleCellAspect battleCellAspect)
+        public void FillDeployableCells(List<HexCoordinates> list)
         {
-            return battleCellsEntities.TryGetValue(coordinates, out battleCellAspect);
+            list.AddRange(AllCellsCoordinates);
+
+            foreach (Entity entity in World.Query(Query.With<PhysicalCellMemberTag>()))
+            {
+                if (entity.TryGetROComponent(World, out BattleGridElementComponent gridEntityComponent))
+                {
+                    Debug.Log($"Removing {gridEntityComponent.coordinates}");
+                    list.Remove(gridEntityComponent.coordinates);
+                }
+            }
         }
 
         /*

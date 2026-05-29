@@ -11,13 +11,7 @@ namespace ATCG.Battle.Commands.Core
     [DontDestroyOnLoad]
     public class GameCommandManager : MonoSingleton<GameCommandManager>
     {
-        private List<object> commandsPlayers;
-
-        protected override void OnAwake()
-        {
-            base.OnAwake();
-            commandsPlayers = new List<object>();
-        }
+        private List<object> commandsPlayers = new List<object>();
 
         public void ExecuteGameCommandAndForget<T>(T gameCommand, BattlePhase battlePhase) where T: GameCommand
         {
@@ -57,7 +51,7 @@ namespace ATCG.Battle.Commands.Core
 
                 await PlayCommandEffects(context, embed);
 
-                await player.WaitBeforePlayingEmbed(embed);
+                await player.WaitAfterPlayingEmbed(embed);
             }
 
             await playable;

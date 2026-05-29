@@ -12,7 +12,6 @@ namespace ATCG.Battle.Commands.GameCommands
 {
     public class SpawnHeroCommand : GameCommand
     {
-
         public IBattlePlayer Player { get; private set; }
 
         public HeroBattleCard Card { get; private set; }
@@ -21,10 +20,11 @@ namespace ATCG.Battle.Commands.GameCommands
 
         public EntityAddress DeployedEntity { get; private set; }
 
-        public SpawnHeroCommand(IBattlePlayer player, HeroBattleCard heroBattleCard)
+        public SpawnHeroCommand(IBattlePlayer player, HeroBattleCard heroBattleCard, HexCoordinates destination)
         {
             Player = player;
             Card = heroBattleCard;
+            Destination = destination;
             DeployedEntity = EntityAddress.None;
         }
 

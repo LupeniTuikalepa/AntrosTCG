@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Battle.Players.Runtime;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -50,8 +51,9 @@ namespace ATCG.Battle.Entities.Runtime.Heroes.UI
             // ReSharper disable once IdentifierTypo
             if (RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(LocalBattlePlayer, out RuntimeLocalBattlePlayer rlbp))
             {
-                heroVCam.OutputChannel = rlbp.Camera.GetOutputChannel();
-                canvas.worldCamera = rlbp.Camera.OutputCamera;
+                var runtimePlayerCamera = rlbp.Camera.Component;
+                heroVCam.OutputChannel = runtimePlayerCamera.GetOutputChannel();
+                canvas.worldCamera = runtimePlayerCamera.OutputCamera;
             }
         }
 

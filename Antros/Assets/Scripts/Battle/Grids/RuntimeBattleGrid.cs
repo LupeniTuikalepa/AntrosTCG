@@ -16,12 +16,9 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Grids.Runtime
 {
     [RequireComponent(typeof(RuntimeHexGrid))]
-    public class RuntimeBattleGrid : MonoBehaviour,
-        IRuntimeBattlePlayerComponent<LocalBattlePlayer>,
-        IPhaseListener<SelectCellPhase>
+    public class RuntimeBattleGrid : MonoBehaviour, IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
 
-        public event Action<SelectCellPhase> OnNewLookupPhaseActivated;
         public event Action<RuntimeBattleCell> OnBattleCellAdded;
         public event Action<RuntimeBattleCell> OnBattleCellRemoved;
 
@@ -29,7 +26,6 @@ namespace ATCG.Battle.Grids.Runtime
         public BattleGrid BattleGrid => CurrentBattlePhase?.BattleGrid;
         public BattlePhase CurrentBattlePhase => LocalBattlePlayer.BattlePhase;
         public IReadOnlyCollection<RuntimeBattleCell> BattleCells => battleCells.Values;
-        public SelectCellPhase CurrentLookupPhase => lookupPhases.Count > 0 ? lookupPhases[0] : null;
 
         public LocalBattlePlayer LocalBattlePlayer { get; private set; }
 
@@ -39,7 +35,6 @@ namespace ATCG.Battle.Grids.Runtime
         [field: SerializeField]
         public RuntimeEntityManager EntityManager { get; private set; }
 
-        private readonly List<SelectCellPhase> lookupPhases = new();
 
         private Dictionary<HexCell, RuntimeBattleCell> battleCells;
         private SelectCellPhase lastLookupPhase;
@@ -56,8 +51,6 @@ namespace ATCG.Battle.Grids.Runtime
             battleCells = DictionaryPool<HexCell, RuntimeBattleCell>.Get();
             runtimeHexGrid.OnCellAdded += OnGridCellAdded;
             runtimeHexGrid.OnCellRemoved += OnGridCellRemoved;
-
-            this.Register();
         }
 
         private void OnDisable()
@@ -65,8 +58,6 @@ namespace ATCG.Battle.Grids.Runtime
             DictionaryPool<HexCell, RuntimeBattleCell>.Release(battleCells);
             runtimeHexGrid.OnCellAdded -= OnGridCellAdded;
             runtimeHexGrid.OnCellRemoved -= OnGridCellRemoved;
-
-            this.Unregister();
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer,
@@ -77,28 +68,10 @@ namespace ATCG.Battle.Grids.Runtime
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer,
-            LocalBattlePlayer battlePlayer)
+            LocalBattlePlayer player)
         {
             runtimeHexGrid.Disconnect();
             LocalBattlePlayer = null;
-        }
-
-        void IPhaseListener<SelectCellPhase>.OnPhaseBegin(SelectCellPhase phase)
-        {
-            if (phase.Player == LocalBattlePlayer)
-            {
-                lookupPhases.Add(phase);
-                RefreshLookupPhase();
-            }
-        }
-
-        void IPhaseListener<SelectCellPhase>.OnPhaseEnd(SelectCellPhase phase)
-        {
-            if (phase.Player == LocalBattlePlayer)
-            {
-                lookupPhases.Remove(phase);
-                RefreshLookupPhase();
-            }
         }
 
 
@@ -109,8 +82,8 @@ namespace ATCG.Battle.Grids.Runtime
             if (CurrentBattlePhase.BattleGrid.TryGetBattleCell(runtimeCell.Coordinates,
                     out BattleCellAspect battleCell))
             {
-
-                runtimeBattleCell.Spawn(this, battleCell);
+                runtimeBattleCell.SetGrid(this);
+                _ = runtimeBattleCell.Spawn(EntityManager, battleCell);
                 battleCells.Add(runtimeCell.Cell, runtimeBattleCell);
                 OnBattleCellAdded?.Invoke(runtimeBattleCell);
             }
@@ -136,22 +109,11 @@ namespace ATCG.Battle.Grids.Runtime
             return false;
         }
 
-        private void RefreshLookupPhase()
-        {
-            SelectCellPhase newCurrentPhase = CurrentLookupPhase;
-            if (lastLookupPhase == newCurrentPhase)
-                return;
-
-            foreach ((HexCell hexCell, RuntimeBattleCell runtimeBattleCell) in battleCells)
-                runtimeBattleCell.RefreshLookupPhaseStatus(lastLookupPhase, newCurrentPhase);
-
-            OnNewLookupPhaseActivated?.Invoke(newCurrentPhase);
-            lastLookupPhase = newCurrentPhase;
-        }
 
         public Vector3 GetTargetScale()
         {
             return RuntimeHexGrid.GetTargetScale();
         }
+
     }
 }

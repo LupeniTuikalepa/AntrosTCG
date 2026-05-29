@@ -10,6 +10,5 @@ namespace ATCG.Battle.Entities.Runtime
         EntityAddress Address { get; }
         void OnSelected();
         void OnDeselected();
-        void SetInteractableState(bool isInMask);
     }
 }

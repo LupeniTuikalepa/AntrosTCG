@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ATCG.MainMenu.MainMenu.GameModeButtons
 {
-    public abstract class LaunchGameMode<T, TResult> : MonoBehaviour where T : IGameMode, IPhase<TResult>
+    public abstract class LaunchGameMode<T, TResult> : MonoBehaviour where T : Phase<TResult>, IGameMode
 
     {
         [SerializeField]

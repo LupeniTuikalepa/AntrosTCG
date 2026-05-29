@@ -15,7 +15,5 @@ namespace ATCG.Battle.Entities.Components
             this.grid = grid;
             this.coordinates = coordinates;
         }
-
-
     }
 }

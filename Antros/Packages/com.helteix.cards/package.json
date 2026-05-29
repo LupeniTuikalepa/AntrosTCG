@@ -1,0 +1,22 @@
+{
+  "name": "com.helteix.cards",
+  "version": "0.2.2",
+  "displayName": "Helteix-Cards",
+  "description": "Advanced and extendable card system for every card game out there.",
+  "unity": "6000.2",
+  "keywords": [
+    "Scripts",
+    "Tools",
+    "Advanced",
+    "Cards"
+  ],
+  "author": {
+    "name": "Helteix",
+    "email": "lupeni.tuikalepa@gmail.com",
+    "url": "https://www.unity3d.com"
+  },
+  "dependencies": {
+    "com.helteix.tools": "1.6.1"
+  },
+  "_fingerprint": "103451150e4af5f01f36432d0c4cfcae74e8ddb1"
+}

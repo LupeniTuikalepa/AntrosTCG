@@ -73,6 +73,10 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("GameFeel")]
         public Gradient PlayerColors { get; private set; }
+        [field: SerializeField, BoxGroup("GameFeel")]
+        public Color SelectionColor { get; private set; }
+        [field: SerializeField, BoxGroup("GameFeel")]
+        public Color HoverColor { get; private set; }
 
         [field: SerializeField, BoxGroup("Layers")]
         public LayerMask CellLayer { get; private set; }

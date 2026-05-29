@@ -43,7 +43,7 @@ namespace ATCG.Battle.Commands.GameCommands
             switch (card)
             {
                 case HeroBattleCard heroBattleCard:
-                    Embed(in context, new SpawnHeroCommand(player, heroBattleCard));
+                    Embed(in context, new SpawnHeroCommand(player, heroBattleCard, Destination));
                     break;
             }
         }

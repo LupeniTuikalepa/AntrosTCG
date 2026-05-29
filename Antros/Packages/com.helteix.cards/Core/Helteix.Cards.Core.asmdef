@@ -1,0 +1,16 @@
+{
+    "name": "Helteix.Cards.Core",
+    "rootNamespace": "Helteix.Cards",
+    "references": [
+        "GUID:218d83f778a79c74791573f907cb34c7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,6 +1,5 @@
 ﻿using Helteix.Cards.UI.Physical;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Players.Local.UI.Cards
 {
@@ -12,16 +11,16 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         private float defaultHeight;
 
-        protected override void OnSelect(BaseEventData baseEventData)
+        public override void OnSelect()
         {
-            base.OnSelect(baseEventData);
+            base.OnSelect();
             defaultHeight = defaultMover.positionOffset.y;
             defaultMover.positionOffset = new Vector2(defaultMover.positionOffset.x, selectedHeight);
         }
 
-        protected override void OnDeselect(BaseEventData baseEventData)
+        public override void OnDeselect()
         {
-            base.OnDeselect(baseEventData);
+            base.OnDeselect();
             defaultMover.positionOffset = new Vector2(defaultMover.positionOffset.x, defaultHeight);
         }
     }

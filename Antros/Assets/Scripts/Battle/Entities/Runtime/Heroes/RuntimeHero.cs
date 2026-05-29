@@ -68,18 +68,23 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         }
 
 
-        public override void Connect(RuntimeEntityManager manager, HeroEntityAspect aspect)
+        public override async Awaitable Spawn(RuntimeEntityManager manager, HeroEntityAspect aspect)
         {
-            Hero = aspect;
+            await base.Spawn(manager, aspect);
 
+            Debug.Log($"[Runtime Hero] {aspect.BattleCardComponent.battleCard.Title} spawned.");
+            Hero = aspect;
             heroName.text = aspect.Name;
+
+            manager.RegisterRuntimeEntity(this);
+
             if (RuntimeBattleGrid.TryGetBattleCellAt(aspect.BattleGridElementComponent.coordinates, out RuntimeBattleCell cell))
             {
                 transform.localScale = GetHeroScale();
                 transform.position = cell.transform.position;
 
                 Tween.StopAll(transform);
-                Tween.PunchScale(transform, Vector3.one * -2, .25f);
+                await Tween.PunchScale(transform, Vector3.one * -2, .25f);
             }
 
             GameMetrics metrics = GameMetrics.Current;
@@ -88,6 +93,12 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             Color playerColor = metrics.GetPlayerColor(aspect.Player.GetPlayerID(), playerCount);
             outline.color = playerColor;
         }
+
+        public void Despawn(RuntimeEntityManager manager)
+        {
+            manager.UnregisterRuntimeEntity(this);
+        }
+
 
         private Vector3 GetHeroScale()
         {

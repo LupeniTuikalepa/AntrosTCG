@@ -1,8 +1,9 @@
-﻿using Helteix.Cards.UI.Physical;
+﻿using Helteix.Cards;
+using Helteix.Cards.UI.Physical;
 using Helteix.Cards.UI.Physical.Components;
+using Helteix.Cards.UI.Physical.Drag;
 using PrimeTween;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ATCG.Cards.UI.Components
 
@@ -15,30 +16,31 @@ namespace ATCG.Cards.UI.Components
         public CanvasGroup CanvasGroup => CardUI.CanvasGroup;
 
         private int lastSortingOrder;
-        public void OnPointerEnter(PointerEventData eventData)
+
+        void ICardPointerHoverHandler.OnBeginCardHover()
         {
 
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        void ICardPointerHoverHandler.OnEndCardHover()
         {
 
         }
 
-        public void OnPointerMove(PointerEventData eventData)
+        void ICardPointerHoverHandler.OnCardHoverMove(Vector2 position, Vector2 delta)
         {
 
         }
 
-        public void OnInitializePotentialDrag(PointerEventData eventData)
+        void ICardPointerDragHandler.OnInitializePotentialCardDrag()
         {
         }
 
-        public void OnDrag(PointerEventData eventData)
+        void ICardPointerDragHandler.OnUpdateCardDrag(Vector2 position, Vector2 delta)
         {
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
+        void ICardPointerDragHandler.OnBeginCardDrag()
         {
             lastSortingOrder = CardCanvas.sortingOrder;
             CardCanvas.sortingOrder = 100;
@@ -46,12 +48,16 @@ namespace ATCG.Cards.UI.Components
             Tween.Alpha(CanvasGroup, .2f, .25f);
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        void ICardPointerDragHandler.OnEndCardDrag()
         {
             CardCanvas.sortingOrder = lastSortingOrder;
 
             Tween.StopAll(CanvasGroup);
             Tween.Alpha(CanvasGroup, 1f, .25f);
+        }
+
+        void ICardPointerDragHandler.OnCardDrop<TCard>(Vector3 screenPosition, ICardDropTarget<TCard> resultTarget)
+        {
         }
     }
 }

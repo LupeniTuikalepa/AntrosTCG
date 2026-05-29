@@ -1,0 +1,40 @@
+.panel-enable {
+    display: flex;
+}
+
+.panel-disable {
+    display: none;
+}
+
+.panel {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.text-zone {
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.unity-help-box {
+}
+
+.main-title {
+    -unity-text-align: upper-center;
+    font-size: 30px;
+    -unity-font-style: bold;
+    border-bottom-width: 4px;
+    padding-right: 25px;
+    padding-left: 25px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.secondary-title {
+    padding-bottom: 4px;
+    margin-bottom: 3px;
+    border-bottom-color: rgb(255, 255, 255);
+    border-bottom-width: 2px;
+}

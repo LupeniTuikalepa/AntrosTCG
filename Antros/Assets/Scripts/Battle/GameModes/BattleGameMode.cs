@@ -7,11 +7,6 @@ namespace ATCG.Battle.GameModes
 {
     public class BattleGameMode : GameMode<BattleGameModeResults>
     {
-        protected override async Awaitable Initialize()
-        {
-            await Task.CompletedTask;
-        }
-
 
         protected override async Awaitable<BattleGameModeResults> Execute(CancellationToken token)
         {
@@ -19,9 +14,5 @@ namespace ATCG.Battle.GameModes
             return default;
         }
 
-        protected override async Awaitable Dispose()
-        {
-            await Task.CompletedTask;
-        }
     }
 }

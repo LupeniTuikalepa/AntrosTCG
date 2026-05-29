@@ -9,8 +9,7 @@ using ATCG.HexGrids.Grids;
 namespace ATCG.Battle.Entities.Aspects
 {
     public partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
-        IEntityAspect<
-            BattleCardComponent,
+        IEntityAspect<BattleCardComponent,
             BelongsToPlayerComponent,
             BattleGridElementComponent,
             MovementComponent,

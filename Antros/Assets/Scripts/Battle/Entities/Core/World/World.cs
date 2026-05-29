@@ -86,11 +86,9 @@ namespace ATCG.Battle.Entities
 
         public void DestroyEntity(in Entity e)
         {
-            // Retire l'entité de tous les stores
             foreach (IComponentStore store in stores)
                 store?.Remove(e.id);
 
-            // Retire l'entité du registre
             entities.Remove(e.id);
         }
     }

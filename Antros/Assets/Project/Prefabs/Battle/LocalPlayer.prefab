@@ -158,6 +158,50 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
+--- !u!1 &2014036549638731058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8929563192401844273}
+  - component: {fileID: 2534884648956132954}
+  m_Layer: 0
+  m_Name: Interactions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8929563192401844273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014036549638731058}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3863691666134329178}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2534884648956132954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014036549638731058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 442efa40558046948ae37a3fe874c71a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.PlayerInteractions
 --- !u!1 &2678039795022004507
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,6 +268,97 @@ MonoBehaviour:
     <Channels>k__BackingField: 4
   moveTarget: {fileID: 0}
   physicsRaycaster: {fileID: 0}
+--- !u!1 &2778149622731399012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3216813312829335074}
+  - component: {fileID: 7671588500508419661}
+  m_Layer: 0
+  m_Name: Entities
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3216813312829335074
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2778149622731399012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4067035915860277414}
+  m_Father: {fileID: 3863691666134329178}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7671588500508419661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2778149622731399012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a6df4427160c34bb6bd12642961fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.RuntimeEntityManager
+  <RuntimeBattleGrid>k__BackingField: {fileID: 839748599908605577}
+--- !u!1 &3388485052105842299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4067035915860277414}
+  - component: {fileID: 3975080634619024718}
+  m_Layer: 0
+  m_Name: Heroes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4067035915860277414
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3388485052105842299}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3216813312829335074}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3975080634619024718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3388485052105842299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ea14253f4a40b7ad5e9ec61a93bd2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Heroes.RuntimeHeroSpawner
+  runtimeEntityManager: {fileID: 7671588500508419661}
 --- !u!1 &3664716065981829095
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,6 +394,8 @@ Transform:
   - {fileID: 6503164449578071134}
   - {fileID: 414140389297784122}
   - {fileID: 6462918280538959704}
+  - {fileID: 3216813312829335074}
+  - {fileID: 8929563192401844273}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7951173172287204164
@@ -273,9 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce2848fd00a449cb240d29818e9bb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.Runtime.RuntimeLocalBattlePlayer
-  <HUD>k__BackingField: {fileID: 8704713653928204258}
-  <Controls>k__BackingField: {fileID: 380214425976605638}
-  <Camera>k__BackingField: {fileID: 7073382301116947390}
 --- !u!1 &4662165610821011190
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,17 +2011,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 9114501563819079083, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
   m_PrefabInstance: {fileID: 3444383276971364194}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8704713653928204258 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6269488580227143808, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
-  m_PrefabInstance: {fileID: 3444383276971364194}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5f2e092878446c88e4032ae24c084b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.Runtime.UI.RuntimeLocalPlayerHUD
 --- !u!1001 &3734944967631637066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1896,6 +2019,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3863691666134329178}
     m_Modifications:
+    - target: {fileID: 4067403916306683075, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
+      propertyPath: <EntityManager>k__BackingField
+      value: 
+      objectReference: {fileID: 7671588500508419661}
     - target: {fileID: 4252518110930111559, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
       propertyPath: m_Name
       value: BattleGrid
@@ -1940,40 +2067,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7516957116047579520, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4252518110930111559, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5155999664563015534}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
---- !u!1 &636918602715792909 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4252518110930111559, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
-  m_PrefabInstance: {fileID: 3734944967631637066}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5155999664563015534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636918602715792909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0a6df4427160c34bb6bd12642961fcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.RuntimeHeroManager
-  <RuntimeBattleGrid>k__BackingField: {fileID: 839748599908605577}
-  container: {fileID: 0}
 --- !u!114 &839748599908605577 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4067403916306683075, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
   m_PrefabInstance: {fileID: 3734944967631637066}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636918602715792909}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1c03404d5bc4d8f8632fb0398f4cd35, type: 3}

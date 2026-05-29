@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATCG.GameModes
 {
-    public class WaitForEveryPlayerPhase : IPhase<bool>
+    public class WaitForEveryPlayerPhase : Phase<bool>
     {
         public const string SESSION_WAIT_STATE = "WaitState";
         public const string PLAYER_IS_READY = "IsReady";
@@ -18,7 +18,7 @@ namespace ATCG.GameModes
             Session = session;
         }
 
-        async Awaitable IPhase<bool>.Initialize(CancellationToken token)
+        protected override async Awaitable Initialize(CancellationToken token)
         {
             Session.Deleted += this.Cancel;
             if (Session is IHostSession hostSession)
@@ -33,7 +33,7 @@ namespace ATCG.GameModes
         }
 
 
-        async Awaitable IPhase<bool>.Dispose(CancellationToken token)
+        protected override async Awaitable Dispose(CancellationToken token)
         {
             Session.Deleted -= this.Cancel;
             if (token.IsCancellationRequested)
@@ -55,7 +55,8 @@ namespace ATCG.GameModes
         }
 
 
-        async Awaitable<bool> IPhase<bool>.Execute(CancellationToken token)
+
+        protected override async Awaitable<bool> Execute(CancellationToken token)
         {
             IHostSession hostSession = Session as IHostSession;
             bool isHost = hostSession != null;

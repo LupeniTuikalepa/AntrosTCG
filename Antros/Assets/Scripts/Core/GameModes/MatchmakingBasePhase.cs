@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Helteix.Tools;
 using Helteix.Tools.Phases;
 using Unity.Services.Multiplayer;
 using UnityEngine;
 
 namespace ATCG.GameModes
 {
-    public class MatchmakingPhase : ISessionSetupPhase
+    public class MatchmakingPhase : Phase<ISession>
     {
         public string GameModeQueue { get; }
         public int MaxPlayers { get; }
@@ -19,7 +18,8 @@ namespace ATCG.GameModes
             MaxPlayers = maxPlayers;
         }
 
-        async Awaitable<ISession> IPhase<ISession>.Execute(CancellationToken token)
+
+        protected override async Awaitable<ISession> Execute(CancellationToken token)
         {
             QuickJoinOptions quickJoinOptions = new QuickJoinOptions()
             {
@@ -37,15 +37,15 @@ namespace ATCG.GameModes
                 }
             };
 
-            return await MultiplayerService.Instance.MatchmakeSessionAsync(quickJoinOptions, sessionOptions);;
+            return await MultiplayerService.Instance.MatchmakeSessionAsync(quickJoinOptions, sessionOptions);
         }
 
-        async Awaitable IPhase<ISession>.Initialize(CancellationToken token)
+        protected override async Awaitable Initialize(CancellationToken token)
         {
             await Task.CompletedTask;
         }
 
-        async Awaitable IPhase<ISession>.Dispose(CancellationToken token)
+        protected override async Awaitable Dispose(CancellationToken token)
         {
             await Task.CompletedTask;
         }
