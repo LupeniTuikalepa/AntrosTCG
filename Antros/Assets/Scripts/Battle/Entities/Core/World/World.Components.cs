@@ -25,24 +25,24 @@ namespace ATCG.Battle.Entities
             return false;
         }
 
-        public ComponentsLookupResult<T, TFilter> LookupComponents<TFilter, T>(in TFilter filter)
-            where TFilter : IComponentLookupFilter<T>
+        public ComponentQuery<T, TFilter> Query<TFilter, T>(in TFilter filter)
+            where TFilter : IFilter<T>
             where T : struct, IEntityComponent
         {
             int id = ComponentID<T>.ID;
             if (stores[id] is not ComponentStore<T> store)
                 return default;
 
-            return new ComponentsLookupResult<T, TFilter>(store, filter, this);
+            return new ComponentQuery<T, TFilter>(store, filter, this);
         }
 
-        public ComponentsLookupResult<T> LookupComponents<T>() where T : struct, IEntityComponent
+        public ComponentQuery<T> Query<T>() where T : struct, IEntityComponent
         {
             int id = ComponentID<T>.ID;
             if (stores[id] is not ComponentStore<T> store)
                 return default;
 
-            return new ComponentsLookupResult<T>(store, this);
+            return new ComponentQuery<T>(store, this);
         }
 
         public bool HasComponent<T>(Entity e) where T : struct, IEntityComponent
@@ -76,7 +76,7 @@ namespace ATCG.Battle.Entities
                 int idx = store.EntityIDToIndex(e);
                 if (idx != -1)
                 {
-                    componentRef = new ComponentRef<T>(this, store, id);
+                    componentRef = new ComponentRef<T>(this, store, e.id);
                     return true;
                 }
             }
@@ -91,7 +91,7 @@ namespace ATCG.Battle.Entities
             if (stores[id] is ComponentStore<T> store && store.Has(e.id))
                 return ref store.GetRef(e.id);
 
-            return ref ComponentStore<T>.DefaultComponent;
+            throw new Exception($"Entity {e.id} does not have component {typeof(T).Name}. Use TryGetComponent or HasComponent first.");
         }
 
         public bool AddOrSetComponent<T>(Entity e) where T : struct, IEntityComponent

@@ -35,7 +35,7 @@ namespace ATCG.Battle.Entities
         public bool TryGetROComponent<T>(World world, out T component) where T : struct, IEntityComponent
         {
             component = default;
-            if (IsAlive(world))
+            if (!IsAlive(world))
                 return false;
 
             return world.TryGetROComponent(this, out component);
@@ -44,7 +44,7 @@ namespace ATCG.Battle.Entities
         public bool TryGetComponent<T>(World world, out ComponentRef<T> componentRef) where T : struct, IEntityComponent
         {
             componentRef = default;
-            if (IsAlive(world))
+            if (!IsAlive(world))
                 return false;
 
             return world.TryGetComponent(this, out componentRef);

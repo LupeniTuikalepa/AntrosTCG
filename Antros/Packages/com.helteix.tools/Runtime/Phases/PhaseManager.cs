@@ -39,8 +39,21 @@ namespace Helteix.Tools.Phases
             }
         }
 
-        public static Awaitable<PhaseResult<TResult>>.Awaiter GetAwaiter<TResult>(this Phase<TResult> phase) =>
-            Run(phase).GetAwaiter();
+        public static Awaitable<PhaseResult<TResult>>.Awaiter GetAwaiter<TResult>(this Phase<TResult> phase)
+        {
+            if (phase.IsRunning())
+                throw new InvalidOperationException($"Phase {phase.GetType().Name} is already running. use WaitAsync if you just want to wait for the result.");
+
+            return Run(phase).GetAwaiter();
+        }
+
+        public static Awaitable<PhaseResult<TResult>> WaitAsync<TResult>(this Phase<TResult> phase)
+        {
+            if (!phase.IsRunning())
+                throw new InvalidOperationException($"Phase {phase.GetType().Name} is not running.");
+
+            return phase.CompletionSource.Awaitable;
+        }
 
         public static void RunAndForget<TResult>(this Phase<TResult> phase) => _ = Run(phase);
 

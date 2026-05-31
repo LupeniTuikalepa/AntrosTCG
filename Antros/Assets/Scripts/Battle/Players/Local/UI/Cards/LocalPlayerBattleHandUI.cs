@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Cards.UI;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Runtime.Grid;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Local.Phases.Cards;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
 using ATCG.HexGrids;
-using ATCG.Utilities;
 using Helteix.Cards;
 using Helteix.Cards.Collections;
 using Helteix.Cards.UI.Physical;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.Tools.Phases;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.UI.Cards
@@ -32,7 +26,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
         protected RuntimeLocalBattlePlayer RuntimeLocalBattlePlayer { get; private set; }
         protected LocalBattlePlayer LocalBattlePlayer => RuntimeLocalBattlePlayer.Player;
 
-        public SelectCellPhase DeployCard { get; private set; }
+        public DeployCardPhase DeployCard { get; private set; }
 
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer,
@@ -132,52 +126,13 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
             if (base.BeginCardDrag(holderUI) && TryGetDragPhase(card, out CardDragPhase<IBattleCard> phase))
             {
-                _ = DoCardDeploy(card, phase);
+                DeployCardPhase deployCardPhase = new DeployCardPhase(LocalBattlePlayer, card, phase);
+                deployCardPhase.RunAndForget();
+
                 return true;
             }
 
             return false;
-        }
-
-        public override bool OnCardDrop(CardHolderUI holderUI, DragResult<IBattleCard> result)
-        {
-            if (base.OnCardDrop(holderUI, result) && DeployCard != null)
-            {
-                if (result.Target is RuntimeBattleCell runtimeBattleCell)
-                {
-                    DeployCard.SetResult(runtimeBattleCell.Address);
-                    return true;
-                }
-
-                DeployCard.Cancel();
-            }
-            return false;
-        }
-
-        private async Awaitable DoCardDeploy(IBattleCard card, CardDragPhase<IBattleCard> phase)
-        {
-            if (DeployCard != null)
-                return;
-
-            using (ListPool<HexCoordinates>.Get(out List<HexCoordinates> cells))
-            {
-                BattleGrid battleGrid = LocalBattlePlayer.BattlePhase.BattleGrid;
-                battleGrid.FillDeployableCells(cells);
-
-                DeployCard = new SelectCellPhase(cells, battleGrid, LocalBattlePlayer);
-
-                var result = await DeployCard.Run();
-                DeployCard = null;
-                if (result.type != PhaseResultType.Success)
-                    return;
-
-                int cardID = LocalBattlePlayer.Hand.GetCardIndex(card);
-                if (cardID != -1 && result.value.IsBattleCellAspect(out BattleCellAspect aspect))
-                {
-                    DeployCardCommand deployCardCommand = new DeployCardCommand(cardID, aspect.Coordinate, LocalBattlePlayer.ID);
-                    deployCardCommand.RunAndForget(Player.BattlePhase);
-                }
-            }
         }
     }
 }

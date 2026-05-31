@@ -58,14 +58,14 @@ namespace ATCG.Battle.Grids
 
         public EntityQueryResult GetGridMembers()
         {
-            return World.Query(Query.With<BattleGridElementComponent>());
+            return World.Query(EntityQuery.With<BattleGridElementComponent>());
         }
 
         public void FillDeployableCells(List<HexCoordinates> list)
         {
             list.AddRange(AllCellsCoordinates);
 
-            foreach (Entity entity in World.Query(Query.With<PhysicalCellMemberTag>()))
+            foreach (Entity entity in World.Query(EntityQuery.With<PhysicalCellMemberTag>()))
             {
                 if (entity.TryGetROComponent(World, out BattleGridElementComponent gridEntityComponent))
                 {

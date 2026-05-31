@@ -6,6 +6,9 @@ namespace Helteix.Tools.Phases
 {
     public abstract class Phase<TResult> : IPhase
     {
+        private const string CANCELLATION_REQUESTED_BY_THE_PHASE = "Cancellation requested by the phase";
+        internal AwaitableCompletionSource<PhaseResult<TResult>> CompletionSource { get; } = new();
+
         public event Action OnInitialized;
 
         public event Action<TResult> OnCompleted;
@@ -14,11 +17,11 @@ namespace Helteix.Tools.Phases
 
         public PhaseStatus CurrentStatus { get; private set; } = PhaseStatus.None;
 
-
         internal virtual Awaitable InitializePhase(CancellationToken token)
         {
             OnInitialized?.Invoke();
             CurrentStatus = PhaseStatus.None;
+            CompletionSource.Reset();
             return Initialize(token);
         }
 
@@ -39,16 +42,24 @@ namespace Helteix.Tools.Phases
                 TResult result = awaiter.GetResult();
                 OnCompleted?.Invoke(result);
 
-                return new PhaseResult<TResult>(result, PhaseResultType.Success);
+
+                var phaseResult = new PhaseResult<TResult>(result, PhaseResultType.Success);
+                CompletionSource.SetResult(phaseResult);
+                return phaseResult;
             }
             catch (OperationCanceledException)
             {
                 CurrentStatus = PhaseStatus.Canceled;
-                return new PhaseResult<TResult>(default, PhaseResultType.Cancel);
+                CompletionSource.SetCanceled();
+
+                var phaseResult = new PhaseResult<TResult>(default, PhaseResultType.Cancel);
+                return phaseResult;
             }
             catch (Exception e)
             {
                 CurrentStatus = PhaseStatus.Failed;
+                CompletionSource.SetException(e);
+
                 Debug.LogException(e);
                 return new PhaseResult<TResult>(default, PhaseResultType.Failure);
             }
@@ -57,8 +68,11 @@ namespace Helteix.Tools.Phases
         internal virtual Awaitable DisposePhase(CancellationToken token)
         {
             OnDisposed?.Invoke();
+
+            CompletionSource?.Reset();
             return Dispose(token);
         }
+
 
         /// <summary>
         /// Execute the phase then send a value at the end

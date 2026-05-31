@@ -15,12 +15,11 @@ namespace Helteix.Tools.Phases
     /// </summary>
     public class PhaseCompletionSource<TValue> : Phase<TValue>
     {
-        private readonly AwaitableCompletionSource<TValue> source;
-        private bool _completed;
+        private bool completed;
 
         protected PhaseCompletionSource()
         {
-            source = new AwaitableCompletionSource<TValue>();
+
         }
 
         /// <summary>
@@ -43,32 +42,32 @@ namespace Helteix.Tools.Phases
         {
             await Awaitable.MainThreadAsync();
 
-            if (_completed)
+            if (completed)
                 return;
 
-            _completed = true;
-            source.SetResult(value);
+            completed = true;
+            CompletionSource.SetResult(new PhaseResult<TValue>(value, PhaseResultType.Success));
         }
 
         private async Awaitable CancelAsync()
         {
             await Awaitable.MainThreadAsync();
 
-            if (_completed)
+            if (completed)
                 return;
 
-            _completed = true;
-            source.SetCanceled();
+            completed = true;
+            CompletionSource.SetCanceled();
         }
 
         protected override async Awaitable<TValue> Execute(CancellationToken token)
         {
-            return await source.Awaitable;
+            return await CompletionSource.Awaitable;
         }
 
         protected override async Awaitable Initialize(CancellationToken token)
         {
-            _completed = false;
+            completed = false;
             await Awaitable.MainThreadAsync();
         }
 

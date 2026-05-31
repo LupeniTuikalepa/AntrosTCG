@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using ATCG.Battle.Entities.Components;
 
@@ -11,6 +12,9 @@ namespace ATCG.Battle.Entities
 
         private readonly int maxEntities;
         private SparseSet<EntityMeta> entities;
+
+        // Recycle destroyed entity IDs to avoid exhausting the ID space.
+        private readonly Stack<int> freeIds = new();
         private int nextId;
 
         private IComponentStore[] stores;
@@ -27,7 +31,6 @@ namespace ATCG.Battle.Entities
         public ReadOnlySpan<EntityMeta> Metas => entities.AllElements;
         public ReadOnlySpan<int> Entities => entities.AllIDs;
 
-
         public void EnsureStores(ComponentMask mask)
         {
             foreach (int id in mask)
@@ -39,19 +42,17 @@ namespace ATCG.Battle.Entities
                 if (componentType is not { IsValueType: true })
                     continue;
 
+                // Reflection is required here since the store type is generic and only known at runtime.
+                // MethodInfo instances are cached per type to avoid repeated MakeGenericMethod calls.
                 MethodInfo methodInfo = GetOrCreateStoreMethodInfos.MakeGenericMethod(componentType);
                 methodInfo.Invoke(this, null);
             }
         }
 
-
         public Entity CreateEntity()
         {
-            int id = nextId++;
-            entities.Set(id, new EntityMeta
-            {
-                isActive = true
-            });
+            int id = freeIds.Count > 0 ? freeIds.Pop() : nextId++;
+            entities.Set(id, new EntityMeta { isActive = true });
             return new Entity(id);
         }
 
@@ -90,6 +91,7 @@ namespace ATCG.Battle.Entities
                 store?.Remove(e.id);
 
             entities.Remove(e.id);
+            freeIds.Push(e.id);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace ATCG.Battle.Players.Local.Phases
 {
     public interface ISelectEntityPhase : ISinglePhase
     {
+        string ISinglePhase.Channel => "SelectPhaseChannel";
+
         ChannelKey ChannelKey { get; }
         bool Accepts(EntityAddress address);
     }

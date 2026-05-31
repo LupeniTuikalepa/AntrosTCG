@@ -8,15 +8,15 @@ using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.Grid
 {
-    public partial class RuntimeBattleCell : ICardDropTarget<IBattleCard>, IPhaseListener<SelectCellPhase>
+    public partial class RuntimeBattleCell : ICardDropTarget<IBattleCard>
     {
-        public SelectCellPhase CurrentSelectCellPhase { get; private set; }
 
         int ICardDropTarget<IBattleCard>.Priority => 1;
 
         bool ICardDropTarget<IBattleCard>.Accepts(ICardUI<IBattleCard> cardUI)
         {
-            return CurrentSelectCellPhase != null && IsInteractable && CurrentSelectCellPhase.IsCoordValid(Aspect.Coordinate);
+            //return CurrentSelectCellPhase != null && IsInteractable && CurrentSelectCellPhase.IsCoordValid(Aspect.Coordinate);
+            return CurrentSelectEntityPhase != null && CurrentSelectEntityPhase.Accepts(Address);
         }
 
         void ICardDropTarget<IBattleCard>.OnCardEnter(ICardUI<IBattleCard> cardUI)
@@ -53,14 +53,5 @@ namespace ATCG.Battle.Entities.Runtime.Grid
         {
         }
 
-        void IPhaseListener<SelectCellPhase>.OnPhaseBegin(SelectCellPhase phase)
-        {
-            CurrentSelectCellPhase = phase;
-        }
-
-        void IPhaseListener<SelectCellPhase>.OnPhaseEnd(SelectCellPhase phase)
-        {
-            CurrentSelectCellPhase = null;
-        }
     }
 }

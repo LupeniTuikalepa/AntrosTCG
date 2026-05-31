@@ -37,7 +37,6 @@ namespace ATCG.Battle.Grids.Runtime
 
 
         private Dictionary<HexCell, RuntimeBattleCell> battleCells;
-        private SelectCellPhase lastLookupPhase;
 
 
 

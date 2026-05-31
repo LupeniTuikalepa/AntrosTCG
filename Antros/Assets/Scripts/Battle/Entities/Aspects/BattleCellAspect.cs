@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public partial struct BattleCellAspect : IEntityAspect<BattleGridElementComponent>,
+    public readonly partial struct BattleCellAspect : IEntityAspect<BattleGridElementComponent>,
         ICreateEntityAspect<BattleCellAspect.Setup>
     {
-        public readonly struct IsCellMemberFilter : IComponentLookupFilter<BattleGridElementComponent>
+        public readonly struct IsCellMemberFilter : IFilter<BattleGridElementComponent>
         {
             private readonly HexCoordinates coordinates;
 
@@ -35,10 +35,10 @@ namespace ATCG.Battle.Entities.Aspects
         public HexCoordinates Coordinate => BattleGridElementComponent.coordinates;
 
 
-        public ComponentsLookupResult<BattleGridElementComponent, IsCellMemberFilter> GetMembers()
+        public ComponentQuery<BattleGridElementComponent, IsCellMemberFilter> GetMembers()
         {
             IsCellMemberFilter filter = new(BattleGridElementComponent.coordinates);
-            return EntityAddress.world.LookupComponents<IsCellMemberFilter, BattleGridElementComponent>(filter);
+            return EntityAddress.world.Query<IsCellMemberFilter, BattleGridElementComponent>(filter);
         }
 
 

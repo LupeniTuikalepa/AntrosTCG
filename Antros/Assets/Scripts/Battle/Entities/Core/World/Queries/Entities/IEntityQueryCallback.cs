@@ -1,6 +1,6 @@
 ﻿namespace ATCG.Battle.Entities.Queries
 {
-    public interface IQueryCallback
+    public interface IEntityQueryCallback
     {
         void Execute(Entity entity);
     }

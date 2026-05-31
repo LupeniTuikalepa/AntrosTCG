@@ -10,9 +10,9 @@ namespace ATCG.Battle.Entities
         private ComponentMask componentMask;
 
 
-        public readonly bool MatchesQuery(in Query query)
+        public readonly bool MatchesQuery(in EntityQuery entityQuery)
         {
-            return query.Matches(componentMask);
+            return entityQuery.Matches(componentMask);
         }
 
         public void AddComponentToMask<T>() where T : struct, IEntityComponent

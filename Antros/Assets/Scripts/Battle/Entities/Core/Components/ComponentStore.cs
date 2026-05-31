@@ -6,7 +6,7 @@ namespace ATCG.Battle.Entities.Components
     {
         public const int NONE = -1;
 
-        public static T DefaultComponent = default;
+
         private readonly int[] denseToEntity; // dense[i] appartient à quelle entité ?
         private readonly int[] sparse; // entityId → index dans dense (-1 = absent)
 
