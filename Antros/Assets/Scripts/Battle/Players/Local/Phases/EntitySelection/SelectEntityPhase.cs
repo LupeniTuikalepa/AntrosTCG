@@ -1,8 +1,7 @@
 ﻿using System.Threading;
-using System.Threading.Tasks;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Players.Local.Phases.Cards;
+using ATCG.Battle.Entities.Runtime;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -15,11 +14,14 @@ namespace ATCG.Battle.Players.Local.Phases
     {
         public ChannelKey ChannelKey { get; private set; }
 
+        private readonly CardDragPhase<IBattleCard> dragPhase;
+
         private readonly T filter;
 
-        public SelectEntityPhase(T filter, CardDragPhase<IBattleCard> phase)
+        public SelectEntityPhase(T filter, CardDragPhase<IBattleCard> dragPhase)
         {
             this.filter = filter;
+            this.dragPhase = dragPhase;
         }
 
 
@@ -28,7 +30,28 @@ namespace ATCG.Battle.Players.Local.Phases
         protected override async Awaitable Initialize(CancellationToken token)
         {
             ChannelKey = ChannelKey.GetUniqueChannelKey();
-            await Task.CompletedTask;
+            await base.Initialize(token);
+
+            if (dragPhase != null)
+                _ = WaitForSelection(token);
+        }
+
+        private async Awaitable WaitForSelection(CancellationToken token)
+        {
+            PhaseResult<DragResult<IBattleCard>> result = await dragPhase.WaitAsync(token);
+
+            if(!IsRunning())
+                return;
+
+            if (result is { type: PhaseResultType.Success, value: { Target: IRuntimeEntity entity } })
+            {
+                if(Accepts(entity.Address))
+                    SetResult(entity.Address);
+            }
+            else
+            {
+                SetCanceled();
+            }
         }
     }
 }

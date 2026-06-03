@@ -55,7 +55,7 @@ MonoBehaviour:
   holderPrefab: {fileID: 1675787444449960120, guid: d8fbdd5e3e86685438e0b693ed7869f2, type: 3}
   containerRoot: {fileID: 8754641824197626668}
   <DraggingParent>k__BackingField: {fileID: 1473166716627623999}
-  <Use3DDragging>k__BackingField: 0
+  <Use3DDragging>k__BackingField: 1
 --- !u!1 &1246179176620695035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2510,8 +2510,8 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
 --- !u!1001 &1239431907920065886
 PrefabInstance:

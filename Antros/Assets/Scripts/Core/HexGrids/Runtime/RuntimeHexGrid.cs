@@ -82,6 +82,10 @@ namespace ATCG.HexGrids.Runtime
 
 
         public bool TryGetCellAt(HexCoordinates coordinates, out HexCell cell) => Current.TryGetCell(coordinates, out cell);
-        public Vector2 GetPositionAt(HexCoordinates coordinates) => Current.GetPositionAt(coordinates);
+        public Vector3 GetPositionAt(HexCoordinates coordinates)
+        {
+            Vector2 positionAt = Current.GetPositionAt(coordinates);
+            return new Vector3(positionAt.x, 0, positionAt.y);
+        }
     }
 }

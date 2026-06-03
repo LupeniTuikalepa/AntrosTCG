@@ -10,11 +10,7 @@ namespace ATCG.HexGrids.Runtime
 
         public HexCell Cell => RuntimeGrid.IsConnected && RuntimeGrid.Current.TryGetCell(Coordinates, out var cell) ? cell : null;
 
-        private uint startLayerMask;
 
-        private void Awake()
-        {
-        }
 
         public void Init(RuntimeHexGrid grid)
         {

@@ -1,26 +1,26 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using UnityEngine;
 
 namespace Helteix.Tools.Phases
 {
     /// <summary>
-    /// A phase that completes when <see cref="SetResult"/> or <see cref="Cancel"/> is called externally.
+    /// A phase that completes when <see cref="SetResult"/> or <see cref="SetCanceled"/> is called externally.
     /// Useful for phases driven by external events (e.g. waiting for a UI button press).
     /// <para>
     /// <b>Must be called from the Unity main thread.</b> This class is not thread-safe —
-    /// do not call <see cref="SetResult"/> or <see cref="Cancel"/> from a background thread.
+    /// do not call <see cref="SetResult"/> or <see cref="SetCanceled"/> from a background thread.
     /// If called from a background thread by mistake, the call will be marshalled to the main
     /// thread via <see cref="Awaitable.MainThreadAsync"/> before completing the phase.
     /// </para>
     /// </summary>
     public class PhaseCompletionSource<TValue> : Phase<TValue>
     {
-        private bool completed;
+        // Separate from Phase<TResult>.CompletionSource — this one is driven by SetResult/SetCanceled.
+        // Phase<TResult>.CompletionSource is driven by ExecutePhase and handles WaitAsync notifications.
+        private readonly AwaitableCompletionSource<PhaseResult<TValue>> internalSource = new();
 
-        protected PhaseCompletionSource()
-        {
-
-        }
+        protected PhaseCompletionSource() { }
 
         /// <summary>
         /// Sets the result and completes the phase. Has no effect if already completed or cancelled.
@@ -31,43 +31,41 @@ namespace Helteix.Tools.Phases
         }
 
         /// <summary>
-        /// Cancels the phase. Has no effect if already completed.
+        /// Cancels the phase immediately. Has no effect if already completed.
         /// </summary>
-        public void Cancel()
+        protected void SetCanceled()
         {
-            _ = CancelAsync();
+            internalSource.TrySetResult(new PhaseResult<TValue>(default, PhaseResultType.Cancel));
         }
 
         private async Awaitable SetResultAsync(TValue value)
         {
             await Awaitable.MainThreadAsync();
-
-            if (completed)
-                return;
-
-            completed = true;
-            CompletionSource.SetResult(new PhaseResult<TValue>(value, PhaseResultType.Success));
-        }
-
-        private async Awaitable CancelAsync()
-        {
-            await Awaitable.MainThreadAsync();
-
-            if (completed)
-                return;
-
-            completed = true;
-            CompletionSource.SetCanceled();
+            internalSource.TrySetResult(new PhaseResult<TValue>(value, PhaseResultType.Success));
         }
 
         protected override async Awaitable<TValue> Execute(CancellationToken token)
         {
-            return await CompletionSource.Awaitable;
+            var awaiter = internalSource.Awaitable.GetAwaiter();
+            while (!awaiter.IsCompleted)
+            {
+                token.ThrowIfCancellationRequested();
+                await Awaitable.NextFrameAsync(token);
+            }
+
+            PhaseResult<TValue> result = awaiter.GetResult();
+            if (result.type == PhaseResultType.Cancel)
+                throw new OperationCanceledException(token);
+
+            if (result.type == PhaseResultType.Failure)
+                throw new Exception($"PhaseCompletionSource<{typeof(TValue).Name}> failed.");
+
+            return result.value;
         }
 
         protected override async Awaitable Initialize(CancellationToken token)
         {
-            completed = false;
+            internalSource.Reset();
             await Awaitable.MainThreadAsync();
         }
 

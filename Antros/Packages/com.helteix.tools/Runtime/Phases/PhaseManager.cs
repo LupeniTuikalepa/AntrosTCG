@@ -47,12 +47,28 @@ namespace Helteix.Tools.Phases
             return Run(phase).GetAwaiter();
         }
 
-        public static Awaitable<PhaseResult<TResult>> WaitAsync<TResult>(this Phase<TResult> phase)
+        public static async Awaitable<PhaseResult<TResult>> WaitAsync<TResult>(this Phase<TResult> phase, CancellationToken token = default)
         {
             if (!phase.IsRunning())
                 throw new InvalidOperationException($"Phase {phase.GetType().Name} is not running.");
 
-            return phase.CompletionSource.Awaitable;
+            Awaitable<PhaseResult<TResult>>.Awaiter awaiter = phase.CompletionSource.Awaitable.GetAwaiter();
+
+            if (token == CancellationToken.None)
+            {
+                while (!awaiter.IsCompleted)
+                    await Awaitable.NextFrameAsync(token);
+            }
+            else
+            {
+                while (!awaiter.IsCompleted)
+                {
+                    token.ThrowIfCancellationRequested();
+                    await Awaitable.NextFrameAsync(token);
+                }
+            }
+
+            return awaiter.GetResult();
         }
 
         public static void RunAndForget<TResult>(this Phase<TResult> phase) => _ = Run(phase);
@@ -62,7 +78,7 @@ namespace Helteix.Tools.Phases
             if (phase == null)
                 return default;
 
-            TResult result = default;
+            PhaseResult<TResult> result = default;
             using (CancellationTokenSource source = new CancellationTokenSource())
             {
                 PhaseExecutionContext<TResult> context = new PhaseExecutionContext<TResult>()
@@ -74,17 +90,20 @@ namespace Helteix.Tools.Phases
                 try
                 {
                     await BeginPhase(context);
+                    // ExecutePhase already handles cancellation/failure internally and
+                    // returns a fully-formed PhaseResult — keep it as-is, do NOT let the
+                    // implicit PhaseResult<T> -> T operator strip the type back to Success.
                     result = await phase.ExecutePhase(context.source.Token);
                 }
                 catch (OperationCanceledException phaseCanceledException)
                 {
                     Debug.Log($"{phase.GetType().Name} phase was cancelled because of : {phaseCanceledException.Message}");
-                    return new PhaseResult<TResult>(result, PhaseResultType.Cancel);
+                    result = new PhaseResult<TResult>(default, PhaseResultType.Cancel);
                 }
                 catch (Exception e)
                 {
                     Debug.LogException(e);
-                    return new PhaseResult<TResult>(result, PhaseResultType.Failure);
+                    result = new PhaseResult<TResult>(default, PhaseResultType.Failure);
                 }
                 finally
                 {
@@ -92,7 +111,7 @@ namespace Helteix.Tools.Phases
                 }
             }
 
-            return new PhaseResult<TResult>(result, PhaseResultType.Success);
+            return result;
         }
 
         internal static async Awaitable BeginPhase<TResult>(PhaseExecutionContext<TResult> context)

@@ -11,14 +11,14 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         private float defaultHeight;
 
-        public override void OnSelect()
+        protected override void OnSelect()
         {
             base.OnSelect();
             defaultHeight = defaultMover.positionOffset.y;
             defaultMover.positionOffset = new Vector2(defaultMover.positionOffset.x, selectedHeight);
         }
 
-        public override void OnDeselect()
+        protected override void OnDeselect()
         {
             base.OnDeselect();
             defaultMover.positionOffset = new Vector2(defaultMover.positionOffset.x, defaultHeight);

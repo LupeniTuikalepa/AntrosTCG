@@ -13,27 +13,15 @@ namespace ATCG.Battle.Entities.Runtime.Grid
 {
     public partial class RuntimeBattleCell : RuntimeEntity<BattleCellAspect>
     {
-        [field: SerializeField]
-        public SpriteRenderer SpriteRenderer { get; private set; }
-
-        [field: SerializeField]
-        public Color DefaultColor { get; private set; }
-        [field: SerializeField]
-        public Color HoverColor { get; private set; }
-        [field: SerializeField]
-        public Color SelectedColor { get; private set; }
-        [field: SerializeField]
-        public Color DisabledColor { get; private set; }
 
         public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
         public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
         public HexCoordinates Coordinates => Aspect.BattleGridElementComponent.coordinates;
 
-        private Vector3 baseSpriteSize;
+
 
         private void OnValidate()
         {
-            SpriteRenderer.color = DefaultColor;
         }
 
         protected override void Awake()

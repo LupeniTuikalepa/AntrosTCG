@@ -47,6 +47,7 @@ namespace ATCG.Battle.Entities.Runtime
 
         private List<Entity> selectedEntities;
 
+
         private Dictionary<Entity, IRuntimeEntity> runtimeEntities;
 
         private void Awake()
@@ -55,13 +56,23 @@ namespace ATCG.Battle.Entities.Runtime
             selectedEntities = new ();
 
             Selectable = new Condition();
-            MaxSelectables = new Priority<int>();
+            MaxSelectables = new Priority<int>(1);
 
             Selectable.AddOnValueChangeCallback(ctx =>
             {
                 if (!ctx)
                     ClearSelection();
             });
+        }
+
+        private void OnEnable()
+        {
+            this.Register();
+        }
+
+        private void OnDisable()
+        {
+            this.Unregister();
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)

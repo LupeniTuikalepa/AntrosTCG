@@ -30,35 +30,33 @@ namespace Helteix.Tools.Phases
             try
             {
                 CurrentStatus = PhaseStatus.Running;
-                var awaitable = Execute(token);
-                Awaitable<TResult>.Awaiter awaiter = awaitable.GetAwaiter();
-                while (!awaiter.IsCompleted)
-                {
-                    token.ThrowIfCancellationRequested();
-                    await Awaitable.NextFrameAsync(token);
-                }
+
+                // Await Execute directly. Unity's Awaitable propagates OperationCanceledException
+                // through await, whereas manually polling the awaiter and calling GetResult()
+                // does NOT reliably rethrow on cancellation — it can return default instead.
+                TResult result = await Execute(token);
+
+                // Catch a cancellation that completed Execute without surfacing as an exception.
+                token.ThrowIfCancellationRequested();
 
                 CurrentStatus = PhaseStatus.Completed;
-                TResult result = awaiter.GetResult();
                 OnCompleted?.Invoke(result);
 
-
                 var phaseResult = new PhaseResult<TResult>(result, PhaseResultType.Success);
-                CompletionSource.SetResult(phaseResult);
+                CompletionSource.TrySetResult(phaseResult);
                 return phaseResult;
             }
             catch (OperationCanceledException)
             {
                 CurrentStatus = PhaseStatus.Canceled;
-                CompletionSource.SetCanceled();
+                CompletionSource.TrySetCanceled();
 
-                var phaseResult = new PhaseResult<TResult>(default, PhaseResultType.Cancel);
-                return phaseResult;
+                return new PhaseResult<TResult>(default, PhaseResultType.Cancel);
             }
             catch (Exception e)
             {
                 CurrentStatus = PhaseStatus.Failed;
-                CompletionSource.SetException(e);
+                CompletionSource.TrySetException(e);
 
                 Debug.LogException(e);
                 return new PhaseResult<TResult>(default, PhaseResultType.Failure);
@@ -100,6 +98,10 @@ namespace Helteix.Tools.Phases
         {
             await Awaitable.MainThreadAsync();
         }
+
+        protected bool IsRunning() => PhaseManager.IsRunning(this);
+        protected void Cancel() => PhaseManager.Cancel(this);
+
     }
     public abstract class Phase : Phase<Phase>
     {

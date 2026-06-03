@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
@@ -13,7 +14,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.Phases.Cards
 {
-    public class DeployCardPhase : Phase<EntityAddress>
+    public class DeployCardPhase : Phase
     {
         private struct DeployableCellFilter : IEntityFilter
         {
@@ -21,8 +22,6 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             {
                 if (address.IsBattleCellAspect(out BattleCellAspect aspect))
                 {
-                    ComponentQuery<BattleGridElementComponent, BattleCellAspect.IsCellMemberFilter> componentQuery = aspect.GetMembers();
-
                     return !aspect.GetMembers().Any();
                 }
 
@@ -41,27 +40,26 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             this.phase = phase;
         }
 
-        protected override async Awaitable<EntityAddress> Execute(CancellationToken token)
+        protected override async Awaitable ExecuteNoResult(CancellationToken token)
         {
             SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(new DeployableCellFilter(), phase);
 
             PhaseResult<EntityAddress> result = await selectEntityPhase;
-
+            if (result.type == PhaseResultType.Cancel)
+                throw new OperationCanceledException(token);
 
             if (result.type != PhaseResultType.Success)
-                return EntityAddress.None;
+                return;
 
             if (!result.value.IsGridMemberAspect(out GridMemberAspect aspect))
-                return EntityAddress.None;
+                return ;
 
             int cardID = localBattlePlayer.Hand.GetCardIndex(battleCard);
             if (cardID == -1)
-                return EntityAddress.None;
+                return;
 
             DeployCardCommand deployCardCommand = new(cardID, aspect.Coordinates, localBattlePlayer.ID);
             deployCardCommand.RunAndForget(localBattlePlayer.BattlePhase);
-
-            return EntityAddress.None;
         }
     }
 }

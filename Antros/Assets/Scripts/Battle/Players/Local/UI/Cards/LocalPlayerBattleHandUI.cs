@@ -121,10 +121,13 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             if (holderUI.CardUI.Card is not IBattleCard card)
                 return false;
 
-            if (LocalBattlePlayer.canDeployHeroes && DeployCard == null)
+            if (!LocalBattlePlayer.canDeployHeroes || DeployCard != null)
                 return false;
 
-            if (base.BeginCardDrag(holderUI) && TryGetDragPhase(card, out CardDragPhase<IBattleCard> phase))
+            if (!base.BeginCardDrag(holderUI))
+                return false;
+
+            if (TryGetDragPhase(card, out CardDragPhase<IBattleCard> phase))
             {
                 DeployCardPhase deployCardPhase = new DeployCardPhase(LocalBattlePlayer, card, phase);
                 deployCardPhase.RunAndForget();

@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Metrics;
 using Helteix.Cards.UI.Physical;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.ChanneledProperties.Priorities;
+using Helteix.Tools;
 using Helteix.Tools.Phases;
 using PrimeTween;
 using UnityEngine;
@@ -22,9 +24,6 @@ namespace ATCG.Battle.Entities.Runtime
         public event Action OnEntityDeselected;
 
 
-        [SerializeField]
-        private SpriteRenderer[] interactableRenderers;
-
         public EntityAddress Address => Aspect.EntityAddress;
         public bool IsSelected => Manager.IsSelected(this);
 
@@ -34,11 +33,24 @@ namespace ATCG.Battle.Entities.Runtime
         public Condition IsInteractable { get; private set; }
 
 
+        [field: SerializeField]
+        public MeshRenderer Model { get; private set; }
 
         protected virtual void Awake()
         {
             IsInteractable = new Condition();
         }
+
+        protected virtual void OnEnable()
+        {
+            PhaseManager.Register<ISelectEntityPhase>(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            PhaseManager.Unregister<ISelectEntityPhase>(this);
+        }
+
         public virtual async Awaitable Spawn(RuntimeEntityManager manager, T aspect)
         {
             Aspect = aspect;
@@ -68,23 +80,16 @@ namespace ATCG.Battle.Entities.Runtime
         void IRuntimeEntity.OnSelected()
         {
             OnSelected();
+            Model.EnableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             OnEntitySelected?.Invoke();
         }
 
         void IRuntimeEntity.OnDeselected()
         {
             OnDeselected();
+            Model.DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             OnEntityDeselected?.Invoke();
         }
 
-        private void UpdateRenderers()
-        {
-            Color targetColor = Color.aliceBlue;
-
-            if (!IsInteractable)
-            {
-                
-            }
-        }
     }
 }

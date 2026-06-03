@@ -27,8 +27,9 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: 556076003896780188}
+  - {fileID: 8246382379986928090}
   - {fileID: 782462617468053354}
-  m_RendererFeatureMap: ad6b866f10d7b46c9ce562e82d94b7076aa734dc9adddb0a
+  m_RendererFeatureMap: ad6b866f10d7b46c9ce562e82d94b707da412959150971726aa734dc9adddb0a
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -118,3 +119,20 @@ MonoBehaviour:
     BlurQuality: 0
     Falloff: 100
     SampleCount: -1
+--- !u!114 &8246382379986928090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f513a53c9ad43a3860c8a56ea7dd26b, type: 3}
+  m_Name: SurfaceFill
+  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.SurfaceFill
+  m_Active: 1
+  settings: {fileID: 11400000, guid: 85cfe92a4bda3984a8d5720639eed8a2, type: 2}
+  shaders:
+    mask: {fileID: 4800000, guid: 7db39fa69b214149be63e199c01483e7, type: 3}
+    fill: {fileID: 4800000, guid: 60bd843b88e8e491eab96dca4a73ce68, type: 3}

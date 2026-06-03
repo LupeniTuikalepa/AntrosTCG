@@ -17,14 +17,33 @@ namespace ATCG.Cards.UI.Components
 
         private int lastSortingOrder;
 
+        [SerializeField]
+        private float animationDuration = .25f;
+
+        [SerializeField, Tooltip("X : Default | Y : Hover")]
+        private Vector2 hoverPivotY = new Vector2(.5f,  .85f);
+        [SerializeField]
+        private float hoverScale = 1.15f;
+
         void ICardPointerHoverHandler.OnBeginCardHover()
         {
+            if (HolderUI != null)
+            {
+                Tween.StopAll(HolderUI.RectTransform);
+                Tween.Scale(HolderUI.RectTransform, Vector3.one * hoverScale, animationDuration);
+                Tween.UIPivotY(HolderUI.RectTransform, hoverPivotY.y, animationDuration);
+            }
 
         }
 
         void ICardPointerHoverHandler.OnEndCardHover()
         {
-
+            if (HolderUI != null)
+            {
+                Tween.StopAll(HolderUI.RectTransform);
+                Tween.Scale(HolderUI.RectTransform, Vector3.one, animationDuration);
+                Tween.UIPivotY(HolderUI.RectTransform, hoverPivotY.x, animationDuration);
+            }
         }
 
         void ICardPointerHoverHandler.OnCardHoverMove(Vector2 position, Vector2 delta)

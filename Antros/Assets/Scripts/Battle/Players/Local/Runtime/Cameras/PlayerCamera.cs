@@ -44,26 +44,19 @@ namespace ATCG.Battle.Players.Local.Runtime
         [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineBrain renderCamera;
 
-        [BoxGroup("Cinemachine"), SerializeField]
-        private BoxCollider2D confiner;
 
         [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineCamera cinemachineCamera;
+        [BoxGroup("Cinemachine"), SerializeField]
+        private CinemachinePositionComposer positionComposer;
 
         [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
 
-        [SerializeField]
-        private Transform moveTarget;
-
-        [BoxGroup("Interactions"), SerializeField]
-        private PhysicsRaycaster physicsRaycaster;
-
-
-        private float currentZoomSpeed;
-
         [ShowInInspector, HideInEditorMode, ReadOnly]
         private RuntimeBattleGrid grid;
+
+        private float currentZoomSpeed;
 
         private Vector3 lastSpeed;
 
@@ -112,41 +105,33 @@ namespace ATCG.Battle.Players.Local.Runtime
 
             float delta = isAccelerating ? accelerationSpeed : decelerationSpeed;
 
-            Vector2 normInput = input.normalized;
+            Vector3 normInput = new Vector3(input.x, 0, input.y).normalized;
 
             Camera cam = Camera.main;
 
             if (cam == null)
                 return;
 
-            Vector2 targetSpeed = normInput.normalized * (isAccelerating ? maxSpeed : 0);
+            Vector3 targetSpeed = normInput.normalized * (isAccelerating ? maxSpeed : 0);
 
-            Vector2 nextSpeed = Vector3.MoveTowards(lastSpeed, targetSpeed, delta * Time.deltaTime);
+            Vector3 nextSpeed = Vector3.MoveTowards(lastSpeed, targetSpeed, delta * Time.deltaTime);
             Transform moveableTarget = cinemachineCamera.Target.TrackingTarget;
 
-            Vector2 currentPosition = moveableTarget.position;
-            Vector2 nextPosition = currentPosition + nextSpeed * Time.deltaTime;
+            Vector3 currentPosition = moveableTarget.position;
+            Vector3 nextPosition = currentPosition + nextSpeed * Time.deltaTime;
 
             lastSpeed = (nextPosition - currentPosition) / Time.deltaTime;
 
             Bounds bounds = new(Vector3.zero, Vector3.one);
             foreach (RuntimeBattleCell r in grid.BattleCells)
-                bounds.Encapsulate(r.SpriteRenderer.bounds);
+                bounds.Encapsulate(r.Model.bounds);
 
             bounds.Expand(boundsExpansion);
-
-            confiner.transform.position = bounds.center;
-            confiner.size = bounds.size;
-
+            bounds.max = new Vector3(bounds.max.x, 60, bounds.max.z);
             if (!bounds.Contains(nextPosition))
                 nextPosition = bounds.ClosestPoint(nextPosition);
 
-            moveableTarget.position = new Vector3
-            {
-                x = nextPosition.x,
-                y = nextPosition.y,
-                z = -10
-            };
+            moveableTarget.position = nextPosition;
         }
 
         private void ZoomCamera(float zoomInput)
@@ -164,10 +149,11 @@ namespace ATCG.Battle.Players.Local.Runtime
             if (targetZoomSpeed < -maxZoomSpeed)
                 targetZoomSpeed = -maxZoomSpeed;
 
-            float currentZoom = cinemachineCamera.Lens.OrthographicSize;
+            float currentZoom = positionComposer.CameraDistance;
             float targetZoom = Mathf.Clamp(currentZoom + targetZoomSpeed, minMaxZoom.x, minMaxZoom.y);
-            cinemachineCamera.Lens.OrthographicSize = targetZoom;
             currentZoomSpeed = targetZoom - currentZoom;
+
+            positionComposer.CameraDistance = targetZoom;
         }
         public OutputChannels GetOutputChannel()
         {

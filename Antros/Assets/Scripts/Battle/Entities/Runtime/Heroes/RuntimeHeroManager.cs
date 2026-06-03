@@ -11,7 +11,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         public async Awaitable Play(DeployCardCommand command)
         {
-            throw new System.NotImplementedException();
+            await Awaitable.MainThreadAsync();
         }
     }
 }

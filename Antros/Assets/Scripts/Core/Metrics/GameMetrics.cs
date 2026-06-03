@@ -71,12 +71,17 @@ namespace ATCG.Metrics
         public uint CellRadius { get; private set; } = 5;
 
 
-        [field: SerializeField, BoxGroup("GameFeel")]
+        [field: SerializeField, BoxGroup("FXs")]
         public Gradient PlayerColors { get; private set; }
-        [field: SerializeField, BoxGroup("GameFeel")]
-        public Color SelectionColor { get; private set; }
-        [field: SerializeField, BoxGroup("GameFeel")]
-        public Color HoverColor { get; private set; }
+        [field: SerializeField, BoxGroup("FXs")]
+        public RenderingLayerMask HoverRenderingLayer { get; private set; }
+        [field: SerializeField, BoxGroup("FXs")]
+        public RenderingLayerMask SelectedRenderingLayer { get; private set; }
+        [field: SerializeField, BoxGroup("FXs")]
+        public RenderingLayerMask PhaseSelectableRenderingLayer { get; private set; }
+
+        [field: SerializeField, BoxGroup("FXs")]
+        public RenderingLayerMask PhaseUnselectableRenderingLayer { get; private set; }
 
         [field: SerializeField, BoxGroup("Layers")]
         public LayerMask CellLayer { get; private set; }

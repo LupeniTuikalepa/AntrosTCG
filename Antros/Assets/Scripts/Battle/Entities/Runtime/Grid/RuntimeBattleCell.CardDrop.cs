@@ -27,6 +27,7 @@ namespace ATCG.Battle.Entities.Runtime.Grid
             {
                 position = mousePosition,
             });
+
         }
 
         void ICardDropTarget<IBattleCard>.OnCardExit(ICardUI<IBattleCard> cardUI)

@@ -7,20 +7,19 @@ namespace Helteix.Cards.UI.Physical.Movers
     [Serializable]
     public class DragCardMover : ICardUIMover
     {
-        public bool IsActive { get; private set; }
-        public int Priority => IsActive && DraggedTarget != null ? 10 : 0;
+        public int Priority { get; internal set; } = 100;
         public RectTransform Container { get; internal set; }
         public RectTransform DraggedTarget { get; internal set; }
 
         [SerializeField]
         private float damping;
 
-
         [SerializeField, Min(0)]
         private float scalingFactor = .6f;
         [SerializeField, Min(0)]
         private float speedRotationStrength = 35f;
 
+        
         public DragCardMover(float damping)
         {
             this.damping = damping;
@@ -50,8 +49,5 @@ namespace Helteix.Cards.UI.Physical.Movers
 
             //PhysicalCardUtilities.ConstraintRectInsideAnother(DraggedTarget, Container);
         }
-
-        public void SetActive(bool active) => IsActive = active;
-
     }
 }

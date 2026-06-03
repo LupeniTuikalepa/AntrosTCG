@@ -147,6 +147,7 @@ namespace Helteix.Cards.UI.Physical
                 handler.OnInitializePotentialCardDrag();
 
             holderUI.InitializePotentialCardDrag();
+            // Debug.Log("InitializePotentialCardDrag");
             return true;
         }
 
@@ -157,6 +158,7 @@ namespace Helteix.Cards.UI.Physical
             if (holderUI.CardUI is not CardUI<TCard> cardUI)
                 return false;
 
+            // Debug.Log("BeginCardDrag");
             Camera cam = GetCanvasCamera();
 
             CardDragPhase<TCard> phase = new CardDragPhase<TCard>(new()
@@ -180,6 +182,7 @@ namespace Helteix.Cards.UI.Physical
 
         public virtual bool UpdateCardDrag(CardHolderUI holderUI, Vector2 position, Vector2 delta)
         {
+            // Debug.Log("UpdateCardDrag");
             if (!holderUI.CanBeDragged || !CanCardBeDragged(holderUI.Card))
                 return false;
 
@@ -198,6 +201,7 @@ namespace Helteix.Cards.UI.Physical
 
         public virtual bool EndCardDrag(CardHolderUI holderUI)
         {
+            // Debug.Log("EndCardDrag");
             if (!holderUI.CanBeDragged || !CanCardBeDragged(holderUI.Card))
                 return false;
 

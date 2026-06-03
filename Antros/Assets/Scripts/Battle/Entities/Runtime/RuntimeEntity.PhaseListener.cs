@@ -1,6 +1,9 @@
 ﻿using System;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Metrics;
+using Helteix.Tools;
 using Helteix.Tools.Phases;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {
@@ -11,14 +14,29 @@ namespace ATCG.Battle.Entities.Runtime
         void IPhaseListener<ISelectEntityPhase>.OnPhaseBegin(ISelectEntityPhase phase)
         {
             CurrentSelectEntityPhase = phase;
-            IsInteractable.AddCondition(phase.ChannelKey, phase.Accepts(Address));
-            UpdateRenderers();
+            bool accepts = phase.Accepts(Address);
+
+            IsInteractable.AddCondition(phase.ChannelKey, accepts);
+
+            if (accepts)
+            {
+                Model.EnableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+                Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+            }
+            else
+            {
+                Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+                Model.EnableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+            }
         }
 
         void IPhaseListener<ISelectEntityPhase>.OnPhaseEnd(ISelectEntityPhase phase)
         {
+            IsInteractable.RemoveCondition(phase.ChannelKey);
             CurrentSelectEntityPhase = null;
-        }
 
+            Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+            Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+        }
     }
 }

@@ -14,15 +14,17 @@ namespace ATCG.Battle.Entities.Aspects
         public readonly struct IsCellMemberFilter : IFilter<BattleGridElementComponent>
         {
             private readonly HexCoordinates coordinates;
+            private readonly int cellEntityID;
 
-            public IsCellMemberFilter(HexCoordinates coordinates)
+            public IsCellMemberFilter(HexCoordinates coordinates, int cellEntityID)
             {
                 this.coordinates = coordinates;
+                this.cellEntityID = cellEntityID;
             }
 
             public bool IsValid(in ComponentRef<BattleGridElementComponent> componentRef)
             {
-                return componentRef.GetValue().coordinates == coordinates;
+                return componentRef.GetValue().coordinates == coordinates && componentRef.entityID != cellEntityID;
             }
         }
 
@@ -37,7 +39,7 @@ namespace ATCG.Battle.Entities.Aspects
 
         public ComponentQuery<BattleGridElementComponent, IsCellMemberFilter> GetMembers()
         {
-            IsCellMemberFilter filter = new(BattleGridElementComponent.coordinates);
+            IsCellMemberFilter filter = new(BattleGridElementComponent.coordinates, EntityAddress.entity);
             return EntityAddress.world.Query<IsCellMemberFilter, BattleGridElementComponent>(filter);
         }
 

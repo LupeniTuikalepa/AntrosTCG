@@ -72,6 +72,18 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
+  <HoverRenderingLayer>k__BackingField:
+    serializedVersion: 0
+    m_Bits: 4
+  <SelectedRenderingLayer>k__BackingField:
+    serializedVersion: 0
+    m_Bits: 2
+  <PhaseSelectableRenderingLayer>k__BackingField:
+    serializedVersion: 0
+    m_Bits: 8
+  <PhaseUnselectableRenderingLayer>k__BackingField:
+    serializedVersion: 0
+    m_Bits: 16
   <CellLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 64

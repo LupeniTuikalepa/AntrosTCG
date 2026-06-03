@@ -1,4 +1,6 @@
-﻿using UnityEngine.EventSystems;
+﻿using ATCG.Metrics;
+using Helteix.Tools;
+using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime
 {
@@ -21,12 +23,14 @@ namespace ATCG.Battle.Entities.Runtime
         {
             IsHovered = true;
             OnPointerEnter(eventData);
+            Model.EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
             IsHovered = false;
             OnPointerExit(eventData);
+            Model.DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
         }
 
         void IPointerMoveHandler.OnPointerMove(PointerEventData eventData)

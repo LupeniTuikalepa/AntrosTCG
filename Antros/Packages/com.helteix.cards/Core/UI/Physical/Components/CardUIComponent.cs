@@ -32,6 +32,8 @@ namespace Helteix.Cards.UI.Physical.Components
 
     public class CardUIComponent : MonoBehaviour, ICardUIComponent
     {
+        public CardHolderUI HolderUI => CardUI.HolderUI;
+
         public ICardUI CardUI { get; set; }
 
         [SerializeField]

@@ -37,8 +37,6 @@ namespace Helteix.Cards.UI.Physical
 
         [SerializeField]
         protected FollowCardMover defaultMover = new FollowCardMover(15);
-        [SerializeField]
-        protected DragCardMover dragMover = new DragCardMover(25);
 
         private List<ICardUIMover> movers;
         private void Awake()
@@ -46,7 +44,7 @@ namespace Helteix.Cards.UI.Physical
             RectTransform = transform as RectTransform;
             CanvasGroup = GetComponent<CanvasGroup>();
 
-            movers = new List<ICardUIMover>() { defaultMover, dragMover };
+            movers = new List<ICardUIMover>() { defaultMover };
         }
 
         private void OnEnable()
@@ -65,11 +63,8 @@ namespace Helteix.Cards.UI.Physical
             CardUI = cardUI;
             CollectionUI = collectionUI;
             tracker.Add(this , cardUI.RectTransform, DrivenTransformProperties.All);
-            dragMover.Container = collectionUI.DraggingParent;
         }
 
-
-        internal void SetDraggedTarget(RectTransform rectTransform) => dragMover.DraggedTarget = rectTransform;
         private void Refresh()
         {
             if (!IsConnected)
@@ -89,6 +84,10 @@ namespace Helteix.Cards.UI.Physical
             movers.Add(newMover);
         }
 
+        public void RemoveMover(ICardUIMover mover)
+        {
+            movers.Remove(mover);
+        }
 
         internal void Dispose()
         {
@@ -99,8 +98,9 @@ namespace Helteix.Cards.UI.Physical
             tracker.Clear();
         }
 
-        public virtual void OnSelect() { }
-        public virtual void OnDeselect() { }
+
+        protected internal virtual void OnSelect() { }
+        protected internal virtual void OnDeselect() { }
         protected internal virtual void OnMove(Vector2 direction) { }
 
         protected internal virtual void OnBeginCardHover() { }
@@ -117,7 +117,7 @@ namespace Helteix.Cards.UI.Physical
         protected internal virtual void OnEndCardDrag() { }
         protected internal virtual void OnUpdateCardDrag(Vector2 position, Vector2 delta) { }
 
-        public virtual void OnCardDrop<TCard>(Vector3 position, ICardDropTarget<TCard> resultTarget) where TCard : ICard
+        protected internal virtual void OnCardDrop<TCard>(Vector3 position, ICardDropTarget<TCard> resultTarget) where TCard : ICard
         { }
         void ISelectHandler.OnSelect(BaseEventData eventData) => CollectionUI.SelectCard(this);
 
@@ -141,7 +141,8 @@ namespace Helteix.Cards.UI.Physical
         void IInitializePotentialDragHandler.OnInitializePotentialDrag(PointerEventData eventData)
             => CollectionUI.InitializePotentialCardDrag(this);
 
-        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData) => CollectionUI.BeginCardDrag(this);
+        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
+            => CollectionUI.BeginCardDrag(this);
 
         void IDragHandler.OnDrag(PointerEventData eventData) => CollectionUI.UpdateCardDrag(this, eventData.position, eventData.delta);
 

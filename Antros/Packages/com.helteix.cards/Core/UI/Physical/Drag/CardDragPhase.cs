@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-
+using Helteix.Cards.UI.Physical.Movers;
 using Helteix.Cards.UI.Utility;
 using Helteix.Tools.Phases;
 using UnityEngine;
@@ -75,18 +75,23 @@ namespace Helteix.Cards.UI.Physical.Drag
                 draggingParent = HolderUI.CardUI.CardCanvas.transform as RectTransform;
 
             target.transform.SetParent(draggingParent);
-            RectTransform dragTarget = target.GetComponent<RectTransform>();
-            dragTarget.sizeDelta = Vector2.zero;
-            dragTarget.localScale = Vector3.one;
-            dragTarget.localRotation = Quaternion.identity;
+            DragTarget = target.GetComponent<RectTransform>();
+            DragTarget.sizeDelta = Vector2.zero;
+            DragTarget.localScale = Vector3.one;
+            DragTarget.localRotation = Quaternion.identity;
 
-            cardUI.HolderUI.SetDraggedTarget(dragTarget);
-
-            await Awaitable.MainThreadAsync();
+            await base.Initialize(token);
         }
 
         protected override async Awaitable<DragResult<TCard>> Execute(CancellationToken token)
         {
+            DragCardMover dragCardMover = new DragCardMover(25)
+            {
+                Container = DraggingParent,
+                DraggedTarget = DragTarget,
+            };
+            cardUI.HolderUI.AddMover(dragCardMover);
+
             while (IsDragging)
             {
                 token.ThrowIfCancellationRequested();
@@ -132,6 +137,8 @@ namespace Helteix.Cards.UI.Physical.Drag
 
             cardUI.CollectionUI.OnCardDrop(cardUI.HolderUI, dragResult);
             Current?.OnCardDrop(cardUI);
+
+            cardUI.HolderUI.RemoveMover(dragCardMover);
             OnDropped?.Invoke(this);
 
             return dragResult;
@@ -142,8 +149,7 @@ namespace Helteix.Cards.UI.Physical.Drag
             IsDragging = false;
             Object.Destroy(DragTarget.gameObject);
 
-            cardUI.HolderUI.SetDraggedTarget(null);
-            await Awaitable.MainThreadAsync();
+            await base.Dispose(token);
         }
 
 
