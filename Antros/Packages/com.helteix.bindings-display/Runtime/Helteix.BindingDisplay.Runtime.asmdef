@@ -1,0 +1,25 @@
+{
+    "name": "Helteix.BindingDisplay.Runtime",
+    "rootNamespace": "Helteix.BindingDisplay",
+    "references": [
+        "GUID:218d83f778a79c74791573f907cb34c7",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "USE_INPUT_SYSTEM"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1",
+            "define": "USE_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

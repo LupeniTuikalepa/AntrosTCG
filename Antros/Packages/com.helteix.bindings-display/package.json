@@ -1,0 +1,21 @@
+{
+  "name": "com.helteix.bindings-display",
+  "version": "0.9.0",
+  "displayName": "Helteix-Bindings Display",
+  "description": "Tools to display controls on screen dynamically",
+  "unity": "6000.3",
+  "unityRelease": "0b1",
+  "keywords": [
+    "Scripts",
+    "Tools",
+    "Advanced"
+  ],
+  "author": {
+    "name": "Helteix",
+    "url": "https://www.unity3d.com",
+    "email": "lupeni.tuikalepa@gmail.com"
+  },
+  "dependencies": {
+    "com.helteix.tools": "1.6.0"
+  }
+}

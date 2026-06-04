@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 1f13ddfd619a47368af4829b9509d971
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - <InputActionUIPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

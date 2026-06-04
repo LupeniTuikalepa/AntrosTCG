@@ -1,0 +1,1071 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f13ddfd619a47368af4829b9509d971, type: 3}
+  m_Name: DefaultBindingDisplay
+  m_EditorClassIdentifier: Helteix.ControlDisplay.Runtime::Helteix.ControlDisplay.Data.BindingDisplaySettings
+  <CopyListenersListBeforeCallbacks>k__BackingField: 0
+  <SpriteVariantsCount>k__BackingField: 2
+  <Devices>k__BackingField:
+  - <Layout>k__BackingField: XInputControllerWindows
+    <BindingEntry>k__BackingField:
+    - <ControlPath>k__BackingField: <XInputController>/buttonSouth
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 139eb2cefea53814bb65d9fe9e3b5dad, type: 3}
+        - {fileID: 21300000, guid: 9fd75f54df70f6e4c91f0399374a9fb5, type: 3}
+    - <ControlPath>k__BackingField: <XInputController>/buttonEast
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 568d8fcc8cebca44f97c4eabedf6de0c, type: 3}
+        - {fileID: 21300000, guid: 852d770cb4d0286479699f1a1ff1080d, type: 3}
+    - <ControlPath>k__BackingField: <XInputController>/buttonNorth
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1b2c15db3acde714f9b0e537a2a6e66d, type: 3}
+        - {fileID: 21300000, guid: 65f3c837ba6e10c41a4922a2d5ad5df3, type: 3}
+    - <ControlPath>k__BackingField: <XInputController>/buttonWest
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8b7010fd85c0c814aa5790fa9bc0ad53, type: 3}
+        - {fileID: 21300000, guid: ab974ad7fcb736c4ca78462d9a4088ed, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/select
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 207fa749bc84ebc4c9b30e010d7fc849, type: 3}
+        - {fileID: 21300000, guid: 42e8146189b2660429e3dc86e4273ed7, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/start
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 4817b18056b68d64585645f709fa035e, type: 3}
+        - {fileID: 21300000, guid: a22996731f54a744084b7b53ded6c22c, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8fd734c3a52b1364ba561e4adc341381, type: 3}
+        - {fileID: 21300000, guid: 70a070db9355c4942bc74c15cdbcd401, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/up
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a39976a422357084eb395a87e0a12e93, type: 3}
+        - {fileID: 21300000, guid: 865d295ab62e7784088a0471224e3148, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/down
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 46c887dd4c090b747916b8f5e1e48e10, type: 3}
+        - {fileID: 21300000, guid: 632c89e56cda8df46b48f840d1ce7259, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/left
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5ecfde72745f7394db0f02994a2c3af6, type: 3}
+        - {fileID: 21300000, guid: bee79927f61133942bf45f7fb0d9ae89, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/right
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: d4b5e2f9a766701429e053f8e3c5f38a, type: 3}
+        - {fileID: 21300000, guid: 93135726f7c1596418e7e30f2981dd0b, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/x
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: df5023e3fcf120b4e87e1a1f8bacb272, type: 3}
+        - {fileID: 21300000, guid: 4256a536414aefd4db5d4fb2d8ed4e7d, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/y
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 62aa8309115ff47449e03b7bbb3f30d7, type: 3}
+        - {fileID: 21300000, guid: d2dfb928aded82541bf7bf7e15c7f7eb, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e47fefe941909b44c9021b8a17444eee, type: 3}
+        - {fileID: 21300000, guid: a536840361b329f4b8e5c7ced80932ff, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/up
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/down
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/right
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/x
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/y
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+    - <ControlPath>k__BackingField: <XInputController>/leftStickPress
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 097d8c657d0cca140a666121a67bf275, type: 3}
+        - {fileID: 21300000, guid: 8b1849519973f0b49ae0931a6bc3103d, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/up
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/down
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/right
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/left
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/x
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/y
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStickPress
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: f50a12049c804e2498096f92c38f3751, type: 3}
+        - {fileID: 21300000, guid: 0748eb3fe90fe004992526e66236293f, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftShoulder
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: ed0707d39b4a52b46bef721c1ce3765d, type: 3}
+        - {fileID: 21300000, guid: 6f8ac18e636a61e4dbe15e9e3c70e679, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftTrigger
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 48b6130276905a045b3416d84a0d0982, type: 3}
+        - {fileID: 21300000, guid: bfd5a51c8df3861479bd9fd845ddc2c1, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightShoulder
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 6f54dd3d4329a2e4e9cdf6a54e56f305, type: 3}
+        - {fileID: 21300000, guid: 20e8d9f9f9e227d4b9fe6872837acc74, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightTrigger
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1bd2b6e168927a84d8809fe5d6d56561, type: 3}
+        - {fileID: 21300000, guid: b2792853717f2b346a0007f4ddcd91a5, type: 3}
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  - <Layout>k__BackingField: SwitchProControllerHID
+    <BindingEntry>k__BackingField:
+    - <ControlPath>k__BackingField: <Gamepad>/buttonSouth
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 419e81db844462d419e372b5b609d086, type: 3}
+        - {fileID: 21300000, guid: c901b163d15c00f44b52c1eaee4156fe, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/buttonEast
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2d3630ffe47d2f24d9506febcca6527a, type: 3}
+        - {fileID: 21300000, guid: 00208185b853a1a49a5e7f25301e93c3, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/buttonNorth
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: d7de4e0da13eb594a80f0679ecff302e, type: 3}
+        - {fileID: 21300000, guid: d8034072a5929ed449a192bd699efc39, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/buttonWest
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2eeaa88079f9ca949bde6be2d51d6709, type: 3}
+        - {fileID: 21300000, guid: 6ea594070e06a4c41b7685f3d9d07f65, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/select
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 251a4d6250260ba4b809876d0851b8bd, type: 3}
+        - {fileID: 21300000, guid: 49cbadceb1ab69a4f95176d448d4a1e8, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/start
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 12eabdc6a1f542846ad035f30bf62da8, type: 3}
+        - {fileID: 21300000, guid: 522fa0b6995cbd44e96f30e53e635cc6, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e111a923d2875e7479e5c074cb2e05ee, type: 3}
+        - {fileID: 21300000, guid: cb970d89dd7074340970effad9791213, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/up
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 59a146fd8e9e69e4aaa64ccfbea0c631, type: 3}
+        - {fileID: 21300000, guid: 1635d42715a606549a2ea069d6284c18, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/down
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 658c72c26ae1d9447afca50f4a891597, type: 3}
+        - {fileID: 21300000, guid: e3f2a7937837a8040b00cb9de7fdfbf8, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/right
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 9fe4816d68175094084d2ba239bfdcba, type: 3}
+        - {fileID: 21300000, guid: 1f5ad0a7b80fb2b438aad26648294663, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/left
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: b2052a2e3a135ee4eba1541ef4a81e14, type: 3}
+        - {fileID: 21300000, guid: 5f4b3d174fbf3df4e952dbe7bd3b782c, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/x
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5f862e55fa33176439479c53d7dc486f, type: 3}
+        - {fileID: 21300000, guid: e710c3a958209bf46993267c3ce9ada0, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/dpad/y
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e591aaa7b15f2694aa3937ac9450c7b0, type: 3}
+        - {fileID: 21300000, guid: 52d331d5d2abf8543912ed13f50f8fc1, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e47fefe941909b44c9021b8a17444eee, type: 3}
+        - {fileID: 21300000, guid: a536840361b329f4b8e5c7ced80932ff, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/up
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/down
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/left
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/right
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/x
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStick/y
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftStickPress
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 097d8c657d0cca140a666121a67bf275, type: 3}
+        - {fileID: 21300000, guid: 8b1849519973f0b49ae0931a6bc3103d, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/up
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/down
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/right
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/left
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/x
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStick/y
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightStickPress
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: f50a12049c804e2498096f92c38f3751, type: 3}
+        - {fileID: 21300000, guid: 0748eb3fe90fe004992526e66236293f, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftTrigger
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1d25851f38056be45a41a02f8a9541c7, type: 3}
+        - {fileID: 21300000, guid: e0df3bc78423b1d419ec495fda02ec24, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/leftShoulder
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: ed0707d39b4a52b46bef721c1ce3765d, type: 3}
+        - {fileID: 21300000, guid: 6f8ac18e636a61e4dbe15e9e3c70e679, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightTrigger
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1b0251934a04a61428806ab7b696014b, type: 3}
+        - {fileID: 21300000, guid: 5a53f11f4aa74b8428976b6ba40dadc5, type: 3}
+    - <ControlPath>k__BackingField: <Gamepad>/rightShoulder
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: fe6e22ce43ddab64faf7f48bf3a17fde, type: 3}
+        - {fileID: 21300000, guid: 0e59fd6bb686f2f4eab15cc1981f0c44, type: 3}
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  - <Layout>k__BackingField: DualShockGamepad
+    <BindingEntry>k__BackingField:
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a461828310d65eb4887d48cd54b9300c, type: 3}
+        - {fileID: 21300000, guid: ef1539b3db3a01a46a87b5b2e464a67f, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 827222032a8696f4a9881cb426b42219, type: 3}
+        - {fileID: 21300000, guid: 63d1c2b3e4b19df488efce59454b677d, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 367b16bf0c91b6642a0adc14277569e1, type: 3}
+        - {fileID: 21300000, guid: 779edca2c99934a4e9e7a64dcf952e2a, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 0d02e0541358b8f45b04f46140debeab, type: 3}
+        - {fileID: 21300000, guid: f0a0a776dea4e084e80caf2c0d6eb5a4, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 212f2c0c6a5702947b9799ac3fc19256, type: 3}
+        - {fileID: 21300000, guid: 008da65bde179ec44a1823c279ebcf7c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5c7f94421ed883b47845887fb124c858, type: 3}
+        - {fileID: 21300000, guid: c499e6b637e67ca4996c2344388bb5e7, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: f4035ec15ea6a3443ab44f09edf90215, type: 3}
+        - {fileID: 21300000, guid: da3e85beeaf88fd44b6832bc086827f3, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: ddb80cfbb342ad04eb26a86b64970d2f, type: 3}
+        - {fileID: 21300000, guid: d8b7988e2d48fe34bb6d309d5569b5be, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2ab043cc1ea4c3c489b877142fb235ff, type: 3}
+        - {fileID: 21300000, guid: 73220006458727d40ab7ec2e1b852d3c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: d66f669c0daaa09418060950c91f0e67, type: 3}
+        - {fileID: 21300000, guid: ca82d8dff06040b4f94cc4f3ac6b0274, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 63df621d118ef2d49b544cf860020515, type: 3}
+        - {fileID: 21300000, guid: da4cb1582d44a1a46ab07cd7ed28e1d3, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 3f5439560a53a194a9c4b9eebcc743c3, type: 3}
+        - {fileID: 21300000, guid: 9688f7ac895c1e2408622d84a86d07ee, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: b65f23515a6325f47b278de9b86c24ad, type: 3}
+        - {fileID: 21300000, guid: 2605d5a3d7318e8498eaac640978f20c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e47fefe941909b44c9021b8a17444eee, type: 3}
+        - {fileID: 21300000, guid: a536840361b329f4b8e5c7ced80932ff, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 097d8c657d0cca140a666121a67bf275, type: 3}
+        - {fileID: 21300000, guid: ac3b5e063eb38634dab2bd17ec7f18e1, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: f50a12049c804e2498096f92c38f3751, type: 3}
+        - {fileID: 21300000, guid: 7f72d8d97bcd08449a1c619f561c6cd8, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5e6eba9472803c5409c7c9e224cf30d1, type: 3}
+        - {fileID: 21300000, guid: 9183ce492efacb7489923aef1fa05a09, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a76c76b18b8d29a49ace4dff8d8bf2c1, type: 3}
+        - {fileID: 21300000, guid: b9cc99c8be1a7934ca57ce25dec58387, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: cafe1506a7804a1489b1d62727d5598b, type: 3}
+        - {fileID: 21300000, guid: fc6aa6a5d685ce145a0fb7426a0fb829, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 455ea1908c1fe3843bc63e5c64b42847, type: 3}
+        - {fileID: 21300000, guid: f6fd7aa719018224692502f5842cbdac, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 455ea1908c1fe3843bc63e5c64b42847, type: 3}
+        - {fileID: 21300000, guid: f6fd7aa719018224692502f5842cbdac, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2ee62b0d17d5356449ecd1204a874b58, type: 3}
+        - {fileID: 21300000, guid: 2ee62b0d17d5356449ecd1204a874b58, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2ee62b0d17d5356449ecd1204a874b58, type: 3}
+        - {fileID: 21300000, guid: 2ee62b0d17d5356449ecd1204a874b58, type: 3}
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  - <Layout>k__BackingField: Keyboard
+    <BindingEntry>k__BackingField:
+    - <ControlPath>k__BackingField: <Keyboard>/escape
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: ebe0cf19e1e619a4b865e0fa4bc1bb2e, type: 3}
+        - {fileID: 21300000, guid: feb5b8bec24640041adb04effe93c471, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/enter
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: f1e53e25536f4cf4291dcd8e3078f7a1, type: 3}
+        - {fileID: 21300000, guid: 37b637329a24a99438a16a98c8e91199, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/tab
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 020c9617b05696b40ad9dbbfee4f6f77, type: 3}
+        - {fileID: 21300000, guid: cda31df37df183e408977ca23ee1891f, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/capsLock
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2ab736a4ac678274fb5787ba1e78b03a, type: 3}
+        - {fileID: 21300000, guid: 31de5bfe92995d745b79ef84e63552fb, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/shift
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: c3cc112b8ad86eb4cae4d467be9b7e45, type: 3}
+        - {fileID: 21300000, guid: 4bb2f969c9fc0f649832144e84086b01, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/leftCtrl
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: eb1e9d01a4f05314c8424123d87124c7, type: 3}
+        - {fileID: 21300000, guid: 4491f054d468f8443a0557819b10a470, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/rightCtrl
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: eb1e9d01a4f05314c8424123d87124c7, type: 3}
+        - {fileID: 21300000, guid: 4491f054d468f8443a0557819b10a470, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/alt
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 25ae9589e18c799459a6be2fed2d8f7f, type: 3}
+        - {fileID: 21300000, guid: c03f731502a440a469eac7c4faaff05d, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/space
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 3c773dbd5858728488e5478648a0406a, type: 3}
+        - {fileID: 21300000, guid: 63baa71685993a64cb58ca1665dfe7b6, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/backspace
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: fac775826723a564b92722acc20a23e6, type: 3}
+        - {fileID: 21300000, guid: 4f04fe433ed32294c9c755eb0662ccfe, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/insert
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a84f39ec65581ff408f05fc50c0bd595, type: 3}
+        - {fileID: 21300000, guid: 76cf97ae12af30d4dbf8f960589372ac, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/delete
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 51f0150392d523e4c8a7cbde9790b016, type: 3}
+        - {fileID: 21300000, guid: 68b5aeb846096fe45b3357e8f8fb4ba3, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/upArrow
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 821d964d57a3c35418b3ad7ee3e401b5, type: 3}
+        - {fileID: 21300000, guid: 936fb7774232ce444b5ec8436a3b3708, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/downArrow
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 792a36661c79513459f08aa1f9084b58, type: 3}
+        - {fileID: 21300000, guid: f305d967132daad46a9dfbeef120390a, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/leftArrow
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 81114be68d85dd0419df1cbd174f4d1b, type: 3}
+        - {fileID: 21300000, guid: 28b922ec66fd3c74aaad1f46ecb8f575, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/rightArrow
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e25b059da5996434bbbe0c06c8afd25a, type: 3}
+        - {fileID: 21300000, guid: 7b2f2cf23ad347443beaa1cefa4427b7, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/1
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 647a0b806bae1424c8023e36a260903d, type: 3}
+        - {fileID: 21300000, guid: 87d97299a5d8e4c4bab08e4e4123b88e, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/2
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 82a912fb0b6c45842b5971dcbd0981b2, type: 3}
+        - {fileID: 21300000, guid: 60910ba0229b1964bb778c8119128fd1, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/3
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 70c0b69f60c4a4a4eb9054e5019749d7, type: 3}
+        - {fileID: 21300000, guid: 851e143a0efee684dbe77707c80ca110, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/4
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5b446186740ade24ea521c09b462d54b, type: 3}
+        - {fileID: 21300000, guid: 39dd61745aff1354684e0a0391854d5d, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/5
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: b350ed91caf70274cb191ebb618e2a28, type: 3}
+        - {fileID: 21300000, guid: aee070706816ecd4585aef717d6fce69, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/6
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 371b98f06193f7840b251af9c814e253, type: 3}
+        - {fileID: 21300000, guid: 7bccc1a14aed6fa459c1af554a62bc84, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/7
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a1dd4c4a6e4a33e4a9f263e2b269d567, type: 3}
+        - {fileID: 21300000, guid: 5208c2228a5281544b6e5bec9ac51392, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/8
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 0603eaeb54c3d234792c8219ed300c5c, type: 3}
+        - {fileID: 21300000, guid: 2bbd58ffa1416b24a9c50e362c91afa9, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/9
+      <OverridePrefab>k__BackingField: {fileID: 6322678068993068384, guid: 5ca4d33cc9548bb4a85fc3909dab68ff, type: 3}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 47c27ceee5e40ef4fa9e0cbbf12eaa68, type: 3}
+        - {fileID: 21300000, guid: f394a8c6a99668c46b52fd98427ea809, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/0
+      <OverridePrefab>k__BackingField: {fileID: 6322678068993068384, guid: 5ca4d33cc9548bb4a85fc3909dab68ff, type: 3}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a7b4df88e391f1a449fbb7b010f306fb, type: 3}
+        - {fileID: 21300000, guid: 83ea41b460c5eea4aa67cb39f3e4fba3, type: 3}
+    - <ControlPath>k__BackingField: <Keyboard>/anyKey
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1abaa426075ad07499e6f234f9c1019d, type: 3}
+        - {fileID: 21300000, guid: 082c1eba45471174e81b68b60ddf8f8c, type: 3}
+    - <ControlPath>k__BackingField: <keyboard>/*
+      <OverridePrefab>k__BackingField: {fileID: 6322678068993068384, guid: 5ca4d33cc9548bb4a85fc3909dab68ff, type: 3}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 0adba7c324e4d2940b5578fb0eb0f80b, type: 3}
+        - {fileID: 21300000, guid: a0695b3817941d3489ec79e478b21301, type: 3}
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  - <Layout>k__BackingField: Gamepad
+    <BindingEntry>k__BackingField:
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 139eb2cefea53814bb65d9fe9e3b5dad, type: 3}
+        - {fileID: 21300000, guid: 9fd75f54df70f6e4c91f0399374a9fb5, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 568d8fcc8cebca44f97c4eabedf6de0c, type: 3}
+        - {fileID: 21300000, guid: 852d770cb4d0286479699f1a1ff1080d, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1b2c15db3acde714f9b0e537a2a6e66d, type: 3}
+        - {fileID: 21300000, guid: 65f3c837ba6e10c41a4922a2d5ad5df3, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8b7010fd85c0c814aa5790fa9bc0ad53, type: 3}
+        - {fileID: 21300000, guid: ab974ad7fcb736c4ca78462d9a4088ed, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 207fa749bc84ebc4c9b30e010d7fc849, type: 3}
+        - {fileID: 21300000, guid: 42e8146189b2660429e3dc86e4273ed7, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 4817b18056b68d64585645f709fa035e, type: 3}
+        - {fileID: 21300000, guid: a22996731f54a744084b7b53ded6c22c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8fd734c3a52b1364ba561e4adc341381, type: 3}
+        - {fileID: 21300000, guid: 70a070db9355c4942bc74c15cdbcd401, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: a39976a422357084eb395a87e0a12e93, type: 3}
+        - {fileID: 21300000, guid: 865d295ab62e7784088a0471224e3148, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 46c887dd4c090b747916b8f5e1e48e10, type: 3}
+        - {fileID: 21300000, guid: 632c89e56cda8df46b48f840d1ce7259, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5ecfde72745f7394db0f02994a2c3af6, type: 3}
+        - {fileID: 21300000, guid: bee79927f61133942bf45f7fb0d9ae89, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: d4b5e2f9a766701429e053f8e3c5f38a, type: 3}
+        - {fileID: 21300000, guid: 93135726f7c1596418e7e30f2981dd0b, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: df5023e3fcf120b4e87e1a1f8bacb272, type: 3}
+        - {fileID: 21300000, guid: 4256a536414aefd4db5d4fb2d8ed4e7d, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 62aa8309115ff47449e03b7bbb3f30d7, type: 3}
+        - {fileID: 21300000, guid: d2dfb928aded82541bf7bf7e15c7f7eb, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: e47fefe941909b44c9021b8a17444eee, type: 3}
+        - {fileID: 21300000, guid: a536840361b329f4b8e5c7ced80932ff, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+        - {fileID: 21300000, guid: 163a3f8b98ac6164ba2d438c870e3e11, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+        - {fileID: 21300000, guid: 676f5e34bf3961e4384eae58a817c434, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+        - {fileID: 21300000, guid: 862949b371feebe4e8413b1d679caa56, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+        - {fileID: 21300000, guid: c82e1c26bb7877c4e94e44dc32cd378e, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+        - {fileID: 21300000, guid: cdc702e53efa97045beb95c5ae249bb6, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+        - {fileID: 21300000, guid: 469b035aa07982348bceeeda90b90c6f, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 097d8c657d0cca140a666121a67bf275, type: 3}
+        - {fileID: 21300000, guid: 8b1849519973f0b49ae0931a6bc3103d, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+        - {fileID: 21300000, guid: 8b3bf09e97ebbcc4abf1cd53a62815d7, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+        - {fileID: 21300000, guid: 27f4932135a5d71408397aed3bc310ae, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+        - {fileID: 21300000, guid: aa38f809ee0fa9a4f83c87a6a2934b4c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+        - {fileID: 21300000, guid: 5231ed2ff5c5b224799c6090e680c3ea, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+        - {fileID: 21300000, guid: 373cf7026042d964b8ab9196ab60fbf1, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+        - {fileID: 21300000, guid: 72ec3663a99d769459cb0be027509011, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+        - {fileID: 21300000, guid: 4dce4dde1fb21a34688ecc6c98ed6a28, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: f50a12049c804e2498096f92c38f3751, type: 3}
+        - {fileID: 21300000, guid: 0748eb3fe90fe004992526e66236293f, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: ed0707d39b4a52b46bef721c1ce3765d, type: 3}
+        - {fileID: 21300000, guid: 6f8ac18e636a61e4dbe15e9e3c70e679, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 48b6130276905a045b3416d84a0d0982, type: 3}
+        - {fileID: 21300000, guid: 6f8ac18e636a61e4dbe15e9e3c70e679, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: ed0707d39b4a52b46bef721c1ce3765d, type: 3}
+        - {fileID: 21300000, guid: bfd5a51c8df3861479bd9fd845ddc2c1, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 20e8d9f9f9e227d4b9fe6872837acc74, type: 3}
+        - {fileID: 21300000, guid: 20e8d9f9f9e227d4b9fe6872837acc74, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 1bd2b6e168927a84d8809fe5d6d56561, type: 3}
+        - {fileID: 21300000, guid: b2792853717f2b346a0007f4ddcd91a5, type: 3}
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  - <Layout>k__BackingField: Mouse
+    <BindingEntry>k__BackingField:
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 9d744b70ac71666469e50bb57fff2bf9, type: 3}
+        - {fileID: 21300000, guid: c42f75a7b46b4a94abd3310aa7597493, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 855a51beafbe32843bc1805bfa919b39, type: 3}
+        - {fileID: 21300000, guid: 74851f41d7fed074f9487308bb388d46, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: edbd314d2dd5fb2458d2f27d4bdf813d, type: 3}
+        - {fileID: 21300000, guid: 3293647148712684093941b7237877bf, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: b5649b4bdea37c947a9a3b69f64fe7ef, type: 3}
+        - {fileID: 21300000, guid: b5649b4bdea37c947a9a3b69f64fe7ef, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: fe8d175e071d29e4fa14ae29616e649c, type: 3}
+        - {fileID: 21300000, guid: fe8d175e071d29e4fa14ae29616e649c, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 2673f2682541ecb4fbab353f1b72283a, type: 3}
+        - {fileID: 21300000, guid: 2673f2682541ecb4fbab353f1b72283a, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 37c6b3ac64aceee42858110bb69b797c, type: 3}
+        - {fileID: 21300000, guid: bf03316f1c9a03d4fb9b83753e1d8256, type: 3}
+    - <ControlPath>k__BackingField: 
+      <OverridePrefab>k__BackingField: {fileID: 0}
+      <Icons>k__BackingField:
+        icons:
+        - {fileID: 21300000, guid: 163e26aeddb608b46ac9d7eb89dc6560, type: 3}
+        - {fileID: 21300000, guid: c9f5336e5bcb13d4aa3beacd8d812906, type: 3}
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  - <Layout>k__BackingField: Touchscreen
+    <BindingEntry>k__BackingField: []
+    <BindingPrefab>k__BackingField: {fileID: 1846942504860520973, guid: b0d719042fc630c4cbfc3f7227f3674c, type: 3}
+  <Composites>k__BackingField: []
