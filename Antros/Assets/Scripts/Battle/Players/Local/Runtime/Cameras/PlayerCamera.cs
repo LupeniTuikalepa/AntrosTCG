@@ -29,26 +29,10 @@ namespace ATCG.Battle.Players.Local.Runtime
         [BoxGroup("Movements"), SerializeField, Min(0)]
         private float maxSpeed = 15;
 
-        [BoxGroup("Zoom"), SerializeField, MinMaxSlider(0, 100)]
-        private Vector2 minMaxZoom;
-
-        [BoxGroup("Zoom"), SerializeField]
-        private float maxZoomSpeed = 10;
-
-        [BoxGroup("Zoom"), SerializeField]
-        private float zoomAcceleration;
-
-        [BoxGroup("Zoom"), SerializeField]
-        private float zoomDeceleration;
-
         [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineBrain renderCamera;
-
-
         [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineCamera cinemachineCamera;
-        [BoxGroup("Cinemachine"), SerializeField]
-        private CinemachinePositionComposer positionComposer;
 
         [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
@@ -57,22 +41,18 @@ namespace ATCG.Battle.Players.Local.Runtime
         private RuntimeBattleGrid grid;
 
         private float currentZoomSpeed;
+        private float currentRotationSpeed;
 
         private Vector3 lastSpeed;
 
-        private InputAction PanAction => RuntimeLocalPlayer.Controls.Component.Pan;
-        private InputAction MoveAction => RuntimeLocalPlayer.Controls.Component.Move;
-        private InputAction ZoomAction => RuntimeLocalPlayer.Controls.Component.Zoom;
+        public InputAction PanAction => RuntimeLocalPlayer.Controls.Component.Pan;
+        public InputAction MoveAction => RuntimeLocalPlayer.Controls.Component.Move;
+        public InputAction ZoomAction => RuntimeLocalPlayer.Controls.Component.Zoom;
+        public InputAction RotationAction => RuntimeLocalPlayer.Controls.Component.Rotate;
 
         private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.Component.PlayerInputUser;
 
         public Camera OutputCamera => renderCamera.OutputCamera;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            var metrics = GameMetrics.Current;
-        }
 
 
         private void LateUpdate()
@@ -82,9 +62,6 @@ namespace ATCG.Battle.Players.Local.Runtime
                 Vector2 input = MoveAction.ReadValue<Vector2>();
 
                 MoveCameraWithPlayerInput(input);
-
-                float zoom = ZoomAction.ReadValue<float>();
-                ZoomCamera(zoom);
             }
             else
             {
@@ -105,14 +82,18 @@ namespace ATCG.Battle.Players.Local.Runtime
 
             float delta = isAccelerating ? accelerationSpeed : decelerationSpeed;
 
-            Vector3 normInput = new Vector3(input.x, 0, input.y).normalized;
 
             Camera cam = Camera.main;
 
             if (cam == null)
                 return;
 
-            Vector3 targetSpeed = normInput.normalized * (isAccelerating ? maxSpeed : 0);
+            Vector3 camForward = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized;
+            Vector3 camRight = Vector3.ProjectOnPlane(cam.transform.right, Vector3.up).normalized;
+            input.Normalize();
+
+            Vector3 worldInput = (camForward * input.y) + (camRight * input.x);
+            Vector3 targetSpeed = worldInput.normalized * (isAccelerating ? maxSpeed : 0);
 
             Vector3 nextSpeed = Vector3.MoveTowards(lastSpeed, targetSpeed, delta * Time.deltaTime);
             Transform moveableTarget = cinemachineCamera.Target.TrackingTarget;
@@ -131,30 +112,10 @@ namespace ATCG.Battle.Players.Local.Runtime
             if (!bounds.Contains(nextPosition))
                 nextPosition = bounds.ClosestPoint(nextPosition);
 
+            nextPosition.y = 0;
             moveableTarget.position = nextPosition;
         }
 
-        private void ZoomCamera(float zoomInput)
-        {
-            float targetZoomSpeed = currentZoomSpeed;
-
-            //Debug.Log(currentZoomSpeed);
-            if (Mathf.Approximately(0, zoomInput))
-                targetZoomSpeed = Mathf.MoveTowards(currentZoomSpeed, 0, zoomDeceleration * Time.deltaTime);
-            else
-                targetZoomSpeed += zoomInput * zoomAcceleration * Time.deltaTime;
-
-            if (targetZoomSpeed > maxZoomSpeed)
-                targetZoomSpeed = maxZoomSpeed;
-            if (targetZoomSpeed < -maxZoomSpeed)
-                targetZoomSpeed = -maxZoomSpeed;
-
-            float currentZoom = positionComposer.CameraDistance;
-            float targetZoom = Mathf.Clamp(currentZoom + targetZoomSpeed, minMaxZoom.x, minMaxZoom.y);
-            currentZoomSpeed = targetZoom - currentZoom;
-
-            positionComposer.CameraDistance = targetZoom;
-        }
         public OutputChannels GetOutputChannel()
         {
             OutputChannels outputChannels = OutputChannels.Channel01;

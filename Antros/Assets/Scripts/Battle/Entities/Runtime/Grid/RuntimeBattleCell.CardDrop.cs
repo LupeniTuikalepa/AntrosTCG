@@ -21,33 +21,15 @@ namespace ATCG.Battle.Entities.Runtime.Grid
 
         void ICardDropTarget<IBattleCard>.OnCardEnter(ICardUI<IBattleCard> cardUI)
         {
-            Vector2 mousePosition = cardUI.CollectionUI.EventSystem.currentInputModule.input.mousePosition;
-
-            (this as IPointerEnterHandler).OnPointerEnter(new PointerEventData(cardUI.CollectionUI.EventSystem)
-            {
-                position = mousePosition,
-            });
-
         }
 
         void ICardDropTarget<IBattleCard>.OnCardExit(ICardUI<IBattleCard> cardUI)
         {
-            Vector2 mousePosition = cardUI.CollectionUI.EventSystem.currentInputModule.input.mousePosition;
 
-            (this as IPointerExitHandler).OnPointerExit(new PointerEventData(cardUI.CollectionUI.EventSystem)
-            {
-                position = mousePosition,
-            });
         }
 
         void ICardDropTarget<IBattleCard>.OnCardDrop(ICardUI<IBattleCard> cardUI)
         {
-            Vector2 mousePosition = cardUI.CollectionUI.EventSystem.currentInputModule.input.mousePosition;
-
-            (this as IPointerExitHandler).OnPointerExit(new PointerEventData(cardUI.CollectionUI.EventSystem)
-            {
-                position = mousePosition,
-            });
         }
 
         void ICardDropTarget<IBattleCard>.OnCardHover(ICardUI<IBattleCard> cardUI)

@@ -178,19 +178,8 @@ namespace Helteix.Cards.UI.Physical.Drag
 
                     foreach (RaycastResult result in uiResults)
                     {
-#if HELTEIX_CARD_DEBUG
-                        Debug.Log($"Drag UI raycast on {result.gameObject.name}", result.gameObject);
-#endif
-                        if (!result.gameObject.TryGetComponent(out ICardDropTarget<TCard> dropTarget))
-                            continue;
-#if HELTEIX_CARD_DEBUG
-                        Debug.Log($"{result.gameObject.name} is compatible", result.gameObject);
-#endif
-                        dragRaycasts.Add(new DragRaycast()
-                        {
-                            target = dropTarget,
-                            depth = result.depth
-                        });
+                        if(TryGetDragRaycast(result.gameObject.transform, result.depth, out DragRaycast drag))
+                            dragRaycasts.Add(drag);
                     }
 
                     dragRaycasts.Sort((a, b) => a.depth.CompareTo(b.depth));
@@ -199,15 +188,6 @@ namespace Helteix.Cards.UI.Physical.Drag
                     if (Current != null || uiResults.Count != 0)
                         return;
                 }
-/*
-                if (system.IsPointerOverGameObject())
-                {
-#if HELTEIX_CARD_DEBUG
-                    Debug.Log("Drag UI raycast on UI");
-#endif
-                    return;
-                }*/
-
                 dragRaycasts.Clear();
                 if (Is3D)
                 {
@@ -216,21 +196,9 @@ namespace Helteix.Cards.UI.Physical.Drag
                     for (int i = 0; i < count; i++)
                     {
                         RaycastHit hit = Hits[i];
-#if HELTEIX_CARD_DEBUG
-                        Debug.Log($"Drag physics raycast on {hit.collider.name}", hit.collider);
-#endif
-                        if (hit.collider.TryGetComponent(out ICardDropTarget<TCard> dropTarget))
-                        {
 
-#if HELTEIX_CARD_DEBUG
-                        Debug.Log($"{hit.collider.name} is compatible", hit.collider);
-#endif
-                            dragRaycasts.Add(new DragRaycast()
-                            {
-                                target = dropTarget,
-                                depth = hit.distance
-                            });
-                        }
+                        if(TryGetDragRaycast(hit.collider, hit.distance, out DragRaycast drag))
+                            dragRaycasts.Add(drag);
                     }
                 }
                 else
@@ -242,17 +210,8 @@ namespace Helteix.Cards.UI.Physical.Drag
                         for (int i = 0; i < count; i++)
                         {
                             Collider2D collider2D = colliders[i];
-                            if (collider2D.TryGetComponent(out ICardDropTarget<TCard> dropTarget))
-                            {
-#if HELTEIX_CARD_DEBUG
-                                Debug.Log($"{collider2D.gameObject.name} is compatible", collider2D.gameObject);
-#endif
-                                dragRaycasts.Add(new DragRaycast()
-                                {
-                                    target = dropTarget,
-                                    depth = collider2D.transform.position.z,
-                                });
-                            }
+                            if(TryGetDragRaycast(collider2D, collider2D.transform.position.z, out DragRaycast drag))
+                                dragRaycasts.Add(drag);
                         }
                     }
                 }
@@ -260,6 +219,31 @@ namespace Helteix.Cards.UI.Physical.Drag
                 ProcessResults(dragRaycasts);
 
             }
+        }
+
+        private static bool TryGetDragRaycast(Component hitComponent, float depth, out DragRaycast dragRaycast)
+        {
+#if HELTEIX_CARD_DEBUG
+            Debug.Log($"Drag raycast on {hitComponent.name}", hitComponent);
+#endif
+            dragRaycast = default;
+            if (!hitComponent.TryGetComponent(out ICardDropTargetPointer<TCard> pointer))
+                return false;
+
+            ICardDropTarget<TCard> dropTarget = pointer.DropTarget;
+            if (dropTarget == null)
+                return false;
+
+#if HELTEIX_CARD_DEBUG
+                Debug.Log($"{hitComponent.name} is compatible", hitComponent);
+#endif
+            dragRaycast = new DragRaycast()
+            {
+                target = dropTarget,
+                depth = depth
+            };
+            return true;
+
         }
 
         private void ProcessResults(List<DragRaycast> dragRaycasts)

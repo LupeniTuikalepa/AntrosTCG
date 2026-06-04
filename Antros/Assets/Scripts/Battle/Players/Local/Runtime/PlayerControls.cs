@@ -16,6 +16,7 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         public InputAction Pan { get; private set; }
         public InputAction Move { get; private set; }
+        public InputAction Rotate { get; private set; }
         public InputAction Zoom { get; private set; }
         public InputAction Use { get; private set; }
         public InputAction Pointer { get; private set; }
@@ -40,10 +41,14 @@ namespace ATCG.Battle.Players.Local.Runtime
         {
             base.Awake();
 
-            Pointer = PlayerInput.actions["Battle/Point"];
-            Pan = PlayerInput.actions["Battle/Pan"];
+            //Camera inputs
             Move = PlayerInput.actions["Battle/Move"];
             Zoom = PlayerInput.actions["Battle/Zoom"];
+            Rotate = PlayerInput.actions["Battle/Rotate"];
+            Pointer = PlayerInput.actions["Battle/Point"];
+            Pan = PlayerInput.actions["Battle/Pan"];
+
+            //Shortcuts
             Use = PlayerInput.actions["Battle/Use"];
         }
 

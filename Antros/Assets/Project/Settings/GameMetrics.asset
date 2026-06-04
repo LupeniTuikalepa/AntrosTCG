@@ -41,7 +41,7 @@ MonoBehaviour:
     - <Key>k__BackingField: 3
       <Value>k__BackingField: 7
   <GridRadius>k__BackingField: 5
-  <CellRadius>k__BackingField: 5
+  <CellRadius>k__BackingField: 1
   <PlayerColors>k__BackingField:
     serializedVersion: 2
     key0: {r: 0.3037113, g: 0.7554218, b: 0.8584906, a: 1}

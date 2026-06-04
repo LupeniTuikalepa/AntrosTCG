@@ -74,46 +74,5 @@ namespace ATCG.Battle.Grids
                 }
             }
         }
-
-        /*
-        public void DeployCard(IBattleCard HeroCard, HexCoordinates coordinates)
-        {
-            if (CanDeploy(HeroCard.Player, coordinates) && cards.TryAddCard(HeroCard))
-            {
-                HeroCard.Deploy(this, coordinates);
-                if(Grid.TryGetCell(coordinates, out HexCell cell))
-                    cell.AddMember(HeroCard);
-
-                OnBattleCardDeployed?.Invoke(HeroCard);
-            }
-        }
-
-
-        public void RemoveCard(IBattleCard HeroCard)
-        {
-            if (cards.TryRemoveCard(HeroCard))
-            {
-                if(Grid.TryGetCell(HeroCard.AllCellsCoordinates, out HexCell cell))
-                    cell.RemoveMember(null);
-
-                HeroCard.Leave();
-
-                OnBattleCardLeft?.Invoke(HeroCard);
-            }
-        }
-
-        public IEnumerable<BattleCell> GetCells() => battleCells.Values;
-
-        public IEnumerable<BattleCell> GetCells(Func<BattleCell, bool> filter)
-        {
-            foreach (var cell in GetCells())
-            {
-                if(filter(cell))
-                    yield return cell;
-            }
-        }
-
-        public BattleCell GetBattleCell(HexCoordinates coordinates) => TryGetBattleCell(coordinates, out BattleCell cell) ? cell : default;
-        */
     }
 }
