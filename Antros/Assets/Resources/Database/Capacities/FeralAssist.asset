@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.CapacityData
   guidText: 8aed28e8-5f03-458b-9c7e-9c1b24a19510
   <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
+  <Name>k__BackingField: Aide Sauvage
+  <Description>k__BackingField: "Une cr\xE9ature (Pas d'id\xE9e du nom encore) est
+    invoqu\xE9e sur une case adjacente. "
   <CastPatterns>k__BackingField: []
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <HitEffects>k__BackingField: []
+  <CellsHitEffects>k__BackingField: []
+  <AlliesHitEffects>k__BackingField: []
+  <OpponentsHitEffects>k__BackingField: []
   references:
     version: 2
     RefIds: []

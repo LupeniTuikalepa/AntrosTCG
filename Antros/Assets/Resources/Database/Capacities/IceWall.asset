@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc4786b8aad4ad19c34ba65d7989e31, type: 3}
+  m_Name: IceWall
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.CapacityData
+  guidText: f8b6cd8f-ec23-4132-8c31-6714d5082664
+  <Cost>k__BackingField: 0
+  <Name>k__BackingField: "Barri\xE8re gel\xE9e"
+  <Description>k__BackingField: 'Dresse un @Mur de Gel entre la case choisie et celle
+    du lanceur. '
+  <CastPatterns>k__BackingField: []
+  <FirePatterns>k__BackingField: []
+  <CasterEffects>k__BackingField: []
+  <CellsHitEffects>k__BackingField: []
+  <AlliesHitEffects>k__BackingField: []
+  <OpponentsHitEffects>k__BackingField: []
+  references:
+    version: 2
+    RefIds: []

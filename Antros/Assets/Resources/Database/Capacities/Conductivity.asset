@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.CapacityData
   guidText: 14b0dc16-a13b-43ed-a46b-2ca4e8e087a3
   <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
+  <Name>k__BackingField: "Conductivit\xE9"
+  <Description>k__BackingField: "Un rayon touche l'enemie le plus proche et inflige
+    4 d\xE9gats. Si un autre est pr\xE9sent \xE0 moins de deux case, celui-ci re\xE7oit
+    le double de degats et ainsi de suite."
   <CastPatterns>k__BackingField: []
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <HitEffects>k__BackingField: []
+  <CellsHitEffects>k__BackingField: []
+  <AlliesHitEffects>k__BackingField: []
+  <OpponentsHitEffects>k__BackingField: []
   references:
     version: 2
     RefIds: []

@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Cards;
+﻿using System.Linq;
+using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
@@ -14,7 +15,7 @@ namespace ATCG.Battle.Entities.Aspects
             BattleGridElementComponent,
             MovementComponent,
             CapacityCasterComponent,
-            PhysicAttackerComponent>
+            BasicAttackerComponent>
     {
         public struct Setup
         {
@@ -35,10 +36,10 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.BattleCardComponent = new BattleCardComponent(setup.card);
             componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetPlayerID());
             componentsFactory.BattleGridElementComponent = new BattleGridElementComponent(setup.grid, setup.coordinates);
-            componentsFactory.PhysicAttackerComponent = new PhysicAttackerComponent(setup.card.Strength);
+            componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
 
             //TODO
-            componentsFactory.CapacityCasterComponent = new CapacityCasterComponent();
+            componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
         }
     }
 }

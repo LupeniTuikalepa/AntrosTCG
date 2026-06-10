@@ -14,13 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.DebugCapacityData
   guidText: d4f9152e-207a-44cc-89ce-022f43cb952b
   <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
+  <Name>k__BackingField: Assimilation
+  <Description>k__BackingField: "Copie le pouvoir d'un entit\xE9 d'une distance maximum
+    de 2"
   <CastPatterns>k__BackingField:
   - rid: 8621190650691584287
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <HitEffects>k__BackingField: []
+  <CellsHitEffects>k__BackingField: []
+  <AlliesHitEffects>k__BackingField: []
+  <OpponentsHitEffects>k__BackingField: []
   references:
     version: 2
     RefIds:

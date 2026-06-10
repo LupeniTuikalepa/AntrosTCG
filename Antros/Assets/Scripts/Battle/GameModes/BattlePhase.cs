@@ -116,7 +116,13 @@ namespace ATCG.Battle.GameModes
             await Task.CompletedTask;
         }
 
-        public IBattlePlayer GetPlayer(int playerID) => Players[playerID];
+        public IBattlePlayer GetPlayer(int playerID)
+        {
+            if(playerID < 0 || playerID >= Players.Length)
+                return null;
+
+            return Players[playerID];
+        }
 
         protected virtual bool IsGameDone(ref BattleHistory history)
         {

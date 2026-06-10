@@ -1,9 +1,12 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine.Pool;
 #endif
 
+using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Object = UnityEngine.Object;
 
 namespace Helteix.Tools
 {
@@ -12,6 +15,7 @@ namespace Helteix.Tools
 
 #if UNITY_EDITOR
         private static List<Object> objectsToDestroy;
+
         [InitializeOnLoadMethod]
         private static void ConnectToEditor()
         {
@@ -25,7 +29,7 @@ namespace Helteix.Tools
             {
                 foreach (var obj in objectsToDestroy)
                 {
-                    if(AssetDatabase.IsSubAsset(obj))
+                    if (AssetDatabase.IsSubAsset(obj))
                         continue;
 
                     if (obj != null)
@@ -52,68 +56,35 @@ namespace Helteix.Tools
             return Object.Instantiate(obj, parent);
 
         }
-        public static void ClearChildren(this Transform transform, params Transform[] ignore)
-        {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                ClearEditor(transform, ignore);
-            else
-#endif
-                ClearRuntime(transform, ignore);
-        }
 
-#if UNITY_EDITOR
-        private static void ClearEditor(this Transform transform, params Transform[] ignore)
+        public static int ClearChildren(this Transform transform, bool detachChildren = true, params Transform[] ignore)
         {
-            int childCount = transform.childCount;
-            for (int i = 0; i < childCount; i++)
+            int destroyed = 0;
+            for (int i = transform.childCount - 1; i >= 0; i--)
             {
-                Transform child = transform.GetChild(i);
-                bool valid = true;
-                for (int j = 0; j < ignore.Length; j++)
-                {
-                    if (ignore[j] == child)
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
-
-                if (!valid)
-                {
+                var child = transform.GetChild(i);
+                if (Array.IndexOf(ignore, child) >= 0)
                     continue;
-                }
 
-                objectsToDestroy.Add(child.gameObject);
+                if(detachChildren)
+                    child.SetParent(null, false);
+
+                if (Application.isPlaying)
+                    Object.Destroy(child.gameObject);
+                else
+                    Object.DestroyImmediate(child.gameObject);
+                destroyed++;
             }
+
+            return destroyed;
         }
-#endif
-
-        private static void ClearRuntime(this Transform transform, params Transform[] ignore)
-        {
-            foreach (Transform child in transform)
-            {
-                bool valid = true;
-                for (int j = 0; j < ignore.Length; j++)
-                {
-                    if (ignore[j] == child)
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
-
-                if (valid)
-                    child.DestroyGameObject();
-            }
-        }
-
 
         public static void Activate(this GameObject unityObject) => unityObject.SetActive(true);
         public static void Deactivate(this GameObject unityObject) => unityObject.SetActive(false);
 
         public static void DestroyGameObject(this Component component) => component.gameObject.Destroy();
-        public static void Destroy<T> (this T unityObject) where T : Object
+
+        public static void Destroy<T>(this T unityObject) where T : Object
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -121,6 +92,7 @@ namespace Helteix.Tools
             else
 #endif
                 Object.Destroy(unityObject);
+
         }
 
     }

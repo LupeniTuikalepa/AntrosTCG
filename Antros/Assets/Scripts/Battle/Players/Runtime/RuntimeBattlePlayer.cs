@@ -5,6 +5,7 @@ namespace ATCG.Battle.Players.Runtime
 {
     public abstract class RuntimeBattlePlayer : MonoBehaviour
     {
+        public abstract IBattlePlayer BattlePlayer { get; }
         public abstract void Disconnect();
     }
 
@@ -36,11 +37,13 @@ namespace ATCG.Battle.Players.Runtime
             public static implicit operator TComponent(ComponentCache<TComponent> cache) => cache.Component;
         }
 
-        protected static readonly List<RuntimeBattlePlayer<T>> runtimeBattlePlayers = new();
+        protected static readonly List<RuntimeBattlePlayer<T>> RuntimeBattlePlayers = new();
 
         private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
 
+        public override IBattlePlayer BattlePlayer => Player;
         public T Player { get; private set; }
+
 
         protected virtual void Awake()
         {
@@ -50,12 +53,12 @@ namespace ATCG.Battle.Players.Runtime
 
         private void OnEnable()
         {
-            runtimeBattlePlayers.Add(this);
+            RuntimeBattlePlayers.Add(this);
         }
 
         private void OnDisable()
         {
-            runtimeBattlePlayers.Remove(this);
+            RuntimeBattlePlayers.Remove(this);
         }
 
 
@@ -106,7 +109,7 @@ namespace ATCG.Battle.Players.Runtime
         public static bool TryGetRuntimeLocalPlayerFor<TRuntimePlayer>(T player, out TRuntimePlayer runtimePlayer)
             where TRuntimePlayer : RuntimeBattlePlayer<T>
         {
-            foreach (RuntimeBattlePlayer<T> runtimeBattlePlayer in runtimeBattlePlayers)
+            foreach (RuntimeBattlePlayer<T> runtimeBattlePlayer in RuntimeBattlePlayers)
                 if (runtimeBattlePlayer.Player == player && runtimeBattlePlayer is TRuntimePlayer rtp)
                 {
                     runtimePlayer = rtp;

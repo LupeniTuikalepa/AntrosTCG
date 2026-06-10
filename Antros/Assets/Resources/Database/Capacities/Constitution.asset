@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.CapacityData
   guidText: a107b212-5043-468e-a288-a5385f4fd80d
   <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
+  <Name>k__BackingField: Constitution
+  <Description>k__BackingField: "Ameliore les statistiques globale de la cr\xE9ature."
   <CastPatterns>k__BackingField: []
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <HitEffects>k__BackingField: []
+  <CellsHitEffects>k__BackingField: []
+  <AlliesHitEffects>k__BackingField: []
+  <OpponentsHitEffects>k__BackingField: []
   references:
     version: 2
     RefIds: []

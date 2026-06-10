@@ -15,7 +15,7 @@ namespace ATCG.Battle.Players.Local.Runtime
         public ComponentCache<PlayerInteractions> Interactions { get; private set; }
 
         [ShowInInspector, ReadOnly]
-        public int LocalID => runtimeBattlePlayers.IndexOf(this);
+        public int LocalID => RuntimeBattlePlayers.IndexOf(this);
 
         protected override void Awake()
         {

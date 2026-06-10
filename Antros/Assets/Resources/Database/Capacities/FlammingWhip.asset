@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: FlammingWhip
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.CapacityData
   guidText: 4a6cb012-0337-41d6-8157-eb09e44ee0ca
-  <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
+  <Cost>k__BackingField: 3
+  <Name>k__BackingField: "Fouet enflamm\xE9"
+  <Description>k__BackingField: "Enflamme les cases \xE0 2 de port\xE9e du lanceur
+    et fait 5 d\xE9gats aux entit\xE9es dessus"
   <CastPatterns>k__BackingField: []
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <HitEffects>k__BackingField: []
+  <CellsHitEffects>k__BackingField: []
+  <AlliesHitEffects>k__BackingField: []
+  <OpponentsHitEffects>k__BackingField: []
   references:
     version: 2
     RefIds: []

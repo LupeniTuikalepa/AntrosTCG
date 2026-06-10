@@ -147,7 +147,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8303150331021048846}
-  - component: {fileID: 2452309319912275167}
+  - component: {fileID: 1985177535135967487}
+  - component: {fileID: 5690419733264440647}
   m_Layer: 5
   m_Name: AbilityButton Variant
   m_TagString: Untagged
@@ -175,7 +176,7 @@ RectTransform:
   m_AnchoredPosition: {x: 125.215, y: -113.365005}
   m_SizeDelta: {x: 250.43, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2452309319912275167
+--- !u!114 &1985177535135967487
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,15 +185,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 6746977571330245434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9a524ef0ca34d63a2c5318e5cfb5328, type: 3}
+  m_Script: {fileID: 11500000, guid: 45a48d58d89b42e4828f50d273c7ab00, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Heroes.Deployed.HeroCapacityButton
-  costUI: {fileID: 1819073816157885713}
-  customButtonUI: {fileID: 1723413242560623012}
-  target: {fileID: 8303150331021048846}
-  source: {fileID: 215277198384838673}
-  title: {fileID: 3718148459376599368}
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.Custom.CapacityButton
+  cost: {fileID: 1819073816157885713}
+  capacityName: {fileID: 3718148459376599368}
   description: {fileID: 6888977788455551468}
+--- !u!114 &5690419733264440647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6746977571330245434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 100
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1001 &215277198384838671
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -363,7 +381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchorMax.y
@@ -375,11 +393,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 250.43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_SizeDelta.y
@@ -415,11 +433,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 125.215
+      value: 0.00077819824
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -34.455
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -517,17 +535,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
   m_PrefabInstance: {fileID: 215277198384838671}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1723413242560623012 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1519430847231396267, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
-  m_PrefabInstance: {fileID: 215277198384838671}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 215277198384838672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e46a3cf02ac4d8d8a05754a1df42351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ATCG.Core::ATCG.UI.CustomButtonUI
 --- !u!1 &3391224514113304653 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3309263654937542722, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}

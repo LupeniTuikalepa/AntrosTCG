@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.Cards;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Grids;
 using ATCG.Capacities;
 using ATCG.HexGrids;

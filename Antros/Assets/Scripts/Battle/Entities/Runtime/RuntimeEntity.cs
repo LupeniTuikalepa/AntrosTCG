@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ATCG.Battle.Cards;
+using ATCG.Battle.GameModes;
+using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Runtime;
 using ATCG.Metrics;
 using Helteix.Cards.UI.Physical;
 using Helteix.Cards.UI.Physical.Drag;
@@ -23,13 +26,19 @@ namespace ATCG.Battle.Entities.Runtime
         public event Action OnEntitySelected;
         public event Action OnEntityDeselected;
 
-
+        public RuntimeBattlePlayer RuntimeBattlePlayer => Manager.RuntimeBattlePlayer;
+        public IBattlePlayer BattlePlayer => RuntimeBattlePlayer.BattlePlayer;
+        public BattlePhase BattlePhase => BattlePlayer.BattlePhase;
         public EntityAddress Address => Aspect.EntityAddress;
         public bool IsSelected => Manager.IsSelected(this);
 
         public T Aspect { get; private set; }
+
+
         public RuntimeEntityManager Manager { get; private set; }
+
         public bool IsHovered { get; private set; }
+
         public Condition IsInteractable { get; private set; }
 
 

@@ -19,6 +19,7 @@ namespace ATCG.Capacities
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
 
+        [field: BoxGroup("Behaviour")]
         [field: BoxGroup("Behaviour/Patterns")]
         [field: SerializeReference, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public ICapacityCastPatternData[] CastPatterns { get; private set; }
@@ -27,7 +28,7 @@ namespace ATCG.Capacities
         [field: SerializeReference, Tooltip("Patterns of cells affected by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public ICapacityCastPatternData[] FirePatterns { get; private set; }
 
-        [field: BoxGroup("Behaviours/Effects")]
+        [field: BoxGroup("Behaviour/Effects")]
         [field: SerializeReference, Tooltip("Effect applied on the caster."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public IEffectData[] CasterEffects { get; private set; }
 

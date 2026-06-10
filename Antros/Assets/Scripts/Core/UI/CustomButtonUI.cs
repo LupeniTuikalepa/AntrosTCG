@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 namespace ATCG.UI
 {
+    [SelectionBase]
     public class CustomButtonUI : SelectableUIComponent, IPointerClickHandler, ISubmitHandler
     {
         public UnityEvent<BaseEventData> OnClick => onClick;
