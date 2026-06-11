@@ -14,7 +14,7 @@ namespace ATCG.Battle.Players.Local.UI
         private PlayerHUDElement[] elements;
 
 
-        protected override void Awake()
+        protected void Awake()
         {
             elements = GetComponentsInChildren<PlayerHUDElement>();
             for (int i = 0; i < elements.Length; i++)

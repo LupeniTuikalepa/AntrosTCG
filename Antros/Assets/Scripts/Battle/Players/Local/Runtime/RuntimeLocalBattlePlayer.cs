@@ -28,6 +28,7 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         protected override void OnConnected()
         {
+            gameObject.name = $"Local Player {LocalID}";
             transform.position = new Vector3
             {
                 x = Player.ID * 200

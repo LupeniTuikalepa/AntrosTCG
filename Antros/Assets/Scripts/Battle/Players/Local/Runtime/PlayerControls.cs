@@ -1,5 +1,8 @@
-﻿using ATCG.Battle.Players.Local.Phases;
+﻿using System;
+using System.Linq;
+using ATCG.Battle.Players.Local.Phases;
 using Helteix.Tools.Phases;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -37,10 +40,8 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         private EventSystem eventSystem;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
             //Camera inputs
             Move = PlayerInput.actions["Battle/Move"];
             Zoom = PlayerInput.actions["Battle/Zoom"];
@@ -64,23 +65,26 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseBegin(LocalPlayerTurnPhase phase)
         {
-            if (phase.localPlayerTurn == Player)
-                PlayerInput.ActivateInput();
         }
 
         void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseEnd(LocalPlayerTurnPhase phase)
         {
-            if (phase.localPlayerTurn == Player)
-                PlayerInput.DeactivateInput();
         }
 
+        private void LateUpdate()
+        {
+            if(Player != null)
+                Debug.Log($"Is connected to {Player.ID}", this);
+        }
 
         protected override void Connect(LocalBattlePlayer player)
         {
+            Debug.Log($"Connected controls with player {player.ID}", gameObject);
         }
 
         protected override void Disconnect(LocalBattlePlayer player)
         {
+            Debug.Log($"Disconnect controls with player {player.ID}", gameObject);
         }
     }
 }
