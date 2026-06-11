@@ -9,13 +9,11 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         public RuntimeLocalBattlePlayer RuntimeLocalPlayer { get; private set; }
 
-        protected virtual void Awake()
-        {
-            RuntimeLocalPlayer = GetComponentInParent<RuntimeLocalBattlePlayer>();
-        }
 
         public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
+            Debug.Log($"Connected with player {player.ID}", runtimeBattlePlayer);
+
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
             {
                 RuntimeLocalPlayer = runtimeLocalBattlePlayer;

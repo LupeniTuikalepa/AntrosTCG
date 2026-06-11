@@ -32,10 +32,8 @@ namespace ATCG.Battle
 
         public PlayerInteractable HoveredInteractable { get; private set; }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
             interactables = new List<PlayerInteractable>();
             activeSelection = new List<PlayerInteractable>();
 
