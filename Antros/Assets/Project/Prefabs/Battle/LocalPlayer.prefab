@@ -374,6 +374,7 @@ MonoBehaviour:
     <Channels>k__BackingField: 2
   - <PlayerID>k__BackingField: 1
     <Channels>k__BackingField: 4
+  runtimeEntityManager: {fileID: 0}
 --- !u!1 &2778149622731399012
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,7 +1370,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6884445204600096667}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}
+  m_LocalRotation: {x: 0.38268346, y: -0, z: -0, w: 0.9238795}
   m_LocalPosition: {x: 0, y: 3.5355341, z: -3.5355337}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1922,7 +1923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360242013734765032, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -180
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 399218703689747186, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2039,6 +2040,10 @@ PrefabInstance:
     - target: {fileID: 1201263911679581694, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1246179176620695035, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1771967850190770535, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2350,7 +2355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2809705903096209044, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -305
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 2899793696162414452, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_Name
@@ -2884,6 +2889,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7483841662496870795, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7625340246822101532, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_Camera
       value: 
@@ -2942,7 +2951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8721189083721576106, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -55
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8737935499431939989, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchorMax.y

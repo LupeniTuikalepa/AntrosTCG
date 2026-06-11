@@ -6,12 +6,14 @@ using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Capacities;
 using ATCG.Metrics;
 using Helteix.Tools;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Pool;
@@ -34,7 +36,8 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         [SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         private float movementDuration;
-
+		
+        [SerializeField] private CinemachineCamera cinemachineCamera;
 
         public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
@@ -88,6 +91,18 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         public void UseCapacity(CapacityData capacityIndex)
         {
             Debug.Log($"Using  capacity {capacityIndex}");
+        }
+
+        protected override void OnSelected()
+        {
+	        base.OnSelected();
+	        cinemachineCamera.gameObject.SetActive(true);
+        }
+
+        protected override void OnDeselected()
+        {
+	        cinemachineCamera.gameObject.SetActive(false);
+	        base.OnDeselected();
         }
     }
 }
