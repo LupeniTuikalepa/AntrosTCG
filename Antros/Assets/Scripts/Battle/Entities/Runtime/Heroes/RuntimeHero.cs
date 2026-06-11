@@ -10,6 +10,7 @@ using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Capacities;
 using ATCG.Metrics;
 using Helteix.Tools;
+using Helteix.Tools.Phases;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -20,7 +21,7 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
 {
-    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>
+    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, IPhaseListener<SelectEntityActionPhase>
     {
         [SerializeField]
         private TMP_Text heroName;
@@ -36,12 +37,23 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         [SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         private float movementDuration;
-		
+
         [SerializeField] private CinemachineCamera cinemachineCamera;
 
         public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
 
+        protected override void OnEnable()
+        {
+            PhaseManager.Register<SelectEntityActionPhase>(this);
+            base.OnEnable();
+        }
+
+        protected override void OnDisable()
+        {
+            PhaseManager.Unregister<SelectEntityActionPhase>(this);
+            base.OnDisable();
+        }
 
 
         public override async Awaitable Spawn(RuntimeEntityManager manager, HeroEntityAspect aspect)
@@ -49,7 +61,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             await base.Spawn(manager, aspect);
 
             Debug.Log($"[Runtime Hero] {aspect.BattleCardComponent.battleCard.Title} spawned.");
-            
+
             heroName.text = aspect.Name;
 
             manager.RegisterRuntimeEntity(this);
@@ -64,7 +76,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             GameMetrics metrics = GameMetrics.Current;
 
-            int playerCount = RuntimeBattleGrid.CurrentBattlePhase.PlayerCount;
             int playerID = aspect.Player.GetPlayerID();
 
             RenderingLayerMask mask = RenderingLayerMask.GetMask($"Player{playerID + 1}");
@@ -78,31 +89,17 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         }
 
 
-        public async Awaitable DoBasicAttack()
+        void IPhaseListener<SelectEntityActionPhase>.OnPhaseBegin(SelectEntityActionPhase phase)
         {
-            await Task.CompletedTask;
+            if (IsSelected)
+            {
+                cinemachineCamera.gameObject.SetActive(true);
+            }
         }
 
-        public async Awaitable Move()
+        void IPhaseListener<SelectEntityActionPhase>.OnPhaseEnd(SelectEntityActionPhase phase)
         {
-            await Task.CompletedTask;
-        }
-
-        public void UseCapacity(CapacityData capacityIndex)
-        {
-            Debug.Log($"Using  capacity {capacityIndex}");
-        }
-
-        protected override void OnSelected()
-        {
-	        base.OnSelected();
-	        cinemachineCamera.gameObject.SetActive(true);
-        }
-
-        protected override void OnDeselected()
-        {
-	        cinemachineCamera.gameObject.SetActive(false);
-	        base.OnDeselected();
+            cinemachineCamera.gameObject.SetActive(false);
         }
     }
 }

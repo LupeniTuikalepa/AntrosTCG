@@ -63,7 +63,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
         {
             canvasGroup.blocksRaycasts = false;
             Tween.StopAll(canvasGroup);
-            await Tween.Alpha(canvasGroup, 0, .15f, Ease.OutExpo);
+            await Tween.Alpha(canvasGroup, 0, .05f, Ease.OutExpo);
         }
 
         public void CloseLast() => Controller.CloseLast();

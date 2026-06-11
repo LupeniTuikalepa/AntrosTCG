@@ -84,7 +84,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
             openedPanels.Clear();
 
-            Phase?.Cancel();
+            Phase?.SetResult(null);
         }
 
         public void CloseLast() => CloseLastAsync().FireAndForget();
@@ -98,7 +98,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
             if (openedPanels.TryPeek(out var openedPanel))
                 await openedPanel.OnOpen();
             else
-                Phase?.Cancel();
+                Phase?.SetResult(null);
         }
 
         public void Exit()
