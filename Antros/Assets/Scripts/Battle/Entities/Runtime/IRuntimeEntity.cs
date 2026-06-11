@@ -14,7 +14,8 @@ namespace ATCG.Battle.Entities.Runtime
         RuntimeBattlePlayer RuntimeBattlePlayer { get; }
         IBattlePlayer BattlePlayer { get; }
         BattlePhase BattlePhase { get; }
-
+        Transform actionUIRoot { get; }
+        
         void OnSelected();
         void OnDeselected();
     }

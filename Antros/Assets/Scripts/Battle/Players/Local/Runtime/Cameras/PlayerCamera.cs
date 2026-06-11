@@ -1,4 +1,5 @@
 using System;
+using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Local.Phases;
@@ -39,6 +40,9 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         [ShowInInspector, HideInEditorMode, ReadOnly]
         private RuntimeBattleGrid grid;
+        
+        [SerializeField]
+        private RuntimeEntityManager runtimeEntityManager;
 
         private float currentZoomSpeed;
         private float currentRotationSpeed;
@@ -53,7 +57,28 @@ namespace ATCG.Battle.Players.Local.Runtime
         private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.Component.PlayerInputUser;
 
         public Camera OutputCamera => renderCamera.OutputCamera;
+		
+        private void OnEnable()
+        {
+	        runtimeEntityManager.OnEntitySelected += OnSelected;
+	        runtimeEntityManager.OnEntityDeselected += OnDeselected;
+        }
 
+        private void OnDisable()
+        {
+	        runtimeEntityManager.OnEntitySelected -= OnSelected;
+	        runtimeEntityManager.OnEntityDeselected -= OnDeselected;
+        }
+
+        private void OnSelected(IRuntimeEntity obj)
+        {
+	        Debug.Log("Selected");
+        }
+
+        private void OnDeselected(IRuntimeEntity obj)
+        {
+	        Debug.Log("Deselected");
+        }
 
         private void LateUpdate()
         {
@@ -67,12 +92,13 @@ namespace ATCG.Battle.Players.Local.Runtime
             {
                 currentZoomSpeed = 0;
                 lastSpeed = Vector2.zero;
-
+                //Todo Saverio
+				/*MoveCameraWithPlayerInput(lastSpeed);
                 CinemachineBrain brain = CinemachineCore.FindPotentialTargetBrain(cinemachineCamera);
                 Plane plane = new(brain.transform.forward, cinemachineCamera.transform.position);
 
                 cinemachineCamera.Target.TrackingTarget.transform.position =
-                    plane.ClosestPointOnPlane(brain.transform.position);
+                    plane.ClosestPointOnPlane(brain.transform.position);*/
             }
         }
 

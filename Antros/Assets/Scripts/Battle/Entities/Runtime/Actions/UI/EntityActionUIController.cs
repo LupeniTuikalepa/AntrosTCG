@@ -49,7 +49,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
         private void OnHeroSelected(IRuntimeEntity entity)
         {
             runtimeEntity = entity;
-
+            MoveOnRoot(entity); 
             Show();
             start.Build();
             if (start.IsEmpty())
@@ -66,7 +66,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
             runtimeEntity = null;
         }
 
-
         public void Show()
         {
             Tween.StopAll(canvasGroup);
@@ -79,6 +78,13 @@ namespace ATCG.Battle.Entities.Runtime.UI
             Tween.StopAll(canvasGroup);
             Tween.Alpha(canvasGroup, 0, .15f, Ease.OutExpo);
             canvasGroup.blocksRaycasts = false;
+        }
+        
+        private void MoveOnRoot(IRuntimeEntity entity)
+        {
+            if (entity.actionUIRoot == null) 
+                return;
+            transform.position = entity.actionUIRoot.position;
         }
 
         public void Open(EntityActionUIPanel panel) => OpenAsync(panel).FireAndForget();

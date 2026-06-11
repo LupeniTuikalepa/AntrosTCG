@@ -45,6 +45,9 @@ namespace ATCG.Battle.Entities.Runtime
         [field: SerializeField]
         public MeshRenderer Model { get; private set; }
 
+        [field: SerializeField]
+        public Transform actionUIRoot { get; private set; }
+        
         protected virtual void Awake()
         {
             IsInteractable = new Condition();
