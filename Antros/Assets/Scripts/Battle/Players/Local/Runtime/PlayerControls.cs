@@ -71,20 +71,14 @@ namespace ATCG.Battle.Players.Local.Runtime
         {
         }
 
-        private void LateUpdate()
-        {
-            if(Player != null)
-                Debug.Log($"Is connected to {Player.ID}", this);
-        }
-
         protected override void Connect(LocalBattlePlayer player)
         {
-            Debug.Log($"Connected controls with player {player.ID}", gameObject);
+            //Debug.Log($"Connected controls with player {player.ID}", gameObject);
         }
 
         protected override void Disconnect(LocalBattlePlayer player)
         {
-            Debug.Log($"Disconnect controls with player {player.ID}", gameObject);
+            //Debug.Log($"Disconnect controls with player {player.ID}", gameObject);
         }
     }
 }
