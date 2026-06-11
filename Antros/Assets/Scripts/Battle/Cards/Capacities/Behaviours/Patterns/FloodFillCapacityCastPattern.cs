@@ -6,7 +6,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
 {
     public class FloodFillCapacityCastPattern : ComplexCapacityCastPattern<FloodFillPatternData, FloodFillPattern>
     {
-        protected override FloodFillPattern GetCellPattern(FloodFillPatternData castData, Capacity context)
+        protected override FloodFillPattern GetCellPattern(FloodFillPatternData castData, CapacityContext context)
         {
             return new FloodFillPattern(context.castPoint, castData.Distance);
         }

@@ -10,7 +10,7 @@ namespace ATCG.Battle.Commands.Core
 
         public static Awaitable Run<T>(this T command, BattlePhase battlePhase) where T : GameCommand
         {
-            return GameCommandManager.Instance.ExecuteGameCommand(command, battlePhase);
+            return GameCommandManager.Instance.ExecuteGameCommandAsync(command, battlePhase);
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using ATCG.Battle.Commands.Core.Exceptions;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.GameModes;
 using Helteix.Singletons.MonoSingletons;
 using Helteix.Singletons.MonoSingletons.Attributes;
+using Helteix.Tools;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -13,17 +16,26 @@ namespace ATCG.Battle.Commands.Core
     {
         private List<object> commandsPlayers = new List<object>();
 
-        public void ExecuteGameCommandAndForget<T>(T gameCommand, BattlePhase battlePhase) where T: GameCommand
+        public void ExecuteGameCommand<T>(T gameCommand, BattlePhase battlePhase) where T: GameCommand
         {
-            _ = ExecuteGameCommand(gameCommand, battlePhase);
+            ExecuteGameCommandAsync(gameCommand, battlePhase).FireAndForget();
         }
 
-        public async Awaitable ExecuteGameCommand<T>(T gameCommand, BattlePhase battlePhase) where T: IGameCommand
+        public async Awaitable ExecuteGameCommandAsync<T>(T gameCommand, BattlePhase battlePhase) where T: IGameCommand
         {
             using GameCommandContext context = new(battlePhase, commandsPlayers);
 
             context.Register(gameCommand);
-            gameCommand.Process(in context);
+
+            try
+            {
+                gameCommand.Process(in context);
+            }
+            catch (BreakCommandException breakCommandException)
+            {
+                Debug.Log(
+@$"Game Command was canceled because of : {breakCommandException.Cause}");
+            }
 
             await PlayCommandEffects(context, gameCommand);
         }
