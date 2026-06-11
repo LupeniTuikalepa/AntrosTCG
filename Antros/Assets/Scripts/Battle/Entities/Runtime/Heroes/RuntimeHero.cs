@@ -38,7 +38,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
-        public HeroEntityAspect Hero { get; private set; }
 
 
 
@@ -47,7 +46,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             await base.Spawn(manager, aspect);
 
             Debug.Log($"[Runtime Hero] {aspect.BattleCardComponent.battleCard.Title} spawned.");
-            Hero = aspect;
+            
             heroName.text = aspect.Name;
 
             manager.RegisterRuntimeEntity(this);

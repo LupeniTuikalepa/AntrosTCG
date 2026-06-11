@@ -115,12 +115,18 @@ namespace ATCG.Battle.Commands.GameCommands
         {
             CapacityData data = capacity.data;
             var disposable = DictionaryPool<IEffectData, ICapacityEffect>.Get(out hitEffectsMapping);
+
+            //TODO revoir la séparation des entitées touchées
+
             foreach (IEffectData hitEffectData in data.AlliesHitEffects)
                 if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
                     hitEffectsMapping[hitEffectData] = hitEffect;
+
             foreach (IEffectData hitEffectData in data.OpponentsHitEffects)
                 if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
                     hitEffectsMapping[hitEffectData] = hitEffect;
+
+
             foreach (IEffectData hitEffectData in data.CellsHitEffects)
                 if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
                     hitEffectsMapping[hitEffectData] = hitEffect;

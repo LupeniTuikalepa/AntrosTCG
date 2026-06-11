@@ -9,6 +9,7 @@ using Unity.Services.CloudSave.Model;
 
 namespace ATCGModule;
 
+
 public class BattleSessionModule
 {
     private static readonly string BattleSessionID = "BattleSession";

@@ -103,6 +103,7 @@ namespace Helteix.Tools.Phases
         protected void Cancel() => PhaseManager.Cancel(this);
 
     }
+
     public abstract class Phase : Phase<Phase>
     {
         protected sealed override async Awaitable<Phase> Execute(CancellationToken token)

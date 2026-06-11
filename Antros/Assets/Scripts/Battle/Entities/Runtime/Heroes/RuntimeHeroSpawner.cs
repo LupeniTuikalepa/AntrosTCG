@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.GameCommands;
@@ -24,11 +26,13 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             GameCommandManager.Instance.Unregister(this);
         }
 
+
         async Awaitable ICommandPlayer<SpawnHeroCommand>.Play(SpawnHeroCommand command)
         {
             if (HeroEntityAspect.TryGetAspect(command.DeployedEntity, out HeroEntityAspect entityAspect))
             {
                 GameObject instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(transform);
+                
                 if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
                     await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
             }

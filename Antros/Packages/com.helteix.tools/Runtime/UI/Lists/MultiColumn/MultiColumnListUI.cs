@@ -11,9 +11,6 @@ namespace ATCG
 {
     public class MultiColumnListUI<T> : UIList<T, MultiColumnRowUI<T>>, ISerializationCallbackReceiver
     {
-
-
-
         [SerializeField, Space]
         private Transform headerRoot;
         [SerializeField]

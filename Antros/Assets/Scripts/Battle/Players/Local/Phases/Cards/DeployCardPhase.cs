@@ -45,6 +45,8 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(new DeployableCellFilter(), phase);
 
             PhaseResult<EntityAddress> result = await selectEntityPhase;
+
+
             if (result.type == PhaseResultType.Cancel)
                 throw new OperationCanceledException(token);
 

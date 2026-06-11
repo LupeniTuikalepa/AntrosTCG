@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading;
+using ATCG.Battle.GameModes;
+using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Battle.Players.Runtime;
 using ATCG.Battle.Turns;
 using ATCG.Metrics;
 using Helteix.ChanneledProperties;
@@ -52,6 +55,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
         public void DeployHero()
         {
+
         }
 
         public void EndTurn()

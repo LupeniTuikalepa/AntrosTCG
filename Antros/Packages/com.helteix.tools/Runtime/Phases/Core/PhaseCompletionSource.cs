@@ -14,7 +14,7 @@ namespace Helteix.Tools.Phases
     /// thread via <see cref="Awaitable.MainThreadAsync"/> before completing the phase.
     /// </para>
     /// </summary>
-    public class PhaseCompletionSource<TValue> : Phase<TValue>
+    public abstract class PhaseCompletionSource<TValue> : Phase<TValue>
     {
         // Separate from Phase<TResult>.CompletionSource — this one is driven by SetResult/SetCanceled.
         // Phase<TResult>.CompletionSource is driven by ExecutePhase and handles WaitAsync notifications.
