@@ -6,7 +6,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
     public interface ICapacityEffect : ICapacityBehaviour<IEffectData>
     {
-        void Hit(IEffectData data, EntityAddress target, in CastCapacityCommand.Context context);
+        void TryApplyEffectTo(IEffectData data, EntityAddress target, in CastCapacityCommand.Context context);
     }
 
     public interface ICapacityEffect<in T> : ICapacityEffect where T : IEffectData
@@ -16,7 +16,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
             return data is T;
         }
 
-        void ICapacityEffect.Hit(IEffectData data, EntityAddress target,
+        void ICapacityEffect.TryApplyEffectTo(IEffectData data, EntityAddress target,
             in CastCapacityCommand.Context context)
         {
             if (data is T t)
