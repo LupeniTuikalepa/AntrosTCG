@@ -6,10 +6,8 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Patterns
 {
-    public struct FloodFillPattern : ICellPattern
+    public readonly struct FloodFillPattern : ICellPattern
     {
-        public Func<HexCoordinates, bool> ValidateCell { get; set; }
-
         public readonly int distance;
         public readonly HexCoordinates center;
 
@@ -18,17 +16,16 @@ namespace ATCG.Battle.Grids.Patterns
         {
             this.center = center;
             this.distance = distance;
-            ValidateCell = null;
         }
-
-        public void Evaluate(List<HexCoordinates> coordinatesList)
+        
+        IEnumerable<HexCoordinates> ICellPattern.GetAll()
         {
             using (DictionaryPool<HexCoordinates, int>.Get(out Dictionary<HexCoordinates, int> dic))
             {
                 FloodFill(center, distance, dic);
 
                 foreach ((HexCoordinates hexCoordinates, _) in dic)
-                    coordinatesList.Add(hexCoordinates);
+                    yield return hexCoordinates;
             }
         }
 
@@ -43,9 +40,6 @@ namespace ATCG.Battle.Grids.Patterns
                     //Someone already found the cell with the same budget or more, so no need to check it
                     if (lastBudget >= budget)
                         continue;
-
-                if (ValidateCell != null && !ValidateCell(neighbor))
-                    continue;
 
                 foundCells[neighbor] = budget;
                 budget--;

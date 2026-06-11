@@ -46,6 +46,7 @@ namespace ATCG.Battle.Entities.Runtime
         private Dictionary<Entity, IRuntimeEntity> runtimeEntities;
 
 
+
         private void Awake()
         {
             runtimeEntities = new Dictionary<Entity, IRuntimeEntity>();
@@ -90,6 +91,11 @@ namespace ATCG.Battle.Entities.Runtime
             return runtimeEntities.Remove(runtimeEntity.Address);
         }
 
+        public bool TryGetRuntimeEntity(EntityAddress address, out IRuntimeEntity runtimeEntity) =>
+            TryGetRuntimeEntity(address.entity, out runtimeEntity);
+        public bool TryGetRuntimeEntity(Entity entity, out IRuntimeEntity runtimeEntity)
+            => runtimeEntities.TryGetValue(entity, out runtimeEntity);
+
 
         #region Selection
 
@@ -109,6 +115,7 @@ namespace ATCG.Battle.Entities.Runtime
             EnsureSelectableSlot(1);
             selectedEntities.Add(runtimeEntity.Address);
             runtimeEntity.OnSelected();
+            SelectionController.Value.OnSelected(runtimeEntity);
 
             OnEntitySelected?.Invoke(runtimeEntity);
         }
@@ -126,6 +133,8 @@ namespace ATCG.Battle.Entities.Runtime
                 return;
 
             runtimeEntity.OnDeselected();
+
+            SelectionController.Value.OnUnselected(runtimeEntity);
             OnEntityDeselected?.Invoke(runtimeEntity);
         }
 
@@ -142,7 +151,7 @@ namespace ATCG.Battle.Entities.Runtime
         private void EnsureSelectableSlot(int quantity)
         {
             int maxSelectableEntities = SelectionController.Value.MaxSelectableEntities;
-            
+
             if (quantity >= maxSelectableEntities)
                 quantity = maxSelectableEntities;
             if(quantity <= 0)

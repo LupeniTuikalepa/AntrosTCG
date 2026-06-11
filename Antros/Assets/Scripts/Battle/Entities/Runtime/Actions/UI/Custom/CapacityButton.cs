@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.UI.Custom
 {
-    public class CapacityButton : EntityActionUIActionButton
+    public class CapacityButton : PerformEntityActionUIButton<CastCapacityAction>
     {
         [SerializeField]
         private TMP_Text capacityName;
@@ -21,6 +21,23 @@ namespace ATCG.Battle.Entities.Runtime.UI.Custom
             capacityData = newCapacityData;
         }
 
+
+        protected override CastCapacityAction GetActionFromPhase()
+        {
+            foreach (CastCapacityAction capacityAction in Phase.GetAll<CastCapacityAction>())
+            {
+                if (capacityAction.capacityData == capacityData)
+                    return capacityAction;
+            }
+
+            return null;
+        }
+
+        public override bool Build()
+        {
+            return base.Build();
+        }
+        /*
         protected override int GetCost() => capacityData.Cost;
 
 
@@ -34,12 +51,13 @@ namespace ATCG.Battle.Entities.Runtime.UI.Custom
                 description.text = capacityData.Description;
             }
 
-            return base.Build();
+            return base.Build(TODO);
         }
 
         protected override void OnClick(BaseEventData baseEventData)
         {
             RuntimeEntity.PrepareForCapacityCast(capacityData);
         }
+        */
     }
 }

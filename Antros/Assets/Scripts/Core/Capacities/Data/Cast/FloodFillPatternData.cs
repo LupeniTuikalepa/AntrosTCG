@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ATCG.Capacities.Data
 {
     [Serializable]
-    public class FloodFillPatternData : ICapacityCastPatternData
+    public class FloodFillPatternData : ICapacityPatternData
     {
         [field: SerializeField]
         public int Distance { get; private set; }

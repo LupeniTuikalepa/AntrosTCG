@@ -74,5 +74,7 @@ namespace ATCG.Battle.Grids
                 }
             }
         }
+
+        public static implicit operator HexGrid(BattleGrid battleGrid) => battleGrid.grid;
     }
 }

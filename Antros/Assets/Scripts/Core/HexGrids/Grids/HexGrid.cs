@@ -110,6 +110,8 @@ namespace ATCG.HexGrids.Grids
 
         #endregion
 
+        public bool Exists(HexCoordinates ctx) => cells.ContainsKey(ctx);
+
         public HexCell GetCell(HexCoordinates coordinates) => TryGetCell(coordinates, out var cell) ? cell : null;
         public bool TryGetCell(HexCoordinates coordinates, out HexCell cell)
         {
@@ -128,5 +130,6 @@ namespace ATCG.HexGrids.Grids
 
         IEnumerator<HexCell> IEnumerable<HexCell>.GetEnumerator() => Cells.Values.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Cells.Values.GetEnumerator();
+
     }
 }

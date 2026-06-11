@@ -8,24 +8,8 @@ using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.UI.Custom
 {
-    public class BasicAttackButton : EntityActionUIButton
+    public class BasicAttackButton : PerformEntityActionUIButton<PerformBasicAttackAction>
     {
-        [SerializeField]
-        private ManaCostUI cost;
 
-        protected override bool Build()
-        {
-            cost.SetCost(GameMetrics.Current.BasicAttackCost);
-            if (RuntimeEntity.Address.HasComponent<BasicAttackerComponent>())
-                return true;
-
-            return false;
-        }
-
-        protected override void OnClick(BaseEventData baseEventData)
-        {
-            Debug.Log($"TODO : Basic attack for entity {RuntimeEntity.gameObject.name}");
-            Controller.CloseAllAsync().FireAndForget();
-        }
     }
 }

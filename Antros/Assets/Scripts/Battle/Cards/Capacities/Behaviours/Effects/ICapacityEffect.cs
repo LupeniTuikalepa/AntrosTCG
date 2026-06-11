@@ -4,18 +4,14 @@ using ATCG.Capacities.Data;
 
 namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
-    public interface ICapacityEffect : ICapacityBehaviour<IEffectData>
+    public interface ICapacityEffect
     {
         void TryApplyEffectTo(IEffectData data, EntityAddress target, in CastCapacityCommand.Context context);
     }
 
     public interface ICapacityEffect<in T> : ICapacityEffect where T : IEffectData
     {
-        bool ICapacityBehaviour<IEffectData>.Accepts(IEffectData data)
-        {
-            return data is T;
-        }
-
+        
         void ICapacityEffect.TryApplyEffectTo(IEffectData data, EntityAddress target,
             in CastCapacityCommand.Context context)
         {

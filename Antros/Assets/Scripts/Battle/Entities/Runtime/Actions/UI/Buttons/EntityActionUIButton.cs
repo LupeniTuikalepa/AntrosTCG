@@ -6,11 +6,10 @@ using UnityEngine.UI;
 
 namespace ATCG.Battle.Entities.Runtime.UI
 {
-    public abstract class EntityActionUIButton : EntityActionUIElement
+    public abstract class EntityActionUIButton: EntityActionUIElement
     {
-        public bool IsActive { get; private set; }
 
-        private CustomButtonUI button;
+        protected CustomButtonUI button;
 
         protected override void Awake()
         {
@@ -29,16 +28,8 @@ namespace ATCG.Battle.Entities.Runtime.UI
             button.OnClick.RemoveListener(OnClick);
         }
 
-        public void BuildButton()
-        {
-            button.Interactable = IsButtonInteractable();
-            IsActive = Build();
-            gameObject.SetActive(IsActive);
-        }
 
         protected virtual bool IsButtonInteractable() => true;
-        protected abstract bool Build();
-
 
         protected abstract void OnClick(BaseEventData baseEventData);
     }

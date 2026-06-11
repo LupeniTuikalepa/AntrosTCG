@@ -6,6 +6,7 @@ using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
+using PrimeTween;
 using Sirenix.OdinInspector;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -18,6 +19,16 @@ namespace ATCG.Battle.Players.Local.Runtime
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player Camera")]
     public class PlayerCamera : RuntimeLocalPlayerComponent
     {
+        public InputAction PanAction => RuntimeLocalPlayer.Controls.Component.Pan;
+        public InputAction MoveAction => RuntimeLocalPlayer.Controls.Component.Move;
+        public InputAction ZoomAction => RuntimeLocalPlayer.Controls.Component.Zoom;
+        public InputAction RotationAction => RuntimeLocalPlayer.Controls.Component.Rotate;
+        public Camera OutputCamera => renderCamera.OutputCamera;
+
+        private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.Component.PlayerInputUser;
+        private Transform TrackingTarget => cinemachineCamera.Target.TrackingTarget;
+
+
         [BoxGroup("Setup"), SerializeField, Range(0, 10)]
         private float boundsExpansion;
 
@@ -27,8 +38,10 @@ namespace ATCG.Battle.Players.Local.Runtime
         [BoxGroup("Movements"), SerializeField, Min(0)]
         private float decelerationSpeed = 2;
 
-        [BoxGroup("Movements"), SerializeField, Min(0)]
+        [SerializeField, Min(0)]
         private float maxSpeed = 15;
+        [BoxGroup("Movements"), SerializeField]
+        private float targetPositionYOffset = 60;
 
         [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineBrain renderCamera;
@@ -38,47 +51,13 @@ namespace ATCG.Battle.Players.Local.Runtime
         [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
 
+
         [ShowInInspector, HideInEditorMode, ReadOnly]
         private RuntimeBattleGrid grid;
-        
-        [SerializeField]
-        private RuntimeEntityManager runtimeEntityManager;
-
-        private float currentZoomSpeed;
-        private float currentRotationSpeed;
 
         private Vector3 lastSpeed;
 
-        public InputAction PanAction => RuntimeLocalPlayer.Controls.Component.Pan;
-        public InputAction MoveAction => RuntimeLocalPlayer.Controls.Component.Move;
-        public InputAction ZoomAction => RuntimeLocalPlayer.Controls.Component.Zoom;
-        public InputAction RotationAction => RuntimeLocalPlayer.Controls.Component.Rotate;
 
-        private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.Component.PlayerInputUser;
-
-        public Camera OutputCamera => renderCamera.OutputCamera;
-		
-        private void OnEnable()
-        {
-	        runtimeEntityManager.OnEntitySelected += OnSelected;
-	        runtimeEntityManager.OnEntityDeselected += OnDeselected;
-        }
-
-        private void OnDisable()
-        {
-	        runtimeEntityManager.OnEntitySelected -= OnSelected;
-	        runtimeEntityManager.OnEntityDeselected -= OnDeselected;
-        }
-
-        private void OnSelected(IRuntimeEntity obj)
-        {
-	        Debug.Log("Selected");
-        }
-
-        private void OnDeselected(IRuntimeEntity obj)
-        {
-	        Debug.Log("Deselected");
-        }
 
         private void LateUpdate()
         {
@@ -90,17 +69,22 @@ namespace ATCG.Battle.Players.Local.Runtime
             }
             else
             {
-                currentZoomSpeed = 0;
                 lastSpeed = Vector2.zero;
-                //Todo Saverio
-				/*MoveCameraWithPlayerInput(lastSpeed);
-                CinemachineBrain brain = CinemachineCore.FindPotentialTargetBrain(cinemachineCamera);
-                Plane plane = new(brain.transform.forward, cinemachineCamera.transform.position);
-
-                cinemachineCamera.Target.TrackingTarget.transform.position =
-                    plane.ClosestPointOnPlane(brain.transform.position);*/
             }
         }
+
+        public Plane GetTargetTransformPlane() => new(Vector3.up, targetPositionYOffset);
+
+
+        public void LookAt(Vector3 position)
+        {
+            Plane plane = GetTargetTransformPlane();
+
+            Tween.StopAll(TrackingTarget.transform);
+            Tween.Position(TrackingTarget.transform, plane.ClosestPointOnPlane(position), .3f);
+        }
+
+
 
         private void MoveCameraWithPlayerInput(Vector2 input)
         {
@@ -122,9 +106,7 @@ namespace ATCG.Battle.Players.Local.Runtime
             Vector3 targetSpeed = worldInput.normalized * (isAccelerating ? maxSpeed : 0);
 
             Vector3 nextSpeed = Vector3.MoveTowards(lastSpeed, targetSpeed, delta * Time.deltaTime);
-            Transform moveableTarget = cinemachineCamera.Target.TrackingTarget;
-
-            Vector3 currentPosition = moveableTarget.position;
+            Vector3 currentPosition = TrackingTarget.position;
             Vector3 nextPosition = currentPosition + nextSpeed * Time.deltaTime;
 
             lastSpeed = (nextPosition - currentPosition) / Time.deltaTime;
@@ -134,12 +116,15 @@ namespace ATCG.Battle.Players.Local.Runtime
                 bounds.Encapsulate(r.Model.bounds);
 
             bounds.Expand(boundsExpansion);
-            bounds.max = new Vector3(bounds.max.x, 60, bounds.max.z);
+            bounds.max = new Vector3(bounds.max.x, targetPositionYOffset, bounds.max.z);
             if (!bounds.Contains(nextPosition))
                 nextPosition = bounds.ClosestPoint(nextPosition);
 
             nextPosition.y = 0;
-            moveableTarget.position = nextPosition;
+            TrackingTarget.position = nextPosition;
+
+            if(lastSpeed.sqrMagnitude >= .3f)
+                Tween.StopAll(TrackingTarget.transform);
         }
 
         public OutputChannels GetOutputChannel()

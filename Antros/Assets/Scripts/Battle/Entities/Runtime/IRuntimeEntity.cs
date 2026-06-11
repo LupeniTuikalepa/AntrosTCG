@@ -9,13 +9,15 @@ namespace ATCG.Battle.Entities.Runtime
     public interface IRuntimeEntity
     {
         GameObject gameObject { get; }
+        Transform transform { get; }
+
         EntityAddress Address { get; }
         RuntimeEntityManager Manager { get; }
         RuntimeBattlePlayer RuntimeBattlePlayer { get; }
         IBattlePlayer BattlePlayer { get; }
         BattlePhase BattlePhase { get; }
         Transform actionUIRoot { get; }
-        
+
         void OnSelected();
         void OnDeselected();
     }

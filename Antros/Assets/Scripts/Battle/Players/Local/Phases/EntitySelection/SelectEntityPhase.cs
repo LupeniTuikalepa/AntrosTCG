@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
@@ -6,52 +9,109 @@ using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public class SelectEntityPhase<T> : PhaseCompletionSource<EntityAddress>, ISelectEntityPhase
+    public class SelectEntityPhase<T> : Phase<EntityAddress[]>,
+        ISelectEntityPhase
         where T : IEntityFilter
     {
+        public int MaxSelectableEntities { get; }
         public ChannelKey ChannelKey { get; private set; }
+
+        public bool IsWaiting { get; private set; }
 
         private readonly CardDragPhase<IBattleCard> dragPhase;
 
         private readonly T filter;
 
+        private HashSet<EntityAddress> selection;
+
+        public SelectEntityPhase(T filter, int maxSelectableEntities = 1)
+        {
+            this.filter = filter;
+            MaxSelectableEntities = maxSelectableEntities;
+            dragPhase = null;
+        }
+
         public SelectEntityPhase(T filter, CardDragPhase<IBattleCard> dragPhase)
         {
             this.filter = filter;
             this.dragPhase = dragPhase;
+
+            MaxSelectableEntities = 1;
         }
 
 
         public bool Accepts(EntityAddress address) => filter.Accepts(address);
 
-        protected override async Awaitable Initialize(CancellationToken token)
+        protected override Awaitable Initialize(CancellationToken token)
         {
+            HashSetPool<EntityAddress>.Get(out selection);
             ChannelKey = ChannelKey.GetUniqueChannelKey();
-            await base.Initialize(token);
+            IsWaiting = false;
 
-            if (dragPhase != null)
-                _ = WaitForSelection(token);
+            return base.Initialize(token);
         }
 
-        private async Awaitable WaitForSelection(CancellationToken token)
+        protected override Awaitable Dispose(CancellationToken token)
         {
-            PhaseResult<DragResult<IBattleCard>> result = await dragPhase.WaitAsync(token);
+            HashSetPool<EntityAddress>.Release(selection);
+            selection = null;
+            IsWaiting = false;
+            return base.Dispose(token);
+        }
 
-            if(!IsRunning())
+        protected override async Awaitable<EntityAddress[]> Execute(CancellationToken token)
+        {
+            if (dragPhase != null)
+            {
+                PhaseResult<DragResult<IBattleCard>> result = await dragPhase.WaitAsync(token);
+
+                if (!IsRunning())
+                    return Array.Empty<EntityAddress>();
+
+                if (result is not { type: PhaseResultType.Success, value: { Target: IRuntimeEntity entity } })
+                    return Array.Empty<EntityAddress>();
+
+                if(!Accepts(entity.Address))
+                    return Array.Empty<EntityAddress>();
+
+                return new[] { entity.Address };
+
+            }
+
+            IsWaiting = true;
+            while (IsWaiting)
+            {
+                token.ThrowIfCancellationRequested();
+                await Awaitable.NextFrameAsync(token);
+            }
+
+            return selection.ToArray();
+        }
+
+        public void ValidateCurrentSelection() => IsWaiting = false;
+
+        public void ClearSelection() => selection.Clear();
+
+        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
+        {
+            if(!IsWaiting)
                 return;
 
-            if (result is { type: PhaseResultType.Success, value: { Target: IRuntimeEntity entity } })
-            {
-                if(Accepts(entity.Address))
-                    SetResult(entity.Address);
-            }
-            else
-            {
-                SetCanceled();
-            }
+            selection?.Add(runtimeEntity.Address);
+            if(selection != null && selection.Count >= MaxSelectableEntities)
+                IsWaiting = false;
+        }
+
+        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
+        {
+            if(!IsWaiting)
+                return;
+
+            selection?.Remove(runtimeEntity.Address);
         }
     }
 }

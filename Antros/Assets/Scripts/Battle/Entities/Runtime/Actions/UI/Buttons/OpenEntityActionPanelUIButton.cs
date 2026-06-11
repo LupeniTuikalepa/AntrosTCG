@@ -3,20 +3,20 @@ using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.UI
 {
-    public class OpenEntityActionUIPanelButton : EntityActionUIButton
+    public class OpenEntityActionPanelUIButton : EntityActionUIButton
     {
         [SerializeField]
         private EntityActionUIPanel panel;
 
-        protected override bool Build()
+        public override bool Build()
         {
-            panel.Build();
-            return !panel.IsEmpty();
+            return panel.Build();
         }
 
         protected override void OnClick(BaseEventData baseEventData)
         {
             Controller.Open(panel);
         }
+
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
+using ATCG.Utilities;
 using Helteix.Tools;
+using Helteix.Tools.Phases;
 using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -11,6 +13,7 @@ using UnityEngine;
 namespace ATCG.Battle.Entities.Runtime.UI
 {
     public class EntityActionUIController : MonoBehaviour,
+        IPhaseListener<SelectEntityActionPhase>,
         IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
         [SerializeField]
@@ -18,76 +21,51 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
         [SerializeField]
         private CanvasGroup canvasGroup;
-
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
 
-        public IRuntimeEntity RuntimeEntity => runtimeEntity;
 
+        public SelectEntityActionPhase Phase { get; private set; }
+
+        public IRuntimeEntity RuntimeEntity
+        {
+            get
+            {
+                if (runtimeEntityManager.TryGetRuntimeEntity(Phase.entityAddress, out var runtimeEntity))
+                    return runtimeEntity;
+
+                return null;
+            }
+        }
         public RuntimeBattlePlayer RuntimeBattlePlayer { get; private set; }
 
-        private IRuntimeEntity runtimeEntity;
         private readonly Stack<EntityActionUIPanel> openedPanels = new();
 
         private void Start()
         {
-            Hide();
+            canvasGroup.Hide(0);
         }
+
 
         private void OnEnable()
         {
-            runtimeEntityManager.OnEntitySelected += OnHeroSelected;
-            runtimeEntityManager.OnEntityDeselected += OnHeroDeselected;
+            this.Register();
         }
 
         private void OnDisable()
         {
-            runtimeEntityManager.OnEntitySelected -= OnHeroSelected;
-            runtimeEntityManager.OnEntityDeselected -= OnHeroDeselected;
+            this.Unregister();
         }
 
-        private void OnHeroSelected(IRuntimeEntity entity)
-        {
-            runtimeEntity = entity;
-            MoveOnRoot(entity); 
-            Show();
-            start.Build();
-            if (start.IsEmpty())
-                return;
-
-            Open(start);
-        }
-
-        private void OnHeroDeselected(IRuntimeEntity entity)
-        {
-            CloseAllAsync().FireAndForget();
-            Hide();
-
-            runtimeEntity = null;
-        }
-
-        public void Show()
-        {
-            Tween.StopAll(canvasGroup);
-            Tween.Alpha(canvasGroup, 1, .15f, Ease.OutExpo);
-            canvasGroup.blocksRaycasts = true;
-        }
-
-        public void Hide()
-        {
-            Tween.StopAll(canvasGroup);
-            Tween.Alpha(canvasGroup, 0, .15f, Ease.OutExpo);
-            canvasGroup.blocksRaycasts = false;
-        }
-        
         private void MoveOnRoot(IRuntimeEntity entity)
         {
-            if (entity.actionUIRoot == null) 
+            if (entity.actionUIRoot == null)
                 return;
             transform.position = entity.actionUIRoot.position;
         }
 
         public void Open(EntityActionUIPanel panel) => OpenAsync(panel).FireAndForget();
+
         public async Awaitable OpenAsync(EntityActionUIPanel panel)
         {
             if (openedPanels.TryPeek(out var openedPanel))
@@ -97,7 +75,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
             await panel.OnOpen();
         }
 
-        public async Awaitable CloseAllAsync()
+        private async Awaitable CloseAllAsync()
         {
             if (!openedPanels.TryPop(out var panel))
                 return;
@@ -105,8 +83,8 @@ namespace ATCG.Battle.Entities.Runtime.UI
             await panel.OnClose();
 
             openedPanels.Clear();
-            if (runtimeEntityManager.IsSelected(runtimeEntity))
-                runtimeEntityManager.Unselect(runtimeEntity);
+
+            Phase?.Cancel();
         }
 
         public void CloseLast() => CloseLastAsync().FireAndForget();
@@ -119,10 +97,42 @@ namespace ATCG.Battle.Entities.Runtime.UI
             await panel.OnClose();
             if (openedPanels.TryPeek(out var openedPanel))
                 await openedPanel.OnOpen();
-            else if (runtimeEntityManager.IsSelected(runtimeEntity))
-                runtimeEntityManager.Unselect(runtimeEntity);
+            else
+                Phase?.Cancel();
         }
 
+        public void Exit()
+        {
+            if(Phase == null)
+                CloseAllAsync().FireAndForget();
+            else
+                Phase.Cancel();
+
+            canvasGroup.Hide(.15f);
+        }
+
+        void IPhaseListener<SelectEntityActionPhase>.OnPhaseBegin(SelectEntityActionPhase phase)
+        {
+            Phase = phase;
+
+            canvasGroup.Show(.15f);
+            MoveOnRoot(RuntimeEntity);
+
+            start.Build();
+            if (start.IsEmpty())
+                return;
+
+            Open(start);
+        }
+
+        void IPhaseListener<SelectEntityActionPhase>.OnPhaseEnd(SelectEntityActionPhase phase)
+        {
+            if (Phase == phase)
+            {
+                Exit();
+                canvasGroup.Hide(.15f);
+            }
+        }
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
             RuntimeBattlePlayer = runtimeBattlePlayer;
@@ -131,5 +141,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
         }
+
     }
 }

@@ -367,6 +367,7 @@ MonoBehaviour:
   accelerationSpeed: 300
   decelerationSpeed: 150
   maxSpeed: 20
+  targetPositionYOffset: 60
   renderCamera: {fileID: 8804094180203367171}
   cinemachineCamera: {fileID: 3625064860288696112}
   channels:
@@ -374,7 +375,6 @@ MonoBehaviour:
     <Channels>k__BackingField: 2
   - <PlayerID>k__BackingField: 1
     <Channels>k__BackingField: 4
-  runtimeEntityManager: {fileID: 0}
 --- !u!1 &2778149622731399012
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,6 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce2848fd00a449cb240d29818e9bb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.Runtime.RuntimeLocalBattlePlayer
+  <RuntimeEntityManager>k__BackingField: {fileID: 7671588500508419661}
 --- !u!1 &3841887743141276196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1923,7 +1924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360242013734765032, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15
+      value: -180
       objectReference: {fileID: 0}
     - target: {fileID: 399218703689747186, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2355,7 +2356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2809705903096209044, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -30
+      value: -305
       objectReference: {fileID: 0}
     - target: {fileID: 2899793696162414452, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_Name
@@ -2951,7 +2952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8721189083721576106, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0
+      value: -55
       objectReference: {fileID: 0}
     - target: {fileID: 8737935499431939989, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchorMax.y

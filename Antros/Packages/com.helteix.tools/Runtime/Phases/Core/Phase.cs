@@ -98,7 +98,6 @@ namespace Helteix.Tools.Phases
         {
             await Awaitable.MainThreadAsync();
         }
-
         protected bool IsRunning() => PhaseManager.IsRunning(this);
         protected void Cancel() => PhaseManager.Cancel(this);
 

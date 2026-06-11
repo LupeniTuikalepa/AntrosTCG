@@ -10,15 +10,11 @@ namespace ATCG.Battle.Commands.GameCommands
     {
         public readonly CapacityData data;
         public readonly HexCoordinates castPoint;
-        public readonly IBattleCard card;
-        public readonly BattleGrid grid;
 
-        public CapacityContext(CapacityData data, HexCoordinates castPoint, IBattleCard card, BattleGrid grid)
+        public CapacityContext(CapacityData data, HexCoordinates castPoint)
         {
             this.data = data;
             this.castPoint = castPoint;
-            this.card = card;
-            this.grid = grid;
         }
     }
 }

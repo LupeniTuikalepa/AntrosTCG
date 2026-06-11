@@ -1,6 +1,6 @@
 ﻿namespace ATCG.Capacities.Data
 {
-    public interface ICapacityCastPatternData : ICapacityBehaviourData
+    public interface ICapacityPatternData : ICapacityBehaviourData
     {
     }
 }

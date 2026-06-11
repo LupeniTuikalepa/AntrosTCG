@@ -1,4 +1,6 @@
-﻿using ATCG.Battle.Players.Runtime;
+﻿using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.GameModes;
+using ATCG.Battle.Players.Runtime;
 using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.Runtime
@@ -8,7 +10,8 @@ namespace ATCG.Battle.Players.Local.Runtime
         public LocalBattlePlayer Player => RuntimeLocalPlayer.Player;
 
         public RuntimeLocalBattlePlayer RuntimeLocalPlayer { get; private set; }
-
+        public BattlePhase BattlePhase => Player.BattlePhase;
+        public RuntimeEntityManager RuntimeEntityManager => RuntimeLocalPlayer.RuntimeEntityManager;
 
         public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {

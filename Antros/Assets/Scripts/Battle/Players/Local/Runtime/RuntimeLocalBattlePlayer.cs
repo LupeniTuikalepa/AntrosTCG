@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Players.Local.UI;
+﻿using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Players.Local.UI;
 using ATCG.Battle.Players.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,7 +12,6 @@ namespace ATCG.Battle.Players.Local.Runtime
         public ComponentCache<PlayerHUD> HUD { get; private set; }
         public ComponentCache<PlayerControls> Controls { get; private set; }
         public ComponentCache<PlayerCamera> Camera { get; private set; }
-
         public ComponentCache<PlayerInteractions> Interactions { get; private set; }
 
         [ShowInInspector, ReadOnly]

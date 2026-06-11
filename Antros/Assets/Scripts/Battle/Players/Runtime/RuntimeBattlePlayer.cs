@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ATCG.Battle.Entities.Runtime;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Battle.Players.Runtime
@@ -39,11 +41,13 @@ namespace ATCG.Battle.Players.Runtime
 
         protected static readonly List<RuntimeBattlePlayer<T>> RuntimeBattlePlayers = new();
 
-        private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
-
-        public override IBattlePlayer BattlePlayer => Player;
+        [field: SerializeField, BoxGroup("Managers")]
+        public RuntimeEntityManager RuntimeEntityManager { get; private set; }
         public T Player { get; private set; }
 
+        public override IBattlePlayer BattlePlayer => Player;
+
+        private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
 
         protected virtual void Awake()
         {

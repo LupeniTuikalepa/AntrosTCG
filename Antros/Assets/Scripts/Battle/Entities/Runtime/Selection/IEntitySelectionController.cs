@@ -9,6 +9,6 @@ namespace ATCG.Battle
 
         void OnSelected(IRuntimeEntity runtimeEntity);
         
-        void OnDeselected(IRuntimeEntity runtimeEntity);
+        void OnUnselected(IRuntimeEntity runtimeEntity);
     }
 }

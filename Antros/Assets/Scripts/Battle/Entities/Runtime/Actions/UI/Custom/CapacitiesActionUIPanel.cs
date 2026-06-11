@@ -14,25 +14,22 @@ namespace ATCG.Battle.Entities.Runtime.UI.Custom
         private CapacityButton buttonPrefab;
 
 
-        public override void Build()
+        public override bool Build()
         {
             buttonContainer.ClearChildren();
 
-            if (RuntimeEntity.Address.TryGetComponent<CapacityCasterComponent>(out var componentRef))
+            foreach (var action in Phase.GetAll<CastCapacityAction>())
             {
-                CapacityData[] datas = componentRef.GetValue().capacities;
-                for (int i = 0; i < datas.Length; i++)
-                {
-                    CapacityData capacity = datas[i];
-                    CapacityButton button = buttonPrefab.InstantiatePrefab(buttonContainer);
+                CapacityButton button = buttonPrefab.InstantiatePrefab(buttonContainer);
+                CapacityData capacityData = action.capacityData;
 
-                    button.gameObject.name = capacity.Name;
-                    button.SetCapacity(capacity);
-                }
+                button.gameObject.name = capacityData.Name;
+                button.SetCapacity(capacityData);
+
             }
 
             CollectButtons();
-            base.Build();
+            return base.Build();
         }
     }
 }

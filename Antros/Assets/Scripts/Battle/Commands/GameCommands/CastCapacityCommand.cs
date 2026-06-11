@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using ATCG.Battle.Cards.Capacities;
 using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
-using ATCG.Battle.Cards.Capacities.Behaviours.Patterns;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Patterns;
 using ATCG.Capacities;
 using ATCG.Capacities.Data;
+using ATCG.HexGrids;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Commands.GameCommands
@@ -57,31 +58,34 @@ namespace ATCG.Battle.Commands.GameCommands
         {
             Context context = new(this, capacityContext, gameCommandContext);
 
-            using (HashSetPool<BattleCellAspect>.Get(out HashSet<BattleCellAspect> targetedCells))
+            using (HashSetPool<HexCoordinates>.Get(out HashSet<HexCoordinates> targetedCells))
             {
                 FillTargetedCells(targetedCells, in context);
                 HitCells(targetedCells, in context);
             }
         }
 
-        private void FillTargetedCells(HashSet<BattleCellAspect> targetedCells, in Context context)
+        private void FillTargetedCells(HashSet<HexCoordinates> targetedCells, in Context context)
         {
-            ICapacityCastPatternData[] firePatternsData = capacityContext.data.FirePatterns;
+            ICapacityPatternData[] firePatternsData = capacityContext.data.FirePatterns;
             for (int i = 0; i < firePatternsData.Length; i++)
             {
-                ICapacityCastPatternData firePatternData = firePatternsData[i];
-                if (CapacityManager.TryGetFor(firePatternData, out ICapacityCastPattern castPattern))
-                    castPattern.FillTargetedCells(firePatternData, in capacityContext, targetedCells);
+                ICapacityPatternData firePatternData = firePatternsData[i];
+                if (CapacityManager.TryGetFor(firePatternData, out ICellPattern castPattern))
+                    castPattern.FillHashSet(targetedCells);
             }
         }
 
-        private void HitCells(IEnumerable<BattleCellAspect> targetedCells, in Context context)
+        private void HitCells(IEnumerable<HexCoordinates> targetedCells, in Context context)
         {
             using IDisposable disposable = FillMapping(out Dictionary<IEffectData, ICapacityEffect> mapping);
             CapacityData capacityData = capacityContext.data;
 
-            foreach (BattleCellAspect battleCell in targetedCells)
+            foreach (HexCoordinates coordinates in targetedCells)
             {
+                if(!context.Grid.TryGetBattleCell(coordinates, out BattleCellAspect aspect))
+                    continue;
+
                 //apply effects
                 IEffectData[] hitEffects = capacityData.HitEffects;
 
@@ -89,10 +93,10 @@ namespace ATCG.Battle.Commands.GameCommands
                 {
                     IEffectData hitData = hitEffects[i];
                     if (mapping.TryGetValue(hitData, out ICapacityEffect hitEffect))
-                        hitEffect.TryApplyEffectTo(hitData, battleCell.EntityAddress, in context);
+                        hitEffect.TryApplyEffectTo(hitData, aspect.EntityAddress, in context);
                 }
 
-                foreach (ComponentRef<BattleGridElementComponent> member in battleCell.GetMembers())
+                foreach (ComponentRef<BattleGridElementComponent> member in aspect.GetMembers())
                 {
                     for (int i = 0; i < hitEffects.Length; i++)
                     {

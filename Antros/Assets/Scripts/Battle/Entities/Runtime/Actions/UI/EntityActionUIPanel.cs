@@ -7,44 +7,49 @@ namespace ATCG.Battle.Entities.Runtime.UI
 {
     public class EntityActionUIPanel : EntityActionUIElement
     {
-        private List<EntityActionUIButton> panelButtons;
+        private List<EntityActionUIElement> elements;
 
         [SerializeField]
         private CanvasGroup canvasGroup;
 
-
         protected override void Awake()
         {
+            elements = new List<EntityActionUIElement>();
             base.Awake();
-            panelButtons = new();
         }
 
         private void Start()
         {
-            OnClose();
+
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.alpha = 0;
             CollectButtons();
         }
 
         protected void CollectButtons()
         {
-            EntityActionUIButton[] buttons = GetComponentsInChildren<EntityActionUIButton>();
-            panelButtons.Clear();
+            EntityActionUIElement[] buttons = GetComponentsInChildren<EntityActionUIElement>();
+            elements.Clear();
             for (int i = 0; i < buttons.Length; i++)
             {
-                EntityActionUIButton button = buttons[i];
-                panelButtons.Add(button);
+                EntityActionUIElement element = buttons[i];
+                if(element != this)
+                    elements.Add(element);
             }
         }
-        public virtual bool IsEmpty() => panelButtons == null
-                                         || panelButtons.Count == 0
-                                         || panelButtons.TrueForAll(ctx => !ctx.IsActive);
+        public virtual bool IsEmpty() => elements == null
+                                         || elements.Count == 0
+                                         || elements.TrueForAll(ctx => !ctx.IsActive);
 
-        public virtual void Build()
+        public override bool Build()
         {
-            foreach (EntityActionUIButton button in panelButtons)
+            bool hasActiveElement = false;
+            foreach (var element in elements)
             {
-                button.BuildButton();
+                    hasActiveElement |= element.Build();
             }
+
+            return hasActiveElement;
         }
 
         public virtual async Awaitable OnOpen()

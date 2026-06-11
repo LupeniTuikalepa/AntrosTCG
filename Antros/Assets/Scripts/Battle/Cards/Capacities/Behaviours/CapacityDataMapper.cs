@@ -3,14 +3,13 @@ using ATCG.Capacities.Data;
 
 namespace ATCG.Battle.Cards.Capacities.Behaviours
 {
-    public class CapacityBehaviourContainer<TBehaviour, TData>
-        where TBehaviour : ICapacityBehaviour<TData>
+    public class CapacityDataMapper<TBehaviour, TData>
         where TData : ICapacityBehaviourData
     {
         private readonly List<IBehaviourContainer> containers;
 
 
-        public CapacityBehaviourContainer()
+        public CapacityDataMapper()
         {
             containers = new List<IBehaviourContainer>();
         }
@@ -27,7 +26,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours
             containers.Add(container);
         }
 
-        public bool TryGetFor<T>(TData data, out T behaviour) where T : ICapacityBehaviour<TData>
+        public bool TryGetFor<T>(TData data, out T behaviour) 
         {
             foreach (IBehaviourContainer container in containers)
                 if (container.Accepts(data) && container.Behaviour is T t)

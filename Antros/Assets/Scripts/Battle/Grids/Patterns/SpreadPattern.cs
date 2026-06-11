@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Patterns
 {
     public struct SpreadPattern : ICellPattern
     {
-        public Func<HexCoordinates, bool> ValidateCell { get; set; }
-
         public readonly int distance;
         public readonly HexCoordinates center;
 
@@ -16,10 +15,10 @@ namespace ATCG.Battle.Grids.Patterns
         {
             this.center = center;
             this.distance = distance;
-            ValidateCell = null;
         }
 
-        void ICellPattern.Evaluate(List<HexCoordinates> coordinatesList)
+
+        IEnumerable<HexCoordinates> ICellPattern.GetAll()
         {
             //GetRef the max range ring
             foreach (HexCoordinates coord in center.GetRing(distance))
@@ -27,16 +26,7 @@ namespace ATCG.Battle.Grids.Patterns
                 IEnumerable<HexCoordinates> line = center.GetLine(coord);
                 //Adds every valid coord between the center and the extremity by drawing a line between.
                 foreach (HexCoordinates lineCoord in line)
-                {
-                    if (coordinatesList.Contains(lineCoord))
-                        continue;
-
-                    //Once an invalid cell is encountered, the line evaluation stops
-                    if (ValidateCell != null && !ValidateCell(coord))
-                        break;
-
-                    coordinatesList.Add(lineCoord);
-                }
+                    yield return lineCoord;
             }
         }
     }

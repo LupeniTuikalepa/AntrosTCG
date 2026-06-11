@@ -44,7 +44,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
         {
             SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(new DeployableCellFilter(), phase);
 
-            PhaseResult<EntityAddress> result = await selectEntityPhase;
+            PhaseResult<EntityAddress[]> result = await selectEntityPhase;
 
 
             if (result.type == PhaseResultType.Cancel)
@@ -53,7 +53,11 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             if (result.type != PhaseResultType.Success)
                 return;
 
-            if (!result.value.IsGridMemberAspect(out GridMemberAspect aspect))
+            if(result.value.Length == 0)
+                return;
+
+            var address = result.value[0];
+            if (!address.IsGridMemberAspect(out GridMemberAspect aspect))
                 return ;
 
             int cardID = localBattlePlayer.Hand.GetCardIndex(battleCard);
