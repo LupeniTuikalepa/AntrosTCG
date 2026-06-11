@@ -69,6 +69,8 @@ namespace ATCG.Battle
         {
             if (!CanInteract)
                 return false;
+            
+            
 
             if (!IsRegistered(interactable))
             {

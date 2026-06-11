@@ -66,7 +66,7 @@ namespace ATCG.Battle
 
         public bool IsActive() => Interactions.IsActive(this);
 
-        public virtual void OnSelected() { }
+        public virtual void OnSelected() { Debug.Log("On Selected"); }
         public virtual void OnDeselected() { }
 
         public virtual void OnActivates() { }
