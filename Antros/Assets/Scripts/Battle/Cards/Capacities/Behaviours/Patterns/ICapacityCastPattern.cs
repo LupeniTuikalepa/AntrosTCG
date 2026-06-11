@@ -7,7 +7,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
 {
     public interface ICapacityCastPattern : ICapacityBehaviour<ICapacityCastPatternData>
     {
-        void FillTargetedCells(ICapacityCastPatternData castData, in Capacity context,
+        void FillTargetedCells(ICapacityCastPatternData castData, in CapacityContext context,
             HashSet<BattleCellAspect> targetedCells);
     }
 
@@ -18,13 +18,13 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
             return data is T;
         }
 
-        void ICapacityCastPattern.FillTargetedCells(ICapacityCastPatternData castData, in Capacity context,
+        void ICapacityCastPattern.FillTargetedCells(ICapacityCastPatternData castData, in CapacityContext context,
             HashSet<BattleCellAspect> targetedCells)
         {
             if (castData is T t)
                 FillTargetedCells(t, context, targetedCells);
         }
 
-        void FillTargetedCells(T castData, in Capacity context, HashSet<BattleCellAspect> targetedCells);
+        void FillTargetedCells(T castData, in CapacityContext context, HashSet<BattleCellAspect> targetedCells);
     }
 }

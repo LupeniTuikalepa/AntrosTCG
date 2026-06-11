@@ -20,17 +20,17 @@ namespace ATCG.Battle.Commands.GameCommands
         {
             public readonly CastCapacityCommand evt;
             public readonly GameCommandContext gameCommandContext;
-            public readonly Capacity capacity;
+            public readonly CapacityContext capacityContext;
 
             public BattleGrid Grid => gameCommandContext.Grid;
 
             public World World => gameCommandContext.battlePhase.world;
 
-            public Context(CastCapacityCommand evt, Capacity capacity,
+            public Context(CastCapacityCommand evt, CapacityContext capacityContext,
                 GameCommandContext gameCommandContext)
             {
                 this.evt = evt;
-                this.capacity = capacity;
+                this.capacityContext = capacityContext;
                 this.gameCommandContext = gameCommandContext;
             }
 
@@ -46,16 +46,16 @@ namespace ATCG.Battle.Commands.GameCommands
             }
         }
 
-        private readonly Capacity capacity;
+        private readonly CapacityContext capacityContext;
 
-        public CastCapacityCommand(in Capacity capacity)
+        public CastCapacityCommand(in CapacityContext capacityContext)
         {
-            this.capacity = capacity;
+            this.capacityContext = capacityContext;
         }
 
         protected override void Process(in GameCommandContext gameCommandContext)
         {
-            Context context = new(this, capacity, gameCommandContext);
+            Context context = new(this, capacityContext, gameCommandContext);
 
             using (HashSetPool<BattleCellAspect>.Get(out HashSet<BattleCellAspect> targetedCells))
             {
@@ -66,19 +66,19 @@ namespace ATCG.Battle.Commands.GameCommands
 
         private void FillTargetedCells(HashSet<BattleCellAspect> targetedCells, in Context context)
         {
-            ICapacityCastPatternData[] firePatternsData = capacity.data.FirePatterns;
+            ICapacityCastPatternData[] firePatternsData = capacityContext.data.FirePatterns;
             for (int i = 0; i < firePatternsData.Length; i++)
             {
                 ICapacityCastPatternData firePatternData = firePatternsData[i];
                 if (CapacityManager.TryGetFor(firePatternData, out ICapacityCastPattern castPattern))
-                    castPattern.FillTargetedCells(firePatternData, in capacity, targetedCells);
+                    castPattern.FillTargetedCells(firePatternData, in capacityContext, targetedCells);
             }
         }
 
         private void HitCells(IEnumerable<BattleCellAspect> targetedCells, in Context context)
         {
             using IDisposable disposable = FillMapping(out Dictionary<IEffectData, ICapacityEffect> mapping);
-            CapacityData capacityData = capacity.data;
+            CapacityData capacityData = capacityContext.data;
 
             foreach (BattleCellAspect battleCell in targetedCells)
             {
@@ -106,7 +106,7 @@ namespace ATCG.Battle.Commands.GameCommands
 
         private IDisposable FillMapping(out Dictionary<IEffectData, ICapacityEffect> hitEffectsMapping)
         {
-            CapacityData data = capacity.data;
+            CapacityData data = capacityContext.data;
             var disposable = DictionaryPool<IEffectData, ICapacityEffect>.Get(out hitEffectsMapping);
 
             foreach (IEffectData hitEffectData in data.HitEffects)
@@ -115,6 +115,5 @@ namespace ATCG.Battle.Commands.GameCommands
 
             return disposable;
         }
-
     }
 }

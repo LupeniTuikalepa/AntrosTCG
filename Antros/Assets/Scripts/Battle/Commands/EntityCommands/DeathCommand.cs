@@ -9,6 +9,7 @@ namespace ATCG.Battle.Commands.EntityCommands
     {
         public DeathCommand(Entity targetEntity) : base(targetEntity)
         {
+
         }
 
         protected override void Process(in GameCommandContext context)
@@ -22,6 +23,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             }
 
             address.Destroy();
+            Break("Entity death.");
         }
     }
 }

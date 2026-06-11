@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ATCG.Battle.Commands.Core.Exceptions;
 using ATCG.Battle.GameModes;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -23,7 +24,22 @@ namespace ATCG.Battle.Commands.Core
             embeds = ListPool<GameCommand>.Get();
         }
 
-        void IGameCommand.Process(in GameCommandContext context) => Process(in context);
+        void IGameCommand.Process(in GameCommandContext context)
+        {
+            try
+            {
+                Init(in context);
+
+                Process(in context);
+            }
+            finally
+            {
+                Dispose(in context);
+            }
+        }
+
+        protected virtual void Init(in GameCommandContext context) { }
+        protected virtual void Dispose(in GameCommandContext context) { }
 
         protected abstract void Process(in GameCommandContext context);
 
@@ -101,6 +117,12 @@ namespace ATCG.Battle.Commands.Core
                 parent = Parent.Parent;
             }
         }
+
+        protected void Break(string message)
+        {
+            throw new BreakCommandException(message);
+        }
+        
         void IDisposable.Dispose()
         {
             OnDispose();
@@ -109,6 +131,7 @@ namespace ATCG.Battle.Commands.Core
                 ((IDisposable)subEvent).Dispose();
 
         }
+
 
         protected virtual void OnDispose()
         {

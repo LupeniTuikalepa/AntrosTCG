@@ -10,12 +10,12 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
     //TODO
     public class SpreadCapacityCastPattern : ComplexCapacityCastPattern<SpreadPatternData, SpreadPattern>
     {
-        protected override SpreadPattern GetCellPattern(SpreadPatternData castData, Capacity context)
+        protected override SpreadPattern GetCellPattern(SpreadPatternData castData, CapacityContext context)
         {
             return new SpreadPattern(context.castPoint, castData.Distance);
         }
 
-        protected override bool ValidateCell(Capacity context, BattleCellAspect battleCellAspect)
+        protected override bool ValidateCell(CapacityContext context, BattleCellAspect battleCellAspect)
         {
             if (!base.ValidateCell(context, battleCellAspect))
                 return false;

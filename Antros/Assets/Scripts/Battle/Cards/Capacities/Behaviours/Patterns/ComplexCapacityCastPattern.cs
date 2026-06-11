@@ -13,18 +13,18 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
         where TPattern : ICellPattern
         where TData : ICapacityCastPatternData
     {
-        public void FillTargetedCells(TData castData, in Capacity context, HashSet<BattleCellAspect> targetedCells)
+        public void FillTargetedCells(TData castData, in CapacityContext context, HashSet<BattleCellAspect> targetedCells)
         {
             using (ListPool<HexCoordinates>.Get(out List<HexCoordinates> results))
             {
                 BattleGrid battleGrid = context.grid;
 
                 TPattern pattern = GetCellPattern(castData, context);
-                Capacity capacity = context;
+                CapacityContext capacityContext = context;
                 pattern.ValidateCell = ctx =>
                 {
                     if (battleGrid.TryGetBattleCell(ctx, out BattleCellAspect cell))
-                        return ValidateCell(capacity, cell);
+                        return ValidateCell(capacityContext, cell);
 
                     return false;
                 };
@@ -40,9 +40,9 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
             }
         }
 
-        protected abstract TPattern GetCellPattern(TData castData, Capacity context);
+        protected abstract TPattern GetCellPattern(TData castData, CapacityContext context);
 
-        protected virtual bool ValidateCell(Capacity context, BattleCellAspect battleCellAspect)
+        protected virtual bool ValidateCell(CapacityContext context, BattleCellAspect battleCellAspect)
         {
             return battleCellAspect.CanBeAttacked(context.card);
         }
