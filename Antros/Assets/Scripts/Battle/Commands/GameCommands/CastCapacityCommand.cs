@@ -83,29 +83,22 @@ namespace ATCG.Battle.Commands.GameCommands
             foreach (BattleCellAspect battleCell in targetedCells)
             {
                 //apply effects
-                for (int i = 0; i < capacityData.CellsHitEffects.Length; i++)
+                IEffectData[] hitEffects = capacityData.HitEffects;
+
+                for (int i = 0; i < hitEffects.Length; i++)
                 {
-                    IEffectData hitData = capacityData.CellsHitEffects[i];
+                    IEffectData hitData = hitEffects[i];
                     if (mapping.TryGetValue(hitData, out ICapacityEffect hitEffect))
-                        hitEffect.Hit(hitData, battleCell.EntityAddress, in context);
+                        hitEffect.TryApplyEffectTo(hitData, battleCell.EntityAddress, in context);
                 }
 
                 foreach (ComponentRef<BattleGridElementComponent> member in battleCell.GetMembers())
                 {
-                    if (!member.Address.TryGetComponent<BelongsToPlayerComponent>(out var belongsToPlayer))
-                        continue;
-
-                    BelongsToPlayerComponent toPlayerComponent = belongsToPlayer.GetValue();
-
-                    IEffectData[] effects = toPlayerComponent.IsAllieOf(context.capacity.card.Player)
-                        ? capacityData.AlliesHitEffects
-                        : capacityData.OpponentsHitEffects;
-
-                    for (int i = 0; i < effects.Length; i++)
+                    for (int i = 0; i < hitEffects.Length; i++)
                     {
-                        IEffectData data = effects[i];
+                        IEffectData data = hitEffects[i];
                         if (mapping.TryGetValue(data, out ICapacityEffect effect))
-                            effect.Hit(data, battleCell.EntityAddress, in context);
+                            effect.TryApplyEffectTo(data, member.Address, in context);
                     }
                 }
             }
@@ -116,18 +109,7 @@ namespace ATCG.Battle.Commands.GameCommands
             CapacityData data = capacity.data;
             var disposable = DictionaryPool<IEffectData, ICapacityEffect>.Get(out hitEffectsMapping);
 
-            //TODO revoir la séparation des entitées touchées
-
-            foreach (IEffectData hitEffectData in data.AlliesHitEffects)
-                if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
-                    hitEffectsMapping[hitEffectData] = hitEffect;
-
-            foreach (IEffectData hitEffectData in data.OpponentsHitEffects)
-                if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
-                    hitEffectsMapping[hitEffectData] = hitEffect;
-
-
-            foreach (IEffectData hitEffectData in data.CellsHitEffects)
+            foreach (IEffectData hitEffectData in data.HitEffects)
                 if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
                     hitEffectsMapping[hitEffectData] = hitEffect;
 

@@ -33,16 +33,8 @@ namespace ATCG.Capacities
         public IEffectData[] CasterEffects { get; private set; }
 
         [field: BoxGroup("Behaviour/Effects"), PropertySpace]
-        [field: SerializeReference, Tooltip("Effects applied on cells hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public IEffectData[] CellsHitEffects { get; private set; }
-
-        [field: BoxGroup("Behaviour/Effects")]
-        [field: SerializeReference, Tooltip("Effects applied on actors hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public IEffectData[] AlliesHitEffects { get; private set; }
-
-        [field: BoxGroup("Behaviour/Effects")]
-        [field: SerializeReference, Tooltip("Effects applied on actors hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public IEffectData[] OpponentsHitEffects { get; private set; }
+        [field: SerializeReference, Tooltip("Effects applied on everything hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
+        public IEffectData[] HitEffects { get; private set; }
 
         protected override void Reset()
         {
@@ -50,10 +42,6 @@ namespace ATCG.Capacities
             CastPatterns = Array.Empty<ICapacityCastPatternData>();
             FirePatterns = Array.Empty<ICapacityCastPatternData>();
             CasterEffects = Array.Empty<IEffectData>();
-
-            CellsHitEffects = Array.Empty<IEffectData>();
-            AlliesHitEffects = Array.Empty<IEffectData>();
-            OpponentsHitEffects = Array.Empty<IEffectData>();
         }
     }
 }
