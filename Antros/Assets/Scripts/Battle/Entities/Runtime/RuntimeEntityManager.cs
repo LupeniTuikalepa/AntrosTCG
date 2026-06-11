@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
-using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Phases;
-using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.ChanneledProperties.Priorities;
@@ -41,7 +36,7 @@ namespace ATCG.Battle.Entities.Runtime
         public Condition Selectable { get; private set; }
 
         [ShowInInspector, ReadOnly]
-        public Priority<int> MaxSelectables { get; private set; }
+        public Priority<IEntitySelectionController> SelectionController { get; private set; }
 
         public RuntimeBattlePlayer RuntimeBattlePlayer { get; private set; }
 
@@ -50,13 +45,14 @@ namespace ATCG.Battle.Entities.Runtime
 
         private Dictionary<Entity, IRuntimeEntity> runtimeEntities;
 
+
         private void Awake()
         {
             runtimeEntities = new Dictionary<Entity, IRuntimeEntity>();
             selectedEntities = new ();
 
             Selectable = new Condition();
-            MaxSelectables = new Priority<int>(1);
+            SelectionController = new Priority<IEntitySelectionController>();
 
             Selectable.AddOnValueChangeCallback(ctx =>
             {
@@ -145,12 +141,14 @@ namespace ATCG.Battle.Entities.Runtime
 
         private void EnsureSelectableSlot(int quantity)
         {
-            if (quantity >= MaxSelectables)
-                quantity = MaxSelectables;
+            int maxSelectableEntities = SelectionController.Value.MaxSelectableEntities;
+            
+            if (quantity >= maxSelectableEntities)
+                quantity = maxSelectableEntities;
             if(quantity <= 0)
                 return;
 
-            int remaining = MaxSelectables - selectedEntities.Count;
+            int remaining = maxSelectableEntities - selectedEntities.Count;
             for (int i = remaining; i < quantity; i++)
             {
                 Unselect(selectedEntities[0]);

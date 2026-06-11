@@ -1,44 +1,26 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.ChanneledProperties.Priorities;
+using Helteix.Tools.Phases;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle
 {
-    public class PlayerInteractions : RuntimeLocalPlayerComponent
+    public class PlayerInteractions : RuntimeLocalPlayerComponent, IEntitySelectionController, IPhaseListener<LocalPlayerTurnPhase>
     {
-        public event Action<PlayerInteractable> OnSelection;
-        public event Action<PlayerInteractable> OnDeselection;
+        int IEntitySelectionController.MaxSelectableEntities => 1;
+        
+        [SerializeField]
+        private RuntimeEntityManager entityManager;
 
-        [ShowInInspector, ReadOnly]
-        public Priority<IInteractionController> CurrentController { get; private set; }
-
-        [ShowInInspector, ReadOnly]
-        public Condition CanInteract { get; private set; }
-
-        public IReadOnlyList<PlayerInteractable> ActiveSelection => activeSelection;
-
-        public Priority<PointerController> PointerController { get; private set; }
-
-        private List<PlayerInteractable> activeSelection;
-        private List<PlayerInteractable> interactables;
-
-        public PlayerInteractable HoveredInteractable { get; private set; }
-
-        protected void Awake()
-        {
-            interactables = new List<PlayerInteractable>();
-            activeSelection = new List<PlayerInteractable>();
-
-            CanInteract = new Condition();
-        }
 
         protected override void Connect(LocalBattlePlayer player)
         {
@@ -51,92 +33,26 @@ namespace ATCG.Battle
         }
 
 
-        public bool Register(PlayerInteractable interactable)
-        {
-            if(interactables.Contains(interactable))
-                return false;
 
-            interactables.Add(interactable);
-            return true;
+        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
+        {
+
         }
 
-        public bool Unregister(PlayerInteractable interactable)
+        void IEntitySelectionController.OnDeselected(IRuntimeEntity runtimeEntity)
         {
-            return interactables.Remove(interactable);
         }
 
-        public bool Select(PlayerInteractable interactable)
+        void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseBegin(LocalPlayerTurnPhase phase)
         {
-            if (!CanInteract)
-                return false;
-
-            if (!IsRegistered(interactable))
-            {
-                Debug.LogError("[Player Interactions] Attempting to select an interactable that is not registered!", this);
-                return false;
-            }
-
-            if(!CurrentController.Value.Validate(interactable))
-                return false;
-
-            EnsureSelectableSlot(1);
-
-            activeSelection.Add(interactable);
-            interactable.OnSelected();
-
-            OnSelection?.Invoke(interactable);
-            return true;
+            if(phase.player == Player)
+                entityManager.SelectionController.AddPriority(this, PriorityTags.Small, this);
         }
 
-        public bool Unselect(PlayerInteractable interactable)
+        void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseEnd(LocalPlayerTurnPhase phase)
         {
-            if (!IsRegistered(interactable))
-            {
-                Debug.LogError("[Player Interactions] Attempting to unselect an interactable that is not registered!", this);
-                return false;
-            }
-
-            Register(interactable);
-
-            if (!activeSelection.Remove(interactable))
-                return false;
-
-            interactable.OnDeselected();
-            OnDeselection?.Invoke(interactable);
-            return true;
+            if (phase.player == Player)
+                entityManager.SelectionController.RemovePriority(this);
         }
-
-
-        public void ClearSelection()
-        {
-            using (ListPool<PlayerInteractable>.Get(out var copy))
-            {
-                copy.AddRange(activeSelection);
-                foreach (PlayerInteractable interactable in copy)
-                    Unselect(interactable);
-            }
-        }
-
-        private void EnsureSelectableSlot(int quantity)
-        {
-            int maxSelectables = CurrentController.Value.MaxSelectables;
-            if (quantity >= maxSelectables)
-                quantity = maxSelectables;
-            if(quantity <= 0)
-                return;
-
-            int remaining = maxSelectables - activeSelection.Count;
-            for (int i = remaining; i < quantity; i++)
-                Unselect(activeSelection[0]);
-        }
-
-        public bool IsRegistered(PlayerInteractable interactable) => interactables.Contains(interactable);
-
-        public bool IsSelected(PlayerInteractable interactable) => activeSelection.Contains(interactable);
-
-        public bool IsActive(PlayerInteractable interactable) =>
-            IsRegistered(interactable) &&
-            CanInteract &&
-            CurrentController.Value.Validate(interactable);
     }
 }
