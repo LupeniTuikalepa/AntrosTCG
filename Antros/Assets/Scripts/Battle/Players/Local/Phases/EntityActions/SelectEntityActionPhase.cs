@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Players.Local.UI;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle
 {
-    public class SelectEntityActionPhase : PhaseCompletionSource<IEntityAction>, IEntitySelectionController, ISinglePhase
+    public class SelectEntityActionPhase : PhaseCompletionSource<IEntityAction>, IEntitySelectionController, ISinglePhase, IHUDPhase<SelectEntityActionPhase>
     {
         string ISinglePhase.Channel => nameof(SelectEntityActionPhase);
         bool ISinglePhase.AllowQueuing => false;
