@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 2854938731345879177}
   m_Layer: 3
   m_Name: Hero
-  m_TagString: Untagged
+  m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Cards.Runtime.RuntimeHeroBattleCard
   <Model>k__BackingField: {fileID: 1508660689090074998}
+  <actionUIRoot>k__BackingField: {fileID: 0}
   heroName: {fileID: 895034403804600685}
   baseScale: 0.85
   windUpDuration: 0
