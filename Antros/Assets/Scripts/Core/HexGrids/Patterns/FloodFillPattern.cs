@@ -6,24 +6,21 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Patterns
 {
-    public readonly struct FloodFillPattern : ICellPattern
+    public readonly struct FloodFillPattern : IHexPattern
     {
         public readonly int distance;
-        public readonly HexCoordinates center;
 
 
-        public FloodFillPattern(HexCoordinates center, int distance)
+        public FloodFillPattern(int distance)
         {
-            this.center = center;
             this.distance = distance;
         }
-        
-        IEnumerable<HexCoordinates> ICellPattern.GetAll()
+
+        IEnumerable<HexCoordinates> IHexPattern.GetAll(HexCoordinates from)
         {
             using (DictionaryPool<HexCoordinates, int>.Get(out Dictionary<HexCoordinates, int> dic))
             {
-                FloodFill(center, distance, dic);
-
+                FloodFill(from, distance, dic);
                 foreach ((HexCoordinates hexCoordinates, _) in dic)
                     yield return hexCoordinates;
             }

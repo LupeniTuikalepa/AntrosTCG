@@ -6,24 +6,22 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Patterns
 {
-    public struct SpreadPattern : ICellPattern
+    public readonly struct SpreadPattern : IHexPattern
     {
         public readonly int distance;
-        public readonly HexCoordinates center;
 
-        public SpreadPattern(HexCoordinates center, int distance)
+        public SpreadPattern(int distance)
         {
-            this.center = center;
             this.distance = distance;
         }
 
 
-        IEnumerable<HexCoordinates> ICellPattern.GetAll()
+        IEnumerable<HexCoordinates> IHexPattern.GetAll(HexCoordinates from)
         {
             //GetRef the max range ring
-            foreach (HexCoordinates coord in center.GetRing(distance))
+            foreach (HexCoordinates coord in from.GetRing(distance))
             {
-                IEnumerable<HexCoordinates> line = center.GetLine(coord);
+                IEnumerable<HexCoordinates> line = from.GetLine(coord);
                 //Adds every valid coord between the center and the extremity by drawing a line between.
                 foreach (HexCoordinates lineCoord in line)
                     yield return lineCoord;

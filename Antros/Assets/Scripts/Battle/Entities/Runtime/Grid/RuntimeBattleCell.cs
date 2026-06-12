@@ -16,7 +16,7 @@ namespace ATCG.Battle.Entities.Runtime.Grid
 
         public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
         public RuntimeHexGrid RuntimeGrid => RuntimeBattleGrid.RuntimeHexGrid;
-        public HexCoordinates Coordinates => Aspect.BattleGridElementComponent.coordinates;
+        public HexCoordinates Coordinates => Aspect.HexCoordinatesComponent.coordinates;
 
 
 

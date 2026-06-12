@@ -1,6 +1,5 @@
-﻿using ATCG.Battle.Cards.Capacities.Behaviours;
-using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
-using ATCG.Battle.Grids.Patterns;
+﻿using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
+using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Capacities.Data;
 using ATCG.Capacities.Data.Effects;
 
@@ -8,29 +7,24 @@ namespace ATCG.Battle.Cards.Capacities
 {
     public static class CapacityManager
     {
-        private static readonly CapacityDataMapper<ICellPattern, ICapacityPatternData> CastPatternContainer = new();
-
-        private static readonly CapacityDataMapper<ICapacityEffect, IEffectData> EffectContainer = new();
+        private static readonly CapacityEffectMapper EffectContainer = new CapacityEffectMapper();
+        private static readonly CapacityPatternMapper PatternContainer = new CapacityPatternMapper();
 
         static CapacityManager()
         {
-            //Patterns
-            CastPatternContainer.Add<FloodFillPatternData, FloodFillPattern>();
-            CastPatternContainer.Add<SpreadPatternData, SpreadPattern>();
-
-            //
             EffectContainer.Add<DamageEffectData, DamageEffect>();
             EffectContainer.Add<HealEffectData, HealEffect>();
         }
 
-        public static bool TryGetFor(ICapacityPatternData data, out ICellPattern pattern)
+        public static bool TryGetFor(IEffectData data, out CapacityEffectMapper.IEffectContainer effect)
         {
-            return CastPatternContainer.TryGetFor(data, out pattern);
+            return EffectContainer.TryGetContainer(data, out effect);
         }
 
-        public static bool TryGetFor(IEffectData data, out ICapacityEffect effect)
+        public static bool TryGetFor(IHexCapacityPatternData data, out CapacityPatternMapper.IPatternContainer pattern)
         {
-            return EffectContainer.TryGetFor(data, out effect);
+            return PatternContainer.TryGetContainer(data, out pattern);
         }
+
     }
 }

@@ -66,7 +66,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             manager.RegisterRuntimeEntity(this);
 
-            if (RuntimeBattleGrid.TryGetBattleCellAt(aspect.BattleGridElementComponent.coordinates, out RuntimeBattleCell cell))
+            if (RuntimeBattleGrid.TryGetBattleCellAt(aspect.HexCoordinatesComponent.coordinates, out RuntimeBattleCell cell))
             {
                 transform.position = cell.transform.position;
 

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Cards.Capacities;
-using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
+﻿using ATCG.Battle.Cards.Capacities;
+using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Patterns;
+using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Capacities;
 using ATCG.Capacities.Data;
-using ATCG.HexGrids;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle.Commands.GameCommands
 {
@@ -23,7 +19,7 @@ namespace ATCG.Battle.Commands.GameCommands
             public readonly GameCommandContext gameCommandContext;
             public readonly CapacityContext capacityContext;
 
-            public BattleGrid Grid => gameCommandContext.Grid;
+            public BattleGrid BattleGrid => gameCommandContext.Grid;
 
             public World World => gameCommandContext.battlePhase.world;
 
@@ -57,67 +53,38 @@ namespace ATCG.Battle.Commands.GameCommands
         protected override void Process(in GameCommandContext gameCommandContext)
         {
             Context context = new(this, capacityContext, gameCommandContext);
-
-            using (HashSetPool<HexCoordinates>.Get(out HashSet<HexCoordinates> targetedCells))
-            {
-                FillTargetedCells(targetedCells, in context);
-                HitCells(targetedCells, in context);
-            }
-        }
-
-        private void FillTargetedCells(HashSet<HexCoordinates> targetedCells, in Context context)
-        {
-            ICapacityPatternData[] firePatternsData = capacityContext.data.FirePatterns;
-            for (int i = 0; i < firePatternsData.Length; i++)
-            {
-                ICapacityPatternData firePatternData = firePatternsData[i];
-                if (CapacityManager.TryGetFor(firePatternData, out ICellPattern castPattern))
-                    castPattern.FillHashSet(targetedCells);
-            }
-        }
-
-        private void HitCells(IEnumerable<HexCoordinates> targetedCells, in Context context)
-        {
-            using IDisposable disposable = FillMapping(out Dictionary<IEffectData, ICapacityEffect> mapping);
             CapacityData capacityData = capacityContext.data;
 
-            foreach (HexCoordinates coordinates in targetedCells)
+            HexPatternBuilder patternBuilder = new HexPatternBuilder(capacityContext.castPoint);
+            for (int i = 0; i < capacityData.FirePatterns.Length; i++)
             {
-                if(!context.Grid.TryGetBattleCell(coordinates, out BattleCellAspect aspect))
-                    continue;
+                IHexCapacityPatternData patternData = capacityData.FirePatterns[i];
+                if (CapacityManager.TryGetFor(patternData, out CapacityPatternMapper.IPatternContainer container))
+                    container.AddToBuilder(patternData, ref patternBuilder);
+            }
 
+            foreach (BattleCellAspect aspect in patternBuilder.GetBattleCells(context.BattleGrid))
+            {
                 //apply effects
                 IEffectData[] hitEffects = capacityData.HitEffects;
 
                 for (int i = 0; i < hitEffects.Length; i++)
                 {
                     IEffectData hitData = hitEffects[i];
-                    if (mapping.TryGetValue(hitData, out ICapacityEffect hitEffect))
-                        hitEffect.TryApplyEffectTo(hitData, aspect.EntityAddress, in context);
+                    if (CapacityManager.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
+                        container.TryApply(hitData, aspect.EntityAddress, in context);
                 }
 
-                foreach (ComponentRef<BattleGridElementComponent> member in aspect.GetMembers())
+                foreach (ComponentRef<HexCoordinatesComponent> member in aspect.GetMembers())
                 {
                     for (int i = 0; i < hitEffects.Length; i++)
                     {
-                        IEffectData data = hitEffects[i];
-                        if (mapping.TryGetValue(data, out ICapacityEffect effect))
-                            effect.TryApplyEffectTo(data, member.Address, in context);
+                        IEffectData hitData = hitEffects[i];
+                        if (CapacityManager.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
+                            container.TryApply(hitData, member.EntityAddress, in context);
                     }
                 }
             }
-        }
-
-        private IDisposable FillMapping(out Dictionary<IEffectData, ICapacityEffect> hitEffectsMapping)
-        {
-            CapacityData data = capacityContext.data;
-            var disposable = DictionaryPool<IEffectData, ICapacityEffect>.Get(out hitEffectsMapping);
-
-            foreach (IEffectData hitEffectData in data.HitEffects)
-                if (CapacityManager.TryGetFor(hitEffectData, out ICapacityEffect hitEffect))
-                    hitEffectsMapping[hitEffectData] = hitEffect;
-
-            return disposable;
         }
     }
 }

@@ -6,6 +6,9 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Runtime.Heroes;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Patterns;
+using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
@@ -20,25 +23,28 @@ namespace ATCG.Battle
 {
     public class PerformBasicAttackAction : IEntityAction
     {
-	    private struct  EnemieFilter : IEntityFilter
+	    private readonly struct EnemyFilter : IEntityFilter
 	    {
 		    private readonly IBattlePlayer player;
 
-		    private readonly HashSet<HexCoordinates> targets;
-		    public EnemieFilter(IBattlePlayer player, HashSet<HexCoordinates> targets)
+		    private readonly HexPatternBuilder patterns;
+		    public EnemyFilter(IBattlePlayer player, HexPatternBuilder patterns)
 		    {
 			    this.player = player;
-			    this.targets = targets;
+			    this.patterns = patterns;
 		    }
 		    public bool Accepts(EntityAddress address)
 		    {
 			    if(!address.HasComponent<HealthComponent>())
 				    return false;
+
 			    if(address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer) && belongsToPlayer.IsAllieOf(player))
 				    return false;
-			    if(!address.TryGetComponentRO(out BattleGridElementComponent battleGridElement))
+
+			    if(!address.TryGetComponentRO(out HexCoordinatesComponent battleGridElement))
 				    return false;
-			    return targets.Contains(battleGridElement.coordinates);
+
+			    return patterns.Contains(battleGridElement.coordinates);
 		    }
 	    }
         private readonly int strength;
@@ -49,42 +55,28 @@ namespace ATCG.Battle
 	        this.strength = strength;
 	        this.player = player;
         }
-        
+
         public async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-	        using (HashSetPool<HexCoordinates>.Get(out var coordinates))
+	        if (!address.TryGetComponentRO(out HexCoordinatesComponent battleGridElement))
+		        return;
+
+	        HexCoordinates center = battleGridElement.coordinates;
+	        int radius = GameMetrics.Current.BasicAttackRange;
+
+	        using HexPatternBuilder builder = new HexPatternBuilder(center)
+		        .With(new SpiralPattern(radius))
+		        .Without(center);
+
+	        var filter = new EnemyFilter(player, builder);
+	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(filter);
+
+	        for (int i = 0; i < result.Length; i++)
 	        {
-		        if(!address.TryGetComponentRO(out BattleGridElementComponent battleGridElement))
-			        return;
-		        
-		        int radius = GameMetrics.Current.BasicAttackRange;
-		        HexCoordinates center = battleGridElement.coordinates;
-		        
-		        foreach (var coordinate in center.GetSpiral(radius))
-		        {
-			        if(coordinate != center)
-				        coordinates.Add(coordinate);
-		        }
-		        
-		        EnemieFilter filter = new EnemieFilter(player, coordinates);
-
-		        SelectEntityPhase<EnemieFilter> phase = new SelectEntityPhase<EnemieFilter>(filter);
-
-		        EntityAddress[] result = await phase;
-
-		        for (int i = 0; i < result.Length; i++)
-		        {
-			        EntityAddress target = result[i];
-			        
-			        if (target.TryGetComponentRO(out BattleGridElementComponent component))
-			        {
-				        var command = new PhysicalAttackCommand(address, strength);
-				        await command.Run(battlePhase);
-			        }
-		        }
+		        EntityAddress target = result[i];
+		        var command = new BasicAttackCommand(address, target, strength);
+		        await command.Run(battlePhase);
 	        }
-
         }
-        
     }
 }

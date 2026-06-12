@@ -1,6 +1,8 @@
-﻿namespace ATCG.Capacities.Data
+﻿using Helteix.Tools.DataMapping;
+
+namespace ATCG.Capacities.Data
 {
-    public interface ICapacityPatternData : ICapacityBehaviourData
+    public interface IHexCapacityPatternData : IData
     {
     }
 }

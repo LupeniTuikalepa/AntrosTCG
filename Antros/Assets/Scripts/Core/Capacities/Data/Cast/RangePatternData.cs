@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ATCG.Capacities.Data
 {
     [Serializable]
-    public class SpreadPatternData : ICapacityPatternData
+    public struct SpreadHexCapacityPatternData : IHexCapacityPatternData
     {
         [field: SerializeField]
         public int Distance { get; private set; }

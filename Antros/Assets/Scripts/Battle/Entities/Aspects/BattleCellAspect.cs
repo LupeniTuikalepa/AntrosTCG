@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public readonly partial struct BattleCellAspect : IEntityAspect<BattleGridElementComponent>,
+    public readonly partial struct BattleCellAspect : IEntityAspect<HexCoordinatesComponent>,
         ICreateEntityAspect<BattleCellAspect.Setup>
     {
-        public readonly struct IsCellMemberFilter : IFilter<BattleGridElementComponent>
+        public readonly struct IsCellMemberFilter : IFilter<HexCoordinatesComponent>
         {
             private readonly HexCoordinates coordinates;
             private readonly int cellEntityID;
@@ -22,7 +22,7 @@ namespace ATCG.Battle.Entities.Aspects
                 this.cellEntityID = cellEntityID;
             }
 
-            public bool IsValid(in ComponentRef<BattleGridElementComponent> componentRef)
+            public bool IsValid(in ComponentRef<HexCoordinatesComponent> componentRef)
             {
                 return componentRef.GetValue().coordinates == coordinates && componentRef.entityID != cellEntityID;
             }
@@ -34,21 +34,21 @@ namespace ATCG.Battle.Entities.Aspects
             public BattleGrid battleGrid;
         }
 
-        public HexCoordinates Coordinate => BattleGridElementComponent.coordinates;
+        public HexCoordinates Coordinate => HexCoordinatesComponent.coordinates;
 
 
-        public ComponentQuery<BattleGridElementComponent, IsCellMemberFilter> GetMembers()
+        public ComponentQuery<HexCoordinatesComponent, IsCellMemberFilter> GetMembers()
         {
-            IsCellMemberFilter filter = new(BattleGridElementComponent.coordinates, EntityAddress.entity);
-            return EntityAddress.world.Query<IsCellMemberFilter, BattleGridElementComponent>(filter);
+            IsCellMemberFilter filter = new(HexCoordinatesComponent.coordinates, EntityAddress.entity);
+            return EntityAddress.world.Query<IsCellMemberFilter, HexCoordinatesComponent>(filter);
         }
 
 
         public bool HasPhysicalMember()
         {
-            foreach (ComponentRef<BattleGridElementComponent> member in GetMembers())
+            foreach (ComponentRef<HexCoordinatesComponent> member in GetMembers())
             {
-                if (!member.Address.IsGridMemberAspect(out GridMemberAspect aspect))
+                if (!member.EntityAddress.IsGridMemberAspect(out GridMemberAspect aspect))
                     continue;
 
                 if (aspect.IsPhysical)
@@ -60,9 +60,9 @@ namespace ATCG.Battle.Entities.Aspects
 
         public bool CanBeDeployedOn(IBattleCard card)
         {
-            foreach (ComponentRef<BattleGridElementComponent> member in GetMembers())
+            foreach (ComponentRef<HexCoordinatesComponent> member in GetMembers())
             {
-                if (!member.Address.IsGridMemberAspect(out GridMemberAspect aspect))
+                if (!member.EntityAddress.IsGridMemberAspect(out GridMemberAspect aspect))
                     continue;
 
                 if (aspect.IsPhysical || aspect.PreventsDeployment)
@@ -81,8 +81,8 @@ namespace ATCG.Battle.Entities.Aspects
         {
             try
             {
-                BattleGridElementComponent elementComponent = new BattleGridElementComponent(setup.battleGrid, setup.coordinates);
-                componentsFactory.BattleGridElementComponent = elementComponent;
+                HexCoordinatesComponent elementComponent = new HexCoordinatesComponent(setup.battleGrid, setup.coordinates);
+                componentsFactory.HexCoordinatesComponent = elementComponent;
             }
             catch (Exception e)
             {
