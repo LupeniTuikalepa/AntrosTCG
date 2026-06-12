@@ -52,7 +52,8 @@ namespace ATCG.Battle.Commands.EntityCommands
 
 		protected override void Process(in GameCommandContext context)
 		{
-			new ModifyPlayerManaCommand(TargetEntity, GameMetrics.Current.BasicAttackCost);
+			var manaCost = new ModifyPlayerManaCommand(TargetEntity, GameMetrics.Current.BasicAttackCost);
+			Embed(in context,manaCost);
 			
 			using (ListPool<EntityAddress>.Get(out var addresses))
 			{
@@ -62,7 +63,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 				{
 					DamageCommand command = new DamageCommand(strength, hit.entity);
 					Embed(in context, command);
-					Debug.Log(hit.entity.id);
+					Debug.Log($"{hit.entity.id} : take a hit");
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
