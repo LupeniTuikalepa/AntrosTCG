@@ -70,7 +70,7 @@ namespace ATCG.Battle
             EntityAddress address = runtimeEntity.Address;
             using (ListPool<IEntityAction>.Get(out var actions))
             {
-                address.GetActionsFor(actions);
+                address.GetActionsFor(actions, Player);
 
                 if (actions.Count == 0)
                     return;
