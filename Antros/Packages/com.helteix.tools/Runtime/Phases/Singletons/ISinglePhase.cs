@@ -7,5 +7,6 @@ namespace Helteix.Tools.Phases
         string Channel { get; }
 
         bool AllowMultipleInstances => false;
+        bool AllowQueuing => true;
     }
 }

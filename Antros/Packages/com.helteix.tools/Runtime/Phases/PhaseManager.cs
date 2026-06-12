@@ -78,6 +78,13 @@ namespace Helteix.Tools.Phases
             if (phase == null)
                 return default;
 
+
+            if(phase is ISinglePhase { AllowQueuing: false } phaseSingleton && PhaseSingletonManager.HasAnyRunning(phaseSingleton.Channel))
+            {
+                Debug.Log("[Phase Manager] Could not begin SinglePhase because one is already running in the same channel");
+                return new PhaseResult<TResult>(default, PhaseResultType.Failure);
+            }
+
             PhaseResult<TResult> result = default;
             using (CancellationTokenSource source = new CancellationTokenSource())
             {
@@ -125,7 +132,9 @@ namespace Helteix.Tools.Phases
             }
 
             if (phase is ISinglePhase { AllowMultipleInstances: false } phaseSingleton)
+            {
                 await PhaseSingletonManager.WaitForSingleInstance(phaseSingleton, context.source.Token);
+            }
 
             Debug.Log("[Phase Manager] Beginning phase " + phase.GetType().Name);
 
