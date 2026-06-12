@@ -537,8 +537,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e62b095978a4a4f97980c733cf94351, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.Custom.CapacitiesActionUIPanel
+  canvasGroup: {fileID: 6754876740830041560}
   buttonContainer: {fileID: 359741306010603278}
-  buttonPrefab: {fileID: 0}
+  buttonPrefab: {fileID: 1985177535135967487, guid: 7e359ded8eb49e8418591a7fa5edcd19, type: 3}
 --- !u!1 &7354531383442492240
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,7 +568,7 @@ RectTransform:
   m_GameObject: {fileID: 7354531383442492240}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8289393930263841700}
@@ -577,8 +578,8 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250.4, y: 310.90002}
-  m_Pivot: {x: -0.42259014, y: 0.5000001}
+  m_SizeDelta: {x: 250, y: 300}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1171883834759820601
 Canvas:
   m_ObjectHideFlags: 0
@@ -730,8 +731,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0.000030517578, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4261065740607385327
 MonoBehaviour:
@@ -797,6 +798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af69799882e4ee0851d88fd32636fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.ActionUIPanel
+  canvasGroup: {fileID: 2123780921485930219}
 --- !u!1 &9181621592424512832
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,8 +826,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3505814433885781429}
   m_Father: {fileID: 0}
@@ -843,7 +845,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.ActionUIController
   start: {fileID: 2758215463757912955}
-  canvas: {fileID: 1171883834759820601}
   canvasGroup: {fileID: 2251339529749349330}
   runtimeEntityManager: {fileID: 0}
 --- !u!1001 &869171802256282429
@@ -2552,10 +2553,22 @@ PrefabInstance:
     - target: {fileID: 1429456544112780126, guid: 554d2facec1de82429591bd1eab301d2, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6313896369639309522}
+      objectReference: {fileID: 2682561269688049222}
     - target: {fileID: 1429456544112780126, guid: 554d2facec1de82429591bd1eab301d2, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429456544112780126, guid: 554d2facec1de82429591bd1eab301d2, type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseLast
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429456544112780126, guid: 554d2facec1de82429591bd1eab301d2, type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ATCG.Battle.Entities.Runtime.UI.Custom.CapacitiesActionUIPanel, ATCG.Battle
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429456544112780126, guid: 554d2facec1de82429591bd1eab301d2, type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3560003601323999592, guid: 554d2facec1de82429591bd1eab301d2, type: 3}
       propertyPath: m_AnchorMax.y

@@ -46,7 +46,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
             canvasGroup.Hide(0);
         }
 
-
         private void OnEnable()
         {
             this.Register();
@@ -56,14 +55,14 @@ namespace ATCG.Battle.Entities.Runtime.UI
         {
             this.Unregister();
         }
-
-        private void MoveOnRoot(IRuntimeEntity entity)
+        
+        private void LateUpdate()
         {
-            if (entity.actionUIRoot == null)
+            if (Phase is null || RuntimeEntity?.actionUIRoot is null)
                 return;
-            transform.position = entity.actionUIRoot.position;
+            transform.rotation = RuntimeEntity.actionUIRoot.rotation;
         }
-
+        
         public void Open(EntityActionUIPanel panel) => OpenAsync(panel).FireAndForget();
 
         public async Awaitable OpenAsync(EntityActionUIPanel panel)
@@ -116,8 +115,8 @@ namespace ATCG.Battle.Entities.Runtime.UI
             Phase = phase;
 
             canvasGroup.Show(.15f);
-            MoveOnRoot(RuntimeEntity);
-
+            transform.position = RuntimeEntity.actionUIRoot.position;
+            
             start.Build();
             if (start.IsEmpty())
                 return;
