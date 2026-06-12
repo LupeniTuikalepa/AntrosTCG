@@ -42,15 +42,22 @@ namespace ATCG.Battle
 
         }
 
+        private bool isInActionSelection = false;
+
         void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
         {
             RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
+
+
+            if(isInActionSelection)
+                return;
 
             if(runtimeEntity.Address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent)
                && !belongsToPlayerComponent.IsAllieOf(Player))
                 return;
 
-            SelectAction(runtimeEntity.Address).FireAndForget();
+
+            SelectAction(runtimeEntity).FireAndForget();
         }
 
         void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
@@ -58,13 +65,29 @@ namespace ATCG.Battle
             RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
         }
 
-        private async Awaitable SelectAction(EntityAddress address)
+        private async Awaitable SelectAction(IRuntimeEntity runtimeEntity)
         {
-            IEntityAction action = await SelectEntityActionPhase.RunPhaseFor(address);
-
-            if (action != null)
+            EntityAddress address = runtimeEntity.Address;
+            using (ListPool<IEntityAction>.Get(out var actions))
             {
-                await action.Execute(address, BattlePhase);
+                address.GetActionsFor(actions);
+
+                if (actions.Count == 0)
+                    return;
+
+                isInActionSelection = true;
+                SelectEntityActionPhase phase = new SelectEntityActionPhase(address, actions);
+
+                RuntimeEntityManager.SelectionController.AddPriority(runtimeEntity.gameObject, PriorityTags.Default, this);
+
+                PhaseResult<IEntityAction> result = await phase;
+                IEntityAction action = result.value;
+
+                if(actions.Contains(action))
+                    await action.Execute(address, BattlePhase);
+
+                isInActionSelection = false;
+                RuntimeEntityManager.SelectionController.RemovePriority(runtimeEntity.gameObject);
                 RuntimeEntityManager.Unselect(address);
             }
         }
