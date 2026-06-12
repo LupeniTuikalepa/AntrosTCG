@@ -42,6 +42,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
+        private SelectEntityActionPhase selectPhase;
 
         protected override void OnEnable()
         {
@@ -53,6 +54,13 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         {
             PhaseManager.Unregister<SelectEntityActionPhase>(this);
             base.OnDisable();
+        }
+
+        private void LateUpdate()
+        {
+            if (selectPhase == null)
+                return;
+            actionUIRoot.forward = actionUIRoot.position - cinemachineCamera.transform.position;
         }
 
 
@@ -91,6 +99,8 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         void IPhaseListener<SelectEntityActionPhase>.OnPhaseBegin(SelectEntityActionPhase phase)
         {
+            selectPhase = phase;
+            
             if (IsSelected)
             {
                 cinemachineCamera.gameObject.SetActive(true);
@@ -100,6 +110,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         void IPhaseListener<SelectEntityActionPhase>.OnPhaseEnd(SelectEntityActionPhase phase)
         {
             cinemachineCamera.gameObject.SetActive(false);
+            selectPhase = null;
         }
     }
 }
