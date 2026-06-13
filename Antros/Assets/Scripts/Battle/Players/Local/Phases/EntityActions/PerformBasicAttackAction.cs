@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
@@ -7,6 +8,7 @@ using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids.Patterns;
 using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
 using ATCG.Metrics;
@@ -15,7 +17,7 @@ using UnityEngine;
 
 namespace ATCG.Battle
 {
-    public class PerformBasicAttackAction : IEntityAction
+    public class PerformBasicAttackAction : EntityAction
     {
 	    private readonly struct EnemyFilter : IEntityFilter
 	    {
@@ -41,19 +43,18 @@ namespace ATCG.Battle
 			    return patterns.Contains(battleGridElement.coordinates);
 		    }
 	    }
-        private readonly int strength;
 
-        private readonly IBattlePlayer player;
+	    private readonly int strength;
 
-        public int ManaCost => GameMetrics.Current.BasicAttackCost;
 
-        public PerformBasicAttackAction(int strength,IBattlePlayer player)
+        public override int ManaCost => GameMetrics.Current.BasicAttackCost;
+
+        public PerformBasicAttackAction(LocalBattlePlayer playerOrigin, int strength) : base(playerOrigin)
         {
 	        this.strength = strength;
-	        this.player = player;
         }
 
-        public async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
+        public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
 	        if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
 		        return;
@@ -65,13 +66,24 @@ namespace ATCG.Battle
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 
-	        var filter = new EnemyFilter(player, builder);
-	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(filter);
+	        //Si l'entité qui attaque appartient a un jour, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
+	        IBattlePlayer entityPlayer = address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent) ?
+		        belongsToPlayerComponent.GetPlayer(battlePhase) :
+		        playerOrigin;
+
+	        var filter = new EnemyFilter(entityPlayer, builder);
+	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(playerOrigin, filter);
+	        if(result.Length == 0)
+		        return;
+
+	        //Le player a l'origine de l'action perd de la mana
+	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(playerOrigin.GetPlayerID(), GameMetrics.Current.BasicAttackCost);
+	        await manaCost.Run(battlePhase);
 
 	        for (int i = 0; i < result.Length; i++)
 	        {
 		        EntityAddress target = result[i];
-		        var command = new BasicAttackCommand(address, target, strength);
+		        BasicAttackCommand command = new BasicAttackCommand(address, target, strength);
 		        await command.Run(battlePhase);
 	        }
         }

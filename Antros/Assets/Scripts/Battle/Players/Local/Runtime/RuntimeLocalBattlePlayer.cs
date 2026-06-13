@@ -39,5 +39,9 @@ namespace ATCG.Battle.Players.Local.Runtime
         {
 
         }
+
+
+        public static bool TryGetRuntimeLocalPlayerFor(LocalBattlePlayer player, out RuntimeLocalBattlePlayer runtimePlayer)
+            => TryGetRuntimePlayerFor(player, out runtimePlayer);
     }
 }

@@ -17,7 +17,7 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public sealed class SelectEntityPhase<T> : Phase<EntityAddress[]>,
+    public sealed class SelectEntityPhase<T> : LocalPlayerPhase<EntityAddress[]>,
         ISelectEntityPhase
         where T : IEntityFilter
     {
@@ -48,14 +48,14 @@ namespace ATCG.Battle.Players.Local.Phases
             return count;
         }
 
-        public SelectEntityPhase(T filter, int maxSelectableEntities = 1)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, int maxSelectableEntities = 1) : base(localBattlePlayer)
         {
             this.filter = filter;
             MaxSelectableEntities = maxSelectableEntities;
             dragPhase = null;
         }
 
-        public SelectEntityPhase(T filter, CardDragPhase<IBattleCard> dragPhase)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.filter = filter;
             this.dragPhase = dragPhase;

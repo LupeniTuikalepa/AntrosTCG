@@ -27,12 +27,15 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         }
 
 
-        async Awaitable ICommandPlayer<SpawnHeroCommand>.Play(SpawnHeroCommand command)
+        async Awaitable ICommandPlayer<SpawnHeroCommand>.Play(GameCommandContext context, SpawnHeroCommand command)
         {
-            if (HeroEntityAspect.TryGetAspect(command.DeployedEntity, out HeroEntityAspect entityAspect))
+            SpawnHeroCommand.Infos infos = command.GetInfos();
+
+            EntityAddress address = infos.spawnedEntity.ToAddress(context.World);
+            if (HeroEntityAspect.TryGetAspect(address, out HeroEntityAspect entityAspect))
             {
                 GameObject instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(transform);
-                
+
                 if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
                     await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
             }

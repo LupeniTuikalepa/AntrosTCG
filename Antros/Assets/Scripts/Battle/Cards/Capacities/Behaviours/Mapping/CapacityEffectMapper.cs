@@ -10,7 +10,7 @@ public class CapacityEffectMapper : Mapper<IEffectData, CapacityEffectMapper.IEf
 {
     public interface IEffectContainer : IContainer<IEffectData>
     {
-        void TryApply(IEffectData data, EntityAddress target, in CastCapacityCommand.Context context);
+        void TryApply(IEffectData data, EntityAddress target, in CapacityContext capacityContext);
     }
 
     private sealed class EffectContainer<TData, TBehaviour>
@@ -20,10 +20,10 @@ public class CapacityEffectMapper : Mapper<IEffectData, CapacityEffectMapper.IEf
     {
         public EffectContainer(TBehaviour behaviour) : base(behaviour) { }
 
-        public void TryApply(IEffectData data, EntityAddress target, in CastCapacityCommand.Context context)
+        public void TryApply(IEffectData data, EntityAddress target, in CapacityContext capacityContext)
         {
             if (data is TData typed)
-                behaviour.Apply(typed, target, in context);
+                behaviour.Apply(typed, target, in capacityContext);
         }
     }
 

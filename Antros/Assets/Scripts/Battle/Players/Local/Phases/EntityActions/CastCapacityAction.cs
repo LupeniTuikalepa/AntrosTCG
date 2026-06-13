@@ -5,6 +5,7 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Patterns.Building;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
 using ATCG.Capacities.Data;
@@ -14,14 +15,14 @@ using UnityEngine;
 
 namespace ATCG.Battle
 {
-    public class CastCapacityAction : IEntityAction
+    public class CastCapacityAction : EntityAction
     {
-        public int ManaCost => capacityData.Cost;
+        public override int ManaCost => capacityData.Cost;
 
         public readonly CapacityData capacityData;
         private readonly HexCoordinates from;
 
-        public CastCapacityAction(CapacityData capacityData, HexCoordinates from)
+        public CastCapacityAction(LocalBattlePlayer playerOrigin, CapacityData capacityData, HexCoordinates from) : base(playerOrigin)
         {
             this.capacityData = capacityData;
             this.from = from;
@@ -29,7 +30,7 @@ namespace ATCG.Battle
 
         //TODO pour les spells, le cast des capacites ne se fera pas depuis une action donc il faudra sortir la logique et la rendre commune dans le capacity manager.
 
-        public async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
+        public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
             CapacityPatternData[] patterns = capacityData.CastPatterns;
 
@@ -45,7 +46,7 @@ namespace ATCG.Battle
 
                 HexPatternFilters filter = new HexPatternFilters(patternBuilder);
 
-                SelectEntityPhase<HexPatternFilters> phase = new SelectEntityPhase<HexPatternFilters>(filter);
+                SelectEntityPhase<HexPatternFilters> phase = new SelectEntityPhase<HexPatternFilters>(playerOrigin, filter);
 
                 EntityAddress[] result = await phase;
 
@@ -59,9 +60,9 @@ namespace ATCG.Battle
             }
         }
 
-        private async Awaitable ExecuteCommand(BattlePhase battlePhase, HexCoordinates from)
+        private async Awaitable ExecuteCommand(BattlePhase battlePhase, HexCoordinates source)
         {
-            CapacityContext context = new CapacityContext(capacityData, from);
+            CapacitySetup context = new CapacitySetup(capacityData, source);
             CastCapacityCommand command = new CastCapacityCommand(in context);
 
             await command.Run(battlePhase);

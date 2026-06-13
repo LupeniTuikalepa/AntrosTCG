@@ -5,6 +5,7 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Capacities;
@@ -21,7 +22,7 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
 {
-    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, IPhaseListener<SelectEntityActionPhase>
+    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, ILocalPlayerPhaseListener<SelectEntityActionPhase>
     {
         [SerializeField]
         private TMP_Text heroName;
@@ -38,7 +39,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         [SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         private float movementDuration;
 
-        [SerializeField] private CinemachineCamera cinemachineCamera;
+        [SerializeField, BoxGroup("GameFeel")] private CinemachineCamera cinemachineCamera;
 
         public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
@@ -89,6 +90,9 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             RenderingLayerMask mask = RenderingLayerMask.GetMask($"Player{playerID + 1}");
             if(mask.value != 0)
                 Model.EnableRenderingLayer(mask);
+
+            if (LocalBattlePlayer.TryGetRuntime(out RuntimeLocalBattlePlayer runtimeLocalBattlePlayer))
+                cinemachineCamera.OutputChannel = runtimeLocalBattlePlayer.Camera.Component.GetOutputChannel();
         }
 
         public void Despawn(RuntimeEntityManager manager)
@@ -100,7 +104,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         void IPhaseListener<SelectEntityActionPhase>.OnPhaseBegin(SelectEntityActionPhase phase)
         {
             selectPhase = phase;
-            
+
             if (IsSelected)
             {
                 cinemachineCamera.gameObject.SetActive(true);

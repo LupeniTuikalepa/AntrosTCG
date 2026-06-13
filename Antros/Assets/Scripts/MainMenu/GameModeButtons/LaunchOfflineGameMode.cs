@@ -37,7 +37,7 @@ namespace ATCG.MainMenu.MainMenu.GameModeButtons
                         .Select(ctx => ctx.ID.ToString())
                         .ToArray();
 
-                //PlayerInputPairing[] pairings = result.result;
+                //PlayerInputPairing[] pairings = infos.infos;
                 IBattlePlayerProfile[] localPlayerProfiles = new IBattlePlayerProfile[players.Length];
                 for (int i = 0; i < players.Length; i++)
                 {

@@ -18,29 +18,35 @@ namespace ATCG.Battle.Commands.Core
         public World World => battlePhase.world;
 
         private readonly List<object> commandPlayers;
-        private readonly Dictionary<IGameCommand, ICommandPlayerContext> pairings;
+        private readonly Dictionary<IGameCommand, ICommandPlayerGroup> pairings;
 
         public GameCommandContext(BattlePhase battlePhase, List<object> commandPlayers)
         {
-            pairings = DictionaryPool<IGameCommand, ICommandPlayerContext>.Get();
+            pairings = DictionaryPool<IGameCommand, ICommandPlayerGroup>.Get();
             this.battlePhase = battlePhase;
             this.commandPlayers = commandPlayers;
         }
 
         public IBattlePlayer GetBattlePlayer(int playerID) => battlePhase.GetPlayer(playerID);
 
-        public bool TryGetCommandPlayerContext(IGameCommand gameCommand, out ICommandPlayerContext commandPlayerContext)
-            => pairings.TryGetValue(gameCommand, out commandPlayerContext);
+        /// <summary>
+        /// Get the group of command players that will react for a specific command.
+        /// </summary>
+        /// <param name="gameCommand"></param>
+        /// <param name="commandPlayerGroup"></param>
+        /// <returns></returns>
+        public bool TryGetCommandPlayerGroup(IGameCommand gameCommand, out ICommandPlayerGroup commandPlayerGroup)
+            => pairings.TryGetValue(gameCommand, out commandPlayerGroup);
 
         public void Register<T>(T command) where T : IGameCommand
         {
-            CommandPlayerContext<T> playerContext = new(command);
-            pairings[command]= playerContext;
+            CommandPlayerGroup<T> playerGroup = new(command);
+            pairings[command]= playerGroup;
 
             foreach (object commandPlayer in commandPlayers)
             {
                 if (commandPlayer is ICommandPlayer<T> player && player.CanPlay(command))
-                    playerContext.Add(player);
+                    playerGroup.Add(player);
             }
         }
         public static implicit operator World(GameCommandContext context) => context.World;
@@ -54,7 +60,7 @@ namespace ATCG.Battle.Commands.Core
             foreach (var value in pairings.Values)
                 value.Dispose();
 
-            DictionaryPool<IGameCommand, ICommandPlayerContext>.Release(pairings);
+            DictionaryPool<IGameCommand, ICommandPlayerGroup>.Release(pairings);
         }
     }
 }

@@ -1,21 +1,23 @@
 using System.Collections.Generic;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.UI;
 using Helteix.Tools.Phases;
 
 namespace ATCG.Battle
 {
-    public class SelectEntityActionPhase : PhaseCompletionSource<IEntityAction>, IEntitySelectionController, ISinglePhase, IHUDPhase<SelectEntityActionPhase>
+    public class SelectEntityActionPhase : LocalPlayerPhaseCompletionSource<EntityAction>, IEntitySelectionController, ISinglePhase, IHUDPhase<SelectEntityActionPhase>
     {
         string ISinglePhase.Channel => nameof(SelectEntityActionPhase);
         bool ISinglePhase.AllowQueuing => false;
 
-        public readonly IReadOnlyList<IEntityAction> actions;
+        public readonly IReadOnlyList<EntityAction> actions;
         public readonly EntityAddress entityAddress;
 
 
-        public SelectEntityActionPhase(EntityAddress entityAddress, List<IEntityAction> actions)
+        public SelectEntityActionPhase(LocalBattlePlayer player, EntityAddress entityAddress, List<EntityAction> actions) : base(player)
         {
             this.entityAddress = entityAddress;
             this.actions = actions;
@@ -23,18 +25,18 @@ namespace ATCG.Battle
 
         public bool IsEmpty() => actions.Count == 0;
 
-        public IEnumerable<T> GetAll<T>() where T : IEntityAction
+        public IEnumerable<T> GetAll<T>() where T : EntityAction
         {
-            foreach (IEntityAction iAction in actions)
+            foreach (EntityAction iAction in actions)
             {
                 if (iAction is T t)
                     yield return t;
             }
         }
 
-        public bool Has<T>(out T action) where T : IEntityAction
+        public bool Has<T>(out T action) where T : EntityAction
         {
-            foreach (IEntityAction iAction in actions)
+            foreach (EntityAction iAction in actions)
             {
                 if (iAction is T t)
                 {

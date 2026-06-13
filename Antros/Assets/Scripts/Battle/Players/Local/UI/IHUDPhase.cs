@@ -1,4 +1,5 @@
-﻿using Helteix.ChanneledProperties;
+﻿using ATCG.Battle.Players.Local.Phases;
+using Helteix.ChanneledProperties;
 using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
 using Unity.Services.Multiplayer;
@@ -10,8 +11,9 @@ namespace ATCG.Battle.Players.Local.UI
         ChannelKey IHUDPhase.ChannelKey => HUDPhaseListenerChannelKeys<T>.ChannelKey;
     }
 
-    public interface IHUDPhase : IPhase
+    public interface IHUDPhase : ILocalPlayerPhase, IPhase
+
     {
-        public ChannelKey ChannelKey { get; }
+    public ChannelKey ChannelKey { get; }
     }
 }

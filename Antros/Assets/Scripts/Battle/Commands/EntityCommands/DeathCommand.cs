@@ -5,8 +5,13 @@ using ATCG.Battle.Players;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class DeathCommand : EntityCommand
+    public class DeathCommand : EntityCommand<DeathCommand.Infos>
     {
+        public struct Infos
+        {
+
+        }
+
         public DeathCommand(Entity sourceEntity) : base(sourceEntity)
         {
 

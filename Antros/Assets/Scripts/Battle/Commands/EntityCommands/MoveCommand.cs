@@ -5,8 +5,14 @@ using ATCG.HexGrids;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class MoveCommand : EntityCommand
+    public class MoveCommand : EntityCommand<MoveCommand.Infos>
     {
+        public struct Infos
+        {
+            public HexCoordinates from;
+            public HexCoordinates to;
+        }
+
         public readonly HexCoordinates destination;
 
         public MoveCommand(Entity sourceEntity, HexCoordinates destination) : base(sourceEntity)
@@ -20,7 +26,11 @@ namespace ATCG.Battle.Commands.EntityCommands
             if (TargetEntity.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))
             {
                 ref GridMemberComponent component = ref gridEntityComponentRef.GetValue();
+                infos.from = component.coordinates;
+
                 component.coordinates =destination;
+
+                infos.to = component.coordinates;
             }
         }
     }

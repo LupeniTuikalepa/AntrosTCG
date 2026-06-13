@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Commands.Core
 {
-    public interface ICommandPlayerContext: IDisposable
+    public interface ICommandPlayerGroup: IDisposable
     {
         IGameCommand Command { get; }
         Awaitable Initiate(GameCommandContext context);

@@ -1,11 +1,16 @@
-﻿using Helteix.Tools;
+﻿using System;
+using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands.GameCommands.Players;
+using Helteix.Tools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.UI
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIconBar")]
-    public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI
+    public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI, ICommandPlayer<ModifyPlayerManaCommand>
     {
         [SerializeField]
         private TMP_Text valueText;
@@ -18,28 +23,80 @@ namespace ATCG.Battle.Players.UI
 
         private PlayerManaIcon[] manaIcons;
 
+        private void OnEnable()
+        {
+            GameCommandManager.Instance.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            GameCommandManager.Instance.Unregister(this);
+        }
 
         public void Connect(IBattlePlayer player)
         {
             container.ClearChildren();
 
-            manaIcons = new PlayerManaIcon[player.MaxMana];
-            for (int i = 0; i < player.MaxMana; i++)
-                manaIcons[i] = iconPrefab.InstantiatePrefab(container);
+            EnsureMaxMana(player.MaxMana);
+            Refresh(player.MaxMana, player.CurrentMana, player.CurrentMana);
+        }
 
-            player.OnPlayerManaChanges += Refresh;
+        private void EnsureMaxMana(int max)
+        {
+            if (manaIcons == null)
+            {
+                manaIcons = new PlayerManaIcon[max];
 
-            Refresh(player, player.CurrentMana, player.MaxMana);
+                for (int i = 0; i < max; i++)
+                    manaIcons[i] = iconPrefab.InstantiatePrefab(container);
+            }
+
+            if (manaIcons.Length == max)
+                return;
+
+            using (ListPool<PlayerManaIcon>.Get(out var list))
+            {
+                list.AddRange(manaIcons);
+                if (manaIcons.Length > max)
+                {
+                    for (int i = max; i < manaIcons.Length; i++)
+                    {
+                        var icon = manaIcons[i];
+                        Destroy(icon.gameObject);
+                        list.Remove(icon);
+                    }
+                }
+                else
+                {
+                    for (int i = manaIcons.Length; i < max; i++)
+                    {
+                        var icon = iconPrefab.InstantiatePrefab(container);
+                        list.Add(icon);
+                    }
+                }
+
+                manaIcons = list.ToArray();
+            }
         }
 
         public void Disconnect(IBattlePlayer player)
         {
-            player.OnPlayerManaChanges -= Refresh;
+            Refresh(player.MaxMana, player.CurrentMana, player.CurrentMana);
         }
 
-        private void Refresh(IBattlePlayer player, int current, int last)
+        public async Awaitable Play(GameCommandContext context, ModifyPlayerManaCommand command)
         {
-            for (int i = 0; i < player.MaxMana; i++)
+            await Awaitable.MainThreadAsync();
+            ModifyPlayerManaCommand.Infos infos = command.GetInfos();
+
+            Refresh(infos.maxMana, infos.toMana, infos.fromMana);
+        }
+
+        private void Refresh(int max, int current, int last)
+        {
+            EnsureMaxMana(max);
+
+            for (int i = 0; i < max; i++)
             {
                 PlayerManaIcon icon = manaIcons[i];
                 if (i < current)
@@ -48,7 +105,8 @@ namespace ATCG.Battle.Players.UI
                     icon.Deactivate();
             }
 
-            valueText.text = $"{current}/{player.MaxMana}";
+            valueText.text = $"{current}/{max}";
         }
+
     }
 }

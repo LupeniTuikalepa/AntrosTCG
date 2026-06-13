@@ -25,6 +25,27 @@ namespace ATCG.Battle.Players.Local
 
         public readonly Condition canUseHeroesAbilities;
 
+
+
+
+        public int ID => Profile.ID;
+        public LocalPlayerProfile Profile { get; }
+        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
+        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
+
+
+        IBattlePlayerProfile IBattlePlayer.Profile => Profile;
+        public Hand<IBattleCard> Hand { get; }
+        public Deck<IBattleCard> Deck { get; }
+        public DefaultCardCollection<IBattleCard> DeadCards { get; }
+        public int CurrentHealth { get; private set; }
+        public int MaxHealth => GameMetrics.Current.MaxHealth;
+        public int CurrentMana { get; private set; }
+        public int MaxMana => GameMetrics.Current.MaxMana;
+
+        public BattlePhase BattlePhase { get; }
+
+
         public LocalBattlePlayer(BattlePhase battle, LocalPlayerProfile profile)
         {
             BattlePhase = battle;
@@ -49,29 +70,10 @@ namespace ATCG.Battle.Players.Local
                 Deck.TryAddCard(card);
             }
         }
-
-
-        public int ID => Profile.ID;
-        public LocalPlayerProfile Profile { get; }
-        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
-        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
-
-
-        IBattlePlayerProfile IBattlePlayer.Profile => Profile;
-        public Hand<IBattleCard> Hand { get; }
-        public Deck<IBattleCard> Deck { get; }
-        public DefaultCardCollection<IBattleCard> DeadCards { get; }
-        public int CurrentHealth { get; private set; }
-        public int MaxHealth => GameMetrics.Current.MaxHealth;
-        public int CurrentMana { get; private set; }
-        public int MaxMana => GameMetrics.Current.MaxMana;
-
-        public BattlePhase BattlePhase { get; }
-
         [Button]
         public void AddOrRemoveMana(int mana)
         {
-            int last = mana;
+            int last = CurrentMana;
             CurrentMana += mana;
             if (CurrentMana > MaxMana)
                 CurrentMana = MaxMana;

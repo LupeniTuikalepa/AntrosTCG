@@ -15,16 +15,16 @@ namespace ATCG.Battle.Turns
         public int PlayerID { get; private set; }
 
         [SerializeReference]
-        private List<GameCommand> commands;
+        private List<IGameCommand> commands;
 
         public BattleTurn(string turnID, int playerID)
         {
             TurnID = turnID;
             PlayerID = playerID;
-            commands = new List<GameCommand>();
+            commands = new List<IGameCommand>();
         }
 
-        public void RegisterCommand(GameCommand command)
+        public void RegisterCommand(IGameCommand command)
         {
             commands.Add(command);
         }

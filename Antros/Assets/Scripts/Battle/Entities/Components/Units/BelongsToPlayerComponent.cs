@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Players;
+﻿using ATCG.Battle.GameModes;
+using ATCG.Battle.Players;
 
 namespace ATCG.Battle.Entities.Components
 {
@@ -10,6 +11,8 @@ namespace ATCG.Battle.Entities.Components
         {
             this.playerId = playerId;
         }
+        
+        public IBattlePlayer GetPlayer(BattlePhase battlePhase) => battlePhase.GetPlayer(playerId);
 
         public bool IsAllieOf(IBattlePlayer player) => IsAllieOf(player.Profile.ID);
         public bool IsAllieOf(int id) => playerId == id;

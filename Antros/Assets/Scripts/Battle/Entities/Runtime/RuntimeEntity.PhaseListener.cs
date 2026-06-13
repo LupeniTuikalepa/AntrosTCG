@@ -1,4 +1,6 @@
 ﻿using System;
+using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.Tools;
@@ -7,7 +9,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {
-    public abstract partial class RuntimeEntity<T> : IPhaseListener<ISelectEntityPhase>
+    public abstract partial class RuntimeEntity<T> : ILocalPlayerPhaseListener<ISelectEntityPhase>
     {
         public ISelectEntityPhase CurrentSelectEntityPhase { get; private set; }
 

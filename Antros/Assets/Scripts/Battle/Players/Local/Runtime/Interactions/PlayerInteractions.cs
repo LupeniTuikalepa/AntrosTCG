@@ -68,7 +68,7 @@ namespace ATCG.Battle
         private async Awaitable SelectAction(IRuntimeEntity runtimeEntity)
         {
             EntityAddress address = runtimeEntity.Address;
-            using (ListPool<IEntityAction>.Get(out var actions))
+            using (ListPool<EntityAction>.Get(out var actions))
             {
                 address.GetActionsFor(actions, Player);
 
@@ -76,12 +76,12 @@ namespace ATCG.Battle
                     return;
 
                 isInActionSelection = true;
-                SelectEntityActionPhase phase = new SelectEntityActionPhase(address, actions);
+                SelectEntityActionPhase phase = new SelectEntityActionPhase(Player, address, actions);
 
                 RuntimeEntityManager.SelectionController.AddPriority(runtimeEntity.gameObject, PriorityTags.Default, this);
 
-                PhaseResult<IEntityAction> result = await phase;
-                IEntityAction action = result.value;
+                PhaseResult<EntityAction> result = await phase;
+                EntityAction action = result.value;
 
                 if(actions.Contains(action))
                     await action.Execute(address, BattlePhase);

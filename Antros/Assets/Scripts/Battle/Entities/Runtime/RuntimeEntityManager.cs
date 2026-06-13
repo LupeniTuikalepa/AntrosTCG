@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ATCG.Battle.Grids.Runtime;
+using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Runtime;
 using Helteix.ChanneledProperties.Conditions;
@@ -39,6 +40,12 @@ namespace ATCG.Battle.Entities.Runtime
         public Priority<IEntitySelectionController> SelectionController { get; private set; }
 
         public RuntimeBattlePlayer RuntimeBattlePlayer { get; private set; }
+        public IBattlePlayer BattlePlayer { get; private set; }
+
+        /// <summary>
+        /// Casts the player to a local player if it's one. The entity manager could be without one.
+        /// </summary>
+        public LocalBattlePlayer LocalBattlePlayer => BattlePlayer as LocalBattlePlayer;
 
         private List<Entity> selectedEntities;
 
@@ -75,10 +82,13 @@ namespace ATCG.Battle.Entities.Runtime
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
             this.RuntimeBattlePlayer = runtimeBattlePlayer;
+            this.BattlePlayer = player;
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
+            RuntimeBattlePlayer = null;
+            BattlePlayer = null;
         }
 
         public void RegisterRuntimeEntity(IRuntimeEntity runtimeEntity)
@@ -150,6 +160,9 @@ namespace ATCG.Battle.Entities.Runtime
 
         private void EnsureSelectableSlot(int quantity)
         {
+            if(SelectionController.Value == null)
+                return;
+
             int maxSelectableEntities = SelectionController.Value.MaxSelectableEntities;
 
             if (quantity >= maxSelectableEntities)

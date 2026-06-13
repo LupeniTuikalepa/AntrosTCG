@@ -1,11 +1,14 @@
-﻿using ATCG.Battle.Players.Local.Phases;
+﻿using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Phases;
 using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
 
 namespace ATCG.Battle.Entities.Runtime
 {
-    public partial class RuntimeEntityManager : IPhaseListener<ISelectEntityPhase>
+    public partial class RuntimeEntityManager : ILocalPlayerPhaseListener<ISelectEntityPhase>
     {
+        LocalBattlePlayer ILocalPlayerPhaseListener<ISelectEntityPhase>.LocalBattlePlayer => LocalBattlePlayer;
+
         void IPhaseListener<ISelectEntityPhase>.OnPhaseBegin(ISelectEntityPhase phase)
         {
             ClearSelection();
@@ -17,5 +20,6 @@ namespace ATCG.Battle.Entities.Runtime
             ClearSelection();
             SelectionController.RemovePriority(phase.ChannelKey);
         }
+
     }
 }

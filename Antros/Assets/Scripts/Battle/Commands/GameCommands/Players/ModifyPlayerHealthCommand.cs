@@ -6,8 +6,14 @@ using UnityEngine;
 namespace ATCG.Battle.Commands.GameCommands.Players
 {
     [Serializable]
-    public class ModifyPlayerHealthCommand : GameCommand
+    public class ModifyPlayerHealthCommand : GameCommand<ModifyPlayerHealthCommand.Infos>
     {
+        public struct Infos
+        {
+            public int from;
+            public int to;
+        }
+        
         [field: SerializeField]
         public int PlayerId { get; private set; }
 
@@ -23,7 +29,11 @@ namespace ATCG.Battle.Commands.GameCommands.Players
         protected override void Process(in GameCommandContext context)
         {
             IBattlePlayer player = context.GetBattlePlayer(PlayerId);
+            infos.from = player.CurrentHealth;
+
             player.AddOrRemoveHealth(Amount);
+
+            infos.to = player.CurrentHealth;
         }
     }
 }

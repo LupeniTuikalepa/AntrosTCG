@@ -110,7 +110,7 @@ namespace ATCG.Battle.Players.Runtime
             return false;
         }
 
-        public static bool TryGetRuntimeLocalPlayerFor<TRuntimePlayer>(T player, out TRuntimePlayer runtimePlayer)
+        public static bool TryGetRuntimePlayerFor<TRuntimePlayer>(T player, out TRuntimePlayer runtimePlayer)
             where TRuntimePlayer : RuntimeBattlePlayer<T>
         {
             foreach (RuntimeBattlePlayer<T> runtimeBattlePlayer in RuntimeBattlePlayers)

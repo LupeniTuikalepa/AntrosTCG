@@ -9,133 +9,155 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Commands.Core
 {
     [Serializable]
-    public abstract class GameCommand : IDisposable, IGameCommand
+    public abstract class GameCommand<TInfos> : IDisposable, IGameCommand where TInfos : struct
+
     {
-        public IReadOnlyList<GameCommand> Embeds => embeds;
+    public IReadOnlyList<IGameCommand> Embeds => embeds;
 
-        [field: SerializeReference]
-        public GameCommand Parent { get; private set; }
+    [field: SerializeReference]
+    public IGameCommand Parent { get; private set; }
 
-        [ShowInInspector]
-        private List<GameCommand> embeds;
+    [ShowInInspector]
+    private List<IGameCommand> embeds;
 
-        protected GameCommand()
+    public int ResultHash => infos.GetHashCode();
+
+    protected TInfos infos;
+
+    protected GameCommand()
+    {
+        embeds = ListPool<IGameCommand>.Get();
+        infos = new TInfos();
+    }
+
+    void IGameCommand.Process(in GameCommandContext context)
+    {
+        try
         {
-            embeds = ListPool<GameCommand>.Get();
+            Init(in context);
+
+            Process(in context);
         }
-
-        void IGameCommand.Process(in GameCommandContext context)
+        finally
         {
-            try
+            Dispose(in context);
+        }
+    }
+
+    protected virtual void Init(in GameCommandContext context)
+    {
+    }
+
+    protected virtual void Dispose(in GameCommandContext context)
+    {
+
+    }
+
+    public TInfos GetInfos() => infos;
+
+    protected abstract void Process(in GameCommandContext context);
+
+    public void Embed<TCommand>(in GameCommandContext context)
+        where TCommand : IGameCommand, new()
+    {
+        Embed(context, new TCommand());
+    }
+
+    public void Embed<TCommand>(in GameCommandContext context, TCommand command)
+        where TCommand : IGameCommand
+    {
+        context.Register(command);
+
+        embeds.Add(command);
+        command.SetParent(this);
+        command.Process(in context);
+    }
+
+
+    void IGameCommand.SetParent(IGameCommand parent)
+    {
+        Parent = parent;
+    }
+
+    public IEnumerable<IGameCommand> GetChildren()
+    {
+        foreach (IGameCommand command in embeds)
+        {
+            yield return command;
+
+            foreach (IGameCommand embed in command.GetChildren())
+                yield return embed;
+        }
+    }
+
+    public IEnumerable<TCommand> GetChildren<TCommand>() where TCommand : IGameCommand
+    {
+        foreach (IGameCommand subEvent in GetChildren())
+            if (subEvent is TCommand t)
+                yield return t;
+    }
+
+    public bool HasAnyChildrenOfType<TCommand>(out TCommand firstFound) where TCommand : IGameCommand
+    {
+        foreach (IGameCommand subEvent in GetChildren())
+            if (subEvent is TCommand t)
             {
-                Init(in context);
-
-                Process(in context);
+                firstFound = t;
+                return true;
             }
-            finally
+
+        firstFound = default;
+        return false;
+    }
+
+    public bool HasAnyAncestorOfType<TCommand>(out TCommand firstFound) where TCommand : IGameCommand
+    {
+        foreach (IGameCommand e in GetAncestors())
+            if (e is TCommand t)
             {
-                Dispose(in context);
+                firstFound = t;
+                return true;
             }
-        }
 
-        protected virtual void Init(in GameCommandContext context) { }
-        protected virtual void Dispose(in GameCommandContext context) { }
+        firstFound = default;
+        return false;
+    }
 
-        protected abstract void Process(in GameCommandContext context);
+    public IEnumerable<TCommand> GetAncestorsOfType<TCommand>() where TCommand : IGameCommand
+    {
+        foreach (IGameCommand entityEvent in GetAncestors())
+            if (entityEvent is TCommand t)
+                yield return t;
+    }
 
-        protected void Embed<T>(in GameCommandContext context) where T : GameCommand, new()
+    public IEnumerable<IGameCommand> GetAncestors()
+    {
+        IGameCommand parent = Parent;
+        while (parent != null)
         {
-            Embed(context, new T());
+            yield return parent;
+            parent = Parent.Parent;
         }
+    }
 
-        protected void Embed<T>(in GameCommandContext context, T command) where T : GameCommand
-        {
-            context.Register(command);
+    protected void Break(string message)
+    {
+        throw new BreakCommandException(message);
+    }
 
-            embeds.Add(command);
-            command.Parent = this;
-            command.Process(in context);
-        }
+    void IDisposable.Dispose()
+    {
+        OnDispose();
+        ListPool<IGameCommand>.Release(embeds);
+        foreach (IGameCommand subEvent in embeds)
+            ((IDisposable)subEvent).Dispose();
 
-        public IEnumerable<GameCommand> GetChildren()
-        {
-            foreach (GameCommand command in embeds)
-            {
-                yield return command;
-
-                foreach (GameCommand embed in command.GetChildren())
-                    yield return embed;
-            }
-        }
-
-        public IEnumerable<T> GetChildren<T>() where T : GameCommand
-        {
-            foreach (GameCommand subEvent in GetChildren())
-                if (subEvent is T t)
-                    yield return t;
-        }
-
-        public bool HasAnyChildrenOfType<T>(out T firstFound)
-        {
-            foreach (GameCommand subEvent in GetChildren())
-                if (subEvent is T t)
-                {
-                    firstFound = t;
-                    return true;
-                }
-
-            firstFound = default;
-            return false;
-        }
-
-        public bool HasAnyAncestorOfType<T>(out T firstFound) where T : GameCommand
-        {
-            foreach (GameCommand e in GetAncestors())
-                if (e is T t)
-                {
-                    firstFound = t;
-                    return true;
-                }
-
-            firstFound = null;
-            return false;
-        }
-
-        public IEnumerable<T> GetAncestorsOfType<T>() where T : GameCommand
-        {
-            foreach (GameCommand entityEvent in GetAncestors())
-                if (entityEvent is T t)
-                    yield return t;
-        }
-
-        public IEnumerable<GameCommand> GetAncestors()
-        {
-            GameCommand parent = Parent;
-            while (parent != null)
-            {
-                yield return parent;
-                parent = Parent.Parent;
-            }
-        }
-
-        protected void Break(string message)
-        {
-            throw new BreakCommandException(message);
-        }
-        
-        void IDisposable.Dispose()
-        {
-            OnDispose();
-            ListPool<GameCommand>.Release(embeds);
-            foreach (GameCommand subEvent in embeds)
-                ((IDisposable)subEvent).Dispose();
-
-        }
+    }
 
 
-        protected virtual void OnDispose()
-        {
-        }
+    protected virtual void OnDispose()
+    {
+    }
 
     }
 }

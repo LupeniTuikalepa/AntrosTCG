@@ -5,23 +5,24 @@ using ATCG.Metrics;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-	public class BasicAttackCommand : EntityCommand
+	public class BasicAttackCommand : EntityCommand<BasicAttackCommand.Infos>
 	{
-		private readonly int strength;
-		private readonly Entity victime;
+		public struct Infos
+		{
 
-		public BasicAttackCommand(EntityAddress sourceEntity, Entity victime, int strength) : base(sourceEntity)
+		}
+		private readonly int strength;
+		private readonly Entity victim;
+
+		public BasicAttackCommand(EntityAddress sourceEntity, Entity victim, int strength) : base(sourceEntity)
 		{
 			this.strength = strength;
-			this.victime = victime;
+			this.victim = victim;
 		}
 
 		protected override void Process(in GameCommandContext context)
 		{
-			var manaCost = new ModifyPlayerManaCommand(TargetEntity, GameMetrics.Current.BasicAttackCost);
-			Embed(in context, manaCost);
-
-			DamageCommand command = new DamageCommand(strength, victime);
+			DamageCommand command = new DamageCommand(strength, victim);
 			Embed(in context, command);
 		}
 	}

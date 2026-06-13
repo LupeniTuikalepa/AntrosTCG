@@ -14,7 +14,7 @@ namespace Helteix.Tools.Phases
             this.listener = listener;
         }
 
-        public bool Accepts<TResult>(Phase<TResult> phase) => phase is T;
+        public bool Accepts<TResult>(Phase<TResult> phase) => phase is T t && listener.Accepts(t);
 
         public void OnPhaseBegin<TResult>(Phase<TResult> phase)
         {

@@ -4,8 +4,14 @@ using ATCG.Battle.Entities.Components;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class HealCommand : EntityCommand
+    public class HealCommand : EntityCommand<HealCommand.Infos>
     {
+        public struct Infos
+        {
+            public int fromHealth;
+            public int toHealth;
+        }
+
         public readonly int quantity;
 
         public HealCommand(int quantity, Entity entity) : base(entity)
@@ -19,7 +25,11 @@ namespace ATCG.Battle.Commands.EntityCommands
                 return;
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
+            infos.fromHealth = componentHealth.CurrentHealth;
+
             componentHealth.AddOrRemoveHealth(quantity);
+
+            infos.toHealth = componentHealth.CurrentHealth;
         }
     }
 }

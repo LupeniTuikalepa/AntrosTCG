@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.Phases.Cards
 {
-    public class DeployCardPhase : Phase
+    public class DeployCardPhase : LocalPlayerPhase
     {
         private struct DeployableCellFilter : IEntityFilter
         {
@@ -30,20 +30,18 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             }
         }
 
-        private readonly LocalBattlePlayer localBattlePlayer;
         private readonly IBattleCard battleCard;
         private readonly CardDragPhase<IBattleCard> phase;
 
-        public DeployCardPhase(LocalBattlePlayer localBattlePlayer, IBattleCard battleCard, CardDragPhase<IBattleCard> phase)
+        public DeployCardPhase(LocalBattlePlayer localBattlePlayer, IBattleCard battleCard, CardDragPhase<IBattleCard> phase) : base(localBattlePlayer)
         {
-            this.localBattlePlayer = localBattlePlayer;
             this.battleCard = battleCard;
             this.phase = phase;
         }
 
         protected override async Awaitable ExecuteNoResult(CancellationToken token)
         {
-            SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(new DeployableCellFilter(), phase);
+            SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(LocalBattlePlayer, new DeployableCellFilter(), phase);
 
             PhaseResult<EntityAddress[]> result = await selectEntityPhase;
 
@@ -61,12 +59,12 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             if (!address.IsGridMemberAspect(out GridMemberAspect aspect))
                 return ;
 
-            int cardID = localBattlePlayer.Hand.GetCardIndex(battleCard);
+            int cardID = LocalBattlePlayer.Hand.GetCardIndex(battleCard);
             if (cardID == -1)
                 return;
 
-            DeployCardCommand deployCardCommand = new(cardID, aspect.Coordinates, localBattlePlayer.ID);
-            deployCardCommand.RunAndForget(localBattlePlayer.BattlePhase);
+            DeployCardCommand deployCardCommand = new(cardID, aspect.Coordinates, LocalBattlePlayer.ID);
+            deployCardCommand.RunAndForget(LocalBattlePlayer.BattlePhase);
         }
     }
 }

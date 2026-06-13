@@ -9,8 +9,12 @@ using UnityEngine;
 namespace ATCG.Battle.Commands.GameCommands
 {
     [Serializable]
-    public class DeployCardCommand : GameCommand
+    public class DeployCardCommand : GameCommand<DeployCardCommand.Infos>
     {
+        public struct Infos
+        {
+            public bool couldInvoke;
+        }
         [field: SerializeField]
         public int PlayerId { get; private set; }
 
@@ -33,8 +37,12 @@ namespace ATCG.Battle.Commands.GameCommands
             IBattleCard card = player.Hand.GetCard(CardId);
 
             if (card.InvocationCost > player.CurrentMana)
+            {
+                infos.couldInvoke = false;
                 return;
+            }
 
+            infos.couldInvoke = true;
             Embed(in context, new ModifyPlayerManaCommand(PlayerId, -card.InvocationCost));
             switch (card)
             {

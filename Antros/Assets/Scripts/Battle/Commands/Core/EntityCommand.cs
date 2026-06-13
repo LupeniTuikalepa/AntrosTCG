@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ATCG.Battle.Commands.Core
 {
     [Serializable]
-    public abstract class EntityCommand : GameCommand
+    public abstract class EntityCommand<T> : GameCommand<T> where T : struct
     {
         [SerializeField]
         private int sourceEntityId;

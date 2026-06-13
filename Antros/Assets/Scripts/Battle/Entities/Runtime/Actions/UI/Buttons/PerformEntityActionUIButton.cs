@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.UI
 {
-    public abstract class PerformEntityActionUIButton<T> : EntityActionUIButton where T : class, IEntityAction
+    public abstract class PerformEntityActionUIButton<T> : EntityActionUIButton where T : EntityAction
     {
         [SerializeField]
         private ManaCostUI cost;

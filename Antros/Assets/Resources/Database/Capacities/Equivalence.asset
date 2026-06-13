@@ -20,9 +20,7 @@ MonoBehaviour:
   <CastPatterns>k__BackingField: []
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <CellsHitEffects>k__BackingField: []
-  <AlliesHitEffects>k__BackingField: []
-  <OpponentsHitEffects>k__BackingField: []
+  <HitEffects>k__BackingField: []
   references:
     version: 2
     RefIds: []

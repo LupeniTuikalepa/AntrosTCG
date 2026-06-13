@@ -16,7 +16,7 @@ namespace ATCG.Battle.Commands.Core
     {
         private List<object> commandsPlayers = new List<object>();
 
-        public void ExecuteGameCommand<T>(T gameCommand, BattlePhase battlePhase) where T: GameCommand
+        public void ExecuteGameCommand<T>(T gameCommand, BattlePhase battlePhase) where T: IGameCommand
         {
             ExecuteGameCommandAsync(gameCommand, battlePhase).FireAndForget();
         }
@@ -39,12 +39,12 @@ namespace ATCG.Battle.Commands.Core
 
             await PlayCommandEffects(context, gameCommand);
         }
-        public void Register<T>(ICommandPlayer<T> player) where T : GameCommand
+        public void Register<T>(ICommandPlayer<T> player) where T : IGameCommand
         {
             commandsPlayers.Add(player);
         }
 
-        public void Unregister<T>(ICommandPlayer<T> player) where T : GameCommand
+        public void Unregister<T>(ICommandPlayer<T> player) where T : IGameCommand
         {
             commandsPlayers.Remove(player);
         }
@@ -52,12 +52,12 @@ namespace ATCG.Battle.Commands.Core
 
         private async Awaitable PlayCommandEffects(GameCommandContext context, IGameCommand gameCommand)
         {
-            if (!context.TryGetCommandPlayerContext(gameCommand, out ICommandPlayerContext player))
+            if (!context.TryGetCommandPlayerGroup(gameCommand, out ICommandPlayerGroup player))
                 return;
 
             Awaitable playable = player.Initiate(context);
 
-            foreach (GameCommand embed in gameCommand.Embeds)
+            foreach (IGameCommand embed in gameCommand.Embeds)
             {
                 await player.WaitBeforePlayingEmbed(embed);
 

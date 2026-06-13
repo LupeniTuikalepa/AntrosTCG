@@ -8,22 +8,26 @@ using ATCG.HexGrids;
 
 namespace ATCG.Battle.Commands.GameCommands
 {
-    public class SpawnHeroCommand : GameCommand
+    public class SpawnHeroCommand : GameCommand<SpawnHeroCommand.Infos>
     {
+        public struct Infos
+        {
+            public Entity spawnedEntity;
+            public int cardID;
+        }
+
         public IBattlePlayer Player { get; private set; }
 
         public HeroBattleCard Card { get; private set; }
 
         public HexCoordinates Destination { get; private set; }
 
-        public EntityAddress DeployedEntity { get; private set; }
-
         public SpawnHeroCommand(IBattlePlayer player, HeroBattleCard heroBattleCard, HexCoordinates destination)
         {
             Player = player;
             Card = heroBattleCard;
             Destination = destination;
-            DeployedEntity = EntityAddress.None;
+
         }
 
 
@@ -36,8 +40,10 @@ namespace ATCG.Battle.Commands.GameCommands
                 grid = context.Grid,
             });
 
-            DeployedEntity = hero.EntityAddress;
-            Embed(in context, new MoveCommand(DeployedEntity, Destination));
+            infos.cardID = Player.Hand.GetCardIndex(Card);
+            infos.spawnedEntity = hero.EntityAddress.entity;
+            
+            Embed(in context, new MoveCommand(hero.EntityAddress, Destination));
         }
     }
 }

@@ -7,6 +7,6 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
     public interface ICapacityEffect<in T> : IBehaviour<T> where T : IEffectData
     {
-        void Apply(T data, EntityAddress target, in CastCapacityCommand.Context context);
+        void Apply(T data, EntityAddress target, in CapacityContext capacityContext);
     }
 }

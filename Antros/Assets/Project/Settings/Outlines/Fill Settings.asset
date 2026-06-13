@@ -1,54 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-634256550602814689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
-  m_Name: Fill
-  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
-  material: {fileID: 0}
-  isActive: 1
-  RenderingLayer:
-    serializedVersion: 0
-    m_Bits: 32
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  renderQueue: 0
-  occlusion: 2
-  occludedBy: 0
-  OccludersRenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  blendMode: 0
-  alphaCutout: 0
-  alphaCutoutTexture: {fileID: 0}
-  alphaCutoutThreshold: 0.5
-  vertexAnimation: 0
-  materialType: 0
-  customMaterial: {fileID: 0}
-  pattern: 5
-  primaryColor: {r: 0, g: 1, b: 0.93669504, a: 0.15686275}
-  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
-  texture: {fileID: 0}
-  channel: 0
-  frequencyX: 40
-  frequencyY: 2
-  density: 0.5
-  rotation: 0
-  direction: 0
-  offset: 0
-  speed: 0.02
-  scale: 1
-  width: 0.5
-  softness: 0.247
-  power: 0.91
 --- !u!114 &-400218524478689417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,9 +66,8 @@ MonoBehaviour:
   fills:
   - {fileID: 1785283159357974261}
   - {fileID: -400218524478689417}
-  - {fileID: -634256550602814689}
-  - {fileID: 1494961961415728934}
---- !u!114 &1494961961415728934
+  - {fileID: 483762448798097702}
+--- !u!114 &483762448798097702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,7 +83,7 @@ MonoBehaviour:
   isActive: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 64
+    m_Bits: 32
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -151,7 +101,7 @@ MonoBehaviour:
   materialType: 0
   customMaterial: {fileID: 0}
   pattern: 5
-  primaryColor: {r: 0, g: 1, b: 0.9372549, a: 0.15686275}
+  primaryColor: {r: 0.6074226, g: 1.5108436, b: 1.7169812, a: 2}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0
@@ -164,8 +114,8 @@ MonoBehaviour:
   speed: 0.02
   scale: 1
   width: 0.3
-  softness: 0
-  power: 0.8
+  softness: 0.5
+  power: 0.3
 --- !u!114 &1785283159357974261
 MonoBehaviour:
   m_ObjectHideFlags: 0

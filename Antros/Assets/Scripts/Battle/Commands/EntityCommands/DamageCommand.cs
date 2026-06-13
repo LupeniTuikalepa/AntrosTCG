@@ -4,8 +4,13 @@ using ATCG.Battle.Entities.Components;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class DamageCommand : EntityCommand
+    public class DamageCommand : EntityCommand<DamageCommand.Infos>
     {
+        public struct Infos
+        {
+
+        }
+
         public readonly int quantity;
         public readonly bool triggerDealDamageReactions;
 

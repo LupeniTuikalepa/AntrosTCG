@@ -17,6 +17,8 @@ namespace ATCG.Battle.Entities
         }
 
 
+        public EntityAddress ToAddress(World world) => new EntityAddress(world, this);
+
         public bool IsAlive(World world)
         {
             return world.IsAlive(this);

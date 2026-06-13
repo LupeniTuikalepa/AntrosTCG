@@ -21,7 +21,6 @@ namespace ATCG.Capacities
 
         [field: BoxGroup("Behaviour")]
         [field: BoxGroup("Behaviour/Patterns")]
-        [field: ListDrawerSettings(ShowFoldout =  false)]
         [field: SerializeReference, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public CapacityPatternData[] CastPatterns { get; private set; }
 
@@ -37,12 +36,16 @@ namespace ATCG.Capacities
         [field: SerializeReference, Tooltip("Effects applied on everything hit by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public IEffectData[] HitEffects { get; private set; }
 
+
         protected override void Reset()
         {
             base.Reset();
+
             CastPatterns = Array.Empty<CapacityPatternData>();
             FirePatterns = Array.Empty<CapacityPatternData>();
+
             CasterEffects = Array.Empty<IEffectData>();
+            HitEffects = Array.Empty<IEffectData>();
         }
     }
 }

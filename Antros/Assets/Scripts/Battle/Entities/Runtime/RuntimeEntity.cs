@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ATCG.Battle.Cards;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Metrics;
@@ -27,8 +28,10 @@ namespace ATCG.Battle.Entities.Runtime
         public event Action OnEntityDeselected;
 
         public RuntimeBattlePlayer RuntimeBattlePlayer => Manager.RuntimeBattlePlayer;
-        public IBattlePlayer BattlePlayer => RuntimeBattlePlayer.BattlePlayer;
-        public BattlePhase BattlePhase => BattlePlayer.BattlePhase;
+        public IBattlePlayer BattlePlayer => Manager.BattlePlayer;
+        public LocalBattlePlayer LocalBattlePlayer => Manager.LocalBattlePlayer;
+        public BattlePhase BattlePhase => LocalBattlePlayer.BattlePhase;
+
         public EntityAddress Address => Aspect.EntityAddress;
         public bool IsSelected => Manager.IsSelected(this);
 
@@ -47,7 +50,7 @@ namespace ATCG.Battle.Entities.Runtime
 
         [field: SerializeField]
         public Transform actionUIRoot { get; private set; }
-        
+
         protected virtual void Awake()
         {
             IsInteractable = new Condition();

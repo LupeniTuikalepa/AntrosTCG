@@ -9,13 +9,13 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
     public class HealEffect : ICapacityEffect<HealEffectData>
     {
         public void Apply(HealEffectData data, EntityAddress target,
-            in CastCapacityCommand.Context context)
+            in CapacityContext capacityContext)
         {
             if (!target.HasComponent<HealthComponent>())
                 return;
 
             HealCommand healCommand = new(data.Quantity, target);
-            context.EmbedCommand(healCommand);
+            capacityContext.EmbedCommand(healCommand);
         }
     }
 }
