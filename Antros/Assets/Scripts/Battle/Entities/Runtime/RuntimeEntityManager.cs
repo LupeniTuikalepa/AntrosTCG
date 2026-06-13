@@ -60,7 +60,7 @@ namespace ATCG.Battle.Entities.Runtime
             selectedEntities = new ();
 
             Selectable = new Condition();
-            SelectionController = new Priority<IEntitySelectionController>();
+            SelectionController = new Priority<IEntitySelectionController>(new DefaultSelectionController());
 
             Selectable.AddOnValueChangeCallback(ctx =>
             {

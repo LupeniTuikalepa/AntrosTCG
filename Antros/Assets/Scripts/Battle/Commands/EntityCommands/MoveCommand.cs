@@ -21,9 +21,9 @@ namespace ATCG.Battle.Commands.EntityCommands
         }
 
         //TODO use correct component
-        protected override void Process(in GameCommandContext context)
+        protected override void Process(in CommandContext context)
         {
-            if (TargetEntity.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))
+            if (Target.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))
             {
                 ref GridMemberComponent component = ref gridEntityComponentRef.GetValue();
                 infos.from = component.coordinates;

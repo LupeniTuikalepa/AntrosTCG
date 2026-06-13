@@ -10,7 +10,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
 
-        public async Awaitable Play(GameCommandContext context, DeployCardCommand command)
+        public async Awaitable Play(CommandContext context, DeployCardCommand command)
         {
             await Awaitable.MainThreadAsync();
         }

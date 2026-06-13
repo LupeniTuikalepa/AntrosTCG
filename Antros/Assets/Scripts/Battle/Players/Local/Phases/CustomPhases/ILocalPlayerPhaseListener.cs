@@ -1,4 +1,5 @@
 ﻿using Helteix.Tools.Phases;
+using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
@@ -6,6 +7,9 @@ namespace ATCG.Battle.Players.Local.Phases
     {
         LocalBattlePlayer LocalBattlePlayer { get; }
 
-        bool IPhaseListener<T>.Accepts(T phase) => phase.LocalBattlePlayer == LocalBattlePlayer;
+        bool IPhaseListener<T>.Accepts(T phase)
+        {
+            return phase.LocalBattlePlayer == LocalBattlePlayer;
+        }
     }
 }

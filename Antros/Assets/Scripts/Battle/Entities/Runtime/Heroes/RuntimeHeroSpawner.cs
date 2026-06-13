@@ -27,7 +27,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         }
 
 
-        async Awaitable ICommandPlayer<SpawnHeroCommand>.Play(GameCommandContext context, SpawnHeroCommand command)
+        async Awaitable ICommandPlayer<SpawnHeroCommand>.Play(CommandContext context, SpawnHeroCommand command)
         {
             SpawnHeroCommand.Infos infos = command.GetInfos();
 

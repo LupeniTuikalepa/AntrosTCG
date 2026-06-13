@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Utilities;
@@ -13,7 +14,7 @@ using UnityEngine;
 namespace ATCG.Battle.Entities.Runtime.UI
 {
     public class EntityActionUIController : MonoBehaviour,
-        IPhaseListener<SelectEntityActionPhase>,
+        ILocalPlayerPhaseListener<SelectEntityActionPhase>,
         IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
         [SerializeField]
@@ -37,6 +38,8 @@ namespace ATCG.Battle.Entities.Runtime.UI
                 return null;
             }
         }
+
+        public LocalBattlePlayer LocalBattlePlayer { get; private set; }
         public RuntimeBattlePlayer RuntimeBattlePlayer { get; private set; }
 
         private readonly Stack<EntityActionUIPanel> openedPanels = new();
@@ -55,14 +58,14 @@ namespace ATCG.Battle.Entities.Runtime.UI
         {
             this.Unregister();
         }
-        
+
         private void LateUpdate()
         {
             if (Phase is null || RuntimeEntity?.actionUIRoot is null)
                 return;
             transform.rotation = RuntimeEntity.actionUIRoot.rotation;
         }
-        
+
         public void Open(EntityActionUIPanel panel) => OpenAsync(panel).FireAndForget();
 
         public async Awaitable OpenAsync(EntityActionUIPanel panel)
@@ -116,7 +119,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
             canvasGroup.Show(.15f);
             transform.position = RuntimeEntity.actionUIRoot.position;
-            
+
             start.Build();
             if (start.IsEmpty())
                 return;
@@ -134,11 +137,14 @@ namespace ATCG.Battle.Entities.Runtime.UI
         }
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
+            LocalBattlePlayer = player;
             RuntimeBattlePlayer = runtimeBattlePlayer;
+
         }
 
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
+            LocalBattlePlayer = null;
         }
 
     }

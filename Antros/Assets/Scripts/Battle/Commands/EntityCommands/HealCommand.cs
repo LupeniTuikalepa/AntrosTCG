@@ -19,9 +19,9 @@ namespace ATCG.Battle.Commands.EntityCommands
             this.quantity = quantity;
         }
 
-        protected override void Process(in GameCommandContext context)
+        protected override void Process(in CommandContext context)
         {
-            if (!TargetEntity.TryGetComponent(context.World, out ComponentRef<HealthComponent> healthComponentRef))
+            if (!Target.TryGetComponent(context.World, out ComponentRef<HealthComponent> healthComponentRef))
                 return;
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();

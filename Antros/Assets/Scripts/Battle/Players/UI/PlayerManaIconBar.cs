@@ -84,7 +84,7 @@ namespace ATCG.Battle.Players.UI
             Refresh(player.MaxMana, player.CurrentMana, player.CurrentMana);
         }
 
-        public async Awaitable Play(GameCommandContext context, ModifyPlayerManaCommand command)
+        public async Awaitable Play(CommandContext context, ModifyPlayerManaCommand command)
         {
             await Awaitable.MainThreadAsync();
             ModifyPlayerManaCommand.Infos infos = command.GetInfos();

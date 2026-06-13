@@ -31,7 +31,7 @@ namespace ATCG.Battle.Commands.GameCommands
             PlayerId = playerId;
         }
 
-        protected override void Process(in GameCommandContext context)
+        protected override void Process(in CommandContext context)
         {
             IBattlePlayer player = context.GetBattlePlayer(PlayerId);
             IBattleCard card = player.Hand.GetCard(CardId);

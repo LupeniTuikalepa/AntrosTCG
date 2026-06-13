@@ -56,6 +56,7 @@ namespace ATCG.Battle
 
         public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
+	        Debug.Log("Bon");
 	        if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
 		        return;
 
@@ -66,6 +67,7 @@ namespace ATCG.Battle
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 
+	        Debug.Log("Huh");
 	        //Si l'entité qui attaque appartient a un jour, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
 	        IBattlePlayer entityPlayer = address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent) ?
 		        belongsToPlayerComponent.GetPlayer(battlePhase) :

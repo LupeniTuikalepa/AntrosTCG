@@ -23,7 +23,7 @@ namespace ATCG.Battle.Commands.Core
 
         public async Awaitable ExecuteGameCommandAsync<T>(T gameCommand, BattlePhase battlePhase) where T: IGameCommand
         {
-            using GameCommandContext context = new(battlePhase, commandsPlayers);
+            using CommandContext context = new(battlePhase, commandsPlayers);
 
             context.Register(gameCommand);
 
@@ -37,7 +37,8 @@ namespace ATCG.Battle.Commands.Core
 @$"Game Command was canceled because of : {breakCommandException.Cause}");
             }
 
-            await PlayCommandEffects(context, gameCommand);
+            CommandPlayerRunner<T> runner = new CommandPlayerRunner<T>(gameCommand);
+            await runner.Run(context);
         }
         public void Register<T>(ICommandPlayer<T> player) where T : IGameCommand
         {
@@ -50,23 +51,6 @@ namespace ATCG.Battle.Commands.Core
         }
 
 
-        private async Awaitable PlayCommandEffects(GameCommandContext context, IGameCommand gameCommand)
-        {
-            if (!context.TryGetCommandPlayerGroup(gameCommand, out ICommandPlayerGroup player))
-                return;
 
-            Awaitable playable = player.Initiate(context);
-
-            foreach (IGameCommand embed in gameCommand.Embeds)
-            {
-                await player.WaitBeforePlayingEmbed(embed);
-
-                await PlayCommandEffects(context, embed);
-
-                await player.WaitAfterPlayingEmbed(embed);
-            }
-
-            await playable;
-        }
     }
 }

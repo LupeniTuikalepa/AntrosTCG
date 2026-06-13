@@ -21,7 +21,6 @@ namespace ATCG.Battle
     {
         int IEntitySelectionController.MaxSelectableEntities => 1;
 
-
         private void OnEnable()
         {
             this.Register();
@@ -34,12 +33,12 @@ namespace ATCG.Battle
 
         protected override void Connect(LocalBattlePlayer player)
         {
-
+            RuntimeEntityManager.SelectionController.AddPriority(this, PriorityTags.Small, this);
         }
 
         protected override void Disconnect(LocalBattlePlayer player)
         {
-
+            RuntimeEntityManager.SelectionController.RemovePriority(this);
         }
 
         private bool isInActionSelection = false;
@@ -48,8 +47,10 @@ namespace ATCG.Battle
         {
             RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
 
-
             if(isInActionSelection)
+                return;
+
+            if(!IsPlayerTurn())
                 return;
 
             if(runtimeEntity.Address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent)
@@ -63,6 +64,9 @@ namespace ATCG.Battle
         void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
         {
             RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
+            
+            if(!IsPlayerTurn())
+                return;
         }
 
         private async Awaitable SelectAction(IRuntimeEntity runtimeEntity)
@@ -94,14 +98,10 @@ namespace ATCG.Battle
 
         void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseBegin(LocalPlayerTurnPhase phase)
         {
-            if(phase.player == Player)
-                RuntimeEntityManager.SelectionController.AddPriority(this, PriorityTags.Small, this);
         }
 
         void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseEnd(LocalPlayerTurnPhase phase)
         {
-            if (phase.player == Player)
-                RuntimeEntityManager.SelectionController.RemovePriority(this);
         }
     }
 }

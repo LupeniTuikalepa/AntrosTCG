@@ -37,5 +37,8 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         protected abstract void Connect(LocalBattlePlayer player);
         protected abstract void Disconnect(LocalBattlePlayer player);
+
+        public bool IsPlayerTurn() => BattlePhase.CurrentPlayer == Player;
+
     }
 }
