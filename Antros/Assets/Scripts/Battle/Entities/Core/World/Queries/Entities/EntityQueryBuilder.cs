@@ -2,53 +2,54 @@
 
 namespace ATCG.Battle.Entities.Queries
 {
-    public delegate bool EntityQueryFilter(Entity entity, World world);
+    public delegate bool EntityQueryDelegateFilter(EntityAddress address);
 
     public struct EntityQueryBuilder
     {
-        private readonly struct EntityQueryFilterContainer : IEntityQueryFilter
+        private readonly struct EntityFilterContainer : IEntityFilter
         {
-            private readonly EntityQueryFilter lambda;
+            private readonly EntityQueryDelegateFilter lambda;
 
-            public EntityQueryFilterContainer(EntityQueryFilter lambda)
+            public EntityFilterContainer(EntityQueryDelegateFilter lambda)
             {
                 this.lambda = lambda;
             }
 
-            public bool Evaluate(Entity entity, World world)
+            public bool Accepts(EntityAddress address)
             {
-                return lambda(entity, world);
+                return lambda(address);
             }
         }
 
         private EntityQuery entityQuery;
 
 
-        public EntityQueryBuilder Where(EntityQueryFilter filter)
+        public EntityQueryBuilder Where(EntityQueryDelegateFilter delegateFilter)
         {
-            return WithFilter(new EntityQueryFilterContainer(filter));
+            return Where(new EntityFilterContainer(delegateFilter));
         }
-
-        public EntityQueryBuilder WithFilter<TFilter>(TFilter filter)
-            where TFilter : IEntityQueryFilter
+        
+        //TODO use static generic to avoid filter boxing
+        public EntityQueryBuilder Where<TFilter>(TFilter filter)
+            where TFilter : IEntityFilter
         {
             entityQuery.AddFilter(filter);
             return this;
         }
 
-        public EntityQueryBuilder With<T>() where T : struct, IEntityComponent
+        public EntityQueryBuilder WithAnyComponent<T>() where T : struct, IEntityComponent
         {
             entityQuery.any.Set(ComponentID<T>.ID);
             return this;
         }
 
-        public EntityQueryBuilder Excluding<T>() where T : struct, IEntityComponent
+        public EntityQueryBuilder WithoutComponent<T>() where T : struct, IEntityComponent
         {
             entityQuery.none.Set(ComponentID<T>.ID);
             return this;
         }
 
-        public EntityQueryBuilder WithAll<T>() where T : struct, IEntityComponent
+        public EntityQueryBuilder WithAllComponents<T>() where T : struct, IEntityComponent
         {
             entityQuery.all.Set(ComponentID<T>.ID);
             return this;

@@ -58,7 +58,7 @@ namespace ATCG.Battle.Grids
 
         public EntityQueryResult GetGridMembers()
         {
-            return World.Query(EntityQuery.With<BattleGridElementComponent>());
+            return World.Query(EntityQuery.With<GridMemberComponent>());
         }
 
         public void FillDeployableCells(List<HexCoordinates> list)
@@ -67,7 +67,7 @@ namespace ATCG.Battle.Grids
 
             foreach (Entity entity in World.Query(EntityQuery.With<PhysicalCellMemberTag>()))
             {
-                if (entity.TryGetROComponent(World, out BattleGridElementComponent gridEntityComponent))
+                if (entity.TryGetROComponent(World, out GridMemberComponent gridEntityComponent))
                 {
                     Debug.Log($"Removing {gridEntityComponent.coordinates}");
                     list.Remove(gridEntityComponent.coordinates);

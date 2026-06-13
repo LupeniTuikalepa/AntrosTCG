@@ -1,7 +1,6 @@
 ﻿using System;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Players;
-using ATCG.Metrics;
 using UnityEngine;
 
 namespace ATCG.Battle.Commands.GameCommands.Players

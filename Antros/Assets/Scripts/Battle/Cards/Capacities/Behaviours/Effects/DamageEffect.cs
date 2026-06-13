@@ -8,7 +8,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
     public class DamageEffect : ICapacityEffect<DamageEffectData>
     {
-        public void Hit(DamageEffectData data, EntityAddress target,
+        public void Apply(DamageEffectData data, EntityAddress target,
             in CastCapacityCommand.Context context)
         {
             if (!target.HasComponent<HealthComponent>())

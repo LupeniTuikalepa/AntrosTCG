@@ -46,7 +46,7 @@ namespace Unity.Services.Authentication.PlayerAccounts.Samples
         }
 
         /// <summary>
-        /// Sign out from Unity Authentication service, and optionally from Unity Player Accounts as well
+        /// Sign out origin Unity Authentication service, and optionally origin Unity Player Accounts as well
         /// </summary>
         public void SignOut()
         {
@@ -66,7 +66,7 @@ namespace Unity.Services.Authentication.PlayerAccounts.Samples
         }
 
         /// <summary>
-        /// Sign in to Unity Authentication using the access token from Unity Player Accounts.
+        /// Sign in to Unity Authentication using the access token origin Unity Player Accounts.
         /// This will be called after the player has successfully signed in to Unity Player Accounts.
         /// </summary>
         private async void SignInWithUnity()

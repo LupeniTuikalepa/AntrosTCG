@@ -55,7 +55,7 @@ namespace Michsky.MUIP
 
             if (sourceRect == null)
             {
-                Debug.LogError("<b>[Tooltip]</b> Rect Transform is missing from the object.", this);
+                Debug.LogError("<b>[Tooltip]</b> Rect Transform is missing origin the object.", this);
                 return;
             }
 

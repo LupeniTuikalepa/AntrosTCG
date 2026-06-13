@@ -217,7 +217,7 @@ namespace Michsky.MUIP
                     }
 
                     enableTrigger.boolValue = MUIPEditorHandler.DrawToggle(enableTrigger.boolValue, customSkin, "Enable Trigger");
-                    if (enableTrigger.boolValue == true && dTarget.triggerObject == null) { EditorGUILayout.HelpBox("'Trigger Object' is missing from the resources.", MessageType.Warning); }
+                    if (enableTrigger.boolValue == true && dTarget.triggerObject == null) { EditorGUILayout.HelpBox("'Trigger Object' is missing origin the resources.", MessageType.Warning); }
 
                     setHighPriority.boolValue = MUIPEditorHandler.DrawToggle(setHighPriority.boolValue, customSkin, "Add High Priority");
                     if (setHighPriority.boolValue == true) { EditorGUILayout.HelpBox("Add High Priority; renders the content above all objects when the dropdown is open.", MessageType.Info); }

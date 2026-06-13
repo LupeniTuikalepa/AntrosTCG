@@ -8,13 +8,13 @@ namespace ATCG.Battle.Commands.Core
     public abstract class EntityCommand : GameCommand
     {
         [SerializeField]
-        private int targetEntityId;
+        private int sourceEntityId;
 
-        public Entity TargetEntity => new Entity(targetEntityId);
+        public Entity TargetEntity => new Entity(sourceEntityId);
 
-        protected EntityCommand(Entity targetEntity)
+        protected EntityCommand(Entity sourceEntity)
         {
-            targetEntityId = targetEntity;
+            sourceEntityId = sourceEntity;
         }
 
         public EntityAddress TargetEntityAddress(World world) => new EntityAddress(world, TargetEntity);

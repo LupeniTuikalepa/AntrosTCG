@@ -8,7 +8,7 @@
 
         public Entity Entity => new(entityID);
 
-        public EntityAddress Address => new EntityAddress(world, Entity);
+        public EntityAddress EntityAddress => new EntityAddress(world, Entity);
 
         public ComponentRef(World world, ComponentStore<T> store, int entityID)
         {

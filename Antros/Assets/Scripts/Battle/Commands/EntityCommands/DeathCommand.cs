@@ -7,7 +7,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 {
     public class DeathCommand : EntityCommand
     {
-        public DeathCommand(Entity targetEntity) : base(targetEntity)
+        public DeathCommand(Entity sourceEntity) : base(sourceEntity)
         {
 
         }

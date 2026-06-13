@@ -10,13 +10,13 @@ namespace ATCG.Battle.Entities.Queries
         public ComponentMask none;
 
 
-        public IEntityQueryFilter[] filters;
+        public IEntityFilter[] filters;
         public int filterCount;
 
         public void AddFilter<TFilter>(TFilter filter)
-            where TFilter : IEntityQueryFilter
+            where TFilter : IEntityFilter
         {
-            filters ??= new IEntityQueryFilter[4];
+            filters ??= new IEntityFilter[4];
             if (filterCount >= filters.Length)
                 Array.Resize(ref filters, filterCount * 2);
 
@@ -30,29 +30,29 @@ namespace ATCG.Battle.Entities.Queries
                    && !mask.MatchesAny(none);
         }
 
-        public static EntityQueryBuilder Where(EntityQueryFilter filter)
+        public static EntityQueryBuilder Where(EntityQueryDelegateFilter delegateFilter)
+        {
+            return new EntityQueryBuilder().Where(delegateFilter);
+        }
+
+        public static EntityQueryBuilder WithFilter<TFilter>(TFilter filter) where TFilter : IEntityFilter
         {
             return new EntityQueryBuilder().Where(filter);
         }
 
-        public static EntityQueryBuilder WithFilter<TFilter>(TFilter filter) where TFilter : IEntityQueryFilter
-        {
-            return new EntityQueryBuilder().WithFilter(filter);
-        }
-
         public static EntityQueryBuilder With<T>() where T : struct, IEntityComponent
         {
-            return new EntityQueryBuilder().With<T>();
+            return new EntityQueryBuilder().WithAnyComponent<T>();
         }
 
         public static EntityQueryBuilder Excluding<T>() where T : struct, IEntityComponent
         {
-            return new EntityQueryBuilder().Excluding<T>();
+            return new EntityQueryBuilder().WithoutComponent<T>();
         }
 
         public static EntityQueryBuilder WithAll<T>() where T : struct, IEntityComponent
         {
-            return new EntityQueryBuilder().WithAll<T>();
+            return new EntityQueryBuilder().WithAllComponents<T>();
         }
     }
 }

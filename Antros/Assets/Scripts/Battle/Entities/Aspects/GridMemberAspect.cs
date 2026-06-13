@@ -4,7 +4,7 @@ using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public partial struct GridMemberAspect : IEntityAspect<BattleGridElementComponent>
+    public readonly partial struct GridMemberAspect : IEntityAspect<GridMemberComponent>
     {
 
         public bool IsPhysical => EntityAddress.HasComponent<PhysicalCellMemberTag>();
@@ -15,9 +15,9 @@ namespace ATCG.Battle.Entities.Aspects
         {
             get
             {
-                if (EntityAddress.TryGetComponent(out ComponentRef<BattleGridElementComponent> componentRef))
+                if (EntityAddress.TryGetComponent(out ComponentRef<GridMemberComponent> componentRef))
                 {
-                    ref BattleGridElementComponent component = ref componentRef.GetValue();
+                    ref GridMemberComponent component = ref componentRef.GetValue();
                     return component.coordinates;
                 }
 
@@ -25,9 +25,9 @@ namespace ATCG.Battle.Entities.Aspects
             }
             set
             {
-                if (EntityAddress.TryGetComponent(out ComponentRef<BattleGridElementComponent> componentRef))
+                if (EntityAddress.TryGetComponent(out ComponentRef<GridMemberComponent> componentRef))
                 {
-                    ref BattleGridElementComponent component = ref componentRef.GetValue();
+                    ref GridMemberComponent component = ref componentRef.GetValue();
                     component.coordinates = value;
                 }
             }

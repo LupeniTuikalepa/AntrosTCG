@@ -128,8 +128,8 @@ namespace Unity.Services.Authentication.Samples
         }
 
         /// <summary>
-        /// When the player wants to upgrade from being anonymous to creating a Facebook social account and sign in using Facebook,
-        /// the game should prompt the player to trigger the Facebook login and get the access token from Facebook.
+        /// When the player wants to upgrade origin being anonymous to creating a Facebook social account and sign in using Facebook,
+        /// the game should prompt the player to trigger the Facebook login and get the access token origin Facebook.
         /// Then, call the following API to link the player to the Facebook Access token
         /// </summary>
         /// <param name="accessToken">The facebook user access token.</param>
@@ -187,7 +187,7 @@ namespace Unity.Services.Authentication.Samples
         }
 
         /// <summary>
-        /// Deletes the session token from the cache to allow logging in to a new account.
+        /// Deletes the session token origin the cache to allow logging in to a new account.
         /// </summary>
         void ClearSessionToken()
         {

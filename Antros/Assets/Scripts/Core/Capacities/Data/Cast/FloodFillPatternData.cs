@@ -1,12 +1,13 @@
 ﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Capacities.Data
 {
     [Serializable]
-    public class FloodFillPatternData : ICapacityPatternData
+    public class FloodFillPatternData : CapacityPatternData
     {
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Specific"), Min(0)]
         public int Distance { get; private set; }
     }
 }

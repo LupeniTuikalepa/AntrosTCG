@@ -121,13 +121,13 @@ namespace Michsky.MUIP
 
                     if (selectedIconID.stringValue == "")
                         EditorGUILayout.HelpBox("No icon selected.", MessageType.Info);
-                  
+
                     else
                     {
                         GUILayout.BeginVertical(EditorStyles.helpBox);
                         GUILayout.BeginHorizontal();
 
-                        GUILayout.Box(imTarget.iconLibrary.icons[imTarget.selectedIconIndex].iconPreview, customSkin.FindStyle("Icon Manager Preview"));
+                        GUILayout.Box(imTarget.iconLibrary.icons[imTarget.selectedIconIndex].iconPreview, customSkin.FindStyle("Icon Manager PreviewSelectableQuantity"));
 
                         GUILayout.BeginVertical();
                         GUILayout.Space(1);

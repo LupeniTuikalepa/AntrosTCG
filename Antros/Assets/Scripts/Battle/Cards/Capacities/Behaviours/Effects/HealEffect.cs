@@ -8,7 +8,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
     public class HealEffect : ICapacityEffect<HealEffectData>
     {
-        public void Hit(HealEffectData data, EntityAddress target,
+        public void Apply(HealEffectData data, EntityAddress target,
             in CastCapacityCommand.Context context)
         {
             if (!target.HasComponent<HealthComponent>())

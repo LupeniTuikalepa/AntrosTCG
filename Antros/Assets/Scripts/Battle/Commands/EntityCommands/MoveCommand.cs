@@ -9,7 +9,7 @@ namespace ATCG.Battle.Commands.EntityCommands
     {
         public readonly HexCoordinates destination;
 
-        public MoveCommand(Entity targetEntity, HexCoordinates destination) : base(targetEntity)
+        public MoveCommand(Entity sourceEntity, HexCoordinates destination) : base(sourceEntity)
         {
             this.destination = destination;
         }
@@ -17,9 +17,9 @@ namespace ATCG.Battle.Commands.EntityCommands
         //TODO use correct component
         protected override void Process(in GameCommandContext context)
         {
-            if (TargetEntity.TryGetComponent<BattleGridElementComponent>(context.World, out var gridEntityComponentRef))
+            if (TargetEntity.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))
             {
-                ref BattleGridElementComponent component = ref gridEntityComponentRef.GetValue();
+                ref GridMemberComponent component = ref gridEntityComponentRef.GetValue();
                 component.coordinates =destination;
             }
         }

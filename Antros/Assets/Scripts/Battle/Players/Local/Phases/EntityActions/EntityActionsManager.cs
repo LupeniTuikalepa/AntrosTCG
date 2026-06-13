@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
+using ATCG.Capacities;
 
 namespace ATCG.Battle
 {
@@ -15,10 +17,11 @@ namespace ATCG.Battle
             if (address.TryGetComponentRO(out BasicAttackerComponent attackerComponent))
                 actions.Add(new PerformBasicAttackAction(attackerComponent.Strength, player));
 
-            if (address.TryGetComponentRO(out CapacityCasterComponent component))
+            if (address.IsCapacityCasterAspect(out var aspect))
             {
-                for (int i = 0; i < component.capacities.Length; i++)
-                    actions.Add(new CastCapacityAction(component.capacities[i]));
+                CapacityData[] capacities = aspect.CapacityCasterComponent.capacities;
+                for (int i = 0; i < capacities.Length; i++)
+                    actions.Add(new CastCapacityAction(capacities[i], aspect.GridMemberComponent.coordinates));
             }
         }
     }

@@ -1,17 +1,16 @@
-﻿using ATCG.Battle.Cards.Capacities;
-using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
-using ATCG.Battle.Grids.Patterns;
+using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
 using ATCG.Capacities.Data;
 using ATCG.HexGrids;
 using Helteix.Tools.Phases;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle
 {
@@ -20,55 +19,42 @@ namespace ATCG.Battle
         public int ManaCost => capacityData.Cost;
 
         public readonly CapacityData capacityData;
+        private readonly HexCoordinates from;
 
-        public CastCapacityAction(CapacityData capacityData)
+        public CastCapacityAction(CapacityData capacityData, HexCoordinates from)
         {
             this.capacityData = capacityData;
+            this.from = from;
         }
-
 
         //TODO pour les spells, le cast des capacites ne se fera pas depuis une action donc il faudra sortir la logique et la rendre commune dans le capacity manager.
 
-
         public async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-            ICapacityPatternData[] patterns = capacityData.CastPatterns;
+            CapacityPatternData[] patterns = capacityData.CastPatterns;
 
             //If no pattern, use the entity position
             if (patterns.Length == 0)
             {
-                if (address.TryGetComponentRO(out BattleGridElementComponent component))
+                if (address.TryGetComponentRO(out GridMemberComponent component))
                     await ExecuteCommand(battlePhase, component.coordinates);
             }
             else
             {
-                //Collects every selectableCell By The player and wait for him to choose.
-                using (HashSetPool<HexCoordinates>.Get(out var possibilities))
+                using HexPatternBuilder patternBuilder = capacityData.CastPatterns.ToPatternBuilder(from);
+
+                HexPatternFilters filter = new HexPatternFilters(patternBuilder);
+
+                SelectEntityPhase<HexPatternFilters> phase = new SelectEntityPhase<HexPatternFilters>(filter);
+
+                EntityAddress[] result = await phase;
+
+                for (int i = 0; i < result.Length; i++)
                 {
-                    for (int i = 0; i < patterns.Length; i++)
-                    {
-                        ICapacityPatternData patternData = patterns[i];
-                        if (!CapacityManager.TryGetFor(patternData, out ICellPattern pattern))
-                            continue;
+                    EntityAddress target = result[i];
+                    if (target.TryGetComponentRO(out GridMemberComponent component))
+                        await ExecuteCommand(battlePhase, component.coordinates);
 
-                        foreach (var coordinate in pattern.GetAllCoordinates())
-                            possibilities.Add(coordinate);
-                    }
-
-                    SpecificBattleCellFilter filter = new SpecificBattleCellFilter(possibilities);
-
-                    SelectEntityPhase<SpecificBattleCellFilter> phase =
-                        new SelectEntityPhase<SpecificBattleCellFilter>(filter);
-
-                    EntityAddress[] result = await phase;
-
-                    for (int i = 0; i < result.Length; i++)
-                    {
-                        EntityAddress target = result[i];
-                        if (target.TryGetComponentRO(out BattleGridElementComponent component))
-                            await ExecuteCommand(battlePhase, component.coordinates);
-
-                    }
                 }
             }
         }

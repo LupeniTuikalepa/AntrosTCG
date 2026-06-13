@@ -12,7 +12,7 @@ namespace ATCG.Battle.Entities.Aspects
     public partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
         IEntityAspect<BattleCardComponent,
             BelongsToPlayerComponent,
-            BattleGridElementComponent,
+            GridMemberComponent,
             MovementComponent,
             CapacityCasterComponent,
             BasicAttackerComponent>
@@ -27,7 +27,7 @@ namespace ATCG.Battle.Entities.Aspects
         public string Name => HeroCard.Title;
         public IBattlePlayer Player => HeroCard.Player;
         public HeroBattleCard HeroCard => BattleCardComponent.battleCard as HeroBattleCard;
-        public HexCoordinates Coordinates => BattleGridElementComponent.coordinates;
+        public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
 
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
@@ -35,7 +35,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed);
             componentsFactory.BattleCardComponent = new BattleCardComponent(setup.card);
             componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetPlayerID());
-            componentsFactory.BattleGridElementComponent = new BattleGridElementComponent(setup.grid, setup.coordinates);
+            componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
 
             //TODO
