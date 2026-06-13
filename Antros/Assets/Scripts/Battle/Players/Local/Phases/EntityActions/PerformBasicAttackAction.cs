@@ -1,23 +1,17 @@
-﻿using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Runtime.Heroes;
+using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.GameModes;
-using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Patterns;
 using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
-using ATCG.HexGrids.Grids;
-using ATCG.HexGrids.Utility;
 using ATCG.Metrics;
 using Helteix.Tools.Phases;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle
 {
@@ -41,15 +35,18 @@ namespace ATCG.Battle
 			    if(address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer) && belongsToPlayer.IsAllieOf(player))
 				    return false;
 
-			    if(!address.TryGetComponentRO(out HexCoordinatesComponent battleGridElement))
+			    if(!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
 				    return false;
 
 			    return patterns.Contains(battleGridElement.coordinates);
 		    }
 	    }
         private readonly int strength;
+
         private readonly IBattlePlayer player;
+
         public int ManaCost => GameMetrics.Current.BasicAttackCost;
+
         public PerformBasicAttackAction(int strength,IBattlePlayer player)
         {
 	        this.strength = strength;
@@ -58,7 +55,7 @@ namespace ATCG.Battle
 
         public async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-	        if (!address.TryGetComponentRO(out HexCoordinatesComponent battleGridElement))
+	        if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
 		        return;
 
 	        HexCoordinates center = battleGridElement.coordinates;

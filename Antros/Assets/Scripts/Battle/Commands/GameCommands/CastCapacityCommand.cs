@@ -58,7 +58,7 @@ namespace ATCG.Battle.Commands.GameCommands
             HexPatternBuilder patternBuilder = new HexPatternBuilder(capacityContext.castPoint);
             for (int i = 0; i < capacityData.FirePatterns.Length; i++)
             {
-                IHexCapacityPatternData patternData = capacityData.FirePatterns[i];
+                CapacityPatternData patternData = capacityData.FirePatterns[i];
                 if (CapacityManager.TryGetFor(patternData, out CapacityPatternMapper.IPatternContainer container))
                     container.AddToBuilder(patternData, ref patternBuilder);
             }
@@ -75,7 +75,7 @@ namespace ATCG.Battle.Commands.GameCommands
                         container.TryApply(hitData, aspect.EntityAddress, in context);
                 }
 
-                foreach (ComponentRef<HexCoordinatesComponent> member in aspect.GetMembers())
+                foreach (ComponentRef<GridMemberComponent> member in aspect.GetMembers())
                 {
                     for (int i = 0; i < hitEffects.Length; i++)
                     {

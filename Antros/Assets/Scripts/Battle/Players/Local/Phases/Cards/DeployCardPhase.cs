@@ -7,6 +7,7 @@ using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Lookups;
+using ATCG.Battle.Entities.Queries;
 using ATCG.HexGrids;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.Tools.Phases;

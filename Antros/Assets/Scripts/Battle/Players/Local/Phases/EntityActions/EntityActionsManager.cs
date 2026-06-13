@@ -21,7 +21,7 @@ namespace ATCG.Battle
             {
                 CapacityData[] capacities = aspect.CapacityCasterComponent.capacities;
                 for (int i = 0; i < capacities.Length; i++)
-                    actions.Add(new CastCapacityAction(capacities[i], aspect.HexCoordinatesComponent.coordinates));
+                    actions.Add(new CastCapacityAction(capacities[i], aspect.GridMemberComponent.coordinates));
             }
         }
     }

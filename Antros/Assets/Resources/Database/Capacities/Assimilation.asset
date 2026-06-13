@@ -21,13 +21,16 @@ MonoBehaviour:
   - rid: 8621190650691584287
   <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <CellsHitEffects>k__BackingField: []
-  <AlliesHitEffects>k__BackingField: []
-  <OpponentsHitEffects>k__BackingField: []
+  <HitEffects>k__BackingField: []
   references:
     version: 2
     RefIds:
     - rid: 8621190650691584287
       type: {class: FloodFillPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
       data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
         <Distance>k__BackingField: 3

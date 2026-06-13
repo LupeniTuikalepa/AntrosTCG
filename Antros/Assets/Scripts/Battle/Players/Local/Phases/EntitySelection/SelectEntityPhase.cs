@@ -4,7 +4,11 @@ using System.Linq;
 using System.Threading;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.GameModes;
+using ATCG.Battle.Grids;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -13,7 +17,7 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public class SelectEntityPhase<T> : Phase<EntityAddress[]>,
+    public sealed class SelectEntityPhase<T> : Phase<EntityAddress[]>,
         ISelectEntityPhase
         where T : IEntityFilter
     {
@@ -27,6 +31,22 @@ namespace ATCG.Battle.Players.Local.Phases
         private readonly T filter;
 
         private HashSet<EntityAddress> selection;
+
+
+        public static int PreviewSelectableQuantity(T filter, BattlePhase phase)
+        {
+            EntityQueryBuilder query = EntityQuery.WithFilter(filter);
+
+            int count = 0;
+            World world = phase.world;
+            foreach (Entity entity in world.Query(query))
+            {
+                if(entity.HasComponent<GridMemberComponent>(world))
+                    count++;
+            }
+
+            return count;
+        }
 
         public SelectEntityPhase(T filter, int maxSelectableEntities = 1)
         {
@@ -42,7 +62,6 @@ namespace ATCG.Battle.Players.Local.Phases
 
             MaxSelectableEntities = 1;
         }
-
 
         public bool Accepts(EntityAddress address) => filter.Accepts(address);
 

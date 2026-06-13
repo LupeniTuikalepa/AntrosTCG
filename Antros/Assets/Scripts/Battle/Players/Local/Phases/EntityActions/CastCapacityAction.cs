@@ -1,12 +1,9 @@
-﻿using ATCG.Battle.Cards.Capacities;
-using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
-using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Patterns;
 using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
@@ -14,7 +11,6 @@ using ATCG.Capacities.Data;
 using ATCG.HexGrids;
 using Helteix.Tools.Phases;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle
 {
@@ -35,12 +31,12 @@ namespace ATCG.Battle
 
         public async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-            IHexCapacityPatternData[] patterns = capacityData.CastPatterns;
+            CapacityPatternData[] patterns = capacityData.CastPatterns;
 
             //If no pattern, use the entity position
             if (patterns.Length == 0)
             {
-                if (address.TryGetComponentRO(out HexCoordinatesComponent component))
+                if (address.TryGetComponentRO(out GridMemberComponent component))
                     await ExecuteCommand(battlePhase, component.coordinates);
             }
             else
@@ -56,7 +52,7 @@ namespace ATCG.Battle
                 for (int i = 0; i < result.Length; i++)
                 {
                     EntityAddress target = result[i];
-                    if (target.TryGetComponentRO(out HexCoordinatesComponent component))
+                    if (target.TryGetComponentRO(out GridMemberComponent component))
                         await ExecuteCommand(battlePhase, component.coordinates);
 
                 }

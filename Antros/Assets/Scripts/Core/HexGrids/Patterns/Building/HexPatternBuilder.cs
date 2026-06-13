@@ -8,12 +8,12 @@ namespace ATCG.Battle.Grids.Patterns.Building
 {
     public readonly struct HexPatternBuilder : IDisposable
     {
-        private readonly HexCoordinates from;
+        public readonly HexCoordinates origin;
         private readonly HashSet<HexCoordinates> coordinates;
 
-        public HexPatternBuilder(HexCoordinates from)
+        public HexPatternBuilder(HexCoordinates origin)
         {
-            this.from = from;
+            this.origin = origin;
             coordinates = HashSetPool<HexCoordinates>.Get();
         }
 
@@ -38,7 +38,7 @@ namespace ATCG.Battle.Grids.Patterns.Building
             return this;
         }
 
-        public HexPatternBuilder With<T>(T pattern) where T : IHexPattern => With(pattern, from);
+        public HexPatternBuilder With<T>(T pattern) where T : IHexPattern => With(pattern, origin);
 
         public HexPatternBuilder With<T>(T pattern, HexCoordinates source) where T : IHexPattern
         {
@@ -53,7 +53,7 @@ namespace ATCG.Battle.Grids.Patterns.Building
             coordinates.Add(point);
             return this;
         }
-        public HexPatternBuilder Without<T>(T pattern) where T : IHexPattern => With(pattern, from);
+        public HexPatternBuilder Without<T>(T pattern) where T : IHexPattern => With(pattern, origin);
 
         public HexPatternBuilder Without<T>(T pattern, HexCoordinates source) where T : IHexPattern
         {

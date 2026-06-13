@@ -16,6 +16,8 @@ namespace Helteix.Tools.DataMapping
     {
         private readonly Dictionary<Type, TContainer> byType = new();
 
+        public void Clear() => byType.Clear();
+
         /// <summary>Store a fully-built container. One per concrete data type.</summary>
         protected void Register(TContainer container)
         {

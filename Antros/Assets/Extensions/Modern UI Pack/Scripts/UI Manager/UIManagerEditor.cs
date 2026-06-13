@@ -518,7 +518,7 @@ namespace Michsky.MUIP
             if (editorHints.boolValue == true)
             {
                 EditorGUILayout.HelpBox("These values are universal and affect all objects containing 'UI Manager' component.", MessageType.Info);
-                EditorGUILayout.HelpBox("If want to assign unique values, remove 'UI Manager' component from the object ", MessageType.Info);
+                EditorGUILayout.HelpBox("If want to assign unique values, remove 'UI Manager' component origin the object ", MessageType.Info);
 				EditorGUILayout.HelpBox("You can press 'Control/Command + Shift + M' to open the manager quickly.", MessageType.Info);
             }
 

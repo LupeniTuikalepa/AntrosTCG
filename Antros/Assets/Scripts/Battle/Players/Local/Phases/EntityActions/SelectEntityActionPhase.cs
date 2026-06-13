@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Threading;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
 using Helteix.Tools.Phases;
-using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle
 {

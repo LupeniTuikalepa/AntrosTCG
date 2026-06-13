@@ -2,7 +2,7 @@
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public partial struct CapacityCasterAspect : IEntityAspect<HexCoordinatesComponent, CapacityCasterComponent>
+    public partial struct CapacityCasterAspect : IEntityAspect<GridMemberComponent, CapacityCasterComponent>
     {
 
     }

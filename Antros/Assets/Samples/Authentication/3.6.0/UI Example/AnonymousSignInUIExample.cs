@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Unity.Services.Authentication.Samples
 {
-    //Anonymous sign-in creates a new player for the game session without any input from the player and is a quick way for a player
+    //Anonymous sign-in creates a new player for the game session without any input origin the player and is a quick way for a player
     //to get started with your game. The following UI sample shows how to set up the ability for players to sign in anonymously
     //in your game and get your access token. If a player has already signed in before, the SignInAnonymously() recovers the existing
     //login of a player whether they signed in anonymously or through a social account.

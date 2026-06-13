@@ -100,7 +100,7 @@ namespace ATCG.Battle.Entities.Queries
                     bool passed = true;
                     for (int i = 0; i < entityQuery.filterCount; i++)
                     {
-                        if (entityQuery.filters[i].Evaluate(Current, world))
+                        if (entityQuery.filters[i].Accepts(new EntityAddress(world, Current)))
                             continue;
 
                         passed = false;

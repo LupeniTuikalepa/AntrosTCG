@@ -9,7 +9,7 @@ namespace ATCG.Battle.Grids
 {
     public static class PatternExtensions
     {
-        public static HexPatternBuilder ToPatternBuilder(this IHexCapacityPatternData data, HexCoordinates from)
+        public static HexPatternBuilder ToPatternBuilder(this CapacityPatternData data, HexCoordinates from)
         {
             HexPatternBuilder builder = new(from);
             if(CapacityManager.TryGetFor(data, out var container))
@@ -17,7 +17,7 @@ namespace ATCG.Battle.Grids
 
             return builder;
         }
-        public static HexPatternBuilder ToPatternBuilder(this IHexCapacityPatternData[] datas, HexCoordinates from)
+        public static HexPatternBuilder ToPatternBuilder(this CapacityPatternData[] datas, HexCoordinates from)
         {
             HexPatternBuilder builder = new(from);
             for (int i = 0; i < datas.Length; i++)
