@@ -66,7 +66,7 @@ namespace ATCG.Battle.Commands.Players
 
             if (isDone)
             {
-                Debug.Log("All players have completed wind up");
+                //Debug.Log("All players have completed wind up");
                 windUpSource.TrySetResult();
             }
         }
@@ -82,7 +82,7 @@ namespace ATCG.Battle.Commands.Players
             if (isDone)
             {
                 followThroughSource.TrySetResult();
-                Debug.Log("All players have completed follow through");
+                //Debug.Log("All players have completed follow through");
             }
         }
 

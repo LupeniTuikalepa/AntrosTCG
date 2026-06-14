@@ -23,11 +23,9 @@ namespace ATCG.Battle
 	    {
 		    private readonly IBattlePlayer player;
 
-		    private readonly HexPatternBuilder patterns;
-		    public EnemyFilter(IBattlePlayer player, HexPatternBuilder patterns)
+		    public EnemyFilter(IBattlePlayer player)
 		    {
 			    this.player = player;
-			    this.patterns = patterns;
 		    }
 		    public bool Accepts(EntityAddress address)
 		    {
@@ -37,10 +35,7 @@ namespace ATCG.Battle
 			    if(address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer) && belongsToPlayer.IsAllieOf(player))
 				    return false;
 
-			    if(!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
-				    return false;
-
-			    return patterns.Contains(battleGridElement.coordinates);
+			    return true;
 		    }
 	    }
 
@@ -56,7 +51,6 @@ namespace ATCG.Battle
 
         public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-	        Debug.Log("Bon");
 	        if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
 		        return;
 
@@ -72,8 +66,8 @@ namespace ATCG.Battle
 		        belongsToPlayerComponent.GetPlayer(battlePhase) :
 		        playerOrigin;
 
-	        var filter = new EnemyFilter(entityPlayer, builder);
-	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(playerOrigin, filter);
+	        var filter = new EnemyFilter(entityPlayer);
+	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(playerOrigin, filter, builder);
 	        if(result.Length == 0)
 		        return;
 

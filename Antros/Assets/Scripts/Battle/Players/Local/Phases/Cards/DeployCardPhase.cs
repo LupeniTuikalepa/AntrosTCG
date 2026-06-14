@@ -8,6 +8,7 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Lookups;
 using ATCG.Battle.Entities.Queries;
+using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.HexGrids;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.Tools.Phases;
@@ -21,27 +22,33 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
         {
             public bool Accepts(EntityAddress address)
             {
-                if (address.IsBattleCellAspect(out BattleCellAspect aspect))
-                {
-                    return !aspect.GetMembers().Any();
-                }
+                if (address.Is(out BattleCellAspect aspect))
+                    return !aspect.HasMembers;
 
                 return false;
             }
         }
 
         private readonly IBattleCard battleCard;
-        private readonly CardDragPhase<IBattleCard> phase;
+        private readonly CardDragPhase<IBattleCard> dragPhase;
 
-        public DeployCardPhase(LocalBattlePlayer localBattlePlayer, IBattleCard battleCard, CardDragPhase<IBattleCard> phase) : base(localBattlePlayer)
+        public DeployCardPhase(LocalBattlePlayer localBattlePlayer, IBattleCard battleCard, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.battleCard = battleCard;
-            this.phase = phase;
+            this.dragPhase = dragPhase;
         }
 
         protected override async Awaitable ExecuteNoResult(CancellationToken token)
         {
-            SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(LocalBattlePlayer, new DeployableCellFilter(), phase);
+            //TODO create pattern with deployable cells
+            //As of now, all the grid is deployable
+            HexPatternBuilder patternBuilder = new HexPatternBuilder(LocalBattlePlayer.BattlePhase.BattleGrid.AllCellsCoordinates);
+
+            SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(
+                LocalBattlePlayer,
+                new DeployableCellFilter(),
+                patternBuilder,
+                dragPhase);
 
             PhaseResult<EntityAddress[]> result = await selectEntityPhase;
 
@@ -56,7 +63,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
                 return;
 
             var address = result.value[0];
-            if (!address.IsGridMemberAspect(out GridMemberAspect aspect))
+            if (!address.Is(out GridMemberAspect aspect))
                 return ;
 
             int cardID = LocalBattlePlayer.Hand.GetCardIndex(battleCard);
@@ -64,7 +71,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
                 return;
 
             DeployCardCommand deployCardCommand = new(cardID, aspect.Coordinates, LocalBattlePlayer.ID);
-            deployCardCommand.Run(LocalBattlePlayer.BattlePhase);
+            await deployCardCommand.RunAsync(LocalBattlePlayer.BattlePhase);
         }
     }
 }

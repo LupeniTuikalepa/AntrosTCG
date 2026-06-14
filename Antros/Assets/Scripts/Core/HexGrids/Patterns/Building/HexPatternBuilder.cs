@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using UnityEngine.Pool;
@@ -10,6 +11,15 @@ namespace ATCG.Battle.Grids.Patterns.Building
     {
         public readonly HexCoordinates origin;
         private readonly HashSet<HexCoordinates> coordinates;
+
+        public HexPatternBuilder(IEnumerable<HexCoordinates> coordinates)
+        {
+            this.coordinates = HashSetPool<HexCoordinates>.Get();
+            foreach (var coordinate in coordinates)
+                this.coordinates.Add(coordinate);
+
+            origin = this.coordinates.FirstOrDefault();
+        }
 
         public HexPatternBuilder(HexCoordinates origin)
         {

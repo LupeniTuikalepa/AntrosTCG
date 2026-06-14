@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Patterns.Building;
+using ATCG.HexGrids;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -28,9 +31,11 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private readonly CardDragPhase<IBattleCard> dragPhase;
 
-        private readonly T filter;
-
         private HashSet<EntityAddress> selection;
+
+        public readonly HexPatternBuilder pattern;
+
+        private readonly T filter;
 
 
         public static int PreviewSelectableQuantity(T filter, BattlePhase phase)
@@ -41,29 +46,65 @@ namespace ATCG.Battle.Players.Local.Phases
             World world = phase.world;
             foreach (Entity entity in world.Query(query))
             {
-                if(entity.HasComponent<GridMemberComponent>(world))
+                if (entity.HasComponent<GridMemberComponent>(world))
                     count++;
             }
 
             return count;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, int maxSelectableEntities = 1) : base(localBattlePlayer)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
+            int maxSelectableEntities = 1) : base(localBattlePlayer)
         {
             this.filter = filter;
+            this.pattern = pattern;
             MaxSelectableEntities = maxSelectableEntities;
             dragPhase = null;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
+            CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.filter = filter;
-            this.dragPhase = dragPhase;
+            this.pattern = pattern;
 
+            this.dragPhase = dragPhase;
             MaxSelectableEntities = 1;
         }
 
-        public bool Accepts(EntityAddress address) => filter.Accepts(address);
+
+        public bool IsInPattern(EntityAddress address)
+        {
+            if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
+                return false;
+
+            return pattern.Contains(battleGridElement.coordinates);
+        }
+
+        public bool IsRelated(EntityAddress address)
+        {
+            if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
+                return false;
+
+            if (!BattleGrid.TryGetBattleCell(battleGridElement.coordinates, out BattleCellAspect cell))
+                return false;
+
+            foreach (var member in cell.GetMembers())
+            {
+                if (filter.Accepts(member.EntityAddress))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool Accepts(EntityAddress address)
+        {
+            if (!address.HasComponent<GridMemberComponent>() || IsInPattern(address))
+                return filter.Accepts(address);
+
+            return false;
+        }
 
         protected override Awaitable Initialize(CancellationToken token)
         {
@@ -94,11 +135,10 @@ namespace ATCG.Battle.Players.Local.Phases
                 if (result is not { type: PhaseResultType.Success, value: { Target: IRuntimeEntity entity } })
                     return Array.Empty<EntityAddress>();
 
-                if(!Accepts(entity.Address))
+                if (!Accepts(entity.Address))
                     return Array.Empty<EntityAddress>();
 
                 return new[] { entity.Address };
-
             }
 
             IsWaiting = true;
@@ -117,17 +157,17 @@ namespace ATCG.Battle.Players.Local.Phases
 
         void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
         {
-            if(!IsWaiting)
+            if (!IsWaiting)
                 return;
 
             selection?.Add(runtimeEntity.Address);
-            if(selection != null && selection.Count >= MaxSelectableEntities)
+            if (selection != null && selection.Count >= MaxSelectableEntities)
                 IsWaiting = false;
         }
 
         void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
         {
-            if(!IsWaiting)
+            if (!IsWaiting)
                 return;
 
             selection?.Remove(runtimeEntity.Address);

@@ -21,7 +21,7 @@ namespace ATCG.Battle.Commands.EntityCommands
         {
             EntityAddress address = TargetEntityAddress(context.World);
 
-            if (address.IsHeroEntityAspect(out HeroEntityAspect aspect))
+            if (address.Is(out HeroEntityAspect aspect))
             {
                 IBattlePlayer player = aspect.Player;
                 player.AddOrRemoveHealth(-aspect.HeroCard.DeathCost);

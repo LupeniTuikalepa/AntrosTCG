@@ -1,6 +1,7 @@
 ﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
@@ -25,6 +26,7 @@ namespace ATCG.Battle
         public CastCapacityAction(LocalBattlePlayer playerOrigin, CapacityData capacityData, HexCoordinates from) : base(playerOrigin)
         {
             this.capacityData = capacityData;
+
             this.from = from;
         }
 
@@ -44,9 +46,8 @@ namespace ATCG.Battle
             {
                 using HexPatternBuilder patternBuilder = capacityData.CastPatterns.ToPatternBuilder(from);
 
-                HexPatternFilters filter = new HexPatternFilters(patternBuilder);
-
-                SelectEntityPhase<HexPatternFilters> phase = new SelectEntityPhase<HexPatternFilters>(playerOrigin, filter);
+                AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();
+                SelectEntityPhase<AspectFilter<BattleCellAspect> > phase = new SelectEntityPhase<AspectFilter<BattleCellAspect>>(playerOrigin, filter, patternBuilder);
 
                 EntityAddress[] result = await phase;
 
