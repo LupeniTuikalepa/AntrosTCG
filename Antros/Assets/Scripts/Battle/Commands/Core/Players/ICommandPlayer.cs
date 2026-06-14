@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ATCG.Battle.Commands.Players;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.Core.Players
 {
@@ -6,9 +7,9 @@ namespace ATCG.Battle.Commands.Core.Players
     {
         bool CanPlay(T command) => true;
 
-        Awaitable Play(CommandContext context, T command);
-        void OnBegin(CommandContext context, T command);
-        void OnHit(CommandContext context, T command);
-        void OnEnd(CommandContext context, T command);
+        Awaitable Play(CommandPlayerState state, T command);
+        void OnBegin(in CommandPlayerState state, T command) { }
+        void OnHit(in CommandPlayerState state, T command) { }
+        void OnEnd(in CommandPlayerState state, T command) { }
     }
 }
