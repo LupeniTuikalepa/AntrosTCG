@@ -26,12 +26,14 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         {
             this.UnregisterPlayer();
         }
-        
+
         public async Awaitable Play(CommandPlayerState state, CommandContext context, SpawnHeroCommand command)
         {
             SpawnHeroCommand.Infos infos = command.GetInfos();
 
             EntityAddress address = infos.spawnedEntity.ToAddress(context.World);
+            state.CompleteWindUp(this);
+
             if (HeroEntityAspect.TryGetAspect(address, out HeroEntityAspect entityAspect))
             {
                 GameObject instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(transform);
@@ -39,6 +41,8 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
                 if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
                     await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
             }
+
+            state.CompleteFollowThrough(this);
         }
     }
 }

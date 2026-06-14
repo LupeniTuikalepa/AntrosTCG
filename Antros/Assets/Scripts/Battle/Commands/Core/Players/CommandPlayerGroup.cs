@@ -49,7 +49,7 @@ namespace ATCG.Battle.Commands.Players
 
         public async Awaitable Run(CommandContext context)
         {
-            using CommandPlayerState state = new();
+            using CommandPlayerState state = new(players, 5);
 
             foreach (ICommandPlayer<T> player in players)
                 player.Play(state, context, command).FireAndForget();

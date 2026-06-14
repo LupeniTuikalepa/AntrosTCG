@@ -111,10 +111,10 @@ namespace ATCG.Battle.Players.UI
 
         public async Awaitable Play(CommandPlayerState state, CommandContext context, ModifyPlayerManaCommand command)
         {
+            state.CompleteWindUp(this);
             var infos = command.GetInfos();
             Refresh(infos.maxMana, infos.toMana, infos.fromMana);
-
-            await Awaitable.WaitForSecondsAsync(.4f);
+            state.CompleteFollowThrough(this);
         }
     }
 }

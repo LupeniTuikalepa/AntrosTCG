@@ -46,7 +46,10 @@ namespace ATCG.Battle.Commands.Core
 
             foreach (object commandPlayer in commandPlayers)
             {
-                if (commandPlayer is ICommandPlayer<T> player && player.CanPlay(command))
+                if(commandPlayer is not ICommandPlayer<T> player)
+                    continue;
+
+                if (player.CanPlay(command))
                     group.Add(player);
             }
         }
