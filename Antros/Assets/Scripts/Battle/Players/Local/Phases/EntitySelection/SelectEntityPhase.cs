@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime;
@@ -45,14 +46,15 @@ namespace ATCG.Battle.Players.Local.Phases
             World world = phase.world;
             foreach (Entity entity in world.Query(query))
             {
-                if(entity.HasComponent<GridMemberComponent>(world))
+                if (entity.HasComponent<GridMemberComponent>(world))
                     count++;
             }
 
             return count;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern, int maxSelectableEntities = 1) : base(localBattlePlayer)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
+            int maxSelectableEntities = 1) : base(localBattlePlayer)
         {
             this.filter = filter;
             this.pattern = pattern;
@@ -60,7 +62,8 @@ namespace ATCG.Battle.Players.Local.Phases
             dragPhase = null;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
+            CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.filter = filter;
             this.pattern = pattern;
@@ -72,13 +75,32 @@ namespace ATCG.Battle.Players.Local.Phases
 
         public bool IsInPattern(EntityAddress address)
         {
-            return address.TryGetComponentRO(out GridMemberComponent battleGridElement) &&
-                   pattern.Contains(battleGridElement.coordinates);
+            if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
+                return false;
+
+            return pattern.Contains(battleGridElement.coordinates);
+        }
+
+        public bool IsRelated(EntityAddress address)
+        {
+            if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
+                return false;
+
+            if (!BattleGrid.TryGetBattleCell(battleGridElement.coordinates, out BattleCellAspect cell))
+                return false;
+
+            foreach (var member in cell.GetMembers())
+            {
+                if (filter.Accepts(member.EntityAddress))
+                    return true;
+            }
+
+            return false;
         }
 
         public bool Accepts(EntityAddress address)
         {
-            if (IsInPattern(address))
+            if (!address.HasComponent<GridMemberComponent>() || IsInPattern(address))
                 return filter.Accepts(address);
 
             return false;
@@ -113,11 +135,10 @@ namespace ATCG.Battle.Players.Local.Phases
                 if (result is not { type: PhaseResultType.Success, value: { Target: IRuntimeEntity entity } })
                     return Array.Empty<EntityAddress>();
 
-                if(!Accepts(entity.Address))
+                if (!Accepts(entity.Address))
                     return Array.Empty<EntityAddress>();
 
                 return new[] { entity.Address };
-
             }
 
             IsWaiting = true;
@@ -136,17 +157,17 @@ namespace ATCG.Battle.Players.Local.Phases
 
         void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
         {
-            if(!IsWaiting)
+            if (!IsWaiting)
                 return;
 
             selection?.Add(runtimeEntity.Address);
-            if(selection != null && selection.Count >= MaxSelectableEntities)
+            if (selection != null && selection.Count >= MaxSelectableEntities)
                 IsWaiting = false;
         }
 
         void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
         {
-            if(!IsWaiting)
+            if (!IsWaiting)
                 return;
 
             selection?.Remove(runtimeEntity.Address);

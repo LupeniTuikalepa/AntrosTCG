@@ -19,12 +19,9 @@ namespace ATCG.Battle.Entities.Runtime
             if (phase.IsInPattern(Address))
             {
                 IsInteractable.AddCondition(phase.ChannelKey, true);
-                if(Address.Is<BattleCellAspect>())
-                    Debug.Log(phase.Accepts(Address));
 
-                if (phase.Accepts(Address))
+                if (phase.Accepts(Address) || phase.IsRelated(Address))
                 {
-
                     Model.EnableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
                     Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
                     Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);

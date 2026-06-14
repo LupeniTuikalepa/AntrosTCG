@@ -13,5 +13,6 @@ namespace ATCG.Battle.Players.Local.Phases
 
         bool IsInPattern(EntityAddress address);
         bool Accepts(EntityAddress address);
+        bool IsRelated(EntityAddress address);
     }
 }
