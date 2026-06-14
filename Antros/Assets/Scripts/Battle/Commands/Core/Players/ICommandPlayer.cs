@@ -7,9 +7,9 @@ namespace ATCG.Battle.Commands.Core.Players
     {
         bool CanPlay(T command) => true;
 
-        Awaitable Play(CommandPlayerState state, T command);
-        void OnBegin(in CommandPlayerState state, T command) { }
-        void OnHit(in CommandPlayerState state, T command) { }
-        void OnEnd(in CommandPlayerState state, T command) { }
+        Awaitable Play(CommandPlayerState state, CommandContext context, T command);
+        void OnBegin(in CommandPlayerState state, CommandContext context, T command) { }
+        void OnHit(in CommandPlayerState state, CommandContext context, T command) { }
+        void OnEnd(in CommandPlayerState state, CommandContext context, T command) { }
     }
 }

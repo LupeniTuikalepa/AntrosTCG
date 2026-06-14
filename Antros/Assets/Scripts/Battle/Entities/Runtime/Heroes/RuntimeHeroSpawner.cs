@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Metrics;
 using Helteix.Tools;
@@ -18,16 +19,15 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         private void OnEnable()
         {
-            GameCommandManager.Instance.Register(this);
+            this.RegisterPlayer();
         }
 
         private void OnDisable()
         {
-            GameCommandManager.Instance.Unregister(this);
+            this.UnregisterPlayer();
         }
-
-
-        async Awaitable ICommandPlayer<SpawnHeroCommand>.Play(CommandContext context, SpawnHeroCommand command)
+        
+        public async Awaitable Play(CommandPlayerState state, CommandContext context, SpawnHeroCommand command)
         {
             SpawnHeroCommand.Infos infos = command.GetInfos();
 
@@ -40,6 +40,5 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
                     await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
             }
         }
-
     }
 }

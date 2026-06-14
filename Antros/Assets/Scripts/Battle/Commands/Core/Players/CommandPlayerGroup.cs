@@ -52,15 +52,15 @@ namespace ATCG.Battle.Commands.Players
             using CommandPlayerState state = new();
 
             foreach (ICommandPlayer<T> player in players)
-                player.Play(state, command).FireAndForget();
+                player.Play(state, context, command).FireAndForget();
 
             foreach (ICommandPlayer<T> player in players)
-                player.OnBegin(state, command);
+                player.OnBegin(state, context, command);
             
             await state.WindUp;
             
             foreach (ICommandPlayer<T> player in players)
-                player.OnHit(state, command);
+                player.OnHit(state, context, command);
 
             foreach (IGameCommand embed in command.Embeds)
             {
@@ -71,7 +71,7 @@ namespace ATCG.Battle.Commands.Players
             await state.FollowThrough;
             
             foreach (ICommandPlayer<T> player in players)
-                player.OnEnd(state, command);
+                player.OnEnd(state, context, command);
         }
 
 

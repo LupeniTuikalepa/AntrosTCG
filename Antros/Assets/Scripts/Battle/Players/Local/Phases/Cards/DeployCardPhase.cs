@@ -64,7 +64,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
                 return;
 
             DeployCardCommand deployCardCommand = new(cardID, aspect.Coordinates, LocalBattlePlayer.ID);
-            deployCardCommand.RunAndForget(LocalBattlePlayer.BattlePhase);
+            deployCardCommand.Run(LocalBattlePlayer.BattlePhase);
         }
     }
 }

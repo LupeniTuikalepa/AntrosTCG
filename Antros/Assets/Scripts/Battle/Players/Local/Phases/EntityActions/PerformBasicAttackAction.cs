@@ -67,7 +67,6 @@ namespace ATCG.Battle
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 
-	        Debug.Log("Huh");
 	        //Si l'entité qui attaque appartient a un jour, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
 	        IBattlePlayer entityPlayer = address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent) ?
 		        belongsToPlayerComponent.GetPlayer(battlePhase) :
@@ -80,13 +79,13 @@ namespace ATCG.Battle
 
 	        //Le player a l'origine de l'action perd de la mana
 	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(playerOrigin.GetPlayerID(), GameMetrics.Current.BasicAttackCost);
-	        await manaCost.Run(battlePhase);
+	        await manaCost.RunAsync(battlePhase);
 
 	        for (int i = 0; i < result.Length; i++)
 	        {
 		        EntityAddress target = result[i];
 		        BasicAttackCommand command = new BasicAttackCommand(address, target, strength);
-		        await command.Run(battlePhase);
+		        await command.RunAsync(battlePhase);
 	        }
         }
     }

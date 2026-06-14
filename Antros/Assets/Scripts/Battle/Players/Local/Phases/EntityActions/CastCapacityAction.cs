@@ -65,7 +65,7 @@ namespace ATCG.Battle
             CapacitySetup context = new CapacitySetup(capacityData, source);
             CastCapacityCommand command = new CastCapacityCommand(in context);
 
-            await command.Run(battlePhase);
+            await command.RunAsync(battlePhase);
         }
     }
 }
