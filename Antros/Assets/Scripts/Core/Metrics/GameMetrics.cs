@@ -82,6 +82,8 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("FXs")]
         public RenderingLayerMask PhaseUnselectableRenderingLayer { get; private set; }
+        [field: SerializeField, BoxGroup("FXs")]
+        public RenderingLayerMask PhaseRelatedRenderingLayer { get; private set; }
 
         [field: SerializeField, BoxGroup("Layers")]
         public LayerMask CellLayer { get; private set; }

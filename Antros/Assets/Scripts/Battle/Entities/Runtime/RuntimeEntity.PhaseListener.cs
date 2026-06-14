@@ -1,7 +1,9 @@
-﻿using ATCG.Battle.Players.Local.Phases;
+﻿using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {
@@ -13,18 +15,32 @@ namespace ATCG.Battle.Entities.Runtime
         {
             //Debug.Log(((IPhaseListener<ISelectEntityPhase>)this).Accepts(phase));
             CurrentSelectEntityPhase = phase;
-            bool accepts = phase.Accepts(Address);
 
-            IsInteractable.AddCondition(phase.ChannelKey, accepts);
-
-            if (accepts)
+            if (phase.IsInPattern(Address))
             {
-                Model.EnableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
-                Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+                IsInteractable.AddCondition(phase.ChannelKey, true);
+                if(Address.Is<BattleCellAspect>())
+                    Debug.Log(phase.Accepts(Address));
+
+                if (phase.Accepts(Address))
+                {
+
+                    Model.EnableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
+                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+                }
+                else
+                {
+                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+                    Model.EnableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
+                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+                }
             }
             else
             {
+                IsInteractable.AddCondition(phase.ChannelKey, false);
                 Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+                Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
                 Model.EnableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
             }
         }
@@ -36,6 +52,7 @@ namespace ATCG.Battle.Entities.Runtime
 
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+            Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
         }
     }
 }

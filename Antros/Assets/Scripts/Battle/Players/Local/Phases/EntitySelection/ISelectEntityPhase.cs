@@ -10,6 +10,8 @@ namespace ATCG.Battle.Players.Local.Phases
         string ISinglePhase.Channel => "SelectPhaseChannel";
 
         ChannelKey ChannelKey { get; }
+
+        bool IsInPattern(EntityAddress address);
         bool Accepts(EntityAddress address);
     }
 }

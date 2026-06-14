@@ -54,7 +54,9 @@ TagManager:
   - HoveredEntity
   - PhaseSelectableEntity
   - PhaseNonSelectableEntity
+  - PhaseRelatedEntity
   - Player1
   - Player2
-  - Light Layer 7
+  - Player3
+  - Player4
   m_MigratedRenderPipelines: []

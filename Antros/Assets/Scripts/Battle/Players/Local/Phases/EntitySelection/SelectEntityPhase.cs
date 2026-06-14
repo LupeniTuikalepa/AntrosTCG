@@ -9,6 +9,8 @@ using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Patterns.Building;
+using ATCG.HexGrids;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -28,9 +30,11 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private readonly CardDragPhase<IBattleCard> dragPhase;
 
-        private readonly T filter;
-
         private HashSet<EntityAddress> selection;
+
+        public readonly HexPatternBuilder pattern;
+
+        private readonly T filter;
 
 
         public static int PreviewSelectableQuantity(T filter, BattlePhase phase)
@@ -48,22 +52,37 @@ namespace ATCG.Battle.Players.Local.Phases
             return count;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, int maxSelectableEntities = 1) : base(localBattlePlayer)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern, int maxSelectableEntities = 1) : base(localBattlePlayer)
         {
             this.filter = filter;
+            this.pattern = pattern;
             MaxSelectableEntities = maxSelectableEntities;
             dragPhase = null;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.filter = filter;
-            this.dragPhase = dragPhase;
+            this.pattern = pattern;
 
+            this.dragPhase = dragPhase;
             MaxSelectableEntities = 1;
         }
 
-        public bool Accepts(EntityAddress address) => filter.Accepts(address);
+
+        public bool IsInPattern(EntityAddress address)
+        {
+            return address.TryGetComponentRO(out GridMemberComponent battleGridElement) &&
+                   pattern.Contains(battleGridElement.coordinates);
+        }
+
+        public bool Accepts(EntityAddress address)
+        {
+            if (IsInPattern(address))
+                return filter.Accepts(address);
+
+            return false;
+        }
 
         protected override Awaitable Initialize(CancellationToken token)
         {

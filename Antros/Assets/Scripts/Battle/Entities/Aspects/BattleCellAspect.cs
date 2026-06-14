@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public readonly partial struct BattleCellAspect : IEntityAspect<GridMemberComponent>,
+    public readonly partial struct BattleCellAspect : IEntityAspect<GridMemberComponent, BattleCellComponent>,
         ICreateEntityAspect<BattleCellAspect.Setup>
     {
         public readonly struct IsCellMemberFilter : IFilter<GridMemberComponent>
@@ -36,6 +36,7 @@ namespace ATCG.Battle.Entities.Aspects
 
         public HexCoordinates Coordinate => GridMemberComponent.coordinates;
 
+        public bool HasMembers => GetMembers().Any();
 
         public ComponentQuery<GridMemberComponent, IsCellMemberFilter> GetMembers()
         {
@@ -48,7 +49,7 @@ namespace ATCG.Battle.Entities.Aspects
         {
             foreach (ComponentRef<GridMemberComponent> member in GetMembers())
             {
-                if (!member.EntityAddress.IsGridMemberAspect(out GridMemberAspect aspect))
+                if (!member.EntityAddress.Is(out GridMemberAspect aspect))
                     continue;
 
                 if (aspect.IsPhysical)
@@ -62,7 +63,7 @@ namespace ATCG.Battle.Entities.Aspects
         {
             foreach (ComponentRef<GridMemberComponent> member in GetMembers())
             {
-                if (!member.EntityAddress.IsGridMemberAspect(out GridMemberAspect aspect))
+                if (!member.EntityAddress.Is(out GridMemberAspect aspect))
                     continue;
 
                 if (aspect.IsPhysical || aspect.PreventsDeployment)
@@ -83,6 +84,8 @@ namespace ATCG.Battle.Entities.Aspects
             {
                 GridMemberComponent elementComponent = new GridMemberComponent(setup.battleGrid, setup.coordinates);
                 componentsFactory.GridMemberComponent = elementComponent;
+
+                componentsFactory.BattleCellComponent = new BattleCellComponent(setup.coordinates);
             }
             catch (Exception e)
             {

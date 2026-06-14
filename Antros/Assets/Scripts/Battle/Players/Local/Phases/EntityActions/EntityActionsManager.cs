@@ -18,7 +18,7 @@ namespace ATCG.Battle
             if (address.TryGetComponentRO(out BasicAttackerComponent attackerComponent))
                 actions.Add(new PerformBasicAttackAction(player, attackerComponent.Strength));
 
-            if (address.IsCapacityCasterAspect(out var aspect))
+            if (address.Is<CapacityCasterAspect>(out var aspect))
             {
                 CapacityData[] capacities = aspect.CapacityCasterComponent.capacities;
                 for (int i = 0; i < capacities.Length; i++)

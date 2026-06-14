@@ -25,6 +25,10 @@
             return !aspect.Is(other);
         }
 
+        public static bool Is<T>(this EntityAddress address) where T : IEntityAspect => EntityAspectManager<T>.Is(address);
+
+        public static bool Is<T>(this EntityAddress address, out T aspect) where T : IEntityAspect => EntityAspectManager<T>.TryGet(address, out aspect);
+
         public static bool Is<T>(this T aspect, T other) where T : IEntityAspect
         {
             return aspect.EntityAddress == other.EntityAddress;

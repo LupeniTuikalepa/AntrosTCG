@@ -126,7 +126,6 @@ namespace GameSourceGeneration
             // Usings en tête de fichier
             foreach (var u in info.usings)
                 sb.AppendLine(u);
-
             if (info.usings.Count > 0)
                 sb.AppendLine();
 
@@ -139,8 +138,15 @@ namespace GameSourceGeneration
             sb.AppendLine($"    public static class {info.structName}Extensions");
             sb.AppendLine($"    {{");
 
+            sb.AppendLine($"        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]");
+            sb.AppendLine($"        private static void Initialize()");
+            sb.AppendLine($"        {{");
+            sb.AppendLine($"            EntityAspectManager<{info.structName}>.Init(Is{info.structName}, {info.structName}.{GetAspectMethodName});");
+            sb.AppendLine($"        }}");
+
+
             string structVariableName = FirstLetterLowerCase(info.structName);
-            sb.AppendLine($"        public static bool Is{info.structName}(this EntityAddress address, out {info.structName} {structVariableName})");
+            sb.AppendLine($"        private static bool Is{info.structName}(this EntityAddress address, out {info.structName} {structVariableName})");
             sb.AppendLine($"        {{");
             sb.AppendLine($"            if(address.Is{info.structName}())");
             sb.AppendLine($"            {{");
@@ -151,7 +157,7 @@ namespace GameSourceGeneration
             sb.AppendLine($"            return false;");
             sb.AppendLine($"        }}");
             sb.AppendLine();
-            sb.AppendLine($"        public static bool Is{info.structName}(this EntityAddress address) => {info.structName}.IsAspect(address);");
+            sb.AppendLine($"        private static bool Is{info.structName}(this EntityAddress address) => {info.structName}.IsAspect(address);");
             sb.AppendLine($"    }}");
             sb.AppendLine();
 
