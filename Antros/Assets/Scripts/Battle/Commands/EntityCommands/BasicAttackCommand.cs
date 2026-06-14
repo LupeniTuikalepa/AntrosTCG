@@ -20,7 +20,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 			this.victim = victim;
 		}
 
-		protected override void Process(in GameCommandContext context)
+		protected override void Process(in CommandContext context)
 		{
 			DamageCommand command = new DamageCommand(strength, victim);
 			Embed(in context, command);

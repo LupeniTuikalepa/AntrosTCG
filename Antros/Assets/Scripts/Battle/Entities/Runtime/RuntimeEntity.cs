@@ -91,7 +91,6 @@ namespace ATCG.Battle.Entities.Runtime
 
         public void UnSelect() => Manager.Unselect(this);
 
-
         void IRuntimeEntity.OnSelected()
         {
             OnSelected();
@@ -105,6 +104,5 @@ namespace ATCG.Battle.Entities.Runtime
             Model.DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             OnEntityDeselected?.Invoke();
         }
-
     }
 }

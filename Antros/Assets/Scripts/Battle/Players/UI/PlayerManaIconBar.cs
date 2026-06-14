@@ -2,6 +2,7 @@
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.GameCommands.Players;
+using ATCG.Battle.Commands.Players;
 using Helteix.Tools;
 using TMPro;
 using UnityEngine;
@@ -25,12 +26,12 @@ namespace ATCG.Battle.Players.UI
 
         private void OnEnable()
         {
-            GameCommandManager.Instance.Register(this);
+            this.RegisterPlayer();
         }
 
         private void OnDisable()
         {
-            GameCommandManager.Instance.Unregister(this);
+            this.UnregisterPlayer();
         }
 
         public void Connect(IBattlePlayer player)
@@ -84,7 +85,7 @@ namespace ATCG.Battle.Players.UI
             Refresh(player.MaxMana, player.CurrentMana, player.CurrentMana);
         }
 
-        public async Awaitable Play(GameCommandContext context, ModifyPlayerManaCommand command)
+        public async Awaitable Play(CommandContext context, ModifyPlayerManaCommand command)
         {
             await Awaitable.MainThreadAsync();
             ModifyPlayerManaCommand.Infos infos = command.GetInfos();
@@ -108,5 +109,12 @@ namespace ATCG.Battle.Players.UI
             valueText.text = $"{current}/{max}";
         }
 
+        public async Awaitable Play(CommandPlayerState state, CommandContext context, ModifyPlayerManaCommand command)
+        {
+            state.CompleteWindUp(this);
+            var infos = command.GetInfos();
+            Refresh(infos.maxMana, infos.toMana, infos.fromMana);
+            state.CompleteFollowThrough(this);
+        }
     }
 }

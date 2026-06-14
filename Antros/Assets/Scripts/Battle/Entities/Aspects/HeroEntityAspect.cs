@@ -12,6 +12,7 @@ namespace ATCG.Battle.Entities.Aspects
     public partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
         IEntityAspect<BattleCardComponent,
             BelongsToPlayerComponent,
+            HealthComponent,
             GridMemberComponent,
             MovementComponent,
             CapacityCasterComponent,
@@ -38,6 +39,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
 
+            componentsFactory.HealthComponent = new HealthComponent(setup.card.MaxHealth);
             //TODO
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
         }

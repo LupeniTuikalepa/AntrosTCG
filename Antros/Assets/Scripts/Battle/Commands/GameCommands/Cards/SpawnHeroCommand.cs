@@ -31,7 +31,7 @@ namespace ATCG.Battle.Commands.GameCommands
         }
 
 
-        protected override void Process(in GameCommandContext context)
+        protected override void Process(in CommandContext context)
         {
             HeroEntityAspect hero = HeroEntityAspect.CreateAspect(context.World, new HeroEntityAspect.Setup()
             {

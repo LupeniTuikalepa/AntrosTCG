@@ -10,10 +10,18 @@ namespace ATCG.Battle.Entities.Components
 
         private static Type[] idMapping;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Initialize()
+        {
+            index = 0;
+            idMapping = new Type[128];
+        }
+
         static ComponentRegistry()
         {
             idMapping = new Type[128];
         }
+
 
         public static int Next<T>() where T : IEntityComponent
         {

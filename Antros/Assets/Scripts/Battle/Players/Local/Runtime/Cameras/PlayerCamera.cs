@@ -93,8 +93,7 @@ namespace ATCG.Battle.Players.Local.Runtime
             float delta = isAccelerating ? accelerationSpeed : decelerationSpeed;
 
 
-            Camera cam = Camera.main;
-
+            Camera cam = OutputCamera;
             if (cam == null)
                 return;
 

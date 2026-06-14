@@ -30,7 +30,7 @@ namespace ATCG.Battle.Commands.Core
         infos = new TInfos();
     }
 
-    void IGameCommand.Process(in GameCommandContext context)
+    void IGameCommand.Process(in CommandContext context)
     {
         try
         {
@@ -44,26 +44,26 @@ namespace ATCG.Battle.Commands.Core
         }
     }
 
-    protected virtual void Init(in GameCommandContext context)
+    protected virtual void Init(in CommandContext context)
     {
     }
 
-    protected virtual void Dispose(in GameCommandContext context)
+    protected virtual void Dispose(in CommandContext context)
     {
 
     }
 
     public TInfos GetInfos() => infos;
 
-    protected abstract void Process(in GameCommandContext context);
+    protected abstract void Process(in CommandContext context);
 
-    public void Embed<TCommand>(in GameCommandContext context)
+    public void Embed<TCommand>(in CommandContext context)
         where TCommand : IGameCommand, new()
     {
         Embed(context, new TCommand());
     }
 
-    public void Embed<TCommand>(in GameCommandContext context, TCommand command)
+    public void Embed<TCommand>(in CommandContext context, TCommand command)
         where TCommand : IGameCommand
     {
         context.Register(command);

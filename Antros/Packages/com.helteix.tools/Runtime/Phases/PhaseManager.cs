@@ -12,7 +12,7 @@ namespace Helteix.Tools.Phases
     /// </summary>
     public static class PhaseManager
     {
-        private static readonly ListenerComparer comparer = new();
+        private static readonly ListenerComparer Comparer = new();
 
         // Listeners indexed by their target type for O(k) lookup instead of O(n).
         private static readonly Dictionary<Type, List<IPhaseListenerContainer>> ListenersByType = new();
@@ -23,6 +23,14 @@ namespace Helteix.Tools.Phases
 
         // No locking needed — main-thread only, matching Unity's Awaitable model.
         private static readonly Dictionary<object, CancellationTokenSource> RunningPhases = new();
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Initialize()
+        {
+            ListenersByType.Clear();
+            ListenerCache.Clear();
+            RunningPhases.Clear();
+        }
 
         private static async Awaitable RunAsyncWithCallback<T, TResult>(this T phase, Action<TResult> onCompleted = null)
             where T : Phase<TResult>
@@ -223,7 +231,11 @@ namespace Helteix.Tools.Phases
 
             if (ListenerCache.TryGetValue(phaseType, out var cached))
             {
-                compatibles.AddRange(cached);
+                foreach (var c in cached)
+                {
+                    if(c.Accepts(phase))
+                        compatibles.Add(c);
+                }
                 return;
             }
 
@@ -235,13 +247,14 @@ namespace Helteix.Tools.Phases
                     if (listenerType.IsAssignableFrom(phaseType))
                         temp.AddRange(list);
                 }
-                temp.Sort(comparer);
+                temp.Sort(Comparer);
 
                 cached = new List<IPhaseListenerContainer>(temp);
             }
 
             ListenerCache[phaseType] = cached;
-            compatibles.AddRange(cached);
+            //Redo with cache this time (the cache doesn't account for runtime filters on listerners)
+            GetListenersFor(compatibles, phase);
         }
 
         private static void AddListener(Type type, IPhaseListenerContainer container)
@@ -252,7 +265,7 @@ namespace Helteix.Tools.Phases
                 ListenersByType[type] = list;
             }
             list.Add(container);
-            list.Sort(comparer);
+            list.Sort(Comparer);
             InvalidateCache(type);
         }
 

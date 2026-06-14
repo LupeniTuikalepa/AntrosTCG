@@ -9,6 +9,13 @@ namespace Helteix.Tools.Phases
     {
         private static Dictionary<string, SinglePhaseChannel> channels = new();
 
+        [RuntimeInitializeOnLoadMethod]
+        private static void Initialize()
+        {
+            channels.Clear();
+        }
+
+
         public static bool HasAnyRunning(string channel)
         {
             return channels.TryGetValue(channel, out var singlePhaseChannel) && singlePhaseChannel.CurrentPhase != null;

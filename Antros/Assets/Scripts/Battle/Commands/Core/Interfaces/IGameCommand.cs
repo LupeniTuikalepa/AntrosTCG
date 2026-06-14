@@ -4,7 +4,7 @@ namespace ATCG.Battle.Commands.Core
 {
     public interface IGameCommand
     {
-        void Process(in GameCommandContext context);
+        void Process(in CommandContext context);
         IReadOnlyList<IGameCommand> Embeds { get; }
         IGameCommand Parent { get; }
         IEnumerable<IGameCommand> GetChildren();

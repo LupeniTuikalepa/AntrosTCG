@@ -12,18 +12,24 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Commands.Core
 {
     [DontDestroyOnLoad]
-    public class GameCommandManager : MonoSingleton<GameCommandManager>
+    public static class GameCommandManager
     {
-        private List<object> commandsPlayers = new List<object>();
+        private static readonly List<object> CommandsPlayers = new List<object>();
 
-        public void ExecuteGameCommand<T>(T gameCommand, BattlePhase battlePhase) where T: IGameCommand
+        [RuntimeInitializeOnLoadMethod]
+        private static void Init()
         {
-            ExecuteGameCommandAsync(gameCommand, battlePhase).FireAndForget();
+            CommandsPlayers.Clear();
+        }
+        
+        public static void Run<T>(this T gameCommand, BattlePhase battlePhase) where T: IGameCommand
+        {
+            RunAsync(gameCommand, battlePhase).FireAndForget();
         }
 
-        public async Awaitable ExecuteGameCommandAsync<T>(T gameCommand, BattlePhase battlePhase) where T: IGameCommand
+        public static async Awaitable RunAsync<T>(this T gameCommand, BattlePhase battlePhase) where T: IGameCommand
         {
-            using GameCommandContext context = new(battlePhase, commandsPlayers);
+            using CommandContext context = new(battlePhase, CommandsPlayers);
 
             context.Register(gameCommand);
 
@@ -33,40 +39,20 @@ namespace ATCG.Battle.Commands.Core
             }
             catch (BreakCommandException breakCommandException)
             {
-                Debug.Log(
-@$"Game Command was canceled because of : {breakCommandException.Cause}");
+                Debug.Log($"Game Command was canceled because of : {breakCommandException.Cause}");
             }
 
-            await PlayCommandEffects(context, gameCommand);
+            CommandPlayerRunner runner = new CommandPlayerRunner(gameCommand);
+            await runner.Run(context);
         }
-        public void Register<T>(ICommandPlayer<T> player) where T : IGameCommand
+        public static void RegisterPlayer<T>(this ICommandPlayer<T> player) where T : IGameCommand
         {
-            commandsPlayers.Add(player);
-        }
-
-        public void Unregister<T>(ICommandPlayer<T> player) where T : IGameCommand
-        {
-            commandsPlayers.Remove(player);
+            CommandsPlayers.Add(player);
         }
 
-
-        private async Awaitable PlayCommandEffects(GameCommandContext context, IGameCommand gameCommand)
+        public static void UnregisterPlayer<T>(this ICommandPlayer<T> player) where T : IGameCommand
         {
-            if (!context.TryGetCommandPlayerGroup(gameCommand, out ICommandPlayerGroup player))
-                return;
-
-            Awaitable playable = player.Initiate(context);
-
-            foreach (IGameCommand embed in gameCommand.Embeds)
-            {
-                await player.WaitBeforePlayingEmbed(embed);
-
-                await PlayCommandEffects(context, embed);
-
-                await player.WaitAfterPlayingEmbed(embed);
-            }
-
-            await playable;
+            CommandsPlayers.Remove(player);
         }
     }
 }

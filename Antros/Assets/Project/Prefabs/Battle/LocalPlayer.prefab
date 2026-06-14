@@ -987,6 +987,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -22.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1171883834759820601, guid: f5648edb8c9ad8e4ca6f1d09c1419c8d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1451121408762502779}
     - target: {fileID: 1354602594988713395, guid: f5648edb8c9ad8e4ca6f1d09c1419c8d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2982,6 +2986,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92baf9d2aae14fe1952e770ee00502bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.UI.MonoHUDPhaseListener
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
   group: {fileID: 156024275057762034}
   phaseToHide:
   - guid: 753bcdd50ee049878702ebb36cde260b

@@ -17,7 +17,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
         }
 
-        protected override void Process(in GameCommandContext context)
+        protected override void Process(in CommandContext context)
         {
             EntityAddress address = TargetEntityAddress(context.World);
 

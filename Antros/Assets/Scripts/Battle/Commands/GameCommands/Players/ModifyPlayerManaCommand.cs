@@ -27,7 +27,7 @@ namespace ATCG.Battle.Commands.GameCommands.Players
             Amount = amount;
         }
 
-        protected override void Process(in GameCommandContext context)
+        protected override void Process(in CommandContext context)
         {
             IBattlePlayer player = context.GetBattlePlayer(PlayerId);
 

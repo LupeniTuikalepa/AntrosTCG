@@ -26,9 +26,9 @@ namespace ATCG.Battle.Commands.GameCommands
             this.setup = setup;
         }
 
-        protected override void Process(in GameCommandContext gameCommandContext)
+        protected override void Process(in CommandContext commandContext)
         {
-            CapacityContext capacityContext = new(this, setup, gameCommandContext);
+            CapacityContext capacityContext = new(this, setup, commandContext);
             CapacityData capacityData = setup.data;
 
             HexPatternBuilder patternBuilder = new HexPatternBuilder(setup.castPoint);

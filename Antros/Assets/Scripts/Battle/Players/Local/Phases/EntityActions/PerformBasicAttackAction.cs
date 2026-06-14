@@ -56,6 +56,7 @@ namespace ATCG.Battle
 
         public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
+	        Debug.Log("Bon");
 	        if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
 		        return;
 
@@ -78,13 +79,13 @@ namespace ATCG.Battle
 
 	        //Le player a l'origine de l'action perd de la mana
 	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(playerOrigin.GetPlayerID(), GameMetrics.Current.BasicAttackCost);
-	        await manaCost.Run(battlePhase);
+	        await manaCost.RunAsync(battlePhase);
 
 	        for (int i = 0; i < result.Length; i++)
 	        {
 		        EntityAddress target = result[i];
 		        BasicAttackCommand command = new BasicAttackCommand(address, target, strength);
-		        await command.Run(battlePhase);
+		        await command.RunAsync(battlePhase);
 	        }
         }
     }

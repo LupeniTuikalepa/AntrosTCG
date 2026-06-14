@@ -52,8 +52,8 @@ MonoBehaviour:
   injectionPoint: 550
   showInSceneView: 1
   outlines:
-  - {fileID: -2082274440807632784}
   - {fileID: 8239071401952694522}
+  - {fileID: -2082274440807632784}
   materialType: 0
   customMaterial: {fileID: 0}
   widthControl: 1

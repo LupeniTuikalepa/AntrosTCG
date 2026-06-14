@@ -11,10 +11,13 @@ namespace ATCG.Battle.Entities.Runtime
     {
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            if (IsSelected)
-                UnSelect();
-            else
-                Select();
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                if (IsSelected)
+                    UnSelect();
+                else
+                    Select();
+            }
 
             OnPointerClick(eventData);
         }
