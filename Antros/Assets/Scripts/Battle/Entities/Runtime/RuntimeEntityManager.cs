@@ -104,7 +104,14 @@ namespace ATCG.Battle.Entities.Runtime
         public bool TryGetRuntimeEntity(EntityAddress address, out IRuntimeEntity runtimeEntity) =>
             TryGetRuntimeEntity(address.entity, out runtimeEntity);
         public bool TryGetRuntimeEntity(Entity entity, out IRuntimeEntity runtimeEntity)
-            => runtimeEntities.TryGetValue(entity, out runtimeEntity);
+        {
+            if (entity.IsValid)
+            {
+                return runtimeEntities.TryGetValue(entity, out runtimeEntity);
+            }
+            runtimeEntity = null;
+            return false;
+        }
 
 
         #region Selection
@@ -120,14 +127,18 @@ namespace ATCG.Battle.Entities.Runtime
             if (!Selectable)
                 return;
 
-            RegisterRuntimeEntity(runtimeEntity);
+            EntityAddress address = runtimeEntity.Address;
+            SelectionController.Value.OnSelected(runtimeEntity, ref address);
 
-            EnsureSelectableSlot(1);
-            selectedEntities.Add(runtimeEntity.Address);
-            runtimeEntity.OnSelected();
-            SelectionController.Value.OnSelected(runtimeEntity);
+            if (TryGetRuntimeEntity(address, out runtimeEntity))
+            {
+                RegisterRuntimeEntity(runtimeEntity);
 
-            OnEntitySelected?.Invoke(runtimeEntity);
+                EnsureSelectableSlot(1);
+                selectedEntities.Add(runtimeEntity.Address);
+                runtimeEntity.OnSelected();
+                OnEntitySelected?.Invoke(runtimeEntity);
+            }
         }
 
         public void Unselect(Entity entity)
@@ -138,14 +149,18 @@ namespace ATCG.Battle.Entities.Runtime
         public void Unselect(IRuntimeEntity runtimeEntity)
         {
             RegisterRuntimeEntity(runtimeEntity);
+            EntityAddress address = runtimeEntity.Address;
+            SelectionController.Value.OnUnselected(runtimeEntity, ref address);
 
-            if (!selectedEntities.Remove(runtimeEntity.Address))
-                return;
+            if (TryGetRuntimeEntity(address, out runtimeEntity))
+            {
+                if (!selectedEntities.Remove(runtimeEntity.Address))
+                    return;
 
-            runtimeEntity.OnDeselected();
+                runtimeEntity.OnDeselected();
 
-            SelectionController.Value.OnUnselected(runtimeEntity);
-            OnEntityDeselected?.Invoke(runtimeEntity);
+                OnEntityDeselected?.Invoke(runtimeEntity);
+            }
         }
 
         public void ClearSelection()

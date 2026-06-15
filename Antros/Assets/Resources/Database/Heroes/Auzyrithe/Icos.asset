@@ -16,10 +16,10 @@ MonoBehaviour:
   <Title>k__BackingField: Icos
   <Description>k__BackingField: 
   <Element>k__BackingField: 5
-  <InvocationCost>k__BackingField: 0
+  <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 8be165195f5a46c4ab290bdc4cfffb54, type: 2}
-  <Health>k__BackingField: 2
+  <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1

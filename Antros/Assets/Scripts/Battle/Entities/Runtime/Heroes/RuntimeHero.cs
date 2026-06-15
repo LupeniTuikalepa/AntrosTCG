@@ -69,7 +69,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         {
             await base.Spawn(manager, aspect);
 
-            Debug.Log($"[Runtime Hero] {aspect.BattleCardComponent.battleCard.Title} spawned.");
+            //Debug.Log($"[Runtime Hero] {aspect.BattleCardComponent.battleCard.Title} spawned.");
 
             heroName.text = aspect.Name;
 
@@ -107,6 +107,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             if (IsSelected)
             {
+                Debug.Log("HUH");
                 cinemachineCamera.gameObject.SetActive(true);
             }
         }

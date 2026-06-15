@@ -1,3 +1,4 @@
+using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
 using UnityEngine;
 
@@ -7,8 +8,8 @@ namespace ATCG.Battle
     {
         int MaxSelectableEntities { get; }
 
-        void OnSelected(IRuntimeEntity runtimeEntity);
-        
-        void OnUnselected(IRuntimeEntity runtimeEntity);
+        void OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity);
+
+        void OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity);
     }
 }

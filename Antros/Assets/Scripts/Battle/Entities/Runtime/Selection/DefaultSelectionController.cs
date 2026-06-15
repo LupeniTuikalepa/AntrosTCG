@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Entities.Runtime;
+﻿using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Runtime;
 
 namespace ATCG.Battle
 {
@@ -6,8 +7,8 @@ namespace ATCG.Battle
     {
         public int MaxSelectableEntities => 1;
 
-        public void OnSelected(IRuntimeEntity runtimeEntity) { }
+        public void OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity) { }
 
-        public void OnUnselected(IRuntimeEntity runtimeEntity) { }
+        public void OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity) { }
     }
 }

@@ -19,7 +19,7 @@ MonoBehaviour:
   <Rarity>k__BackingField: 1
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 4c33316959bc5404b92c4ce6915a4bda, type: 2}
-  <Health>k__BackingField: 2
+  <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1

@@ -18,10 +18,10 @@ namespace ATCG.Battle.Commands.Core
 
         public World World => battlePhase.world;
 
-        private readonly List<object> commandPlayers;
+        private readonly List<ICommandPlayer> commandPlayers;
         private readonly Dictionary<IGameCommand, ICommandPlayerGroup> pairings;
 
-        public CommandContext(BattlePhase battlePhase, List<object> commandPlayers)
+        public CommandContext(BattlePhase battlePhase, List<ICommandPlayer> commandPlayers)
         {
             pairings = DictionaryPool<IGameCommand, ICommandPlayerGroup>.Get();
             this.battlePhase = battlePhase;
@@ -29,6 +29,19 @@ namespace ATCG.Battle.Commands.Core
         }
 
         public IBattlePlayer GetBattlePlayer(int playerID) => battlePhase.GetPlayer(playerID);
+
+
+        public bool TryGetCommandPlayerGroup<T>(T gameCommand, out CommandPlayerGroup<T> group) where T : IGameCommand
+        {
+            if (pairings.TryGetValue(gameCommand, out var g) && g is CommandPlayerGroup<T> cpg)
+            {
+                group = cpg;
+                return true;
+            }
+
+            group = null;
+            return false;
+        }
 
         /// <summary>
         /// Get the group of command players that will react for a specific command.
@@ -44,7 +57,7 @@ namespace ATCG.Battle.Commands.Core
             CommandPlayerGroup<T> group = new(command);
             pairings[command]= group;
 
-            foreach (object commandPlayer in commandPlayers)
+            foreach (ICommandPlayer commandPlayer in commandPlayers)
             {
                 if(commandPlayer is not ICommandPlayer<T> player)
                     continue;
@@ -53,6 +66,8 @@ namespace ATCG.Battle.Commands.Core
                     group.Add(player);
             }
         }
+
+
         public static implicit operator World(CommandContext context) => context.World;
 
         public static implicit operator BattleGrid(CommandContext context) => context.Grid;

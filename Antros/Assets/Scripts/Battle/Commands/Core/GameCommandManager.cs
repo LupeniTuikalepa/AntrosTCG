@@ -14,14 +14,14 @@ namespace ATCG.Battle.Commands.Core
     [DontDestroyOnLoad]
     public static class GameCommandManager
     {
-        private static readonly List<object> CommandsPlayers = new List<object>();
+        private static readonly List<ICommandPlayer> CommandsPlayers = new List<ICommandPlayer>();
 
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
         {
             CommandsPlayers.Clear();
         }
-        
+
         public static void Run<T>(this T gameCommand, BattlePhase battlePhase) where T: IGameCommand
         {
             RunAsync(gameCommand, battlePhase).FireAndForget();
@@ -45,12 +45,12 @@ namespace ATCG.Battle.Commands.Core
             CommandPlayerRunner runner = new CommandPlayerRunner(gameCommand);
             await runner.Run(context);
         }
-        public static void RegisterPlayer<T>(this ICommandPlayer<T> player) where T : IGameCommand
+        public static void RegisterPlayer(this ICommandPlayer player)
         {
             CommandsPlayers.Add(player);
         }
 
-        public static void UnregisterPlayer<T>(this ICommandPlayer<T> player) where T : IGameCommand
+        public static void UnregisterPlayer(this ICommandPlayer player)
         {
             CommandsPlayers.Remove(player);
         }
