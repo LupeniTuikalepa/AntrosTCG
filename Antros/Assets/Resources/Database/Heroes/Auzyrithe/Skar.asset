@@ -16,10 +16,10 @@ MonoBehaviour:
   <Title>k__BackingField: Skar
   <Description>k__BackingField: 
   <Element>k__BackingField: 5
-  <InvocationCost>k__BackingField: 0
+  <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: 63673eac212f56d45a37b9692adf9c6b, type: 2}
-  <Health>k__BackingField: 2
+  <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 1

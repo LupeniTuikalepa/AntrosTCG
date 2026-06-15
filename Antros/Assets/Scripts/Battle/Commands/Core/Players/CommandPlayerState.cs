@@ -13,19 +13,20 @@ namespace ATCG.Battle.Commands.Players
         private readonly AwaitableCompletionSource windUpSource;
         private readonly AwaitableCompletionSource followThroughSource;
 
-        private readonly Dictionary<object, bool> windUps;
-        private readonly Dictionary<object, bool> followThrough;
+        private readonly Dictionary<ICommandPlayer, bool> windUps;
+        private readonly Dictionary<ICommandPlayer, bool> followThrough;
 
         public Awaitable WindUp => windUpSource.Awaitable;
         public Awaitable FollowThrough => followThroughSource.Awaitable;
 
-        public CommandPlayerState(IEnumerable<object> players, float timeout = 5f)
+
+        public CommandPlayerState(IEnumerable<ICommandPlayer> players, float timeout = 5f)
         {
             windUpSource = new AwaitableCompletionSource();
             followThroughSource = new AwaitableCompletionSource();
 
-            windUps = DictionaryPool<object, bool>.Get();
-            followThrough = DictionaryPool<object, bool>.Get();
+            windUps = DictionaryPool<ICommandPlayer, bool>.Get();
+            followThrough = DictionaryPool<ICommandPlayer, bool>.Get();
 
             foreach (var player in players)
             {
@@ -57,7 +58,7 @@ namespace ATCG.Battle.Commands.Players
                 Debug.LogWarning($"CommandPlayerState: Timeout reached for follow through after {time} seconds");
         }
 
-        public void CompleteWindUp<T>(ICommandPlayer<T> player) where T : IGameCommand
+        public void CompleteWindUp(ICommandPlayer player)
         {
             windUps[player] = true;
             bool isDone = true;
@@ -71,7 +72,7 @@ namespace ATCG.Battle.Commands.Players
             }
         }
 
-        public void CompleteFollowThrough<T>(ICommandPlayer<T> player) where T : IGameCommand
+        public void CompleteFollowThrough(ICommandPlayer player)
         {
             followThrough[player] = true;
 
@@ -89,9 +90,9 @@ namespace ATCG.Battle.Commands.Players
         void IDisposable.Dispose()
         {
             if (windUps != null)
-                DictionaryPool<object, bool>.Release(windUps);
+                DictionaryPool<ICommandPlayer, bool>.Release(windUps);
             if (followThrough != null)
-                DictionaryPool<object, bool>.Release(followThrough);
+                DictionaryPool<ICommandPlayer, bool>.Release(followThrough);
         }
     }
 }

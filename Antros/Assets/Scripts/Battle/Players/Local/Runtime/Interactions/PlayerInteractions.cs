@@ -43,7 +43,7 @@ namespace ATCG.Battle
 
         private bool isInActionSelection = false;
 
-        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
+        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
             RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
 
@@ -61,10 +61,10 @@ namespace ATCG.Battle
             SelectAction(runtimeEntity).FireAndForget();
         }
 
-        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
+        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress address)
         {
             RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
-            
+
             if(!IsPlayerTurn())
                 return;
         }
@@ -80,6 +80,7 @@ namespace ATCG.Battle
                     return;
 
                 isInActionSelection = true;
+                await Awaitable.EndOfFrameAsync();
                 SelectEntityActionPhase phase = new SelectEntityActionPhase(Player, address, actions);
 
                 RuntimeEntityManager.SelectionController.AddPriority(runtimeEntity.gameObject, PriorityTags.Default, this);

@@ -50,9 +50,9 @@ namespace ATCG.Battle
 
         public int MaxSelectableEntities => 1;
 
-        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity) { }
+        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity) { }
 
-        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
+        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
             if(runtimeEntity.Address == entityAddress)
                 SetResult(null);

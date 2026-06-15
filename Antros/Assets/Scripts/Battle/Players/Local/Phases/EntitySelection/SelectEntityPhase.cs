@@ -81,8 +81,11 @@ namespace ATCG.Battle.Players.Local.Phases
             return pattern.Contains(battleGridElement.coordinates);
         }
 
-        public bool IsRelated(EntityAddress address)
+        public bool IsRelated(EntityAddress address) => IsRelated(address, out _);
+        public bool IsRelated(EntityAddress address, out EntityAddress related)
         {
+            related = EntityAddress.None;
+
             if (!address.TryGetComponentRO(out GridMemberComponent battleGridElement))
                 return false;
 
@@ -92,7 +95,10 @@ namespace ATCG.Battle.Players.Local.Phases
             foreach (var member in cell.GetMembers())
             {
                 if (filter.Accepts(member.EntityAddress))
+                {
+                    related = member.EntityAddress;
                     return true;
+                }
             }
 
             return false;
@@ -155,17 +161,32 @@ namespace ATCG.Battle.Players.Local.Phases
 
         public void ClearSelection() => selection.Clear();
 
-        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity)
+        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
             if (!IsWaiting)
                 return;
 
-            selection?.Add(runtimeEntity.Address);
-            if (selection != null && selection.Count >= MaxSelectableEntities)
+            if (!IsInPattern(selectedEntity))
+            {
+                selection.Clear();
+                IsWaiting = false;
+                return;
+            }
+
+            if (!Accepts(selectedEntity))
+            {
+                if (IsRelated(selectedEntity, out EntityAddress related))
+                    selectedEntity = related;
+                else
+                    return;
+            }
+
+            selection.Add(selectedEntity);
+            if (selection.Count >= MaxSelectableEntities)
                 IsWaiting = false;
         }
 
-        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity)
+        void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress address)
         {
             if (!IsWaiting)
                 return;

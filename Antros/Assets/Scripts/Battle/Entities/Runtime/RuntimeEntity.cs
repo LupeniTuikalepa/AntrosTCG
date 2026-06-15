@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ATCG.Battle.Cards;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
@@ -59,11 +60,13 @@ namespace ATCG.Battle.Entities.Runtime
         protected virtual void OnEnable()
         {
             PhaseManager.Register<ISelectEntityPhase>(this);
+            GameCommandManager.RegisterPlayer(this);
         }
 
         protected virtual void OnDisable()
         {
             PhaseManager.Unregister<ISelectEntityPhase>(this);
+            GameCommandManager.UnregisterPlayer(this);
         }
 
         public virtual async Awaitable Spawn(RuntimeEntityManager manager, T aspect)

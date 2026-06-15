@@ -15,8 +15,6 @@ namespace ATCG.Battle.Players.Local.Runtime
 
         public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
         {
-            Debug.Log($"Connected with player {player.ID}", runtimeBattlePlayer);
-
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
             {
                 RuntimeLocalPlayer = runtimeLocalBattlePlayer;

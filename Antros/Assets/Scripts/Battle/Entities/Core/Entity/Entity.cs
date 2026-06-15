@@ -7,6 +7,8 @@ namespace ATCG.Battle.Entities
     [Serializable]
     public readonly struct Entity : IEquatable<Entity>
     {
+        public bool IsValid => id >= 0;
+
         public static readonly Entity None = new Entity(-1);
 
         public readonly int id;

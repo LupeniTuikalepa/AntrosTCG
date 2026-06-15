@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace ATCG.Battle.Commands.Core.Players
 {
-    public interface ICommandPlayer<in T> where T : IGameCommand
+    public interface ICommandPlayer { }
+    public interface ICommandPlayer<in T> : ICommandPlayer where T : IGameCommand
     {
         bool CanPlay(T command) => true;
 
