@@ -107,7 +107,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             if (IsSelected)
             {
-                Debug.Log("HUH");
                 cinemachineCamera.gameObject.SetActive(true);
             }
         }

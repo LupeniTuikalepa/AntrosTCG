@@ -592,7 +592,7 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
-  BlendHint: 0
+  BlendHint: 40
 --- !u!114 &4273614372188557420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -876,7 +876,7 @@ MonoBehaviour:
     DefaultMode: 2
   DefaultBlend:
     Style: 1
-    Time: 2
+    Time: 1
     CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -2963,7 +2963,55 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8175323274441218989, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 156024275057762034}
+    - targetCorrespondingSourceObject: {fileID: 2021819493002656930, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6347739504226617245}
+    - targetCorrespondingSourceObject: {fileID: 2021819493002656930, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1043768567743496163}
   m_SourcePrefab: {fileID: 100100000, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
+--- !u!1 &3729572349604705216 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2021819493002656930, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
+  m_PrefabInstance: {fileID: 3444383276971364194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &6347739504226617245
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729572349604705216}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1043768567743496163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729572349604705216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92baf9d2aae14fe1952e770ee00502bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.UI.MonoHUDPhaseListener
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  group: {fileID: 6347739504226617245}
+  phaseToHide:
+  - guid: 753bcdd50ee049878702ebb36cde260b
+    isNativeType: 0
+  - guid: 6ebba7a2f0764f878fb2a9a0319556d1
+    isNativeType: 0
+  fadeDuration: 0.15
 --- !u!224 &5886731065208421065 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9114501563819079083, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}

@@ -11,6 +11,7 @@ using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Patterns.Building;
+using ATCG.Battle.Players.Local.UI;
 using ATCG.HexGrids;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
@@ -21,7 +22,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Players.Local.Phases
 {
     public sealed class SelectEntityPhase<T> : LocalPlayerPhase<EntityAddress[]>,
-        ISelectEntityPhase
+        ISelectEntityPhase, IHUDPhase<ISelectEntityPhase>
         where T : IEntityFilter
     {
         public int MaxSelectableEntities { get; }
