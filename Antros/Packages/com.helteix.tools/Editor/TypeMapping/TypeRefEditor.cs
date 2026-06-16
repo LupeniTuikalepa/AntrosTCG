@@ -86,7 +86,14 @@ namespace Helteix.Tools.Editor.TypeMapping
 
                         if (attributes.Length > 0)
                         {
-                            var type = monoScript.GetClass();
+                            Type type = monoScript.GetClass();
+
+                            if (type == null)
+                            {
+                                objectField.SetEnabled(false);
+                                return;
+                            }
+
                             objectField.SetEnabled(IsValid(attributes, type));
                             return;
                         }
@@ -134,6 +141,8 @@ namespace Helteix.Tools.Editor.TypeMapping
             {
                 if (attributes[i] is not TypeRefOfAttribute att)
                     continue;
+
+                Debug.Log($"testing {att.type.Name} assignable by {type.Name} : {att.type.IsAssignableFrom(type)}");
                 if (att.type.IsAssignableFrom(type))
                     continue;
 

@@ -16,7 +16,7 @@ MonoBehaviour:
   - From: HeroCam
     To: PlayerCamera
     Blend:
-      Style: 3
+      Style: 1
       Time: 0.5
       CustomCurve:
         serializedVersion: 2
@@ -27,7 +27,7 @@ MonoBehaviour:
   - From: PlayerCamera
     To: HeroCam
     Blend:
-      Style: 3
+      Style: 1
       Time: 0.5
       CustomCurve:
         serializedVersion: 2
