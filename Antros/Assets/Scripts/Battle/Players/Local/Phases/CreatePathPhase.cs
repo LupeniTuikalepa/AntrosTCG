@@ -66,7 +66,6 @@ namespace ATCG.Battle.Players.Local.Phases
                     }
                     center = list[^1];
                     OnPathChanged?.Invoke(list);
-                    Debug.Log($"AAAAAAAAAAA");
                 }
                 return list.ToArray();
             }
