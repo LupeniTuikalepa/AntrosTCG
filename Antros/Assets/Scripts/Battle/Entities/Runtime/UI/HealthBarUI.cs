@@ -40,10 +40,10 @@ namespace ATCG.Battle
 			state.CompleteFollowThrough(this);
 
 			var info = command.GetInfos();
-			CurrentValue = info.currentHealth;
-			MaxValue = info.maxHealth;
+			CurrentValue = info.to;
+			MaxValue = info.max;
 
-			Refresh();
+			await RefreshAsync();
 		}
 
 	}
