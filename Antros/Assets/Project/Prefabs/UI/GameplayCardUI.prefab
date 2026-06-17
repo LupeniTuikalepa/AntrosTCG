@@ -2419,6 +2419,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1623620319
@@ -2466,6 +2467,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.UI.Components.GameCardUIEffects
   registerOnEnable: 1
   unregisteredOnDisable: 1
+  animationDuration: 0.25
+  hoverPivotY: {x: 0.5, y: 0.85}
+  hoverScale: 1.15
 --- !u!114 &6645903396853824852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3831,8 +3835,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 217.94751, y: -72.476}
-  m_SizeDelta: {x: 99.979004, y: 0}
+  m_AnchoredPosition: {x: 201.62524, y: -72.476}
+  m_SizeDelta: {x: 93.450096, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &3725468130676996093
 CanvasGroup:
@@ -4354,7 +4358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9098326687602053167, guid: f25b8a3123115f741bff0d6aaa164b0b, type: 3}
       propertyPath: m_fontSize
-      value: 21.15
+      value: 18.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4472,7 +4476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9098326687602053167, guid: f25b8a3123115f741bff0d6aaa164b0b, type: 3}
       propertyPath: m_fontSize
-      value: 21.15
+      value: 18.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4590,7 +4594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9098326687602053167, guid: f25b8a3123115f741bff0d6aaa164b0b, type: 3}
       propertyPath: m_fontSize
-      value: 21.15
+      value: 18.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

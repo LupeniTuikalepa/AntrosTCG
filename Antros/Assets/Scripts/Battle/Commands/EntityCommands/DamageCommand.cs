@@ -5,7 +5,7 @@ using ATCG.Battle.Entities.Components;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class DamageCommand : EntityCommand<NoInfos>
+    public class DamageCommand : EntityCommand<DeltaInRangeInfos<int>>
     {
 
         public readonly int quantity;
@@ -25,7 +25,13 @@ namespace ATCG.Battle.Commands.EntityCommands
                 return;
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
+
+            infos.from = componentHealth.CurrentHealth;
             componentHealth.AddOrRemoveHealth(-quantity);
+            
+            infos.to = componentHealth.CurrentHealth;
+            infos.max = componentHealth.MaxHealth;
+
             if (componentHealth.CurrentHealth <= 0)
                 Embed(context, new DeathCommand(address));
         }

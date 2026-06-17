@@ -104,6 +104,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3151379040916540478}
     m_Modifications:
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2966755077349586426, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_text
       value: Public
@@ -197,17 +221,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
---- !u!114 &3345462228781768548 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7745977065392621166, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
-  m_PrefabInstance: {fileID: 4977116635640551690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &3806706577262501131 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
@@ -221,6 +234,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3151379040916540478}
     m_Modifications:
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 560703605423195775, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2966755077349586426, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_text
       value: Private
@@ -314,17 +351,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
---- !u!114 &271335011419887528 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7745977065392621166, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
-  m_PrefabInstance: {fileID: 7547123509835846086}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &1835958587983582663 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8198352610778219521, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
@@ -451,12 +477,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.MultiChoiceUI
   choices:
   - <Title>k__BackingField: Public
-    <Button>k__BackingField: {fileID: 3345462228781768548}
+    <Button>k__BackingField: {fileID: 0}
     <OnChose>k__BackingField:
       m_PersistentCalls:
         m_Calls: []
   - <Title>k__BackingField: Private
-    <Button>k__BackingField: {fileID: 271335011419887528}
+    <Button>k__BackingField: {fileID: 0}
     <OnChose>k__BackingField:
       m_PersistentCalls:
         m_Calls: []
