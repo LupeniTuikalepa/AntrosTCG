@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ATCG.Battle;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
@@ -31,13 +32,13 @@ namespace ATCG.Debugging.Debugging.Gameplay
                 IBattlePlayerProfile[] localPlayerProfiles = new IBattlePlayerProfile[players.Length];
 
                 for (int i = 0; i < players.Length; i++)
-                    localPlayerProfiles[i] = new LocalPlayerProfile(i, players[i], allCards);
+                    localPlayerProfiles[i] = new LocalPlayerProfile(BattleID.CreateNew(), players[i], allCards);
 
                 int seed = Random.Range(int.MinValue, int.MaxValue);
                 BattlePhase battlePhase = new BattlePhase(seed, localPlayerProfiles);
                 PhaseResult<BattleHistory> result = await battlePhase.Run();
 
-                return result.value.WinningPlayer == 0;
+                return result.value.WinningPlayer != BattleID.None;
             }
 
         }

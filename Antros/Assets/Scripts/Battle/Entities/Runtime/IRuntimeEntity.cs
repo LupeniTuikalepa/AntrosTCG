@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Runtime;
 using UnityEngine;
 // ReSharper disable InconsistentNaming
@@ -13,7 +14,7 @@ namespace ATCG.Battle.Entities.Runtime
 
         EntityAddress Address { get; }
         RuntimeEntityManager Manager { get; }
-        RuntimeBattlePlayer RuntimeBattlePlayer { get; }
+        IRuntimeBattlePlayer<LocalBattlePlayer> RuntimeBattlePlayer { get; }
         IBattlePlayer BattlePlayer { get; }
         BattlePhase BattlePhase { get; }
         Transform actionUIRoot { get; }

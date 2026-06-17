@@ -29,6 +29,9 @@ namespace ATCG.Battle
 
             public float GetValue(Object context, IInputAxisOwner.AxisDescriptor.Hints hint)
             {
+                if (!playerCamera.IsConnected)
+                    return 0;
+
                 return axis switch
                 {
                     Axis.Horizontal => playerCamera.RotationAction.ReadValue<Vector2>().x,

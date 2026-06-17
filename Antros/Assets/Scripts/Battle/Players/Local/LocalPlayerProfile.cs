@@ -1,4 +1,5 @@
 ﻿using System;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Cards;
 using ATCG.Players;
@@ -8,7 +9,7 @@ namespace ATCG.Battle.Players.Local
 {
     public interface IBattlePlayerProfile
     {
-        int ID { get; }
+        BattleID ID { get; }
         PlayerInfos Infos { get; }
         GameCardData[] Cards { get; }
 
@@ -19,7 +20,7 @@ namespace ATCG.Battle.Players.Local
     public struct LocalPlayerProfile : IBattlePlayerProfile
     {
         [field: SerializeField]
-        public int ID { get; private set; }
+        public BattleID ID { get; private set; }
 
         [field: SerializeField]
         public PlayerInfos Infos { get; private set; }
@@ -28,7 +29,7 @@ namespace ATCG.Battle.Players.Local
         public GameCardData[] Cards { get; private set; }
 
 
-        public LocalPlayerProfile(int id, PlayerInfos infos, GameCardData[] cards)
+        public LocalPlayerProfile(BattleID id, PlayerInfos infos, GameCardData[] cards)
         {
             ID = id;
             Infos = infos;

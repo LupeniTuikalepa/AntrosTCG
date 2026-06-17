@@ -8,12 +8,11 @@ namespace ATCG.Battle.Players.Runtime
 {
     public abstract class RuntimeBattlePlayer : MonoBehaviour
     {
-        public abstract IBattlePlayer BattlePlayer { get; }
         public abstract void Disconnect();
     }
 
 
-    public abstract class RuntimeBattlePlayer<T> : RuntimeBattlePlayer where T : class, IBattlePlayer
+    public abstract class RuntimeBattlePlayer<T> : RuntimeBattlePlayer, IRuntimeBattlePlayer<T> where T : class, IBattlePlayer
     {
         public class ComponentCache<TComponent> where TComponent : IRuntimeBattlePlayerComponent<T>
         {
@@ -42,15 +41,7 @@ namespace ATCG.Battle.Players.Runtime
 
         protected static readonly List<RuntimeBattlePlayer<T>> RuntimeBattlePlayers = new();
 
-        [field: SerializeField, BoxGroup("Managers")]
-        public RuntimeEntityManager RuntimeEntityManager { get; private set; }
-        
-        [field: SerializeField, BoxGroup("Managers")]
-        public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
-
-        public T Player { get; private set; }
-
-        public override IBattlePlayer BattlePlayer => Player;
+        public T BattlePlayer { get; private set; }
 
         private IRuntimeBattlePlayerComponent<T>[] runtimeComponents;
 
@@ -73,27 +64,28 @@ namespace ATCG.Battle.Players.Runtime
 
         public void Connect(T player)
         {
-            if (Player != null)
+            if (BattlePlayer != null)
                 Disconnect();
 
-            Player = player;
+            BattlePlayer = player;
             OnConnected();
 
             for (int i = 0; i < runtimeComponents.Length; i++)
-                runtimeComponents[i].Connect(this, player);
+                runtimeComponents[i].Connect(this);
         }
 
 
         public sealed override void Disconnect()
         {
-            if (Player != null)
+            if (BattlePlayer != null)
             {
+                for (int i = 0; i < runtimeComponents.Length; i++)
+                    runtimeComponents[i].Disconnect(this);
+
                 OnDisconnected();
-                Player = null;
+                BattlePlayer = null;
             }
 
-            for (int i = 0; i < runtimeComponents.Length; i++)
-                runtimeComponents[i].Disconnect(this, Player);
         }
 
         protected abstract void OnConnected();
@@ -119,7 +111,7 @@ namespace ATCG.Battle.Players.Runtime
             where TRuntimePlayer : RuntimeBattlePlayer<T>
         {
             foreach (RuntimeBattlePlayer<T> runtimeBattlePlayer in RuntimeBattlePlayers)
-                if (runtimeBattlePlayer.Player == player && runtimeBattlePlayer is TRuntimePlayer rtp)
+                if (runtimeBattlePlayer.BattlePlayer == player && runtimeBattlePlayer is TRuntimePlayer rtp)
                 {
                     runtimePlayer = rtp;
                     return true;
@@ -128,5 +120,6 @@ namespace ATCG.Battle.Players.Runtime
             runtimePlayer = null;
             return false;
         }
+
     }
 }

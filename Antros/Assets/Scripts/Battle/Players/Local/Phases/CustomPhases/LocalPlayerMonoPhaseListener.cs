@@ -7,22 +7,19 @@ namespace ATCG.Battle.Players.Local.Phases
 {
     public abstract class LocalPlayerMonoPhaseListener<T> : MonoPhaseListener<T>, ILocalPlayerPhaseListener<T>, IRuntimeBattlePlayerComponent<LocalBattlePlayer> where T : IPhase, ILocalPlayerPhase
     {
-        public LocalBattlePlayer LocalBattlePlayer { get; private set; }
-        
         public RuntimeLocalBattlePlayer RuntimeBattlePlayer { get; private set; }
+        public LocalBattlePlayer LocalBattlePlayer => RuntimeBattlePlayer.BattlePlayer;
 
-        public virtual void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        public virtual void Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
-            LocalBattlePlayer = player;
             RuntimeBattlePlayer = runtimeBattlePlayer as RuntimeLocalBattlePlayer;
         }
 
-        public virtual void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        public virtual void Disconnect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
-            if (LocalBattlePlayer != player) 
+            if (LocalBattlePlayer != runtimeBattlePlayer.BattlePlayer)
                 return;
-            
-            LocalBattlePlayer = null;
+
             RuntimeBattlePlayer = null;
         }
     }

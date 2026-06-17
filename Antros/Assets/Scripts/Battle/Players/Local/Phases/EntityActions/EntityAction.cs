@@ -7,13 +7,13 @@ namespace ATCG.Battle
 {
     public abstract class EntityAction
     {
-        protected readonly LocalBattlePlayer playerOrigin;
+        protected readonly LocalBattlePlayer fromPlayer;
 
         public abstract int ManaCost { get; }
 
-        protected EntityAction(LocalBattlePlayer playerOrigin)
+        protected EntityAction(LocalBattlePlayer fromPlayer)
         {
-            this.playerOrigin = playerOrigin;
+            this.fromPlayer = fromPlayer;
         }
 
         public abstract Awaitable Execute(EntityAddress address, BattlePhase battlePhase);

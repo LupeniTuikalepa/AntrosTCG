@@ -28,8 +28,8 @@ namespace ATCG.Battle.Entities.Runtime
         public event Action OnEntitySelected;
         public event Action OnEntityDeselected;
 
-        public RuntimeBattlePlayer RuntimeBattlePlayer => Manager.RuntimeBattlePlayer;
-        public IBattlePlayer BattlePlayer => Manager.BattlePlayer;
+        public IRuntimeBattlePlayer<LocalBattlePlayer> RuntimeBattlePlayer => Manager.RuntimeBattlePlayer;
+        public IBattlePlayer BattlePlayer => Manager.LocalBattlePlayer;
         public LocalBattlePlayer LocalBattlePlayer => Manager.LocalBattlePlayer;
         public BattlePhase BattlePhase => LocalBattlePlayer.BattlePhase;
 
@@ -60,13 +60,13 @@ namespace ATCG.Battle.Entities.Runtime
         protected virtual void OnEnable()
         {
             PhaseManager.Register<ISelectEntityPhase>(this);
-            GameCommandManager.RegisterPlayer(this);
+            CommandManager.RegisterPlayer(this);
         }
 
         protected virtual void OnDisable()
         {
             PhaseManager.Unregister<ISelectEntityPhase>(this);
-            GameCommandManager.UnregisterPlayer(this);
+            CommandManager.UnregisterPlayer(this);
         }
 
         public virtual async Awaitable Spawn(RuntimeEntityManager manager, T aspect)

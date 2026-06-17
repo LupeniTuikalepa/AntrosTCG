@@ -5,16 +5,16 @@ namespace ATCG.Battle.Entities.Components
 {
     public readonly struct BelongsToPlayerComponent : IEntityComponent
     {
-        public readonly int playerId;
+        public readonly BattleID playerId;
 
-        public BelongsToPlayerComponent(int playerId)
+        public BelongsToPlayerComponent(BattleID playerId)
         {
             this.playerId = playerId;
         }
-        
+
         public IBattlePlayer GetPlayer(BattlePhase battlePhase) => battlePhase.GetPlayer(playerId);
 
         public bool IsAllieOf(IBattlePlayer player) => IsAllieOf(player.Profile.ID);
-        public bool IsAllieOf(int id) => playerId == id;
+        public bool IsAllieOf(BattleID id) => playerId == id;
     }
 }

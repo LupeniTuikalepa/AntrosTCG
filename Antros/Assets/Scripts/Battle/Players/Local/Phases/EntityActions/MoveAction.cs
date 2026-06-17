@@ -25,37 +25,37 @@ using UnityEngine.Pool;
 namespace ATCG.Battle
 {
     public class MoveAction : EntityAction
-    { 
+    {
         public override int ManaCost => GameMetrics.Current.MovementCost;
 
         private readonly int speed;
-        public MoveAction(LocalBattlePlayer player, int speed) : base(player)
+        public MoveAction(LocalBattlePlayer fromPlayer, int speed) : base(fromPlayer)
         {
             this.speed = speed;
         }
-        
+
         public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
             if (!address.TryGetComponentRO(out GridMemberComponent gridMemberComponent))
                 return;
-            
+
             if(!address.TryGetComponentRO(out MovementComponent movementComponent))
                 return;
-            
+
             HexCoordinates center = gridMemberComponent.coordinates;
             var movementPatternData = movementComponent.patternDatas;
-            
-            var pathPhase = new CreatePathPhase(playerOrigin, center, speed, movementPatternData);
+
+            var pathPhase = new CreatePathPhase(fromPlayer, center, speed, movementPatternData);
             HexCoordinates[] result = await pathPhase.Run();
             if (result.Length == 0)
                 return;
 
-            var manaCommand = new ModifyPlayerManaCommand(playerOrigin.ID, -ManaCost);
+            var manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
             manaCommand.Run(battlePhase);
-            
+
             var pathCommand = new MovePathCommand(address, result);
             await pathCommand.RunAsync(battlePhase);
-            
+
         }
     }
 }

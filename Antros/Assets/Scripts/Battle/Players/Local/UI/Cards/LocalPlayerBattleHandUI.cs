@@ -24,13 +24,12 @@ namespace ATCG.Battle.Players.Local.UI.Cards
     {
         private PlayerHUD hud;
         protected RuntimeLocalBattlePlayer RuntimeLocalBattlePlayer { get; private set; }
-        protected LocalBattlePlayer LocalBattlePlayer => RuntimeLocalBattlePlayer.Player;
+        protected LocalBattlePlayer LocalBattlePlayer => RuntimeLocalBattlePlayer.BattlePlayer;
 
         public DeployCardPhase DeployCard { get; private set; }
 
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer,
-            LocalBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
             {
@@ -41,19 +40,19 @@ namespace ATCG.Battle.Players.Local.UI.Cards
                 Connect(LocalBattlePlayer.Hand);
             }
 
-            (this as IRuntimeBattlePlayerComponent<IBattlePlayer>).Connect(runtimeBattlePlayer, player);
+            (this as IRuntimeBattlePlayerComponent<IBattlePlayer>).Connect(runtimeBattlePlayer);
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer,
-            LocalBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(
+            IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
-            if (runtimeBattlePlayer == RuntimeLocalBattlePlayer)
+            if ((RuntimeLocalBattlePlayer)runtimeBattlePlayer == RuntimeLocalBattlePlayer)
             {
                 Disconnect();
                 RuntimeLocalBattlePlayer = null;
             }
 
-            (this as IRuntimeBattlePlayerComponent<IBattlePlayer>).Disconnect(runtimeBattlePlayer, player);
+            (this as IRuntimeBattlePlayerComponent<IBattlePlayer>).Disconnect(runtimeBattlePlayer);
         }
 
         public override bool CanCardBeDragged(ICard card)
@@ -94,9 +93,7 @@ namespace ATCG.Battle.Players.Local.UI.Cards
             if (LocalBattlePlayer != null && cardHolderUI.CardUI.Card is IBattleCard gameCard)
             {
                 Hand<IBattleCard> hand = LocalBattlePlayer.Hand;
-                int index = hand.GetCardIndex(gameCard);
-
-                if (index > 0)
+                if (hand.TryGetCardIndex(gameCard, out int index))
                 {
                     int horizontalDir = (int)Mathf.Sign(moveVector.x);
                     int targetIndex = index + horizontalDir;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
@@ -18,22 +19,38 @@ namespace ATCG.Battle.Commands.Core
 
         public World World => battlePhase.world;
 
-        private readonly List<ICommandPlayer> commandPlayers;
-        private readonly Dictionary<IGameCommand, ICommandPlayerGroup> pairings;
+        private readonly List<ICommandListener> commandPlayers;
+        private readonly Dictionary<ICommand, ICommandListenerGroup> pairings;
+        private readonly CommandCollection commandCollection;
 
-        public CommandContext(BattlePhase battlePhase, List<ICommandPlayer> commandPlayers)
+
+        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandPlayers, CommandCollection commandCollection)
         {
-            pairings = DictionaryPool<IGameCommand, ICommandPlayerGroup>.Get();
+            pairings = DictionaryPool<ICommand, ICommandListenerGroup>.Get();
             this.battlePhase = battlePhase;
             this.commandPlayers = commandPlayers;
+            this.commandCollection = commandCollection;
         }
 
-        public IBattlePlayer GetBattlePlayer(int playerID) => battlePhase.GetPlayer(playerID);
-
-
-        public bool TryGetCommandPlayerGroup<T>(T gameCommand, out CommandPlayerGroup<T> group) where T : IGameCommand
+        public bool TryGetBattlePlayer(BattleID playerID, out IBattlePlayer player)
         {
-            if (pairings.TryGetValue(gameCommand, out var g) && g is CommandPlayerGroup<T> cpg)
+            player = GetBattlePlayer(playerID);
+            return player != null;
+        }
+
+        public IBattlePlayer GetBattlePlayer(BattleID playerID) => battlePhase.GetPlayer(playerID);
+
+
+        public bool TryGetCommand(BattleID battleID, out ICommand command)
+        {
+            return commandCollection.TryGetCommand(battleID, out command);
+        }
+
+        public ICommand GetCommand(BattleID battleID) => commandCollection.GetCommand(battleID);
+
+        public bool TryGetCommandPlayerGroup<T>(T gameCommand, out CommandListenerGroup<T> group) where T : ICommand
+        {
+            if (pairings.TryGetValue(gameCommand, out var g) && g is CommandListenerGroup<T> cpg)
             {
                 group = cpg;
                 return true;
@@ -46,20 +63,21 @@ namespace ATCG.Battle.Commands.Core
         /// <summary>
         /// Get the group of command players that will react for a specific command.
         /// </summary>
-        /// <param name="gameCommand"></param>
+        /// <param name="command"></param>
         /// <param name="group"></param>
         /// <returns></returns>
-        public bool TryGetCommandPlayerGroup(IGameCommand gameCommand, out ICommandPlayerGroup group)
-            => pairings.TryGetValue(gameCommand, out group);
+        public bool TryGetCommandPlayerGroup(ICommand command, out ICommandListenerGroup group)
+            => pairings.TryGetValue(command, out group);
 
-        public void Register<T>(T command) where T : IGameCommand
+        public void Register<T>(T command) where T : ICommand
         {
-            CommandPlayerGroup<T> group = new(command);
+            CommandListenerGroup<T> group = new(command);
             pairings[command]= group;
+            commandCollection.AddCommand(command);
 
-            foreach (ICommandPlayer commandPlayer in commandPlayers)
+            foreach (ICommandListener commandPlayer in commandPlayers)
             {
-                if(commandPlayer is not ICommandPlayer<T> player)
+                if(commandPlayer is not ICommandListener<T> player)
                     continue;
 
                 if (player.CanPlay(command))
@@ -79,7 +97,10 @@ namespace ATCG.Battle.Commands.Core
             foreach (var value in pairings.Values)
                 value.Dispose();
 
-            DictionaryPool<IGameCommand, ICommandPlayerGroup>.Release(pairings);
+            DictionaryPool<ICommand, ICommandListenerGroup>.Release(pairings);
         }
+
+        public ICommand GetRoot() => commandCollection.Root;
+        public bool IsRoot(ICommand command) => commandCollection.RootID == command.ID;
     }
 }

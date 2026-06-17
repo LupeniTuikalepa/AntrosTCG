@@ -2,6 +2,7 @@
 using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
@@ -11,14 +12,8 @@ using ATCG.Capacities.Data;
 
 namespace ATCG.Battle.Commands.GameCommands
 {
-    public sealed class CastCapacityCommand : GameCommand<CastCapacityCommand.Infos>
+    public sealed class CastCapacityCommand : Command<NoInfos>
     {
-        //TODO remplir avec des infos pertinentes pour l'UI et la verification
-        public struct Infos
-        {
-
-        }
-
         private readonly CapacitySetup setup;
 
         public CastCapacityCommand(in CapacitySetup setup)

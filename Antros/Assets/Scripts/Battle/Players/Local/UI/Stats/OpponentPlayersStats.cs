@@ -27,11 +27,11 @@ namespace ATCG.Battle.Players.Local.UI.Stats
 
         protected override void OnConnect()
         {
-            CurrentPhase = Player.BattlePhase;
-            for (int i = 0; i < CurrentPhase.PlayerCount; i++)
+            CurrentPhase = RuntimePlayer.BattlePlayer.BattlePhase;
+
+            foreach (IBattlePlayer player in CurrentPhase.Players)
             {
-                IBattlePlayer player = CurrentPhase.Players[i];
-                if (player == Player)
+                if (player == RuntimePlayer.BattlePlayer)
                     continue;
 
                 SimplePlayerStats instance = simplePlayerStatsPrefab.InstantiatePrefab(container);
@@ -40,6 +40,7 @@ namespace ATCG.Battle.Players.Local.UI.Stats
                 instance.Connect(player);
 
                 LayoutRebuilder.ForceRebuildLayoutImmediate(container);
+
             }
         }
 

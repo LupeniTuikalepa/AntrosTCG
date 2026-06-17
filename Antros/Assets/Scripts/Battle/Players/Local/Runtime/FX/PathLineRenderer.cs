@@ -38,12 +38,12 @@ namespace ATCG.Battle
             lineRenderer.positionCount = 0;
             phase.OnPathChanged += PhaseOnOnPathChanged;
             startingPoint = phase.startingPoint;
-            ShowPath().FireAndForget();
+            ShowPath().ListenForExceptions();
         }
 
         protected override void OnPhaseEnd(CreatePathPhase phase)
         {
-            HidePath().FireAndForget();
+            HidePath().ListenForExceptions();
             phase.OnPathChanged -= PhaseOnOnPathChanged;
             base.OnPhaseEnd(phase);
         }

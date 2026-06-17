@@ -14,8 +14,8 @@ namespace ATCG.Battle.Players.Local.UI.Cards
 
         protected override void OnConnect()
         {
-            deckUI.Connect(Player.Deck);
-            discardUI.Connect(Player.DeadCards);
+            deckUI.Connect(RuntimePlayer.BattlePlayer.Deck);
+            discardUI.Connect(RuntimePlayer.BattlePlayer.DeadCards);
         }
 
         protected override void OnDisconnect()

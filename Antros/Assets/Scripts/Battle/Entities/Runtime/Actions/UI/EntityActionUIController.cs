@@ -13,10 +13,11 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.UI
 {
-    public class EntityActionUIController : MonoBehaviour,
-        ILocalPlayerPhaseListener<SelectEntityActionPhase>,
-        IRuntimeBattlePlayerComponent<LocalBattlePlayer>
+    public class EntityActionUIController : RuntimeLocalPlayerComponent,
+        ILocalPlayerPhaseListener<SelectEntityActionPhase>
     {
+        LocalBattlePlayer ILocalPlayerPhaseListener<SelectEntityActionPhase>.LocalBattlePlayer => Player;
+
         [SerializeField]
         private EntityActionUIPanel start;
 
@@ -24,7 +25,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
         private CanvasGroup canvasGroup;
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
-
 
         public SelectEntityActionPhase Phase { get; private set; }
 
@@ -38,9 +38,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
                 return null;
             }
         }
-
-        public LocalBattlePlayer LocalBattlePlayer { get; private set; }
-        public RuntimeBattlePlayer RuntimeBattlePlayer { get; private set; }
 
         private readonly Stack<EntityActionUIPanel> openedPanels = new();
 
@@ -66,7 +63,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
             transform.rotation = RuntimeEntity.actionUIRoot.rotation;
         }
 
-        public void Open(EntityActionUIPanel panel) => OpenAsync(panel).FireAndForget();
+        public void Open(EntityActionUIPanel panel) => OpenAsync(panel).ListenForExceptions();
 
         public async Awaitable OpenAsync(EntityActionUIPanel panel)
         {
@@ -89,7 +86,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
             Phase?.SetResult(null);
         }
 
-        public void CloseLast() => CloseLastAsync().FireAndForget();
+        public void CloseLast() => CloseLastAsync().ListenForExceptions();
 
         public async Awaitable CloseLastAsync()
         {
@@ -106,7 +103,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
         public void Exit()
         {
             if(Phase == null)
-                CloseAllAsync().FireAndForget();
+                CloseAllAsync().ListenForExceptions();
             else
                 Phase.Cancel();
 
@@ -135,16 +132,13 @@ namespace ATCG.Battle.Entities.Runtime.UI
                 canvasGroup.Hide(.15f);
             }
         }
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
-        {
-            LocalBattlePlayer = player;
-            RuntimeBattlePlayer = runtimeBattlePlayer;
 
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
+        {
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
-            LocalBattlePlayer = null;
         }
 
     }

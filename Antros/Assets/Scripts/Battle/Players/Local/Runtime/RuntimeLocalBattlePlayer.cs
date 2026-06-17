@@ -10,13 +10,24 @@ namespace ATCG.Battle.Players.Local.Runtime
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player")]
     public class RuntimeLocalBattlePlayer : RuntimeBattlePlayer<LocalBattlePlayer>
     {
+        [field: SerializeField, BoxGroup("Managers")]
+        public RuntimeEntityManager RuntimeEntityManager { get; private set; }
+
+        [field: SerializeField, BoxGroup("Managers")]
+        public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
+
+        [ShowInInspector, ReadOnly, BoxGroup("Debug")]
+        public int LocalID => RuntimeBattlePlayers.IndexOf(this);
+
+        [ShowInInspector, ReadOnly, BoxGroup("Debug")]
         public ComponentCache<PlayerHUD> HUD { get; private set; }
+        [ShowInInspector, ReadOnly, BoxGroup("Debug")]
         public ComponentCache<PlayerControls> Controls { get; private set; }
+        [ShowInInspector, ReadOnly, BoxGroup("Debug")]
         public ComponentCache<PlayerCamera> Camera { get; private set; }
+        [ShowInInspector, ReadOnly, BoxGroup("Debug")]
         public ComponentCache<PlayerInteractions> Interactions { get; private set; }
 
-        [ShowInInspector, ReadOnly]
-        public int LocalID => RuntimeBattlePlayers.IndexOf(this);
 
         protected override void Awake()
         {
@@ -32,7 +43,7 @@ namespace ATCG.Battle.Players.Local.Runtime
             gameObject.name = $"Local Player {LocalID}";
             transform.position = new Vector3
             {
-                x = Player.ID * 200
+                x = BattlePlayer.GetPlayerNumber() * 200
             };
         }
 

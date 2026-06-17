@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players.Local.Phases;
@@ -25,14 +26,8 @@ namespace ATCG.Battle.Players.Local
 
         public readonly Condition canUseHeroesAbilities;
 
-
-
-
-        public int ID => Profile.ID;
+        public BattleID ID => Profile.ID;
         public LocalPlayerProfile Profile { get; }
-        public event IBattlePlayer.PlayerStatChange OnPlayerHealthChanges;
-        public event IBattlePlayer.PlayerStatChange OnPlayerManaChanges;
-
 
         IBattlePlayerProfile IBattlePlayer.Profile => Profile;
         public Hand<IBattleCard> Hand { get; }
@@ -44,6 +39,7 @@ namespace ATCG.Battle.Players.Local
         public int MaxMana => GameMetrics.Current.MaxMana;
         public BattlePhase BattlePhase { get; }
 
+        private Dictionary<BattleID, IBattleCard> cards;
 
         public LocalBattlePlayer(BattlePhase battle, LocalPlayerProfile profile)
         {
@@ -61,6 +57,16 @@ namespace ATCG.Battle.Players.Local
             Hand = new Hand<IBattleCard>();
             Deck = new Deck<IBattleCard>();
             DeadCards = new DefaultCardCollection<IBattleCard>();
+            cards = new Dictionary<BattleID, IBattleCard>();
+
+            Hand.OnCardAdded += RegisterCard;
+            Hand.OnCardRemoved += UnregisterCard;
+
+            Deck.OnCardAdded += RegisterCard;
+            Deck.OnCardRemoved += UnregisterCard;
+
+            DeadCards.OnCardAdded += RegisterCard;
+            DeadCards.OnCardRemoved += UnregisterCard;
 
             GameCardData[] deckCards = profile.Cards;
             for (int i = 0; i < deckCards.Length; i++)
@@ -69,7 +75,7 @@ namespace ATCG.Battle.Players.Local
                 Deck.TryAddCard(card);
             }
         }
-        [Button]
+
         public void AddOrRemoveMana(int mana)
         {
             int last = CurrentMana;
@@ -78,12 +84,8 @@ namespace ATCG.Battle.Players.Local
                 CurrentMana = MaxMana;
             if (CurrentMana < 0)
                 CurrentMana = 0;
-
-            if (last != CurrentMana)
-                OnPlayerManaChanges?.Invoke(this, CurrentMana, last);
         }
 
-        [Button]
         public void AddOrRemoveHealth(int health)
         {
             int last = health;
@@ -92,15 +94,14 @@ namespace ATCG.Battle.Players.Local
                 CurrentHealth = MaxHealth;
             if (CurrentHealth < 0)
                 CurrentHealth = 0;
-
-            if (last != CurrentHealth)
-                OnPlayerHealthChanges?.Invoke(this, CurrentMana, last);
         }
 
         public bool IsDefeated()
         {
             return CurrentHealth <= 0;
         }
+
+        public bool TryGetCard(BattleID battleID, out IBattleCard battleCard) => cards.TryGetValue(battleID, out battleCard);
 
         public async Awaitable<BattleTurn> PlayTurn(int round, int turnNumber)
         {
@@ -166,6 +167,16 @@ namespace ATCG.Battle.Players.Local
             }
 
             return true;
+        }
+
+        private void RegisterCard(IBattleCard card)
+        {
+            cards.Add(card.ID, card);
+        }
+
+        private void UnregisterCard(IBattleCard card)
+        {
+            cards.Remove(card.ID);
         }
     }
 }

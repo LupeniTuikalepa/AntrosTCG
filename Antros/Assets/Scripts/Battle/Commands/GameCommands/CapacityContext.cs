@@ -26,6 +26,6 @@ namespace ATCG.Battle.Commands.GameCommands
             this.castPoint = capacitySetup.castPoint;
         }
 
-        public void EmbedCommand<T>(T command) where T : IGameCommand => evt.Embed(commandContext, command);
+        public void EmbedCommand<T>(T command) where T : ICommand => evt.Embed(commandContext, command);
     }
 }

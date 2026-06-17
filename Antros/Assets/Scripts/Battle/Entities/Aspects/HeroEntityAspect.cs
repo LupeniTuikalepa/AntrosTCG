@@ -12,20 +12,22 @@ using ATCG.HexGrids.Grids;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
+    public readonly partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
         IEntityAspect<BattleCardComponent,
             BelongsToPlayerComponent,
             HealthComponent,
-            GridMemberComponent,
             MovementComponent,
             CapacityCasterComponent,
-            BasicAttackerComponent>
+            BasicAttackerComponent,
+            GridMemberComponent,
+            BattleIDOwner>
     {
         public struct Setup
         {
             public HeroBattleCard card;
             public BattleGrid grid;
             public HexCoordinates coordinates;
+            public BattleID battleID;
         }
 
         public string Name => HeroCard.Title;
@@ -36,16 +38,18 @@ namespace ATCG.Battle.Entities.Aspects
 
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
         {
-            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns);
-            
             componentsFactory.BattleCardComponent = new BattleCardComponent(setup.card);
-            componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetPlayerID());
-            componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
-            componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
+            componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetBattleID());
 
             componentsFactory.HealthComponent = new HealthComponent(setup.card.MaxHealth);
-            //TODO
+            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns);
+
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
+            componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
+            componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
+
+            //TODO
+            componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
         }
     }
 }

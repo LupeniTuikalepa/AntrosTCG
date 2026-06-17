@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.Cards;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Turns;
@@ -12,6 +13,7 @@ namespace ATCG.Battle.Players
         public delegate void PlayerStatChange(LocalBattlePlayer player, int current, int last);
 
         IBattlePlayerProfile Profile { get; }
+
         int CurrentHealth { get; }
         int MaxHealth { get; }
         int CurrentMana { get; }
@@ -21,11 +23,11 @@ namespace ATCG.Battle.Players
         DefaultCardCollection<IBattleCard> DeadCards { get; }
         BattlePhase BattlePhase { get; }
 
-        event PlayerStatChange OnPlayerHealthChanges;
-        event PlayerStatChange OnPlayerManaChanges;
-        bool IsDefeated();
+        bool TryGetCard(BattleID battleID, out IBattleCard battleCard);
+        
         Awaitable<BattleTurn> PlayTurn(int round, int turnNumber);
 
+        bool IsDefeated();
         void OnBattleBegins(BattlePhase battlePhase);
         void OnBattleEnds(BattlePhase battlePhase);
         void AddOrRemoveMana(int mana);

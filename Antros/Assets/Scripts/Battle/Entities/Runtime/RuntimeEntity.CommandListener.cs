@@ -15,16 +15,16 @@ using UnityEngine;
 namespace ATCG.Battle.Entities.Runtime
 {
     public abstract partial class RuntimeEntity<T> :
-        IEntityCommandPlayer<DeathCommand>,
-        IEntityCommandPlayer<DamageCommand>,
-        IEntityCommandPlayer<MoveCommand>
+        IEntityCommandListener<DeathCommand>,
+        IEntityCommandListener<DamageCommand>,
+        IEntityCommandListener<MoveCommand>
 
     {
     public Entity Entity => Address.entity;
     public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
 
-    async Awaitable ICommandPlayer<DeathCommand>.Play(CommandPlayerState state, CommandContext context,
+    async Awaitable ICommandListener<DeathCommand>.Play(CommandListenerState state, CommandContext context,
         DeathCommand command)
     {
         Manager.UnregisterRuntimeEntity(this);
@@ -40,12 +40,12 @@ namespace ATCG.Battle.Entities.Runtime
 
     }
 
-    void ICommandPlayer<DeathCommand>.OnEnd(in CommandPlayerState state, CommandContext context, DeathCommand command)
+    void ICommandListener<DeathCommand>.OnEnd(in CommandListenerState state, CommandContext context, DeathCommand command)
     {
         Destroy(gameObject);
     }
 
-    async Awaitable ICommandPlayer<DamageCommand>.Play(CommandPlayerState state, CommandContext context,
+    async Awaitable ICommandListener<DamageCommand>.Play(CommandListenerState state, CommandContext context,
         DamageCommand command)
     {
         state.CompleteWindUp(this);
@@ -58,23 +58,23 @@ namespace ATCG.Battle.Entities.Runtime
     }
 
 
-    protected virtual async Awaitable OnDeath(CommandPlayerState state, CommandContext context, DeathCommand command)
+    protected virtual async Awaitable OnDeath(CommandListenerState state, CommandContext context, DeathCommand command)
         => await Awaitable.MainThreadAsync();
 
-    protected virtual async Awaitable OnTakeDamage(CommandPlayerState state, CommandContext context,
+    protected virtual async Awaitable OnTakeDamage(CommandListenerState state, CommandContext context,
         DamageCommand command)
         => await Awaitable.MainThreadAsync();
 
-    public async Awaitable Play(CommandPlayerState state, CommandContext context, MoveCommand command)
+    public async Awaitable Play(CommandListenerState state, CommandContext context, MoveCommand command)
     {
         state.CompleteWindUp(this);
         var infos = command.GetInfos();
-        
+
         if (RuntimeBattleGrid.TryGetBattleCellAt(infos.to, out RuntimeBattleCell cell))
         {
             await Tween.Position(transform, cell.transform.position, .3f, Ease.OutCirc);
         }
-        
+
         state.CompleteFollowThrough(this);
     }
     }

@@ -1,18 +1,14 @@
 ﻿using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Players;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class DeathCommand : EntityCommand<DeathCommand.Infos>
+    public class DeathCommand : EntityCommand<NoInfos>
     {
-        public struct Infos
-        {
-
-        }
-
-        public DeathCommand(Entity sourceEntity) : base(sourceEntity)
+        public DeathCommand(EntityAddress address) : base(address)
         {
 
         }

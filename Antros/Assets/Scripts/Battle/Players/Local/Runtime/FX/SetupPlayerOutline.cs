@@ -46,25 +46,23 @@ namespace ATCG.Battle
         private void OnValidate()
         {
             if (settings.Fills.Contains(fill) && Player != null)
-            {
                 Refresh(Player);
-            }
         }
 
         private void Refresh(LocalBattlePlayer player)
         {
             Color color = Player.GetPlayerColor() * Mathf.Pow(2f, emission);
             fill.primaryColor = color;
-            fill.RenderingLayer = RenderingLayerMask.GetMask($"Player{player.ID + 1}");
+            fill.RenderingLayer = RenderingLayerMask.GetMask($"Player{player.GetPlayerNumber() + 1}");
             settings.Changed();
         }
 
-        protected override void Connect(LocalBattlePlayer player)
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
-            Refresh(player);
+            Refresh(runtimeLocalBattlePlayer.BattlePlayer);
         }
 
-        protected override void Disconnect(LocalBattlePlayer player)
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
 
         }

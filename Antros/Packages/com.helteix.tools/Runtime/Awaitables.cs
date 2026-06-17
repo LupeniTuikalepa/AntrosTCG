@@ -15,7 +15,7 @@ namespace Helteix.Tools
         /// </summary>
         /// <param name="awaitable">L'Awaitable déjà démarré à attendre.</param>
         /// <param name="onError">Handler d'erreur optionnel. Si null, utilise Debug.LogException.</param>
-        public static async void FireAndForget(this Awaitable awaitable, Action<Exception> onError = null)
+        public static async void ListenForExceptions(this Awaitable awaitable, Action<Exception> onError = null)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Helteix.Tools
         /// </summary>
         /// <param name="awaitable">L'Awaitable déjà démarré à attendre.</param>
         /// <param name="onError">Handler d'erreur optionnel. Si null, utilise Debug.LogException.</param>
-        public static async void FireAndForget<T>(this Awaitable<T> awaitable, Action<Exception> onError = null)
+        public static async void ListenForExceptions<T>(this Awaitable<T> awaitable, Action<Exception> onError = null)
         {
             try
             {
@@ -50,30 +50,6 @@ namespace Helteix.Tools
                     onError(e);
                 else
                     Debug.LogException(e);
-            }
-        }
-
-        private static async Awaitable RunAsync<T>(this Func<Awaitable<T>> asyncMethod)
-        {
-            try
-            {
-                await asyncMethod();
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-
-        private static async Awaitable RunAsync(this Func<Awaitable> asyncMethod)
-        {
-            try
-            {
-                await asyncMethod();
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
             }
         }
 

@@ -1,18 +1,21 @@
 ﻿using System;
+using ATCG.Battle.Entities.Components;
+using UnityEngine;
 
 namespace ATCG.Battle.Turns
 {
     [Serializable]
     public struct BattleHistory
     {
-        public int WinningPlayer { get; private set; }
+        [field: SerializeField]
+        public BattleID WinningPlayer { get; private set; }
 
         public readonly int seed;
 
         public BattleHistory(int seed)
         {
             this.seed = seed;
-            WinningPlayer = -1;
+            WinningPlayer = BattleID.None;
         }
 
 
@@ -20,7 +23,7 @@ namespace ATCG.Battle.Turns
         {
         }
 
-        public void SetWinningPlayer(int profileID)
+        public void SetWinningPlayer(BattleID profileID)
         {
             WinningPlayer = profileID;
         }

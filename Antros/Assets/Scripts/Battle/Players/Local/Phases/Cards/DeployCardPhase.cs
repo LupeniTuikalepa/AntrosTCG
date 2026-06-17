@@ -52,7 +52,6 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
 
             PhaseResult<EntityAddress[]> result = await selectEntityPhase;
 
-
             if (result.type == PhaseResultType.Cancel)
                 throw new OperationCanceledException(token);
 
@@ -62,15 +61,11 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             if(result.value.Length == 0)
                 return;
 
-            var address = result.value[0];
+            EntityAddress address = result.value[0];
             if (!address.Is(out GridMemberAspect aspect))
-                return ;
-
-            int cardID = LocalBattlePlayer.Hand.GetCardIndex(battleCard);
-            if (cardID == -1)
                 return;
 
-            DeployCardCommand deployCardCommand = new(cardID, aspect.Coordinates, LocalBattlePlayer.ID);
+            DeployCardCommand deployCardCommand = new(battleCard, aspect.Coordinates, LocalBattlePlayer);
             await deployCardCommand.RunAsync(LocalBattlePlayer.BattlePhase);
         }
     }

@@ -21,18 +21,18 @@ namespace ATCG.Battle.Players.Local.UI
                 elements[i].Initialize(this);
         }
 
-        protected override void Connect(LocalBattlePlayer player)
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
-            Canvas.targetDisplay = RuntimeLocalPlayer.LocalID;
+            Canvas.targetDisplay = RuntimeLocalBattlePlayer.LocalID;
             for (int i = 0; i < elements.Length; i++)
-                elements[i].Connect(player);
+                elements[i].Connect(runtimeLocalBattlePlayer);
         }
 
-        protected override void Disconnect(LocalBattlePlayer player)
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             Canvas.targetDisplay = 0;
             for (int i = 0; i < elements.Length; i++)
-                if (player == elements[i].Player)
+                if (runtimeLocalBattlePlayer == elements[i].RuntimePlayer)
                     elements[i].Disconnect();
         }
     }

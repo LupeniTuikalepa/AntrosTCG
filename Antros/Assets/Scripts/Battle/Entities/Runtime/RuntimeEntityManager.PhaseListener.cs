@@ -7,8 +7,6 @@ namespace ATCG.Battle.Entities.Runtime
 {
     public partial class RuntimeEntityManager : ILocalPlayerPhaseListener<ISelectEntityPhase>
     {
-        LocalBattlePlayer ILocalPlayerPhaseListener<ISelectEntityPhase>.LocalBattlePlayer => LocalBattlePlayer;
-
         void IPhaseListener<ISelectEntityPhase>.OnPhaseBegin(ISelectEntityPhase phase)
         {
             ClearSelection();
