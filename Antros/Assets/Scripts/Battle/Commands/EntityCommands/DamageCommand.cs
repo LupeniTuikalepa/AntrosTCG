@@ -28,7 +28,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
             infos.from = componentHealth.CurrentHealth;
             componentHealth.AddOrRemoveHealth(-quantity);
-            
+
             infos.to = componentHealth.CurrentHealth;
             infos.max = componentHealth.MaxHealth;
 
