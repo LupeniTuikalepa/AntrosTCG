@@ -20,12 +20,10 @@ namespace ATCG.Battle.Commands.EntityCommands
             if (address.Is(out HeroEntityAspect aspect))
             {
                 IBattlePlayer player = aspect.Player;
-                player.AddOrRemoveHealth(-aspect.HeroCard.DeathCost);
-
-                if (player.DeadCards != null && aspect.HeroCard != null)
-                {
-	                player.DeadCards.TryAddCard(aspect.HeroCard);
-                }
+	            player.AddOrRemoveHealth(-aspect.HeroCard.DeathCost);
+	            
+	            //Todo à changer 
+	            player.DeadCards.TryAddCard(aspect.HeroCard);
             }
             address.Destroy();
             Break("Entity death.");

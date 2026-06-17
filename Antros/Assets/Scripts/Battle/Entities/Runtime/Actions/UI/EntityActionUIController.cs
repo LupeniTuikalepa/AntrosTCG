@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
@@ -116,7 +117,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
             canvasGroup.Show(.15f);
             transform.position = RuntimeEntity.actionUIRoot.position;
-
             start.Build();
             if (start.IsEmpty())
                 return;
