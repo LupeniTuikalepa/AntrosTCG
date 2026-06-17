@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace ATCG.Battle
 {
-	public class HealthBarUI : BarUI, IEntityCommandPlayer<DamageCommand>
+	public class HealthBarUI : BarUI, IEntityCommandListener<DamageCommand>
 	{
 		private IRuntimeEntity runtimeEntity;
 		public Entity Entity => runtimeEntity.Address.entity;
@@ -32,17 +32,17 @@ namespace ATCG.Battle
 			runtimeEntity = GetComponentInParent<IRuntimeEntity>();
 		}
 
-		public async Awaitable Play(CommandPlayerState state, CommandContext context, DamageCommand command)
+		public async Awaitable Play(CommandListenerState state, CommandContext context, DamageCommand command)
 		{
 			await Awaitable.MainThreadAsync();
-			
+
 			state.CompleteWindUp(this);
 			state.CompleteFollowThrough(this);
-			
+
 			var info = command.GetInfos();
 			CurrentValue = info.currentHealth;
 			MaxValue = info.maxHealth;
-			
+
 			Refresh();
 		}
 
