@@ -26,6 +26,7 @@ namespace ATCG.Battle.Cards.UI
         protected override void OnCardRemoved(IBattleCard card)
         {
             base.OnCardRemoved(card);
+            
             Refresh();
         }
 

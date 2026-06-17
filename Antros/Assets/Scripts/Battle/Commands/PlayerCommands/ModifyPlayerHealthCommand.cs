@@ -26,6 +26,7 @@ namespace ATCG.Battle.Commands.GameCommands.Players
             player.AddOrRemoveHealth(Amount);
 
             infos.to = player.CurrentHealth;
+            
         }
     }
 }

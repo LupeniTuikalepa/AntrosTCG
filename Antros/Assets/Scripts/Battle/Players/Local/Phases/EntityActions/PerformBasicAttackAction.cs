@@ -61,7 +61,7 @@ namespace ATCG.Battle
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 
-	        //Si l'entité qui attaque appartient a un jour, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
+	        //Si l'entité qui attaque appartient a un joueur, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
 	        IBattlePlayer entityPlayer = address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent) ?
 		        belongsToPlayerComponent.GetPlayer(battlePhase) :
 		        fromPlayer;
