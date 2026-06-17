@@ -2,7 +2,7 @@
 {
     public interface IRuntimeBattlePlayerComponent<in T> where T : IBattlePlayer
     {
-        void Connect(RuntimeBattlePlayer runtimeBattlePlayer, T player);
-        void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, T player);
+        void Connect(IRuntimeBattlePlayer<T> runtimeBattlePlayer);
+        void Disconnect(IRuntimeBattlePlayer<T> runtimeBattlePlayer);
     }
 }

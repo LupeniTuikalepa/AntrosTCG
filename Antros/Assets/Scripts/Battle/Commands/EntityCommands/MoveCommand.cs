@@ -1,21 +1,18 @@
 ﻿using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class MoveCommand : EntityCommand<MoveCommand.Infos>
+    public class MoveCommand : EntityCommand<DeltaInfos<HexCoordinates>>
     {
-        public struct Infos
-        {
-            public HexCoordinates from;
-            public HexCoordinates to;
-        }
 
         public readonly HexCoordinates destination;
 
-        public MoveCommand(Entity sourceEntity, HexCoordinates destination) : base(sourceEntity)
+        public MoveCommand(EntityAddress address, HexCoordinates destination) : base(address)
         {
             this.destination = destination;
         }
@@ -28,9 +25,10 @@ namespace ATCG.Battle.Commands.EntityCommands
                 ref GridMemberComponent component = ref gridEntityComponentRef.GetValue();
                 infos.from = component.coordinates;
 
-                component.coordinates =destination;
+                component.coordinates = destination;
 
                 infos.to = component.coordinates;
+                //Debug.Log($"Moving from {infos.from} to {infos.to}");
             }
         }
     }

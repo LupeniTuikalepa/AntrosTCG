@@ -35,10 +35,7 @@ namespace ATCG.Battle.Grids.Runtime
         [field: SerializeField]
         public RuntimeEntityManager EntityManager { get; private set; }
 
-
         private Dictionary<HexCell, RuntimeBattleCell> battleCells;
-
-
 
         private void Reset()
         {
@@ -59,15 +56,15 @@ namespace ATCG.Battle.Grids.Runtime
             runtimeHexGrid.OnCellRemoved -= OnGridCellRemoved;
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer,
-            LocalBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(
+            IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
-            LocalBattlePlayer = player;
+            LocalBattlePlayer = runtimeBattlePlayer.BattlePlayer;
             runtimeHexGrid.Connect(CurrentBattlePhase.HexGrid);
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer,
-            LocalBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(
+            IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             runtimeHexGrid.Disconnect();
             LocalBattlePlayer = null;

@@ -8,8 +8,8 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public readonly partial struct BattleCellAspect : IEntityAspect<GridMemberComponent, BattleCellComponent>,
-        ICreateEntityAspect<BattleCellAspect.Setup>
+    public readonly partial struct BattleCellAspect : ICreateEntityAspect<BattleCellAspect.Setup>,
+        IEntityAspect<GridMemberComponent, BattleCellComponent, BattleIDOwner>
     {
         public readonly struct IsCellMemberFilter : IFilter<GridMemberComponent>
         {
@@ -32,6 +32,7 @@ namespace ATCG.Battle.Entities.Aspects
         {
             public HexCoordinates coordinates;
             public BattleGrid battleGrid;
+            public BattleID battleID;
         }
 
         public HexCoordinates Coordinate => GridMemberComponent.coordinates;
@@ -82,15 +83,19 @@ namespace ATCG.Battle.Entities.Aspects
         {
             try
             {
-                GridMemberComponent elementComponent = new GridMemberComponent(setup.battleGrid, setup.coordinates);
-                componentsFactory.GridMemberComponent = elementComponent;
-
-                componentsFactory.BattleCellComponent = new BattleCellComponent(setup.coordinates);
+                componentsFactory.GridMemberComponent = new GridMemberComponent(setup.battleGrid, setup.coordinates);
+                componentsFactory.BattleCellComponent = new BattleCellComponent();
+                componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
             }
             catch (Exception e)
             {
                 Debug.LogException(e);
             }
+        }
+
+        public bool CanBeMovedOn()
+        {
+            return !HasMembers;
         }
     }
 }

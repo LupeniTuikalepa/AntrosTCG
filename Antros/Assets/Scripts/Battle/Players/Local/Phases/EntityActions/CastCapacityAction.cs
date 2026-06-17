@@ -23,7 +23,7 @@ namespace ATCG.Battle
         public readonly CapacityData capacityData;
         private readonly HexCoordinates from;
 
-        public CastCapacityAction(LocalBattlePlayer playerOrigin, CapacityData capacityData, HexCoordinates from) : base(playerOrigin)
+        public CastCapacityAction(LocalBattlePlayer fromPlayer, CapacityData capacityData, HexCoordinates from) : base(fromPlayer)
         {
             this.capacityData = capacityData;
 
@@ -47,7 +47,7 @@ namespace ATCG.Battle
                 using HexPatternBuilder patternBuilder = capacityData.CastPatterns.ToPatternBuilder(from);
 
                 AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();
-                SelectEntityPhase<AspectFilter<BattleCellAspect> > phase = new SelectEntityPhase<AspectFilter<BattleCellAspect>>(playerOrigin, filter, patternBuilder);
+                SelectEntityPhase<AspectFilter<BattleCellAspect> > phase = new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder);
 
                 EntityAddress[] result = await phase;
 

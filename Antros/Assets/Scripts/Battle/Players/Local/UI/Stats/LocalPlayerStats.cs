@@ -10,18 +10,18 @@ namespace ATCG.Battle.Players.Local.UI.Stats
         private PlayerHealthBar healthBar;
 
         [SerializeField]
-        private PlayerManaIconBar manaBar;
+        private ListenerManaIconBar manaBar;
 
         protected override void OnConnect()
         {
-            healthBar.Connect(Player);
-            manaBar.Connect(Player);
+            healthBar.Connect(LocalPlayer);
+            manaBar.Connect(LocalPlayer);
         }
 
         protected override void OnDisconnect()
         {
-            healthBar.Disconnect(Player);
-            manaBar.Disconnect(Player);
+            healthBar.Disconnect(LocalPlayer);
+            manaBar.Disconnect(LocalPlayer);
         }
     }
 }

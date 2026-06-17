@@ -2,6 +2,8 @@
 using ATCG.Battle.Cards;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands.Players;
+using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
 using UnityEngine;
@@ -9,41 +11,32 @@ using UnityEngine;
 namespace ATCG.Battle.Commands.GameCommands
 {
     [Serializable]
-    public class DeployCardCommand : GameCommand<DeployCardCommand.Infos>
+    public class DeployCardCommand : PlayerCommand<NoInfos>
     {
-        public struct Infos
-        {
-            public bool couldInvoke;
-        }
         [field: SerializeField]
-        public int PlayerId { get; private set; }
-
-        [field: SerializeField]
-        public int CardId { get; private set; }
+        public BattleID CardId { get; private set; }
 
         [field: SerializeField]
         public HexCoordinates Destination { get; private set; }
 
-        public DeployCardCommand(int cardId, HexCoordinates destination, int playerId)
+        public DeployCardCommand(IBattleCard card, HexCoordinates destination, IBattlePlayer player)  : base(player)
         {
-            CardId = cardId;
+            //TODO use something better, card could be shuffled
+            CardId = card.ID;
             Destination = destination;
-            PlayerId = playerId;
         }
 
         protected override void Process(in CommandContext context)
         {
-            IBattlePlayer player = context.GetBattlePlayer(PlayerId);
-            IBattleCard card = player.Hand.GetCard(CardId);
+            IBattlePlayer player = GetPlayer(in context);
+
+            if(!player.TryGetCard(CardId, out IBattleCard card))
+                return;
 
             if (card.InvocationCost > player.CurrentMana)
-            {
-                infos.couldInvoke = false;
                 return;
-            }
 
-            infos.couldInvoke = true;
-            Embed(in context, new ModifyPlayerManaCommand(PlayerId, -card.InvocationCost));
+            Embed(in context, new ModifyPlayerManaCommand(player, -card.InvocationCost));
             switch (card)
             {
                 case HeroBattleCard heroBattleCard:

@@ -31,12 +31,12 @@ namespace ATCG.Battle
             this.Unregister();
         }
 
-        protected override void Connect(LocalBattlePlayer player)
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             RuntimeEntityManager.SelectionController.AddPriority(this, PriorityTags.Small, this);
         }
 
-        protected override void Disconnect(LocalBattlePlayer player)
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             RuntimeEntityManager.SelectionController.RemovePriority(this);
         }
@@ -45,7 +45,7 @@ namespace ATCG.Battle
 
         void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
-            RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
+            RuntimeLocalBattlePlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
 
             if(isInActionSelection)
                 return;
@@ -58,12 +58,12 @@ namespace ATCG.Battle
                 return;
 
 
-            SelectAction(runtimeEntity).FireAndForget();
+            SelectAction(runtimeEntity).ListenForExceptions();
         }
 
         void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress address)
         {
-            RuntimeLocalPlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
+            RuntimeLocalBattlePlayer.Camera.Component.LookAt(runtimeEntity.transform.position);
 
             if(!IsPlayerTurn())
                 return;

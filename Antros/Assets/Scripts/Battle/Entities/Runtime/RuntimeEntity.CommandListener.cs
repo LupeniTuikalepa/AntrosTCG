@@ -3,6 +3,8 @@ using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Players;
+using ATCG.Battle.Entities.Runtime.Grid;
+using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.Tools;
@@ -13,48 +15,67 @@ using UnityEngine;
 namespace ATCG.Battle.Entities.Runtime
 {
     public abstract partial class RuntimeEntity<T> :
-        IEntityCommandPlayer<DeathCommand>,
-        IEntityCommandPlayer<DamageCommand>
+        IEntityCommandListener<DeathCommand>,
+        IEntityCommandListener<DamageCommand>,
+        IEntityCommandListener<MoveCommand>
+
     {
-        public Entity Entity => Address.entity;
+    public Entity Entity => Address.entity;
+    public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
 
+    async Awaitable ICommandListener<DeathCommand>.Play(CommandListenerState state, CommandContext context,
+        DeathCommand command)
+    {
+        Manager.UnregisterRuntimeEntity(this);
 
-        async Awaitable ICommandPlayer<DeathCommand>.Play(CommandPlayerState state, CommandContext context, DeathCommand command)
+        state.CompleteWindUp(this);
+
+        Tween.CompleteAll(transform);
+        await OnDeath(state, context, command);
+
+        await Tween.Scale(transform, 0, .3f, Ease.InQuad);
+        state.CompleteFollowThrough(this);
+        gameObject.SetActive(false);
+
+    }
+
+    void ICommandListener<DeathCommand>.OnEnd(in CommandListenerState state, CommandContext context, DeathCommand command)
+    {
+        Destroy(gameObject);
+    }
+
+    async Awaitable ICommandListener<DamageCommand>.Play(CommandListenerState state, CommandContext context,
+        DamageCommand command)
+    {
+        state.CompleteWindUp(this);
+        await OnTakeDamage(state, context, command);
+
+        Tween.CompleteAll(transform);
+        await Tween.PunchScale(transform, -Vector3.one * .3f, .3f);
+
+        state.CompleteFollowThrough(this);
+    }
+
+
+    protected virtual async Awaitable OnDeath(CommandListenerState state, CommandContext context, DeathCommand command)
+        => await Awaitable.MainThreadAsync();
+
+    protected virtual async Awaitable OnTakeDamage(CommandListenerState state, CommandContext context,
+        DamageCommand command)
+        => await Awaitable.MainThreadAsync();
+
+    public async Awaitable Play(CommandListenerState state, CommandContext context, MoveCommand command)
+    {
+        state.CompleteWindUp(this);
+        var infos = command.GetInfos();
+
+        if (RuntimeBattleGrid.TryGetBattleCellAt(infos.to, out RuntimeBattleCell cell))
         {
-            Manager.UnregisterRuntimeEntity(this);
-
-            state.CompleteWindUp(this);
-
-            Tween.CompleteAll(transform);
-            await OnDeath(state, context, command);
-
-            await Tween.Scale(transform, 0, .3f, Ease.InQuad);
-            state.CompleteFollowThrough(this);
-            gameObject.SetActive(false);
-
+            await Tween.Position(transform, cell.transform.position, .3f, Ease.OutCirc);
         }
 
-        void ICommandPlayer<DeathCommand>.OnEnd(in CommandPlayerState state, CommandContext context, DeathCommand command)
-        {
-            Destroy(gameObject);
-        }
-
-        async Awaitable ICommandPlayer<DamageCommand>.Play(CommandPlayerState state, CommandContext context, DamageCommand command)
-        {
-            state.CompleteWindUp(this);
-            await OnTakeDamage(state, context, command);
-
-            Tween.CompleteAll(transform);
-            await Tween.PunchScale(transform, -Vector3.one * .3f, .3f);
-
-            state.CompleteFollowThrough(this);
-        }
-
-
-        protected virtual async Awaitable OnDeath(CommandPlayerState state, CommandContext context, DeathCommand command)
-            => await Awaitable.MainThreadAsync();
-        protected virtual async Awaitable OnTakeDamage(CommandPlayerState state, CommandContext context, DamageCommand command)
-            => await Awaitable.MainThreadAsync();
+        state.CompleteFollowThrough(this);
+    }
     }
 }

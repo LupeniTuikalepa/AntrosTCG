@@ -5,7 +5,7 @@ using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public readonly partial struct CapacityCasterAspect : IEntityAspect<GridMemberComponent, CapacityCasterComponent>
+    public readonly partial struct CapacityCasterAspect : IEntityAspect<GridMemberComponent, CapacityCasterComponent, BattleIDOwner>
     {
         public CapacityData[] Capacities => CapacityCasterComponent.capacities;
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;

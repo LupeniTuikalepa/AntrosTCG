@@ -44,7 +44,7 @@ namespace ATCG.Battle
 
         public override int ManaCost => GameMetrics.Current.BasicAttackCost;
 
-        public PerformBasicAttackAction(LocalBattlePlayer playerOrigin, int strength) : base(playerOrigin)
+        public PerformBasicAttackAction(LocalBattlePlayer fromPlayer, int strength) : base(fromPlayer)
         {
 	        this.strength = strength;
         }
@@ -64,15 +64,15 @@ namespace ATCG.Battle
 	        //Si l'entité qui attaque appartient a un jour, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
 	        IBattlePlayer entityPlayer = address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent) ?
 		        belongsToPlayerComponent.GetPlayer(battlePhase) :
-		        playerOrigin;
+		        fromPlayer;
 
 	        var filter = new EnemyFilter(entityPlayer);
-	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(playerOrigin, filter, builder);
+	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(fromPlayer, filter, builder);
 	        if(result.Length == 0)
 		        return;
 
 	        //Le player a l'origine de l'action perd de la mana
-	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(playerOrigin.GetPlayerID(), GameMetrics.Current.BasicAttackCost);
+	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(fromPlayer, GameMetrics.Current.BasicAttackCost);
 	        await manaCost.RunAsync(battlePhase);
 
 	        for (int i = 0; i < result.Length; i++)

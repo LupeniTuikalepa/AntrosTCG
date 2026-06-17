@@ -1,33 +1,36 @@
-﻿using UnityEngine;
+﻿using ATCG.Battle.Players.Local.Runtime;
+using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.UI
 {
     public abstract class PlayerHUDElement : MonoBehaviour
     {
         public PlayerHUD HUD { get; private set; }
-        public LocalBattlePlayer Player { get; private set; }
+        public RuntimeLocalBattlePlayer RuntimePlayer { get; private set; }
+
+        public LocalBattlePlayer LocalPlayer => RuntimePlayer.BattlePlayer;
 
         public void Initialize(PlayerHUD hud)
         {
             HUD = hud;
         }
 
-        public void Connect(LocalBattlePlayer player)
+        public void Connect(RuntimeLocalBattlePlayer player)
         {
-            if (Player != null)
+            if (RuntimePlayer != null)
                 Disconnect();
 
-            Player = player;
+            RuntimePlayer = player;
             OnConnect();
         }
 
         public void Disconnect()
         {
-            if (Player == null)
+            if (RuntimePlayer == null)
                 return;
 
             OnDisconnect();
-            Player = null;
+            RuntimePlayer = null;
         }
 
         protected abstract void OnConnect();

@@ -11,13 +11,16 @@ namespace ATCG.Battle.Cards.UI
     {
         public IBattlePlayer Player { get; private set; }
 
-        void IRuntimeBattlePlayerComponent<IBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
+
+        void IRuntimeBattlePlayerComponent<IBattlePlayer>.Connect(
+            IRuntimeBattlePlayer<IBattlePlayer> runtimeBattlePlayer)
         {
-            Player = player;
+            Player = runtimeBattlePlayer.BattlePlayer;
             Connect(Player.Hand);
         }
 
-        void IRuntimeBattlePlayerComponent<IBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, IBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<IBattlePlayer>.Disconnect(
+            IRuntimeBattlePlayer<IBattlePlayer> runtimeBattlePlayer)
         {
             Disconnect();
             Player = null;

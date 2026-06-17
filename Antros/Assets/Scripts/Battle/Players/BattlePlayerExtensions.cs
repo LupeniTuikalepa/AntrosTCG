@@ -1,19 +1,25 @@
-﻿using ATCG.Metrics;
+﻿using ATCG.Battle.Entities.Components;
+using ATCG.Battle.GameModes;
+using ATCG.Metrics;
 using UnityEngine;
 
 namespace ATCG.Battle.Players
 {
     public static class BattlePlayerExtensions
     {
-        public static int GetPlayerID(this IBattlePlayer player) => player.Profile.ID;
+        public static BattleID GetBattleID(this IBattlePlayer player)
+            => player.Profile.ID;
+
         public static string GetPlayerName(this IBattlePlayer player)
-        {
-            return player.Profile.Infos.name;
-        }
+            => player.Profile.Infos.name;
+
+        public static int GetPlayerNumber(this IBattlePlayer player) =>
+            player.BattlePhase.GetPlayerNumber(player);
 
         public static Color GetPlayerColor(this IBattlePlayer player)
         {
-            return GameMetrics.Current.GetPlayerColor(player.Profile.ID, player.BattlePhase.PlayerCount);
+            int number = player.BattlePhase.GetPlayerNumber(player);
+            return GameMetrics.Current.GetPlayerColor(number, player.BattlePhase.PlayerCount);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace ATCG.Battle.Players.Local.UI.Other
 
         void IPhaseListener<PlayerTurnPhase>.OnPhaseBegin(PlayerTurnPhase phase)
         {
-            endTurnButton.Interactable = phase.player == Player;
+            endTurnButton.Interactable = phase.player == RuntimePlayer.BattlePlayer;
             CurrentPhase = phase;
         }
 
@@ -43,13 +43,13 @@ namespace ATCG.Battle.Players.Local.UI.Other
 
         public void EndTurn(BaseEventData arg0)
         {
-            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == Player)
+            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == RuntimePlayer.BattlePlayer)
                 localPlayerTurnPhase.EndTurn();
         }
 
         public void GiveUp(BaseEventData arg0)
         {
-            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == Player)
+            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == RuntimePlayer)
                 localPlayerTurnPhase.GiveUp();
         }
 

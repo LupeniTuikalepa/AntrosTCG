@@ -31,18 +31,17 @@ namespace ATCG.Battle.Players.Runtime
             runtimeBattlePlayers.Clear();
             container.ClearChildren();
 
-            for (int i = 0; i < phase.Players.Length; i++)
+            foreach (IBattlePlayer player in phase.Players)
             {
-                IBattlePlayer player = phase.Players[i];
                 for (int j = 0; j < factories.Length; j++)
                 {
                     IRuntimePlayerFactory factory = factories[j];
-                    if (factory.TryCreateRuntimeFor(player, out RuntimeBattlePlayer runtimeBattlePlayer))
-                    {
-                        runtimeBattlePlayers.Add(player, runtimeBattlePlayer);
-                        runtimeBattlePlayer.transform.SetParent(container);
-                        break;
-                    }
+                    if (!factory.TryCreateRuntimeFor(player, out RuntimeBattlePlayer runtimeBattlePlayer))
+                        continue;
+
+                    runtimeBattlePlayers.Add(player, runtimeBattlePlayer);
+                    runtimeBattlePlayer.transform.SetParent(container);
+                    break;
                 }
             }
         }

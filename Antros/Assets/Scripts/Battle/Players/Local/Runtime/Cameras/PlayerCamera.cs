@@ -19,13 +19,13 @@ namespace ATCG.Battle.Players.Local.Runtime
     [AddComponentMenu("ATCG/Gameplay/Player/Runtime/Local Player Camera")]
     public class PlayerCamera : RuntimeLocalPlayerComponent
     {
-        public InputAction PanAction => RuntimeLocalPlayer.Controls.Component.Pan;
-        public InputAction MoveAction => RuntimeLocalPlayer.Controls.Component.Move;
-        public InputAction ZoomAction => RuntimeLocalPlayer.Controls.Component.Zoom;
-        public InputAction RotationAction => RuntimeLocalPlayer.Controls.Component.Rotate;
+        public InputAction PanAction => RuntimeLocalBattlePlayer.Controls.Component.Pan;
+        public InputAction MoveAction => RuntimeLocalBattlePlayer.Controls.Component.Move;
+        public InputAction ZoomAction => RuntimeLocalBattlePlayer.Controls.Component.Zoom;
+        public InputAction RotationAction => RuntimeLocalBattlePlayer.Controls.Component.Rotate;
         public Camera OutputCamera => renderCamera.OutputCamera;
 
-        private InputUser PlayerInputUser => RuntimeLocalPlayer.Controls.Component.PlayerInputUser;
+        private InputUser PlayerInputUser => RuntimeLocalBattlePlayer.Controls.Component.PlayerInputUser;
         private Transform TrackingTarget => cinemachineCamera.Target.TrackingTarget;
 
 
@@ -51,9 +51,6 @@ namespace ATCG.Battle.Players.Local.Runtime
         [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
 
-
-        [ShowInInspector, HideInEditorMode, ReadOnly]
-        private RuntimeBattleGrid grid;
 
         private Vector3 lastSpeed;
 
@@ -111,7 +108,8 @@ namespace ATCG.Battle.Players.Local.Runtime
             lastSpeed = (nextPosition - currentPosition) / Time.deltaTime;
 
             Bounds bounds = new(Vector3.zero, Vector3.one);
-            foreach (RuntimeBattleCell r in grid.BattleCells)
+
+            foreach (RuntimeBattleCell r in RuntimeLocalBattlePlayer.RuntimeBattleGrid.BattleCells)
                 bounds.Encapsulate(r.Model.bounds);
 
             bounds.Expand(boundsExpansion);
@@ -130,27 +128,28 @@ namespace ATCG.Battle.Players.Local.Runtime
         {
             OutputChannels outputChannels = OutputChannels.Channel01;
             for (int i = 0; i < channels.Length; i++)
-                if (channels[i].PlayerID == Player.Profile.ID)
+            {
+                if (channels[i].PlayerID == Player.GetPlayerNumber())
                 {
                     outputChannels = channels[i].Channels;
                     break;
                 }
+            }
 
             cinemachineCamera.OutputChannel = outputChannels;
             return outputChannels;
         }
 
-        protected override void Connect(LocalBattlePlayer player)
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             OutputChannels outputChannels = GetOutputChannel();
 
-            grid = RuntimeLocalPlayer.GetComponentInChildren<RuntimeBattleGrid>();
             renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
-            renderCamera.OutputCamera.targetDisplay = RuntimeLocalPlayer.LocalID;
+            renderCamera.OutputCamera.targetDisplay = RuntimeLocalBattlePlayer.LocalID;
         }
 
 
-        protected override void Disconnect(LocalBattlePlayer battlePlayer)
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             cinemachineCamera.OutputChannel = OutputChannels.Default;
             renderCamera.ChannelMask = OutputChannels.Default;

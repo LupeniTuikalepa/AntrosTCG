@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using ATCG.Capacities.Data;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Cards.Implementations
@@ -15,7 +16,10 @@ namespace ATCG.Cards.Implementations
         [field: SerializeField, Range(1, 10), BoxGroup("Heroes")]
         public int Strength { get; private set; } = 1;
 
-        [field: SerializeField, Range(1, 5), BoxGroup("Heroes")]
+        [field: SerializeField, Range(1, 5), BoxGroup("Movement")]
         public int Speed { get; private set; } = 1;
+        
+        [field: SerializeReference, BoxGroup("Movement")]
+        public CapacityPatternData[] MovementPatterns { get; private set; } = {new SpiralPatternData()};
     }
 }

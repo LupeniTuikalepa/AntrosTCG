@@ -63,6 +63,7 @@ namespace ATCG.Battle.Grids.Patterns.Building
             coordinates.Add(point);
             return this;
         }
+        
         public HexPatternBuilder Without<T>(T pattern) where T : IHexPattern => With(pattern, origin);
 
         public HexPatternBuilder Without<T>(T pattern, HexCoordinates source) where T : IHexPattern

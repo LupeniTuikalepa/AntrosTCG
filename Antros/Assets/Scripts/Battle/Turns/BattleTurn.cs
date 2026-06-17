@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Entities.Components;
 using UnityEngine;
 
 namespace ATCG.Battle.Turns
@@ -12,19 +13,19 @@ namespace ATCG.Battle.Turns
         public string TurnID { get; private set; }
 
         [field: SerializeField]
-        public int PlayerID { get; private set; }
+        public BattleID PlayerID { get; private set; }
 
         [SerializeReference]
-        private List<IGameCommand> commands;
+        private List<ICommand> commands;
 
-        public BattleTurn(string turnID, int playerID)
+        public BattleTurn(string turnID, BattleID playerID)
         {
             TurnID = turnID;
             PlayerID = playerID;
-            commands = new List<IGameCommand>();
+            commands = new List<ICommand>();
         }
 
-        public void RegisterCommand(IGameCommand command)
+        public void RegisterCommand(ICommand command)
         {
             commands.Add(command);
         }

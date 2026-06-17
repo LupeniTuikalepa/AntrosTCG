@@ -12,18 +12,13 @@ namespace ATCG.Battle.Entities.Runtime
         {
             if (entity.Address.TryGetComponent<BelongsToPlayerComponent>(out var componentRef))
             {
-                int playerId = componentRef.GetValue().playerId;
+                BattleID playerId = componentRef.GetValue().playerId;
                 entityOwner = entity.BattlePhase.GetPlayer(playerId);
                 return entityOwner != null;
             }
 
             entityOwner = null;
             return false;
-        }
-
-        public static void PrepareForCapacityCast(this IRuntimeEntity runtimeEntity, CapacityData capacityData)
-        {
-
         }
     }
 }

@@ -39,13 +39,9 @@ namespace ATCG.Battle.Entities.Runtime
         [ShowInInspector, ReadOnly]
         public Priority<IEntitySelectionController> SelectionController { get; private set; }
 
-        public RuntimeBattlePlayer RuntimeBattlePlayer { get; private set; }
-        public IBattlePlayer BattlePlayer { get; private set; }
+        public IRuntimeBattlePlayer<LocalBattlePlayer> RuntimeBattlePlayer { get; private set; }
+        public LocalBattlePlayer LocalBattlePlayer => RuntimeBattlePlayer.BattlePlayer;
 
-        /// <summary>
-        /// Casts the player to a local player if it's one. The entity manager could be without one.
-        /// </summary>
-        public LocalBattlePlayer LocalBattlePlayer => BattlePlayer as LocalBattlePlayer;
 
         private List<Entity> selectedEntities;
 
@@ -79,16 +75,14 @@ namespace ATCG.Battle.Entities.Runtime
             this.Unregister();
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
-            this.RuntimeBattlePlayer = runtimeBattlePlayer;
-            this.BattlePlayer = player;
+            RuntimeBattlePlayer = runtimeBattlePlayer;
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             RuntimeBattlePlayer = null;
-            BattlePlayer = null;
         }
 
         public void RegisterRuntimeEntity(IRuntimeEntity runtimeEntity)

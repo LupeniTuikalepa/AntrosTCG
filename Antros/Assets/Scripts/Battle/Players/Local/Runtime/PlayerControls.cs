@@ -71,12 +71,12 @@ namespace ATCG.Battle.Players.Local.Runtime
         {
         }
 
-        protected override void Connect(LocalBattlePlayer player)
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             //Debug.Log($"Connected controls with player {player.ID}", gameObject);
         }
 
-        protected override void Disconnect(LocalBattlePlayer player)
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             //Debug.Log($"Disconnect controls with player {player.ID}", gameObject);
         }

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
@@ -25,18 +26,21 @@ namespace ATCG.Battle.GameModes
 
         public HexGrid HexGrid => BattleGrid.grid;
         public int PlayerCount => playerProfiles.Length;
+        public IEnumerable<IBattlePlayer> Players => players.Values;
+        public IBattlePlayer CurrentPlayer => players[CurrentPlayerID];
 
         public BattleGrid BattleGrid { get; private set; }
-        public IBattlePlayer[] Players { get; private set; }
-        public IBattlePlayer CurrentPlayer { get; private set; }
-        public int CurrentPlayerID => CurrentPlayer.Profile.ID;
 
+        public BattleID CurrentPlayerID { get; private set; }
         public int Round { get; private set; }
         public int Turn { get; private set; }
+
+        private Dictionary<BattleID, IBattlePlayer> players;
 
         public readonly IBattlePlayerProfile[] playerProfiles;
         public readonly World world;
         public readonly int seed;
+
 
         public BattlePhase(int seed, params IBattlePlayerProfile[] playerProfiles)
         {
@@ -44,6 +48,7 @@ namespace ATCG.Battle.GameModes
 
             this.seed = seed;
             this.playerProfiles = playerProfiles;
+            players = new Dictionary<BattleID, IBattlePlayer>();
         }
 
         protected override async Awaitable Initialize(CancellationToken token)
@@ -52,14 +57,14 @@ namespace ATCG.Battle.GameModes
             SceneReference gameScene = GameScenes.Current.Game;
             await GameController.GameSceneController.LoadScenesWithLoadingScreen(gameScene);
 
-            Players = new IBattlePlayer[playerProfiles.Length];
+            players = DictionaryPool<BattleID, IBattlePlayer>.Get();
             for (int i = 0; i < playerProfiles.Length; i++)
             {
                 IBattlePlayerProfile playerProfile = playerProfiles[i];
 
                 IBattlePlayer battlePlayer = playerProfile.Convert(this);
                 battlePlayer.OnBattleBegins(this);
-                Players[i] = battlePlayer;
+                players.Add(battlePlayer.GetBattleID(), battlePlayer);
             }
 
             BattleGrid = new BattleGrid(this, CellRadius, GridRadius);
@@ -75,11 +80,11 @@ namespace ATCG.Battle.GameModes
             while (true)
             {
                 bool isGameDone = false;
-                for (int i = 0; i < Players.Length; i++)
+                foreach ((BattleID battleID, IBattlePlayer battlePlayer) in players)
                 {
-                    CurrentPlayer = Players[i];
+                    CurrentPlayerID = battleID;
 
-                    BattleTurn turn = await CurrentPlayer.PlayTurn(Round, Turn);
+                    BattleTurn turn = await battlePlayer.PlayTurn(Round, Turn);
                     history.RegisterTurn(turn);
                     Turn++;
 
@@ -101,56 +106,55 @@ namespace ATCG.Battle.GameModes
 
         protected override async Awaitable Dispose(CancellationToken token)
         {
+            DictionaryPool<BattleID, IBattlePlayer>.Release(players);
+
             //"reset" of seed
-            Random.InitState(DateTime.Today.GetHashCode());
-            for (int i = 0; i < playerProfiles.Length; i++)
-            {
-                IBattlePlayerProfile playerProfile = playerProfiles[i];
-
-                IBattlePlayer battlePlayer = playerProfile.Convert(this);
-                battlePlayer.OnBattleEnds(this);
-                Players[i] = battlePlayer;
-            }
-
             // (BattleGrid as IDisposable).Dispose();
             await Task.CompletedTask;
         }
 
-        public IBattlePlayer GetPlayer(int playerID)
-        {
-            if(playerID < 0 || playerID >= Players.Length)
-                return null;
+        public int GetPlayerNumber(IBattlePlayer player) => GetPlayerNumber(player.GetBattleID());
 
-            return Players[playerID];
+        public int GetPlayerNumber(BattleID playerID)
+        {
+            int number = 0;
+            foreach ((BattleID battleID, _) in players)
+            {
+                if (playerID == battleID)
+                    return number;
+
+                number++;
+            }
+
+            return -1;
         }
+        public IBattlePlayer GetPlayer(BattleID playerID) => players[playerID];
+
+        public bool TryGetPlayer(BattleID playerID, out IBattlePlayer player) => players.TryGetValue(playerID, out player);
 
         protected virtual bool IsGameDone(ref BattleHistory history)
         {
             using (ListPool<IBattlePlayer>.Get(out List<IBattlePlayer> winningPlayers))
             {
-                winningPlayers.AddRange(Players);
-                for (int i = 0; i < Players.Length; i++)
+                winningPlayers.AddRange(players.Values);
+
+                foreach ((BattleID battleID, IBattlePlayer player) in players)
                 {
-                    IBattlePlayer player = Players[i];
                     if (player.IsDefeated())
                         winningPlayers.Remove(player);
                 }
 
                 if (winningPlayers.Count == 1)
                 {
-                    history.SetWinningPlayer(winningPlayers[0].Profile.ID);
+                    history.SetWinningPlayer(winningPlayers[0].GetBattleID());
                     return true;
                 }
 
-                if (winningPlayers.Count == 0)
-                {
-                    history.SetWinningPlayer(-1);
-                    return true;
-                }
 
-                history.SetWinningPlayer(-2);
+                history.SetWinningPlayer(BattleID.None);
                 return false;
             }
         }
+
     }
 }

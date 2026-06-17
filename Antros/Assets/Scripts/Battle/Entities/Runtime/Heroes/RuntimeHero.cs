@@ -68,9 +68,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         public override async Awaitable Spawn(RuntimeEntityManager manager, HeroEntityAspect aspect)
         {
             await base.Spawn(manager, aspect);
-
-            //Debug.Log($"[Runtime Hero] {aspect.BattleCardComponent.battleCard.Title} spawned.");
-
             heroName.text = aspect.Name;
 
             manager.RegisterRuntimeEntity(this);
@@ -83,10 +80,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
                 await Tween.PunchScale(transform, Vector3.one * -2, .25f);
             }
 
-            GameMetrics metrics = GameMetrics.Current;
-
-            int playerID = aspect.Player.GetPlayerID();
-
+            int playerID = BattlePhase.GetPlayerNumber(aspect.Player);
             RenderingLayerMask mask = RenderingLayerMask.GetMask($"Player{playerID + 1}");
             if(mask.value != 0)
                 Model.EnableRenderingLayer(mask);

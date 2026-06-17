@@ -7,34 +7,37 @@ namespace ATCG.Battle.Players.Local.Runtime
 {
     public abstract class RuntimeLocalPlayerComponent : MonoBehaviour, IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
-        public LocalBattlePlayer Player => RuntimeLocalPlayer.Player;
+        public bool IsConnected => RuntimeLocalBattlePlayer != null;
 
-        public RuntimeLocalBattlePlayer RuntimeLocalPlayer { get; private set; }
-        public BattlePhase BattlePhase => Player.BattlePhase;
-        public RuntimeEntityManager RuntimeEntityManager => RuntimeLocalPlayer.RuntimeEntityManager;
+        protected LocalBattlePlayer Player => RuntimeLocalBattlePlayer.BattlePlayer;
+        protected RuntimeLocalBattlePlayer RuntimeLocalBattlePlayer { get; private set; }
 
-        public void Connect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+
+        protected BattlePhase BattlePhase => Player.BattlePhase;
+        protected RuntimeEntityManager RuntimeEntityManager => RuntimeLocalBattlePlayer.RuntimeEntityManager;
+
+        public void Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
             {
-                RuntimeLocalPlayer = runtimeLocalBattlePlayer;
-                Connect(player);
+                RuntimeLocalBattlePlayer = runtimeLocalBattlePlayer;
+                Connect(runtimeLocalBattlePlayer);
             }
         }
 
-        public void Disconnect(RuntimeBattlePlayer runtimeBattlePlayer, LocalBattlePlayer player)
+        public void Disconnect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             if (runtimeBattlePlayer is RuntimeLocalBattlePlayer runtimeLocalBattlePlayer &&
-                runtimeLocalBattlePlayer == RuntimeLocalPlayer)
+                runtimeLocalBattlePlayer == RuntimeLocalBattlePlayer)
             {
-                Disconnect(player);
-                RuntimeLocalPlayer = null;
+                Disconnect(runtimeLocalBattlePlayer);
+                RuntimeLocalBattlePlayer = null;
             }
         }
 
 
-        protected abstract void Connect(LocalBattlePlayer player);
-        protected abstract void Disconnect(LocalBattlePlayer player);
+        protected abstract void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer);
+        protected abstract void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer);
 
         public bool IsPlayerTurn() => BattlePhase.CurrentPlayer == Player;
 
