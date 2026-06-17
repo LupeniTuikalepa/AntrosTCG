@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Grids.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -43,6 +44,10 @@ namespace ATCG.Battle.Players.Runtime
 
         [field: SerializeField, BoxGroup("Managers")]
         public RuntimeEntityManager RuntimeEntityManager { get; private set; }
+        
+        [field: SerializeField, BoxGroup("Managers")]
+        public RuntimeBattleGrid RuntimeBattleGrid { get; private set; }
+
         public T Player { get; private set; }
 
         public override IBattlePlayer BattlePlayer => Player;

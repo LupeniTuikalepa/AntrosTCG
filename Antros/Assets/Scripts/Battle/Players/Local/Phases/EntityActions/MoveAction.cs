@@ -4,6 +4,7 @@ using ATCG.Battle.Cards.Capacities;
 using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
@@ -25,14 +26,6 @@ namespace ATCG.Battle
 {
     public class MoveAction : EntityAction
     { 
-        private readonly struct GridFilter : IEntityFilter
-         {
-             public bool Accepts(EntityAddress entityAddress)
-             {
-                 return entityAddress.Is<BattleCellAspect>(out var cell) && cell.CanBeMovedOn();
-             }
-         }
-        
         public override int ManaCost => GameMetrics.Current.MovementCost;
 
         private readonly int speed;
@@ -50,32 +43,19 @@ namespace ATCG.Battle
                 return;
             
             HexCoordinates center = gridMemberComponent.coordinates;
-            var movementComponentPatternData = movementComponent.patternDatas;
+            var movementPatternData = movementComponent.patternDatas;
             
+            var pathPhase = new CreatePathPhase(playerOrigin, center, speed, movementPatternData);
+            HexCoordinates[] result = await pathPhase.Run();
+            if (result.Length == 0)
+                return;
+
+            var manaCommand = new ModifyPlayerManaCommand(playerOrigin.ID, -ManaCost);
+            manaCommand.Run(battlePhase);
             
-            var filter = new GridFilter();
-            using (ListPool<HexCoordinates>.Get(out var list))
-            {
-                for (int i = 0; i < speed; i++)
-                {
-                    using HexPatternBuilder builder = movementComponentPatternData
-                        .ToPatternBuilder(center)
-                        .Without(center);
-                    
-                    EntityAddress[] result = await new SelectEntityPhase<GridFilter>(playerOrigin, filter, builder);
-                    
-                    for (int j = 0; j < result.Length; j++)
-                    {
-                        var selectedCell = result[j];
-                        if (!selectedCell.TryGetComponentRO(out GridMemberComponent cellComponent))
-                            return;
-                        list.Add(cellComponent.coordinates);
-                    }
-                    center = list[^1];
-                }
-                var pathCommand = new MovePathCommand(address, list);
-                await pathCommand.RunAsync(battlePhase);
-            } 
+            var pathCommand = new MovePathCommand(address, result);
+            await pathCommand.RunAsync(battlePhase);
+            
         }
     }
 }
