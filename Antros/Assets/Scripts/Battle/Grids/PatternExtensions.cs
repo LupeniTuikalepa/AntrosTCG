@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using ATCG.Battle.Cards.Capacities;
+using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Capacities.Data;
@@ -29,6 +31,13 @@ namespace ATCG.Battle.Grids
             return builder;
         }
 
+        public static HexPatternBuilder WithPatternData(this HexPatternBuilder builder, CapacityPatternData data)
+        {
+            if(CapacityManager.TryGetFor(data, out var container))
+                container.AddToBuilder(data, ref builder);
+            
+            return builder;
+        }
 
         public static IEnumerable<BattleCellAspect> GetBattleCells(this HexPatternBuilder hexPatternBuilder, BattleGrid battleGrid)
         {
@@ -38,5 +47,7 @@ namespace ATCG.Battle.Grids
                     yield return cell;
             }
         }
+        
+        
     }
 }

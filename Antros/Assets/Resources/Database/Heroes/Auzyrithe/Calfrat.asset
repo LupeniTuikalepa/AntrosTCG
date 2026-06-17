@@ -22,4 +22,18 @@ MonoBehaviour:
   <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
-  <Speed>k__BackingField: 1
+  <Speed>k__BackingField: 2
+  <MovementPatterns>k__BackingField:
+  - rid: 1137761834296672398
+  references:
+    version: 2
+    RefIds:
+    - rid: 1137761834296672398
+      type: {class: SpiralPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 2

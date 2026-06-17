@@ -2,6 +2,7 @@
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
@@ -27,10 +28,11 @@ namespace ATCG.Battle.Commands.EntityCommands
             {
                 ref GridMemberComponent component = ref gridEntityComponentRef.GetValue();
                 infos.from = component.coordinates;
-
-                component.coordinates =destination;
+                
+                component.coordinates = destination;
 
                 infos.to = component.coordinates;
+                Debug.Log($"Moving from {infos.from} to {infos.to}");
             }
         }
     }

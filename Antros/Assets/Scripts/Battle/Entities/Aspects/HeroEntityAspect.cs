@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using ATCG.Battle.Cards;
+using ATCG.Battle.Cards.Capacities;
+using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
+using ATCG.Capacities.Data;
 using ATCG.Cards.Implementations;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
@@ -33,7 +36,8 @@ namespace ATCG.Battle.Entities.Aspects
 
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
         {
-            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed);
+            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns);
+            
             componentsFactory.BattleCardComponent = new BattleCardComponent(setup.card);
             componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetPlayerID());
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);

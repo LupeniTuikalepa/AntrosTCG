@@ -42,7 +42,6 @@ namespace ATCG.Battle.Players.Local
         public int MaxHealth => GameMetrics.Current.MaxHealth;
         public int CurrentMana { get; private set; }
         public int MaxMana => GameMetrics.Current.MaxMana;
-
         public BattlePhase BattlePhase { get; }
 
 

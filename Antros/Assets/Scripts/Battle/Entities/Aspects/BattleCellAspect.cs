@@ -85,12 +85,17 @@ namespace ATCG.Battle.Entities.Aspects
                 GridMemberComponent elementComponent = new GridMemberComponent(setup.battleGrid, setup.coordinates);
                 componentsFactory.GridMemberComponent = elementComponent;
 
-                componentsFactory.BattleCellComponent = new BattleCellComponent(setup.coordinates);
+                componentsFactory.BattleCellComponent = new BattleCellComponent();
             }
             catch (Exception e)
             {
                 Debug.LogException(e);
             }
+        }
+
+        public bool CanBeMovedOn()
+        {
+            return !HasMembers;
         }
     }
 }
