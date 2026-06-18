@@ -78,8 +78,9 @@ namespace ATCG.Battle.Entities.Runtime
         
         var source = infos.from;
         var destination = infos.to;
-        
-        var path = HexPathfinder.FindPath(source,destination, context.Grid, Filter);
+
+        using var hexPathfinder = new HexPathfinder(10000);
+        var path = hexPathfinder.FindPath(source,destination, context.Grid, Filter);
         
         foreach (var coordinate in path)
         {
