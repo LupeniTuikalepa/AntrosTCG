@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ATCG.Capacities.Data
 {
     [Serializable]
-    public class OffsetsPatternData : CapacityPatternData
+    public class OffsetsPatternData : PatternData
     {
         [field: SerializeField, BoxGroup("Specific")]
         public HexCoordinates[] Offsets { get; private set; }

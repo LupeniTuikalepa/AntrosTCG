@@ -19,7 +19,7 @@ namespace ATCG.Battle.Commands.Core
 
         public async Awaitable Run(CommandContext context)
         {
-            if (!context.TryGetCommandPlayerGroup(command, out ICommandListenerGroup group))
+            if (!context.TryGetGroup(command, out ICommandListenerGroup group))
                 return;
 
             await group.Run(context);

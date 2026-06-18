@@ -11,29 +11,29 @@ namespace ATCG.Battle.Grids
 {
     public static class PatternExtensions
     {
-        public static HexPatternBuilder ToPatternBuilder(this CapacityPatternData data, HexCoordinates from)
+        public static HexPatternBuilder ToPatternBuilder(this PatternData data, HexCoordinates from)
         {
             HexPatternBuilder builder = new(from);
-            if(CapacityManager.TryGetFor(data, out var container))
+            if(BattleDataMapper.TryGetFor(data, out var container))
                 container.AddToBuilder(data, ref builder);
 
             return builder;
         }
-        public static HexPatternBuilder ToPatternBuilder(this CapacityPatternData[] datas, HexCoordinates from)
+        public static HexPatternBuilder ToPatternBuilder(this PatternData[] datas, HexCoordinates from)
         {
             HexPatternBuilder builder = new(from);
             for (int i = 0; i < datas.Length; i++)
             {
-                if(CapacityManager.TryGetFor(datas[i], out var container))
+                if(BattleDataMapper.TryGetFor(datas[i], out var container))
                     container.AddToBuilder(datas[i], ref builder);
             }
 
             return builder;
         }
 
-        public static HexPatternBuilder WithPatternData(this HexPatternBuilder builder, CapacityPatternData data)
+        public static HexPatternBuilder WithPatternData(this HexPatternBuilder builder, PatternData data)
         {
-            if(CapacityManager.TryGetFor(data, out var container))
+            if(BattleDataMapper.TryGetFor(data, out var container))
                 container.AddToBuilder(data, ref builder);
             
             return builder;

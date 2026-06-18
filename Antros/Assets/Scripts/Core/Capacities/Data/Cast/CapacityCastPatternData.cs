@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ATCG.Capacities.Data
 {
     [Serializable]
-    public abstract class CapacityPatternData : IData
+    public abstract class PatternData : IData
     {
         [field: SerializeField, BoxGroup("General")]
         public bool IsAdditive { get; private set; } = true;

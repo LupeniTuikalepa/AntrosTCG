@@ -11,22 +11,22 @@ using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.Cards.Capacities.Behaviours.Mapping
 {
-    public class CapacityPatternMapper : Mapper<CapacityPatternData, CapacityPatternMapper.IPatternContainer>
+    public class PatternMapper : Mapper<PatternData, PatternMapper.IPatternContainer>
     {
 
-        public interface IPatternContainer : IContainer<CapacityPatternData>
+        public interface IPatternContainer : IContainer<PatternData>
         {
-            void AddToBuilder(CapacityPatternData data, ref HexPatternBuilder builder);
+            void AddToBuilder(PatternData data, ref HexPatternBuilder builder);
         }
         private sealed class PatternContainer<TData, TBehaviour, TPattern>
             : Container<TData, TBehaviour>, IPatternContainer
-            where TData : CapacityPatternData
-            where TBehaviour : ICapacityHexPattern<TData, TPattern>
+            where TData : PatternData
+            where TBehaviour : IHexPatternGenerator<TData, TPattern>
             where TPattern : IHexPattern
         {
             public PatternContainer(TBehaviour behaviour) : base(behaviour) { }
 
-            public void AddToBuilder(CapacityPatternData data, ref HexPatternBuilder builder)
+            public void AddToBuilder(PatternData data, ref HexPatternBuilder builder)
             {
                 if (data is TData t)
                 {
@@ -50,8 +50,8 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Mapping
         }
 
         public void Add<TData, TBehaviour, TPattern>()
-            where TData : CapacityPatternData
-            where TBehaviour : ICapacityHexPattern<TData, TPattern>, new()
+            where TData : PatternData
+            where TBehaviour : IHexPatternGenerator<TData, TPattern>, new()
             where TPattern : IHexPattern
 
             => Register(new PatternContainer<TData, TBehaviour, TPattern>(new()));

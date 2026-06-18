@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ATCG.Capacities.Data
 {
     [Serializable]
-    public class RingPatternData : CapacityPatternData
+    public class RingPatternData : PatternData
     {
         [field: SerializeField, BoxGroup("Specific")]
         public int Distance { get; private set; }

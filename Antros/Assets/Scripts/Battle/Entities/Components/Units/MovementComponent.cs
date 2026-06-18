@@ -11,11 +11,11 @@ namespace ATCG.Battle.Entities.Components
     {
         public readonly Formula<float> moveSpeed;
         
-        public readonly CapacityPatternData[] patternDatas;
+        public readonly PatternData[] patternDatas;
 
         public int Speed => Mathf.FloorToInt(moveSpeed.Value);
 
-        public MovementComponent(int baseMoveSpeed, CapacityPatternData[] patternDatas)
+        public MovementComponent(int baseMoveSpeed, PatternData[] patternDatas)
         {
             this.moveSpeed = new Formula<float>(baseMoveSpeed);
             this.patternDatas = patternDatas;
