@@ -27,21 +27,10 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         [SerializeField]
         private TMP_Text heroName;
 
-        [BoxGroup("Animations"), SerializeField, Range(0, 1)]
-        private float baseScale = .85f;
-
-        [SerializeField, BoxGroup("Animations/Basic Attack")]
-        private float windUpDuration;
-
-        [SerializeField, BoxGroup("Animations/Basic Attack")]
-        private float windUpScale;
-
         [SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         private float movementDuration;
 
         [SerializeField, BoxGroup("GameFeel")] private CinemachineCamera cinemachineCamera;
-
-        public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
         private SelectEntityActionPhase selectPhase;
 

@@ -49,7 +49,7 @@ namespace ATCG.Battle.Players.Local.UI.Other
 
         public void GiveUp(BaseEventData arg0)
         {
-            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == RuntimePlayer)
+            if (CurrentPhase is LocalPlayerTurnPhase localPlayerTurnPhase && localPlayerTurnPhase.player == RuntimePlayer.BattlePlayer)
                 localPlayerTurnPhase.GiveUp();
         }
 
