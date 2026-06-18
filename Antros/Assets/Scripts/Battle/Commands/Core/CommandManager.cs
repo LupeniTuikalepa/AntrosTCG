@@ -46,12 +46,12 @@ namespace ATCG.Battle.Commands.Core
             CommandListenerRunner runner = new CommandListenerRunner(gameCommand);
             await runner.Run(context);
         }
-        public static void RegisterPlayer(this ICommandListener listener)
+        public static void RegisterListener(this ICommandListener listener)
         {
             CommandsPlayers.Add(listener);
         }
 
-        public static void UnregisterPlayer(this ICommandListener listener)
+        public static void UnregisterListener(this ICommandListener listener)
         {
             CommandsPlayers.Remove(listener);
         }

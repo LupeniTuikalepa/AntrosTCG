@@ -60,13 +60,13 @@ namespace ATCG.Battle.Entities.Runtime
         protected virtual void OnEnable()
         {
             PhaseManager.Register<ISelectEntityPhase>(this);
-            CommandManager.RegisterPlayer(this);
+            CommandManager.RegisterListener(this);
         }
 
         protected virtual void OnDisable()
         {
             PhaseManager.Unregister<ISelectEntityPhase>(this);
-            CommandManager.UnregisterPlayer(this);
+            CommandManager.UnregisterListener(this);
         }
 
         public virtual async Awaitable Spawn(RuntimeEntityManager manager, T aspect)
