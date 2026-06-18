@@ -25,7 +25,7 @@ namespace ATCG.Battle.Players.Local.UI.Other
 
         public void OnPhaseBegin(PlayerTurnPhase phase)
         {
-            if (phase.player == RuntimePlayer)
+            if (phase.player == RuntimePlayer.BattlePlayer)
                 playerName.text = "Your turn";
             else
                 playerName.text = $"{phase.player.Profile.Infos.name}'s turn";

@@ -120,6 +120,8 @@ namespace ATCG.Battle.Players.UI
             var infos = command.GetInfos();
             Refresh(infos.max, infos.to, infos.from);
             state.CompleteFollowThrough(this);
+
+            await Awaitable.MainThreadAsync();
         }
 
     }

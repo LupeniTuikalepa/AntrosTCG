@@ -16,29 +16,41 @@ namespace ATCG.Battle.Entities.Runtime
             //Debug.Log(((IPhaseListener<ISelectEntityPhase>)this).Accepts(phase));
             CurrentSelectEntityPhase = phase;
 
+            GameMetrics gameMetrics = GameMetrics.Current;
+
             if (phase.IsInPattern(Address))
             {
                 IsInteractable.AddCondition(phase.ChannelKey, true);
 
-                if (phase.Accepts(Address) || phase.IsRelated(Address))
+                bool isRelated = phase.IsRelated(Address);
+                bool accepts = phase.Accepts(Address);
+
+                if (accepts || isRelated)
                 {
-                    Model.EnableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
-                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
-                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+                    Model.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                    Model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                    Model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                    if(accepts)
+                        Model.DisableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
+                    else
+                        Model.EnableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
                 }
                 else
                 {
-                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
-                    Model.EnableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
-                    Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+                    Model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                    Model.EnableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                    Model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                    Model.DisableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
                 }
             }
             else
             {
                 IsInteractable.AddCondition(phase.ChannelKey, false);
-                Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
-                Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
-                Model.EnableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+
+                Model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                Model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                Model.EnableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                Model.EnableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
             }
         }
 
@@ -50,6 +62,7 @@ namespace ATCG.Battle.Entities.Runtime
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
+            Model.DisableRenderingLayer(GameMetrics.Current.DitherOccluderRenderingLayer);
         }
     }
 }
