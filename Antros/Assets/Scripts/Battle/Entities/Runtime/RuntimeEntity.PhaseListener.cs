@@ -30,17 +30,12 @@ namespace ATCG.Battle.Entities.Runtime
                     Model.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
                     Model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
                     Model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
-                    if(accepts)
-                        Model.DisableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
-                    else
-                        Model.EnableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
                 }
                 else
                 {
                     Model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
                     Model.EnableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
                     Model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
-                    Model.DisableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
                 }
             }
             else
@@ -50,7 +45,6 @@ namespace ATCG.Battle.Entities.Runtime
                 Model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
                 Model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
                 Model.EnableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
-                Model.EnableRenderingLayer(gameMetrics.DitherOccluderRenderingLayer);
             }
         }
 
@@ -62,7 +56,6 @@ namespace ATCG.Battle.Entities.Runtime
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
             Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
-            Model.DisableRenderingLayer(GameMetrics.Current.DitherOccluderRenderingLayer);
         }
     }
 }
