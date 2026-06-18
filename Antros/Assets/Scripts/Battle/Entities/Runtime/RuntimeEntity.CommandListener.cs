@@ -1,12 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Players;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime.Grid;
+using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
+using CollectionDebugger.Core;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using PrimeTween;
@@ -68,14 +73,38 @@ namespace ATCG.Battle.Entities.Runtime
     public async Awaitable Play(CommandListenerState state, CommandContext context, MoveCommand command)
     {
         state.CompleteWindUp(this);
+        
         var infos = command.GetInfos();
-
-        if (RuntimeBattleGrid.TryGetBattleCellAt(infos.to, out RuntimeBattleCell cell))
+        
+        var source = infos.from;
+        var destination = infos.to;
+        
+        var path = HexPathfinder.FindPath(source,destination, context.Grid, Filter);
+        
+        foreach (var coordinate in path)
         {
-            await Tween.Position(transform, cell.transform.position, .3f, Ease.OutCirc);
+            if (RuntimeBattleGrid.TryGetBattleCellAt(coordinate, out RuntimeBattleCell cell))
+            {
+                await Tween.Position(transform, cell.transform.position, .15f, Ease.OutCirc);
+            }
         }
 
+        await Awaitable.WaitForSecondsAsync(0.2f);
         state.CompleteFollowThrough(this);
+    }
+
+    private bool Filter(BattleCellAspect aspect)
+    {
+        if (aspect.CanBeMovedOn())
+            return true;
+
+        foreach (var memberRef in aspect.GetMembers())
+        {
+            if (memberRef.Entity == Entity)
+                return true;
+        }
+        
+        return false;
     }
     }
 }

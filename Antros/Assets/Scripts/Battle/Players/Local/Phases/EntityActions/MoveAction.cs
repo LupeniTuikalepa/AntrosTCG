@@ -50,6 +50,8 @@ namespace ATCG.Battle
             if (result.Length == 0)
                 return;
 
+            
+            
             var manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
             manaCommand.Run(battlePhase);
 
