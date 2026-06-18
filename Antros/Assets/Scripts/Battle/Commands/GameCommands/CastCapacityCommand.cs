@@ -29,8 +29,8 @@ namespace ATCG.Battle.Commands.GameCommands
             HexPatternBuilder patternBuilder = new HexPatternBuilder(setup.castPoint);
             for (int i = 0; i < capacityData.FirePatterns.Length; i++)
             {
-                CapacityPatternData patternData = capacityData.FirePatterns[i];
-                if (CapacityManager.TryGetFor(patternData, out CapacityPatternMapper.IPatternContainer container))
+                PatternData patternData = capacityData.FirePatterns[i];
+                if (BattleDataMapper.TryGetFor(patternData, out PatternMapper.IPatternContainer container))
                     container.AddToBuilder(patternData, ref patternBuilder);
             }
 
@@ -42,7 +42,7 @@ namespace ATCG.Battle.Commands.GameCommands
                 for (int i = 0; i < hitEffects.Length; i++)
                 {
                     IEffectData hitData = hitEffects[i];
-                    if (CapacityManager.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
+                    if (BattleDataMapper.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
                         container.TryApply(hitData, aspect.EntityAddress, in capacityContext);
                 }
 
@@ -51,7 +51,7 @@ namespace ATCG.Battle.Commands.GameCommands
                     for (int i = 0; i < hitEffects.Length; i++)
                     {
                         IEffectData hitData = hitEffects[i];
-                        if (CapacityManager.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
+                        if (BattleDataMapper.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
                             container.TryApply(hitData, member.EntityAddress, in capacityContext);
                     }
                 }

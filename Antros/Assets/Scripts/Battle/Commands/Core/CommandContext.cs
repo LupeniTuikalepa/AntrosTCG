@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.EntityCommands;
@@ -22,16 +22,16 @@ namespace ATCG.Battle.Commands.Core
 
         public World World => battlePhase.world;
 
-        private readonly List<ICommandListener> commandPlayers;
+        private readonly List<ICommandListener> commandListener;
         private readonly Dictionary<ICommand, ICommandListenerGroup> pairings;
         private readonly CommandCollection commandCollection;
 
 
-        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandPlayers, CommandCollection commandCollection)
+        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandListener, CommandCollection commandCollection)
         {
             pairings = DictionaryPool<ICommand, ICommandListenerGroup>.Get();
             this.battlePhase = battlePhase;
-            this.commandPlayers = commandPlayers;
+            this.commandListener = commandListener;
             this.commandCollection = commandCollection;
         }
 
@@ -51,7 +51,7 @@ namespace ATCG.Battle.Commands.Core
 
         public ICommand GetCommand(BattleID battleID) => commandCollection.GetCommand(battleID);
 
-        public bool TryGetCommandPlayerGroup<T>(T gameCommand, out CommandListenerGroup<T> group) where T : ICommand
+        public bool TryGetGroup<T>(T gameCommand, out CommandListenerGroup<T> group) where T : ICommand
         {
             if (pairings.TryGetValue(gameCommand, out var g) && g is CommandListenerGroup<T> cpg)
             {
@@ -69,7 +69,7 @@ namespace ATCG.Battle.Commands.Core
         /// <param name="command"></param>
         /// <param name="group"></param>
         /// <returns></returns>
-        public bool TryGetCommandPlayerGroup(ICommand command, out ICommandListenerGroup group)
+        public bool TryGetGroup(ICommand command, out ICommandListenerGroup group)
             => pairings.TryGetValue(command, out group);
 
         public void Register<T>(T command) where T : ICommand
@@ -78,14 +78,13 @@ namespace ATCG.Battle.Commands.Core
             pairings[command]= group;
             commandCollection.AddCommand(command);
 
-            foreach (ICommandListener commandPlayer in commandPlayers)
+            foreach (ICommandListener commandPlayer in commandListener)
             {
                 if(commandPlayer is not ICommandListener<T> player)
                     continue;
 
                 if (player.CanPlay(command))
                 {
-	                
                     group.Add(player); 
                 }
             }

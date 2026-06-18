@@ -34,7 +34,7 @@ namespace ATCG.Battle
 
         public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-            CapacityPatternData[] patterns = capacityData.CastPatterns;
+            PatternData[] patterns = capacityData.CastPatterns;
 
             //If no pattern, use the entity position
             if (patterns.Length == 0)

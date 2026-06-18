@@ -7,8 +7,8 @@ using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.Cards.Capacities.Behaviours.Patterns
 {
-    public interface ICapacityHexPattern<in T, out TPattern> : IBehaviour<T>
-        where T : CapacityPatternData
+    public interface IHexPatternGenerator<in T, out TPattern> : IBehaviour<T>
+        where T : PatternData
         where TPattern : IHexPattern
     {
 

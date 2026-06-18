@@ -23,7 +23,7 @@ namespace ATCG.Battle.Players.Local.Phases
         public readonly HexCoordinates startingPoint;
         
         private readonly int speed;
-        private readonly CapacityPatternData[] patternData;
+        private readonly PatternData[] patternData;
         
         private readonly struct GridFilter : IEntityFilter
         {
@@ -33,7 +33,7 @@ namespace ATCG.Battle.Players.Local.Phases
             }
         }
         
-        public CreatePathPhase(LocalBattlePlayer localBattlePlayer,HexCoordinates startingPoint , int speed, CapacityPatternData[] patternData) : base(localBattlePlayer)
+        public CreatePathPhase(LocalBattlePlayer localBattlePlayer,HexCoordinates startingPoint , int speed, PatternData[] patternData) : base(localBattlePlayer)
         {
             this.startingPoint = startingPoint;
             this.speed = speed;

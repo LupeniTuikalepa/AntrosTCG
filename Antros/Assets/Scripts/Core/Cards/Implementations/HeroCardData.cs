@@ -20,6 +20,6 @@ namespace ATCG.Cards.Implementations
         public int Speed { get; private set; } = 1;
         
         [field: SerializeReference, BoxGroup("Movement")]
-        public CapacityPatternData[] MovementPatterns { get; private set; } = {new SpiralPatternData()};
+        public PatternData[] MovementPatterns { get; private set; } = {new SpiralPatternData()};
     }
 }

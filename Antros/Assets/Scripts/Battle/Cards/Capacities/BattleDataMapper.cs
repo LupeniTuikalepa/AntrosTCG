@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace ATCG.Battle.Cards.Capacities
 {
-    public static class CapacityManager
+    public static class BattleDataMapper
     {
         private static readonly CapacityEffectMapper EffectContainer = new CapacityEffectMapper();
-        private static readonly CapacityPatternMapper PatternContainer = new CapacityPatternMapper();
+        private static readonly PatternMapper PatternContainer = new PatternMapper();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
@@ -19,18 +19,18 @@ namespace ATCG.Battle.Cards.Capacities
             PatternContainer.Clear();
             EffectContainer.Clear();
 
-            PatternContainer.Add<FloodFillPatternData, CapacityFloodFillPattern, FloodFillPattern>();
-            PatternContainer.Add<OffsetsPatternData, CapacityOffsetPattern, OffsetsPattern>();
-            PatternContainer.Add<PointsPatternData, CapacityPointsPattern, PointsPattern>();
-            PatternContainer.Add<RayPatternData, CapacityRayPattern, RayPattern>();
-            PatternContainer.Add<RingPatternData, CapacityRingPattern, RingPattern>();
-            PatternContainer.Add<SpiralPatternData, CapacitySpiralPattern, SpiralPattern>();
-            PatternContainer.Add<SpreadCapacityPatternData, CapacitySpreadPattern, SpreadPattern>();
+            PatternContainer.Add<FloodFillPatternData, FloodFillPatternGenerator, FloodFillPattern>();
+            PatternContainer.Add<OffsetsPatternData, OffsetPatternGenerator, OffsetsPattern>();
+            PatternContainer.Add<PointsPatternData, PointsPatternGenerator, PointsPattern>();
+            PatternContainer.Add<RayPatternData, RayPatternGenerator, RayPattern>();
+            PatternContainer.Add<RingPatternData, RingPatternGenerator, RingPattern>();
+            PatternContainer.Add<SpiralPatternData, SpiralPatternGenerator, SpiralPattern>();
+            PatternContainer.Add<SpreadPatternData, SpreadPatternGenerator, SpreadPattern>();
 
             EffectContainer.Add<DamageEffectData, DamageEffect>();
             EffectContainer.Add<HealEffectData, HealEffect>();
         }
-        static CapacityManager()
+        static BattleDataMapper()
         {
         }
 
@@ -39,7 +39,7 @@ namespace ATCG.Battle.Cards.Capacities
             return EffectContainer.TryGetContainer(data, out effect);
         }
 
-        public static bool TryGetFor(CapacityPatternData data, out CapacityPatternMapper.IPatternContainer pattern)
+        public static bool TryGetFor(PatternData data, out PatternMapper.IPatternContainer pattern)
         {
             return PatternContainer.TryGetContainer(data, out pattern);
         }
