@@ -20,12 +20,12 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
         private void OnEnable()
         {
-            this.RegisterPlayer();
+            this.RegisterListener();
         }
 
         private void OnDisable()
         {
-            this.UnregisterPlayer();
+            this.UnregisterListener();
         }
 
         public async Awaitable Play(CommandListenerState state, CommandContext context, SpawnHeroCommand command)

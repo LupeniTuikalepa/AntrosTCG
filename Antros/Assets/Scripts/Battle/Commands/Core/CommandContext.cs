@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
+using UnityEngine;
 using UnityEngine.Pool;
+using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.Commands.Core
 {
@@ -81,7 +84,15 @@ namespace ATCG.Battle.Commands.Core
                     continue;
 
                 if (player.CanPlay(command))
-                    group.Add(player);
+                {
+	                if (command is DeathCommand deathCommand && commandPlayer is IEntityCommandListener<DeathCommand> dc)
+	                {
+		                Object obj = dc as Object;
+		                Debug.Log($"Death command is registered and {obj.name} is listening. " +
+		                          $"Command Entity {deathCommand.Target.id} | Listener Entity : {dc.Entity.id}", obj);
+	                }
+                    group.Add(player); 
+                }
             }
         }
 

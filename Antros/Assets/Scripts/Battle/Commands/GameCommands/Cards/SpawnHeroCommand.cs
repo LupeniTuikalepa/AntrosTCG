@@ -2,6 +2,7 @@
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
@@ -12,11 +13,8 @@ using UnityEngine;
 namespace ATCG.Battle.Commands.GameCommands
 {
     [System.Serializable]
-    public class SpawnHeroCommand : Command<NoInfos>
+    public class SpawnHeroCommand : PlayerCommand<NoInfos>
     {
-        [field: SerializeField]
-        public BattleID PlayerID { get; private set; }
-
         [field: SerializeField]
         public BattleID CardID { get; private set; }
         [field: SerializeField]
@@ -24,9 +22,8 @@ namespace ATCG.Battle.Commands.GameCommands
         [field: SerializeField]
         public BattleID SpawnID { get; private set; }
 
-        public SpawnHeroCommand(IBattlePlayer player, HeroBattleCard heroBattleCard, HexCoordinates destination)
+        public SpawnHeroCommand(IBattlePlayer player, HeroBattleCard heroBattleCard, HexCoordinates destination) : base(player)
         {
-            PlayerID = player.GetBattleID();
             CardID = heroBattleCard.ID;
             Destination = destination;
 

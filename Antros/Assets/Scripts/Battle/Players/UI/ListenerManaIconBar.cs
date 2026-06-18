@@ -29,12 +29,12 @@ namespace ATCG.Battle.Players.UI
 
         private void OnEnable()
         {
-            this.RegisterPlayer();
+            this.RegisterListener();
         }
 
         private void OnDisable()
         {
-            this.UnregisterPlayer();
+            this.UnregisterListener();
         }
 
 
