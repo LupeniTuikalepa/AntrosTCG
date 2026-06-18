@@ -7,69 +7,68 @@ using ATCG.Capacities.Data;
 using ATCG.HexGrids;
 using CollectionDebugger.Core;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
 {
-    public static class HexPathfinder
+    public readonly struct HexPathfinder : IDisposable
     {
-        private static readonly Dictionary<HexCoordinates, int> CostSoFar;
-        private static readonly Dictionary<HexCoordinates, HexCoordinates> CameFrom;
-        private static readonly PriorityQueue<HexCoordinates, int> Frontier;
+        private readonly int maxSteps;
+        private readonly Dictionary<HexCoordinates, int> costSoFar;
+        private readonly Dictionary<HexCoordinates, HexCoordinates> cameFrom;
+        private readonly PriorityQueue<HexCoordinates, int> frontier;
         private static readonly HexCoordinates[] Directions =
         {
             new(1, 0), new(1, -1), new(0, -1),
             new(-1, 0), new(-1, 1), new(0, 1)
         };
-        
-        static HexPathfinder()
+
+        public HexPathfinder(int maxSteps = int.MaxValue)
         {
-            Frontier = new PriorityQueue<HexCoordinates, int>();
-            CameFrom = new Dictionary<HexCoordinates, HexCoordinates>();
-            CostSoFar = new Dictionary<HexCoordinates, int>();
+            this.maxSteps = maxSteps;
+            costSoFar = DictionaryPool<HexCoordinates, int>.Get();
+            cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
+            frontier = new PriorityQueue<HexCoordinates, int>();
         }
-        
-        public static List<HexCoordinates> FindPath(
+
+        public List<HexCoordinates> FindPath(
             HexCoordinates start,
             HexCoordinates goal,
             BattleGrid battleGrid,
-            Func<BattleCellAspect, bool> filter = null,
-            int maxSteps = int.MaxValue)
+            Func<BattleCellAspect, bool> filter = null)
         {
             filter ??= aspect => aspect.CanBeMovedOn();
-            Frontier.Clear();
-            CameFrom.Clear();
-            CostSoFar.Clear();
 
-            Frontier.Enqueue(start, 0);
-            CameFrom[start] = start;
-            CostSoFar[start] = 0;
+            frontier.Enqueue(start, 0);
+            cameFrom[start] = start;
+            costSoFar[start] = 0;
             Debug.Log($"[HexPathfinder] Start: {start}, Goal: {goal}");
-            while (Frontier.Count > 0)
+            while (frontier.Count > 0)
             {
-                HexCoordinates current = Frontier.Dequeue();
+                HexCoordinates current = frontier.Dequeue();
 
                 if (current.Equals(goal))
                     break;
                 foreach (HexCoordinates next in GetNeighbors(current, battleGrid, filter))
                 {
-                    int newCost = CostSoFar[current] + 1;
+                    int newCost = costSoFar[current] + 1;
 
                     if (newCost > maxSteps)
                         continue;
 
-                    if (!CostSoFar.ContainsKey(next) || newCost < CostSoFar[next])
+                    if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                     {
-                        CostSoFar[next] = newCost;
+                        costSoFar[next] = newCost;
                         int priority = newCost + HexDistance(next, goal);
-                        Frontier.Enqueue(next, priority);
-                        CameFrom[next] = current;
+                        frontier.Enqueue(next, priority);
+                        cameFrom[next] = current;
                     }
                 }
             }
-            return ReconstructPath(CameFrom, start, goal);
+            return ReconstructPath(cameFrom, start, goal);
         }
 
-        private static IEnumerable<HexCoordinates> GetNeighbors(HexCoordinates coord, BattleGrid battleGrid, Func<BattleCellAspect, bool> filter)
+        private IEnumerable<HexCoordinates> GetNeighbors(HexCoordinates coord, BattleGrid battleGrid, Func<BattleCellAspect, bool> filter)
         {
             List<HexCoordinates> reachable = new();
             
@@ -86,14 +85,14 @@ namespace ATCG.Battle.Grids
             return reachable;
         }
 
-        private static int HexDistance(HexCoordinates a, HexCoordinates b)
+        private int HexDistance(HexCoordinates a, HexCoordinates b)
         {
             int dx = a.X - b.X;
             int dy = a.Y - b.Y;
             return (Math.Abs(dx) + Math.Abs(dy) + Math.Abs(dx + dy)) / 2;
         }
 
-        private static List<HexCoordinates> ReconstructPath(
+        private List<HexCoordinates> ReconstructPath(
             Dictionary<HexCoordinates, HexCoordinates> cameFrom,
             HexCoordinates start,
             HexCoordinates goal)
@@ -119,6 +118,12 @@ namespace ATCG.Battle.Grids
 
             path.Reverse();
             return path;
+        }
+
+        public void Dispose()
+        {
+            DictionaryPool<HexCoordinates, int>.Release(costSoFar);
+            DictionaryPool<HexCoordinates, HexCoordinates>.Release(cameFrom);
         }
     }
 }
