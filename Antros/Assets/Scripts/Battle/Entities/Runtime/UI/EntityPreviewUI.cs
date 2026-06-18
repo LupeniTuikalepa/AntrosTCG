@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace ATCG.Battle
 {
-	public class EntityPreviewUI : BarUI, IEntityCommandListener<DamageCommand>,ICommandListener<DeathCommand>
+	public class EntityPreviewUI : BarUI, IEntityCommandListener<DamageCommand>,IEntityCommandListener<DeathCommand>
 	{
 		private EntityPreviewListUI entityPreviewList;
 		public Entity Entity { get; private set; }
@@ -66,7 +66,6 @@ namespace ATCG.Battle
 		
 		public async Awaitable Play(CommandListenerState state, CommandContext context, DeathCommand command)
 		{
-			Debug.Log($"{command.Target.id} is Dead and my entity is {Entity.id}");
 			state.CompleteAll(this);
 			await entityPreviewList.DestroyPreviewAsync(Entity);
 		}

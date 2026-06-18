@@ -85,12 +85,7 @@ namespace ATCG.Battle.Commands.Core
 
                 if (player.CanPlay(command))
                 {
-	                if (command is DeathCommand deathCommand && commandPlayer is IEntityCommandListener<DeathCommand> dc)
-	                {
-		                Object obj = dc as Object;
-		                Debug.Log($"Death command is registered and {obj.name} is listening. " +
-		                          $"Command Entity {deathCommand.Target.id} | Listener Entity : {dc.Entity.id}", obj);
-	                }
+	                
                     group.Add(player); 
                 }
             }
