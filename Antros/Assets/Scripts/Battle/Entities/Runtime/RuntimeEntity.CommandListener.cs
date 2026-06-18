@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
@@ -22,7 +22,8 @@ namespace ATCG.Battle.Entities.Runtime
     public abstract partial class RuntimeEntity<T> :
         IEntityCommandListener<DeathCommand>,
         IEntityCommandListener<DamageCommand>,
-        IEntityCommandListener<MoveCommand>
+        IEntityCommandListener<MoveCommand>,IEntityCommandListener<FallCommand>
+		
 
     {
     public Entity Entity => Address.entity;
@@ -93,6 +94,15 @@ namespace ATCG.Battle.Entities.Runtime
         await Awaitable.WaitForSecondsAsync(0.2f);
         state.CompleteFollowThrough(this);
     }
+
+    public async Awaitable Play(CommandListenerState state, CommandContext context, FallCommand command)
+    {
+	    float targetY = transform.position.y - 10f;
+
+	    await Tween.PositionY(transform, targetY, duration: 0.8f, ease: Ease.InQuad);
+
+	    await Tween.Scale(transform, Vector3.zero, duration: 0.8f, ease: Ease.InQuad);
+	    state.CompleteAll(this);
 
     private bool Filter(BattleCellAspect aspect)
     {

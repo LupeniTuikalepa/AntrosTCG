@@ -31,5 +31,6 @@ namespace ATCG.Battle.Commands.EntityCommands
                 Debug.Log($"Moving from {infos.from} to {infos.to}");
             }
         }
+        
     }
 }
