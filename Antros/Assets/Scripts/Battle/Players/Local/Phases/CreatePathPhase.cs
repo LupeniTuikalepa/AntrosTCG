@@ -63,7 +63,6 @@ namespace ATCG.Battle.Players.Local.Phases
                         if (!selectedCell.TryGetComponentRO(out GridMemberComponent cellComponent))
                             continue;
                         list.Add(cellComponent.coordinates);
-                        //list = HexPathfinder.FindPath(center, cellComponent.coordinates, builder, BattleGrid, speed);
                     }
                     center = list[^1];
                     OnPathChanged?.Invoke(list);
