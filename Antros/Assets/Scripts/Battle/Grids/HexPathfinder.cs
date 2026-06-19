@@ -40,7 +40,6 @@ namespace ATCG.Battle.Grids
             costSoFar = DictionaryPool<HexCoordinates, int>.Get();
             cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
             frontier = ListPool<PriorityHexCoordinates>.Get();
-            cameFrom.Watch(nameof(cameFrom));
         }
 
         public bool FindPath(
@@ -55,9 +54,12 @@ namespace ATCG.Battle.Grids
             HexCoordinates goal,
             List<HexCoordinates> path,
             BattleGrid battleGrid,
-            TController controller)
-            where TController : IPathfinderController
+            TController controller) where TController : IPathfinderController
         {
+            costSoFar.Clear();
+            cameFrom.Clear();
+            frontier.Clear();
+            
             frontier.Add(new PriorityHexCoordinates(start, 0));
             cameFrom[start] = start;
             costSoFar[start] = 0;
@@ -92,7 +94,6 @@ namespace ATCG.Battle.Grids
                     
                 }
             }
-            CollectionDebug.TakeSnapshot(nameof(cameFrom));
             return ReconstructPath(start, goal, path);
         }
 
