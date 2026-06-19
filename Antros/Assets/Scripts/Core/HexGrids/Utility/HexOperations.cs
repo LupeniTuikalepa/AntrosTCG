@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ATCG.HexGrids.Utility
@@ -13,6 +14,8 @@ namespace ATCG.HexGrids.Utility
             new HexCoordinates(-1, 1),
             new HexCoordinates(0, 1)
         };
+        
+        public static ReadOnlySpan<HexCoordinates> Directions => directions;
 
         public static int DirectionsCount => directions.Length;
 

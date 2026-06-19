@@ -191,7 +191,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1173186091470948849}
   - component: {fileID: 7693259140358200842}
-  - component: {fileID: 2854938731345879177}
   m_Layer: 3
   m_Name: Hero
   m_TagString: Hero
@@ -233,47 +232,8 @@ MonoBehaviour:
   <Model>k__BackingField: {fileID: 1508660689090074998}
   <actionUIRoot>k__BackingField: {fileID: 167438518338950931}
   heroName: {fileID: 895034403804600685}
-  baseScale: 0.85
-  windUpDuration: 0
-  windUpScale: 0
   movementDuration: 0
   cinemachineCamera: {fileID: 985806925998146216}
---- !u!58 &2854938731345879177
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2771192464520882885}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.41
 --- !u!1 &4088443381881390415
 GameObject:
   m_ObjectHideFlags: 0
