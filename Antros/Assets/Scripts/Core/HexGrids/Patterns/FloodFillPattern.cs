@@ -25,7 +25,6 @@ namespace ATCG.Battle.Grids.Patterns
                     yield return hexCoordinates;
             }
         }
-
         private void FloodFill(HexCoordinates coordinates, int budget, Dictionary<HexCoordinates, int> foundCells)
         {
             if (budget <= 0)
@@ -33,17 +32,18 @@ namespace ATCG.Battle.Grids.Patterns
 
             foreach (HexCoordinates neighbor in coordinates.GetRing(1))
             {
+                var newBudget = budget - 1;
+                
                 if (foundCells.TryGetValue(neighbor, out int lastBudget))
                     //Someone already found the cell with the same budget or more, so no need to check it
-                    if (lastBudget >= budget)
+                    if (lastBudget >= newBudget)
                         continue;
 
-                foundCells[neighbor] = budget;
-                budget--;
+                foundCells[neighbor] = newBudget;
 
                 //Recursively check the neighbor cells
-                FloodFill(neighbor, budget, foundCells);
+                FloodFill(neighbor, newBudget, foundCells);
             }
-        }
+        } 
     }
 }
