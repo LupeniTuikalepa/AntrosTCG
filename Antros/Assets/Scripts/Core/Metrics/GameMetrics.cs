@@ -64,6 +64,9 @@ namespace ATCG.Metrics
         public DualPairing<CardRarity, int> CardRarityInvocationCost { get; private set; }
 
 
+        [field: SerializeField, BoxGroup("RuntimeBattleGrid")]
+        public DualPairing<int, int> PlayerBorder { get; private set; }
+        
         [field: SerializeField, BoxGroup("RuntimeBattleGrid"), Range(0, 30)]
         public uint GridRadius { get; private set; } = 7;
 

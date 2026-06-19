@@ -41,6 +41,7 @@ namespace ATCG.Battle.Commands.GameCommands
             {
                 case HeroBattleCard heroBattleCard:
                     Embed(in context, new SpawnHeroCommand(player, heroBattleCard, Destination));
+                    player.Hand.TryRemoveCard(card);
                     break;
             }
         }

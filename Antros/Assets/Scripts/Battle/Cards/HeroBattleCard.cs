@@ -13,7 +13,7 @@ namespace ATCG.Battle.Cards
         public int MaxHealth => Data.Health;
         public int Speed => Data.Speed;
         public int Strength => Data.Strength;
-        public PatternData[] MovementPatterns => Data.MovementPatterns;
+        public PatternData[] MovementPatterns => Data.MovementPatterns.Data;
 
         public HeroBattleCard(HeroCardData data, IBattlePlayer player) : base(data, player)
         {
