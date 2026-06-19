@@ -1,5 +1,4 @@
-﻿using ATCG.Battle.Entities.Components;
-using ATCG.Capacities;
+﻿using ATCG.Capacities;
 using Helteix.Tools;
 using UnityEngine;
 

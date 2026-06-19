@@ -1,23 +1,12 @@
-using System;
-using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime.Grid;
-using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Runtime;
-using ATCG.Battle.Players.Local.Phases;
-using ATCG.HexGrids;
-using ATCG.Metrics;
-using CollectionDebugger.Core;
-using Helteix.Tools;
-using Helteix.Tools.Phases;
 using PrimeTween;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Runtime
 {
@@ -81,21 +70,13 @@ namespace ATCG.Battle.Entities.Runtime
 
 			var infos = command.GetInfos();
 
-			var source = infos.from;
 			var destination = infos.to;
 
-			using var hexPathfinder = new HexPathfinder(10000);
-			var path = hexPathfinder.FindPath(source, destination, context.Grid, Filter);
-
-			foreach (var coordinate in path)
+			if (RuntimeBattleGrid.TryGetBattleCellAt(destination, out RuntimeBattleCell cell))
 			{
-				if (RuntimeBattleGrid.TryGetBattleCellAt(coordinate, out RuntimeBattleCell cell))
-				{
-					await Tween.Position(transform, cell.transform.position, .15f, Ease.OutCirc);
-				}
+				await Tween.Position(transform, cell.transform.position, .15f, Ease.OutCirc);
 			}
 
-			await Awaitable.WaitForSecondsAsync(0.2f);
 			state.CompleteFollowThrough(this);
 		}
 

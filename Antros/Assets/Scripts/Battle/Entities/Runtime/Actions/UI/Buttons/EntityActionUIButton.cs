@@ -1,8 +1,5 @@
-﻿using System;
-using ATCG.UI;
-using UnityEngine;
+﻿using ATCG.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace ATCG.Battle.Entities.Runtime.UI
 {

@@ -1,10 +1,6 @@
 ﻿using ATCG.Battle.Cards;
-using ATCG.Battle.Players.Local.Phases;
 using Helteix.Cards.UI.Physical;
 using Helteix.Cards.UI.Physical.Drag;
-using Helteix.Tools.Phases;
-using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.Grid
 {

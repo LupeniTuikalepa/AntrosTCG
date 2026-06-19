@@ -1,6 +1,5 @@
 ﻿using ATCG.Battle.Players;
 using ATCG.Cards.UI.Components;
-using ATCG.Metrics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

@@ -1,8 +1,5 @@
 ﻿using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
-using ATCG.Battle.Players.Runtime;
-using ATCG.Capacities;
-using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Runtime
 {

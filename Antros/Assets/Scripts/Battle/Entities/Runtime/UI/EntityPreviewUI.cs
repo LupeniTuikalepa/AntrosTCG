@@ -1,17 +1,12 @@
-using System;
-using System.Threading.Tasks;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Runtime;
 using ATCG.UI;
-using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ATCG.Battle
 {

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ATCG.Battle.Entities.Aspects;
+﻿using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Grid;
-using ATCG.Battle.Grids.Runtime;
-using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
-using ATCG.Capacities;
-using ATCG.Metrics;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using PrimeTween;
@@ -17,8 +10,6 @@ using Sirenix.OdinInspector;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
 {

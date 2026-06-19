@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Entities.Components;
+﻿using System.Collections.Generic;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
-using ATCG.Battle.Players.Runtime;
 using ATCG.Utilities;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
-using PrimeTween;
-using Unity.Cinemachine;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.UI

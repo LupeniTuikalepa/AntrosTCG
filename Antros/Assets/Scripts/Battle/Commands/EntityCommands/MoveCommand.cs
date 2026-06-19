@@ -28,7 +28,6 @@ namespace ATCG.Battle.Commands.EntityCommands
                 component.coordinates = destination;
 
                 infos.to = component.coordinates;
-                Debug.Log($"Moving from {infos.from} to {infos.to}");
             }
         }
         

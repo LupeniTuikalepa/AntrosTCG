@@ -1,6 +1,5 @@
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
-using UnityEngine;
 
 namespace ATCG.Battle
 {

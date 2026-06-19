@@ -1,9 +1,7 @@
-﻿using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Players.Local.Phases;
+﻿using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
-using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {

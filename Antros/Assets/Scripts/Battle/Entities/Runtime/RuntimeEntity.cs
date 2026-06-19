@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using ATCG.Battle.Cards;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
@@ -8,15 +6,10 @@ using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Metrics;
-using Helteix.Cards.UI.Physical;
-using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties.Conditions;
-using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
-using PrimeTween;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime
 {

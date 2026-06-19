@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ATCG.Battle.Grids.Runtime;
-using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Runtime;
 using Helteix.ChanneledProperties.Conditions;

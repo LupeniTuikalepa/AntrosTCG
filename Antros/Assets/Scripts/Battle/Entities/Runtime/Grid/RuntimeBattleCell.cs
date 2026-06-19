@@ -1,13 +1,10 @@
-﻿using System;
-using ATCG.Battle.Cards;
+﻿using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
-using Helteix.ChanneledProperties.Priorities;
 using PrimeTween;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.Grid
 {

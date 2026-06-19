@@ -1,5 +1,4 @@
-﻿using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Phases;
+﻿using ATCG.Battle.Players.Local.Phases;
 using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
 

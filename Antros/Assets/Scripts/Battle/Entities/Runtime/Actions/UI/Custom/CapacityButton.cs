@@ -1,8 +1,6 @@
-﻿using ATCG.Battle.Commands.GameCommands;
-using ATCG.Capacities;
+﻿using ATCG.Capacities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime.UI.Custom
 {
