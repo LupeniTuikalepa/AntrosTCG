@@ -55,9 +55,12 @@ namespace ATCG.Battle
             var manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
             manaCommand.Run(battlePhase);
 
-            var pathCommand = new MovePathCommand(address, result);
-            await pathCommand.RunAsync(battlePhase);
-
+            for (int i = 0; i < result.Length; i++)
+            {
+                var to  = result[i];
+                var pathCommand = new MovePathCommand(address, to);
+                await pathCommand.RunAsync(battlePhase);
+            }
         }
     }
 }
