@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
+using Sirenix.Utilities;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Patterns.Building
@@ -48,6 +49,7 @@ namespace ATCG.Battle.Grids.Patterns.Building
             return this;
         }
 
+        
         public HexPatternBuilder With<T>(T pattern) where T : IHexPattern => With(pattern, origin);
 
         public HexPatternBuilder With<T>(T pattern, HexCoordinates source) where T : IHexPattern
@@ -64,7 +66,7 @@ namespace ATCG.Battle.Grids.Patterns.Building
             return this;
         }
         
-        public HexPatternBuilder Without<T>(T pattern) where T : IHexPattern => With(pattern, origin);
+        public HexPatternBuilder Without<T>(T pattern) where T : IHexPattern => Without(pattern, origin);
 
         public HexPatternBuilder Without<T>(T pattern, HexCoordinates source) where T : IHexPattern
         {

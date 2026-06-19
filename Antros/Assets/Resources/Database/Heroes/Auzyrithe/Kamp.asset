@@ -24,16 +24,29 @@ MonoBehaviour:
   <Strength>k__BackingField: 2
   <Speed>k__BackingField: 2
   <MovementPatterns>k__BackingField:
-  - rid: 1137761876204585180
+    <Data>k__BackingField:
+    - rid: 8719919294422974794
+  <DeployPattern>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 8719919294422974784
   references:
     version: 2
     RefIds:
-    - rid: 1137761876204585180
-      type: {class: FloodFillPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
+    - rid: 8719919294422974784
+      type: {class: SpiralPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
       data:
         <IsAdditive>k__BackingField: 1
         <OverridePatternOrigin>k__BackingField: 0
         <Offset>k__BackingField:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
-        <Distance>k__BackingField: 3
+        <Distance>k__BackingField: 1
+    - rid: 8719919294422974794
+      type: {class: SpiralPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 1

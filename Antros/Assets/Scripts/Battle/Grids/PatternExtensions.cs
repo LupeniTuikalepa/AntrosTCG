@@ -48,6 +48,22 @@ namespace ATCG.Battle.Grids
             }
         }
         
+        public static HexPatternBuilder WithGroup(this HexPatternBuilder builder ,PatternGroup group, HexCoordinates coordinates)
+        {
+	        var datas = group.Data;
+	        
+	        for (int i = 0; i < datas.Length; i++)
+	        {
+		        if(BattleDataMapper.TryGetFor(datas[i], out var container))
+			        container.AddToBuilder(datas[i], ref builder, coordinates);
+	        }
+	        return builder;
+        }
+        public static HexPatternBuilder WithGroup(this HexPatternBuilder builder ,PatternGroup group)
+        {
+	        return builder.WithGroup(group, builder.origin);
+        }
+        
         
     }
 }

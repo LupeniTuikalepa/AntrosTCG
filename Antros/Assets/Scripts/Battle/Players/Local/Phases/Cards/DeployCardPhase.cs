@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Commands.Core;
@@ -8,16 +9,22 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Lookups;
 using ATCG.Battle.Entities.Queries;
+using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Patterns;
 using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Utility;
+using ATCG.Metrics;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.Tools.Phases;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.Phases.Cards
 {
     public class DeployCardPhase : LocalPlayerPhase
     {
+	    
         private struct DeployableCellFilter : IEntityFilter
         {
             public bool Accepts(EntityAddress address)
@@ -29,6 +36,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             }
         }
 
+        
         private readonly IBattleCard battleCard;
         private readonly CardDragPhase<IBattleCard> dragPhase;
 
@@ -42,7 +50,29 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
         {
             //TODO create pattern with deployable cells
             //As of now, all the grid is deployable
-            HexPatternBuilder patternBuilder = new HexPatternBuilder(LocalBattlePlayer.BattlePhase.BattleGrid.AllCellsCoordinates);
+            
+            var allCells = LocalBattlePlayer.BattlePhase.BattleGrid.AllCellsCoordinates;
+    
+            List<HexCoordinates> borderCells = new List<HexCoordinates>();
+            HexCoordinates[] corners = new HexCoordinates[HexOperations.DirectionsCount];
+            HexCoordinates center = new HexCoordinates(0, 0);
+            using HexPatternBuilder patternBuilder = new HexPatternBuilder(center);
+
+            for (int i = 0; i < HexOperations.DirectionsCount; i++)
+            {
+	            HexCoordinates corner = HexOperations.GetNeighbor(center, i) * (int) GameMetrics.Current.GridRadius;
+	            corners[i] = corner;
+            }
+            int playerNumber = LocalBattlePlayer.GetPlayerNumber() % HexOperations.DirectionsCount;
+            
+            if (GameMetrics.Current.PlayerBorder.TryGetValueForKey(playerNumber, out int edge))
+            {
+	            HexCoordinates a = corners[edge];
+	            HexCoordinates b = corners[(edge+1)% HexOperations.DirectionsCount];
+	            patternBuilder.With(new LinePattern(a), b);
+            }
+
+            GetAllDeployTarget( patternBuilder);
 
             SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(
                 LocalBattlePlayer,
@@ -67,6 +97,23 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
 
             DeployCardCommand deployCardCommand = new(battleCard, aspect.Coordinates, LocalBattlePlayer);
             await deployCardCommand.RunAsync(LocalBattlePlayer.BattlePhase);
+        }
+
+        private void GetAllDeployTarget(HexPatternBuilder patternBuilder)
+        {
+	        foreach (ComponentRef<DeployTargetComponent> componentRef in LocalBattlePlayer.BattlePhase.world.Query<DeployTargetComponent>())
+	        {
+		        var address = componentRef.EntityAddress;
+		        if(!address.TryGetComponentRO(out GridMemberComponent gridMember))
+			        continue;
+		        if(!address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer))
+			        continue;
+		        if(!belongsToPlayer.IsAllieOf(LocalBattlePlayer))
+			        continue;
+		        
+		        DeployTargetComponent component = componentRef.GetValue();
+		        patternBuilder.WithGroup(component.deployPattern, gridMember.coordinates);
+	        }
         }
     }
 }

@@ -17,6 +17,7 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Mapping
         public interface IPatternContainer : IContainer<PatternData>
         {
             void AddToBuilder(PatternData data, ref HexPatternBuilder builder);
+            void AddToBuilder(PatternData data, ref HexPatternBuilder builder, HexCoordinates origin);
         }
         private sealed class PatternContainer<TData, TBehaviour, TPattern>
             : Container<TData, TBehaviour>, IPatternContainer
@@ -28,22 +29,27 @@ namespace ATCG.Battle.Cards.Capacities.Behaviours.Mapping
 
             public void AddToBuilder(PatternData data, ref HexPatternBuilder builder)
             {
+	            AddToBuilder(data, ref builder, builder.origin);
+            }
+
+            public void AddToBuilder(PatternData data, ref HexPatternBuilder builder, HexCoordinates origin)
+            {
                 if (data is TData t)
                 {
                     TPattern pattern = behaviour.CreatePattern(t);
                     if (data.IsAdditive)
                     {
                         if(data.OverridePatternOrigin)
-                            builder.With(pattern, builder.origin + data.Offset);
+                            builder.With(pattern, origin + data.Offset);
                         else
-                            builder.With(pattern);
+                            builder.With(pattern, origin);
                     }
                     else
                     {
                         if(data.OverridePatternOrigin)
-                            builder.Without(pattern, builder.origin);
+                            builder.Without(pattern, origin);
                         else
-                            builder.Without(pattern);
+                            builder.Without(pattern, origin);
                     }
                 }
             }
