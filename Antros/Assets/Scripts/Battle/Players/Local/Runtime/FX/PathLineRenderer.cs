@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ATCG.Battle.Grids;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.HexGrids;
 using Helteix.Tools;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.Serialization;
 
 namespace ATCG.Battle
@@ -36,7 +38,7 @@ namespace ATCG.Battle
         {
             base.OnPhaseBegin(phase);
             lineRenderer.positionCount = 0;
-            phase.OnPathChanged += PhaseOnOnPathChanged;
+            phase.OnPathChanged += OnPathChanged;
             startingPoint = phase.startingPoint;
             ShowPath().ListenForExceptions();
         }
@@ -44,7 +46,7 @@ namespace ATCG.Battle
         protected override void OnPhaseEnd(CreatePathPhase phase)
         {
             HidePath().ListenForExceptions();
-            phase.OnPathChanged -= PhaseOnOnPathChanged;
+            phase.OnPathChanged -= OnPathChanged;
             base.OnPhaseEnd(phase);
         }
 
@@ -67,20 +69,33 @@ namespace ATCG.Battle
             target.widthMultiplier = newValue;
         }
 
-        private void PhaseOnOnPathChanged(IEnumerable<HexCoordinates> path)
+        private void OnPathChanged(IEnumerable<HexCoordinates> result)
         {
-            var array = path.ToArray();
-            var lenght = array.Length;
-            lineRenderer.positionCount = lenght + 1;
-            if (RuntimeBattlePlayer.RuntimeBattleGrid.TryGetBattleCellAt(startingPoint, out var startingCell))
-                lineRenderer.SetPosition(0, startingCell.transform.position + Vector3.up * yOffset);
-            
-            for (var i = 0; i < lenght; i++)
+            using var hexPathfinder = new HexPathfinder(10000);
+            using (ListPool<HexCoordinates>.Get(out var fullPath))
+            using (ListPool<HexCoordinates>.Get(out var segment))
             {
-                var coord = array[i];
-                if (RuntimeBattlePlayer.RuntimeBattleGrid.TryGetBattleCellAt(coord, out var cell))
-                    lineRenderer.SetPosition(i + 1, cell.transform.position + Vector3.up * yOffset);
-                
+                var from = startingPoint;
+
+                foreach (var to in result)
+                {
+                    segment.Clear();
+                    hexPathfinder.FindPath(from, to, segment, RuntimeBattlePlayer.RuntimeBattleGrid.BattleGrid);
+                    fullPath.AddRange(segment);
+                    from = to;
+                }
+
+                lineRenderer.positionCount = fullPath.Count + 1;
+
+                if (RuntimeBattlePlayer.RuntimeBattleGrid.TryGetBattleCellAt(startingPoint, out var startingCell))
+                    lineRenderer.SetPosition(0, startingCell.transform.position + Vector3.up * yOffset);
+
+                for (var i = 0; i < fullPath.Count; i++)
+                {
+                    var coord = fullPath[i];
+                    if (RuntimeBattlePlayer.RuntimeBattleGrid.TryGetBattleCellAt(coord, out var cell))
+                        lineRenderer.SetPosition(i + 1, cell.transform.position + Vector3.up * yOffset);
+                }
             }
         }
     }
