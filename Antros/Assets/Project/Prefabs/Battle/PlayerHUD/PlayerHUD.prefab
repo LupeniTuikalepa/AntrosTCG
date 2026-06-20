@@ -177,6 +177,8 @@ GameObject:
   - component: {fileID: 8169696650153378970}
   - component: {fileID: 7521804123731949181}
   - component: {fileID: 6977074139518567171}
+  - component: {fileID: 3815379678421505663}
+  - component: {fileID: 2348072266314545583}
   m_Layer: 5
   m_Name: BottomRightButtons
   m_TagString: Untagged
@@ -245,6 +247,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Runtime.UI.Other.LocalPlayerButtons
   endTurnButton: {fileID: 724570192493353553}
   giveUpButton: {fileID: 8393516892605829204}
+--- !u!225 &3815379678421505663
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021819493002656930}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &2348072266314545583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021819493002656930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92baf9d2aae14fe1952e770ee00502bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.UI.MonoHUDPhaseListener
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  group: {fileID: 3815379678421505663}
+  phaseToHide:
+  - guid: 753bcdd50ee049878702ebb36cde260b
+    isNativeType: 0
+  - guid: 6ebba7a2f0764f878fb2a9a0319556d1
+    isNativeType: 0
+  fadeDuration: 0.15
 --- !u!1 &2354522512734019193
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +449,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: 52.28861}
+  m_AnchoredPosition: {x: 26, y: 52.288574}
   m_SizeDelta: {x: 451.63, y: -657.342}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &2504005418033255266
@@ -2917,6 +2956,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6698060649930688732}
+  - component: {fileID: 2611403859018767455}
+  - component: {fileID: 3208937780961347499}
   m_Layer: 5
   m_Name: Cards
   m_TagString: Untagged
@@ -2946,6 +2987,41 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2611403859018767455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8175323274441218989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92baf9d2aae14fe1952e770ee00502bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.UI.MonoHUDPhaseListener
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  group: {fileID: 3208937780961347499}
+  phaseToHide:
+  - guid: 753bcdd50ee049878702ebb36cde260b
+    isNativeType: 0
+  fadeDuration: 0.15
+--- !u!225 &3208937780961347499
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8175323274441218989}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8670505482765406452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3060,7 +3136,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000015258789, y: 0}
+  m_AnchoredPosition: {x: -0.000015258789, y: -0.000030517578}
   m_SizeDelta: {x: -0.000019073486, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &191840669849860312
@@ -5769,27 +5845,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1729356618768395234, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1729356618768395234, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1729356618768395234, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 25.001236
       objectReference: {fileID: 0}
     - target: {fileID: 1729356618768395234, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 1729356618768395234, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 27.500618
       objectReference: {fileID: 0}
     - target: {fileID: 1729356618768395234, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -35
       objectReference: {fileID: 0}
     - target: {fileID: 3559344720838056263, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_text
@@ -5889,7 +5965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8710057185908218416, guid: 3703658f269ba3a4d861faa4a0d01777, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 39.598763
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -33,29 +33,9 @@ namespace ATCG.Battle.Entities.Runtime.UI.Custom
 
         public override bool Build()
         {
+            capacityName.text = capacityData.Name;
+            description.text = capacityData.Description;
             return base.Build();
         }
-        /*
-        protected override int GetCost() => capacityData.Cost;
-
-
-        protected override bool IsButtonCompatible() => capacityData != null;
-
-        protected override bool Build()
-        {
-            if (capacityData != null)
-            {
-                capacityName.text = capacityData.Name;
-                description.text = capacityData.Description;
-            }
-
-            return base.Build(TODO);
-        }
-
-        protected override void OnClick(BaseEventData baseEventData)
-        {
-            RuntimeEntity.PrepareForCapacityCast(capacityData);
-        }
-        */
     }
 }

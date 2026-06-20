@@ -3,6 +3,7 @@ using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Capacities.Data.Effects;
+using UnityEngine;
 
 namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
