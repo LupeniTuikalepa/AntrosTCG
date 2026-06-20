@@ -1,12 +1,15 @@
+using System;
+using System.Collections.Generic;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Grids;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using ATCG.HexGrids.Patterns;
+using UnityEngine;
 
-public readonly struct BattlePatternController : IHexPatternController
+public readonly struct BattlePatternController : IHexPatternController, IDisposable
 {
     public HexGrid HexGrid => battleGrid.grid;
-
     public readonly BattleGrid battleGrid;
 
     public BattlePatternController(BattleGrid battleGrid)
@@ -22,11 +25,13 @@ public readonly struct BattlePatternController : IHexPatternController
     public bool Blocks(HexCoordinates c)
     {
         if (battleGrid.TryGetBattleCell(c, out var cell))
-        {
-            if(cell.HasPhysicalMember())
-                return true;
-        }
+            return !cell.HasPhysicalMember();
 
-        return false;
+        return true;
+    }
+
+    public void Dispose()
+    {
+        // TODO release managed resources here
     }
 }

@@ -10,6 +10,7 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Lookups;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
@@ -51,7 +52,8 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             HexCoordinates[] corners = new HexCoordinates[HexOperations.DirectionsCount];
             HexCoordinates center = new HexCoordinates(0, 0);
 
-            using HexPatternBuilder<BattlePatternController> patternBuilder = new HexPatternBuilder<BattlePatternController>(center, new BattlePatternController(LocalBattlePlayer.BattlePhase.BattleGrid));
+            DeployBattlePatternController patternController = new DeployBattlePatternController(LocalBattlePlayer.BattlePhase.BattleGrid, LocalBattlePlayer);
+            using var patternBuilder = new HexPatternBuilder<DeployBattlePatternController>(center, patternController);
 
             for (int i = 0; i < HexOperations.DirectionsCount; i++)
             {
@@ -65,11 +67,12 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
 	            HexCoordinates a = corners[edge];
 	            HexCoordinates b = corners[(edge+1)% HexOperations.DirectionsCount];
 	            patternBuilder.With(new LinePattern(a), b);
+                Debug.Log("ha");
             }
 
             GetAllDeployTarget(patternBuilder);
 
-            SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new SelectEntityPhase<DeployableCellFilter>(
+            SelectEntityPhase<DeployableCellFilter, DeployBattlePatternController> selectEntityPhase = new(
                 LocalBattlePlayer,
                 new DeployableCellFilter(),
                 patternBuilder,
@@ -94,7 +97,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             await deployCardCommand.RunAsync(LocalBattlePlayer.BattlePhase);
         }
 
-        private void GetAllDeployTarget(HexPatternBuilder<BattlePatternController> patternBuilder)
+        private void GetAllDeployTarget(HexPatternBuilder<DeployBattlePatternController> patternBuilder)
         {
 	        foreach (ComponentRef<DeployTargetComponent> componentRef in LocalBattlePlayer.BattlePhase.world.Query<DeployTargetComponent>())
 	        {

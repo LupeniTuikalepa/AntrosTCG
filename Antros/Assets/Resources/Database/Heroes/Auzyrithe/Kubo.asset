@@ -22,31 +22,31 @@ MonoBehaviour:
   <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
-  <Speed>k__BackingField: 2
+  <Speed>k__BackingField: 1
   <MovementPatterns>k__BackingField:
     <Data>k__BackingField:
-    - rid: 8719919294422974798
-  <DeployPattern>k__BackingField:
+    - rid: 2899897500470608017
+  <DeployPatterns>k__BackingField:
     <Data>k__BackingField:
-    - rid: 8719919294422974788
+    - rid: 2899897500470608027
   references:
     version: 2
     RefIds:
-    - rid: 8719919294422974788
-      type: {class: SpiralPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
+    - rid: 2899897500470608017
+      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:
         <IsAdditive>k__BackingField: 1
         <OverridePatternOrigin>k__BackingField: 0
         <Offset>k__BackingField:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
-    - rid: 8719919294422974798
-      type: {class: SpiralPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
+        <Distance>k__BackingField: 2
+    - rid: 2899897500470608027
+      type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:
         <IsAdditive>k__BackingField: 1
         <OverridePatternOrigin>k__BackingField: 0
         <Offset>k__BackingField:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
+        <Distance>k__BackingField: 2

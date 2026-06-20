@@ -23,11 +23,11 @@ namespace ATCG.Capacities
 
         [field: BoxGroup("Behaviour")]
         [field: BoxGroup("Behaviour/Patterns")]
-        [field: SerializeReference, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
+        [field: SerializeField, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public PatternGroup CastPatterns { get; private set; }
 
         [field: BoxGroup("Behaviour/Patterns")]
-        [field: SerializeReference, Tooltip("Patterns of cells affected by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
+        [field: SerializeField, Tooltip("Patterns of cells affected by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public PatternGroup FirePatterns { get; private set; }
 
         [field: BoxGroup("Behaviour/Effects")]

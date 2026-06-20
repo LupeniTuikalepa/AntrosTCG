@@ -18,12 +18,13 @@ MonoBehaviour:
   <Description>k__BackingField: "Invoque une statue de gel sur n'importe qu'elle
     case du plateau.\nL'utilisateur pourra dans les tours suivant \xE9changer sa
     place avec la statue de Gel."
-  <CastPatterns>k__BackingField: []
-  <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <CellsHitEffects>k__BackingField: []
-  <AlliesHitEffects>k__BackingField: []
-  <OpponentsHitEffects>k__BackingField: []
+  <HitEffects>k__BackingField:
+  - rid: 2899897500470608034
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2899897500470608034
+      type: {class: DamageEffectData, ns: ATCG.Capacities.Data.Effects, asm: ATCG.Core}
+      data:
+        <Quantity>k__BackingField: 3

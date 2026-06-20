@@ -25,25 +25,6 @@ namespace ATCG.Battle.Entities
             return false;
         }
 
-        public ComponentQuery<T, TFilter> Query<TFilter, T>(in TFilter filter)
-            where TFilter : IFilter<T>
-            where T : struct, IEntityComponent
-        {
-            int id = ComponentID<T>.ID;
-            if (stores[id] is not ComponentStore<T> store)
-                return default;
-
-            return new ComponentQuery<T, TFilter>(store, filter, this);
-        }
-
-        public ComponentQuery<T> Query<T>() where T : struct, IEntityComponent
-        {
-            int id = ComponentID<T>.ID;
-            if (stores[id] is not ComponentStore<T> store)
-                return default;
-
-            return new ComponentQuery<T>(store, this);
-        }
 
         public bool HasComponent<T>(Entity e) where T : struct, IEntityComponent
         {

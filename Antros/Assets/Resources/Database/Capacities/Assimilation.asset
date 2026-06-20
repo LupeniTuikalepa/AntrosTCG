@@ -17,20 +17,13 @@ MonoBehaviour:
   <Name>k__BackingField: Assimilation
   <Description>k__BackingField: "Copie le pouvoir d'un entit\xE9 d'une distance maximum
     de 2"
-  <CastPatterns>k__BackingField:
-  - rid: 8621190650691584287
-  <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <HitEffects>k__BackingField: []
+  <HitEffects>k__BackingField:
+  - rid: 2899897500470608037
   references:
     version: 2
     RefIds:
-    - rid: 8621190650691584287
-      type: {class: FloodFillPatternData, ns: ATCG.Capacities.Data, asm: ATCG.Core}
+    - rid: 2899897500470608037
+      type: {class: DamageEffectData, ns: ATCG.Capacities.Data.Effects, asm: ATCG.Core}
       data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 3
+        <Quantity>k__BackingField: 3

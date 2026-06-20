@@ -73,7 +73,7 @@ namespace ATCG.Battle
 		        return;
 
 	        //Le player a l'origine de l'action perd de la mana
-	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(fromPlayer, GameMetrics.Current.BasicAttackCost);
+	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(fromPlayer, -GameMetrics.Current.BasicAttackCost);
 	        await manaCost.RunAsync(battlePhase);
 
 	        for (int i = 0; i < result.Length; i++)

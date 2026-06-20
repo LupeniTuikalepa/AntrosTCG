@@ -18,12 +18,13 @@ MonoBehaviour:
   <Description>k__BackingField: "Un rayon touche l'enemie le plus proche et inflige
     4 d\xE9gats. Si un autre est pr\xE9sent \xE0 moins de deux case, celui-ci re\xE7oit
     le double de degats et ainsi de suite."
-  <CastPatterns>k__BackingField: []
-  <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <CellsHitEffects>k__BackingField: []
-  <AlliesHitEffects>k__BackingField: []
-  <OpponentsHitEffects>k__BackingField: []
+  <HitEffects>k__BackingField:
+  - rid: 2899897500470608035
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2899897500470608035
+      type: {class: DamageEffectData, ns: ATCG.Capacities.Data.Effects, asm: ATCG.Core}
+      data:
+        <Quantity>k__BackingField: 3

@@ -1,5 +1,6 @@
 ﻿using System;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Lookups;
 using ATCG.Battle.Entities.Queries;
 
 namespace ATCG.Battle.Entities
@@ -11,6 +12,31 @@ namespace ATCG.Battle.Entities
             return new EntityQueryResult(this, entityQuery);
         }
 
+        public ComponentQuery<T, TFilter> Query<TFilter, T>(in TFilter filter)
+            where TFilter : IFilter<T>
+            where T : struct, IEntityComponent
+        {
+            int id = ComponentID<T>.ID;
+            if (stores[id] is not ComponentStore<T> store)
+                return default;
+
+            return new ComponentQuery<T, TFilter>(store, filter, this);
+        }
+
+        public ComponentQuery<T> Query<T>() where T : struct, IEntityComponent
+        {
+            int id = ComponentID<T>.ID;
+            if (stores[id] is not ComponentStore<T> store)
+                return default;
+
+            return new ComponentQuery<T>(store, this);
+        }
+
+        /// <summary>
+        /// Gets all entities that match the lambda
+        /// </summary>
+        /// <param name="entityQuery"></param>
+        /// <param name="action"></param>
         public void Query(in EntityQuery entityQuery, Action<Entity> action)
         {
             ReadOnlySpan<int> allElements = entities.AllIDs;

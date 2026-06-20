@@ -17,12 +17,13 @@ MonoBehaviour:
   <Name>k__BackingField: "Fouet enflamm\xE9"
   <Description>k__BackingField: "Enflamme les cases \xE0 2 de port\xE9e du lanceur
     et fait 5 d\xE9gats aux entit\xE9es dessus"
-  <CastPatterns>k__BackingField: []
-  <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <CellsHitEffects>k__BackingField: []
-  <AlliesHitEffects>k__BackingField: []
-  <OpponentsHitEffects>k__BackingField: []
+  <HitEffects>k__BackingField:
+  - rid: 2899897500470608030
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2899897500470608030
+      type: {class: DamageEffectData, ns: ATCG.Capacities.Data.Effects, asm: ATCG.Core}
+      data:
+        <Quantity>k__BackingField: 3

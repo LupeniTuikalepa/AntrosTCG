@@ -1,6 +1,7 @@
 ﻿using System;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Entities.Lookups;
 using ATCG.Battle.Grids;
 using ATCG.HexGrids;
@@ -27,7 +28,24 @@ namespace ATCG.Battle.Entities.Aspects
                 return componentRef.GetValue().coordinates == coordinates && componentRef.entityID != cellEntityID;
             }
         }
+        public readonly struct IsCellPhysicalMemberFilter : IFilter<GridMemberComponent>
+        {
+            private readonly HexCoordinates coordinates;
+            private readonly int cellEntityID;
 
+            public IsCellPhysicalMemberFilter(HexCoordinates coordinates, int cellEntityID)
+            {
+                this.coordinates = coordinates;
+                this.cellEntityID = cellEntityID;
+            }
+
+            public bool IsValid(in ComponentRef<GridMemberComponent> componentRef)
+            {
+                return componentRef.GetValue().coordinates == coordinates
+                       && componentRef.entityID != cellEntityID
+                       && componentRef.EntityAddress.HasComponent<PhysicalCellMemberTag>();
+            }
+        }
         public struct Setup
         {
             public HexCoordinates coordinates;
@@ -44,7 +62,11 @@ namespace ATCG.Battle.Entities.Aspects
             IsCellMemberFilter filter = new(GridMemberComponent.coordinates, EntityAddress.entity);
             return EntityAddress.world.Query<IsCellMemberFilter, GridMemberComponent>(filter);
         }
-
+        public ComponentQuery<GridMemberComponent, IsCellPhysicalMemberFilter> GetPhysicalMembers()
+        {
+            IsCellPhysicalMemberFilter filter = new(GridMemberComponent.coordinates, EntityAddress.entity);
+            return EntityAddress.world.Query<IsCellPhysicalMemberFilter, GridMemberComponent>(filter);
+        }
         public bool CanBeMovedOn()
         {
             return !HasPhysicalMember();

@@ -16,12 +16,13 @@ MonoBehaviour:
   <Cost>k__BackingField: 0
   <Name>k__BackingField: Constitution
   <Description>k__BackingField: "Ameliore les statistiques globale de la cr\xE9ature."
-  <CastPatterns>k__BackingField: []
-  <FirePatterns>k__BackingField: []
   <CasterEffects>k__BackingField: []
-  <CellsHitEffects>k__BackingField: []
-  <AlliesHitEffects>k__BackingField: []
-  <OpponentsHitEffects>k__BackingField: []
+  <HitEffects>k__BackingField:
+  - rid: 2899897500470608032
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2899897500470608032
+      type: {class: DamageEffectData, ns: ATCG.Capacities.Data.Effects, asm: ATCG.Core}
+      data:
+        <Quantity>k__BackingField: 3

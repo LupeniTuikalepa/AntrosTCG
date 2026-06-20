@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
@@ -16,7 +17,8 @@ namespace ATCG.Battle.Entities.Aspects
             BasicAttackerComponent,
             GridMemberComponent,
             BattleIDOwner,
-			DeployTargetComponent>
+			DeployTargetComponent,
+            PhysicalCellMemberTag>
     {
         public struct Setup
         {
@@ -44,6 +46,9 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployementPatterns);
+
+            //Heroes block pathfinding, Ray Casting and such
+            componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             //TODO
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
         }
