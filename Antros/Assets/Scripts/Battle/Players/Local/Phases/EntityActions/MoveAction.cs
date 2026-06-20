@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Commands.Core;
+﻿using System;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities;
@@ -6,7 +7,9 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Enums;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns.Building;
 using ATCG.Metrics;
 using Helteix.Tools.Phases;
 using UnityEngine;
@@ -32,10 +35,37 @@ namespace ATCG.Battle
                 return;
 
             HexCoordinates center = gridMemberComponent.coordinates;
-            var movementPatternData = movementComponent.pattern;
+            PatternGroup movementPatternData = movementComponent.pattern;
 
-            var pathPhase = new CreatePathPhase(fromPlayer, center, speed, movementPatternData);
-            HexCoordinates[] result = await pathPhase.Run();
+
+            Awaitable<PhaseResult<HexCoordinates[]>> awaitable;
+
+            switch (movementComponent.movementType)
+            {
+                case MovementType.Walk:
+                    WalkingPathGenerator walkingPathGenerator = new WalkingPathGenerator();
+                    var walkPhase =  new CreatePathPhase<WalkingPathGenerator>(fromPlayer, center, speed, movementPatternData, walkingPathGenerator);
+                    awaitable = walkPhase.Run();
+                    break;
+                case MovementType.Flight:
+                    FlightPathGenerator flightPathGenerator = new FlightPathGenerator();
+                    var flightPhase =  new CreatePathPhase<FlightPathGenerator>(fromPlayer, center, speed, movementPatternData, flightPathGenerator);
+                    awaitable = flightPhase.Run();
+                    break;
+                case MovementType.Teleportation:
+                    TeleportationPathGenerator teleportationPathGenerator = new TeleportationPathGenerator();
+                    var teleportationPhase =  new CreatePathPhase<TeleportationPathGenerator>(fromPlayer, center, speed, movementPatternData, teleportationPathGenerator);
+                    awaitable = teleportationPhase.Run();
+                    break;
+                default:
+                    awaitable = null;
+                    break;
+            }
+
+            if(awaitable == null)
+                return;
+
+            HexCoordinates[] result = await awaitable;
             if (result.Length == 0)
                 return;
 
@@ -44,12 +74,8 @@ namespace ATCG.Battle
             var manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
             manaCommand.Run(battlePhase);
 
-            for (int i = 0; i < result.Length; i++)
-            {
-                var to  = result[i];
-                var pathCommand = new MovePathCommand(address, to);
-                await pathCommand.RunAsync(battlePhase);
-            }
+            var pathCommand = new MoveAlongPathCommand(address, result);
+            await pathCommand.RunAsync(battlePhase);
         }
     }
 }

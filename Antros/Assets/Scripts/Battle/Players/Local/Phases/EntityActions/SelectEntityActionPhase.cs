@@ -48,7 +48,7 @@ namespace ATCG.Battle
             return false;
         }
 
-        public int MaxSelectableEntities => 1;
+        int IEntitySelectionController.MaxSelectableEntities => 1;
 
         void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity) { }
 
@@ -56,6 +56,14 @@ namespace ATCG.Battle
         {
             if(runtimeEntity.Address == entityAddress)
                 SetResult(null);
+        }
+
+        void IEntitySelectionController.OnHoverBegin(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
+        {
+        }
+
+        void IEntitySelectionController.OnHoverEnd(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
+        {
         }
     }
 }

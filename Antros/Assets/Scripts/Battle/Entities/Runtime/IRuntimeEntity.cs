@@ -19,6 +19,8 @@ namespace ATCG.Battle.Entities.Runtime
         BattlePhase BattlePhase { get; }
         Transform actionUIRoot { get; }
 
+        void OnHovered();
+        void OnUnhovered();
         void OnSelected();
         void OnDeselected();
     }

@@ -24,14 +24,15 @@ namespace ATCG.Battle.Entities.Runtime
 		async Awaitable ICommandListener<DeathCommand>.Play(CommandListenerState state, CommandContext context,
 			DeathCommand command)
 		{
-			Manager.UnregisterRuntimeEntity(this);
-
 			state.CompleteWindUp(this);
 
 			Tween.CompleteAll(transform);
 			await OnDeath(state, context, command);
 
 			await Tween.Scale(transform, 0, .3f, Ease.InQuad);
+
+			await Despawn();
+
 			state.CompleteFollowThrough(this);
 			gameObject.SetActive(false);
 

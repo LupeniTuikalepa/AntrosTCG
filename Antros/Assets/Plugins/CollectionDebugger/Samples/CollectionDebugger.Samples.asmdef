@@ -1,4 +1,18 @@
 {
-	"name": "CollectionDebugger.Samples",
-	"references":[ "GUID:0d9e32bd442978b4ba03530451b28de0" ]
+    "name": "CollectionDebugger.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0d9e32bd442978b4ba03530451b28de0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

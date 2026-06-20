@@ -9,6 +9,7 @@ using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
+using Helteix.Tools;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -78,8 +79,8 @@ namespace ATCG.Battle.Grids.Runtime
             if (CurrentBattlePhase.BattleGrid.TryGetBattleCell(runtimeCell.Coordinates,
                     out BattleCellAspect battleCell))
             {
-                runtimeBattleCell.SetGrid(this);
-                _ = runtimeBattleCell.Spawn(EntityManager, battleCell);
+                runtimeBattleCell.Spawn(EntityManager, battleCell).ListenForExceptions();
+
                 battleCells.Add(runtimeCell.Cell, runtimeBattleCell);
                 OnBattleCellAdded?.Invoke(runtimeBattleCell);
             }

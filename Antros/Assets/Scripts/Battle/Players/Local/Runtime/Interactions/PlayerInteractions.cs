@@ -20,7 +20,6 @@ namespace ATCG.Battle
         IPhaseListener<LocalPlayerTurnPhase>
     {
         int IEntitySelectionController.MaxSelectableEntities => 1;
-
         private void OnEnable()
         {
             this.Register();
@@ -67,6 +66,14 @@ namespace ATCG.Battle
 
             if(!IsPlayerTurn())
                 return;
+        }
+
+        void IEntitySelectionController.OnHoverBegin(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
+        {
+        }
+
+        void IEntitySelectionController.OnHoverEnd(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
+        {
         }
 
         private async Awaitable SelectAction(IRuntimeEntity runtimeEntity)

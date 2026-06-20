@@ -40,12 +40,12 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetBattleID());
 
             componentsFactory.HealthComponent = new HealthComponent(setup.card.MaxHealth);
-            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns);
+            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns, setup.card.MovementType);
 
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
-            componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployementPatterns);
+            componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();

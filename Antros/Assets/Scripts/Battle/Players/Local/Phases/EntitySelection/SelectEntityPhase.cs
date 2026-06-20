@@ -37,7 +37,13 @@ namespace ATCG.Battle.Players.Local.Phases
         ISelectEntityPhase, IHUDPhase<ISelectEntityPhase>
         where T : IEntityFilter where TBuilderController : IHexPatternController
     {
+        public event Action<EntityAddress> OnEntitySelected;
+        public event Action<EntityAddress> OnEntityUnselected;
+        public event Action<EntityAddress> OnEntityHovered;
+        public event Action<EntityAddress> OnEntityUnhovered;
+
         public int MaxSelectableEntities { get; }
+
         public ChannelKey ChannelKey { get; private set; }
 
         public bool IsWaiting { get; private set; }
@@ -174,29 +180,27 @@ namespace ATCG.Battle.Players.Local.Phases
 
         public void ClearSelection() => selection.Clear();
 
-        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
+        void IEntitySelectionController.OnSelected(IRuntimeEntity runtimeEntity, ref EntityAddress address)
         {
             if (!IsWaiting)
                 return;
 
-            if (!IsInPattern(selectedEntity))
+            if (!IsInPattern(address))
             {
                 selection.Clear();
                 IsWaiting = false;
                 return;
             }
 
-            if (!Accepts(selectedEntity))
-            {
-                if (IsRelated(selectedEntity, out EntityAddress related))
-                    selectedEntity = related;
-                else
-                    return;
-            }
+            if (!AcceptsWithRelated(ref address))
+                return;
 
-            selection.Add(selectedEntity);
+
+            selection.Add(address);
             if (selection.Count >= MaxSelectableEntities)
                 IsWaiting = false;
+
+            OnEntitySelected?.Invoke(address);
         }
 
         void IEntitySelectionController.OnUnselected(IRuntimeEntity runtimeEntity, ref EntityAddress address)
@@ -204,7 +208,47 @@ namespace ATCG.Battle.Players.Local.Phases
             if (!IsWaiting)
                 return;
 
-            selection?.Remove(runtimeEntity.Address);
+
+            if (!AcceptsWithRelated(ref address))
+                return;
+
+
+            selection?.Remove(address);
+            OnEntityUnselected?.Invoke(address);
+        }
+        void IEntitySelectionController.OnHoverBegin(IRuntimeEntity runtimeEntity, ref EntityAddress address)
+        {
+            if (!IsWaiting)
+                return;
+
+            if (!AcceptsWithRelated(ref address))
+                return;
+
+            OnEntityHovered?.Invoke(address);
+        }
+
+        void IEntitySelectionController.OnHoverEnd(IRuntimeEntity runtimeEntity, ref EntityAddress address)
+        {
+            if (!IsWaiting)
+                return;
+
+            if (!AcceptsWithRelated(ref address))
+                return;
+
+            OnEntityUnhovered?.Invoke(address);
+        }
+
+        private bool AcceptsWithRelated(ref EntityAddress address)
+        {
+            if (!Accepts(address))
+            {
+                if (IsRelated(address, out EntityAddress related))
+                    address = related;
+                else
+                    return false;
+            }
+
+            return true;
         }
     }
 }

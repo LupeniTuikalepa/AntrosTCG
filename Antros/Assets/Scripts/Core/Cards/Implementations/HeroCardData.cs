@@ -1,4 +1,5 @@
 ﻿using ATCG.Capacities.Data;
+using ATCG.Enums;
 using ATCG.HexGrids.Patterns.Building;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -22,7 +23,8 @@ namespace ATCG.Cards.Implementations
 
 		[field: SerializeField, BoxGroup("Movement")]
 		public PatternGroup MovementPatterns { get; private set; }
-
+		[field: SerializeField, BoxGroup("Movement")]
+		public MovementType MovementType { get; private set; }
 		[field: SerializeField, BoxGroup("Deploy")]
 		public PatternGroup DeployPatterns { get; private set; }
 	}

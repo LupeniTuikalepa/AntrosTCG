@@ -6,8 +6,7 @@ namespace ATCG.Battle.Entities.Runtime
 {
     public abstract partial class RuntimeEntity<T> :
         IPointerClickHandler,
-        IPointerEnterHandler, IPointerExitHandler,
-        IPointerMoveHandler
+        IPointerEnterHandler, IPointerExitHandler
     {
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
@@ -18,42 +17,23 @@ namespace ATCG.Battle.Entities.Runtime
                 else
                     Select();
             }
-
-            OnPointerClick(eventData);
         }
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
-            IsHovered = true;
-            OnPointerEnter(eventData);
-            Model.EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+            Manager.BeginHover(this);
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
-            IsHovered = false;
-            OnPointerExit(eventData);
-            Model.DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+            Manager.EndHover(this);
         }
 
-        void IPointerMoveHandler.OnPointerMove(PointerEventData eventData)
-        {
-            OnPointerMove(eventData);
-        }
-        protected virtual void OnPointerClick(PointerEventData eventData)
+        protected virtual void OnHovered()
         {
         }
 
-        protected virtual void OnPointerMove(PointerEventData eventData)
-        {
-
-        }
-
-        protected virtual void OnPointerEnter(PointerEventData eventData)
-        {
-        }
-
-        protected virtual void OnPointerExit(PointerEventData eventData)
+        protected virtual void OnUnhovered()
         {
         }
 

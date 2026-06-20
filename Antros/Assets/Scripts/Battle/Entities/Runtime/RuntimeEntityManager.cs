@@ -14,6 +14,8 @@ namespace ATCG.Battle.Entities.Runtime
 {
     public partial class RuntimeEntityManager : MonoBehaviour, IRuntimeBattlePlayerComponent<LocalBattlePlayer>
     {
+        public event Action<IRuntimeEntity> OnEntityHoverBegin;
+        public event Action<IRuntimeEntity> OnEntityHoverEnd;
         public event Action<IRuntimeEntity> OnEntitySelected;
         public event Action<IRuntimeEntity> OnEntityDeselected;
 
@@ -23,9 +25,21 @@ namespace ATCG.Battle.Entities.Runtime
             {
                 foreach (Entity entity in selectedEntities)
                 {
-                    if(runtimeEntities.TryGetValue(entity, out IRuntimeEntity runtimeEntity))
+                    if (runtimeEntities.TryGetValue(entity, out IRuntimeEntity runtimeEntity))
                         yield return runtimeEntity;
                 }
+            }
+        }
+
+        public IRuntimeEntity HoveredEntity
+        {
+            get
+            {
+                if (hoveredEntity.IsValid &&
+                    runtimeEntities.TryGetValue(hoveredEntity, out IRuntimeEntity runtimeEntity))
+                    return runtimeEntity;
+
+                return null;
             }
         }
 
@@ -43,16 +57,16 @@ namespace ATCG.Battle.Entities.Runtime
 
 
         private List<Entity> selectedEntities;
+        private Entity hoveredEntity;
 
 
         private Dictionary<Entity, IRuntimeEntity> runtimeEntities;
 
 
-
         private void Awake()
         {
             runtimeEntities = new Dictionary<Entity, IRuntimeEntity>();
-            selectedEntities = new ();
+            selectedEntities = new();
 
             Selectable = new Condition();
             SelectionController = new Priority<IEntitySelectionController>(new DefaultSelectionController());
@@ -74,12 +88,14 @@ namespace ATCG.Battle.Entities.Runtime
             this.Unregister();
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(
+            IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             RuntimeBattlePlayer = runtimeBattlePlayer;
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Disconnect(
+            IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             RuntimeBattlePlayer = null;
         }
@@ -96,12 +112,14 @@ namespace ATCG.Battle.Entities.Runtime
 
         public bool TryGetRuntimeEntity(EntityAddress address, out IRuntimeEntity runtimeEntity) =>
             TryGetRuntimeEntity(address.entity, out runtimeEntity);
+
         public bool TryGetRuntimeEntity(Entity entity, out IRuntimeEntity runtimeEntity)
         {
             if (entity.IsValid)
             {
                 return runtimeEntities.TryGetValue(entity, out runtimeEntity);
             }
+
             runtimeEntity = null;
             return false;
         }
@@ -109,9 +127,44 @@ namespace ATCG.Battle.Entities.Runtime
 
         #region Selection
 
+        public void BeginHover(IRuntimeEntity runtimeEntity)
+        {
+            if (!Selectable)
+                return;
+
+            if (hoveredEntity.IsValid && TryGetRuntimeEntity(hoveredEntity, out IRuntimeEntity entity))
+                EndHover(entity);
+
+            EntityAddress address = runtimeEntity.Address;
+            SelectionController.Value.OnHoverBegin(runtimeEntity, ref address);
+
+            if (TryGetRuntimeEntity(address, out runtimeEntity))
+            {
+                runtimeEntity.OnHovered();
+                OnEntityHoverBegin?.Invoke(runtimeEntity);
+            }
+        }
+
+        public void EndHover(IRuntimeEntity runtimeEntity)
+        {
+            if (!Selectable)
+                return;
+            if (hoveredEntity.IsValid && TryGetRuntimeEntity(hoveredEntity, out IRuntimeEntity entity))
+            {
+                EntityAddress address = runtimeEntity.Address;
+                SelectionController.Value.OnHoverEnd(runtimeEntity, ref address);
+
+                if (TryGetRuntimeEntity(address, out runtimeEntity))
+                {
+                    runtimeEntity.OnUnhovered();
+                    OnEntityHoverEnd?.Invoke(runtimeEntity);
+                }
+            }
+        }
+
         public void Select(Entity entity)
         {
-            if(runtimeEntities.TryGetValue(entity, out IRuntimeEntity runtimeEntity))
+            if (runtimeEntities.TryGetValue(entity, out IRuntimeEntity runtimeEntity))
                 Select(runtimeEntity);
         }
 
@@ -125,8 +178,6 @@ namespace ATCG.Battle.Entities.Runtime
 
             if (TryGetRuntimeEntity(address, out runtimeEntity))
             {
-                RegisterRuntimeEntity(runtimeEntity);
-
                 EnsureSelectableSlot(1);
                 selectedEntities.Add(runtimeEntity.Address);
                 runtimeEntity.OnSelected();
@@ -136,12 +187,12 @@ namespace ATCG.Battle.Entities.Runtime
 
         public void Unselect(Entity entity)
         {
-            if(runtimeEntities.TryGetValue(entity, out IRuntimeEntity runtimeEntity))
+            if (runtimeEntities.TryGetValue(entity, out IRuntimeEntity runtimeEntity))
                 Unselect(runtimeEntity);
         }
+
         public void Unselect(IRuntimeEntity runtimeEntity)
         {
-            RegisterRuntimeEntity(runtimeEntity);
             EntityAddress address = runtimeEntity.Address;
             SelectionController.Value.OnUnselected(runtimeEntity, ref address);
 
@@ -168,14 +219,14 @@ namespace ATCG.Battle.Entities.Runtime
 
         private void EnsureSelectableSlot(int quantity)
         {
-            if(SelectionController.Value == null)
+            if (SelectionController.Value == null)
                 return;
 
             int maxSelectableEntities = SelectionController.Value.MaxSelectableEntities;
 
             if (quantity >= maxSelectableEntities)
                 quantity = maxSelectableEntities;
-            if(quantity <= 0)
+            if (quantity <= 0)
                 return;
 
             int remaining = maxSelectableEntities - selectedEntities.Count;
@@ -185,12 +236,10 @@ namespace ATCG.Battle.Entities.Runtime
             }
         }
 
+        public bool IsHovered(IRuntimeEntity runtimeEntity) => hoveredEntity == runtimeEntity.Address.entity;
+
         public bool IsSelected(IRuntimeEntity runtimeEntity) => selectedEntities.Contains(runtimeEntity.Address);
 
-
-
         #endregion
-
-
     }
 }

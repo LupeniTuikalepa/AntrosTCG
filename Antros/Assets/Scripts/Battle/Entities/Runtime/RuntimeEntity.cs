@@ -27,14 +27,15 @@ namespace ATCG.Battle.Entities.Runtime
         public BattlePhase BattlePhase => LocalBattlePlayer.BattlePhase;
 
         public EntityAddress Address => Aspect.EntityAddress;
+
         public bool IsSelected => Manager.IsSelected(this);
 
+        public bool IsHovered => Manager.IsHovered(this);
         public T Aspect { get; private set; }
 
 
         public RuntimeEntityManager Manager { get; private set; }
 
-        public bool IsHovered { get; private set; }
 
         public Condition IsInteractable { get; private set; }
 
@@ -44,6 +45,7 @@ namespace ATCG.Battle.Entities.Runtime
 
         [field: SerializeField]
         public Transform actionUIRoot { get; private set; }
+
 
         protected virtual void Awake()
         {
@@ -67,15 +69,18 @@ namespace ATCG.Battle.Entities.Runtime
             Aspect = aspect;
             Manager = manager;
 
+            Manager.RegisterRuntimeEntity(this);
+
             await Awaitable.MainThreadAsync();
             OnEntityConnected?.Invoke(aspect);
         }
 
-
-        public virtual void Disconnect()
+        public virtual async Awaitable Despawn()
         {
-            T last = Aspect;
+            await Awaitable.MainThreadAsync();
 
+            T last = Aspect;
+            Manager.UnregisterRuntimeEntity(this);
             Aspect = default;
             Manager = null;
 
@@ -89,16 +94,27 @@ namespace ATCG.Battle.Entities.Runtime
 
         void IRuntimeEntity.OnSelected()
         {
-            OnSelected();
             Model.EnableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
+            OnSelected();
             OnEntitySelected?.Invoke();
         }
 
         void IRuntimeEntity.OnDeselected()
         {
-            OnDeselected();
             Model.DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
+            OnDeselected();
             OnEntityDeselected?.Invoke();
+        }
+        void IRuntimeEntity.OnHovered()
+        {
+            OnHovered();
+            Model.EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+        }
+
+        void IRuntimeEntity.OnUnhovered()
+        {
+            OnUnhovered();
+            Model.DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
         }
     }
 }

@@ -29,13 +29,7 @@ namespace ATCG.HexGrids.Patterns
         {
             HexCoordinates a = hasExtremity ? start : from;
             HexCoordinates b = end;
-
-            foreach (var point in a.GetLine(b))
-            {
-                yield return point;
-                if(controller.Blocks(point))
-                    break;
-            }
+            return a.GetLine(b);
         }
     }
 }

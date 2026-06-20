@@ -2,6 +2,7 @@
 using ATCG.Battle.Players;
 using ATCG.Capacities.Data;
 using ATCG.Cards.Implementations;
+using ATCG.Enums;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.ChanneledProperties.Formulas;
@@ -16,7 +17,8 @@ namespace ATCG.Battle.Cards
         public int Speed => Data.Speed;
         public int Strength => Data.Strength;
         public PatternGroup MovementPatterns => Data.MovementPatterns;
-        public PatternGroup DeployementPatterns => Data.DeployPatterns;
+        public PatternGroup DeployPatterns => Data.DeployPatterns;
+        public MovementType MovementType => Data.MovementType;
 
         public HeroBattleCard(HeroCardData data, IBattlePlayer player) : base(data, player)
         {
