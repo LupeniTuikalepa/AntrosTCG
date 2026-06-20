@@ -24,6 +24,6 @@ namespace ATCG.Cards.Implementations
 		public PatternGroup MovementPatterns { get; private set; }
 
 		[field: SerializeField, BoxGroup("Deploy")]
-		public PatternGroup DeployPattern { get; private set; }
+		public PatternGroup DeployPatterns { get; private set; }
 	}
 }

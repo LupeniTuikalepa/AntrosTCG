@@ -6,6 +6,8 @@ using Helteix.Tools.DataMapping;
 namespace ATCG.Battle.Cards.Capacities.Behaviours.Effects
 {
     /// <summary>Behaviour contract: a data type produces an effect application.</summary>
+    ///
+    [MappedBehaviour(typeof(EffectContainer<,>), typeof(IEffectContainer))]
     public interface ICapacityEffect<in TData> : IBehaviour<TData> where TData : IEffectData
     {
         void Apply(TData data, EntityAddress target, in CapacityContext capacityContext);

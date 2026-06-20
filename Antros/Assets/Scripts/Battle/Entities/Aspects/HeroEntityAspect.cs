@@ -43,7 +43,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
-            componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.Data.DeployPattern);
+            componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployementPatterns);
             //TODO
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
         }
