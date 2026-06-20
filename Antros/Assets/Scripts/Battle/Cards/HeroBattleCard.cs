@@ -2,6 +2,7 @@
 using ATCG.Battle.Players;
 using ATCG.Capacities.Data;
 using ATCG.Cards.Implementations;
+using ATCG.HexGrids.Patterns;
 using Helteix.ChanneledProperties.Formulas;
 
 namespace ATCG.Battle.Cards

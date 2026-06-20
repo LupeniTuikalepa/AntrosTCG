@@ -8,7 +8,12 @@ namespace ATCG.HexGrids
     [System.Serializable]
     public struct HexCoordinates : IEquatable<HexCoordinates>
     {
-        public static HexCoordinates None => new();
+        public static readonly HexCoordinates None = new();
+
+        public static readonly HexCoordinates Zero = new(0, 0);
+
+        public static readonly HexCoordinates One = new(1, 1);
+
         public bool IsValid { get; }
 
         [field: SerializeField]

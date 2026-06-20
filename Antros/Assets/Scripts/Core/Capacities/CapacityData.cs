@@ -1,6 +1,8 @@
 ﻿using System;
 using ATCG.Capacities.Data;
 using ATCG.Databases;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -22,11 +24,11 @@ namespace ATCG.Capacities
         [field: BoxGroup("Behaviour")]
         [field: BoxGroup("Behaviour/Patterns")]
         [field: SerializeReference, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public PatternData[] CastPatterns { get; private set; }
+        public PatternGroup CastPatterns { get; private set; }
 
         [field: BoxGroup("Behaviour/Patterns")]
         [field: SerializeReference, Tooltip("Patterns of cells affected by the capacity"), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
-        public PatternData[] FirePatterns { get; private set; }
+        public PatternGroup FirePatterns { get; private set; }
 
         [field: BoxGroup("Behaviour/Effects")]
         [field: SerializeReference, Tooltip("Effect applied on the caster."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
@@ -40,9 +42,6 @@ namespace ATCG.Capacities
         protected override void Reset()
         {
             base.Reset();
-
-            CastPatterns = Array.Empty<PatternData>();
-            FirePatterns = Array.Empty<PatternData>();
 
             CasterEffects = Array.Empty<IEffectData>();
             HitEffects = Array.Empty<IEffectData>();

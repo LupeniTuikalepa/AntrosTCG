@@ -1,14 +1,9 @@
 ﻿using System.Linq;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Cards.Capacities;
-using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
-using ATCG.Capacities.Data;
-using ATCG.Cards.Implementations;
 using ATCG.HexGrids;
-using ATCG.HexGrids.Grids;
 
 namespace ATCG.Battle.Entities.Aspects
 {

@@ -45,6 +45,10 @@ namespace ATCG.Battle.Entities.Aspects
             return EntityAddress.world.Query<IsCellMemberFilter, GridMemberComponent>(filter);
         }
 
+        public bool CanBeMovedOn()
+        {
+            return !HasPhysicalMember();
+        }
 
         public bool HasPhysicalMember()
         {
@@ -93,9 +97,5 @@ namespace ATCG.Battle.Entities.Aspects
             }
         }
 
-        public bool CanBeMovedOn()
-        {
-            return !HasMembers;
-        }
     }
 }

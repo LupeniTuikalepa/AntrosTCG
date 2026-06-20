@@ -5,12 +5,12 @@ using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.GameModes;
-using ATCG.Battle.Grids.Patterns;
-using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
 using ATCG.Metrics;
 using Helteix.Tools.Phases;
 using UnityEngine;
@@ -57,7 +57,8 @@ namespace ATCG.Battle
 	        HexCoordinates center = battleGridElement.coordinates;
 	        int radius = GameMetrics.Current.BasicAttackRange;
 
-	        using HexPatternBuilder builder = new HexPatternBuilder(center)
+	        BattlePatternController patternController = new BattlePatternController(BattleGrid);
+	        using HexPatternBuilder<BattlePatternController> builder = new HexPatternBuilder<BattlePatternController>(center, patternController)
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 

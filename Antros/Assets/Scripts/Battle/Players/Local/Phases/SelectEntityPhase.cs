@@ -10,9 +10,9 @@ using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players.Local.UI;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns.Building;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -34,7 +34,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private HashSet<EntityAddress> selection;
 
-        public readonly HexPatternBuilder pattern;
+        public readonly HexPatternBuilder<BattlePatternController> pattern;
 
         private readonly T filter;
 
@@ -54,7 +54,7 @@ namespace ATCG.Battle.Players.Local.Phases
             return count;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder<BattlePatternController> pattern,
             int maxSelectableEntities = 1) : base(localBattlePlayer)
         {
             this.filter = filter;
@@ -63,7 +63,7 @@ namespace ATCG.Battle.Players.Local.Phases
             dragPhase = null;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder<BattlePatternController> pattern,
             CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.filter = filter;

@@ -7,9 +7,9 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Capacities.Data;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -19,12 +19,12 @@ namespace ATCG.Battle.Players.Local.Phases
     public class CreatePathPhase : LocalPlayerPhase<HexCoordinates[]>
     {
         public event Action<IEnumerable<HexCoordinates>> OnPathChanged;
-        
+
         public readonly HexCoordinates startingPoint;
-        
+
         private readonly int speed;
-        private readonly PatternData[] patternData;
-        
+        private readonly PatternGroup patternGroup;
+
         private readonly struct GridFilter : IEntityFilter
         {
             public bool Accepts(EntityAddress entityAddress)
@@ -32,12 +32,12 @@ namespace ATCG.Battle.Players.Local.Phases
                 return entityAddress.Is<BattleCellAspect>(out var cell) && cell.CanBeMovedOn();
             }
         }
-        
-        public CreatePathPhase(LocalBattlePlayer localBattlePlayer,HexCoordinates startingPoint , int speed, PatternData[] patternData) : base(localBattlePlayer)
+
+        public CreatePathPhase(LocalBattlePlayer localBattlePlayer,HexCoordinates startingPoint , int speed, PatternGroup patternGroup) : base(localBattlePlayer)
         {
             this.startingPoint = startingPoint;
             this.speed = speed;
-            this.patternData = patternData;
+            this.patternGroup = patternGroup;
         }
 
         protected override async Awaitable<HexCoordinates[]> Execute(CancellationToken token)
@@ -48,15 +48,15 @@ namespace ATCG.Battle.Players.Local.Phases
                 var center  = startingPoint;
                 for (int i = 0; i < speed; i++)
                 {
-                    using HexPatternBuilder builder = patternData
-                        .ToPatternBuilder(center)
+                    using HexPatternBuilder<BattlePatternController> builder = new HexPatternBuilder<BattlePatternController>(center, new BattlePatternController(BattleGrid))
+                        .With(patternGroup, center)
                         .Without(center);
-                    
+
                     EntityAddress[] result = await new SelectEntityPhase<GridFilter>(LocalBattlePlayer, filter, builder);
-                    
+
                     if (result.Length <= 0)
                         return Array.Empty<HexCoordinates>();
-                    
+
                     for (int j = 0; j < result.Length; j++)
                     {
                         var selectedCell = result[j];

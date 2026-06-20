@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using ATCG.Battle.Grids.Patterns.Building;
+using ATCG.HexGrids.Patterns.Building;
 
 namespace ATCG.Battle.Entities.Components
 {

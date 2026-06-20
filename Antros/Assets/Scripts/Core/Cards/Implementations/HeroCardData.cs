@@ -1,5 +1,5 @@
-﻿using ATCG.Battle.Grids.Patterns.Building;
-using ATCG.Capacities.Data;
+﻿using ATCG.Capacities.Data;
+using ATCG.HexGrids.Patterns.Building;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

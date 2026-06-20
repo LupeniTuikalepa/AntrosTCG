@@ -5,12 +5,13 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
 using ATCG.Capacities.Data;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.Phases;
 using UnityEngine;
 
@@ -34,17 +35,20 @@ namespace ATCG.Battle
 
         public override async Awaitable Execute(EntityAddress address, BattlePhase battlePhase)
         {
-            PatternData[] patterns = capacityData.CastPatterns;
+            var patterns = capacityData.CastPatterns;
 
             //If no pattern, use the entity position
-            if (patterns.Length == 0)
+            if (patterns.IsEmpty)
             {
                 if (address.TryGetComponentRO(out GridMemberComponent component))
                     await ExecuteCommand(battlePhase, component.coordinates);
             }
             else
             {
-                using HexPatternBuilder patternBuilder = capacityData.CastPatterns.ToPatternBuilder(from);
+
+                BattlePatternController patternController = new BattlePatternController(BattleGrid);
+                using var patternBuilder = new HexPatternBuilder<BattlePatternController>(from, patternController)
+                    .With(capacityData.CastPatterns);
 
                 AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();
                 SelectEntityPhase<AspectFilter<BattleCellAspect> > phase = new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder);
@@ -56,7 +60,6 @@ namespace ATCG.Battle
                     EntityAddress target = result[i];
                     if (target.TryGetComponentRO(out GridMemberComponent component))
                         await ExecuteCommand(battlePhase, component.coordinates);
-
                 }
             }
         }

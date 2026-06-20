@@ -1,12 +1,15 @@
 using System;
-using ATCG.Capacities.Data;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ATCG.Battle.Grids.Patterns.Building
+namespace ATCG.HexGrids.Patterns.Building
 {
-	[Serializable]
+	[Serializable, InlineProperty]
 	public struct PatternGroup
 	{
-		[field: SerializeReference] public PatternData [] Data { get; private set; }
+		[field: SerializeReference, ListDrawerSettings(ShowFoldout = false)]
+		public PatternData [] Data { get; private set; }
+
+		public bool IsEmpty => Data == null || Data.Length == 0;
 	}
 }

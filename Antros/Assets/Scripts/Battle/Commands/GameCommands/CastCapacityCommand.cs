@@ -1,14 +1,16 @@
-﻿using ATCG.Battle.Cards.Capacities;
-using ATCG.Battle.Cards.Capacities.Behaviours.Mapping;
+﻿
+using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Patterns.Building;
 using ATCG.Capacities;
 using ATCG.Capacities.Data;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
+using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.Commands.GameCommands
 {
@@ -26,12 +28,12 @@ namespace ATCG.Battle.Commands.GameCommands
             CapacityContext capacityContext = new(this, setup, commandContext);
             CapacityData capacityData = setup.data;
 
-            HexPatternBuilder patternBuilder = new HexPatternBuilder(setup.castPoint);
+            HexPatternBuilder<BattlePatternController> patternBuilder = new(setup.castPoint, new(commandContext.Grid));
             for (int i = 0; i < capacityData.FirePatterns.Length; i++)
             {
                 PatternData patternData = capacityData.FirePatterns[i];
-                if (BattleDataMapper.TryGetFor(patternData, out PatternMapper.IPatternContainer container))
-                    container.AddToBuilder(patternData, ref patternBuilder);
+                if (Mapper.TryGet<IPatternContainer>(patternData, out var container))
+                    container.AddToBuilder(patternData, patternBuilder);
             }
 
             foreach (BattleCellAspect aspect in patternBuilder.GetBattleCells(capacityContext.BattleGrid))
@@ -42,7 +44,7 @@ namespace ATCG.Battle.Commands.GameCommands
                 for (int i = 0; i < hitEffects.Length; i++)
                 {
                     IEffectData hitData = hitEffects[i];
-                    if (BattleDataMapper.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
+                    if (Mapper.TryGet<IEffectContainer>(hitData, out var container))
                         container.TryApply(hitData, aspect.EntityAddress, in capacityContext);
                 }
 
@@ -51,7 +53,7 @@ namespace ATCG.Battle.Commands.GameCommands
                     for (int i = 0; i < hitEffects.Length; i++)
                     {
                         IEffectData hitData = hitEffects[i];
-                        if (BattleDataMapper.TryGetFor(hitData, out CapacityEffectMapper.IEffectContainer container))
+                        if (Mapper.TryGet<IEffectContainer>(hitData, out var container))
                             container.TryApply(hitData, member.EntityAddress, in capacityContext);
                     }
                 }

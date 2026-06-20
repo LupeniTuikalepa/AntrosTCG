@@ -56,15 +56,20 @@ namespace Helteix.Tools.UI
             CustomOnDestroy();
         }
 
-        protected virtual void CustomAwake() { }
-        protected virtual void CustomOnDestroy() { }
+        protected virtual void CustomAwake()
+        {
+        }
+
+        protected virtual void CustomOnDestroy()
+        {
+        }
 
 
         public void Connect(IEnumerable<T> source) => Connect(new EnumerableSource<T>(source));
 
         public virtual void Connect(IUIListSource<T> listSource)
         {
-            if(CurrentSource != null)
+            if (CurrentSource != null)
                 Disconnect();
 
             CurrentSource = listSource;
@@ -79,7 +84,7 @@ namespace Helteix.Tools.UI
 
         public virtual void Disconnect()
         {
-            if(CurrentSource == null)
+            if (CurrentSource == null)
                 return;
 
             Clear();
@@ -99,12 +104,13 @@ namespace Helteix.Tools.UI
                 ui.Connect(item);
                 return;
             }
+
             TUI p = GetPrefabFor(item);
             Transform r = GetRootFor(item);
             TUI instance = InstantiatePrefabFor(p, r);
             items.Add(item, instance);
 
-            if(items.Count > 1 && dividerPrefab)
+            if (items.Count > 1 && dividerPrefab)
             {
                 var divider = Instantiate(dividerPrefab, r);
                 int targetIndex = instance.transform.GetSiblingIndex();
@@ -137,18 +143,25 @@ namespace Helteix.Tools.UI
             using (ListPool<T>.Get(out var list))
             {
                 list.AddRange(items.Keys);
-                foreach(var key in list)
+                foreach (var key in list)
                     CurrentSourceOnItemRemoved(key);
             }
 
             (root ? root : transform).ClearChildren();
             items.Clear();
         }
+
         protected virtual Transform GetRootFor(T item) => root ? root : transform;
         protected virtual TUI InstantiatePrefabFor(TUI p, Transform t) => p.InstantiatePrefab(t);
 
         protected virtual void DestroyInstance(TUI p) => p.DestroyGameObject();
-        public bool TryGetUIFor(T item, out TUI ui) => items.TryGetValue(item, out ui);
 
+        public bool TryGetUIFor(T item, out TUI ui)
+        {
+            if (item != null)
+                return items.TryGetValue(item, out ui);
+            ui = null;
+            return false;
+        }
     }
 }
