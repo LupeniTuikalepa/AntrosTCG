@@ -7,41 +7,36 @@ using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using ATCG.HexGrids.Patterns;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids.Controllers
 {
-    public readonly struct DeployBattlePatternController : IHexPatternController
+    public readonly struct MovementPatternController : IHexPatternController
     {
         public HexGrid HexGrid => battleGrid.grid;
         public readonly BattleGrid battleGrid;
+        private readonly HexCoordinates origin;
 
-        private readonly IBattlePlayer player;
 
-        public DeployBattlePatternController(BattleGrid battleGrid, IBattlePlayer player)
+        public MovementPatternController(BattleGrid battleGrid, HexCoordinates origin)
         {
             this.battleGrid = battleGrid;
-            this.player = player;
+            this.origin = origin;
         }
 
 
         /// <summary>
         /// True if propagation stops at this coordinate. Branch onto your real
-        /// BattleGrid blocking method (wall / occupied / off-grid).
         /// </summary>
         public bool Blocks(HexCoordinates c)
         {
             if (!battleGrid.TryGetBattleCell(c, out var cell))
                 return true;
 
-            foreach (var member in cell.GetPhysicalMembers())
-            {
-                if (member.EntityAddress.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer))
-                    return !belongsToPlayer.IsAllieOf(player);
+            if (origin == c)
+                return false;
 
-                return true;
-            }
-
-            return false;
+            return !cell.CanBeMovedOn();
         }
     }
 }

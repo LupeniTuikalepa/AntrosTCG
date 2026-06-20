@@ -22,7 +22,7 @@ MonoBehaviour:
   <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 2
-  <Speed>k__BackingField: 1
+  <Speed>k__BackingField: 3
   <MovementPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 2899897500470608015

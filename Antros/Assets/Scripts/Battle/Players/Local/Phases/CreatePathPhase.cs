@@ -7,6 +7,7 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.Capacities.Data;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Building;
@@ -46,13 +47,15 @@ namespace ATCG.Battle.Players.Local.Phases
             {
                 var filter = new GridFilter();
                 var center  = startingPoint;
+                MovementPatternController controller = new MovementPatternController(BattleGrid, center);
+
                 for (int i = 0; i < speed; i++)
                 {
-                    using HexPatternBuilder<BattlePatternController> builder = new HexPatternBuilder<BattlePatternController>(center, new BattlePatternController(BattleGrid))
+                    using HexPatternBuilder<MovementPatternController> builder = new HexPatternBuilder<MovementPatternController>(center, controller)
                         .With(patternGroup, center)
                         .Without(center);
 
-                    EntityAddress[] result = await new SelectEntityPhase<GridFilter>(LocalBattlePlayer, filter, builder);
+                    EntityAddress[] result = await new SelectEntityPhase<GridFilter, MovementPatternController>(LocalBattlePlayer, filter, builder);
 
                     if (result.Length <= 0)
                         return Array.Empty<HexCoordinates>();
