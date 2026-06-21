@@ -79,13 +79,12 @@ namespace ATCG.Battle.Players.Local.Phases
             CurrentPath.Add(StartingPoint);
             for (int i = 0; i < Speed; i++)
             {
-                using HexPatternBuilder<MovementPatternController> builder =
-                    new HexPatternBuilder<MovementPatternController>(center, controller)
+                using HexPatternBuilder builder = new HexPatternBuilder(center, controller)
                         .With(PatternGroup, center)
                         .Without(center);
 
                 var selectEntityPhase =
-                    new SelectEntityPhase<GridFilter, MovementPatternController>(LocalBattlePlayer, filter, builder);
+                    new SelectEntityPhase<GridFilter>(LocalBattlePlayer, filter, builder);
 
                 selectEntityPhase.OnEntityHovered += UpdateTemporaryPath;
                 selectEntityPhase.OnEntityUnhovered -= ClearTemporaryPath;

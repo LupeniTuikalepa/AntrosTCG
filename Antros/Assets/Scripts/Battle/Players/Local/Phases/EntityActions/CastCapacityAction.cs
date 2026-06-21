@@ -47,7 +47,7 @@ namespace ATCG.Battle
             {
 
                 BattlePatternController patternController = new BattlePatternController(BattleGrid);
-                using var patternBuilder = new HexPatternBuilder<BattlePatternController>(from, patternController)
+                using var patternBuilder = new HexPatternBuilder(from, patternController)
                     .With(capacityData.CastPatterns);
 
                 AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();

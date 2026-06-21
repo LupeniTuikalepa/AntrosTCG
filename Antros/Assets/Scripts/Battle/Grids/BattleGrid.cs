@@ -29,7 +29,7 @@ namespace ATCG.Battle.Grids
         public IEnumerable<HexCoordinates> AllCellsCoordinates => battleCellsEntities.Keys;
 
 
-        public BattleGrid(BattlePhase battlePhase, uint cellRadius, uint gridRadius)
+        public BattleGrid(BattlePhase battlePhase, float cellRadius, uint gridRadius)
         {
             this.battlePhase = battlePhase;
             grid = new HexGrid(cellRadius, Vector2.zero);

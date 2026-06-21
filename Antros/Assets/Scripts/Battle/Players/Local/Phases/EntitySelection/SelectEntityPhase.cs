@@ -22,20 +22,8 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public sealed class SelectEntityPhase<T> : SelectEntityPhase<T, BattlePatternController> where T : IEntityFilter
-    {
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder<BattlePatternController> pattern, int maxSelectableEntities = 1) : base(localBattlePlayer, filter, pattern, maxSelectableEntities)
-        {
-        }
-
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder<BattlePatternController> pattern, CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer, filter, pattern, dragPhase)
-        {
-        }
-    }
-
-    public class SelectEntityPhase<T, TBuilderController> : LocalPlayerPhase<EntityAddress[]>,
-        ISelectEntityPhase, IHUDPhase<ISelectEntityPhase>
-        where T : IEntityFilter where TBuilderController : IHexPatternController
+    public sealed class SelectEntityPhase<T> : LocalPlayerPhase<EntityAddress[]>,
+        ISelectEntityPhase, IHUDPhase<ISelectEntityPhase> where T : IEntityFilter
     {
         public event Action<EntityAddress> OnEntitySelected;
         public event Action<EntityAddress> OnEntityUnselected;
@@ -52,14 +40,14 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private HashSet<EntityAddress> selection;
 
-        public readonly HexPatternBuilder<TBuilderController> pattern;
+        public readonly HexPatternBuilder pattern;
 
         private readonly T filter;
 
 
         public static int PreviewSelectableQuantity(T filter, BattlePhase phase)
         {
-            EntityQueryBuilder query = EntityQuery.WithFilter(filter);
+            EntityQueryBuilder query = EntityQuery.WithFilter<T>(filter);
 
             int count = 0;
             World world = phase.world;
@@ -72,7 +60,7 @@ namespace ATCG.Battle.Players.Local.Phases
             return count;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder<TBuilderController> pattern,
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
             int maxSelectableEntities = 1) : base(localBattlePlayer)
         {
             this.filter = filter;
@@ -81,7 +69,7 @@ namespace ATCG.Battle.Players.Local.Phases
             dragPhase = null;
         }
 
-        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder<TBuilderController> pattern,
+        public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
             CardDragPhase<IBattleCard> dragPhase) : base(localBattlePlayer)
         {
             this.filter = filter;

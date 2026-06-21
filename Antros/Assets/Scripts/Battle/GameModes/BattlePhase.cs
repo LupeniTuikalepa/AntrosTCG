@@ -21,7 +21,7 @@ namespace ATCG.Battle.GameModes
 {
     public class BattlePhase : Phase<BattleHistory>
     {
-        public uint CellRadius => GameMetrics.Current.CellRadius;
+        public float CellRadius => GameMetrics.Current.CellRadius;
         public uint GridRadius => GameMetrics.Current.GridRadius;
 
         public HexGrid HexGrid => BattleGrid.grid;

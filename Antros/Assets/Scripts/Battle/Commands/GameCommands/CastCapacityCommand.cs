@@ -28,7 +28,7 @@ namespace ATCG.Battle.Commands.GameCommands
             CapacityContext capacityContext = new(this, setup, commandContext);
             CapacityData capacityData = setup.data;
 
-            using var patternBuilder = new HexPatternBuilder<BattlePatternController>(setup.castPoint, new(commandContext.Grid))
+            using var patternBuilder = new HexPatternBuilder(setup.castPoint, new BattlePatternController(commandContext.Grid))
                 .With(capacityData.FirePatterns);
 
             foreach (BattleCellAspect aspect in patternBuilder.GetBattleCells(capacityContext.BattleGrid))

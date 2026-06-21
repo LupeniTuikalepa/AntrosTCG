@@ -1,5 +1,7 @@
 ﻿using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Runtime;
 using UnityEngine;
 
@@ -14,7 +16,9 @@ namespace ATCG.Battle.Players.Local.Runtime
 
 
         protected BattlePhase BattlePhase => Player.BattlePhase;
+        protected BattleGrid BattleGrid => BattlePhase.BattleGrid;
         protected RuntimeEntityManager RuntimeEntityManager => RuntimeLocalBattlePlayer.RuntimeEntityManager;
+        protected RuntimeBattleGrid RuntimeBattleGrid => RuntimeLocalBattlePlayer.RuntimeBattleGrid;
 
         public void Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {

@@ -54,12 +54,12 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             DeployPatternController patternController = new DeployPatternController(LocalBattlePlayer.BattlePhase.BattleGrid, LocalBattlePlayer);
             DeployableCellFilter cellFilter = new DeployableCellFilter();
 
-            using var patternBuilder = new HexPatternBuilder<DeployPatternController>(center, patternController);
+            using var patternBuilder = new HexPatternBuilder(center, patternController);
 
             LocalBattlePlayer.GetStartingLine(patternBuilder);
             GetAllDeployTarget(patternBuilder);
 
-            SelectEntityPhase<DeployableCellFilter, DeployPatternController> selectEntityPhase = new(
+            SelectEntityPhase<DeployableCellFilter> selectEntityPhase = new(
                 LocalBattlePlayer,
                 cellFilter,
                 patternBuilder,
@@ -84,7 +84,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
             await deployCardCommand.RunAsync(LocalBattlePlayer.BattlePhase);
         }
 
-        private void GetAllDeployTarget(HexPatternBuilder<DeployPatternController> patternBuilder)
+        private void GetAllDeployTarget(HexPatternBuilder patternBuilder)
         {
             World world = LocalBattlePlayer.BattlePhase.world;
             foreach (ComponentRef<DeployTargetComponent> componentRef in world.Query<DeployTargetComponent>())

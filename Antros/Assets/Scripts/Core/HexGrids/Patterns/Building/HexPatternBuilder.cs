@@ -7,14 +7,13 @@ using UnityEngine.Pool;
 
 namespace ATCG.HexGrids.Patterns.Building
 {
-    public readonly struct HexPatternBuilder<TController> : IDisposable
-        where TController : IHexPatternController
+    public readonly struct HexPatternBuilder : IDisposable
     {
-        public readonly TController controller;
+        public readonly IHexPatternController controller;
         public readonly HexCoordinates origin;
         private readonly HashSet<HexCoordinates> coordinates;
 
-        public HexPatternBuilder(IEnumerable<HexCoordinates> coordinates, TController controller)
+        public HexPatternBuilder(IEnumerable<HexCoordinates> coordinates, IHexPatternController controller)
         {
             this.controller = controller;
             this.coordinates = HashSetPool<HexCoordinates>.Get();
@@ -23,7 +22,7 @@ namespace ATCG.HexGrids.Patterns.Building
             origin = this.coordinates.FirstOrDefault();
         }
 
-        public HexPatternBuilder(HexCoordinates origin, TController controller)
+        public HexPatternBuilder(HexCoordinates origin, IHexPatternController controller)
         {
             this.origin = origin;
             this.controller = controller;
@@ -40,15 +39,15 @@ namespace ATCG.HexGrids.Patterns.Building
                     yield return cell;
         }
 
-        public HexPatternBuilder<TController> Clear()
+        public HexPatternBuilder Clear()
         {
             coordinates.Clear();
             return this;
         }
 
-        public HexPatternBuilder<TController> With(PatternGroup group) => With(group, origin);
+        public HexPatternBuilder With(PatternGroup group) => With(group, origin);
 
-        public HexPatternBuilder<TController> With(PatternGroup group, HexCoordinates source)
+        public HexPatternBuilder With(PatternGroup group, HexCoordinates source)
         {
             for (int i = 0; i < group.Data.Length; i++)
                 With(group.Data[i], source);
@@ -56,7 +55,7 @@ namespace ATCG.HexGrids.Patterns.Building
             return this;
         }
 
-        public HexPatternBuilder<TController> With(PatternData data, HexCoordinates source)
+        public HexPatternBuilder With(PatternData data, HexCoordinates source)
         {
             if (Mapper.TryGet(data, out IPatternContainer container))
                 container.AddToBuilder(data, this, source);
@@ -64,12 +63,12 @@ namespace ATCG.HexGrids.Patterns.Building
             return this;
         }
 
-        public HexPatternBuilder<TController> With(PatternData data)
+        public HexPatternBuilder With(PatternData data)
         {
             return With(data, origin);
         }
 
-        public HexPatternBuilder<TController> With<TPattern>(TPattern pattern, HexCoordinates source)
+        public HexPatternBuilder With<TPattern>(TPattern pattern, HexCoordinates source)
             where TPattern : IHexPattern
         {
             foreach (var coordinate in pattern.GetAll(source, controller))
@@ -77,19 +76,19 @@ namespace ATCG.HexGrids.Patterns.Building
 
             return this;
         }
-        public HexPatternBuilder<TController> With<TPattern>(TPattern pattern)
+        public HexPatternBuilder With<TPattern>(TPattern pattern)
             where TPattern : IHexPattern
             => With(pattern, origin);
 
-        public HexPatternBuilder<TController> With(HexCoordinates point)
+        public HexPatternBuilder With(HexCoordinates point)
         {
             coordinates.Add(point);
             return this;
         }
-        public HexPatternBuilder<TController> Without<TPattern>(TPattern pattern) where TPattern : IHexPattern
+        public HexPatternBuilder Without<TPattern>(TPattern pattern) where TPattern : IHexPattern
             => Without(pattern, origin);
 
-        public HexPatternBuilder<TController> Without<TPattern>(TPattern pattern, HexCoordinates source)
+        public HexPatternBuilder Without<TPattern>(TPattern pattern, HexCoordinates source)
             where TPattern : IHexPattern
         {
             foreach (var coordinate in pattern.GetAll(source, controller))
@@ -98,7 +97,7 @@ namespace ATCG.HexGrids.Patterns.Building
         }
 
 
-        public HexPatternBuilder<TController> Without(HexCoordinates point)
+        public HexPatternBuilder Without(HexCoordinates point)
         {
             coordinates.Remove(point);
             return this;

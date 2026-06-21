@@ -30,8 +30,15 @@ namespace ATCG.Battle.Players
             return GameMetrics.Current.GetPlayerColor(number, player.BattlePhase.PlayerCount);
         }
 
-        public static void GetStartingLine<T>(this IBattlePlayer battlePlayer, HexPatternBuilder<T> builder)
-            where T : IHexPatternController
+        public static IEnumerable<HexCoordinates> GetStartingLine(this IBattlePlayer battlePlayer)
+        {
+            HexPatternBuilder builder = new HexPatternBuilder(HexCoordinates.Zero, new BattlePatternController(battlePlayer.BattlePhase.BattleGrid));
+            GetStartingLine(battlePlayer, builder);
+
+            return builder.GetCoordinates();
+        }
+
+        public static void GetStartingLine(this IBattlePlayer battlePlayer, HexPatternBuilder builder)
         {
             HexCoordinates center = new HexCoordinates(0, 0);
             for (int i = 0; i < HexOperations.DirectionsCount; i++)

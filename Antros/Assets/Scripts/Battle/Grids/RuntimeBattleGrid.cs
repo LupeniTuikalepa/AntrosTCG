@@ -4,6 +4,7 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
@@ -11,6 +12,7 @@ using ATCG.HexGrids;
 using ATCG.HexGrids.Runtime;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -36,11 +38,25 @@ namespace ATCG.Battle.Grids.Runtime
         [field: SerializeField]
         public RuntimeEntityManager EntityManager { get; private set; }
 
+        [SerializeField, BoxGroup("Materials")]
+        private Material cellPlayerMaterial;
+        [field: SerializeField, BoxGroup("Materials")]
+        public Material CellMaterial { get; private set; }
+
+
         private Dictionary<HexCell, RuntimeBattleCell> battleCells;
+
+        private Dictionary<IBattlePlayer, Material> playerMats;
+
 
         private void Reset()
         {
             runtimeHexGrid = GetComponent<RuntimeHexGrid>();
+        }
+
+        private void Awake()
+        {
+            playerMats = new Dictionary<IBattlePlayer, Material>();
         }
 
         private void OnEnable()
@@ -57,10 +73,13 @@ namespace ATCG.Battle.Grids.Runtime
             runtimeHexGrid.OnCellRemoved -= OnGridCellRemoved;
         }
 
-        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(
-            IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
+        void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             LocalBattlePlayer = runtimeBattlePlayer.BattlePlayer;
+
+            foreach (IBattlePlayer player in runtimeBattlePlayer.BattlePlayer.BattlePhase.Players)
+            {
+            }
             runtimeHexGrid.Connect(CurrentBattlePhase.HexGrid);
         }
 
@@ -71,6 +90,21 @@ namespace ATCG.Battle.Grids.Runtime
             LocalBattlePlayer = null;
         }
 
+
+
+        public Material GetCellPlayerMaterial(IBattlePlayer player)
+        {
+            if (playerMats.TryGetValue(player, out Material mat))
+                return mat;
+
+            mat = new Material(cellPlayerMaterial)
+            {
+                color = player.GetPlayerColor(),
+                name = $"Player {player.GetPlayerNumber()} Cell Material"
+            };
+            playerMats.Add(player, mat);
+            return mat;
+        }
 
         private void OnGridCellAdded(RuntimeHexCell runtimeCell)
         {

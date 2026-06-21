@@ -10,10 +10,8 @@ namespace ATCG.HexGrids.Patterns
     /// </summary>
     public interface IPatternContainer : IContainer<PatternData>
     {
-        void AddToBuilder<TController>(PatternData data, HexPatternBuilder<TController> builder)
-            where TController : IHexPatternController;
+        void AddToBuilder(PatternData data, HexPatternBuilder builder);
 
-        void AddToBuilder<TController>(PatternData data, HexPatternBuilder<TController> builder, HexCoordinates origin)
-            where TController : IHexPatternController;
+        void AddToBuilder(PatternData data, HexPatternBuilder builder, HexCoordinates origin);
     }
 }

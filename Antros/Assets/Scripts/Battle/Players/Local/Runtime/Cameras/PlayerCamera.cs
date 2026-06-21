@@ -1,8 +1,10 @@
 using System;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Local.Runtime.Cameras;
 using ATCG.Metrics;
 using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
@@ -13,6 +15,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Players.Local.Runtime
 {
@@ -47,12 +50,37 @@ namespace ATCG.Battle.Players.Local.Runtime
         private CinemachineBrain renderCamera;
         [BoxGroup("Cinemachine"), SerializeField]
         private CinemachineCamera cinemachineCamera;
+        [BoxGroup("Cinemachine"), SerializeField]
+        private OrbitalRecentering recentering;
+
+        [BoxGroup("Cinemachine"), SerializeField]
+        private CinemachineOrbitalFollow orbitalFollow;
 
         [BoxGroup("Cinemachine"), SerializeField, TableList(AlwaysExpanded = true), ListDrawerSettings(ShowFoldout = false)]
         private CinemachineOutputChannels[] channels;
 
 
         private Vector3 lastSpeed;
+
+
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
+        {
+            OutputChannels outputChannels = GetOutputChannel();
+
+            renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
+            renderCamera.OutputCamera.targetDisplay = RuntimeLocalBattlePlayer.LocalID;
+
+            MoveCameraToPlayerLine();
+        }
+
+
+
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
+        {
+            cinemachineCamera.OutputChannel = OutputChannels.Default;
+            renderCamera.ChannelMask = OutputChannels.Default;
+        }
+
 
 
 
@@ -82,6 +110,40 @@ namespace ATCG.Battle.Players.Local.Runtime
         }
 
 
+        [Button]
+        private void MoveCameraToPlayerLine()
+        {
+            using (ListPool<Vector3>.Get(out var points))
+            {
+                foreach (var coord in RuntimeLocalBattlePlayer.BattlePlayer.GetStartingLine())
+                {
+                    if (RuntimeBattleGrid.TryGetBattleCellAt(coord, out RuntimeBattleCell runtimeBattleCell))
+                        points.Add(runtimeBattleCell.transform.position);
+                }
+
+                if (points.Count > 0)
+                {
+                    Vector3 average = Vector3.zero;
+                    foreach (var p in points)
+                        average += p;
+
+                    average /= points.Count;
+
+                    TrackingTarget.position = average;
+                    Vector3 center = RuntimeBattleGrid.transform.position;
+                    TrackingTarget.LookAt(center);
+                    Recenter();
+                }
+            }
+        }
+
+        [Button]
+        private void Recenter() => recentering.Recenter();
+
+        public void ForceCameraPosition(Vector3 position, Quaternion rotation)
+        {
+            orbitalFollow.ForceCameraPosition(position, rotation);
+        }
 
         private void MoveCameraWithPlayerInput(Vector2 input)
         {
@@ -139,23 +201,6 @@ namespace ATCG.Battle.Players.Local.Runtime
             cinemachineCamera.OutputChannel = outputChannels;
             return outputChannels;
         }
-
-        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
-        {
-            OutputChannels outputChannels = GetOutputChannel();
-
-            renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
-            renderCamera.OutputCamera.targetDisplay = RuntimeLocalBattlePlayer.LocalID;
-        }
-
-
-        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
-        {
-            cinemachineCamera.OutputChannel = OutputChannels.Default;
-            renderCamera.ChannelMask = OutputChannels.Default;
-        }
-
-
         [Serializable]
         public struct CinemachineOutputChannels
         {

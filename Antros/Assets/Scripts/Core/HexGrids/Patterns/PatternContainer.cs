@@ -16,12 +16,9 @@ namespace ATCG.HexGrids.Patterns
         {
         }
 
-        public void AddToBuilder<TController>(PatternData data, HexPatternBuilder<TController> builder)
-            where TController : IHexPatternController
-            => AddToBuilder(data, builder, builder.origin);
+        public void AddToBuilder(PatternData data, HexPatternBuilder builder) => AddToBuilder(data, builder, builder.origin);
 
-        public void AddToBuilder<TController>(PatternData data, HexPatternBuilder<TController> builder, HexCoordinates origin)
-            where TController : IHexPatternController
+        public void AddToBuilder(PatternData data, HexPatternBuilder builder, HexCoordinates origin)
         {
             if (data is not TData typed)
                 return;

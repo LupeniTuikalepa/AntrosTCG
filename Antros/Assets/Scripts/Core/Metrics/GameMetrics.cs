@@ -66,12 +66,12 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("RuntimeBattleGrid")]
         public DualPairing<int, int> PlayerBorder { get; private set; }
-        
+
         [field: SerializeField, BoxGroup("RuntimeBattleGrid"), Range(0, 30)]
         public uint GridRadius { get; private set; } = 7;
 
         [field: SerializeField, BoxGroup("RuntimeBattleGrid"), Range(0, 50)]
-        public uint CellRadius { get; private set; } = 5;
+        public float CellRadius { get; private set; } = 5;
 
 
         [field: SerializeField, BoxGroup("FXs")]

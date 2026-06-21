@@ -93,3 +93,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.HexGrids.Runtime.RuntimeBattleGrid
   runtimeHexGrid: {fileID: 7824447401510648085}
   <EntityManager>k__BackingField: {fileID: 0}
+  cellPlayerMaterial: {fileID: 2100000, guid: 5c6916370a2e83d48a21f0976d9f6ec8, type: 2}
+  <CellMaterial>k__BackingField: {fileID: 2100000, guid: dd0e1c802582ad64eac0375f1596361d, type: 2}

@@ -58,7 +58,7 @@ namespace ATCG.Battle
 	        int radius = GameMetrics.Current.BasicAttackRange;
 
 	        BattlePatternController patternController = new BattlePatternController(BattleGrid);
-	        using HexPatternBuilder<BattlePatternController> builder = new HexPatternBuilder<BattlePatternController>(center, patternController)
+	        using HexPatternBuilder builder = new HexPatternBuilder(center, patternController)
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 
