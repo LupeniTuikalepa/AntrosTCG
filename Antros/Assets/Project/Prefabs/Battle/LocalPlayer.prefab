@@ -536,6 +536,7 @@ Transform:
   - {fileID: 6462918280538959704}
   - {fileID: 3216813312829335074}
   - {fileID: 8929563192401844273}
+  - {fileID: 8980162153183915283}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7951173172287204164
@@ -2883,11 +2884,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5205329935430079946, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_Size
-      value: 0.57672757
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5205329935430079946, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5258266488561902121, guid: 1d7be2e33c1dbd14ba69ead772239208, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3607,4 +3608,98 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6790181165470097586, guid: d0f3bd4bf993f5e4ead21ccb952b9f3a, type: 3}
   m_PrefabInstance: {fileID: 3734944967631637066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7086130158561045559
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3863691666134329178}
+    m_Modifications:
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 763.0984
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 475.29877
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3250981027205044673, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: m_Name
+      value: CheatCode
+      objectReference: {fileID: 0}
+    - target: {fileID: 6194902386156035551, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: name
+      value: AddOrRemovePVandMana
+      objectReference: {fileID: 0}
+    - target: {fileID: 6194902386156035551, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      propertyPath: description
+      value: 'Touche 1 : ajoute des pv    Touche 2 : enleve des pv   Touche 3 : ajoute
+        de la mana    Touche 4 : enleve de la mana'
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3250981027205044673, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9021221415429285338}
+  m_SourcePrefab: {fileID: 100100000, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+--- !u!1 &5713717524036711926 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3250981027205044673, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+  m_PrefabInstance: {fileID: 7086130158561045559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9021221415429285338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5713717524036711926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30fa48ffa5449d2ae08c9c2a11f298a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.TeleportationCheatCode
+  name: Teleportation
+  description: "Une fois activer le Move Action, appuyer sur la touche 5 pour \xE9largir
+    la port\xE9."
+--- !u!4 &8980162153183915283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2218317708546113828, guid: 103de854c3bb8e24cabca09fc562363c, type: 3}
+  m_PrefabInstance: {fileID: 7086130158561045559}
   m_PrefabAsset: {fileID: 0}
