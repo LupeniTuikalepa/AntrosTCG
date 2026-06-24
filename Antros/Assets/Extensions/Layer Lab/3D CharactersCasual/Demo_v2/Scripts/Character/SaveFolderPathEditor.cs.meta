@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7e4486f95f6ca4bfc99f19d4b0fb4983
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308661
+  packageName: 3D Characters Pro - Fantasy
+  packageVersion: 1.0.3
+  assetPath: Assets/Layer Lab/3D CharactersCasual/Demo_v2/Scripts/Character/SaveFolderPathEditor.cs
+  uploadId: 811724

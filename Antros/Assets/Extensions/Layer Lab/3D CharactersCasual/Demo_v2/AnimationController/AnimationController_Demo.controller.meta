@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5c480f23f060544c3a6dfcb0cf50a096
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308661
+  packageName: 3D Characters Pro - Fantasy
+  packageVersion: 1.0.3
+  assetPath: Assets/Layer Lab/3D CharactersCasual/Demo_v2/AnimationController/AnimationController_Demo.controller
+  uploadId: 811724
