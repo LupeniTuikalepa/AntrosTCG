@@ -21,7 +21,7 @@ namespace Layer_lab._3D_Casual_Character.Demo2
         {
             if (!_isEnter)
             {
-                if (Input.GetMouseButton(0)) SetAnimationPanel(false);
+                //if (Input.GetMouseButton(0)) SetAnimationPanel(false);
             }
         }
 
@@ -29,7 +29,7 @@ namespace Layer_lab._3D_Casual_Character.Demo2
         {
             textAnimation.text = animationName;
         }
-        
+
         public void OnClick_Left()
         {
             UIControl.Instance.PanelAnimation.PreviousAnimation();
@@ -41,7 +41,7 @@ namespace Layer_lab._3D_Casual_Character.Demo2
             UIControl.Instance.PanelAnimation.NextAnimation();
             SetAnimationPanel(false);
         }
-        
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (UIControl.Instance.PanelAnimation.IsShow)

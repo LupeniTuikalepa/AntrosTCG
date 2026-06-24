@@ -119,10 +119,12 @@ namespace Layer_lab._3D_Casual_Character.Demo2
         private void Update()
         {
             #if UNITY_EDITOR
+            /*
             if (Input.GetKeyDown(KeyCode.S))
             {
                 CharacterPrefabSaver.SaveAsPrefab();
             }
+            */
             #endif
         }
     }
