@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a9f18abe7a1ca450d93e30ac6da32254
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308661
+  packageName: 3D Characters Pro - Fantasy
+  packageVersion: 1.0.3
+  assetPath: Assets/Layer Lab/3D CharactersCasual/Demo_v2/Scripts/AnimationBar.cs
+  uploadId: 811724
