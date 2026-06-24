@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using ATCG.Battle.Entities.Components.Implementations;
+using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
@@ -38,6 +40,11 @@ namespace ATCG.Battle.Players.Local.Phases
             localPlayerTurn.canDoBasicAttack.AddCondition(ChannelKey);
 
             localPlayerTurn.FillHand();
+
+            //TODO a enlever plus tard
+            StatusManager.UpdateAllStatusController<PoisonStatus, StatusDurationController<PoisonStatus>>(
+                player.BattlePhase.world);
+            
             return base.Initialize(token);
         }
 

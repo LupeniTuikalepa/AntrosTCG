@@ -117,6 +117,22 @@ namespace ATCG.Battle.Entities
             return id;
         }
 
+        public bool RemoveComponent(int id, Entity entity)
+        {
+            ref EntityMeta meta = ref entities[entity];
+            if (!meta.HasComponent(id))
+                return false;
+
+            if (stores[id].Has(entity.id))
+            {
+                stores[id].Remove(entity.id);
+                meta.RemoveComponentFromMask(id);
+                return true;
+            }
+
+            return false;
+        }
+        
         public bool RemoveComponent<T>(Entity e) where T : struct, IEntityComponent
         {
             ref EntityMeta meta = ref entities[e];

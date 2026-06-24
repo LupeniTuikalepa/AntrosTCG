@@ -1,0 +1,95 @@
+{
+    "version": 1,
+    "name": "CheatCodeInputActions",
+    "maps": [
+        {
+            "name": "Cheat",
+            "id": "315f3e39-9df3-4aa6-b9a3-eb204bdb2feb",
+            "actions": [
+                {
+                    "name": "AddHealth",
+                    "type": "Button",
+                    "id": "4f03b395-6ab8-4cf5-9f50-bbd04c2e503e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RemoveHealth",
+                    "type": "Button",
+                    "id": "20671e40-0307-43b8-bb95-3b5b7e983f08",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AddMana",
+                    "type": "Button",
+                    "id": "c0172d1d-8491-406f-a99e-9ec6a5dc0082",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RemoveMana",
+                    "type": "Button",
+                    "id": "ca205a1c-f12d-4682-a413-b12006b39bfe",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c1ae8a8f-263b-49d0-a007-21dd941584fa",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AddHealth",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eae6d2d3-d9b0-49dc-8c40-8633fcee2f46",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RemoveHealth",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5babec03-24db-4265-accf-a39be9b07870",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AddMana",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e78f412-3d9c-4e85-8949-4ee138119dee",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RemoveMana",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
