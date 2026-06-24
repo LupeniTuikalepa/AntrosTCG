@@ -9,7 +9,6 @@ namespace ATCG.Battle.Commands.EntityCommands
 {
     public class MoveCommand : EntityCommand<DeltaInfos<HexCoordinates>>
     {
-
         public readonly HexCoordinates destination;
 
         public MoveCommand(EntityAddress address, HexCoordinates destination) : base(address)
@@ -30,6 +29,5 @@ namespace ATCG.Battle.Commands.EntityCommands
                 infos.to = component.coordinates;
             }
         }
-        
     }
 }

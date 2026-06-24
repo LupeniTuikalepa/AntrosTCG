@@ -1,4 +1,4 @@
-using ATCG.Battle.Cards;
+/*using ATCG.Battle.Cards;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands.Players;
@@ -10,13 +10,14 @@ using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Turns;
+using ATCG.Debugging.Debugging.Cheat;
 using ATCG.Metrics;
 using Helteix.Cards.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class AddOrRemovePlayerStatsCheatCode : ICheatCode
+public class AddOrRemovePlayerStatsCheatCode : CheatCode
 {
 	public void OnAddHealth(InputAction.CallbackContext context)
 	{
@@ -60,6 +61,6 @@ public class AddOrRemovePlayerStatsCheatCode : ICheatCode
 			command.Run(Player.BattlePhase);
 			Debug.Log($"[AddOrRemovePlayerStatsCheatCode] Mana de {Player} est à {Player.CurrentMana}");
 		}
-	}
-}
+	}*/
+
 
