@@ -24,6 +24,10 @@ namespace ATCG.Battle.Entities
         {
             componentMask.Clear(ComponentID<T>.ID);
         }
+        public void RemoveComponentFromMask(int id)
+        {
+            componentMask.Clear(id);
+        }
 
         public readonly bool HasAnyComponents(in ComponentMask mask)
         {
@@ -35,9 +39,9 @@ namespace ATCG.Battle.Entities
             return componentMask.MatchesAll(mask);
         }
 
-        public readonly bool HasComponent<T>() where T : struct, IEntityComponent
-        {
-            return componentMask.Has(ComponentID<T>.ID);
-        }
+        public readonly bool HasComponent(int id) => componentMask.Has(id);
+
+        public readonly bool HasComponent<T>() where T : struct, IEntityComponent => componentMask.Has(ComponentID<T>.ID);
+
     }
 }

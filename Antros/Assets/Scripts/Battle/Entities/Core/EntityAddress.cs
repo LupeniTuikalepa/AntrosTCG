@@ -51,6 +51,19 @@ namespace ATCG.Battle.Entities
             world.AddOrSetComponent(entity, in component);
         }
 
+        public void RemoveComponent<T>() where T : struct, IEntityComponent
+        {
+            world.RemoveComponent<T>(entity);
+        }
+
+        public void RemoveAll(ComponentMask mask)
+        {
+            foreach (var id in mask)
+            {
+                world.RemoveComponent(id, entity);
+            }
+        }
+        
         public bool TryGetComponentRO<T>(out T component) where T : struct, IEntityComponent
         {
             return world.TryGetROComponent(entity, out component);

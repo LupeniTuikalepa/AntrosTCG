@@ -5,5 +5,6 @@
         void Add(int entityId);
 
         void Remove(int entityId);
+        bool Has(int entityID);
     }
 }
