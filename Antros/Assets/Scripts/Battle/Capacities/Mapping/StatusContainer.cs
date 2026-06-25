@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.Capacities.Status;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
 
@@ -13,11 +14,35 @@ namespace ATCG.Battle.Capacities.Mapping
         {
         }
 
-        public void Apply(StatusData data, EntityAddress address)
+        public void Apply(StatusData data, EntityAddress address, StatusContext context)
         {
             if (data is TStatusData typed)
             {
-                behaviour.Apply(typed, address);
+                behaviour.Apply(typed, address, context);
+            }
+        }
+
+        public void Remove(StatusData data, EntityAddress address, StatusContext context)
+        {
+            if (data is TStatusData typed)
+            {
+                behaviour.Remove(typed, address, context);
+            }
+        }
+
+        public void Tick(StatusData data, EntityAddress address, StatusContext context)
+        {
+            if (data is TStatusData typed)
+            {
+                behaviour.Tick(typed, address, context);
+            }
+        }
+
+        public void TickAll(StatusData data, StatusContext context)
+        {
+            if (data is TStatusData typed)
+            {
+                behaviour.TickAll(typed, context);
             }
         }
     }
