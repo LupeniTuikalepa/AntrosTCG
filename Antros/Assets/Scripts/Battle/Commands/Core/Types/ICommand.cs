@@ -3,7 +3,7 @@ using ATCG.Battle.Entities.Components;
 
 namespace ATCG.Battle.Commands.Core
 {
-    public interface ICommand
+    public interface ICommand : IBaseCommand
     {
         void Process(in CommandContext context);
 

@@ -39,8 +39,8 @@ namespace ATCG.Battle.Commands.GameCommands
                 for (int i = 0; i < hitEffects.Length; i++)
                 {
                     IEffectData hitData = hitEffects[i];
-                    if (Mapper.TryGet<IEffectContainer>(hitData, out var container))
-                        container.TryApply(hitData, aspect.EntityAddress, in capacityContext);
+                    if (Mapper.TryGet<ICapacityEffectContainer>(hitData, out var container))
+                        container.Apply(hitData, aspect.EntityAddress, in capacityContext);
                 }
 
                 foreach (ComponentRef<GridMemberComponent> member in aspect.GetMembers())
@@ -48,8 +48,8 @@ namespace ATCG.Battle.Commands.GameCommands
                     for (int i = 0; i < hitEffects.Length; i++)
                     {
                         IEffectData hitData = hitEffects[i];
-                        if (Mapper.TryGet<IEffectContainer>(hitData, out var container))
-                            container.TryApply(hitData, member.EntityAddress, in capacityContext);
+                        if (Mapper.TryGet<ICapacityEffectContainer>(hitData, out var container))
+                            container.Apply(hitData, member.EntityAddress, in capacityContext);
                     }
                 }
             }

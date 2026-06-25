@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Commands.Core.Exceptions;
 using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using Helteix.Singletons.MonoSingletons;
 using Helteix.Singletons.MonoSingletons.Attributes;
@@ -15,37 +16,65 @@ namespace ATCG.Battle.Commands.Core
     public static class CommandManager
     {
         private static readonly List<ICommandListener> CommandsPlayers = new List<ICommandListener>();
+        private static readonly Queue<BattleID> groupsQueue;
 
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
         {
             CommandsPlayers.Clear();
+            groupsQueue.Clear();
         }
 
-        public static void Run<T>(this T gameCommand, BattlePhase battlePhase) where T: ICommand
+        public static void Run(this ICommand command, BattlePhase battlePhase)
         {
-            RunAsync(gameCommand, battlePhase).ListenForExceptions();
+            RunAsync(command, battlePhase).ListenForExceptions();
         }
 
-        public static async Awaitable RunAsync<T>(this T gameCommand, BattlePhase battlePhase) where T: ICommand
+        public static BattleID BeginGroup()
         {
-            using CommandCollection collection = new CommandCollection(gameCommand);
-            using CommandContext context = new(battlePhase, CommandsPlayers, collection);
+            BattleID battleID = BattleID.CreateNew();
+            groupsQueue.Enqueue(battleID);
+            return battleID;
+        }
 
-            context.Register(gameCommand);
+        public static BattleID EndGroup() => groupsQueue.Dequeue();
+
+        public static async Awaitable RunAsync(this ICommand command, BattlePhase battlePhase)
+        {
+
+            bool isInGroup = false;
+
+            if (groupsQueue.TryDequeue(out BattleID groupID))
+            {
+                isInGroup = true;
+            }
+            else
+            {
+                groupID = BeginGroup();
+                isInGroup = false;
+            }
+
+            using CommandCollection collection = new CommandCollection(command);
+            using CommandContext context = new(battlePhase, CommandsPlayers, collection, groupID);
+
+            context.Register(command);
 
             try
             {
-                gameCommand.Process(in context);
+                command.Process(in context);
             }
             catch (BreakCommandException breakCommandException)
             {
                 Debug.Log($"Game Command was canceled because of : {breakCommandException.Cause}");
             }
 
-            CommandListenerRunner runner = new CommandListenerRunner(gameCommand);
+            CommandListenerRunner runner = new CommandListenerRunner(command);
             await runner.Run(context);
+
+            if (!isInGroup)
+                EndGroup();
         }
+
         public static void RegisterListener(this ICommandListener listener)
         {
             CommandsPlayers.Add(listener);

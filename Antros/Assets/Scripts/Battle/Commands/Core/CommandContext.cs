@@ -22,17 +22,19 @@ namespace ATCG.Battle.Commands.Core
 
         public World World => battlePhase.world;
 
+        public readonly BattleID groupID;
         private readonly List<ICommandListener> commandListener;
         private readonly Dictionary<ICommand, ICommandListenerGroup> pairings;
         private readonly CommandCollection commandCollection;
 
 
-        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandListener, CommandCollection commandCollection)
+        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandListener, CommandCollection commandCollection, BattleID groupID)
         {
             pairings = DictionaryPool<ICommand, ICommandListenerGroup>.Get();
             this.battlePhase = battlePhase;
             this.commandListener = commandListener;
             this.commandCollection = commandCollection;
+            this.groupID = groupID;
         }
 
         public bool TryGetBattlePlayer(BattleID playerID, out IBattlePlayer player)
@@ -85,7 +87,7 @@ namespace ATCG.Battle.Commands.Core
 
                 if (player.CanPlay(command))
                 {
-                    group.Add(player); 
+                    group.Add(player);
                 }
             }
         }
