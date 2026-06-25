@@ -20,10 +20,11 @@ namespace Cheats.Core
 		
 		public static void ScanCheats()
 		{
-			cheats.Clear();
+			
 			CheatProvider[] providers = GameObject.FindObjectsByType<CheatProvider>();
 			for (int i = 0; i < providers.Length; i++)
 			{
+				
 				CheatProvider provider = providers[i];
 				cheats.AddRange(provider.GetCheats());
 			}

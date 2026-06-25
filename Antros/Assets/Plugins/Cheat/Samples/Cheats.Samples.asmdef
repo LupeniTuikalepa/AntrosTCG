@@ -2,7 +2,8 @@
     "name": "Cheats.Samples",
     "rootNamespace": "Cheats.Samples",
     "references": [
-        "GUID:67905581b1e4a464eb62d12fb46b0da2"
+        "GUID:67905581b1e4a464eb62d12fb46b0da2",
+        "ATCG.Battle"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

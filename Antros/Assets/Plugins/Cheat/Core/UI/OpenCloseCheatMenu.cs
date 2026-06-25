@@ -1,3 +1,4 @@
+using Cheats.Core.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,7 @@ namespace Cheats.Samples
     public class OpenCloseCheatMenu : MonoBehaviour
     {
 	    [SerializeField] private Canvas cheatMenu;
+	    [SerializeField] private CheatsUIController uiController;
         private bool keyOne = false;
         private bool keyTwo = false;
 
@@ -19,6 +21,7 @@ namespace Cheats.Samples
 	        if (keyOne && keyTwo)
 	        {
 		        cheatMenu.enabled = true;
+		        uiController.ReloadCheats();
 	        }
         }
         public void One(InputAction.CallbackContext ctx)
@@ -47,6 +50,7 @@ namespace Cheats.Samples
         public void Close(InputAction.CallbackContext ctx)
         {
 	        cheatMenu.enabled = false;
+	        uiController.cheats.Clear();
 	        keyOne = false;
 	        keyTwo = false;
         }

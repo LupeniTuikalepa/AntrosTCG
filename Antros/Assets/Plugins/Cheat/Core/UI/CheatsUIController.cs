@@ -9,27 +9,21 @@ namespace Cheats.Core.UI
 {
 	public class CheatsUIController : MonoBehaviour
 	{
-		
 		[SerializeField] private GameObject menuCheatPrefab;
 		[SerializeField] private CheatUI cheatUIPrefab;
 		[SerializeField] private Transform container;
-		private Dictionary< ICheat, CheatUI> cheats;
-		
-		
+		public Dictionary<ICheat, CheatUI> cheats;
+
+
 		private void Awake()
 		{
 			cheats = new Dictionary<ICheat, CheatUI>();
 		}
 
-		private void Start()
-		{
-			ReloadCheats();
-		}
-
 		public void ReloadCheats()
 		{
-			
 			cheats.Clear();
+			Debug.Log(cheats.Count);
 			CheatManager.ScanCheats();
 
 			IEnumerable<ICheat> cheatList = CheatManager.GetCheats();
@@ -37,10 +31,11 @@ namespace Cheats.Core.UI
 			foreach (var cheat in cheatList)
 			{
 				if (cheats.ContainsKey(cheat))
-					continue;
+					return;
 
 				CheatUI instantiate = Instantiate(cheatUIPrefab, container);
 				instantiate.SpawnButton(cheat);
+				cheats[cheat] = instantiate;
 			}
 		}
 	}
