@@ -13,7 +13,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
         protected override void Process(in CommandContext context)
         {
-            StatusEffectCommand effectCommand = new StatusEffectCommand(TargetEntityAddress(context.World));
+            
         }
     }
 }

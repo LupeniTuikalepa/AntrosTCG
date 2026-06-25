@@ -1,22 +1,24 @@
 ﻿using ATCG.Battle.Entities.Queries;
+using ATCG.Battle.GameModes;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Components.Status
 {
     public static class StatusManager
     {
-        public static void Trigger<TStatus>(EntityAddress address) where TStatus : struct, IStatus
+        public static void Trigger<TStatus>(EntityAddress address, BattlePhase battlePhase) where TStatus : struct, IStatusComponent
         {
             if (address.TryGetComponent<TStatus>(out var componentRef))
             {
                 ref var component = ref componentRef.GetValue();
-                component.Trigger(address);
+                component.Trigger(address, battlePhase);
             }
 
             UpdateControllers<TStatus>(address);
         }
 
-        private static void UpdateControllers<TStatus>(EntityAddress address) where TStatus : struct, IStatus
+        private static void UpdateControllers<TStatus>(EntityAddress address) where TStatus : struct, IStatusComponent
         {
             if (IsFinished<TStatus, StatusDurationController<TStatus>>(address))
             {
@@ -30,7 +32,7 @@ namespace ATCG.Battle.Entities.Components.Status
         }
 
         public static bool IsFinished<TStatus, TController>(EntityAddress address)
-            where TStatus : struct, IStatus
+            where TStatus : struct, IStatusComponent
             where TController : struct, IStatusController<TStatus>
         {
             if (address.TryGetComponent<TController>(out var componentRef))
@@ -45,7 +47,7 @@ namespace ATCG.Battle.Entities.Components.Status
         }
         
         public static void ApplyStatus<TStatus, TController>(this EntityAddress address, TStatus status, TController controller)
-            where TStatus : struct, IStatus 
+            where TStatus : struct, IStatusComponent 
             where TController : struct, IStatusController<TStatus>
         {
             address.AddOrSetComponent(status);
@@ -55,7 +57,7 @@ namespace ATCG.Battle.Entities.Components.Status
         }
 
         public static void RemoveStatus<TStatus>(this EntityAddress address)
-            where TStatus : struct, IStatus
+            where TStatus : struct, IStatusComponent
         {
             if (address.TryGetComponentRO<StatusInfos<TStatus>>(out var component))
             {
@@ -65,7 +67,7 @@ namespace ATCG.Battle.Entities.Components.Status
         }
         
         public static void UpdateAllStatusController<TStatus, TController>(World world) 
-            where TStatus : struct, IStatus 
+            where TStatus : struct, IStatusComponent 
             where TController : struct, IStatusController<TStatus>
         {
             using (ListPool<EntityAddress>.Get(out var list))
@@ -88,13 +90,16 @@ namespace ATCG.Battle.Entities.Components.Status
             }
         }
         
-        public static void ProcessAllControllers<TStatus>(World world) where TStatus : struct, IStatus
+        public static void ProcessAllControllers<TStatus>(BattlePhase battlePhase) where TStatus : struct, IStatusComponent
         {
+            
+            var world = battlePhase.world;
             foreach (var entity in world.Query(EntityQuery.With<TStatus>()))
             {
                 EntityAddress address = new EntityAddress(world, entity);
-                UpdateControllers<TStatus>(address);
+                Trigger<TStatus>(address, battlePhase);
             }
+            
         }
     }
 }

@@ -36,7 +36,12 @@ namespace ATCG.Battle
 			}
 			//await Tween.PunchScale(transform,Vector3.one * 0.2f, 0.3f);
 			entityPreviewList = entityPreviewListUI;
-			
+			if (address.TryGetComponentRO(out HealthComponent healthComponent))
+			{
+				CurrentValue = healthComponent.CurrentHealth;
+				MaxValue = healthComponent.MaxHealth;
+				await RefreshAsync();
+			}
 		}
 
 		public async Awaitable Disconnect(EntityPreviewListUI entityPreviewListUI, Entity entity)

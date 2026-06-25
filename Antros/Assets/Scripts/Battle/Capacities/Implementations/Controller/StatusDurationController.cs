@@ -1,6 +1,8 @@
-﻿namespace ATCG.Battle.Entities.Components.Status
+﻿using ATCG.Battle.Entities.Components.Implementations;
+
+namespace ATCG.Battle.Entities.Components.Status
 {
-    public struct StatusDurationController<T> : IStatusController<T> where T : struct, IStatus
+    public struct StatusDurationController<T> : IStatusController<T> where T : struct, IStatusComponent
     {
         private int remainingTick;
 
@@ -11,8 +13,6 @@
 
         public bool IsFinished(ComponentRef<T> componentRef)
         {
-            var component = componentRef.GetValue();
-            component.Trigger(componentRef.EntityAddress);
             remainingTick--;
             return remainingTick <= 0;
             

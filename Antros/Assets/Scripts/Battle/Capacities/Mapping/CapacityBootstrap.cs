@@ -1,5 +1,8 @@
-﻿using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
+﻿using ATCG.Battle.Capacities.Mapping;
+using ATCG.Battle.Cards.Capacities.Behaviours.Effects;
+using ATCG.Battle.Entities.Components.Implementations;
 using ATCG.Capacities.Data.Effects;
+using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
 using UnityEngine;
 
@@ -16,10 +19,14 @@ namespace ATCG.Battle.Cards.Capacities
         {
             // Edit-mode safety when domain reload is disabled.
             DomainBucket<IEffectContainer>.Clear();
-
+            DomainBucket<IStatusContainer>.Clear();
+            
             // Effects
             Mapper.Register<DamageEffectData, DamageEffect>();
             Mapper.Register<HealEffectData, HealEffect>();
+            
+            //Status
+            Mapper.Register<PoisonStatusData, PoisonStatus>();
         }
     }
 }
