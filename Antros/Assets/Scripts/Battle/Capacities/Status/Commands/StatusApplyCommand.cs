@@ -30,7 +30,8 @@ namespace ATCG.Battle.Commands.EntityCommands
         {
             if (Mapper.TryGet(data, out IStatusContainer container))
             {
-                container.Apply(data, Target.ToAddress(context.World));
+                StatusContext statusContext = new StatusContext(context.battlePhase);
+                container.Apply(data, Target.ToAddress(context.World), statusContext);
             }
         }
     }

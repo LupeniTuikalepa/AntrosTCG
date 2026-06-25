@@ -9,6 +9,8 @@ namespace ATCG.Battle.Entities.Components.Status
     {
         public static void Trigger<TStatus>(EntityAddress address, BattlePhase battlePhase) where TStatus : struct, IStatusComponent
         {
+            Debug.Log($"Battle phase: {battlePhase}");
+
             if (address.TryGetComponent<TStatus>(out var componentRef))
             {
                 ref var component = ref componentRef.GetValue();
@@ -90,7 +92,7 @@ namespace ATCG.Battle.Entities.Components.Status
             }
         }
         
-        public static void ProcessAllControllers<TStatus>(BattlePhase battlePhase) where TStatus : struct, IStatusComponent
+        public static void ProcessAllStatus<TStatus>(BattlePhase battlePhase) where TStatus : struct, IStatusComponent
         {
             
             var world = battlePhase.world;

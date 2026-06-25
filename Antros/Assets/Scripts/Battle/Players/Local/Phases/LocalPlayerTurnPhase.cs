@@ -42,7 +42,7 @@ namespace ATCG.Battle.Players.Local.Phases
             localPlayerTurn.FillHand();
 
             //TODO a modifier plus tard
-            StatusManager.ProcessAllControllers<PoisonStatusComponent>(player.BattlePhase);
+            StatusManager.ProcessAllStatus<PoisonStatusComponent>(player.BattlePhase);
             
             return base.Initialize(token);
         }
