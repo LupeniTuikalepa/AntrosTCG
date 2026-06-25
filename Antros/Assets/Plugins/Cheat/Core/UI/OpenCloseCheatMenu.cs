@@ -7,9 +7,13 @@ namespace Cheats.Samples
     public class OpenCloseCheatMenu : MonoBehaviour
     {
 	    [SerializeField] private Canvas cheatMenu;
+
+	    [SerializeField]
+	    private Camera cam;
 	    [SerializeField] private CheatsUIController uiController;
         private bool keyOne = false;
         private bool keyTwo = false;
+        private bool menuOpen = false;
 
         private void Start()
         {
@@ -18,9 +22,11 @@ namespace Cheats.Samples
 
         private void Update()
         {
-	        if (keyOne && keyTwo)
+	        if (keyOne && keyTwo &&  !menuOpen)
 	        {
+		        menuOpen = true;
 		        cheatMenu.enabled = true;
+		        cheatMenu.targetDisplay = cam.targetDisplay;
 		        uiController.ReloadCheats();
 	        }
         }
@@ -50,9 +56,10 @@ namespace Cheats.Samples
         public void Close(InputAction.CallbackContext ctx)
         {
 	        cheatMenu.enabled = false;
-	        uiController.cheats.Clear();
+	        menuOpen = false;
 	        keyOne = false;
 	        keyTwo = false;
         }
+        
     }
 }
