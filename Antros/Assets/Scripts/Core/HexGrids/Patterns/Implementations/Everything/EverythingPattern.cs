@@ -4,7 +4,7 @@ namespace ATCG.HexGrids.Patterns
 {
     public readonly partial struct EverythingPattern : IHexPattern
     {
-        public IEnumerable<HexCoordinates> GetAll<TController>(HexCoordinates from, TController controller) where TController : IHexPatternController
+        public IEnumerable<HexCoordinates> GetAll(HexCoordinates from, IHexPatternController controller)
             => controller.HexGrid.CellsCoordinates;
     }
 }

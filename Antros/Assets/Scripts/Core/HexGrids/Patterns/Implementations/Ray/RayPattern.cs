@@ -14,7 +14,8 @@ namespace ATCG.HexGrids.Patterns
             this.distance = distance;
         }
 
-        public IEnumerable<HexCoordinates> GetAll<TController>(HexCoordinates from, TController controller) where TController : IHexPatternController
+
+        public IEnumerable<HexCoordinates> GetAll(HexCoordinates from, IHexPatternController controller)
         {
             HexCoordinates dir = HexOperations.GetDirection(direction);
             HexCoordinates destination = dir * distance;

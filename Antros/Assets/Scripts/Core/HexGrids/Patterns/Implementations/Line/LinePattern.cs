@@ -24,12 +24,11 @@ namespace ATCG.HexGrids.Patterns
             hasExtremity = false;
         }
 
-        public IEnumerable<HexCoordinates> GetAll<TController>(HexCoordinates from, TController controller)
-            where TController : IHexPatternController
+        public IEnumerable<HexCoordinates> GetAll(HexCoordinates from, IHexPatternController controller)
         {
-            HexCoordinates a = hasExtremity ? start : from;
-            HexCoordinates b = end;
-            return a.GetLine(b);
+                HexCoordinates a = hasExtremity ? start : from;
+                HexCoordinates b = end;
+                return a.GetLine(b);
         }
     }
 }

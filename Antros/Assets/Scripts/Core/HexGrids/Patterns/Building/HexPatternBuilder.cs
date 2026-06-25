@@ -57,7 +57,7 @@ namespace ATCG.HexGrids.Patterns.Building
 
         public HexPatternBuilder With(PatternData data, HexCoordinates source)
         {
-            if (Mapper.TryGet(data, out IPatternContainer container))
+            if (Mapper.TryGet(data, out IHexPatternContainer container))
                 container.AddToBuilder(data, this, source);
 
             return this;
