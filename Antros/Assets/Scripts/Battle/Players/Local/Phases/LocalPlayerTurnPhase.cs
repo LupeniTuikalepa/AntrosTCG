@@ -41,9 +41,8 @@ namespace ATCG.Battle.Players.Local.Phases
 
             localPlayerTurn.FillHand();
 
-            //TODO a enlever plus tard
-            StatusManager.UpdateAllStatusController<PoisonStatus, StatusDurationController<PoisonStatus>>(
-                player.BattlePhase.world);
+            //TODO a modifier plus tard
+            StatusManager.ProcessAllControllers<PoisonStatusComponent>(player.BattlePhase);
             
             return base.Initialize(token);
         }

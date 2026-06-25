@@ -21,10 +21,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 		protected override void Process(in CommandContext context)
 		{
 			DamageCommand command = new DamageCommand(strength, victim.ToAddress(context.World));
-			//TODO a enlever absolument
-			StatusTickCommand effectCommand = new StatusTickCommand(TargetEntityAddress(context.World));
 			Embed(in context, command);
-			Embed(in context, effectCommand);
 		}
 	}
 }

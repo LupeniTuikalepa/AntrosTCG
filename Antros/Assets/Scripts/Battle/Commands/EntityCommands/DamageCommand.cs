@@ -2,6 +2,7 @@
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
@@ -26,8 +27,10 @@ namespace ATCG.Battle.Commands.EntityCommands
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
 
+            Debug.Log($"[Damage Command] Current Health: {componentHealth.CurrentHealth}/{componentHealth.MaxHealth}");
             infos.from = componentHealth.CurrentHealth;
             componentHealth.AddOrRemoveHealth(-quantity);
+            Debug.Log($"[Damage Command] Current Health: {componentHealth.CurrentHealth}/{componentHealth.MaxHealth}");
 
             infos.to = componentHealth.CurrentHealth;
             infos.max = componentHealth.MaxHealth;

@@ -19,22 +19,26 @@ namespace ATCG.UI
         public float MaxValue { get; protected set; }
         public float CurrentValue { get; protected set; }
 
+        private float lastValue;
 
         public void Refresh() => RefreshAsync().ListenForExceptions();
 
         public async Awaitable RefreshAsync()
         {
             float target = CurrentValue / MaxValue;
-
+            
+            
             Tween.StopAll(fill);
-            valueText.text = $"{CurrentValue}/{MaxValue}";
 
             await Sequence.Create()
                 .Insert(0f, Tween.UIFillAmount(fill, target, fillDuration, Ease.OutCubic))
-                .Insert(0f, Tween.Custom(CurrentValue, MaxValue, fillDuration, ctx =>
+                .Insert(0f, Tween.Custom(lastValue, CurrentValue, fillDuration, ctx =>
                 {
-                    valueText.text = ((int)ctx).ToString();
+                    valueText.text = $"{(int)ctx}/{MaxValue}";
                 }, Ease.OutCubic));
+            
+            valueText.text = $"{CurrentValue}/{MaxValue}";
+            lastValue = CurrentValue;
         }
     }
 }
