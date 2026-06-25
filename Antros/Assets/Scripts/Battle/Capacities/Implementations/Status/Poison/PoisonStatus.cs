@@ -11,22 +11,23 @@ namespace ATCG.Battle.Entities.Components.Implementations
         public void Apply(PoisonStatusData data, EntityAddress target, StatusContext context)
         {
             target.ApplyStatus(new PoisonStatusComponent(data.Damage), 
-                new StatusDurationController<PoisonStatusComponent>(data.Duration));
+                new StatusDurationController<PoisonStatusComponent>(data.Duration),
+                context);
         }
 
         public void Remove(PoisonStatusData data, EntityAddress address, StatusContext context)
         {
-            address.RemoveStatus<PoisonStatusComponent>();
+            address.RemoveStatus<PoisonStatusComponent>(context);
         }
 
         public void Tick(PoisonStatusData data, EntityAddress address, StatusContext context)
         {
-            StatusManager.Trigger<PoisonStatusComponent>(address, context.battlePhase);
+            StatusManager.Trigger<PoisonStatusComponent>(address, context);
         }
 
         public void TickAll(PoisonStatusData data, StatusContext context)
         {
-            StatusManager.ProcessAllStatus<PoisonStatusComponent>(context.battlePhase);
+            StatusManager.ProcessAllStatus<PoisonStatusComponent>(context);
         }
     }
 }
