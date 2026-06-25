@@ -28,14 +28,14 @@ namespace ATCG.Battle.Commands.GameCommands
             CapacityContext capacityContext = new(this, setup, commandContext);
             CapacityData capacityData = setup.data;
 
-            using var patternBuilder = new HexPatternBuilder(setup.castPoint, new BattlePatternController(commandContext.Grid))
+            BattlePatternController patternController = new BattlePatternController(commandContext.Grid);
+            using HexPatternBuilder patternBuilder = new HexPatternBuilder(setup.castPoint, patternController)
                 .With(capacityData.FirePatterns);
 
             foreach (BattleCellAspect aspect in patternBuilder.GetBattleCells(capacityContext.BattleGrid))
             {
                 //apply effects
                 IEffectData[] hitEffects = capacityData.HitEffects;
-
                 for (int i = 0; i < hitEffects.Length; i++)
                 {
                     IEffectData hitData = hitEffects[i];
@@ -55,5 +55,4 @@ namespace ATCG.Battle.Commands.GameCommands
             }
         }
     }
-
 }

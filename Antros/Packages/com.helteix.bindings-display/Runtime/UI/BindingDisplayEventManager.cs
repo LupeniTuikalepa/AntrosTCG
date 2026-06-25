@@ -8,11 +8,14 @@ namespace Helteix.ControlDisplay.UI
 {
     public static class BindingDisplayEventManager
     {
-        private static Dictionary<InputAction, List<IBindingDisplayEventListener>> listeners = new();
+        private static readonly Dictionary<InputAction, List<IBindingDisplayEventListener>> Listeners = new();
 
-        static BindingDisplayEventManager()
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Init()
         {
             InputSystem.onActionChange += OnActionChanges;
+            Listeners.Clear();
         }
 
         private static void OnActionChanges(object obj, InputActionChange change)
@@ -22,7 +25,7 @@ namespace Helteix.ControlDisplay.UI
                 case InputActionChange.ActionDisabled:
                 case InputActionChange.ActionEnabled:
                 {
-                    if (obj is InputAction action && listeners.TryGetValue(action, out var list))
+                    if (obj is InputAction action && Listeners.TryGetValue(action, out var list))
                     {
                         if (BindingDisplaySettings.Current.CopyListenersListBeforeCallbacks)
                         {
@@ -58,7 +61,7 @@ namespace Helteix.ControlDisplay.UI
 
         private static void SendActionChangedEvent(InputAction action)
         {
-            if (listeners.TryGetValue(action, out var list))
+            if (Listeners.TryGetValue(action, out var list))
             {
                 if (BindingDisplaySettings.Current.CopyListenersListBeforeCallbacks)
                 {
@@ -79,15 +82,15 @@ namespace Helteix.ControlDisplay.UI
 
         public static void Register(this IBindingDisplayEventListener listener, InputAction action)
         {
-            if(!listeners.TryGetValue(action, out var list))
-                listeners.Add(action, list = new());
+            if(!Listeners.TryGetValue(action, out var list))
+                Listeners.Add(action, list = new());
 
             list.Add(listener);
         }
 
         public static void Unregister(this IBindingDisplayEventListener listener, InputAction action)
         {
-            if(listeners.TryGetValue(action, out var list))
+            if(Listeners.TryGetValue(action, out var list))
                 list.Remove(listener);
         }
     }

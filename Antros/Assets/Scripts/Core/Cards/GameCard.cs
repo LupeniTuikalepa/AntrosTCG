@@ -10,10 +10,6 @@ namespace ATCG.Cards
 {
     public abstract class GameCard<T> : Card, IGameCard where T : GameCardData
     {
-        IEnumerable<CapacityData> IUIListSource<CapacityData>.Items => CapacitiesData;
-
-        public event Action<CapacityData> ItemAdded;
-        public event Action<CapacityData> ItemRemoved;
 
         GameCardData IGameCard.CardData => Data;
         public string Title => Data.Title;

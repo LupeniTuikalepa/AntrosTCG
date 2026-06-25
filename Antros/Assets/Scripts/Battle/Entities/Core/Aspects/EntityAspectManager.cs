@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities
 {
@@ -7,6 +8,7 @@ namespace ATCG.Battle.Entities
         // ReSharper disable once StaticMemberInGenericType
         private static Func<EntityAddress, bool> checkDelegate;
 
+        // ReSharper disable once StaticMemberInGenericType
         private static Func<EntityAddress, T> getAspectDelegate;
 
         public static void Init(Func<EntityAddress, bool> check, Func<EntityAddress, T> getAspect)
