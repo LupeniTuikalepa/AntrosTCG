@@ -1,4 +1,4 @@
-﻿using ATCG.Battle.Capacities.Mapping;
+﻿using ATCG.Battle.Capacities.Status;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
@@ -24,7 +24,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
                 container.Remove(data, Target.ToAddress(context.World), statusContext);
-                
+
                 var applyStatusSignal = new StatusSignal(Target.id, StatusAction.Remove);
                 applyStatusSignal.Run(context.battlePhase);
             }

@@ -1,9 +1,6 @@
 ﻿using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Battle.Entities.Queries;
-using ATCG.Battle.GameModes;
-using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Components.Status

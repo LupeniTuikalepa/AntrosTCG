@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ATCG.Battle.Capacities.Mapping;
+﻿using ATCG.Battle.Capacities.Status;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
@@ -7,7 +6,6 @@ using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
-using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
@@ -26,7 +24,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
                 container.Tick(data, Target.ToAddress(context.World), statusContext);
-                
+
                 var applyStatusSignal = new StatusSignal(Target.id, StatusAction.Tick);
                 applyStatusSignal.Run(context.battlePhase);
             }
