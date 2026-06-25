@@ -1,7 +1,6 @@
 ﻿using ATCG.Battle.Capacities.Mapping;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Capacities.Data.Status;
@@ -9,11 +8,11 @@ using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-    public class StatusRemoveCommand : EntityCommand<NoInfos>
+    public class StatusTickAllCommand : Command<NoInfos>
     {
         private readonly StatusData data;
 
-        public StatusRemoveCommand(EntityAddress address, StatusData data) : base(address)
+        public StatusTickAllCommand(StatusData data)
         {
             this.data = data;
         }
@@ -23,10 +22,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             if (Mapper.TryGet(data, out IStatusContainer container))
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
-                container.Remove(data, Target.ToAddress(context.World), statusContext);
-                
-                var applyStatusSignal = new StatusSignal(Target.id, StatusAction.Remove);
-                applyStatusSignal.Run(context.battlePhase);
+                container.TickAll(data, statusContext);
             }
         }
     }

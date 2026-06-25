@@ -18,10 +18,10 @@ namespace ATCG.Debugging.Debugging.Gameplay
     #if UNITY_EDITOR
     public class StatusCaller : MonoPhaseListener<BattlePhase>
     {
-        private EntityAddress Address => targetHero.Address;
+        private EntityAddress Address(RuntimeHero hero) => hero.Address;
         
         [SerializeField]
-        private RuntimeHero targetHero;
+        private RuntimeHero[] targetHeroes;
         
         [SerializeField]
         private StatusData data;
@@ -39,33 +39,47 @@ namespace ATCG.Debugging.Debugging.Gameplay
             base.OnPhaseEnd(phase);
         }
 
-
         [Button, DisableInEditorMode]
         private void ApplyStatus()
         {
-            var statusApplyCommand = new StatusApplyCommand(Address, data);
-            statusApplyCommand.Run(battlePhase);
+            for (int i = 0; i < targetHeroes.Length; i++)
+            {
+                RuntimeHero runtimeHero = targetHeroes[i];
+                EntityAddress adresse = Address(runtimeHero);
+                var statusApplyCommand = new StatusApplyCommand(adresse, data);
+                statusApplyCommand.Run(battlePhase);
+            }
         }
         
         [Button, DisableInEditorMode]
         private void RemoveStatus()
         {
-            var statusRemoveCommand = new StatusRemoveCommand(Address, data);
-            statusRemoveCommand.Run(battlePhase);
+            for (int i = 0; i < targetHeroes.Length; i++)
+            {
+                RuntimeHero runtimeHero = targetHeroes[i];
+                EntityAddress adresse = Address(runtimeHero);
+                var statusApplyCommand = new StatusRemoveCommand(adresse, data);
+                statusApplyCommand.Run(battlePhase);
+            }
         }
         
         [Button, DisableInEditorMode]
         private void Tick()
         {
-            var statusTickCommand = new StatusTickCommand(Address, data);
-            statusTickCommand.Run(battlePhase);
+            for (int i = 0; i < targetHeroes.Length; i++)
+            {
+                RuntimeHero runtimeHero = targetHeroes[i];
+                EntityAddress adresse = Address(runtimeHero);
+                var statusApplyCommand = new StatusTickCommand(adresse, data);
+                statusApplyCommand.Run(battlePhase);
+            }
         }
         
         [Button, DisableInEditorMode]
         private void TickAll()
         {
-            var statusTickCommand = new StatusTickCommand(Address, data, true);
-            statusTickCommand.Run(battlePhase);
+            var statusApplyCommand = new StatusTickAllCommand(data);
+            statusApplyCommand.Run(battlePhase);
         }
     }
     #endif

@@ -1,6 +1,8 @@
 ﻿using ATCG.Battle.Capacities.Status;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components.Status;
+using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
 
