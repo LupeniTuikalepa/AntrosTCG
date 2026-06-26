@@ -31,7 +31,7 @@ namespace ATCG.Debugging.Debugging.Battle
 		{
 			using (DictionaryPool<string, EntityAddress>.Get(out var bucket))
 			{
-				FillBucket(bucket);
+				CheatUtilities.FillBucket<HealthComponent>(bucket,player);
 
 				CheatsChoicePhase choicePhase = new CheatsChoicePhase( player, bucket.Keys.ToList());
 				
@@ -41,23 +41,11 @@ namespace ATCG.Debugging.Debugging.Battle
 				{
 					DeathCommand deathCommand = new DeathCommand(address);
 					deathCommand.Run(player.BattlePhase);
+					bucket.Remove(result);
 				}
 			}
 		}
 
-		private void FillBucket(Dictionary<string, EntityAddress> bucket)
-		{
-			foreach (ComponentRef<HealthComponent> componentRef in player.BattlePhase.world.Query<HealthComponent>())
-			{
-				if (componentRef.EntityAddress.TryGetComponentRO(out BattleCardComponent battleCardComponent))
-				{
-					bucket.Add(battleCardComponent.battleCard.Title, componentRef.EntityAddress);
-				}
-				else
-				{
-					bucket.Add(componentRef.entityID.ToString(), componentRef.EntityAddress);
-				}
-			}
-		}
+		
 	}
 }

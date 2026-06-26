@@ -2162,6 +2162,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: MenuCheat
       objectReference: {fileID: 0}
+    - target: {fileID: 4452009708181893671, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452009708181893671, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734867353364145988, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734867353364145988, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734867353364145988, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8572318821369926677, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: player
       value: 

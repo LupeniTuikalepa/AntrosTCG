@@ -25,19 +25,20 @@ namespace ATCG.Debugging.Debugging.Battle.ChoicePhase
 		}
 		protected override void OnPhaseBegin(CheatsChoicePhase phase)
 		{
+			dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 			current = phase;
 			dropdown.ClearOptions();
 			canvasGroup.Show(0.3f);
 
 			List<string> options = current.choices;
 			dropdown.AddOptions(options);
-			dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 			
 			base.OnPhaseBegin(phase);
 		}
 
 		protected override void OnPhaseEnd(CheatsChoicePhase phase)
 		{
+			dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
 			canvasGroup.Hide(0.2f);
 			base.OnPhaseEnd(phase);
 		}
@@ -50,7 +51,7 @@ namespace ATCG.Debugging.Debugging.Battle.ChoicePhase
 		public void Validate()
 		{
 			current.SetResult(stringChoisie);
-			Debug.Log($"{stringChoisie} is dead");
+			Debug.Log($"{stringChoisie} is affected");
 		}
 
 		public void OnDropdownValueChanged(int index)

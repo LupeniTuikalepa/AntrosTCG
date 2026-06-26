@@ -18,6 +18,7 @@ namespace ATCG.Debugging.Debugging.Battle
 		public override IEnumerable<ICheat> GetCheats()
 		{
 			yield return new KillEntityCheat(player.BattlePlayer);
+			yield return new TeleportEntityCheat(player.BattlePlayer);
 			yield return new AddHealthCheat(player);
 			yield return new RemoveHealthCheat(player);
 			yield return new AddManaCheat(player);
