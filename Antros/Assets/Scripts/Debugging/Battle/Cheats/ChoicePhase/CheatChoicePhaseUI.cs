@@ -17,6 +17,8 @@ namespace ATCG.Debugging.Debugging.Battle.ChoicePhase
 		[SerializeField]
 		private TMP_Dropdown dropdown;
 
+		private string stringChoisie;
+
 		private void Awake()
 		{
 			canvasGroup.Hide(0);
@@ -45,11 +47,16 @@ namespace ATCG.Debugging.Debugging.Battle.ChoicePhase
 			current.SetResult(string.Empty);
 		}
 
+		public void Validate()
+		{
+			current.SetResult(stringChoisie);
+			Debug.Log($"{stringChoisie} is dead");
+		}
+
 		public void OnDropdownValueChanged(int index)
 		{
-			string stringChoisie = dropdown.options[index].text;
+			stringChoisie = dropdown.options[index].text;
 			Debug.Log("Tu as cliqué sur : " + stringChoisie);
-			current.SetResult(stringChoisie);
 		}
 	}
 }

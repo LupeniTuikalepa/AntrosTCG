@@ -16,7 +16,7 @@ namespace ATCG.Battle.Commands.Core
     public static class CommandManager
     {
         private static readonly List<ICommandListener> CommandsPlayers = new List<ICommandListener>();
-        private static readonly Queue<BattleID> groupsQueue;
+        private static readonly Queue<BattleID> groupsQueue = new Queue<BattleID>();
 
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
@@ -56,7 +56,6 @@ namespace ATCG.Battle.Commands.Core
 
             using CommandCollection collection = new CommandCollection(command);
             using CommandContext context = new(battlePhase, CommandsPlayers, collection, groupID);
-
             context.Register(command);
 
             try
@@ -77,6 +76,7 @@ namespace ATCG.Battle.Commands.Core
 
         public static void RegisterListener(this ICommandListener listener)
         {
+			
             CommandsPlayers.Add(listener);
         }
 
