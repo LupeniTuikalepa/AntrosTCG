@@ -15,7 +15,7 @@ namespace ATCG.Battle.Entities.Components.Status
                 ref var component = ref componentRef.GetValue();
                 component.Trigger(address, statusContext.battlePhase);
 
-                var tickStatusSignal = new StatusSignal(address.entity.id, StatusAction.Tick);
+                var tickStatusSignal = new StatusSignal(address, StatusAction.Tick, component.StatusData);
                 tickStatusSignal.Run(statusContext.battlePhase);
             }
             
@@ -56,9 +56,9 @@ namespace ATCG.Battle.Entities.Components.Status
             address.AddOrSetComponent(status);
             address.AddOrSetComponent(controller);
             ComponentMask mask = ComponentMask.With<TStatus>().With<TController>();
-            address.AddOrSetComponent(new StatusInfos<TStatus>(mask));
+            address.AddOrSetComponent(new StatusInfos<TStatus>(mask, status.StatusData));
             
-            var removeStatusSignal = new StatusSignal(address.entity.id, StatusAction.Apply);
+            var removeStatusSignal = new StatusSignal(address, StatusAction.Apply, status.StatusData);
             removeStatusSignal.Run(statusContext.battlePhase);
 
         }
@@ -71,7 +71,7 @@ namespace ATCG.Battle.Entities.Components.Status
                 address.RemoveAll(component.componentMask);
                 address.RemoveComponent<StatusInfos<TStatus>>();
                 
-                var removeStatusSignal = new StatusSignal(address.entity.id, StatusAction.Remove);
+                var removeStatusSignal = new StatusSignal(address, StatusAction.Remove, component.statusData);
                 removeStatusSignal.Run(statusContext.battlePhase);
             }
         }
@@ -108,9 +108,6 @@ namespace ATCG.Battle.Entities.Components.Status
                 EntityAddress address = new EntityAddress(world, entity);
                 Trigger<TStatus>(address, statusContext);
             }
-
-            var tickAllStatusSignal = new StatusSignal(-1, StatusAction.TickAll);
-            tickAllStatusSignal.Run(statusContext.battlePhase);
         }
     }
 }

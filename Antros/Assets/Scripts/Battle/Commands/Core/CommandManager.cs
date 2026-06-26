@@ -25,7 +25,7 @@ namespace ATCG.Battle.Commands.Core
             groupsQueue.Clear();
         }
 
-        public static void Run(this ICommand command, BattlePhase battlePhase)
+        public static void Run<T>(this T command, BattlePhase battlePhase) where T : ICommand
         {
             RunAsync(command, battlePhase).ListenForExceptions();
         }
@@ -37,9 +37,13 @@ namespace ATCG.Battle.Commands.Core
             return battleID;
         }
 
-        public static BattleID EndGroup() => groupsQueue.Dequeue();
+        public static BattleID EndGroup()
+        {
+            groupsQueue.TryDequeue(out BattleID groupID);
+            return groupID;
+        }
 
-        public static async Awaitable RunAsync(this ICommand command, BattlePhase battlePhase)
+        public static async Awaitable RunAsync<T>(this T command, BattlePhase battlePhase) where T : ICommand
         {
 
             bool isInGroup = false;
@@ -76,8 +80,8 @@ namespace ATCG.Battle.Commands.Core
 
         public static void RegisterListener(this ICommandListener listener)
         {
-			
             CommandsPlayers.Add(listener);
+            Debug.Log($"Registered {listener.GetType().Name}");
         }
 
         public static void UnregisterListener(this ICommandListener listener)

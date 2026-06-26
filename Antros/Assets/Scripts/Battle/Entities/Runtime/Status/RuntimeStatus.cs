@@ -9,8 +9,16 @@ using UnityEngine.Assertions.Must;
 
 namespace ATCG.Battle.Entities.Runtime.Status
 {
-    public class RuntimeStatus : MonoBehaviour, ICommandListener<StatusSignal>
+    public class RuntimeStatus : MonoBehaviour, IEntityCommandListener<StatusSignal>
     {
+        private IRuntimeEntity runtimeEntity;
+        public Entity Entity => runtimeEntity.Address.entity;
+
+        private void Awake()
+        {
+            runtimeEntity = GetComponentInParent<IRuntimeEntity>();
+        }
+
         private void OnEnable()
         {
             this.RegisterListener();
@@ -27,10 +35,8 @@ namespace ATCG.Battle.Entities.Runtime.Status
             state.CompleteAll(this);
             
             var infos = command.GetInfos();
-            int id = infos.id;
-            StatusAction action = infos.action;
             
-            switch (action)
+            switch (infos.action)
             {
                 case StatusAction.Apply:
                     Debug.Log("[RuntimeStatus] Apply");
@@ -45,7 +51,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
                     Debug.Log("[RuntimeStatus] TickAll");
                     break;
             }
-            
         }
+
     }
 }
