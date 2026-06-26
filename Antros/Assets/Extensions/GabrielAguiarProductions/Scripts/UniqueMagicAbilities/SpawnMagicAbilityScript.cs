@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SpawnMagicAbilityScript : MonoBehaviour {
@@ -44,28 +45,29 @@ public class SpawnMagicAbilityScript : MonoBehaviour {
 			effectToSpawn = VFXs [0];
 		else
 			Debug.Log ("No Effects added to the VFXs List");
-		
+
 		if(VFXsShakeParameters.Count > 0)
 			effectShakeParameters = VFXsShakeParameters [0];
 		else
 			Debug.Log ("No Delays added to the ShakeDelays List");
-		
-		if (effectName != null) 
+
+		if (effectName != null)
 			effectName.text = effectToSpawn.name;
 	}
 
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.Space) || Input.GetMouseButtonDown (0) )
+		Keyboard keyboard = Keyboard.current;
+		if (keyboard.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
 			SpawnVFX ();
-		if (Input.GetKeyDown (KeyCode.D))
+		if (keyboard.dKey.wasPressedThisFrame)
 			Next ();
-		if (Input.GetKeyDown (KeyCode.A)) 
-			Previous ();	
-		if (Input.GetKeyDown (KeyCode.C))
-			SwitchCamera ();	
-		if (Input.GetKeyDown (KeyCode.X))
+		if (keyboard.aKey.wasPressedThisFrame)
+			Previous ();
+		if (keyboard.cKey.wasPressedThisFrame)
+			SwitchCamera ();
+		if (keyboard.xKey.wasPressedThisFrame)
 			ZoomIn ();
-		if (Input.GetKeyDown (KeyCode.Z))
+		if (keyboard.zKey.wasPressedThisFrame)
 			ZoomOut ();
 	}
 
@@ -74,7 +76,7 @@ public class SpawnMagicAbilityScript : MonoBehaviour {
 			StartCoroutine (ShakeDelay (effectShakeParameters.delays));
 
 		GameObject vfxSpawned = Instantiate(effectToSpawn);
-		spawnedVFX.Add(vfxSpawned); 
+		spawnedVFX.Add(vfxSpawned);
 
 		var ps = GetFirstPS (vfxSpawned);
 	}

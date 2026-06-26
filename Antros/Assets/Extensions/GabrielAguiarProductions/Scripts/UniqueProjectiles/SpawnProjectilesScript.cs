@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SpawnProjectilesScript : MonoBehaviour {
@@ -48,7 +49,7 @@ public class SpawnProjectilesScript : MonoBehaviour {
 			effectToSpawn = VFXs[0];
 		else
 			Debug.Log ("Please assign one or more VFXs in inspector");
-		
+
 		if (effectName != null) effectName.text = effectToSpawn.name;
 
 		if (camerasList.Count > 0) {
@@ -70,23 +71,24 @@ public class SpawnProjectilesScript : MonoBehaviour {
         }
     }
 
-	void Update () {
-		if (Input.GetKey (KeyCode.Space) && Time.time >= timeToFire || Input.GetMouseButton (0) && Time.time >= timeToFire) {
+	void Update ()
+	{
+		Keyboard keyboard = Keyboard.current;
+
+		if (keyboard.spaceKey.wasPressedThisFrame && Time.time >= timeToFire ||Mouse.current.leftButton.wasPressedThisFrame && Time.time >= timeToFire) {
 			timeToFire = Time.time + 1f / effectToSpawn.GetComponent<ProjectileMoveScript>().fireRate;
-			SpawnVFX ();	
+			SpawnVFX ();
 		}
 
-		if (Input.GetKeyDown (KeyCode.D))
+		if (keyboard.dKey.wasPressedThisFrame)
 			Next ();
-		if (Input.GetKeyDown (KeyCode.A)) 
-			Previous ();	
-		if (Input.GetKeyDown (KeyCode.C))
-			SwitchCamera ();	
-		if (Input.GetKeyDown (KeyCode.Alpha1))
-			CameraShake ();
-		if (Input.GetKeyDown (KeyCode.X))
+		if (keyboard.aKey.wasPressedThisFrame)
+			Previous ();
+		if (keyboard.cKey.wasPressedThisFrame)
+			SwitchCamera ();
+		if (keyboard.xKey.wasPressedThisFrame)
 			ZoomIn ();
-		if (Input.GetKeyDown (KeyCode.Z))
+		if (keyboard.zKey.wasPressedThisFrame)
 			ZoomOut ();
 	}
 
@@ -111,9 +113,9 @@ public class SpawnProjectilesScript : MonoBehaviour {
             else
             {
                 if (target != null)
-                {                    
+                {
                     vfx.GetComponent<ProjectileMoveScript>().SetTarget(target, rotateToMouse);
-                    rotateToMouse.RotateToMouse(vfx, target.transform.position);                    
+                    rotateToMouse.RotateToMouse(vfx, target.transform.position);
                 }
                 else
                 {
@@ -123,7 +125,7 @@ public class SpawnProjectilesScript : MonoBehaviour {
             }
 		}
 		else
-			vfx = Instantiate (effectToSpawn);		
+			vfx = Instantiate (effectToSpawn);
 	}
 
 	public void Next () {
