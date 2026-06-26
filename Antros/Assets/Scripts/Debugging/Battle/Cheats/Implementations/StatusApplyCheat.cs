@@ -24,7 +24,7 @@ namespace ATCG.Debugging
 	    public StatusApplyCheat(LocalBattlePlayer player)
 	    {
 		    Name = " Apply Status ";
-		    Description = " Apply Status for one guys ";
+		    Description = " Infect whomever you want. ";
 		    this.player = player;
 	    }
 

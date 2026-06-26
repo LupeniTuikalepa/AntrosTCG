@@ -14,7 +14,7 @@ namespace ATCG.Debugging.Debugging.Battle
 
 		public RemoveManaCheat(RuntimeLocalBattlePlayer player)
 		{
-			Name = nameof(RemoveManaCheat);
+			Name = "Remove Mana";
 			Description = "SomeBody remove your Mana a bit";
 			this.players = player;
 		}

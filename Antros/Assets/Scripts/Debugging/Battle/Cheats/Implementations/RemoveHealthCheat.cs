@@ -15,7 +15,7 @@ namespace ATCG.Debugging.Debugging.Battle
 
 		public RemoveHealthCheat(RuntimeLocalBattlePlayer player)
 		{
-			Name = nameof(RemoveHealthCheat);
+			Name = "Remove Health";
 			Description = "SomeBody remove your health";
 			this.players = player;
 		}

@@ -24,7 +24,7 @@ namespace ATCG.Debugging.Debugging.Battle
 		{
 			this.player = player;
 			Name = "Kill Entity";
-			Description = "Kill somebody";
+			Description = "Take the life of whomever you want.";
 		}
 
 		public async Awaitable Execute(CheatContext context)

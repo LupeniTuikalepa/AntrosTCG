@@ -14,8 +14,8 @@ namespace ATCG.Debugging.Debugging.Battle
 
 		public AddManaCheat(RuntimeLocalBattlePlayer player)
 		{
-			Name = nameof(AddManaCheat);
-			Description = "SomeBody give you Mana a bit";
+			Name = "Add Mana";
+			Description = "SomeBody give you 2 Mana ";
 			this.players = player;
 		}
 

@@ -23,7 +23,7 @@ namespace ATCG.Debugging.Debugging.Battle.Cheats.Implementations
 		public StatusRemoveCheat(LocalBattlePlayer player)
 		{
 			Name = " Remove Status ";
-			Description = " Remove Status for one guys ";
+			Description = " Bless the infected ";
 			this.player = player;
 		}
 

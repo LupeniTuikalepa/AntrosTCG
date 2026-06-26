@@ -18,7 +18,7 @@ namespace ATCG.Debugging.Debugging.Battle
 
 		public AddHealthCheat(RuntimeLocalBattlePlayer player)
 		{
-			Name = nameof(AddHealthCheat);
+			Name = "Heal";
 			Description = "Somebody give you some heal";
 			players = player;
 		}

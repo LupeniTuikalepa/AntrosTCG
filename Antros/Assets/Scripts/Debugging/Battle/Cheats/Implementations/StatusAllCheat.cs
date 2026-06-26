@@ -23,7 +23,7 @@ namespace ATCG.Debugging.Debugging.Battle.Cheats.Implementations
 		public StatusAllCheat(LocalBattlePlayer player)
 		{
 			Name = " Apply All Status ";
-			Description = " Apply All Status for one guys ";
+			Description = " Tick all the infected. ";
 			this.player = player;
 		}
 
