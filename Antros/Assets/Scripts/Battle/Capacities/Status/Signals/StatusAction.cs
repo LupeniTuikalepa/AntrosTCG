@@ -5,6 +5,5 @@
         Apply,
         Remove,
         Tick,
-        TickAll
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3195838811892127527}
   - component: {fileID: 2630243126384689303}
   m_Layer: 0
-  m_Name: RuntimeStatus
+  m_Name: RuntimeStatusController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3787760227535759248}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 79.60391, y: 552.1421, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef9b1f1204345a892346cc437a6d842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Status.RuntimeStatus
+  statusRoot: {fileID: 0}
