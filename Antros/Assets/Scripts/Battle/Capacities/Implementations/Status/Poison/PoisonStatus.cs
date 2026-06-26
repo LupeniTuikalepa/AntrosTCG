@@ -10,7 +10,7 @@ namespace ATCG.Battle.Entities.Components.Implementations
     {
         public void Apply(PoisonStatusData data, EntityAddress target, StatusContext context)
         {
-            target.ApplyStatus(new PoisonStatusComponent(data.Damage), 
+            target.ApplyStatus(new PoisonStatusComponent(data), 
                 new StatusDurationController<PoisonStatusComponent>(data.Duration),
                 context);
         }
