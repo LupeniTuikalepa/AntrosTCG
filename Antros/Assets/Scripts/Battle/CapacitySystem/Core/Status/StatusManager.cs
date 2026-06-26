@@ -2,6 +2,7 @@
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Battle.Entities.Queries;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Components.Status
@@ -107,6 +108,7 @@ namespace ATCG.Battle.Entities.Components.Status
             {
                 EntityAddress address = new EntityAddress(world, entity);
                 Trigger<TStatus>(address, statusContext);
+                
             }
         }
     }
