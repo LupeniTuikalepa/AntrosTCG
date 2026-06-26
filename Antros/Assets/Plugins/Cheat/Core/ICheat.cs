@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Cheats.Core
 {
 	public interface ICheat 
@@ -5,7 +7,7 @@ namespace Cheats.Core
 		public string Name { get; }
 		public string Description { get; }
 		
-		public void Execute(in CheatContext context);
+		public Awaitable Execute( CheatContext context);
 		
 	}
 }

@@ -6,21 +6,22 @@ using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
-	public class RemoveMana: ICheat
+	public class RemoveManaCheat: ICheat
 	{
 		public string Name { get; }
 		public string Description { get; }
 		public readonly RuntimeLocalBattlePlayer players;
 
-		public RemoveMana(RuntimeLocalBattlePlayer player)
+		public RemoveManaCheat(RuntimeLocalBattlePlayer player)
 		{
-			Name = nameof(RemoveMana);
+			Name = nameof(RemoveManaCheat);
 			Description = "SomeBody remove your Mana a bit";
 			this.players = player;
 		}
 
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
+			await Awaitable.MainThreadAsync();
 			players.BattlePlayer.AddOrRemoveMana(-1);
 			Debug.Log(players);
 			ModifyPlayerManaCommand command = new ModifyPlayerManaCommand(players.BattlePlayer, -1);

@@ -12,14 +12,16 @@ namespace ATCG.Debugging.Debugging.Battle
 {
     public class PlayerProvider : CheatProvider
     { 
-		[SerializeField] private RuntimeLocalBattlePlayer player;
+		[SerializeField] 
+		private RuntimeLocalBattlePlayer player;
 		
 		public override IEnumerable<ICheat> GetCheats()
 		{
+			yield return new KillEntityCheat(player.BattlePlayer);
 			yield return new AddHealthCheat(player);
 			yield return new RemoveHealthCheat(player);
 			yield return new AddManaCheat(player);
-			yield return new RemoveMana(player);
+			yield return new RemoveManaCheat(player);
 			yield return new BreakCheat();
 		}
 	    

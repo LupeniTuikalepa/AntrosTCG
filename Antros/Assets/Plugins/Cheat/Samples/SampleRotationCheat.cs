@@ -17,9 +17,10 @@ namespace Cheats.Samples.Samples
 			this.espion =  espion;
 		}
 		
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
 			espion.transform.localRotation = new Quaternion(10,30,20,40);
+			await Awaitable.MainThreadAsync();
 			
 		}
 	}

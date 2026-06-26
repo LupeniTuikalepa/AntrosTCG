@@ -7,8 +7,9 @@ namespace ATCG.Debugging.Debugging.Battle
 	{
 		public string Name => "Break Cheat";
 		public string Description => "Break Cheat";
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
+			await Awaitable.MainThreadAsync();
 			Debug.Break();
 		}
 	}

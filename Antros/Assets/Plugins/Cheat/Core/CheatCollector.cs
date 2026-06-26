@@ -19,7 +19,6 @@ namespace Cheats.Core
 			cheats.Clear();
 
 			CheatProvider[] providers = players.GetComponentsInChildren<CheatProvider>();
-			Debug.Log("Found " + players.name +  providers.Length + " providers");
 			
 			for (int i = 0; i < providers.Length; i++)
 			{

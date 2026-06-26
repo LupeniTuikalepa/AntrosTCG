@@ -18,10 +18,11 @@ namespace Cheats.Core.Resources.Cheats
 			
 		}
 		
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
 			Debug.Log($"{Name}: {Description}");
 			espion.transform.localScale = new Vector3(10, 10, 10);
+			await Awaitable.MainThreadAsync();
 		}
 	}
 }

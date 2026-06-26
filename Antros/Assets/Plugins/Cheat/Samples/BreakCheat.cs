@@ -8,9 +8,10 @@ namespace Cheats.Core.Resources.Cheats
 		public string Name => "Break Cheat";
 		public string Description => "Break Cheat";
 		
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
 			Debug.Break();
+			await Awaitable.MainThreadAsync();
 		}
 	}
 }

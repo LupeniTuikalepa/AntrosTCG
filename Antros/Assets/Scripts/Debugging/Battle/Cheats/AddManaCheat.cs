@@ -19,8 +19,9 @@ namespace ATCG.Debugging.Debugging.Battle
 			this.players = player;
 		}
 
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
+			await Awaitable.MainThreadAsync();
 			players.BattlePlayer.AddOrRemoveMana(1);
 			Debug.Log(players);
 			ModifyPlayerManaCommand command = new ModifyPlayerManaCommand(players.BattlePlayer, 1);

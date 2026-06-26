@@ -18,9 +18,10 @@ namespace Cheats.Core.Resources.Cheats
 			
 		}
 		
-		public void Execute(in CheatContext context)
+		public async Awaitable Execute(CheatContext context)
 		{
 			espion.gameObject.GetComponent<Renderer>().material.color = Color.red;
+			await Awaitable.MainThreadAsync();
 		}
 	}
 }
