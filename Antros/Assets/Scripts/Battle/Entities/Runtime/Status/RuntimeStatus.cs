@@ -1,57 +1,57 @@
 ﻿using System;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
-using ATCG.Battle.Commands.Players;
-using ATCG.Battle.Entities.Components.Status.Signals;
-using PrimeTween;
+using ATCG.Capacities.Data.Status;
+using Helteix.Tools;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 namespace ATCG.Battle.Entities.Runtime.Status
 {
-    public class RuntimeStatus : MonoBehaviour, IEntityCommandListener<StatusSignal>
+    public class RuntimeStatus : MonoBehaviour
     {
-        private IRuntimeEntity runtimeEntity;
-        public Entity Entity => runtimeEntity.Address.entity;
-
-        private void Awake()
+        private event Action OnApplyStatus;
+        private event Action OnRemoveStatus;
+        private event Action<RuntimeStatusContext> OnTickStatus;
+        
+        private IRuntimeStatusComponent[] components; 
+        protected virtual void Awake()
         {
-            runtimeEntity = GetComponentInParent<IRuntimeEntity>();
+            components = GetComponentsInChildren<IRuntimeStatusComponent>();
         }
 
         private void OnEnable()
         {
-            this.RegisterListener();
+            for (int i = 0; i < components.Length; i++)
+            {
+                var component = components[i];
+                OnApplyStatus += component.OnApplyStatus;
+                OnRemoveStatus += component.OnRemoveStatus;
+                OnTickStatus += component.OnTickStatus;
+            }
         }
 
         private void OnDisable()
         {
-            this.UnregisterListener();
-        }
-
-        public async Awaitable Play(CommandListenerState state, CommandContext context, StatusSignal command)
-        {
-            await Awaitable.MainThreadAsync();
-            state.CompleteAll(this);
-            
-            var infos = command.GetInfos();
-            
-            switch (infos.action)
+            for (int i = 0; i < components.Length; i++)
             {
-                case StatusAction.Apply:
-                    Debug.Log("[RuntimeStatus] Apply");
-                    break;
-                case StatusAction.Remove:
-                    Debug.Log("[RuntimeStatus] Remove");
-                    break;
-                case StatusAction.Tick:
-                    Debug.Log("[RuntimeStatus] Tick");
-                    break;
-                case StatusAction.TickAll:
-                    Debug.Log("[RuntimeStatus] TickAll");
-                    break;
+                var component = components[i];
+                OnApplyStatus -= component.OnApplyStatus;
+                OnRemoveStatus -= component.OnRemoveStatus;
+                OnTickStatus -= component.OnTickStatus;
             }
         }
+        
+        public void Apply()
+        {
+            OnApplyStatus?.Invoke();
+        }
 
+        public void Remove()
+        {
+            OnRemoveStatus?.Invoke();
+        }
+        
+        public void Tick(RuntimeStatusContext context)
+        {
+            OnTickStatus?.Invoke(context);
+        }
     }
 }

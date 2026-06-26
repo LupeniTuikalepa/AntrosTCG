@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Data.Status
 {
-    [CreateAssetMenu(menuName = "ATCG/Capacities/Status")]
-    public class StatusData : GameDatabaseObject, IData
+    public abstract class StatusData : GameDatabaseObject, IData
     {
+        [field: SerializeField]
+        public GameObject StatusVFX { get; private set; }
     }
 }
