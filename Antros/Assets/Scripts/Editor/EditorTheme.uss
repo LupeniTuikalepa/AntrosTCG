@@ -1,0 +1,37 @@
+﻿/* ATCG editor theme — shared design tokens.
+   Single source of truth for the palette used across all ATCG editor windows
+   (Command Timeline, World Inspector, ...). Each window loads this sheet IN
+   ADDITION to its own component sheet; the :root variables here are visible to
+   the class selectors in those sheets within the same panel.
+
+   Change the DA here once and every window follows. */
+
+:root {
+    /* surfaces */
+    --atcg-canvas: rgb(38, 38, 41);
+    --atcg-chrome: rgb(51, 51, 54);
+    --atcg-panel: rgb(46, 46, 49);
+    --atcg-panel-nested: rgb(52, 52, 55);
+
+    /* cards / rows */
+    --atcg-card: rgb(61, 61, 66);
+    --atcg-card-root: rgb(66, 69, 77);
+    --atcg-card-sel: rgb(51, 77, 107);
+    --atcg-card-line: rgb(87, 87, 94);
+
+    /* lines */
+    --atcg-hairline: rgb(26, 26, 26);
+    --atcg-rail: rgb(84, 102, 133);
+    --atcg-dot: rgb(140, 158, 184);
+
+    /* accents */
+    --atcg-accent: rgb(92, 168, 255);
+    --atcg-accent-warm: rgb(242, 178, 76);
+    --atcg-accent-warm-bg: rgb(76, 61, 31);
+    --atcg-accent-warm-text: rgb(250, 204, 128);
+
+    /* text */
+    --atcg-text-strong: rgb(230, 230, 235);
+    --atcg-text-soft: rgb(189, 189, 199);
+    --atcg-text-muted: rgb(140, 140, 148);
+}

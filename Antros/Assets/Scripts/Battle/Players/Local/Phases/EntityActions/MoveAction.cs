@@ -69,13 +69,15 @@ namespace ATCG.Battle
             if (result.Length == 0)
                 return;
 
-
+            CommandManager.BeginGroup($"[{address.entity.id}]Entity Movement");
 
             var manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
             manaCommand.Run(battlePhase);
 
             var pathCommand = new MoveAlongPathCommand(address, result);
             await pathCommand.RunAsync(battlePhase);
+
+            CommandManager.EndGroup();
         }
     }
 }

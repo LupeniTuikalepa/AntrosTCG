@@ -22,6 +22,8 @@ namespace ATCG.Battle.Entities.Components
 
         public int Count { get; private set; }
 
+        public Type ComponentType => typeof(T);
+
         //Itération cache-friendly
         public ReadOnlySpan<T> AllComponents => dense.AsSpan(0, Count);
         public ReadOnlySpan<int> AllEntities => denseToEntity.AsSpan(0, Count);
@@ -55,6 +57,15 @@ namespace ATCG.Battle.Entities.Components
         public bool Has(int entityId)
         {
             return sparse[entityId] != NONE;
+        }
+
+        public object GetBoxed(int entityId)
+        {
+            int index = sparse[entityId];
+            if (index == NONE)
+                return null;
+
+            return dense[index];
         }
 
         public ref T GetRef(int entityId)

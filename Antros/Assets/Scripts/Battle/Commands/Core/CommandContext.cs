@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Players;
+using ATCG.Battle.Commands.Trace;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
@@ -22,18 +23,18 @@ namespace ATCG.Battle.Commands.Core
 
         public World World => battlePhase.world;
 
-        public readonly BattleID groupID;
         private readonly List<ICommandListener> commandListener;
         private readonly Dictionary<ICommand, ICommandListenerGroup> pairings;
-        private readonly CommandCollection commandCollection;
+        private readonly CommandTree commandTree;
+        private readonly BattleID groupID;
 
 
-        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandListener, CommandCollection commandCollection, BattleID groupID)
+        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandListener, CommandTree commandTree, BattleID groupID)
         {
             pairings = DictionaryPool<ICommand, ICommandListenerGroup>.Get();
             this.battlePhase = battlePhase;
             this.commandListener = commandListener;
-            this.commandCollection = commandCollection;
+            this.commandTree = commandTree;
             this.groupID = groupID;
         }
 
@@ -48,10 +49,10 @@ namespace ATCG.Battle.Commands.Core
 
         public bool TryGetCommand(BattleID battleID, out ICommand command)
         {
-            return commandCollection.TryGetCommand(battleID, out command);
+            return commandTree.TryGetCommand(battleID, out command);
         }
 
-        public ICommand GetCommand(BattleID battleID) => commandCollection.GetCommand(battleID);
+        public ICommand GetCommand(BattleID battleID) => commandTree.GetCommand(battleID);
 
         public bool TryGetGroup<T>(T gameCommand, out CommandListenerGroup<T> group) where T : ICommand
         {
@@ -78,7 +79,8 @@ namespace ATCG.Battle.Commands.Core
         {
             CommandListenerGroup<T> group = new(command);
             pairings[command]= group;
-            commandCollection.AddCommand(command);
+            commandTree.AddCommand(command);
+            CommandTrace.ReportCommandRegistered(groupID, command);  // <-- ajoute ceci
 
             foreach (ICommandListener commandPlayer in commandListener)
             {
@@ -107,7 +109,7 @@ namespace ATCG.Battle.Commands.Core
             DictionaryPool<ICommand, ICommandListenerGroup>.Release(pairings);
         }
 
-        public ICommand GetRoot() => commandCollection.Root;
-        public bool IsRoot(ICommand command) => commandCollection.RootID == command.ID;
+        public ICommand GetRoot() => commandTree.Root;
+        public bool IsRoot(ICommand command) => commandTree.RootID == command.ID;
     }
 }

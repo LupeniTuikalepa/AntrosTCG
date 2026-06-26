@@ -7,6 +7,8 @@ namespace ATCG.Battle.Entities
         private const int SIZE = 4;
         private const int BIT_SIZE = 64;
 
+        public static readonly int MaxComponents = SIZE * BIT_SIZE;
+
         //4 × 64 = 256 bits max.
         //I could up the number more, but it should be enough for the game.
         //We'll see

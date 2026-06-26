@@ -7,7 +7,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Commands.Core
 {
     [Serializable]
-    public class CommandCollection : IDisposable, ISerializationCallbackReceiver
+    public struct CommandTree : ISerializationCallbackReceiver
     {
         [SerializeReference]
         private List<ICommand> commands;
@@ -19,30 +19,26 @@ namespace ATCG.Battle.Commands.Core
 
         private Dictionary<BattleID, ICommand> mapping;
 
-        public CommandCollection(ICommand root) : this()
+        public CommandTree(ICommand root)
         {
             RootID = root.ID;
-        }
-
-        public CommandCollection()
-        {
-            mapping = DictionaryPool<BattleID, ICommand>.Get();
-            commands = ListPool<ICommand>.Get();
+            mapping = new Dictionary<BattleID, ICommand>();
+            commands = new List<ICommand>();
         }
 
 
-        public void AddCommand(ICommand command)
+        public readonly void AddCommand(ICommand command)
         {
             commands.Add(command);
             mapping.Add(command.ID, command);
         }
 
-        public bool TryGetCommand(BattleID battleID, out ICommand command)
+        public readonly bool TryGetCommand(BattleID battleID, out ICommand command)
         {
             return mapping.TryGetValue(battleID, out command);
         }
 
-        public ICommand GetCommand(BattleID battleID)
+        public readonly ICommand GetCommand(BattleID battleID)
         {
             return mapping.GetValueOrDefault(battleID);
         }
@@ -51,24 +47,17 @@ namespace ATCG.Battle.Commands.Core
         void ISerializationCallbackReceiver.OnBeforeSerialize()
         {
             commands.Clear();
-            foreach ((BattleID battleID, ICommand command) in mapping)
+            foreach ((_, ICommand command) in mapping)
                 commands.Add(command);
 
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            mapping ??= DictionaryPool<BattleID, ICommand>.Get();
-
+            mapping ??= new Dictionary<BattleID, ICommand>();
             mapping.Clear();
             foreach (var command in commands)
                 mapping.Add(command.ID, command);
-        }
-
-        void IDisposable.Dispose()
-        {
-            DictionaryPool<BattleID, ICommand>.Release(mapping);
-            ListPool<ICommand>.Release(commands);
         }
     }
 }

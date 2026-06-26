@@ -6,20 +6,16 @@ namespace ATCG.Battle.Entities.Components
 {
     public static class ComponentRegistry
     {
+        public static int MaxComponents => ComponentMask.MaxComponents;
+
         private static int index;
 
         private static Type[] idMapping;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void Initialize()
-        {
-            index = 0;
-            idMapping = new Type[128];
-        }
-
         static ComponentRegistry()
         {
-            idMapping = new Type[128];
+            index = 0;
+            idMapping = new Type[MaxComponents];
         }
 
 
@@ -33,6 +29,7 @@ namespace ATCG.Battle.Entities.Components
             return next;
         }
 
-        public static Type GetTypeForComponentID(int id) => idMapping[id];
+        public static Type GetTypeForComponentID(int id)
+            => (uint)id < (uint)idMapping.Length ? idMapping[id] : null;
     }
 }

@@ -44,5 +44,7 @@ namespace ATCG.Battle.Entities.Components
             return (id != null ? id.GetHashCode() : 0);
         }
 
+
+        public override string ToString() => id;
     }
 }

@@ -3,9 +3,12 @@
     "rootNamespace": "ATCG.Editor",
     "references": [
         "ATCG.Core",
-        "Helteix.Tools.Editor"
+        "Helteix.Tools.Editor",
+        "ATCG.Battle"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

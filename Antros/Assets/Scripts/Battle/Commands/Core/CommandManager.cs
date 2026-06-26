@@ -16,7 +16,7 @@ namespace ATCG.Battle.Commands.Core
     public static class CommandManager
     {
         private static readonly List<ICommandListener> CommandsPlayers = new List<ICommandListener>();
-        private static readonly Queue<BattleID> groupsQueue = new Queue<BattleID>();
+        private static readonly Queue<CommandGroup> groupsQueue = new Queue<CommandGroup>();
 
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
@@ -30,36 +30,38 @@ namespace ATCG.Battle.Commands.Core
             RunAsync(command, battlePhase).ListenForExceptions();
         }
 
-        public static BattleID BeginGroup()
+        public static BattleID BeginGroup(string label)
         {
-            BattleID battleID = BattleID.CreateNew();
-            groupsQueue.Enqueue(battleID);
-            return battleID;
+            CommandGroup group = groupsQueue.TryPeek(out var parent) ? new CommandGroup(label, parent) : new CommandGroup(label);
+            groupsQueue.Enqueue(group);
+
+            Trace.CommandTrace.ReportGroupBegan(group.GroupID, group.ParentGroupID, label);
+
+            return group.GroupID;
         }
 
         public static BattleID EndGroup()
         {
-            groupsQueue.TryDequeue(out BattleID groupID);
-            return groupID;
+            CommandGroup group = groupsQueue.Dequeue();
+            Trace.CommandTrace.ReportGroupEnded(group.GroupID);
+            return group.GroupID;
         }
 
         public static async Awaitable RunAsync<T>(this T command, BattlePhase battlePhase) where T : ICommand
         {
+            //If it's the first command called and no group was setup first
 
-            bool isInGroup = false;
+            bool useAutoGroup = groupsQueue.Count == 0;
+            if (useAutoGroup)
+                BeginGroup($"Auto_{command.GetType().Name}");
 
-            if (groupsQueue.TryDequeue(out BattleID groupID))
-            {
-                isInGroup = true;
-            }
-            else
-            {
-                groupID = BeginGroup();
-                isInGroup = false;
-            }
+            CommandGroup group = groupsQueue.Peek();
+            CommandTree tree = new CommandTree(command);
+            group.AddTree(tree);
 
-            using CommandCollection collection = new CommandCollection(command);
-            using CommandContext context = new(battlePhase, CommandsPlayers, collection, groupID);
+            Trace.CommandTrace.ReportTreeBegan(group.GroupID, command.ID);
+
+            using CommandContext context = new(battlePhase, CommandsPlayers, tree, group.GroupID);
             context.Register(command);
 
             try
@@ -74,14 +76,13 @@ namespace ATCG.Battle.Commands.Core
             CommandListenerRunner runner = new CommandListenerRunner(command);
             await runner.Run(context);
 
-            if (!isInGroup)
+            if(useAutoGroup)
                 EndGroup();
         }
 
         public static void RegisterListener(this ICommandListener listener)
         {
             CommandsPlayers.Add(listener);
-            Debug.Log($"Registered {listener.GetType().Name}");
         }
 
         public static void UnregisterListener(this ICommandListener listener)

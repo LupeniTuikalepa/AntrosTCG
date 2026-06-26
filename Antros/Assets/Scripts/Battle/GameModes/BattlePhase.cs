@@ -53,6 +53,8 @@ namespace ATCG.Battle.GameModes
 
         protected override async Awaitable Initialize(CancellationToken token)
         {
+            world.Register();
+
             Random.InitState(seed);
             SceneReference gameScene = GameScenes.Current.Game;
             await GameController.GameSceneController.LoadScenesWithLoadingScreen(gameScene);
@@ -107,6 +109,7 @@ namespace ATCG.Battle.GameModes
         protected override async Awaitable Dispose(CancellationToken token)
         {
             DictionaryPool<BattleID, IBattlePlayer>.Release(players);
+            world.Unregister();
 
             //"reset" of seed
             // (BattleGrid as IDisposable).Dispose();
