@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Battle.Entities.Queries;
 using UnityEngine.Pool;
@@ -13,6 +14,9 @@ namespace ATCG.Battle.Entities.Components.Status
             {
                 ref var component = ref componentRef.GetValue();
                 component.Trigger(address, statusContext.battlePhase);
+
+                var tickStatusSignal = new StatusSignal(address.entity.id, StatusAction.Tick);
+                tickStatusSignal.Run(statusContext.battlePhase);
             }
             
             UpdateControllers<TStatus>(address, statusContext);
@@ -104,6 +108,9 @@ namespace ATCG.Battle.Entities.Components.Status
                 EntityAddress address = new EntityAddress(world, entity);
                 Trigger<TStatus>(address, statusContext);
             }
+
+            var tickAllStatusSignal = new StatusSignal(-1, StatusAction.TickAll);
+            tickAllStatusSignal.Run(statusContext.battlePhase);
         }
     }
 }

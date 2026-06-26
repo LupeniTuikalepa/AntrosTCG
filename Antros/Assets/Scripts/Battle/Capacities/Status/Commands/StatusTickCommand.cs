@@ -24,9 +24,6 @@ namespace ATCG.Battle.Commands.EntityCommands
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
                 container.Tick(data, Target.ToAddress(context.World), statusContext);
-
-                var applyStatusSignal = new StatusSignal(Target.id, StatusAction.Tick);
-                applyStatusSignal.Run(context.battlePhase);
             }
         }
     }
