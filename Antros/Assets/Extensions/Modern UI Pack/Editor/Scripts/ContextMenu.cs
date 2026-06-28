@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -845,10 +845,10 @@ namespace Michsky.MUIP
             CreateObject("Spinner/Spinner - Standard Fill");
         }
 
-        [MenuItem("GameObject/Modern UI Pack/Spinner/Standard GetSteps", false, 8)]
+        [MenuItem("GameObject/Modern UI Pack/Spinner/Standard Run", false, 8)]
         static void PBLSR()
         {
-            CreateObject("Spinner/Spinner - Standard GetSteps");
+            CreateObject("Spinner/Spinner - Standard Run");
         }
 
         [MenuItem("GameObject/Modern UI Pack/Spinner/Radial Material", false, 8)]
@@ -863,10 +863,10 @@ namespace Michsky.MUIP
             CreateObject("Spinner/Spinner - Radial Pie");
         }
 
-        [MenuItem("GameObject/Modern UI Pack/Spinner/Radial GetSteps", false, 8)]
+        [MenuItem("GameObject/Modern UI Pack/Spinner/Radial Run", false, 8)]
         static void PBLRR()
         {
-            CreateObject("Spinner/Spinner - Radial GetSteps");
+            CreateObject("Spinner/Spinner - Radial Run");
         }
 
         [MenuItem("GameObject/Modern UI Pack/Spinner/Radial Trapez", false, 8)]

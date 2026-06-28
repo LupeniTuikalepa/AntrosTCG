@@ -6,7 +6,7 @@ namespace ATCG.Battle.Entities;
 
 public partial struct TestAspect : IEntityAspect<TestComponent>, ICreateEntityAspect<SetupInfos>
 {
-    private static void CreateComponents(ref ComponentsFactory componentsFactory, SetupInfos setupInfos)
+    private static partial void CreateComponents(ref ComponentsFactory componentsFactory, SetupInfos setupInfos)
     {
         throw new System.NotImplementedException();
     }
