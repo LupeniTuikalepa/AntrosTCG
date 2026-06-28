@@ -33,7 +33,7 @@ namespace ATCG.Databases
             OnValidate();
         }
 
-        private void OnValidate()
+        protected virtual void OnValidate()
         {
             if(string.IsNullOrEmpty(guidText))
                 SetNewGuid();

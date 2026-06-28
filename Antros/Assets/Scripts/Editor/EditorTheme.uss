@@ -1,37 +1,50 @@
-﻿/* ATCG editor theme — shared design tokens.
+/* ATCG editor theme — shared design tokens.
    Single source of truth for the palette used across all ATCG editor windows
-   (Command Timeline, World Inspector, ...). Each window loads this sheet IN
-   ADDITION to its own component sheet; the :root variables here are visible to
+   (the Antros TCG Editor hub and every tool in it). Each window loads this sheet
+   IN ADDITION to its own component sheet; the :root variables here are visible to
    the class selectors in those sheets within the same panel.
 
-   Change the DA here once and every window follows. */
+   Without this file present and imported, every sheet that references --atcg-*
+   renders unstyled (Unity silently ignores unresolved variables). Keep it in the
+   project, imported as a StyleSheet. */
 
 :root {
     /* surfaces */
-    --atcg-canvas: rgb(38, 38, 41);
-    --atcg-chrome: rgb(51, 51, 54);
-    --atcg-panel: rgb(46, 46, 49);
-    --atcg-panel-nested: rgb(52, 52, 55);
+    --atcg-canvas: rgb(32, 33, 36);
+    --atcg-chrome: rgb(43, 44, 48);
+    --atcg-panel: rgb(38, 39, 43);
+    --atcg-panel-nested: rgb(48, 49, 54);
 
     /* cards / rows */
-    --atcg-card: rgb(61, 61, 66);
-    --atcg-card-root: rgb(66, 69, 77);
-    --atcg-card-sel: rgb(51, 77, 107);
-    --atcg-card-line: rgb(87, 87, 94);
+    --atcg-card: rgb(54, 55, 61);
+    --atcg-card-root: rgb(63, 66, 75);
+    --atcg-card-sel: rgb(46, 72, 104);
+    --atcg-card-line: rgb(82, 83, 92);
 
     /* lines */
-    --atcg-hairline: rgb(26, 26, 26);
+    --atcg-hairline: rgb(22, 22, 24);
     --atcg-rail: rgb(84, 102, 133);
     --atcg-dot: rgb(140, 158, 184);
 
-    /* accents */
+    /* primary accent */
     --atcg-accent: rgb(92, 168, 255);
+    --atcg-accent-soft: rgb(60, 90, 130);
+
+    /* warm accent (kept for existing usages) */
     --atcg-accent-warm: rgb(242, 178, 76);
     --atcg-accent-warm-bg: rgb(76, 61, 31);
     --atcg-accent-warm-text: rgb(250, 204, 128);
 
+    /* categorical accents for tool icons (Cardness-style colored badges) */
+    --atcg-ic-blue: rgb(92, 168, 255);
+    --atcg-ic-green: rgb(118, 200, 130);
+    --atcg-ic-purple: rgb(180, 142, 240);
+    --atcg-ic-pink: rgb(232, 130, 196);
+    --atcg-ic-amber: rgb(242, 178, 76);
+    --atcg-ic-teal: rgb(96, 206, 206);
+
     /* text */
-    --atcg-text-strong: rgb(230, 230, 235);
-    --atcg-text-soft: rgb(189, 189, 199);
-    --atcg-text-muted: rgb(140, 140, 148);
+    --atcg-text-strong: rgb(233, 233, 238);
+    --atcg-text-soft: rgb(190, 190, 200);
+    --atcg-text-muted: rgb(138, 138, 146);
 }

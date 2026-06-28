@@ -19,10 +19,10 @@ namespace ATCG.Debugging.Debugging.Gameplay
     public class StatusCaller : MonoPhaseListener<BattlePhase>
     {
         private EntityAddress Address(RuntimeHero hero) => hero.Address;
-        
+
         [SerializeField]
         private RuntimeHero[] targetHeroes;
-        
+
         [SerializeField]
         private StatusData data;
         private BattlePhase battlePhase;
@@ -50,19 +50,19 @@ namespace ATCG.Debugging.Debugging.Gameplay
                 statusApplyCommand.Run(battlePhase);
             }
         }
-        
+
         [Button, DisableInEditorMode]
         private void RemoveStatus()
         {
             for (int i = 0; i < targetHeroes.Length; i++)
             {
                 RuntimeHero runtimeHero = targetHeroes[i];
-                EntityAddress adresse = Address(runtimeHero);
-                var statusApplyCommand = new StatusRemoveCommand(adresse, data);
+                EntityAddress address = Address(runtimeHero);
+                var statusApplyCommand = new StatusRemoveCommand(address, data);
                 statusApplyCommand.Run(battlePhase);
             }
         }
-        
+
         [Button, DisableInEditorMode]
         private void Tick()
         {
@@ -74,7 +74,7 @@ namespace ATCG.Debugging.Debugging.Gameplay
                 statusApplyCommand.Run(battlePhase);
             }
         }
-        
+
         [Button, DisableInEditorMode]
         private void TickAll()
         {

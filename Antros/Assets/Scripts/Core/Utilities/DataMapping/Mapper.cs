@@ -27,7 +27,7 @@ namespace Helteix.Tools.DataMapping
         /// closed generic by calling once; the JIT resolves DomainBucket&lt;T&gt;
         /// per process, not per call.
         /// </summary>
-        public static bool TryGet<TContainer>(IData data, out TContainer container)
+        public static bool TryGet<TContainer>(this IData data, out TContainer container)
             where TContainer : class, IContainer
             => DomainBucket<TContainer>.TryGet(data, out container);
     }

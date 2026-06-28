@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Capacities;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
@@ -66,10 +67,8 @@ namespace ATCG.Battle
 
         private async Awaitable ExecuteCommand(BattlePhase battlePhase, HexCoordinates source)
         {
-            CapacitySetup context = new CapacitySetup(capacityData, source);
-            CastCapacityCommand command = new CastCapacityCommand(in context);
-
-            await command.RunAsync(battlePhase);
+            CapacitySetup setup = new CapacitySetup(capacityData, source, battlePhase);
+            await CapacityManager.CastCapacityAsync(capacityData, setup);
         }
     }
 }

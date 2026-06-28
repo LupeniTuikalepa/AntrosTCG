@@ -36,8 +36,10 @@ namespace ATCG.Battle.Entities.Aspects
 
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
         {
+            IBattlePlayer battlePlayer = setup.card.Player;
+
             componentsFactory.BattleCardComponent = new BattleCardComponent(setup.card);
-            componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(setup.card.Player.GetBattleID());
+            componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(battlePlayer.GetBattleID(), battlePlayer.GetPlayerNumber());
 
             componentsFactory.HealthComponent = new HealthComponent(setup.card.MaxHealth);
             componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns, setup.card.MovementType);

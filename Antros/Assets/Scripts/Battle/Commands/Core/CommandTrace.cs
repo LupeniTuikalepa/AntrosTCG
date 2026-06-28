@@ -28,7 +28,7 @@ namespace ATCG.Battle.Commands.Trace
         /// <summary>(groupID) -- a group was closed.</summary>
         public static Action<BattleID> GroupEnded;
 
-        /// <summary>(groupID, rootCommandID) -- a new tree (a .Run()) started; its root follows.</summary>
+        /// <summary>(groupID, rootCommandID) -- a new tree (a .GetSteps()) started; its root follows.</summary>
         public static Action<BattleID, BattleID> TreeBegan;
 
         /// <summary>(groupID, command) -- a command was registered (applied).</summary>

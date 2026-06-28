@@ -45,7 +45,8 @@ namespace ATCG.Battle.Grids
                 BattleCellAspect cellAspect = BattleCellAspect.CreateAspect(World, new BattleCellAspect.Setup()
                 {
                     coordinates = coordinate,
-                    battleGrid = this
+                    battleGrid = this,
+                    battleID = BattleID.CreateNew(),
                 });
 
                 battleCellsEntities.Add(coordinate, cellAspect);

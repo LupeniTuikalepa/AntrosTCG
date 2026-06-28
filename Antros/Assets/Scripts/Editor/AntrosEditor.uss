@@ -1,0 +1,110 @@
+/* Antros TCG Editor hub shell. Tokens come from EditorTheme.uss. */
+
+/* ---- left rail ---- */
+.ae-rail {
+    width: 184px;
+    flex-shrink: 0;
+    flex-direction: column;
+    background-color: var(--atcg-chrome);
+    border-right-width: 1px;
+    border-right-color: var(--atcg-hairline);
+    padding-top: 0;
+}
+
+.ae-rail__brand {
+    -unity-font-style: bold;
+    font-size: 14px;
+    color: var(--atcg-text-strong);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--atcg-hairline);
+    padding-left: 12px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 6px;
+}
+
+.ae-rail__btn {
+    flex-direction: row;
+    align-items: center;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 7px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-top: 2px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.ae-rail__btn:hover {
+    background-color: var(--atcg-panel-nested);
+}
+
+.ae-rail__btn--active {
+    background-color: var(--atcg-card);
+}
+
+/* icon badge */
+.ae-rail__icon {
+    width: 24px;
+    height: 24px;
+    -unity-text-align: middle-center;
+    font-size: 14px;
+    color: var(--atcg-text-soft);
+    background-color: var(--atcg-card);
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.ae-rail__label {
+    color: var(--atcg-text-soft);
+    font-size: 12px;
+    -unity-text-align: middle-left;
+}
+
+.ae-rail__btn--active .ae-rail__label {
+    color: var(--atcg-text-strong);
+    -unity-font-style: bold;
+}
+
+/* ---- content area ---- */
+.ae-content {
+    flex-direction: column;
+    background-color: var(--atcg-canvas);
+}
+
+.ae-header {
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--atcg-chrome);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--atcg-hairline);
+    padding-left: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.ae-header__icon {
+    width: 20px;
+    height: 20px;
+    -unity-text-align: middle-center;
+    font-size: 12px;
+    color: rgb(20, 28, 40);
+    background-color: var(--atcg-accent);
+    border-radius: 5px;
+    margin-right: 9px;
+}
+
+.ae-header__title {
+    -unity-font-style: bold;
+    font-size: 13px;
+    color: var(--atcg-text-strong);
+}
+
+.ae-empty {
+    color: var(--atcg-text-muted);
+    font-size: 13px;
+    padding: 24px;
+}

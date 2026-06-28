@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Commands.Core.Exceptions;
 using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands.Groups;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using Helteix.Singletons.MonoSingletons;
@@ -16,7 +17,7 @@ namespace ATCG.Battle.Commands.Core
     public static class CommandManager
     {
         private static readonly List<ICommandListener> CommandsPlayers = new List<ICommandListener>();
-        private static readonly Queue<CommandGroup> groupsQueue = new Queue<CommandGroup>();
+        private static readonly Stack<CommandGroup> groupsQueue = new Stack<CommandGroup>();
 
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
@@ -30,21 +31,28 @@ namespace ATCG.Battle.Commands.Core
             RunAsync(command, battlePhase).ListenForExceptions();
         }
 
-        public static BattleID BeginGroup(string label)
+        public static CommandGroupHandle BeginGroup(string label)
         {
             CommandGroup group = groupsQueue.TryPeek(out var parent) ? new CommandGroup(label, parent) : new CommandGroup(label);
-            groupsQueue.Enqueue(group);
+            groupsQueue.Push(group);
 
             Trace.CommandTrace.ReportGroupBegan(group.GroupID, group.ParentGroupID, label);
 
-            return group.GroupID;
+            return new CommandGroupHandle(group.GroupID);
         }
 
-        public static BattleID EndGroup()
+        public static void EndGroup()
         {
-            CommandGroup group = groupsQueue.Dequeue();
-            Trace.CommandTrace.ReportGroupEnded(group.GroupID);
-            return group.GroupID;
+            if(groupsQueue.TryPeek(out var group))
+                EndGroup(group.GroupID);
+        }
+        public static void EndGroup(BattleID id)
+        {
+            if (groupsQueue.TryPeek(out var group) && group.GroupID == id)
+            {
+                groupsQueue.Pop();
+                Trace.CommandTrace.ReportGroupEnded(group.GroupID);
+            }
         }
 
         public static async Awaitable RunAsync<T>(this T command, BattlePhase battlePhase) where T : ICommand

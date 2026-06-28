@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 namespace ATCG.Battle.Entities.Runtime
 {
 #if UNITY_EDITOR
-    
+
     public partial class RuntimeEntity<T>
     {
         [Button, DisableInEditorMode]
@@ -16,6 +16,6 @@ namespace ATCG.Battle.Entities.Runtime
             statusApplyCommand.Run(BattlePhase);
         }
     }
-    
+
 #endif
 }

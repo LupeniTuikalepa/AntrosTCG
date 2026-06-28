@@ -1,0 +1,251 @@
+/* Command Timeline — component styles. Palette tokens come from EditorTheme.uss. */
+
+.ctl-toolbar {
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: var(--atcg-chrome);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--atcg-hairline);
+}
+
+.ctl-toolbar Button {
+    height: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+}
+
+.ctl-status {
+    margin-left: 12px;
+    color: var(--atcg-text-muted);
+    -unity-text-align: middle-left;
+    flex-grow: 1;
+}
+
+.ctl-canvas {
+    flex-grow: 1;
+    background-color: var(--atcg-canvas);
+}
+
+.ctl-page {
+    flex-direction: column;
+    padding: 12px;
+}
+
+/* group box */
+.ctl-group {
+    flex-direction: column;
+    margin-bottom: 12px;
+    background-color: var(--atcg-panel);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: var(--atcg-hairline);
+}
+
+.ctl-group--nested {
+    background-color: var(--atcg-panel-nested);
+}
+
+.ctl-group__header {
+    flex-direction: row;
+    align-items: center;
+    height: 28px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--atcg-hairline);
+}
+
+.ctl-group__rail {
+    width: 3px;
+    height: 100%;
+    background-color: var(--atcg-accent);
+}
+
+.ctl-group__rail--open {
+    background-color: var(--atcg-accent-warm);
+}
+
+.ctl-group__title {
+    -unity-font-style: bold;
+    color: var(--atcg-text-strong);
+    margin-left: 8px;
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+}
+
+.ctl-pill {
+    color: var(--atcg-accent-warm-text);
+    background-color: var(--atcg-accent-warm-bg);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.ctl-group__body {
+    flex-direction: column;
+    padding: 12px;
+}
+
+.ctl-group__nested {
+    flex-direction: column;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 8px;
+}
+
+/* a row = one chained tree; embeds extend to the right inside it */
+.ctl-row {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+/* embeds of a command: siblings stacked vertically, depth extends right.
+   Left margin leaves room for the arrow connectors drawn on the overlay. */
+.ctl-embed-group {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 28px;
+}
+
+/* command card */
+.ctl-card {
+    flex-direction: column;
+    margin: 4px 6px 4px 0;
+    padding: 6px 10px 7px 10px;
+    min-width: 150px;
+    border-radius: 7px;
+    border-width: 1px;
+    border-color: var(--atcg-card-line);
+    background-color: var(--atcg-card);
+}
+
+.ctl-card--root {
+    background-color: var(--atcg-card-root);
+}
+
+.ctl-card--selected {
+    border-color: var(--atcg-accent);
+    background-color: var(--atcg-card-sel);
+}
+
+.ctl-card__title-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ctl-card__dot {
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+    border-radius: 4px;
+    background-color: var(--atcg-dot);
+}
+
+.ctl-card__dot--root {
+    background-color: var(--atcg-accent);
+}
+
+.ctl-card__title {
+    color: var(--atcg-text-strong);
+    -unity-font-style: bold;
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+}
+
+.ctl-card__meta {
+    color: var(--atcg-text-muted);
+    font-size: 10px;
+    margin-top: 2px;
+    margin-left: 14px;
+}
+
+/* inspector */
+.ctl-inspector {
+    flex-direction: column;
+    background-color: var(--atcg-chrome);
+    min-width: 180px;
+}
+
+.ctl-inspector__title {
+    -unity-font-style: bold;
+    color: var(--atcg-text-strong);
+    padding: 10px 0 8px 12px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--atcg-hairline);
+}
+
+.ctl-inspector__body {
+    flex-direction: column;
+    padding: 10px 12px;
+}
+
+.ctl-inspector__type {
+    color: var(--atcg-text-strong);
+    -unity-font-style: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    white-space: normal;
+}
+
+.ctl-field {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.ctl-field__label {
+    color: var(--atcg-text-muted);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+.ctl-field__value {
+    color: var(--atcg-text-strong);
+    font-size: 11px;
+    -unity-text-align: middle-right;
+    white-space: normal;
+    flex-grow: 1;
+}
+
+.ctl-section {
+    height: 1px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    background-color: var(--atcg-hairline);
+}
+
+.ctl-section__label {
+    color: var(--atcg-text-strong);
+    -unity-font-style: bold;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.ctl-subheader {
+    color: var(--atcg-text-soft);
+    -unity-font-style: bold;
+    font-size: 11px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+}
+
+.ctl-hint {
+    color: var(--atcg-text-muted);
+    white-space: normal;
+}
+/* ---- cross-tool entity focus (hub additions) ---- */
+.ctl-card--focus-hit {
+    border-color: var(--atcg-accent);
+    border-width: 2px;
+}
+.ctl-card--focus-dim {
+    opacity: 0.35;
+}
+.ctl-clear-focus {
+    margin-left: 6px;
+}

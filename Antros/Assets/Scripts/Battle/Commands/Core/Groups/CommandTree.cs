@@ -7,7 +7,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Commands.Core
 {
     [Serializable]
-    public struct CommandTree : ISerializationCallbackReceiver
+    public class CommandTree : ISerializationCallbackReceiver
     {
         [SerializeReference]
         private List<ICommand> commands;
@@ -27,18 +27,18 @@ namespace ATCG.Battle.Commands.Core
         }
 
 
-        public readonly void AddCommand(ICommand command)
+        public void AddCommand(ICommand command)
         {
             commands.Add(command);
             mapping.Add(command.ID, command);
         }
 
-        public readonly bool TryGetCommand(BattleID battleID, out ICommand command)
+        public bool TryGetCommand(BattleID battleID, out ICommand command)
         {
             return mapping.TryGetValue(battleID, out command);
         }
 
-        public readonly ICommand GetCommand(BattleID battleID)
+        public ICommand GetCommand(BattleID battleID)
         {
             return mapping.GetValueOrDefault(battleID);
         }
@@ -49,7 +49,6 @@ namespace ATCG.Battle.Commands.Core
             commands.Clear();
             foreach ((_, ICommand command) in mapping)
                 commands.Add(command);
-
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()

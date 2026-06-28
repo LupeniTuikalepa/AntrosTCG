@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ATCG.Battle
 {
     [Serializable]
-    public struct CommandGroup
+    public class CommandGroup
     {
         public BattleID GroupID => groupID;
         public BattleID ParentGroupID => parentGroupID;

@@ -44,17 +44,17 @@ namespace ATCG.Battle
             {
                 case MovementType.Walk:
                     WalkingPathGenerator walkingPathGenerator = new WalkingPathGenerator();
-                    var walkPhase =  new CreatePathPhase<WalkingPathGenerator>(fromPlayer, center, speed, movementPatternData, walkingPathGenerator);
+                    CreatePathPhase<WalkingPathGenerator> walkPhase =  new CreatePathPhase<WalkingPathGenerator>(fromPlayer, center, speed, movementPatternData, walkingPathGenerator);
                     awaitable = walkPhase.Run();
                     break;
                 case MovementType.Flight:
                     FlightPathGenerator flightPathGenerator = new FlightPathGenerator();
-                    var flightPhase =  new CreatePathPhase<FlightPathGenerator>(fromPlayer, center, speed, movementPatternData, flightPathGenerator);
+                    CreatePathPhase<FlightPathGenerator> flightPhase =  new CreatePathPhase<FlightPathGenerator>(fromPlayer, center, speed, movementPatternData, flightPathGenerator);
                     awaitable = flightPhase.Run();
                     break;
                 case MovementType.Teleportation:
                     TeleportationPathGenerator teleportationPathGenerator = new TeleportationPathGenerator();
-                    var teleportationPhase =  new CreatePathPhase<TeleportationPathGenerator>(fromPlayer, center, speed, movementPatternData, teleportationPathGenerator);
+                    CreatePathPhase<TeleportationPathGenerator> teleportationPhase =  new CreatePathPhase<TeleportationPathGenerator>(fromPlayer, center, speed, movementPatternData, teleportationPathGenerator);
                     awaitable = teleportationPhase.Run();
                     break;
                 default:
@@ -69,15 +69,14 @@ namespace ATCG.Battle
             if (result.Length == 0)
                 return;
 
-            CommandManager.BeginGroup($"[{address.entity.id}]Entity Movement");
+            using (CommandManager.BeginGroup($"[{address.entity.id}] Entity Movement"))
+            {
+                ModifyPlayerManaCommand manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
+                manaCommand.Run(battlePhase);
 
-            var manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
-            manaCommand.Run(battlePhase);
-
-            var pathCommand = new MoveAlongPathCommand(address, result);
-            await pathCommand.RunAsync(battlePhase);
-
-            CommandManager.EndGroup();
+                MoveAlongPathCommand pathCommand = new MoveAlongPathCommand(address, result);
+                await pathCommand.RunAsync(battlePhase);
+            }
         }
     }
 }

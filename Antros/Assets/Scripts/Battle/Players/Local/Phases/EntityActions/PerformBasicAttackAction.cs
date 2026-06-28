@@ -71,16 +71,19 @@ namespace ATCG.Battle
 	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(fromPlayer, filter, builder);
 	        if(result.Length == 0)
 		        return;
-
-	        //Le player a l'origine de l'action perd de la mana
-	        ModifyPlayerManaCommand manaCost = new ModifyPlayerManaCommand(fromPlayer, -GameMetrics.Current.BasicAttackCost);
-	        await manaCost.RunAsync(battlePhase);
-
-	        for (int i = 0; i < result.Length; i++)
+	        using (CommandManager.BeginGroup($"[{address.entity.id}] Entity Basic Attack"))
 	        {
-		        EntityAddress target = result[i];
-		        BasicAttackCommand command = new BasicAttackCommand(address, target, strength);
-		        await command.RunAsync(battlePhase);
+		        //Le player a l'origine de l'action perd de la mana
+		        ModifyPlayerManaCommand manaCost =
+			        new ModifyPlayerManaCommand(fromPlayer, -GameMetrics.Current.BasicAttackCost);
+		        await manaCost.RunAsync(battlePhase);
+
+		        for (int i = 0; i < result.Length; i++)
+		        {
+			        EntityAddress target = result[i];
+			        BasicAttackCommand command = new BasicAttackCommand(address, target, strength);
+			        await command.RunAsync(battlePhase);
+		        }
 	        }
         }
     }
