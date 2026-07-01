@@ -1,25 +1,23 @@
 using System.Threading;
+using ATCG.Battle.Players.Local.Runtime;
 using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Core.Directors
 {
     /// <summary>
-    /// Drives the presentation of a capacity cast for ONE screen and decides
-    /// this screen's role (emit QTE results vs. wait for them). Owns a
-    /// CapacityCutscene (spawned from the capacity data) and paces it. Never
-    /// mutates the ECS and never decides step order — the phase owns those.
+    /// One per screen. Owns a cutscene, plays it through, and relays its step
+    /// markers to the phase (which barriers them across screens, then runs the
+    /// step). Decides this screen's role for QTEs (owner emits, others observe).
+    /// Never mutates the ECS, never runs steps.
     /// </summary>
     public interface ICapacityDirector
     {
-        Awaitable Begin(CastCapacityPhase phase, CancellationToken token);
+        /// <summary>Play the cutscene from start to finish. Returns when the timeline ends.</summary>
+        public Awaitable Play(CastCapacityPhase phase, RuntimeLocalBattlePlayer screenPlayer, CancellationToken token);
 
-        /// <summary>
-        /// Advance presentation up to the next step boundary. Owner screen plays
-        /// the QTE window and emits a QteCommand; other screens advance their
-        /// cutscene to the consumption marker (waiting there if needed).
-        /// </summary>
-        Awaitable AdvanceToNextStep(CancellationToken token);
+        /// <summary>Stop and release.</summary>
+        Awaitable Stop(CancellationToken token);
 
-        Awaitable End(CancellationToken token);
+        void Dispose();
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace PilotoStudio
@@ -75,19 +74,19 @@ namespace PilotoStudio
 
         private void Update()
         {
-            if (Keyboard.current.qKey.wasPressedThisFrame)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 ActivatePrevious();
             }
 
-            if (Keyboard.current.wKey.wasPressedThisFrame)
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 ActivateNext();
             }
 
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-
+          
                 if (particles[currentlyActive].TryGetComponent<ParticleSystem>(out ParticleSystem ps))
                 {
                     ps.Play();

@@ -14,7 +14,9 @@
         "Unity.Services.Authentication",
         "Unity.Services.Multiplayer",
         "PrimeTween.Runtime",
-        "Eflatun.SceneReference"
+        "Eflatun.SceneReference",
+        "Unity.Cinemachine",
+        "Unity.Timeline"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

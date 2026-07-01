@@ -26,11 +26,11 @@ namespace ATCG.Capacities
         [field: BoxGroup("Base")]
         [field: SerializeField, Tooltip("Steps of this capacity. Structure is driven by [WithStep] on the concrete data type; only metrics are editable.")]
         private CapacityStepData[] steps;
+        [field: SerializeField, BoxGroup("Base")]
+        public GameObject CutscenePrefab { get; private set; }
 
         private Dictionary<string, CapacityStepData> mappedSteps;
 
-        // OnEnable runs both in editor AND in build when the SO is loaded,
-        // unlike OnValidate (editor only) or an empty Awake.
         protected virtual void OnEnable() => RebuildStepMap();
 
         protected override void OnValidate()

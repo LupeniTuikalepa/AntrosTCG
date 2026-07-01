@@ -2,33 +2,28 @@ using System.Threading;
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.GameCommands.Capacities;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Battle.Players;
 using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Directors
 {
     /// <summary>
-    /// One per screen, created by the phase. Routing rule: this screen OWNS the
-    /// cast iff its logical player == the casting player (casterPlayerId). The
-    /// owner plays the QTE and emits a QteCommand from real input; the others
-    /// advance their cutscene and receive the QteCommand through the pipeline.
-    ///
-    /// Holds and drives an ICapacityCutscene (presentation). The cutscene is
-    /// spawned from the capacity data prefab; this director is engine-agnostic.
-    /// Works with OR without a caster entity (spell cards): routing is on the
-    /// player id, not on an EntityAddress.
+    /// One per screen. Plays its cutscene through and relays step markers to the
+    /// phase. The phase barriers reports across all screens and runs the step once
+    /// all have reported. QTE ownership (input vs observe) is decided by comparing
+    /// this screen's player to the casting player — used by the QTE clip logic.
     /// </summary>
     public class CapacityDirector : ICapacityDirector
     {
-        private readonly RuntimeLocalBattlePlayer runtimePlayer;
-        private readonly BattleID casterPlayerId;
-        private readonly ICapacityCutscene cutscene;
+        public CastCapacityPhase Phase { get; private set; }
 
-        private bool IsOwner =>
+        public readonly RuntimeLocalBattlePlayer runtimePlayer;
+        public readonly BattleID casterPlayerId;
+        public readonly ICapacityCutscene cutscene;
+
+
+        public bool IsOwner =>
             runtimePlayer.BattlePlayer != null
             && runtimePlayer.BattlePlayer.ID == casterPlayerId;
 
@@ -42,40 +37,48 @@ namespace ATCG.Battle.CapacitySystem.Directors
             this.cutscene = cutscene;
         }
 
-        public async Awaitable Begin(CastCapacityPhase phase, CancellationToken token)
+        public async Awaitable Play(CastCapacityPhase phase,  RuntimeLocalBattlePlayer screenPlayer, CancellationToken token)
+        {
+            this.Phase = phase;
+
+            if (cutscene == null)
+            {
+                await Awaitable.MainThreadAsync();
+                return;
+            }
+
+            // Tell the cutscene its role so it knows whether to read QTE input and
+            // emit the QteCommand. Only the owner screen does.
+            if (cutscene is CapacityCutscene concrete)
+                concrete.Configure(phase, screenPlayer);
+
+            cutscene.StepReached += OnStepReached;
+            try
+            {
+                await cutscene.Play(token);
+            }
+            finally
+            {
+                cutscene.StepReached -= OnStepReached;
+            }
+        }
+
+
+        public async Awaitable Stop(CancellationToken token)
         {
             if (cutscene != null)
-                await cutscene.Begin(token);
+                await cutscene.Stop(token);
             else
                 await Awaitable.MainThreadAsync();
         }
 
-        public async Awaitable AdvanceToNextStep(CancellationToken token)
-        {
-            if (IsOwner)
-            {
-                // Play the QTE window locally, get the [0,1], and broadcast it as
-                // a command so BOTH screens stack the same value.
-                float result = cutscene != null ? await cutscene.PlayNextQteWindow(token) : 1f;
+        // Relay the step marker to the phase barrier. The phase runs the step once
+        // every screen has reported it.
+        private void OnStepReached(string stepName) => Phase.ReportStepReached(stepName);
 
-                LocalBattlePlayer caster = runtimePlayer.BattlePlayer;
-                new QteCommand(caster, result).Run(runtimePlayer.BattlePlayer.BattlePhase);
-            }
-            else
-            {
-                // Observe: advance to the consumption marker, pausing there until
-                // the QteCommand has been received (the phase stacks it on OnBegin).
-                if (cutscene != null)
-                    await cutscene.AdvanceToNextConsumption(token);
-            }
-        }
-
-        public async Awaitable End(CancellationToken token)
+        public void Dispose()
         {
-            if (cutscene != null)
-                await cutscene.End(token);
-            else
-                await Awaitable.MainThreadAsync();
+            cutscene?.Dispose();
         }
     }
 }

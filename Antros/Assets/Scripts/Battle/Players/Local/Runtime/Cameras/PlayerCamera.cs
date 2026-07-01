@@ -27,6 +27,7 @@ namespace ATCG.Battle.Players.Local.Runtime
         public InputAction ZoomAction => RuntimeLocalBattlePlayer.Controls.Component.Zoom;
         public InputAction RotationAction => RuntimeLocalBattlePlayer.Controls.Component.Rotate;
         public Camera OutputCamera => renderCamera.OutputCamera;
+        public CinemachineBrain CinemachineBrain => renderCamera;
 
         private InputUser PlayerInputUser => RuntimeLocalBattlePlayer.Controls.Component.PlayerInputUser;
         private Transform TrackingTarget => cinemachineCamera.Target.TrackingTarget;
@@ -172,7 +173,12 @@ namespace ATCG.Battle.Players.Local.Runtime
             Bounds bounds = new(Vector3.zero, Vector3.one);
 
             foreach (RuntimeBattleCell r in RuntimeLocalBattlePlayer.RuntimeBattleGrid.BattleCells)
-                bounds.Encapsulate(r.Model.bounds);
+            {
+                foreach (var model in r.Models)
+                {
+                    bounds.Encapsulate(model.bounds);
+                }
+            }
 
             bounds.Expand(boundsExpansion);
             bounds.max = new Vector3(bounds.max.x, targetPositionYOffset, bounds.max.z);

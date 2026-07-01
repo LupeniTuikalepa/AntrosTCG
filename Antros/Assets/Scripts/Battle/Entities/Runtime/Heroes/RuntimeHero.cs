@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Runtime.Animations;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
@@ -13,11 +14,13 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
 {
-    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, ILocalPlayerPhaseListener<SelectEntityActionPhase>
+    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, ILocalPlayerPhaseListener<SelectEntityActionPhase>, IRuntimeEntityWithAnimator
     {
-        [SerializeField]
+        [SerializeField, BoxGroup("UI")]
         private TMP_Text heroName;
 
+        [field: SerializeField, BoxGroup("GameFeel"),]
+        public Animator Animator { get; private set; }
         [SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         private float movementDuration;
 
@@ -62,8 +65,13 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             int playerID = BattlePhase.GetPlayerNumber(aspect.Player);
             RenderingLayerMask mask = RenderingLayerMask.GetMask($"Player{playerID + 1}");
-            if(mask.value != 0)
-                Model.EnableRenderingLayer(mask);
+            if (mask.value != 0)
+            {
+                foreach (Renderer model in Models)
+                {
+                    model.EnableRenderingLayer(mask);
+                }
+            }
 
             if (LocalBattlePlayer.TryGetRuntime(out RuntimeLocalBattlePlayer runtimeLocalBattlePlayer))
                 cinemachineCamera.OutputChannel = runtimeLocalBattlePlayer.Camera.Component.GetOutputChannel();

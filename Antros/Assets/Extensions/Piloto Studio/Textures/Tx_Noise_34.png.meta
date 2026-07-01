@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -183,8 +183,8 @@ TextureImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 327633
-  packageName: Ultimate Mesh FX
-  packageVersion: 1.0
-  assetPath: Assets/Piloto Studio/Textures/Tx_Noise_34.png
-  uploadId: 794932
+  productId: 305728
+  packageName: Anime Powers Pack
+  packageVersion: 1.1
+  assetPath: Assets/Extensions/Piloto Studio/Textures/Tx_Noise_34.png
+  uploadId: 777329

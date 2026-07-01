@@ -25,24 +25,32 @@ namespace ATCG.Battle.Entities.Runtime
 
                 if (accepts || isRelated)
                 {
-                    Model.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                    Model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                    Model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                    foreach (var model in Models)
+                    {
+                        model.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                        model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                        model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                    }
                 }
                 else
                 {
-                    Model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                    Model.EnableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                    Model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                    foreach (var model in Models)
+                    {
+                        model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                        model.EnableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                        model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                    }
                 }
             }
             else
             {
                 IsInteractable.AddCondition(phase.ChannelKey, false);
-
-                Model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                Model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                Model.EnableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                foreach (var model in Models)
+                {
+                    model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                    model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                    model.EnableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                }
             }
         }
 
@@ -51,9 +59,12 @@ namespace ATCG.Battle.Entities.Runtime
             IsInteractable.RemoveCondition(phase.ChannelKey);
             CurrentSelectEntityPhase = null;
 
-            Model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
-            Model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
-            Model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
+            foreach (var model in Models)
+            {
+                model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
+                model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
+                model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
+            }
         }
     }
 }

@@ -14,12 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Fire.DevastationData
   guidText: c6067dd9-4a40-4d73-9eff-cab6e4539271
   <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
+  <Name>k__BackingField: Devastation
+  <Description>k__BackingField: Boom
   <CastPatterns>k__BackingField:
-    <Data>k__BackingField: []
-  <Range>k__BackingField: 0
-  <Damage>k__BackingField: 0
+    <Data>k__BackingField:
+    - rid: 2899897746609406451
+  steps:
+  - <StepName>k__BackingField: Explosion
+    <QTEsCount>k__BackingField: 2
+  <CutscenePrefab>k__BackingField: {fileID: 2981106221713600082, guid: 9bce9ba43db47434d8cfbfb5d2d49683, type: 3}
+  <Range>k__BackingField: 3
+  <Damage>k__BackingField:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2899897746609406451
+      type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 3

@@ -48,7 +48,8 @@ namespace ATCG.Battle.Entities.Runtime.Grid
 
                 list.Add(RuntimeBattleGrid.CellMaterial);
 
-                Model.SetMaterials(list);
+                for (int i = 0; i < Models.Length; i++)
+                    Models[i].SetMaterials(list);
             }
             transform.localScale = Vector3.zero;
             float delay = Coordinates.Length() * .2f;

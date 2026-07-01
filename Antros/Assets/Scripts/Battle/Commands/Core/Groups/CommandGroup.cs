@@ -26,12 +26,13 @@ namespace ATCG.Battle
 
         public CommandGroup(string label, CommandGroup parentGroup)
         {
-            parentGroupID = parentGroup.groupID;
+            parentGroupID = parentGroup?.groupID ?? BattleID.None;
+
             groupID = BattleID.CreateNew();
             trees = new List<CommandTree>();
             this.label = label;
         }
-        public CommandGroup(string label) : this(label, default)
+        public CommandGroup(string label) : this(label, null)
         {
             parentGroupID = BattleID.None;
         }

@@ -152,7 +152,7 @@ namespace ATCG.Battle.Entities.EditorTools
             if (v == null) return "null";
             switch (v)
             {
-                case ATCG.Battle.Entities.Components.BattleID bid:
+                case BattleID bid:
                     return bid.IsValid ? bid.ToString() : "None";
                 case string s: return $"\"{s}\"";
                 case UnityEngine.Object uo: return uo == null ? "null (UnityObject)" : uo.name;

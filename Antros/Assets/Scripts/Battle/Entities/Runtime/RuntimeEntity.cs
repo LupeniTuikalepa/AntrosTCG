@@ -9,6 +9,7 @@ using ATCG.Metrics;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
@@ -40,15 +41,16 @@ namespace ATCG.Battle.Entities.Runtime
         public Condition IsInteractable { get; private set; }
 
 
-        [field: SerializeField]
-        public MeshRenderer Model { get; private set; }
+        [field: ShowInInspector, ReadOnly, BoxGroup("Debug")]
+        public Renderer[] Models { get; private set; }
 
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("UI")]
         public Transform actionUIRoot { get; private set; }
 
 
         protected virtual void Awake()
         {
+            Models = GetComponentsInChildren<Renderer>();
             IsInteractable = new Condition();
         }
 
@@ -94,27 +96,44 @@ namespace ATCG.Battle.Entities.Runtime
 
         void IRuntimeEntity.OnSelected()
         {
-            Model.EnableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             OnSelected();
+            for (int i = 0; i < Models.Length; i++)
+            {
+                if(Models[i] != null)
+                    Models[i].EnableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
+            }
             OnEntitySelected?.Invoke();
         }
 
         void IRuntimeEntity.OnDeselected()
         {
-            Model.DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             OnDeselected();
+            for (int i = 0; i < Models.Length; i++)
+            {
+                if(Models[i] != null)
+                    Models[i].DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
+            }
             OnEntityDeselected?.Invoke();
         }
         void IRuntimeEntity.OnHovered()
         {
             OnHovered();
-            Model.EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+            for (int i = 0; i < Models.Length; i++)
+            {
+                if (Models[i] != null)
+                    Models[i].EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+            }
+
         }
 
         void IRuntimeEntity.OnUnhovered()
         {
             OnUnhovered();
-            Model.DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+            for (int i = 0; i < Models.Length; i++)
+            {
+                if (Models[i] != null)
+                    Models[i].DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+            }
         }
     }
 }

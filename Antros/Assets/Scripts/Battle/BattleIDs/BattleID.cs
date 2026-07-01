@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ATCG.Battle.Entities.Components
+namespace ATCG.Battle
 {
     [System.Serializable]
     public struct BattleID : IEquatable<BattleID>

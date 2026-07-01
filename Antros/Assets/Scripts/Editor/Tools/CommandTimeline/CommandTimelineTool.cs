@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using ATCG.Battle;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Trace;
 using ATCG.Battle.Entities.Components;

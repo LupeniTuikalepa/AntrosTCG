@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ATCG.Battle;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities.Components;
 

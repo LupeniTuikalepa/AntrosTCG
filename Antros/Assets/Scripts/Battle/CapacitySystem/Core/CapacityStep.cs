@@ -13,6 +13,12 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
         public readonly T data;
 
+        public CapacityStep(string stepName)
+        {
+            this.StepName = stepName;
+            this.data = null;
+            this.callback = null;
+        }
         public CapacityStep(T data, CapacityStepDelegate callback, string stepName)
         {
             this.data = data;
@@ -20,6 +26,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities
             StepName = stepName;
         }
 
-        public void RunStep(in CapacityStepContext stepContext) => callback(data, stepContext);
+        public void RunStep(in CapacityStepContext stepContext) => callback?.Invoke(data, stepContext);
     }
 }

@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using ATCG.Battle.Capacities;
 using ATCG.Battle.CapacitySystem.Capacities;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
@@ -13,19 +13,25 @@ using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Capacities;
 using ATCG.HexGrids;
+using Helteix.Tools;
 using Helteix.Tools.DataMapping;
 using Helteix.Tools.Phases;
 using UnityEngine;
 using UnityEngine.Pool;
+using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.CapacitySystem.Core
 {
     public class CastCapacityPhase : Phase, ICommandListener<QteCommand>
     {
+        public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
+        public bool HasCaster => caster.IsValid;
+
         public readonly BattlePhase battlePhase;
         public readonly CapacityData data;
 
@@ -33,9 +39,17 @@ namespace ATCG.Battle.CapacitySystem.Core
         public readonly EntityAddress caster;
         public readonly BattleID casterPlayerId;
 
-        public List<ICapacityDirector> directors;
+        public Dictionary<ICapacityDirector, RuntimeLocalBattlePlayer> directors;
 
         private List<float> QTEs;
+
+        // Steps mapped by name (from Run's yield). Timeline markers pick which to
+        // run; order of execution comes from the timeline, not the yield order.
+        private Dictionary<string, ICapacityStep> stepsByName;
+
+        // Barrier for steps across all screens. Built once directors are known.
+        private StepBarrier stepBarrier;
+        private readonly HashSet<string> stepsRun = new HashSet<string>();
 
         public CastCapacityPhase(
             BattlePhase battlePhase,
@@ -54,11 +68,13 @@ namespace ATCG.Battle.CapacitySystem.Core
         protected override Awaitable Initialize(CancellationToken token)
         {
             QTEs = ListPool<float>.Get();
-            directors = ListPool<ICapacityDirector>.Get();
+            directors = DictionaryPool<ICapacityDirector, RuntimeLocalBattlePlayer>.Get();
+            stepsByName = DictionaryPool<string, ICapacityStep>.Get();
 
             this.RegisterListener();
 
             CollectDirectors();
+            stepBarrier = new StepBarrier(directors.Count);
             return base.Initialize(token);
         }
 
@@ -69,49 +85,117 @@ namespace ATCG.Battle.CapacitySystem.Core
                 if (!data.TryGet(out ICapacityContainer capacityContainer))
                     return;
 
-                for (int i = 0; i < directors.Count; i++)
-                    await directors[i].Begin(this, token);
-
-                foreach (ICapacityStep stepHolder in capacityContainer.Run(data, this))
+                // Map the capacity's steps by name. Timeline markers will pick
+                // which to run; a missing/duplicate name is a detectable error.
+                foreach (ICapacityStep step in capacityContainer.Run(data, this))
                 {
-                    // Let every screen advance its cutscene to the next boundary.
-                    // Owner emits QteCommand(s); others wait. QteCommands land via
-                    // OnBegin and fill the stack before the flush below.
-                    for (int i = 0; i < directors.Count; i++)
-                        await directors[i].AdvanceToNextStep(token);
-
-                    if (!data.TryGetStep(stepHolder.StepName, out CapacityStepData stepData))
-                    {
-                        Debug.LogError($"[{data.Name}] No data for step '{stepHolder.StepName}'. Skipping.");
-                        continue;
-                    }
-
-                    float effectiveness = FlushQtes();
-                    CapacityStepContext stepContext = new CapacityStepContext(this, effectiveness, stepData);
-                    stepHolder.RunStep(stepContext);
+                    if (!stepsByName.TryAdd(step.StepName, step))
+                        Debug.LogError($"[{data.Name}] Duplicate step '{step.StepName}' from Run.");
                 }
 
-                for (int i = 0; i < directors.Count; i++)
-                    await directors[i].End(token);
+                // Play every screen's cutscene in parallel. Step markers reported
+                // by the directors drive ProcessStep via the barrier. We finish
+                // when all cutscenes have finished playing.
+                int playing = directors.Count;
+                if (playing == 0)
+                {
+                    // Headless / no screen: run all steps immediately, in yield order,
+                    // with neutral effectiveness (no QTE possible without a screen).
+                    foreach (ICapacityStep step in stepsByName.Values)
+                        RunStepNow(step);
+                    return;
+                }
+
+                AwaitableCompletionSource allDone = new AwaitableCompletionSource();
+                int remaining = playing;
+
+                foreach ((ICapacityDirector capacityDirector, RuntimeLocalBattlePlayer runtimeLocalBattlePlayer) in directors)
+                {
+                    PlayDirector(capacityDirector, runtimeLocalBattlePlayer, token, () =>
+                    {
+                        remaining--;
+                        if (remaining <= 0)
+                            allDone.TrySetResult();
+                    }).ListenForExceptions();
+                }
+
+                await allDone.Awaitable;
             }
+        }
+
+        private async Awaitable PlayDirector(ICapacityDirector director,
+            RuntimeLocalBattlePlayer screenPlayer, CancellationToken token, Action onDone)
+        {
+            try
+            {
+                await director.Play(this, screenPlayer, token);
+            }
+            finally
+            {
+                onDone();
+            }
+        }
+
+        /// <summary>
+        /// Called by a director when its cutscene crosses a StepMarker. Reports to
+        /// the barrier; once ALL screens have reported this step, flush + run it once.
+        /// </summary>
+        public void ReportStepReached(string stepName) =>
+            OnStepReportedAsync(stepName)
+                .ListenForExceptions();
+
+        private async Awaitable OnStepReportedAsync(string stepName)
+        {
+            stepBarrier.Report(stepName);
+            await stepBarrier.Await(stepName);
+
+            // Guard: the barrier releases once per screen report, but the step must
+            // execute exactly once across all of them.
+            if (!stepsRun.Add(stepName))
+                return;
+
+            if (stepsByName.TryGetValue(stepName, out ICapacityStep step))
+                RunStepNow(step);
+            else
+                Debug.LogError($"[{data.Name}] Step marker '{stepName}' has no matching step in Run.");
+        }
+
+        private void RunStepNow(ICapacityStep step)
+        {
+            float effectiveness = FlushQtes();
+            CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName));
+            step.RunStep(ctx);
+        }
+
+        private CapacityStepData ResolveStepData(string stepName)
+        {
+            data.TryGetStep(stepName, out CapacityStepData stepData);
+            return stepData;
         }
 
         protected override Awaitable Dispose(CancellationToken token)
         {
             this.UnregisterListener();
 
-            ListPool<ICapacityDirector>.Release(directors);
+
+            foreach (var director in directors)
+                director.Key.Dispose();
+
+            DictionaryPool<ICapacityDirector, RuntimeLocalBattlePlayer>.Release(directors);
             ListPool<float>.Release(QTEs);
+            DictionaryPool<string, ICapacityStep>.Release(stepsByName);
 
             return base.Dispose(token);
         }
 
         // ---- QteCommand listener --------------------------------------------
 
-        void ICommandListener<QteCommand>.OnBegin(in CommandListenerState state, CommandContext context, QteCommand command)
+        void ICommandListener<QteCommand>.OnBegin(in CommandListenerState state, CommandContext context,
+            QteCommand command)
             => AddQteResult(command.Result);
 
-        async Awaitable ICommandListener<QteCommand>.Play(CommandListenerState state, CommandContext context, QteCommand command)
+        async Awaitable ICommandListener<QteCommand>.Play(CommandListenerState state, CommandContext context,
+            QteCommand command)
         {
             state.CompleteAll(this);
             await Awaitable.MainThreadAsync();
@@ -137,9 +221,6 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         // ---- director collection -------------------------------------------
 
-        // One director per screen. Each is given the casting player's id (routing)
-        // and its own cutscene spawned from the capacity prefab. Iterating screens
-        // (not entities) is what lets spell cards with no caster entity still work.
         private void CollectDirectors()
         {
             foreach (var player in battlePhase.Players)
@@ -148,21 +229,22 @@ namespace ATCG.Battle.CapacitySystem.Core
                     RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(localBattlePlayer,
                         out RuntimeLocalBattlePlayer screenPlayer))
                 {
-                    // TODO: spawn the cutscene prefab referenced by `data` for this
-                    // screen and bind it. Until CapacityData exposes a prefab, inject
-                    // null / a stub so the chain runs.
                     ICapacityCutscene cutscene = SpawnCutsceneFor(screenPlayer);
-
-                    directors.Add(new CapacityDirector(screenPlayer, casterPlayerId, cutscene));
+                    CapacityDirector capacityDirector = new CapacityDirector(screenPlayer, casterPlayerId, cutscene);
+                    directors.Add(capacityDirector, screenPlayer);
                 }
             }
         }
 
-        private ICapacityCutscene SpawnCutsceneFor(RuntimeLocalBattlePlayer screen)
+        private ICapacityCutscene SpawnCutsceneFor(RuntimeLocalBattlePlayer player)
         {
-            // TODO: Object.Instantiate(data.CutscenePrefab) under `screen`, then
-            // GetComponent<CapacityCutscene>(). Returns null for now.
-            return null;
+            if (data.CutscenePrefab == null)
+                return null;
+
+            GameObject instance = Object.Instantiate(data.CutscenePrefab, player.transform);
+            CapacityCutscene spawnCutsceneFor = instance.GetComponent<CapacityCutscene>();
+
+            return spawnCutsceneFor;
         }
     }
 }
