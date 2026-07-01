@@ -146,5 +146,15 @@ namespace ATCG.HexGrids.Utility
                 }
             }
         }
+        
+        //TODO move in math operation ?
+        public static void ComputeQuaternion(Vector3 a, Vector3 b, out Quaternion rotation)
+        {
+            Vector3 direction = b - a;
+            direction.y = 0;
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
+            rotation = targetRotation;
+        }
     }
 }

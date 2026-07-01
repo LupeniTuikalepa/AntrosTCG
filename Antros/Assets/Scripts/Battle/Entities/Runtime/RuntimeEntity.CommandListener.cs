@@ -5,6 +5,7 @@ using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids.Runtime;
+using ATCG.HexGrids.Utility;
 using PrimeTween;
 using UnityEngine;
 
@@ -49,8 +50,29 @@ namespace ATCG.Battle.Entities.Runtime
 		{
 			state.CompleteWindUp(this);
 			await OnTakeDamage(state, context, command);
-
+			
 			Tween.CompleteAll(transform);
+
+			/*
+			if (Manager.TryGetRuntimeEntity(source, out var sourceRuntimeEntity))
+			{
+				var sourceTransform = sourceRuntimeEntity.transform;
+				
+				HexOperations.ComputeQuaternion(
+					sourceTransform.position,
+					transform.position, 
+					out var sourceTargetRotation);
+				
+				HexOperations.ComputeQuaternion(
+					transform.position,
+					sourceTransform.position,
+					out var victimTargetRotation);
+				
+				await Tween.Rotation(sourceTransform, sourceTargetRotation, .15f, Ease.InOutQuint);
+				await Tween.Rotation(transform, victimTargetRotation, .15f, Ease.InOutQuad);
+			}
+			*/
+			
 			await Tween.PunchScale(transform, -Vector3.one * .3f, .3f);
 
 			state.CompleteFollowThrough(this);
@@ -75,6 +97,12 @@ namespace ATCG.Battle.Entities.Runtime
 
 			if (RuntimeBattleGrid.TryGetBattleCellAt(destination, out RuntimeBattleCell cell))
 			{
+				HexOperations.ComputeQuaternion(
+					transform.position, 
+					cell.transform.position, 
+					out var targetRotation);
+
+				await Tween.Rotation(transform, targetRotation, 0.15f, Ease.InOutQuint);
 				await Tween.Position(transform, cell.transform.position, .15f, Ease.OutCirc);
 			}
 
