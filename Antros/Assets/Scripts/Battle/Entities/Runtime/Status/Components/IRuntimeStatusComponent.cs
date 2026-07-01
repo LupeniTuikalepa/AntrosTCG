@@ -1,8 +1,10 @@
-﻿namespace ATCG.Battle.Entities.Runtime.Status
+﻿using ATCG.Capacities.Data.Status;
+
+namespace ATCG.Battle.Entities.Runtime.Status
 {
     public interface IRuntimeStatusComponent
     {
-        void OnApplyStatus();
+        void OnApplyStatus(StatusData statusData);
         void OnRemoveStatus();
         void OnTickStatus(RuntimeStatusContext context);
     }

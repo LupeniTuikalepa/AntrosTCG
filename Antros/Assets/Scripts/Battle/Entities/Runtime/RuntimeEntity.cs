@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
+using ATCG.Capacities.Data.Status;
 using ATCG.Metrics;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.Tools;
@@ -47,11 +50,16 @@ namespace ATCG.Battle.Entities.Runtime
         [field: SerializeField, BoxGroup("UI")]
         public Transform actionUIRoot { get; private set; }
 
+        [field: SerializeField, BoxGroup("UI")]
+        public Transform statusRoot { get; private set; }
+        
+        private Dictionary<StatusData, RuntimeStatus> statusDatas;
 
         protected virtual void Awake()
         {
             Models = GetComponentsInChildren<Renderer>();
             IsInteractable = new Condition();
+            statusDatas = new();
         }
 
         protected virtual void OnEnable()

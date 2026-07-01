@@ -7,7 +7,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatus : MonoBehaviour
     {
-        private event Action OnApplyStatus;
+        private event Action<StatusData> OnApplyStatus;
         private event Action OnRemoveStatus;
         private event Action<RuntimeStatusContext> OnTickStatus;
         
@@ -39,9 +39,9 @@ namespace ATCG.Battle.Entities.Runtime.Status
             }
         }
         
-        public void Apply()
+        public void Apply(StatusData statusData)
         {
-            OnApplyStatus?.Invoke();
+            OnApplyStatus?.Invoke(statusData);
         }
 
         public void Remove()
