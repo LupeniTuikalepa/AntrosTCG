@@ -7,8 +7,15 @@ using ATCG.Metrics;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
-	public class BasicAttackCommand : EntityCommand<NoInfos>
+	public class BasicAttackCommand : EntityCommand<BasicAttackCommand.Infos>
 	{
+		public struct Infos : ICommandInfos
+		{
+			public int strength;
+			public Entity victim;
+			public Entity source;
+		}
+		
 		private readonly int strength;
 		private readonly Entity victim;
 
@@ -16,6 +23,10 @@ namespace ATCG.Battle.Commands.EntityCommands
 		{
 			this.strength = strength;
 			this.victim = victim;
+			
+			infos.strength = strength;
+			infos.victim = victim;
+			infos.source = address;
 		}
 
 		protected override void Process(in CommandContext context)

@@ -14,7 +14,9 @@ namespace ATCG.Battle.Entities.Runtime
 	public abstract partial class RuntimeEntity<T> :
 		IEntityCommandListener<DeathCommand>,
 		IEntityCommandListener<DamageCommand>,
-		IEntityCommandListener<MoveCommand>, IEntityCommandListener<FallCommand>
+		IEntityCommandListener<MoveCommand>, 
+		IEntityCommandListener<FallCommand>,
+		IEntityCommandListener<BasicAttackCommand>
 
 
 	{
@@ -52,29 +54,36 @@ namespace ATCG.Battle.Entities.Runtime
 			await OnTakeDamage(state, context, command);
 			
 			Tween.CompleteAll(transform);
-
-			/*
-			if (Manager.TryGetRuntimeEntity(source, out var sourceRuntimeEntity))
-			{
-				var sourceTransform = sourceRuntimeEntity.transform;
-				
-				HexOperations.ComputeQuaternion(
-					sourceTransform.position,
-					transform.position, 
-					out var sourceTargetRotation);
-				
-				HexOperations.ComputeQuaternion(
-					transform.position,
-					sourceTransform.position,
-					out var victimTargetRotation);
-				
-				await Tween.Rotation(sourceTransform, sourceTargetRotation, .15f, Ease.InOutQuint);
-				await Tween.Rotation(transform, victimTargetRotation, .15f, Ease.InOutQuad);
-			}
-			*/
 			
 			await Tween.PunchScale(transform, -Vector3.one * .3f, .3f);
 
+			state.CompleteFollowThrough(this);
+		}
+
+		async Awaitable ICommandListener<BasicAttackCommand>.Play(CommandListenerState state, CommandContext context, BasicAttackCommand command)
+		{
+			state.CompleteWindUp(this);
+			
+			var infos = command.GetInfos();
+			
+			if (Manager.TryGetRuntimeEntity(infos.victim, out var victimRuntimeEntity))
+			{
+				var victimTransform = victimRuntimeEntity.transform;
+				
+				HexOperations.ComputeQuaternion(
+					victimTransform.position,
+					transform.position,
+					out var victimTargetRotation);
+
+				HexOperations.ComputeQuaternion(
+					transform.position,
+					victimTransform.position,
+					out var sourceTargetRotation);
+
+				await Tween.Rotation(transform, sourceTargetRotation, .15f, Ease.InOutQuint);
+				await Tween.Rotation(victimTransform, victimTargetRotation, .15f, Ease.InOutQuint);
+			}
+			
 			state.CompleteFollowThrough(this);
 		}
 
@@ -118,20 +127,6 @@ namespace ATCG.Battle.Entities.Runtime
 			await Tween.Scale(transform, Vector3.zero, duration: 0.8f, ease: Ease.InQuad);
 			state.CompleteAll(this);
 
-		}
-
-		private bool Filter(BattleCellAspect aspect)
-		{
-			if (aspect.CanBeMovedOn())
-				return true;
-
-			foreach (var memberRef in aspect.GetMembers())
-			{
-				if (memberRef.Entity == Entity)
-					return true;
-			}
-
-			return false;
 		}
 	}
 }

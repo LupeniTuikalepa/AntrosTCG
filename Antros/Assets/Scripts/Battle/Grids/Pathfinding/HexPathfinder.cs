@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using ATCG.Battle.CapacitySystem.Status.Forst;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using CollectionDebugger.Core;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
@@ -14,8 +17,17 @@ namespace ATCG.Battle.Grids
             bool IPathfinderController.CanTraverse(BattleCellAspect cell) => cell.CanBeMovedOn();
 
             int IPathfinderController.GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell) => 1;
-            public bool TryRedirect(HexCoordinates from, BattleCellAspect to, out HexCoordinates newCoordinates)
+            public bool TryRedirect(HexCoordinates from, BattleCellAspect goal, out HexCoordinates newCoordinates)
             {
+                if (goal.EntityAddress.HasComponent<FrostStatusComponent>())
+                {
+                    Debug.Log($"[PathfindingController] Try redirect from {from} to {goal.Coordinate}]");
+                    var to = goal.Coordinate;
+                    var direction = from.GetDirection(to);
+                    newCoordinates = to + direction;
+                    Debug.Log($"[PathfindingController] New coordinates : {newCoordinates}");
+                    return true;
+                }
                 newCoordinates = HexCoordinates.None;
                 return false;
             }
@@ -83,7 +95,6 @@ namespace ATCG.Battle.Grids
                         frontier.Add(new PriorityHexCoordinates(next, priority));
                         cameFrom[next] = current;
                     }
-
                 }
             }
             return ReconstructPath(start, goal, path);
@@ -96,12 +107,13 @@ namespace ATCG.Battle.Grids
             TController controller)
             where TController : IPathfinderController
         {
-            if (!battleGrid.TryGetBattleCell(from, out BattleCellAspect fromCell))
+            if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell))
                 yield break;
 
-            if (controller.TryRedirect(from, fromCell, out var newCoordinates)
-                && IsCoordinatesValid(newCoordinates, goal, battleGrid, controller))
+            if (controller.TryRedirect(from, goalCell, out var newCoordinates)
+                && IsCoordinatesValid(from, newCoordinates, battleGrid, controller))
                 yield return newCoordinates;
+            
 
             else
             {
@@ -126,7 +138,7 @@ namespace ATCG.Battle.Grids
             if (from == goal)
                 return true;
 
-            if (!battleGrid.TryGetBattleCell(from, out BattleCellAspect cell))
+            if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect cell))
                 return false;
 
             if (!controller.CanTraverse(cell))
