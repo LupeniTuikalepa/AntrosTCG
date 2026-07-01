@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
@@ -19,6 +20,8 @@ namespace ATCG.Battle
     public class PlayerInteractions : RuntimeLocalPlayerComponent, IEntitySelectionController,
         IPhaseListener<LocalPlayerTurnPhase>
     {
+	    
+	    private HoverEntityPhase hoverEntityPhase;
         int IEntitySelectionController.MaxSelectableEntities => 1;
         private void OnEnable()
         {
@@ -69,11 +72,28 @@ namespace ATCG.Battle
         }
 
         void IEntitySelectionController.OnHoverBegin(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
-        {
+        { 
+	        //Todo à changé
+	        if (hoverEntityPhase != null)
+	        {
+		        hoverEntityPhase.SetResult(hoverEntityPhase.HoveredAddress);
+	        }
+	        if (selectedEntity.TryGetComponentRO(out BattleCardComponent battleCardComponent))
+	        {
+		        hoverEntityPhase =  new HoverEntityPhase(Player, selectedEntity);
+		        ExecuteHoverPhase(hoverEntityPhase).ListenForExceptions();
+	        }
+	        
         }
 
         void IEntitySelectionController.OnHoverEnd(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
+	        //Todo à changé
+	        if (hoverEntityPhase != null && hoverEntityPhase.HoveredAddress == selectedEntity )
+	        {
+		        hoverEntityPhase.SetResult(selectedEntity);
+		        hoverEntityPhase = null;
+	        }
         }
 
         private async Awaitable SelectAction(IRuntimeEntity runtimeEntity)
@@ -110,6 +130,10 @@ namespace ATCG.Battle
 
         void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseEnd(LocalPlayerTurnPhase phase)
         {
+        }
+        private async Awaitable ExecuteHoverPhase(HoverEntityPhase phase)
+        {
+	        await phase; 
         }
     }
 }

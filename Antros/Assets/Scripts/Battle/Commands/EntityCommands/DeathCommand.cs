@@ -1,8 +1,12 @@
 using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.UI;
+using ATCG.UI;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
@@ -20,13 +24,15 @@ namespace ATCG.Battle.Commands.EntityCommands
             if (address.Is(out HeroEntityAspect aspect))
             {
                 IBattlePlayer player = aspect.Player;
-	            player.AddOrRemoveHealth(-aspect.HeroCard.DeathCost);
-	            
+                
+                Embed(in context, new ModifyPlayerHealthCommand(player, -aspect.HeroCard.DeathCost));
+                
 	            //Todo à changer 
 	            player.DeadCards.TryAddCard(aspect.HeroCard);
+	            
             }
             address.Destroy();
-            Break("Entity death.");
+            //Break("Entity death.");
         }
     }
 }
