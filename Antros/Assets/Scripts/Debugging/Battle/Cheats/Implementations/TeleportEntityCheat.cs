@@ -4,10 +4,14 @@ using ATCG.Battle;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Debugging.Debugging.Battle.ChoicePhase;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
 using Cheats.Core;
 using Helteix.Tools.Phases;
 using UnityEngine;
@@ -32,20 +36,36 @@ namespace ATCG.Debugging.Debugging.Battle
 		{
 			using (DictionaryPool<string , EntityAddress>.Get(out var bucket))
 			{
-				CheatUtilities.FillBucket<GridMemberComponent>(bucket,player);
+				CheatUtilities.FillBucket<MovementComponent>(bucket,player);
 				
 				CheatsChoicePhase choicePhase = new CheatsChoicePhase(player, bucket.Keys.ToList());
 				string result = await choicePhase.Run();
 
 				if (bucket.TryGetValue(result, out EntityAddress address))
 				{
-					HexCoordinates coordinates = new HexCoordinates(0,0);
-					MoveCommand moveCommand = new MoveCommand(address,coordinates);
+					var battlePatternController = new BattlePatternController(player.BattlePhase.BattleGrid);
 					
-					if(address.TryGetComponentRO(out GridMemberComponent component))
-					Debug.Log($"{address.entity.id} : is teleported to {component.coordinates}");
+					using HexPatternBuilder allCell = new HexPatternBuilder(HexCoordinates.Zero,
+						battlePatternController).With(new EverythingPattern());
+
+					var filter = new AspectFilter<BattleCellAspect>();
 					
-					moveCommand.Run(player.BattlePhase);
+					var phase = new SelectEntityPhase<AspectFilter<BattleCellAspect>>(player,filter,allCell);
+					EntityAddress[] resultCoordinate = await phase.Run();
+					if (resultCoordinate.Length > 0)
+					{
+						EntityAddress first = resultCoordinate[0];
+						if (first.TryGetComponentRO(out GridMemberComponent gridMember))
+						{
+							MoveCommand moveCommand = new MoveCommand(address, gridMember.coordinates);
+					
+							if(address.TryGetComponentRO(out GridMemberComponent component))
+								Debug.Log($"{address.entity.id} : is teleported to {component.coordinates}");
+					
+							moveCommand.Run(player.BattlePhase);
+						}
+					}
+					
 				}
 			}
 		}
