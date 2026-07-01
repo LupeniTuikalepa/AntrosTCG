@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2475319510328557620}
-  - component: {fileID: -5624816788901137009}
+  - component: {fileID: 36008938902687542}
   m_Layer: 0
-  m_Name: RuntimePoisonStatus
+  m_Name: RuntimeFrostStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,11 +30,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4674573209564308796}
-  - {fileID: 1880436001115274360}
+  - {fileID: 2386470182546466614}
+  - {fileID: 1111673459865580141}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5624816788901137009
+--- !u!114 &36008938902687542
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de43029c2da4f2c8e2cb343139cbacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Status.RuntimeStatus
---- !u!1 &4643286642075346372
+--- !u!1 &4369665701747811756
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,8 +54,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4674573209564308796}
-  - component: {fileID: 5019804292045449941}
+  - component: {fileID: 2386470182546466614}
+  - component: {fileID: 3329572032498316122}
   m_Layer: 0
   m_Name: VFX
   m_TagString: Untagged
@@ -63,13 +63,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4674573209564308796
+--- !u!4 &2386470182546466614
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4643286642075346372}
+  m_GameObject: {fileID: 4369665701747811756}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -78,19 +78,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2475319510328557620}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5019804292045449941
+--- !u!114 &3329572032498316122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4643286642075346372}
+  m_GameObject: {fileID: 4369665701747811756}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a0966fa763a4e4aa0f04aa22681046c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Status.RuntimeStatusVFX
---- !u!1 &8129816611434189060
+--- !u!1 &4431288323210916601
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,8 +98,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1880436001115274360}
-  - component: {fileID: 2293375129995766259}
+  - component: {fileID: 1111673459865580141}
+  - component: {fileID: 8476530704140868850}
   m_Layer: 0
   m_Name: Audio
   m_TagString: Untagged
@@ -107,13 +107,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1880436001115274360
+--- !u!4 &1111673459865580141
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8129816611434189060}
+  m_GameObject: {fileID: 4431288323210916601}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -122,13 +122,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2475319510328557620}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2293375129995766259
+--- !u!114 &8476530704140868850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8129816611434189060}
+  m_GameObject: {fileID: 4431288323210916601}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37b0d5eac9654c78aed3f205d2207da5, type: 3}

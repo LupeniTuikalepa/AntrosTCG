@@ -215,7 +215,7 @@ Transform:
   - {fileID: 6901710294249636606}
   - {fileID: 167438518338950931}
   - {fileID: 7136927883721114253}
-  - {fileID: 2172208025077487483}
+  - {fileID: 3256700890912901188}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7693259140358200842
@@ -231,10 +231,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Cards.Runtime.RuntimeHeroBattleCard
   <actionUIRoot>k__BackingField: {fileID: 167438518338950931}
+  <statusRoot>k__BackingField: {fileID: 3256700890912901188}
   heroName: {fileID: 895034403804600685}
   <Animator>k__BackingField: {fileID: 1584673418553577359}
   movementDuration: 0
   cinemachineCamera: {fileID: 985806925998146216}
+--- !u!1 &3627302078991207085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3256700890912901188}
+  m_Layer: 0
+  m_Name: StatusVFXRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3256700890912901188
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3627302078991207085}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.19448996, y: 1.48367, z: -0.36291}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1173186091470948849}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4088443381881390415
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,66 +648,4 @@ Animator:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
   m_PrefabInstance: {fileID: 3359121768631106932}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &3638026446695530588
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1173186091470948849}
-    m_Modifications:
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3787760227535759248, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-      propertyPath: m_Name
-      value: RuntimeStatusController
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
---- !u!4 &2172208025077487483 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3195838811892127527, guid: ac5a74d0c6a3e294ea259b0ddb8c2d4b, type: 3}
-  m_PrefabInstance: {fileID: 3638026446695530588}
   m_PrefabAsset: {fileID: 0}

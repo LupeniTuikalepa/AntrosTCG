@@ -18,6 +18,7 @@ namespace ATCG.Battle.Entities.Runtime
         IBattlePlayer BattlePlayer { get; }
         BattlePhase BattlePhase { get; }
         Transform actionUIRoot { get; }
+        Transform statusRoot { get; }
 
         void OnHovered();
         void OnUnhovered();

@@ -7,6 +7,6 @@ namespace ATCG.Battle.Grids
     {
         bool CanTraverse(BattleCellAspect cell);
         int GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell);
-        bool TryRedirect(HexCoordinates from, BattleCellAspect to, out HexCoordinates newCoordinates);
+        bool TryRedirect(HexCoordinates from, BattleCellAspect toCellAspect, out HexCoordinates newCoordinates);
     }
 }
