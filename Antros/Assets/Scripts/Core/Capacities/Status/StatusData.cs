@@ -7,6 +7,6 @@ namespace ATCG.Capacities.Data.Status
     public abstract class StatusData : GameDatabaseObject, IData
     {
         [field: SerializeField]
-        public GameObject StatusVFX { get; private set; }
+        public GameObject RuntimeStatus { get; private set; }
     }
 }

@@ -79,6 +79,10 @@ namespace ATCG.Battle.Players.Local.Phases
             CurrentPath.Add(StartingPoint);
             for (int i = 0; i < Speed; i++)
             {
+                if (!BattleGrid.TryGetBattleCell(StartingPoint, out var cell))
+                {
+                    return CurrentPath.ToArray();
+                }
                 using HexPatternBuilder builder = new HexPatternBuilder(center, controller)
                         .With(PatternGroup, center)
                         .Without(center);

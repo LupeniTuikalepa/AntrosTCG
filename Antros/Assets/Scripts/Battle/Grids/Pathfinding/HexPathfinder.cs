@@ -17,14 +17,27 @@ namespace ATCG.Battle.Grids
             bool IPathfinderController.CanTraverse(BattleCellAspect cell) => cell.CanBeMovedOn();
 
             int IPathfinderController.GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell) => 1;
-            public bool TryRedirect(HexCoordinates from, BattleCellAspect toCellAspect, out HexCoordinates newCoordinates)
+            public bool TryRedirect(HexCoordinates from, HexCoordinates to, BattleGrid battleGrid, out HexCoordinates newCoordinates)
             {
+                if (!battleGrid.TryGetBattleCell(to, out var toCellAspect))
+                {
+                    newCoordinates = HexCoordinates.None;
+                    return false;
+                }
+                
                 //TODO check good component
                 if (toCellAspect.EntityAddress.HasComponent<FrostStatusComponent>())
                 {
-                    var to = toCellAspect.Coordinate;
-                    var direction = from.GetDirection(to);
-                    newCoordinates = to + direction;
+                    var direction = from.GetNormalizedDirection(to);
+                    var redirectedCoord = to + direction;
+                    Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
+                    if (TryRedirect(from, redirectedCoord, battleGrid, out var coord))
+                    {
+                        newCoordinates = coord;
+                        return true;
+                    }
+                    
+                    newCoordinates = redirectedCoord;
                     return true;
                 }
                 newCoordinates = HexCoordinates.None;
@@ -43,6 +56,8 @@ namespace ATCG.Battle.Grids
             costSoFar = DictionaryPool<HexCoordinates, int>.Get();
             cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
             frontier = ListPool<PriorityHexCoordinates>.Get();
+            
+            cameFrom.Watch(nameof(cameFrom));
         }
 
         public bool FindPath(
@@ -64,10 +79,17 @@ namespace ATCG.Battle.Grids
     frontier.Clear();
 
     HexCoordinates actualGoal = goal;
-    
-    if (battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell) 
-        && controller.TryRedirect(start, goalCell, out HexCoordinates redirectedGoal)) 
-        actualGoal = redirectedGoal;
+
+    foreach (HexCoordinates dir in HexOperations.Directions)
+    {
+        HexCoordinates neighborOfGoal = goal - dir;
+        if (battleGrid.TryGetBattleCell(neighborOfGoal, out _) 
+            && controller.TryRedirect(neighborOfGoal, goal, battleGrid, out HexCoordinates redirectedGoal))
+        {
+            actualGoal = redirectedGoal;
+            break;
+        }
+    }
 
     frontier.Add(new PriorityHexCoordinates(start, 0));
     cameFrom[start] = start;
@@ -86,20 +108,22 @@ namespace ATCG.Battle.Grids
         {
             if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
                 continue;
-
             HexCoordinates actual = next;
 
-            if (controller.TryRedirect(current, nextCell, out HexCoordinates redirected))
+            if (controller.TryRedirect(current, next, battleGrid, out HexCoordinates redirected))
             {
                 costSoFar[next] = int.MaxValue;
                 cameFrom[next] = current;
+                cameFrom[actual] = current;
 
                 if (!battleGrid.TryGetBattleCell(redirected, out BattleCellAspect redirectedCell))
-                    continue;
-
-                if (!controller.CanTraverse(redirectedCell) && redirected != actualGoal)
-                    continue;
-
+                {
+                    if (!IsCoordinatesValid(redirected, actualGoal, battleGrid, controller))
+                    {
+                        continue;
+                    }
+                }
+                
                 actual = redirected;
                 nextCell = redirectedCell;
             }
@@ -133,7 +157,8 @@ namespace ATCG.Battle.Grids
             }
         }
 
-        private bool IsCoordinatesValid<TController>(HexCoordinates from,
+        private bool IsCoordinatesValid<TController>(
+            HexCoordinates from,
             HexCoordinates goal,
             BattleGrid battleGrid,
             TController controller)
@@ -157,6 +182,8 @@ namespace ATCG.Battle.Grids
             List<HexCoordinates> path)
         {
             if (!cameFrom.ContainsKey(goal))
+                return false;
+            if(!cameFrom.ContainsKey(start))
                 return false;
 
             HexCoordinates current = goal;

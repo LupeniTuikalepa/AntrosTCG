@@ -7,13 +7,14 @@ namespace CollectionDebugger.Core
     /// Allows registering collections to monitor and display them
     /// in the Unity editor window under "Tools/Collection Debugger".
     /// </summary>
-    public static class CollectionDebug
+    public static partial class CollectionDebug
     {
         private static readonly Dictionary<string, ICollectionWatch> Watches;
 
         static CollectionDebug()
         {
             Watches = new();
+            SnapshotWatches = new();
         }
 
         /// <summary>
@@ -90,20 +91,6 @@ namespace CollectionDebugger.Core
         /// </summary>
         public static void UnwatchAll()
             => Watches.Clear();
-
-        private static readonly Dictionary<string, int> SnapshotCounters = new();
-
-        public static void TakeSnapshot(string label)
-        {
-            if (!Watches.TryGetValue(label, out var watch)) return;
-
-            if (!SnapshotCounters.ContainsKey(label))
-                SnapshotCounters[label] = 0;
-
-            SnapshotCounters[label]++;
-            var snapshotLabel = $"{label} (snapshot {SnapshotCounters[label]})";
-            Watches[snapshotLabel] = new SnapshotWatch(snapshotLabel, watch.GetEntries());
-        }
 
         internal static IReadOnlyDictionary<string, ICollectionWatch> GetWatches() => Watches;
     }

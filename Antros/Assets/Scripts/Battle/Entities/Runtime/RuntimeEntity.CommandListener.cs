@@ -99,7 +99,7 @@ namespace ATCG.Battle.Entities.Runtime
 		DamageCommand command)
 		=> await Awaitable.MainThreadAsync();
 
-	public async Awaitable Play(CommandListenerState state, CommandContext context, MoveCommand command)
+	async Awaitable ICommandListener<MoveCommand>.Play(CommandListenerState state, CommandContext context, MoveCommand command)
 	{
 		state.CompleteWindUp(this);
 
@@ -107,21 +107,21 @@ namespace ATCG.Battle.Entities.Runtime
 
 		var destination = infos.to;
 
-		if (RuntimeBattleGrid.TryGetBattleCellAt(destination, out RuntimeBattleCell cell))
-		{
-			HexOperations.ComputeQuaternion(
-				transform.position,
-				cell.transform.position,
-				out var targetRotation);
+		var position = RuntimeBattleGrid.GetPositionAt(destination);
+		
+		HexOperations.ComputeQuaternion(
+			transform.position,
+			position,
+			out var targetRotation);
 
-			await Tween.Rotation(transform, targetRotation, 0.15f, Ease.InOutQuint);
-			await Tween.Position(transform, cell.transform.position, .15f, Ease.OutCirc);
-		}
+		await Tween.Rotation(transform, targetRotation, 0.15f, Ease.InOutQuint);
+		await Tween.Position(transform, position, .15f, Ease.OutCirc);
+		
 
 		state.CompleteFollowThrough(this);
 	}
 
-	public async Awaitable Play(CommandListenerState state, CommandContext context, FallCommand command)
+	async Awaitable ICommandListener<FallCommand>.Play(CommandListenerState state, CommandContext context, FallCommand command)
 	{
 		float targetY = transform.position.y - 10f;
 
@@ -179,9 +179,9 @@ namespace ATCG.Battle.Entities.Runtime
 		if (statusDatas.ContainsKey(statusData))
 			return;
 
-		if (!statusData.StatusVFX.TryGetComponent(out RuntimeStatus prefabStatus))
+		if (!statusData.RuntimeStatus.TryGetComponent(out RuntimeStatus prefabStatus))
 		{
-			Debug.LogWarning($"[RuntimeStatusController] No RuntimeStatus found");
+			Debug.LogWarning($"[RuntimeEntity] No RuntimeStatus found");
 			return;
 		}
             

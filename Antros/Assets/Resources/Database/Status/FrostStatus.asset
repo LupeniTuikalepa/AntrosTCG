@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FrostStatus
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Status.FrostStatusData
   guidText: 96e879b3-e642-4a06-bd08-a90991ae49b8
-  <StatusVFX>k__BackingField: {fileID: 1034227222644561179, guid: d5d38a8cb4afc9e458dbdc2ec0d78bec, type: 3}
+  <RuntimeStatus>k__BackingField: {fileID: 1034227222644561179, guid: d5d38a8cb4afc9e458dbdc2ec0d78bec, type: 3}
   <Duration>k__BackingField: 3
