@@ -114,6 +114,7 @@ namespace ATCG.Battle.Grids
             {
                 costSoFar[next] = int.MaxValue;
                 cameFrom[next] = current;
+                cameFrom[actual] = current;
 
                 if (!battleGrid.TryGetBattleCell(redirected, out BattleCellAspect redirectedCell))
                 {
