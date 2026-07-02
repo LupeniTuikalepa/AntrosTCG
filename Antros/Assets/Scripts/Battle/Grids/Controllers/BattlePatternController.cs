@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using ATCG.Battle.Entities;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Grids;
 using ATCG.HexGrids.Patterns;
-using UnityEngine;
 
 public class BattlePatternController : IHexPatternController, IDisposable
 {

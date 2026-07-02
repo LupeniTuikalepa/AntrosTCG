@@ -74,7 +74,7 @@ namespace ATCG.Battle.Players.Local.Phases
         {
             var filter = new GridFilter();
             var center = StartingPoint;
-            MovementPatternController controller = new MovementPatternController(BattleGrid, center);
+            BattleIgnoreOriginPatternController controller = new BattleIgnoreOriginPatternController(BattleGrid, center);
 
             CurrentPath.Add(StartingPoint);
             for (int i = 0; i < Speed; i++)

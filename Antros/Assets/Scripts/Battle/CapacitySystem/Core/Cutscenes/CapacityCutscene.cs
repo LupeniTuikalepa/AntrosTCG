@@ -1,18 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes.Timeline;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.GameCommands.Capacities;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.Animations;
-using ATCG.Battle.Entities.Runtime.Heroes;
-using ATCG.Battle.Players;
-using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Core.Cutscenes;
+using ATCG.Metrics;
 using Helteix.Tools;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using Object = UnityEngine.Object;
@@ -20,24 +18,20 @@ using Object = UnityEngine.Object;
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
 {
     /// <summary>
-    /// Plays the capacity timeline straight through for one screen.
-    ///  - StepMarkers fire StepReached (relayed by the director to the phase).
-    ///  - QTE clips drive QTE windows through IQteWindowHost. Only the OWNER screen
-    ///    reads input and emits the QteCommand; other screens just play the gauge.
-    ///
-    /// The owner flag and the casting player are injected by the director (it knows
-    /// the role). The critical-window width comes from a global game metric.
+    /// Plays a capacity timeline for ONE screen. Network-agnostic: it plays the
+    /// same on both sides, shows the gauges, reads local input, arbitrates presses
+    /// (FIFO) across open QTE windows, and SIGNALS each resolved score to the sink.
+    /// The sink (the director) decides whether to emit a QteCommand based on role.
     /// </summary>
     [RequireComponent(typeof(PlayableDirector))]
     [AddComponentMenu("ATCG/Gameplay/Capacities/Capacity Cutscene")]
-    public class CapacityCutscene : MonoBehaviour, ICapacityCutscene, IQteWindowHost, INotificationReceiver
+    public class CapacityCutscene : MonoBehaviour, IQteWindowHost, INotificationReceiver
     {
+        public event Action<CastCapacityPhase, Qte> OnQteWindowOpened;
+        public event Action<CastCapacityPhase, Qte> OnQteWindowClosed;
+        public event Action<CastCapacityPhase, Qte> OnQteResolved;
         public event Action<string> StepReached;
 
-        public bool IsOwner => ScreenPlayer.BattlePlayer.ID == castCapacityPhase.casterPlayerId;
-        public IBattlePlayer CastingPlayer => castCapacityPhase.CasterPlayer;
-
-        // Injected by the director before Play.
         public RuntimeLocalBattlePlayer ScreenPlayer { get; private set; }
 
         [SerializeField]
@@ -46,35 +40,37 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
         private AwaitableCompletionSource finished;
 
         private CastCapacityPhase castCapacityPhase;
-        private bool pressedThisWindow;
-        private float pendingResult;
+        private IQteResultReceiver resultReceiver;
 
         private ICapacityCutsceneElement[] elements;
 
-        private void Awake()
-        {
-            elements = GetComponentsInChildren<ICapacityCutsceneElement>();
-        }
+        public bool IsHost => castCapacityPhase.casterPlayerId == ScreenPlayer.BattlePlayer.ID;
 
-        private void Reset()
-        {
-            playableDirector = GetComponent<PlayableDirector>();
-        }
+        private readonly Dictionary<BattleID, Qte> qtes = new();
 
-        /// <summary>Called by the director before Play, so the cutscene knows its role.</summary>
-        public void Configure(CastCapacityPhase capacityPhase, RuntimeLocalBattlePlayer screenPlayer)
+        private void Awake() => elements = GetComponentsInChildren<ICapacityCutsceneElement>();
+
+        private void Reset() => playableDirector = GetComponent<PlayableDirector>();
+
+        /// <summary>Injected by the director before Play. The sink receives QTE scores.</summary>
+        public void Configure(
+            CastCapacityPhase capacityPhase,
+            RuntimeLocalBattlePlayer screenPlayer,
+            IQteResultReceiver resultReceiver)
         {
             ScreenPlayer = screenPlayer;
-            for (int i = 0; i < elements.Length; i++)
-                elements[i].Connect(screenPlayer, capacityPhase);
-
             this.castCapacityPhase = capacityPhase;
+            this.resultReceiver = resultReceiver;
 
-            if (capacityPhase.HasCaster && screenPlayer.RuntimeEntityManager.TryGetRuntimeEntity(capacityPhase.caster, out IRuntimeEntity runtimeEntity))
+            if (capacityPhase.TryGetRuntimeCaster(screenPlayer, out IRuntimeEntity runtimeEntity))
             {
                 transform.position = runtimeEntity.transform.position;
                 transform.rotation = runtimeEntity.transform.rotation;
             }
+
+            for (int i = 0; i < elements.Length; i++)
+                elements[i].Connect(screenPlayer, capacityPhase);
+
         }
 
         public async Awaitable Play(CancellationToken token)
@@ -83,6 +79,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             playableDirector.extrapolationMode = DirectorWrapMode.None;
 
             ResolveBindings();
+            HookInput();
 
             finished = new AwaitableCompletionSource();
             playableDirector.stopped += OnDirectorStopped;
@@ -91,6 +88,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             await finished.Awaitable;
             playableDirector.stopped -= OnDirectorStopped;
             finished = null;
+
+            UnhookInput();
         }
 
         public async Awaitable Stop(CancellationToken token)
@@ -99,10 +98,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             await Awaitable.MainThreadAsync();
         }
 
-        public void Dispose()
-        {
-            gameObject.Destroy();
-        }
+        public void Dispose() => gameObject.Destroy();
 
         private void OnDirectorStopped(PlayableDirector _) => finished?.TrySetResult();
 
@@ -112,71 +108,87 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
                 StepReached?.Invoke(step.StepName);
         }
 
-        // ---- IQteWindowHost (QTE clip drives these) -------------------------
+        // ---- input (single subscription for all QTEs of this cutscene) ------
 
-        public void OnQteWindowEnter(QteClipData data)
+        private void HookInput()
         {
-            pressedThisWindow = false;
-            pendingResult = 0f;
-
-            // TODO: spawn the gauge (data.gaugePrefab) for visual feedback on this
-            // screen. Both screens show the gauge; only the owner reads input.
+            if (IsHost)
+            {
+                var qteAction = ScreenPlayer?.Controls?.Component?.QTE;
+                if (qteAction != null)
+                {
+                    qteAction.performed += OnQtePerformed;
+                }
+            }
         }
 
-        public void OnQteWindowTick(QteClipData data, double normalizedTime)
+        private void UnhookInput()
         {
-            // TODO: update gauge fill from normalizedTime.
+            if (IsHost)
+            {
+                var qteAction = ScreenPlayer?.Controls?.Component?.QTE;
 
-            if (!IsOwner || pressedThisWindow)
+                if (qteAction != null)
+                    qteAction.performed -= OnQtePerformed;
+            }
+        }
+
+        private void OnDestroy() => UnhookInput();
+
+
+        public void SetQteData(BattleID qteID, QteClipData data, double time, double duration)
+        {
+            if (!qtes.TryGetValue(qteID, out Qte target))
+            {
+                target = new Qte(ScreenPlayer, duration, data);
+                qtes.Add(qteID, target);
+
+                OnQteWindowOpened?.Invoke(castCapacityPhase, target);
+            }
+
+            target.SetDuration(duration);
+            target.SetTime(time);
+
+            if (time >= duration)
+            {
+                if (!target.IsDone)
+                    resultReceiver?.SubmitQteResult(0f);
+
+                qtes.Remove(qteID);
+                OnQteWindowClosed?.Invoke(castCapacityPhase, target);
+            }
+        }
+
+        private void OnQtePerformed(InputAction.CallbackContext _)
+        {
+
+            Qte target = null;
+            double lastNorm = 0;
+
+            foreach ((BattleID id, Qte qte) in qtes)
+            {
+                if(qte.NormalizedTime > lastNorm)
+                {
+                    target = qte;
+                    lastNorm = qte.NormalizedTime;
+                }
+            }
+            if (target == null)
                 return;
 
-            // TODO: replace with the real input gateway (player's input controller).
-            bool pressed = ReadQtePressPlaceholder();
-            if (!pressed)
-                return;
-
-            pressedThisWindow = true;
-
-            // Critical window = the last `criticalPortion` of the clip. A press is a
-            // success (1) iff it lands inside it, else a miss (0).
-            float criticalPortion = GetCriticalPortion();
+            float criticalPortion = GameMetrics.Current.QTESuccessRange;
             float threshold = 1f - criticalPortion;
-            pendingResult = normalizedTime >= threshold ? 1f : 0f;
+            float score = target.NormalizedTime >= threshold ? 1f : 0f;
 
-            // TODO: if pendingResult == 0, play the early-press miss animation.
+            target.Resolve();
+            resultReceiver?.SubmitQteResult(score);
+            OnQteResolved?.Invoke(castCapacityPhase, target);
         }
 
-        public void OnQteWindowExit(QteClipData data)
-        {
-            // Only the owner emits; both screens stack via the QteCommand listener.
-            if (!IsOwner)
-                return;
-
-            // No press at all = miss (0). A press already computed pendingResult.
-            float result = pressedThisWindow ? pendingResult : 0f;
-            new QteCommand(CastingPlayer, result).Run(CastingPlayer.BattlePhase);
-        }
-
-        // ---- placeholders to wire later -------------------------------------
-
-        private bool ReadQtePressPlaceholder() => false;
-
-        private float GetCriticalPortion()
-        {
-            // TODO: read from the global game metric (e.g. gameMetrics.QteCriticalPortion).
-            return 0.2f;
-        }
-
-        /// <summary>
-        /// Résout les bindings de la timeline par NOM de piste, à l'instanciation.
-        /// Le prefab porte la structure (les pistes) ; les objets liés dépendent de
-        /// l'écran/du caster, donc on les bind ici au runtime.
-        /// </summary>
         public void ResolveBindings()
         {
             if (playableDirector == null)
                 return;
-
             if (playableDirector.playableAsset is not TimelineAsset timeline)
                 return;
 
@@ -185,18 +197,17 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
                 switch (track.name)
                 {
                     case CutsceneTrackNames.HERO_ANIMATOR:
-                        if(!castCapacityPhase.caster.IsValid)
+                        if (!castCapacityPhase.caster.IsValid)
                         {
-                            Debug.LogWarning($"[Cutscene] Pas d'Animator pour la piste '{track.name}' car la capacité n'a pas de casters.");
+                            Debug.LogWarning($"[Cutscene] No animator for track '{track.name}': the capacity has no caster.");
                             break;
                         }
-
                         if (ScreenPlayer.RuntimeEntityManager.TryGetRuntimeEntity(castCapacityPhase.caster, out IRuntimeEntity runtimeEntity))
                         {
-                            if (runtimeEntity is IRuntimeEntityWithAnimator runtimeEntityWithAnimator)
-                                playableDirector.SetGenericBinding(track, runtimeEntityWithAnimator.Animator);
+                            if (runtimeEntity is IRuntimeEntityWithAnimator withAnimator)
+                                playableDirector.SetGenericBinding(track, withAnimator.Animator);
                             else
-                                Debug.LogWarning($"[Cutscene] Pas d'Animator pour la piste '{track.name}'.");
+                                Debug.LogWarning($"[Cutscene] No animator for track '{track.name}'.");
                         }
                         break;
 
@@ -205,11 +216,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
                         if (cameraBinding != null)
                             playableDirector.SetGenericBinding(track, cameraBinding);
                         else
-                            Debug.LogWarning($"[Cutscene] Pas de caméra pour la piste '{track.name}'.");
+                            Debug.LogWarning($"[Cutscene] No camera for track '{track.name}'.");
                         break;
-
                 }
             }
         }
+
     }
 }

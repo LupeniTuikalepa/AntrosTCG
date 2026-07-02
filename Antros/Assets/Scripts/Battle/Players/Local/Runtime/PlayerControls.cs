@@ -23,6 +23,7 @@ namespace ATCG.Battle.Players.Local.Runtime
         public InputAction Zoom { get; private set; }
         public InputAction Use { get; private set; }
         public InputAction Pointer { get; private set; }
+        public InputAction QTE { get; private set; }
 
         public InputUser PlayerInputUser => PlayerInput.user;
 
@@ -51,6 +52,9 @@ namespace ATCG.Battle.Players.Local.Runtime
 
             //Shortcuts
             Use = PlayerInput.actions["Battle/Use"];
+
+            //Gameplay
+            QTE = PlayerInput.actions["Battle/QTE"];
         }
 
         private void OnEnable()

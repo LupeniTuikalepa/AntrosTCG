@@ -51,7 +51,6 @@ namespace ATCG.Battle.Entities.Aspects
 
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
-            //TODO
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
         }
     }

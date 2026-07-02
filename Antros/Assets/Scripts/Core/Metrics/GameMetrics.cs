@@ -54,7 +54,9 @@ namespace ATCG.Metrics
         public int BasicAttackRange { get; private set; } = 1;
         [field: SerializeField, BoxGroup("Game")]
         public DualPairing<CardRarity, int> CardRarityDeathCost { get; private set; }
-
+        [field: SerializeField, BoxGroup("Game"), Range(0, 1)]
+        public float QTESuccessRange { get; private set; } = 0.25f;
+        
         [field: SerializeField, BoxGroup("Game/Costs"), PropertyRange(1, nameof(MinPlayerHandSize))]
         public int BasicAttackCost { get; private set; } = 1;
         [field: SerializeField, BoxGroup("Game/Costs"), PropertyRange(1, nameof(MinPlayerHandSize))]

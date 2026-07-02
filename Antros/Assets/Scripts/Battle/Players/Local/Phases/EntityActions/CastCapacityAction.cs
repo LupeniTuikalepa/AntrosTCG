@@ -5,6 +5,7 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
@@ -40,7 +41,7 @@ namespace ATCG.Battle
             }
             else
             {
-                BattlePatternController patternController = new BattlePatternController(BattleGrid);
+                BattleIgnoreOriginPatternController patternController = new BattleIgnoreOriginPatternController(BattleGrid, from);
                 using var patternBuilder = new HexPatternBuilder(from, patternController)
                     .With(capacityData.CastPatterns);
 

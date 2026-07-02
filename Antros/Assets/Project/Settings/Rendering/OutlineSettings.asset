@@ -47,7 +47,11 @@ Material:
   - OUTLINE_USE_COLOR
   - OUTLINE_USE_DEPTH
   - RESOLUTION_INVARIANT_THICKNESS
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - OUTLINE_FADE_OUT
+  - OUTLINE_USE_COLOR
+  - OUTLINE_USE_DEPTH
+  - RESOLUTION_INVARIANT_THICKNESS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0

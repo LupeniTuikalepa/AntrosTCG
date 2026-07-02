@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Devastation
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Fire.DevastationData
   guidText: c6067dd9-4a40-4d73-9eff-cab6e4539271
-  <Cost>k__BackingField: 0
+  <Cost>k__BackingField: 1
   <Name>k__BackingField: Devastation
   <Description>k__BackingField: Boom
   <CastPatterns>k__BackingField:
@@ -59,4 +59,4 @@ MonoBehaviour:
         <Offset>k__BackingField:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
-        <Distance>k__BackingField: 3
+        <Distance>k__BackingField: 5
