@@ -20,7 +20,7 @@ namespace ATCG.HexGrids.Runtime
         public void Connect(HexCoordinates coordinates)
         {
             Coordinates = coordinates;
-            transform.localPosition = RuntimeGrid.GetPositionAt(coordinates);
+            transform.position = RuntimeGrid.GetPositionAt(coordinates);
         }
 
         public void Disconnect()

@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Tags;
-using ATCG.Battle.Players;
-using ATCG.HexGrids;
-using ATCG.HexGrids.Grids;
-using ATCG.HexGrids.Patterns;
-using UnityEngine;
-using UnityEngine.Pool;
+﻿using ATCG.HexGrids;
 
 namespace ATCG.Battle.Grids.Controllers
 {
-    public class MovementPatternController : BattlePatternController
+    public class BattleIgnoreOriginPatternController : BattlePatternController
     {
         private readonly HexCoordinates origin;
 
-
-        public MovementPatternController(BattleGrid battleGrid, HexCoordinates origin) : base(battleGrid)
+        public BattleIgnoreOriginPatternController(BattleGrid battleGrid, HexCoordinates origin) : base(battleGrid)
         {
             this.origin = origin;
         }

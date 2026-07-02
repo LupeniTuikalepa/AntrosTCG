@@ -76,10 +76,6 @@ namespace ATCG.Battle.Grids.Runtime
         void IRuntimeBattlePlayerComponent<LocalBattlePlayer>.Connect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
         {
             LocalBattlePlayer = runtimeBattlePlayer.BattlePlayer;
-
-            foreach (IBattlePlayer player in runtimeBattlePlayer.BattlePlayer.BattlePhase.Players)
-            {
-            }
             runtimeHexGrid.Connect(CurrentBattlePhase.HexGrid);
         }
 

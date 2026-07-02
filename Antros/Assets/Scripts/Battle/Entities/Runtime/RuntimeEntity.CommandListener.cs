@@ -8,6 +8,7 @@ using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.HexGrids.Utility;
+using ATCG.HexGrids;
 using PrimeTween;
 using UnityEngine;
 
@@ -188,6 +189,19 @@ namespace ATCG.Battle.Entities.Runtime
 		RuntimeStatus runtimeStatus = Instantiate(prefabStatus, statusRoot);
 		statusDatas.Add(statusData, runtimeStatus);
 		runtimeStatus.Apply(statusData);
-	}
-	}
+    }
+
+	public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
+	{
+		Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
+		Vector3 from = transform.position;
+		Vector3 to = (target - from).normalized;
+		to.y = 0;
+
+		Quaternion rotation = Quaternion.LookRotation(to, Vector3.up);
+
+		Tween.StopAll(transform);
+		await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
+    }
+	
 }

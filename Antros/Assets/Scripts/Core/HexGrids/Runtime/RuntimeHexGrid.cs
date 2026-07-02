@@ -85,7 +85,7 @@ namespace ATCG.HexGrids.Runtime
         public Vector3 GetPositionAt(HexCoordinates coordinates)
         {
             Vector2 positionAt = Current.GetPositionAt(coordinates);
-            return new Vector3(positionAt.x, 0, positionAt.y);
+            return new Vector3(positionAt.x, 0, positionAt.y) + transform.position;
         }
     }
 }

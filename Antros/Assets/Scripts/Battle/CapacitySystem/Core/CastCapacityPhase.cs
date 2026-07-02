@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Capacities;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
-using ATCG.Battle.CapacitySystem.Core.Directors;
+using ATCG.Battle.CapacitySystem.Core.Properties;
 using ATCG.Battle.CapacitySystem.Directors;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
@@ -11,7 +11,7 @@ using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Commands.GameCommands.Capacities;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
@@ -39,7 +39,9 @@ namespace ATCG.Battle.CapacitySystem.Core
         public readonly EntityAddress caster;
         public readonly BattleID casterPlayerId;
 
-        public Dictionary<ICapacityDirector, RuntimeLocalBattlePlayer> directors;
+        private Dictionary<string, ICapacityProperty> properties;
+
+        public Dictionary<RuntimeLocalBattlePlayer, CapacityDirector> directors;
 
         private List<float> QTEs;
 
@@ -68,7 +70,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         protected override Awaitable Initialize(CancellationToken token)
         {
             QTEs = ListPool<float>.Get();
-            directors = DictionaryPool<ICapacityDirector, RuntimeLocalBattlePlayer>.Get();
+            directors = DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Get();
             stepsByName = DictionaryPool<string, ICapacityStep>.Get();
 
             this.RegisterListener();
@@ -109,9 +111,9 @@ namespace ATCG.Battle.CapacitySystem.Core
                 AwaitableCompletionSource allDone = new AwaitableCompletionSource();
                 int remaining = playing;
 
-                foreach ((ICapacityDirector capacityDirector, RuntimeLocalBattlePlayer runtimeLocalBattlePlayer) in directors)
+                foreach ((RuntimeLocalBattlePlayer screenPlayer, CapacityDirector capacityDirector) in directors)
                 {
-                    PlayDirector(capacityDirector, runtimeLocalBattlePlayer, token, () =>
+                    PlayDirector(capacityDirector, screenPlayer, token, () =>
                     {
                         remaining--;
                         if (remaining <= 0)
@@ -123,7 +125,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             }
         }
 
-        private async Awaitable PlayDirector(ICapacityDirector director,
+        private async Awaitable PlayDirector(CapacityDirector director,
             RuntimeLocalBattlePlayer screenPlayer, CancellationToken token, Action onDone)
         {
             try
@@ -143,6 +145,24 @@ namespace ATCG.Battle.CapacitySystem.Core
         public void ReportStepReached(string stepName) =>
             OnStepReportedAsync(stepName)
                 .ListenForExceptions();
+
+        public bool TryGetProperty<T>(string name, out T value)
+        {
+            if (properties.TryGetValue(name, out ICapacityProperty property) &&
+                property is CapacityProperty<T> capacityProperty)
+            {
+                value = capacityProperty.Value;
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
+        public void InjectProperty<T>(string name, T value)
+        {
+            properties[name] = new CapacityProperty<T>(value);
+        }
 
         private async Awaitable OnStepReportedAsync(string stepName)
         {
@@ -178,10 +198,10 @@ namespace ATCG.Battle.CapacitySystem.Core
             this.UnregisterListener();
 
 
-            foreach (var director in directors)
-                director.Key.Dispose();
+            foreach ((var runtimeLocalBattlePlayer, CapacityDirector director) in directors)
+                director.Dispose();
 
-            DictionaryPool<ICapacityDirector, RuntimeLocalBattlePlayer>.Release(directors);
+            DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Release(directors);
             ListPool<float>.Release(QTEs);
             DictionaryPool<string, ICapacityStep>.Release(stepsByName);
 
@@ -229,14 +249,17 @@ namespace ATCG.Battle.CapacitySystem.Core
                     RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(localBattlePlayer,
                         out RuntimeLocalBattlePlayer screenPlayer))
                 {
-                    ICapacityCutscene cutscene = SpawnCutsceneFor(screenPlayer);
+                    CapacityCutscene cutscene = SpawnCutsceneFor(screenPlayer);
                     CapacityDirector capacityDirector = new CapacityDirector(screenPlayer, casterPlayerId, cutscene);
-                    directors.Add(capacityDirector, screenPlayer);
+                    directors.Add(screenPlayer, capacityDirector);
                 }
             }
         }
 
-        private ICapacityCutscene SpawnCutsceneFor(RuntimeLocalBattlePlayer player)
+        public bool TryGetCapacityDirector(RuntimeLocalBattlePlayer player, out CapacityDirector capacityDirector)
+            => directors.TryGetValue(player, out capacityDirector);
+
+        private CapacityCutscene SpawnCutsceneFor(RuntimeLocalBattlePlayer player)
         {
             if (data.CutscenePrefab == null)
                 return null;
@@ -245,6 +268,16 @@ namespace ATCG.Battle.CapacitySystem.Core
             CapacityCutscene spawnCutsceneFor = instance.GetComponent<CapacityCutscene>();
 
             return spawnCutsceneFor;
+        }
+
+        public bool TryGetRuntimeCaster(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer,
+            out IRuntimeEntity runtimeEntity)
+        {
+            runtimeEntity = null;
+            if (!HasCaster)
+                return false;
+
+            return runtimeLocalBattlePlayer.RuntimeEntityManager.TryGetRuntimeEntity(caster, out runtimeEntity);
         }
     }
 }

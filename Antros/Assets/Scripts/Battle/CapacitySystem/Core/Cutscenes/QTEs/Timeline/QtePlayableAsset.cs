@@ -1,8 +1,7 @@
-using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Timeline
+namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs
 {
     /// <summary>
     /// The authorable QTE clip. Its LENGTH on the track is the QTE duration. Holds

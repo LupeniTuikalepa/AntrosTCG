@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Tags;
+﻿using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
-using ATCG.HexGrids.Grids;
-using ATCG.HexGrids.Patterns;
-using UnityEngine;
 
 namespace ATCG.Battle.Grids.Controllers
 {

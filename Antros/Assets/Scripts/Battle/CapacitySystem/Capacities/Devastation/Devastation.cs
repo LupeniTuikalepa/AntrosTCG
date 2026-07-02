@@ -6,6 +6,7 @@ using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.Capacities;
 using ATCG.Capacities.Fire;
 using ATCG.HexGrids.Patterns;
@@ -26,7 +27,8 @@ namespace ATCG.Battle.CapacitySystem.Capacities
         private static void ApplyExplosion(DevastationData data, CapacityStepContext ctx)
         {
             BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-            BattlePatternController hexPatternController = new BattlePatternController(battleGrid);
+            
+            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, ctx.CastPoint);
             using HexPatternBuilder builder = new HexPatternBuilder(ctx.CastPoint, hexPatternController)
                 .With(new SpreadPattern(data.Range));
 
