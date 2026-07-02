@@ -1,23 +1,26 @@
-﻿using ATCG.Capacities.Data.Status;
+﻿using System;
+using ATCG.Capacities.Data.Status;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatusVFX : RuntimeStatusComponent
     {
-        public override void OnApplyStatus(StatusData statusData)
+        [SerializeField]
+        private new ParticleSystem particleSystem;
+
+        public override void OnApplyStatus(RuntimeStatusContext context)
         {
-            Debug.Log("[RuntimeStatusVFX] OnApplyStatus");
+            var shape = particleSystem.shape;
+            shape.meshRenderer = context.runtimeEntity.gameObject.GetComponentInChildren<MeshRenderer>();
         }
 
-        public override void OnRemoveStatus()
+        public override void OnRemoveStatus(RuntimeStatusContext context)
         {
-            Debug.Log("[RuntimeStatusVFX] OnRemoveStatus");
         }
 
         public override void OnTickStatus(RuntimeStatusContext context)
         {
-            Debug.Log("[RuntimeStatusVFX] OnTickStatus");
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
     {
         public readonly StatusData statusData;
         public readonly Entity entity;
-        private readonly IRuntimeEntity runtimeEntity;
+        public readonly IRuntimeEntity runtimeEntity;
 
         public RuntimeStatusContext(StatusData statusData, Entity entity, IRuntimeEntity runtimeEntity)
         {

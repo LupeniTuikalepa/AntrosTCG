@@ -195,6 +195,16 @@ namespace ATCG.Battle.Entities.Runtime
 			runtimeStatus.Apply(statusData);
 		}
 
+	private void RemoveRuntimeStatus(RuntimeStatusContext runtimeContext)
+	{
+		var statusData = runtimeContext.statusData;
+		if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus)) 
+			return;
+            
+		removeStatus.Remove(runtimeContext);
+		Destroy(removeStatus.gameObject);
+		statusDatas.Remove(statusData);
+	}
 		public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
 		{
 			Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);

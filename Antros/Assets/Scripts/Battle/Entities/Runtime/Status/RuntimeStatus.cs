@@ -7,11 +7,12 @@ namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatus : MonoBehaviour
     {
-        private event Action<StatusData> OnApplyStatus;
-        private event Action OnRemoveStatus;
+        private event Action<RuntimeStatusContext> OnApplyStatus;
+        private event Action<RuntimeStatusContext> OnRemoveStatus;
         private event Action<RuntimeStatusContext> OnTickStatus;
         
         private IRuntimeStatusComponent[] components; 
+        
         protected virtual void Awake()
         {
             components = GetComponentsInChildren<IRuntimeStatusComponent>();
@@ -39,14 +40,14 @@ namespace ATCG.Battle.Entities.Runtime.Status
             }
         }
         
-        public void Apply(StatusData statusData)
+        public void Apply(RuntimeStatusContext context)
         {
-            OnApplyStatus?.Invoke(statusData);
+            OnApplyStatus?.Invoke(context);
         }
 
-        public void Remove()
+        public void Remove(RuntimeStatusContext context)
         {
-            OnRemoveStatus?.Invoke();
+            OnRemoveStatus?.Invoke(context);
         }
         
         public void Tick(RuntimeStatusContext context)
