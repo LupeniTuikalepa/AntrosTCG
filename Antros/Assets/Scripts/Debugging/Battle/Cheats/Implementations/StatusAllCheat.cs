@@ -34,7 +34,6 @@ namespace ATCG.Debugging.Debugging.Battle.Cheats.Implementations
 			{
 				StatusTickAllCommand command = new StatusTickAllCommand(data);
 				await command.RunAsync(player.BattlePhase);
-				Debug.Log($"{command} fonctionne tkt");
 			} 
 		}
 	}

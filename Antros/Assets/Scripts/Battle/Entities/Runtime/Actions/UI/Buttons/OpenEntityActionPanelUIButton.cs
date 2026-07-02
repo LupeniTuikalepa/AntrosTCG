@@ -17,6 +17,5 @@ namespace ATCG.Battle.Entities.Runtime.UI
         {
             Controller.Open(panel);
         }
-
     }
 }

@@ -19,6 +19,7 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
         [SerializeField]
         private CanvasGroup canvasGroup;
+        
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
 

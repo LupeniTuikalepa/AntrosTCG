@@ -29,5 +29,6 @@ namespace ATCG.Battle.Entities.Runtime.UI
         protected virtual bool IsButtonInteractable() => true;
 
         protected abstract void OnClick(BaseEventData baseEventData);
+        
     }
 }
