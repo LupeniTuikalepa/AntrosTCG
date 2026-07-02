@@ -179,9 +179,9 @@ namespace ATCG.Battle.Entities.Runtime
 		if (statusDatas.ContainsKey(statusData))
 			return;
 
-		if (!statusData.StatusVFX.TryGetComponent(out RuntimeStatus prefabStatus))
+		if (!statusData.RuntimeStatus.TryGetComponent(out RuntimeStatus prefabStatus))
 		{
-			Debug.LogWarning($"[RuntimeStatusController] No RuntimeStatus found");
+			Debug.LogWarning($"[RuntimeEntity] No RuntimeStatus found");
 			return;
 		}
             

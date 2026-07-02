@@ -79,8 +79,8 @@ namespace ATCG.Battle
                 for (var i = 0; i < fullPath.Count; i++)
                 {
                     var coord = fullPath[i];
-                    if (RuntimeBattlePlayer.RuntimeBattleGrid.TryGetBattleCellAt(coord, out var cell))
-                        lineRenderer.SetPosition(i, cell.transform.position + Vector3.up * yOffset);
+                    var pathPosition = RuntimeBattlePlayer.RuntimeBattleGrid.GetPositionAt(coord);
+                    lineRenderer.SetPosition(i, pathPosition + Vector3.up * yOffset);
                 }
             }
         }

@@ -124,10 +124,12 @@ namespace ATCG.Battle.Grids.Runtime
         {
             if (battleCells.Remove(runtimeCell.Cell, out RuntimeBattleCell cell))
             {
-                if (CurrentBattlePhase.BattleGrid.TryGetBattleCell(runtimeCell.Coordinates, out BattleCellAspect battleCell))
-
-                OnBattleCellRemoved?.Invoke(cell);
-                Destroy(cell);
+                if (CurrentBattlePhase.BattleGrid.TryGetBattleCell(runtimeCell.Coordinates,
+                        out BattleCellAspect battleCell))
+                {
+                    OnBattleCellRemoved?.Invoke(cell);
+                    Destroy(cell);
+                }
             }
         }
 
@@ -138,6 +140,11 @@ namespace ATCG.Battle.Grids.Runtime
 
             battleCell = null;
             return false;
+        }
+
+        public Vector3 GetPositionAt(HexCoordinates coordinates)
+        {
+            return runtimeHexGrid.GetPositionAt(coordinates);
         }
 
 

@@ -56,7 +56,7 @@
         /// Returns a snapshot of the current state of the watched collection as an array of <see cref="WatchEntry"/>.
         /// Called by the debugger window on every repaint.
         /// </summary>
-        public WatchEntry[] GetEntries()
+        public virtual WatchEntry[] GetEntries()
         {
             var entries = new WatchEntry[GetCount()];
             FillEntries(entries);
