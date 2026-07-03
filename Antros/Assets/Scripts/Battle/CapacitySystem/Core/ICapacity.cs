@@ -13,7 +13,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
     public interface ICapacity<in T> : IBehaviour<T> where T : CapacityData
     {
         [AddToContainer]
-        HexPatternBuilder GetHitPattern(T data, BattleGrid battleGrid, HexCoordinates origin);
+        HexPatternBuilder GetHitPattern(T data, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin);
 
         [AddToContainer]
         IEnumerable<ICapacityStep> Run(T data, CastCapacityPhase phase);

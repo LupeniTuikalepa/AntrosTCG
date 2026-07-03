@@ -11,6 +11,7 @@ using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Commands.GameCommands.Capacities;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
@@ -31,6 +32,10 @@ namespace ATCG.Battle.CapacitySystem.Core
     {
         public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
         public bool HasCaster => caster.IsValid;
+        public HexCoordinates CasterOrigin => 
+            HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMemberComponent)?
+            gridMemberComponent.coordinates:
+            castPoint;
 
         public readonly BattlePhase battlePhase;
         public readonly CapacityData data;

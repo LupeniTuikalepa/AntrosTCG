@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0ae2b9b4aa433eb55bc5c8c2622138, type: 3}
+  m_Name: WintryMist
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Frost.WintryMistData
+  guidText: 06848562-1c7a-4259-8b8e-7410aff7b0fb
+  <Cost>k__BackingField: 1
+  <Name>k__BackingField: "Br\xFBme Hivernal"
+  <Description>k__BackingField: "Applique l'etat Gel\xE9e a une ligne de case"
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 7630467839202951329
+  steps:
+  - <StepName>k__BackingField: BlackIce
+    <QTEsCount>k__BackingField: 0
+  <CutscenePrefab>k__BackingField: {fileID: 2981106221713600082, guid: f9b4a6111b641de49aab350bffbb6a8d, type: 3}
+  <Range>k__BackingField: 3
+  <Status>k__BackingField: {fileID: 11400000, guid: 4d2f6fb665f44cf47ae99d76458c9ca0, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7630467839202951329
+      type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 3

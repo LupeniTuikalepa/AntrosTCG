@@ -32,17 +32,19 @@ namespace ATCG.Battle
         {
             private readonly CapacityData data;
             private readonly BattleGrid battleGrid;
+            private readonly HexCoordinates from;
 
-            public CapacityHitPreview(CapacityData data, BattleGrid battleGrid)
+            public CapacityHitPreview(CapacityData data, BattleGrid battleGrid, HexCoordinates from)
             {
                 this.data = data;
                 this.battleGrid = battleGrid;
+                this.from = from;
             }
 
             public HexPatternBuilder GetPreview(HexCoordinates coordinates)
             {
                 if (data.TryGet(out ICapacityContainer container))
-                    return container.GetHitPattern(data, battleGrid, coordinates);
+                    return container.GetHitPattern(data, battleGrid, coordinates, from);
 
                 return new HexPatternBuilder(coordinates, new BattlePatternController(battleGrid));
             }
@@ -73,7 +75,7 @@ namespace ATCG.Battle
                 SelectEntityPhase<AspectFilter<BattleCellAspect>> phase =
                     new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder)
                     {
-                        preview = new CapacityHitPreview(capacityData, BattleGrid),
+                        preview = new CapacityHitPreview(capacityData, BattleGrid, from),
                     };
 
                 EntityAddress[] result = await phase;
