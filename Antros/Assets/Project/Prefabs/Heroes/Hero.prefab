@@ -216,6 +216,7 @@ Transform:
   - {fileID: 167438518338950931}
   - {fileID: 7136927883721114253}
   - {fileID: 3256700890912901188}
+  - {fileID: 8620006178935296126}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7693259140358200842
@@ -232,6 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Cards.Runtime.RuntimeHeroBattleCard
   <actionUIRoot>k__BackingField: {fileID: 167438518338950931}
   <statusRoot>k__BackingField: {fileID: 3256700890912901188}
+  <HoveredRoot>k__BackingField: {fileID: 8620006178935296126}
   heroName: {fileID: 895034403804600685}
   <Animator>k__BackingField: {fileID: 1584673418553577359}
   movementDuration: 0
@@ -479,6 +481,37 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!1 &8818436735654899738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8620006178935296126}
+  m_Layer: 0
+  m_Name: HoveredRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8620006178935296126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818436735654899738}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.19448996, y: 1.48367, z: -0.36291}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1173186091470948849}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8977719334637485840
 GameObject:
   m_ObjectHideFlags: 0

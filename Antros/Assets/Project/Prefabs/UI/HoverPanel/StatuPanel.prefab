@@ -436,7 +436,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1634931343088010094}
-  - component: {fileID: 6063283965717350723}
   - component: {fileID: 1535033852399404313}
   m_Layer: 5
   m_Name: StatuPanel
@@ -465,21 +464,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 240.74, y: 47.8994}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6063283965717350723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5178416225613442485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e80cbed5cee4fc6ae0f1ae04f0920b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat.SetupCapaPanel
-  Title: {fileID: 6295799297106382805}
-  Description: {fileID: 3831945343552652121}
-  ManaCost: {fileID: 0}
 --- !u!114 &1535033852399404313
 MonoBehaviour:
   m_ObjectHideFlags: 0

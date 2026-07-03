@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities.Runtime.Status;
@@ -52,7 +52,9 @@ namespace ATCG.Battle.Entities.Runtime
 
         [field: SerializeField, BoxGroup("UI")]
         public Transform statusRoot { get; private set; }
-
+        [field: SerializeField, BoxGroup("UI")]
+        public Transform HoveredRoot { get; private set; }
+        
         private Dictionary<StatusData, RuntimeStatus> statusDatas;
 
         protected virtual void Awake()
