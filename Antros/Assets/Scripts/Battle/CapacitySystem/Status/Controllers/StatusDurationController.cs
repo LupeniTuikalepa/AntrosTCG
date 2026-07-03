@@ -5,6 +5,7 @@ namespace ATCG.Battle.Entities.Components.Status
     public struct StatusDurationController<T> : IStatusController<T> where T : struct, IStatusComponent
     {
         private int remainingTick;
+        public int RemainingTicks => remainingTick;
 
         public StatusDurationController(int remainingTick)
         {

@@ -15,7 +15,7 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 			bool succes = Build();
 		} 
 		public void Disconnect (HoverEntityPhase phase) => EntityPhase = null;
-		protected void Awake()
+		protected virtual void Awake()
 		{
 			StateUIController = GetComponentInParent<StateUIController>();
 		}

@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local.Phases;
 using Helteix.Tools.Phases;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,15 +16,16 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 
         [Header("UI Components")] [SerializeField]
         private Transform mainPanel;
-        [SerializeField] private Canvas statPanel;
+        [SerializeField] private GameObject statPanel;
         private HoverStateUIElement[] panel;
 
         [Header("Setting")] [SerializeField] private Vector2 offset;
 
+        private bool canBeSee;
         private void Awake()
         {
             Instance = this;
-            statPanel.enabled = false;
+            statPanel.SetActive(false);
         }
         
         private void OnEnable()
@@ -36,9 +40,9 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 
         public void OnPhaseBegin(HoverEntityPhase phase)
         {
-	        bool canBeSee = false;
+	        canBeSee = false;
 	        panel = GetComponentsInChildren<HoverStateUIElement>(true);
-	        statPanel.enabled = true;
+	        statPanel.SetActive(true);
 
 	        foreach (HoverStateUIElement uiElement in panel)
 	        {
@@ -46,20 +50,21 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 		        if (uiElement.isActiveAndEnabled)
 		        {
 			        canBeSee = true;
+			        
 			        UiPositon(Mouse.current.position.ReadValue());
 		        }
 	        }
 
 	        if (!canBeSee)
 	        {
-		        statPanel.enabled = false;
+		        statPanel.SetActive(false);
 	        }
 	        
         }
 
         public void OnPhaseEnd(HoverEntityPhase phase)
         {
-	        statPanel.enabled = false;
+	        statPanel.SetActive(false);
         }
 
         private void UiPositon(Vector2 pos)

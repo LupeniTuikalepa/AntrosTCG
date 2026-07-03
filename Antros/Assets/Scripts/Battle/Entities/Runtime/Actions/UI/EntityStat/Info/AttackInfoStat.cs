@@ -17,7 +17,7 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 				return true;
 			}
 			attackBar.SetActive(false);
-				return false;
+			return false;
 		}
 	}
 }

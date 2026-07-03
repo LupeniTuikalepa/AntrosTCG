@@ -11,6 +11,7 @@ namespace ATCG.Battle.Entities.Components.Implementations
     {
         public void Apply(PoisonStatusData data, EntityAddress target, StatusContext context)
         {
+	        Debug.Log($"Applying PoisonStatusData: {target}");
             target.ApplyStatus(new PoisonStatusComponent(data),
                 new StatusDurationController<PoisonStatusComponent>(data.Duration),
                 context);
