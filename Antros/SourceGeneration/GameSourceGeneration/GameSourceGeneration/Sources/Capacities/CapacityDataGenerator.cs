@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace GameSourceGeneration.Sources.Capacities;
+namespace GameSourceGeneration.Capacities;
 
 [Generator]
 public class CapacityDataGenerator : IIncrementalGenerator
@@ -152,11 +151,25 @@ public class CapacityDataGenerator : IIncrementalGenerator
 
         sb.AppendLine();
 
-        // typed accessors -> resolve through the base (throws if missing)
+        // serialized per-step fields, filled by the editor tools (ReadOnly).
         foreach ((string name, string identifier) in ordered)
+        {
+            sb.Append(indent).AppendLine("[field: global::UnityEngine.SerializeField, global::Sirenix.OdinInspector.BoxGroup(\"Steps\"), global::Sirenix.OdinInspector.ReadOnly]");
             sb.Append(indent).Append("public global::ATCG.Capacities.CapacityStepData ")
-              .Append(identifier).Append("StepData => GetStepOrThrow(")
-              .Append(identifier).AppendLine(");");
+              .Append(identifier).AppendLine("StepData { get; private set; }");
+        }
+
+        sb.AppendLine();
+
+        // generated mapping: base clears the map then calls MapSteps().
+        sb.Append(indent).AppendLine("protected override void MapSteps(global::System.Collections.Generic.Dictionary<string, global::ATCG.Capacities.CapacityStepData> map)");
+        sb.Append(indent).AppendLine("{");
+        foreach ((string name, string identifier) in ordered)
+        {
+            sb.Append(indent).Append("    map[").Append(identifier).Append("] = ")
+              .Append(identifier).AppendLine("StepData;");
+        }
+        sb.Append(indent).AppendLine("}");
 
         sb.Append(typeIndent).AppendLine("}");
 

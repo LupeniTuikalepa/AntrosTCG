@@ -43,21 +43,10 @@ namespace ATCG.Capacities
         {
             mappedSteps ??= new Dictionary<string, CapacityStepData>();
             mappedSteps.Clear();
-
-            if (steps == null)
-                return;
-
-            for (int i = 0; i < steps.Length; i++)
-            {
-                string key = steps[i].StepName;
-                if (string.IsNullOrEmpty(key))
-                    continue;
-
-                if (!mappedSteps.TryAdd(key, steps[i]))
-                    Debug.LogError($"[{name}] Duplicate step '{key}' in '{GetType().Name}'. " +
-                                   $"Only the first occurrence is kept.", this);
-            }
+            MapSteps(mappedSteps);
         }
+
+        protected abstract void MapSteps(Dictionary<string, CapacityStepData> capacityStepDatas);
 
         public bool TryGetStep(string stepName, out CapacityStepData step)
         {

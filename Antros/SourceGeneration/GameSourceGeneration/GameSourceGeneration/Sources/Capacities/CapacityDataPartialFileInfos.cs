@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
 
-namespace GameSourceGeneration.Sources.Capacities;
+namespace GameSourceGeneration.Capacities;
 
 public sealed class CapacityDataPartialFileInfos : IEquatable<CapacityDataPartialFileInfos>
 {

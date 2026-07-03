@@ -6,3 +6,4 @@
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 ASP001 | EntityAspect | Error | EntityAspectImplementationGenerator
+HTX020 | ATCG.Capacities | Error | CapacityRunGenerator
