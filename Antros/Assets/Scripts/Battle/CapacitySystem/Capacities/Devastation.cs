@@ -19,10 +19,10 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
     public partial struct Devastation : ICapacity<DevastationData>
     {
-        public HexPatternBuilder GetHitPattern(DevastationData data, BattleGrid battleGrid, HexCoordinates origin)
+        public HexPatternBuilder GetHitPattern(DevastationData data, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
         {
-            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, origin);
-            HexPatternBuilder builder = new HexPatternBuilder(origin, hexPatternController)
+            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
+            HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
                 .With(new SpreadPattern(data.Range));
 
             return builder;
@@ -38,7 +38,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
         {
             BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
 
-            using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint);
+            using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
 
             int damage = GameMaths.Round(data.Damage.Evaluate(ctx.effectiveness));
             foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))

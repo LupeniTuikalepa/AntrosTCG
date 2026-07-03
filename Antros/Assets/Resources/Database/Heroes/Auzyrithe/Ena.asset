@@ -19,7 +19,7 @@ MonoBehaviour:
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
   - {fileID: 11400000, guid: ec964813dcb4f15499aa4565a677ba13, type: 2}
-  - {fileID: 11400000, guid: ec964813dcb4f15499aa4565a677ba13, type: 2}
+  - {fileID: 11400000, guid: e3e5490c0eb061a45891d2aae8b36c48, type: 2}
   <Health>k__BackingField: 18
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 6

@@ -76,7 +76,7 @@ namespace ATCG.HexGrids.Utility
 
         public static HexCoordinates Normalize(this HexCoordinates coord)
         {
-            int distance = Mathf.Max(Mathf.Abs(coord.X), Mathf.Abs(coord.Y));
+            int distance = Mathf.Max(Mathf.Abs(coord.X), Mathf.Abs(coord.Y), Mathf.Abs(coord.Z));
             if (distance == 0)
                 return coord;
 
