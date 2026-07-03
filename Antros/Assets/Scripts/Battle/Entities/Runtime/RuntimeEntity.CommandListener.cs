@@ -167,17 +167,6 @@ namespace ATCG.Battle.Entities.Runtime
 				tickStatus.Tick(runtimeContext);
 		}
 
-		private void RemoveRuntimeStatus(RuntimeStatusContext runtimeContext)
-		{
-			var statusData = runtimeContext.statusData;
-			if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus))
-				return;
-
-			removeStatus.Remove();
-			Destroy(removeStatus.gameObject);
-			statusDatas.Remove(statusData);
-		}
-
 		private void ApplyRuntimeStatus(RuntimeStatusContext runtimeContext)
 		{
 			var statusData = runtimeContext.statusData;
@@ -192,7 +181,7 @@ namespace ATCG.Battle.Entities.Runtime
 
 			RuntimeStatus runtimeStatus = Instantiate(prefabStatus, statusRoot);
 			statusDatas.Add(statusData, runtimeStatus);
-			runtimeStatus.Apply(statusData);
+			runtimeStatus.Apply(runtimeContext);
 		}
 
 	private void RemoveRuntimeStatus(RuntimeStatusContext runtimeContext)
@@ -205,18 +194,17 @@ namespace ATCG.Battle.Entities.Runtime
 		Destroy(removeStatus.gameObject);
 		statusDatas.Remove(statusData);
 	}
-		public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
-		{
-			Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
-			Vector3 from = transform.position;
-			Vector3 to = (target - from).normalized;
-			to.y = 0;
+	public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
+	{
+		Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
+		Vector3 from = transform.position;
+		Vector3 to = (target - from).normalized;
+		to.y = 0;
 
-			Quaternion rotation = Quaternion.LookRotation(to, Vector3.up);
+		Quaternion rotation = Quaternion.LookRotation(to, Vector3.up);
 
-			Tween.StopAll(transform);
-			await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
-		}
-
+		Tween.StopAll(transform);
+		await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
+	}
 	}
 }
