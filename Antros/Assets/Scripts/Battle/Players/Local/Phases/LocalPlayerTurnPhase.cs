@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status;
 using ATCG.Battle.Entities.Components.Implementations;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.GameModes;

@@ -1,6 +1,4 @@
-﻿using ATCG.Battle.Commands.GameCommands;
-
-namespace ATCG.Battle.CapacitySystem.Capacities
+﻿namespace ATCG.Battle.CapacitySystem.Core
 {
     public interface ICapacityStep
     {

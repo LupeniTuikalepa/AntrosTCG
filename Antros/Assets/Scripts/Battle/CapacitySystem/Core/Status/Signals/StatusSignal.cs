@@ -1,9 +1,9 @@
 ﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Entities;
 using ATCG.Capacities.Data.Status;
-using UnityEngine;
 
-namespace ATCG.Battle.Entities.Components.Status.Signals
+namespace ATCG.Battle.CapacitySystem.Core.Status.Signals
 {
     public class StatusSignal : EntityCommand<StatusSignal.Infos>
     {

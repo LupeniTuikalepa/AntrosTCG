@@ -1,11 +1,9 @@
-using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.Commands.GameCommands;
 using ATCG.Capacities;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using UnityEngine;
 
-namespace ATCG.Battle.Capacities
+namespace ATCG.Battle.CapacitySystem.Core
 {
     public static class CapacityManager
     {

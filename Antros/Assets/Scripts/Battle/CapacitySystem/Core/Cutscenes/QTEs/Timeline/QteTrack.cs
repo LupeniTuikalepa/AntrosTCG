@@ -1,6 +1,6 @@
 using UnityEngine.Timeline;
 
-namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs
+namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs.Timeline
 {
     /// <summary>
     /// Track holding QTE clips. Bound to the cutscene (which implements

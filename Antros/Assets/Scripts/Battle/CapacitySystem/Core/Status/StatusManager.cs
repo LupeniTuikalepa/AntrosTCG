@@ -1,11 +1,11 @@
-﻿using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Entities.Components.Status.Signals;
+﻿using ATCG.Battle.CapacitySystem.Core.Status.Signals;
+using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.Entities.Queries;
-using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Entities.Components.Status
+namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public static class StatusManager
     {

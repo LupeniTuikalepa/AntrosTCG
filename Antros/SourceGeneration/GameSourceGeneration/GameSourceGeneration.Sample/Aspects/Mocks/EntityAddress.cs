@@ -16,7 +16,7 @@ public struct EntityAddress
         return ref RefProvider<T>.Get();
     }
 
-    public void AddComponent<T>(T t) where T : new()
+    public void AddOrSetComponent<T>(T t = default) where T : new()
     {
 
     }

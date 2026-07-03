@@ -1,13 +1,10 @@
-﻿using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.Entities;
+﻿using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
-using ATCG.Battle.Grids;
-using ATCG.Battle.Players;
 using ATCG.Capacities;
 using ATCG.HexGrids;
 
-namespace ATCG.Battle.Commands.GameCommands
+namespace ATCG.Battle.CapacitySystem.Core
 {
     public readonly struct CapacityStepContext
     {

@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.CapacitySystem.Core;
+﻿using ATCG.Battle.CapacitySystem;
+using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;

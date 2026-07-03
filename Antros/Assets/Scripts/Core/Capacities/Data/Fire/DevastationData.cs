@@ -14,7 +14,6 @@ namespace ATCG.Capacities.Fire
 
         [field: SerializeField, BoxGroup("Custom")]
         public AnimationCurve Damage { get; private set; }
+
     }
-
-
 }

@@ -1,14 +1,13 @@
 using System.Threading;
-using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands.Capacities;
-using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players;
+using ATCG.Battle.Players.Local.Runtime;
 using UnityEngine;
 
-namespace ATCG.Battle.CapacitySystem.Directors
+namespace ATCG.Battle.CapacitySystem.Core.Directors
 {
     /// <summary>
     /// One per screen. Plays its cutscene, relays step markers to the phase, and is

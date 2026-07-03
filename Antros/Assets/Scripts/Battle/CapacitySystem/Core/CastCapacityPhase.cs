@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using ATCG.Battle.CapacitySystem.Capacities;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Battle.CapacitySystem.Core.Directors;
 using ATCG.Battle.CapacitySystem.Core.Properties;
-using ATCG.Battle.CapacitySystem.Directors;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
-using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Commands.GameCommands.Capacities;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
@@ -32,7 +30,7 @@ namespace ATCG.Battle.CapacitySystem.Core
     {
         public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
         public bool HasCaster => caster.IsValid;
-        public HexCoordinates CasterOrigin => 
+        public HexCoordinates CasterOrigin =>
             HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMemberComponent)?
             gridMemberComponent.coordinates:
             castPoint;
@@ -94,7 +92,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
                 // Map the capacity's steps by name. Timeline markers will pick
                 // which to run; a missing/duplicate name is a detectable error.
-                foreach (ICapacityStep step in capacityContainer.Run(data, this))
+                foreach (ICapacityStep step in capacityContainer.GetSteps(data, this))
                 {
                     if (!stepsByName.TryAdd(step.StepName, step))
                         Debug.LogError($"[{data.Name}] Duplicate step '{step.StepName}' from Run.");

@@ -1,6 +1,4 @@
-using ATCG.Battle.Capacities;
-using ATCG.Battle.CapacitySystem.Capacities;
-using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
@@ -12,7 +10,6 @@ using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Phases.Preview;
 using ATCG.Capacities;
 using ATCG.HexGrids;
-using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.DataMapping;
 using Helteix.Tools.Phases;

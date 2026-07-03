@@ -1,4 +1,6 @@
-﻿using ATCG.Battle.Entities.Components.Implementations;
+﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status;
+using ATCG.Battle.Entities.Components.Implementations;
 
 namespace ATCG.Battle.Entities.Components.Status
 {

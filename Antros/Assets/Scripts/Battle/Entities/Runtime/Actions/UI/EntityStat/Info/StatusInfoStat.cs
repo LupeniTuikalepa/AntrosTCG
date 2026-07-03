@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Components.Implementations;

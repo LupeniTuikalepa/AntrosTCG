@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Grids;
+﻿using ATCG.Battle.Grids;
 using ATCG.Capacities;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.DataMapping;
 
-namespace ATCG.Battle.CapacitySystem.Capacities
+namespace ATCG.Battle.CapacitySystem.Core
 {
     [GenerateContainer]
     public interface ICapacity<in T> : IBehaviour<T> where T : CapacityData
@@ -16,6 +13,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities
         HexPatternBuilder GetHitPattern(T data, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin);
 
         [AddToContainer]
-        IEnumerable<ICapacityStep> Run(T data, CastCapacityPhase phase);
+        ICapacityStep[] GetSteps(T data, CastCapacityPhase phase);
     }
 }

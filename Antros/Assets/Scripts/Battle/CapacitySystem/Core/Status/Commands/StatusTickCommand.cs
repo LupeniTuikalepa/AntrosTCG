@@ -1,13 +1,11 @@
-﻿using ATCG.Battle.Capacities.Status;
+﻿using ATCG.Battle.CapacitySystem.Status;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components.Status;
-using ATCG.Battle.Entities.Components.Status.Signals;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
 
-namespace ATCG.Battle.Commands.EntityCommands
+namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
 {
     public class StatusTickCommand : EntityCommand<NoInfos>
     {

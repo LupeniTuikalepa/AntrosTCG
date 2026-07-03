@@ -1,9 +1,8 @@
-﻿using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.GameModes;
 using ATCG.Capacities.Data.Status;
-using UnityEngine;
 
 namespace ATCG.Battle.Entities.Components.Implementations
 {
