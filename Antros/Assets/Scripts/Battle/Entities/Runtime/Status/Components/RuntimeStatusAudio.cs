@@ -4,11 +4,11 @@ namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatusAudio : RuntimeStatusComponent
     {
-        public override void OnApplyStatus(StatusData statusData)
+        public override void OnApplyStatus(RuntimeStatusContext context)
         {
         }
 
-        public override void OnRemoveStatus()
+        public override void OnRemoveStatus(RuntimeStatusContext context)
         {
         }
 

@@ -246,7 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3256700890912901188}
   m_Layer: 0
-  m_Name: StatusVFXRoot
+  m_Name: StatusRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
