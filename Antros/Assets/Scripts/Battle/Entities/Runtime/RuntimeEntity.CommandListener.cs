@@ -187,9 +187,9 @@ namespace ATCG.Battle.Entities.Runtime
 	private void RemoveRuntimeStatus(RuntimeStatusContext runtimeContext)
 	{
 		var statusData = runtimeContext.statusData;
-		if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus)) 
+		if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus))
 			return;
-            
+
 		removeStatus.Remove(runtimeContext);
 		Destroy(removeStatus.gameObject);
 		statusDatas.Remove(statusData);
@@ -206,6 +206,5 @@ namespace ATCG.Battle.Entities.Runtime
 			Tween.StopAll(transform);
 			await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
 		}
-	}
 	}
 }

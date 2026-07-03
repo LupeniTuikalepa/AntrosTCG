@@ -9,6 +9,7 @@ using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
 using ATCG.Capacities;
 using ATCG.Capacities.Fire;
+using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.Utilities;
@@ -18,22 +19,28 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
     public partial struct Devastation : ICapacity<DevastationData>
     {
+        public HexPatternBuilder GetHitPattern(DevastationData data, BattleGrid battleGrid, HexCoordinates origin)
+        {
+            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, origin);
+            HexPatternBuilder builder = new HexPatternBuilder(origin, hexPatternController)
+                .With(new SpreadPattern(data.Range));
+
+            return builder;
+        }
+
         public IEnumerable<ICapacityStep> Run(DevastationData data, CastCapacityPhase phase)
         {
             //Explosion
             yield return new CapacityStep<DevastationData>(data, ApplyExplosion, DevastationData.Explosion);
         }
 
-        private static void ApplyExplosion(DevastationData data, CapacityStepContext ctx)
+        private void ApplyExplosion(DevastationData data, CapacityStepContext ctx)
         {
             BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-            
-            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, ctx.CastPoint);
-            using HexPatternBuilder builder = new HexPatternBuilder(ctx.CastPoint, hexPatternController)
-                .With(new SpreadPattern(data.Range));
+
+            using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint);
 
             int damage = GameMaths.Round(data.Damage.Evaluate(ctx.effectiveness));
-
             foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))
             {
                 foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())

@@ -194,13 +194,13 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
 
             foreach (TrackAsset track in timeline.GetOutputTracks())
             {
-                foreach (AutoBindChannel channel in CutsceneChannels.All)
-                {
-                    if (CutsceneChannels.TryGetBinding(channel.trackName, ctx, out Object binding))
-                        playableDirector.SetGenericBinding(track, binding);
-                    else
-                        Debug.LogWarning($"[Cutscene] Channel '{channel.trackName}' could not resolve a binding.");
-                }
+                if (!CutsceneChannels.IsAutoBindableTrack(track))
+                    continue;
+
+                if (CutsceneChannels.TryGetBinding(track.name, ctx, out Object binding))
+                    playableDirector.SetGenericBinding(track, binding);
+                else
+                    Debug.LogWarning($"[Cutscene] Channel '{track}' could not resolve a binding.");
             }
         }
 
