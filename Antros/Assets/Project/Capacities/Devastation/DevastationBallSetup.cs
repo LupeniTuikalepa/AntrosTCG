@@ -5,7 +5,7 @@ using ATCG.Battle.Players.Local.Runtime;
 using ATCG.HexGrids.Runtime;
 using UnityEngine;
 
-namespace Project.Capacities.Devastation
+namespace ATCG.Capacities.Devastation
 {
     public class DevastationBallSetup : MonoBehaviour, ICapacityCutsceneElement
     {

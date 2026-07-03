@@ -4,7 +4,7 @@ using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
 using UnityEngine;
 
-namespace Project.Capacities.Devastation
+namespace ATCG.Capacities.Devastation
 {
     public class DevastationHeroSetup : MonoBehaviour, ICapacityCutsceneElement
     {

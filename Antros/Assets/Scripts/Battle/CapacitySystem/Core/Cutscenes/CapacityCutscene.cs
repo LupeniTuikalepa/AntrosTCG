@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.Animations;
 using ATCG.Battle.Players.Local.Runtime;
@@ -184,40 +185,21 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             resultReceiver?.SubmitQteResult(score);
             OnQteResolved?.Invoke(castCapacityPhase, target);
         }
-
         public void ResolveBindings()
         {
-            if (playableDirector == null)
-                return;
             if (playableDirector.playableAsset is not TimelineAsset timeline)
                 return;
 
+            CutsceneBindContext ctx = new(castCapacityPhase, ScreenPlayer);
+
             foreach (TrackAsset track in timeline.GetOutputTracks())
             {
-                switch (track.name)
+                foreach (AutoBindChannel channel in CutsceneChannels.All)
                 {
-                    case CutsceneTrackNames.HERO_ANIMATOR:
-                        if (!castCapacityPhase.caster.IsValid)
-                        {
-                            Debug.LogWarning($"[Cutscene] No animator for track '{track.name}': the capacity has no caster.");
-                            break;
-                        }
-                        if (ScreenPlayer.RuntimeEntityManager.TryGetRuntimeEntity(castCapacityPhase.caster, out IRuntimeEntity runtimeEntity))
-                        {
-                            if (runtimeEntity is IRuntimeEntityWithAnimator withAnimator)
-                                playableDirector.SetGenericBinding(track, withAnimator.Animator);
-                            else
-                                Debug.LogWarning($"[Cutscene] No animator for track '{track.name}'.");
-                        }
-                        break;
-
-                    case CutsceneTrackNames.MAIN_CAMERA:
-                        Object cameraBinding = ScreenPlayer.Camera.Component.CinemachineBrain;
-                        if (cameraBinding != null)
-                            playableDirector.SetGenericBinding(track, cameraBinding);
-                        else
-                            Debug.LogWarning($"[Cutscene] No camera for track '{track.name}'.");
-                        break;
+                    if (CutsceneChannels.TryGetBinding(channel.trackName, ctx, out Object binding))
+                        playableDirector.SetGenericBinding(track, binding);
+                    else
+                        Debug.LogWarning($"[Cutscene] Channel '{channel.trackName}' could not resolve a binding.");
                 }
             }
         }

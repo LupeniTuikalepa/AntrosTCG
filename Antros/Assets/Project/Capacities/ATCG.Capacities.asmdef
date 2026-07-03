@@ -1,6 +1,6 @@
 {
     "name": "ATCG.Capacities",
-    "rootNamespace": "",
+    "rootNamespace": "ATCG.Capacities",
     "references": [
         "GUID:96c0b87a195bf3041a9ef494c47583fb",
         "GUID:609e78acfb7c5644c95699b15a2d8cf6",
