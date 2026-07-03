@@ -1,46 +1,75 @@
-﻿using System;
-using ATCG.Capacities.Data.Status;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatusVFX : RuntimeStatusComponent
     {
         [SerializeField]
-        private ParticleSystem[] particleSystems;
+        private GameObject vfxPrefab;
+        
+        [SerializeField]
+        private Transform container;
 
         private Renderer[] entityRenderers;
+        
+        private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
+
+        private void Awake()
+        {
+            if (container == null)
+                container = transform;
+        }
 
         public override void OnApplyStatus(RuntimeStatusContext context)
         {
             entityRenderers = context.renderers;
 
-            switch (entityRenderers)
-            {   /*
-                case MeshRenderer[] meshRenderers:
+            int count = entityRenderers.Length;
+    
+            for (int i = 0; i < count; i++)
+            {
+                var entityRenderer = entityRenderers[i];
+                switch (entityRenderer)
                 {
-                    foreach (var system in particleSystems)
+                    case MeshRenderer meshRenderer:
                     {
-                        var shape = system.shape;
-                        foreach (var meshRenderer in meshRenderers)
+                        var instance = Instantiate(vfxPrefab, container);
+                        instance.gameObject.SetActive(true);
+                        instance.gameObject.hideFlags = HideFlags.DontSave;
+
+                        var systems = instance.GetComponentsInChildren<ParticleSystem>();
+                        for (int j = 0; j < systems.Length; j++)
                         {
+                            var system = systems[j];
+                            ParticleSystem.ShapeModule shape = system.shape;
+                            shape.shapeType = ParticleSystemShapeType.MeshRenderer;
                             shape.meshRenderer = meshRenderer;
+                            particleSystems.Add(system);
                         }
+                        break;
                     }
-                    break;
-                }
-                case SkinnedMeshRenderer[] skinnedMeshRenderer:
-                {
-                    foreach (var system in particleSystems)
+                    case SkinnedMeshRenderer skinnedMeshRenderer:
                     {
-                        var shape = system.shape;
-                        shape.skinnedMeshRenderer = skinnedMeshRenderer;
+                        var instance = Instantiate(vfxPrefab, container);
+                        instance.gameObject.SetActive(true);
+                        instance.gameObject.hideFlags = HideFlags.DontSave;
+
+                        var systems = instance.GetComponentsInChildren<ParticleSystem>();
+                        for (int j = 0; j < systems.Length; j++)
+                        {
+                            var system = systems[j];
+                            ParticleSystem.ShapeModule shape = system.shape;
+                            shape.shapeType = ParticleSystemShapeType.SkinnedMeshRenderer;
+                            shape.skinnedMeshRenderer = skinnedMeshRenderer;
+                            particleSystems.Add(system);
+                        }
+                        break;
                     }
-                    break;
                 }
-                */
+
             }
+            
         }
 
         public override void OnRemoveStatus(RuntimeStatusContext context)

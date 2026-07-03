@@ -23,7 +23,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
         [SerializeField]
         private Material material;
         
-        private List<RendererAndMaterials> rendererAndMaterials;
+        private List<RendererAndMaterials> rendererAndMaterials = new List<RendererAndMaterials>();
         
         public override void OnApplyStatus(RuntimeStatusContext context)
         {
@@ -32,16 +32,15 @@ namespace ATCG.Battle.Entities.Runtime.Status
 
             foreach (var rendererMaterial in rendererAndMaterials)
             {
-                var entityRenderer = rendererMaterial.renderer;
                 var entityMaterials = rendererMaterial.renderer.materials;
                 
                 var array = ArrayPool<Material>.Shared.Rent(entityMaterials.Length + 1);
                 
                 for (int i = 0; i < entityMaterials.Length; i++)
-                    array[i] = entityRenderer.materials[i];
+                    array[i] = entityMaterials[i];
                 
                 array[^1] = material;
-                entityRenderer.materials = array;
+                rendererMaterial.renderer.materials = array;
                 
                 ArrayPool<Material>.Shared.Return(array);
             }
