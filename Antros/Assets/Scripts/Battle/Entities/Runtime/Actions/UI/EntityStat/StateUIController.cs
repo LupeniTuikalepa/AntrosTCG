@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Local.Runtime;
 using Helteix.Tools.Phases;
 using PrimeTween;
 using TMPro;
@@ -10,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 {
-	public class StateUIController: MonoBehaviour,IPhaseListener<HoverEntityPhase>
+	public class StateUIController: RuntimeLocalPlayerComponent,IPhaseListener<HoverEntityPhase>
 	{
         public static StateUIController Instance { get; private set; }
 
@@ -18,8 +20,12 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
         private Transform mainPanel;
         [SerializeField] private GameObject statPanel;
         private HoverStateUIElement[] panel;
+        
 
-        [Header("Setting")] [SerializeField] private Vector2 offset;
+        [Header("Setting")] 
+        [SerializeField] private Vector2 offset;
+        
+        private Transform hoveredEntityTransform;
 
         private bool canBeSee;
         private void Awake()
@@ -40,7 +46,10 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 
         public void OnPhaseBegin(HoverEntityPhase phase)
         {
-	        canBeSee = false;
+	        if (RuntimeEntityManager.TryGetRuntimeEntity(phase.HoveredAddress, out IRuntimeEntity runtimeEntity))
+	        {
+		        UiPositon(runtimeEntity.HoveredRoot.position);
+	        }
 	        panel = GetComponentsInChildren<HoverStateUIElement>(true);
 	        statPanel.SetActive(true);
 
@@ -50,16 +59,12 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 		        if (uiElement.isActiveAndEnabled)
 		        {
 			        canBeSee = true;
-			        
-			        UiPositon(Mouse.current.position.ReadValue());
 		        }
 	        }
-
 	        if (!canBeSee)
 	        {
 		        statPanel.SetActive(false);
 	        }
-	        
         }
 
         public void OnPhaseEnd(HoverEntityPhase phase)
@@ -67,9 +72,18 @@ namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 	        statPanel.SetActive(false);
         }
 
-        private void UiPositon(Vector2 pos)
+        private void UiPositon(Vector3 pos)
         {
-	        mainPanel.transform.position = pos +  offset;
+	        Vector2 position = RuntimeLocalBattlePlayer.Camera.Component.OutputCamera.WorldToScreenPoint(pos);
+	        mainPanel.transform.position = position + offset;
+        }
+
+        protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
+        {
+	        
+        }
+        protected override void Disconnect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
+        {
         }
 	}
 }
