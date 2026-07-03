@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core;
+using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands;
@@ -28,12 +29,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
             return builder;
         }
 
-        public IEnumerable<ICapacityStep> Run(WintryMistData data, CastCapacityPhase phase)
-        {
-            yield return new CapacityStep<WintryMistData>(data, ApplyStatus, WintryMistData.BlackIce);
-        }
-
-        private void ApplyStatus(WintryMistData data, CapacityStepContext ctx)
+        private partial void ExecuteBlackIce(WintryMistData data, CapacityStepContext ctx)
         {
             BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
 
@@ -43,7 +39,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
             {
                 var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
                 statusCommand.Run(ctx.BattlePhase);
-                
+
             }
         }
     }

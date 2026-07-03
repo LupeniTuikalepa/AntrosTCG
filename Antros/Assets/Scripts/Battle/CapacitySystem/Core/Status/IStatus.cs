@@ -1,9 +1,8 @@
 ﻿using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
 
-namespace ATCG.Battle.Capacities.Status
+namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     [GenerateContainer]
     public interface IStatus<in TData> : IBehaviour<TData> where TData : StatusData

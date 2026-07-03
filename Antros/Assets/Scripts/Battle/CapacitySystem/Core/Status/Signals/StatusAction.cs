@@ -1,4 +1,4 @@
-﻿namespace ATCG.Battle.Entities.Components.Status.Signals
+﻿namespace ATCG.Battle.CapacitySystem.Core.Status.Signals
 {
     public enum StatusAction
     {

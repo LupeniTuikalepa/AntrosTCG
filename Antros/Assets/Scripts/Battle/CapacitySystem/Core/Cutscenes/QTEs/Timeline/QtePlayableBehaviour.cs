@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs
+namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs.Timeline
 {
     /// <summary>
     /// Behaviour for a QTE clip. Each clip owns ITS window (local state), which

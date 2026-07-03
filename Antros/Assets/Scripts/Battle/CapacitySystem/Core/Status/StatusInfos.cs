@@ -1,6 +1,8 @@
-﻿using ATCG.Capacities.Data.Status;
+﻿using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components;
+using ATCG.Capacities.Data.Status;
 
-namespace ATCG.Battle.Entities.Components.Status
+namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public readonly struct StatusInfos<TStatus> : IEntityComponent where TStatus : struct, IStatusComponent
     {

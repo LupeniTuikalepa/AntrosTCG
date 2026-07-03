@@ -28,13 +28,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
             return builder;
         }
 
-        public IEnumerable<ICapacityStep> Run(DevastationData data, CastCapacityPhase phase)
-        {
-            //Explosion
-            yield return new CapacityStep<DevastationData>(data, ApplyExplosion, DevastationData.Explosion);
-        }
-
-        private void ApplyExplosion(DevastationData data, CapacityStepContext ctx)
+        private partial void ExecuteExplosion(DevastationData data, CapacityStepContext ctx)
         {
             BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
 

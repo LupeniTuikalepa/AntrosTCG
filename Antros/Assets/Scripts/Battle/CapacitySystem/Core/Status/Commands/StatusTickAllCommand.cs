@@ -1,12 +1,10 @@
-﻿using ATCG.Battle.Capacities.Status;
+﻿using ATCG.Battle.CapacitySystem.Status;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
-using UnityEngine;
 
-namespace ATCG.Battle.Commands.EntityCommands
+namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
 {
     public class StatusTickAllCommand : Command<NoInfos>
     {

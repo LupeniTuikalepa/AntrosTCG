@@ -1,6 +1,6 @@
 ﻿using ATCG.Battle.GameModes;
 
-namespace ATCG.Battle.Entities.Components.Status
+namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public readonly struct StatusContext
     {

@@ -1,7 +1,6 @@
-﻿using ATCG.Battle.Commands.GameCommands;
-using ATCG.Capacities;
+﻿using ATCG.Capacities;
 
-namespace ATCG.Battle.CapacitySystem.Capacities
+namespace ATCG.Battle.CapacitySystem.Core
 {
     public class CapacityStep<T> : ICapacityStep where T : CapacityData
     {

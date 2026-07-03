@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
 using Helteix.Tools;
@@ -9,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Timeline;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
 {
     public class RootParticleSystemController : MonoBehaviour,
         ICapacityCutsceneElement,

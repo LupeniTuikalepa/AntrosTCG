@@ -1,4 +1,6 @@
-﻿namespace ATCG.Battle.Entities.Components.Status
+﻿using ATCG.Battle.Entities.Components;
+
+namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public interface IStatusController<T> : IEntityComponent where T : struct, IStatusComponent
     {
