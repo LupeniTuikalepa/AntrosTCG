@@ -203,8 +203,9 @@ namespace ATCG.Battle.Entities.Runtime
 
 		Quaternion rotation = Quaternion.LookRotation(to, Vector3.up);
 
-		Tween.StopAll(transform);
-		await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
+			Tween.StopAll(transform);
+			await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
+		}
 	}
 	}
 }

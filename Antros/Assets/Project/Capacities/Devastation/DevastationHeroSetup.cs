@@ -2,10 +2,9 @@
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
-using ATCG.HexGrids.Runtime;
 using UnityEngine;
 
-namespace ATCG.Battle.CapacitySystem.Capacities.Cutscene
+namespace Project.Capacities.Devastation
 {
     public class DevastationHeroSetup : MonoBehaviour, ICapacityCutsceneElement
     {

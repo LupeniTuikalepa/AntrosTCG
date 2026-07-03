@@ -43,7 +43,6 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         public Dictionary<RuntimeLocalBattlePlayer, CapacityDirector> directors;
 
-        private List<float> QTEs;
 
         // Steps mapped by name (from Run's yield). Timeline markers pick which to
         // run; order of execution comes from the timeline, not the yield order.
@@ -52,6 +51,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         // Barrier for steps across all screens. Built once directors are known.
         private StepBarrier stepBarrier;
         private readonly HashSet<string> stepsRun = new HashSet<string>();
+        private List<float> qtes = new List<float>();
 
         public CastCapacityPhase(
             BattlePhase battlePhase,
@@ -69,7 +69,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         protected override Awaitable Initialize(CancellationToken token)
         {
-            QTEs = ListPool<float>.Get();
+            qtes = ListPool<float>.Get();
             directors = DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Get();
             stepsByName = DictionaryPool<string, ICapacityStep>.Get();
 
@@ -182,7 +182,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         private void RunStepNow(ICapacityStep step)
         {
-            float effectiveness = FlushQtes();
+            float effectiveness = ReadQtes();
             CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName));
             step.RunStep(ctx);
         }
@@ -202,7 +202,7 @@ namespace ATCG.Battle.CapacitySystem.Core
                 director.Dispose();
 
             DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Release(directors);
-            ListPool<float>.Release(QTEs);
+            ListPool<float>.Release(qtes);
             DictionaryPool<string, ICapacityStep>.Release(stepsByName);
 
             return base.Dispose(token);
@@ -223,21 +223,31 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         // ---- QTE stack ------------------------------------------------------
 
-        public void AddQteResult(float qte) => QTEs.Add(qte);
+        private bool consumedSinceLastFill;
 
-        private float FlushQtes()
+        public void AddQteResult(float qte)
         {
-            if (QTEs.Count == 0)
+            if (consumedSinceLastFill)
+            {
+                qtes.Clear();
+                consumedSinceLastFill = false;
+            }
+            qtes.Add(qte);
+        }
+
+        private float ReadQtes()
+        {
+            consumedSinceLastFill = true;
+
+            if (qtes.Count == 0)
                 return 1f;
 
-            float result = 0f;
-            for (int i = 0; i < QTEs.Count; i++)
-                result += QTEs[i];
-            result /= QTEs.Count;
-
-            QTEs.Clear();
-            return result;
+            float sum = 0f;
+            for (int i = 0; i < qtes.Count; i++)
+                sum += qtes[i];
+            return sum / qtes.Count;
         }
+
 
         // ---- director collection -------------------------------------------
 
