@@ -52,7 +52,7 @@ namespace ATCG.Battle.Entities.Runtime
 
         [field: SerializeField, BoxGroup("UI")]
         public Transform statusRoot { get; private set; }
-        
+
         private Dictionary<StatusData, RuntimeStatus> statusDatas;
 
         protected virtual void Awake()
@@ -64,13 +64,13 @@ namespace ATCG.Battle.Entities.Runtime
 
         protected virtual void OnEnable()
         {
-            PhaseManager.Register<ISelectEntityPhase>(this);
+            PhaseManager.Register(this);
             CommandManager.RegisterListener(this);
         }
 
         protected virtual void OnDisable()
         {
-            PhaseManager.Unregister<ISelectEntityPhase>(this);
+            PhaseManager.Unregister(this);
             CommandManager.UnregisterListener(this);
         }
 

@@ -13,9 +13,9 @@ namespace ATCG.Battle.Entities.Runtime
         {
             //Debug.Log(((IPhaseListener<ISelectEntityPhase>)this).Accepts(phase));
             CurrentSelectEntityPhase = phase;
+            phase.OnPreviewChanged += UpdatePreviewState;
 
             GameMetrics gameMetrics = GameMetrics.Current;
-
             if (phase.IsInPattern(Address))
             {
                 IsInteractable.AddCondition(phase.ChannelKey, true);
@@ -54,9 +54,24 @@ namespace ATCG.Battle.Entities.Runtime
             }
         }
 
+        private void UpdatePreviewState(ISelectEntityPhase phase)
+        {
+            bool isInPreview = phase.IsInPreview(Address);
+            foreach (var model in Models)
+            {
+                if(isInPreview)
+                    model.EnableRenderingLayer(GameMetrics.Current.PhasePreviewRenderingLayer);
+                else
+                    model.DisableRenderingLayer(GameMetrics.Current.PhasePreviewRenderingLayer);
+            }
+        }
+
+
         void IPhaseListener<ISelectEntityPhase>.OnPhaseEnd(ISelectEntityPhase phase)
         {
             IsInteractable.RemoveCondition(phase.ChannelKey);
+
+            phase.OnPreviewChanged -= UpdatePreviewState;
             CurrentSelectEntityPhase = null;
 
             foreach (var model in Models)
@@ -64,6 +79,7 @@ namespace ATCG.Battle.Entities.Runtime
                 model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
                 model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
                 model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
+                model.DisableRenderingLayer(GameMetrics.Current.PhasePreviewRenderingLayer);
             }
         }
     }
