@@ -15,7 +15,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
             this.statusData = statusData;
             this.entity = entity;
             this.runtimeEntity = runtimeEntity;
-            renderers = runtimeEntity.gameObject.GetComponentsInChildren<Renderer>();
+            renderers = runtimeEntity.Models;
         }
     }
 }
