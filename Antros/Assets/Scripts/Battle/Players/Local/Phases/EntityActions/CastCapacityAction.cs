@@ -1,4 +1,5 @@
 using ATCG.Battle.Capacities;
+using ATCG.Battle.CapacitySystem.Capacities;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
@@ -8,10 +9,12 @@ using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Local.Phases.Preview;
 using ATCG.Capacities;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
+using Helteix.Tools.DataMapping;
 using Helteix.Tools.Phases;
 using UnityEngine;
 
@@ -23,6 +26,27 @@ namespace ATCG.Battle
 
         public readonly CapacityData capacityData;
         private readonly HexCoordinates from;
+
+
+        private class CapacityHitPreview : ISelectionPatternPreview
+        {
+            private readonly CapacityData data;
+            private readonly BattleGrid battleGrid;
+
+            public CapacityHitPreview(CapacityData data, BattleGrid battleGrid)
+            {
+                this.data = data;
+                this.battleGrid = battleGrid;
+            }
+
+            public HexPatternBuilder GetPreview(HexCoordinates coordinates)
+            {
+                if (data.TryGet(out ICapacityContainer container))
+                    return container.GetHitPattern(data, battleGrid, coordinates);
+
+                return new HexPatternBuilder(coordinates, new BattlePatternController(battleGrid));
+            }
+        }
 
         public CastCapacityAction(LocalBattlePlayer fromPlayer, CapacityData capacityData, HexCoordinates from) : base(fromPlayer)
         {
@@ -47,7 +71,10 @@ namespace ATCG.Battle
 
                 AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();
                 SelectEntityPhase<AspectFilter<BattleCellAspect>> phase =
-                    new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder);
+                    new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder)
+                    {
+                        preview = new CapacityHitPreview(capacityData, BattleGrid),
+                    };
 
                 EntityAddress[] result = await phase;
 

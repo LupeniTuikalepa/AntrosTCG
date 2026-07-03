@@ -56,7 +56,7 @@ namespace ATCG.Metrics
         public DualPairing<CardRarity, int> CardRarityDeathCost { get; private set; }
         [field: SerializeField, BoxGroup("Game"), Range(0, 1)]
         public float QTESuccessRange { get; private set; } = 0.25f;
-        
+
         [field: SerializeField, BoxGroup("Game/Costs"), PropertyRange(1, nameof(MinPlayerHandSize))]
         public int BasicAttackCost { get; private set; } = 1;
         [field: SerializeField, BoxGroup("Game/Costs"), PropertyRange(1, nameof(MinPlayerHandSize))]
@@ -89,6 +89,9 @@ namespace ATCG.Metrics
         public RenderingLayerMask PhaseUnselectableRenderingLayer { get; private set; }
         [field: SerializeField, BoxGroup("FXs")]
         public RenderingLayerMask PhaseRelatedRenderingLayer { get; private set; }
+
+        [field: SerializeField, BoxGroup("FXs")]
+        public RenderingLayerMask PhasePreviewRenderingLayer { get; private set; }
 
         [field: SerializeField, BoxGroup("Layers")]
         public LayerMask CellLayer { get; private set; }
