@@ -12,19 +12,22 @@ using UnityEngine.Pool;
 namespace ATCG.Battle
 {
     public class PlayerInteractions : RuntimeLocalPlayerComponent, IEntitySelectionController,
-        IPhaseListener<LocalPlayerTurnPhase>
+        IPhaseListener<LocalPlayerTurnPhase>,
+        IPhaseListener<InspectEntityPhase>
     {
-	    
-	    private HoverEntityPhase hoverEntityPhase;
+
+	    private InspectEntityPhase inspectEntityPhase;
         int IEntitySelectionController.MaxSelectableEntities => 1;
         private void OnEnable()
         {
-            this.Register();
+            this.Register<LocalPlayerTurnPhase>();
+            this.Register<InspectEntityPhase>();
         }
 
         private void OnDisable()
         {
-            this.Unregister();
+            this.Unregister<LocalPlayerTurnPhase>();
+            this.Unregister<InspectEntityPhase>();
         }
 
         protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
@@ -66,28 +69,24 @@ namespace ATCG.Battle
         }
 
         void IEntitySelectionController.OnHoverBegin(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
-        { 
-	        //Todo à changé
-	        if (hoverEntityPhase != null)
+        {
+	        if (selectedEntity.TryGetComponentRO(out BattleCardComponent battleCardComponent) && inspectEntityPhase == null)
 	        {
-		        hoverEntityPhase.SetResult(hoverEntityPhase.HoveredAddress);
+		        inspectEntityPhase =  new InspectEntityPhase(Player, selectedEntity);
+                inspectEntityPhase.isActive.AddPriority(this, PriorityTags.Small, true);
+                inspectEntityPhase.RunAndForget();
 	        }
-	        if (selectedEntity.TryGetComponentRO(out BattleCardComponent battleCardComponent))
-	        {
-		        hoverEntityPhase =  new HoverEntityPhase(Player, selectedEntity);
-		        ExecuteHoverPhase(hoverEntityPhase).ListenForExceptions();
-	        }
-	        
+
+            if (inspectEntityPhase != null && inspectEntityPhase.EntityAddress == selectedEntity)
+            {
+                inspectEntityPhase.isActive.Write(this, true);
+            }
         }
 
         void IEntitySelectionController.OnHoverEnd(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
-	        //Todo à changé
-	        if (hoverEntityPhase != null && hoverEntityPhase.HoveredAddress == selectedEntity )
-	        {
-		        hoverEntityPhase.SetResult(selectedEntity);
-		        hoverEntityPhase = null;
-	        }
+	        if (inspectEntityPhase != null && inspectEntityPhase.EntityAddress == selectedEntity )
+                inspectEntityPhase.isActive.Write(this, false);
         }
 
         private async Awaitable SelectAction(IRuntimeEntity runtimeEntity)
@@ -125,9 +124,14 @@ namespace ATCG.Battle
         void IPhaseListener<LocalPlayerTurnPhase>.OnPhaseEnd(LocalPlayerTurnPhase phase)
         {
         }
-        private async Awaitable ExecuteHoverPhase(HoverEntityPhase phase)
+
+        void IPhaseListener<InspectEntityPhase>.OnPhaseBegin(InspectEntityPhase phase)
         {
-	        await phase; 
+        }
+
+        void IPhaseListener<InspectEntityPhase>.OnPhaseEnd(InspectEntityPhase phase)
+        {
+            inspectEntityPhase = null;
         }
     }
 }

@@ -1,19 +1,15 @@
-﻿using System.Collections.Generic;
-using ATCG.Battle.CapacitySystem.Core;
+﻿using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
-using ATCG.Capacities;
 using ATCG.Capacities.Fire;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.Utilities;
-using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
@@ -35,6 +31,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
             using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
 
             int damage = GameMaths.Round(data.Damage.Evaluate(ctx.effectiveness));
+
             foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))
             {
                 foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())

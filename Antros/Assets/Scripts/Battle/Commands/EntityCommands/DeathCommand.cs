@@ -3,6 +3,7 @@ using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.UI;
 using ATCG.UI;
@@ -21,16 +22,17 @@ namespace ATCG.Battle.Commands.EntityCommands
         {
             EntityAddress address = TargetEntityAddress(context.World);
 
-            if (address.Is(out HeroEntityAspect aspect))
+            if (address.TryGetComponentRO(out DeathCostComponent deathCostComponent) &&
+                address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent))
             {
-                IBattlePlayer player = aspect.Player;
-                
-                Embed(in context, new ModifyPlayerHealthCommand(player, -aspect.HeroCard.DeathCost));
-                
-	            //Todo à changer 
-	            player.DeadCards.TryAddCard(aspect.HeroCard);
-	            
+                IBattlePlayer player = belongsToPlayerComponent.GetPlayer(context.battlePhase);
+                Embed(in context, new ModifyPlayerHealthCommand(player, -deathCostComponent.cost));
             }
+
+            //TODO à changer
+            if (address.Is(out HeroEntityAspect aspect))
+                aspect.Player.DeadCards.TryAddCard(aspect.HeroCard);
+
             address.Destroy();
             //Break("Entity death.");
         }

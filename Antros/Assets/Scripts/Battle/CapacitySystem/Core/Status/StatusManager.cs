@@ -19,7 +19,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 var tickStatusSignal = new StatusSignal(address, StatusAction.Tick, component.StatusData);
                 tickStatusSignal.Run(statusContext.battlePhase);
             }
-            
+
             UpdateControllers<TStatus>(address, statusContext);
         }
 
@@ -29,7 +29,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             {
                 address.RemoveStatus<TStatus>(statusContext);
             }
-            
+
             if (IsFinished<TStatus, StatusCustomController<TStatus>>(address))
             {
                 address.RemoveStatus<TStatus>(statusContext);
@@ -49,16 +49,16 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             }
             return false;
         }
-        
+
         public static void ApplyStatus<TStatus, TController>(this EntityAddress address, TStatus status, TController controller, StatusContext statusContext)
-            where TStatus : struct, IStatusComponent 
+            where TStatus : struct, IStatusComponent
             where TController : struct, IStatusController<TStatus>
         {
             address.AddOrSetComponent(status);
             address.AddOrSetComponent(controller);
             ComponentMask mask = ComponentMask.With<TStatus>().With<TController>();
             address.AddOrSetComponent(new StatusInfos<TStatus>(mask, status.StatusData));
-            
+
             var removeStatusSignal = new StatusSignal(address, StatusAction.Apply, status.StatusData);
             removeStatusSignal.Run(statusContext.battlePhase);
 
@@ -71,14 +71,14 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             {
                 address.RemoveAll(component.componentMask);
                 address.RemoveComponent<StatusInfos<TStatus>>();
-                
+
                 var removeStatusSignal = new StatusSignal(address, StatusAction.Remove, component.statusData);
                 removeStatusSignal.Run(statusContext.battlePhase);
             }
         }
-        
-        public static void UpdateAllStatusController<TStatus, TController>(StatusContext statusContext) 
-            where TStatus : struct, IStatusComponent 
+
+        public static void UpdateAllStatusController<TStatus, TController>(StatusContext statusContext)
+            where TStatus : struct, IStatusComponent
             where TController : struct, IStatusController<TStatus>
         {
             using (ListPool<EntityAddress>.Get(out var list))
@@ -97,10 +97,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 {
                     address.RemoveStatus<TStatus>(statusContext);
                 }
-                
+
             }
         }
-        
+
         public static void ProcessAllStatus<TStatus>(StatusContext statusContext) where TStatus : struct, IStatusComponent
         {
             var world = statusContext.battlePhase.world;
@@ -108,7 +108,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             {
                 EntityAddress address = new EntityAddress(world, entity);
                 Trigger<TStatus>(address, statusContext);
-                
+
             }
         }
     }

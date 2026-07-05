@@ -8,13 +8,12 @@
         //Primary
         Fire,
         Darkness,
-        Water,
         Life,
 
         //Secondary
+        Flow,
         Thunder,
         Light,
-        Wind,
         Frost,
 
         //Other

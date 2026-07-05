@@ -16,6 +16,7 @@ namespace ATCG.Battle.Entities.Aspects
             CapacityCasterComponent,
             BasicAttackerComponent,
             GridMemberComponent,
+            DeathCostComponent,
             BattleIDOwner,
 			DeployTargetComponent,
             PhysicalCellMemberTag>
@@ -49,6 +50,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
+            componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
