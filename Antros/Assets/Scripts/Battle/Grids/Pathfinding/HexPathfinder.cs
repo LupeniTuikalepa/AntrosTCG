@@ -4,7 +4,10 @@ using ATCG.Battle.CapacitySystem.Status.Forst;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+
+#if UNITY_EDITOR
 using CollectionDebugger.Core;
+#endif
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -24,9 +27,9 @@ namespace ATCG.Battle.Grids
                     newCoordinates = HexCoordinates.None;
                     return false;
                 }
-                
+
                 //TODO check good component
-                if (toCellAspect.EntityAddress.HasComponent<FrostStatusComponent>())
+                if (toCellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
                 {
                     var direction = from.GetNormalizedDirection(to);
                     var redirectedCoord = to + direction;
@@ -36,7 +39,7 @@ namespace ATCG.Battle.Grids
                         newCoordinates = coord;
                         return true;
                     }
-                    
+
                     newCoordinates = redirectedCoord;
                     return true;
                 }
@@ -56,8 +59,10 @@ namespace ATCG.Battle.Grids
             costSoFar = DictionaryPool<HexCoordinates, int>.Get();
             cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
             frontier = ListPool<PriorityHexCoordinates>.Get();
-            
+
+#if UNITY_EDITOR
             cameFrom.Watch(nameof(cameFrom));
+#endif
         }
 
         public bool FindPath(
@@ -83,7 +88,7 @@ namespace ATCG.Battle.Grids
     foreach (HexCoordinates dir in HexOperations.Directions)
     {
         HexCoordinates neighborOfGoal = goal - dir;
-        if (battleGrid.TryGetBattleCell(neighborOfGoal, out _) 
+        if (battleGrid.TryGetBattleCell(neighborOfGoal, out _)
             && controller.TryRedirect(neighborOfGoal, goal, battleGrid, out HexCoordinates redirectedGoal))
         {
             actualGoal = redirectedGoal;
@@ -123,7 +128,7 @@ namespace ATCG.Battle.Grids
                         continue;
                     }
                 }
-                
+
                 actual = redirected;
                 nextCell = redirectedCell;
             }
@@ -146,7 +151,7 @@ namespace ATCG.Battle.Grids
 }
 
         private IEnumerable<HexCoordinates> GetNeighbors(
-            HexCoordinates from, 
+            HexCoordinates from,
             BattleGrid battleGrid)
         {
             for (var i = 0; i < HexOperations.Directions.Length; i++)

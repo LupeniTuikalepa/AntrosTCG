@@ -1,5 +1,6 @@
 ﻿using System;
 using ATCG.Cards;
+using ATCG.Enums;
 using Helteix.Tools.Settings;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -92,6 +93,10 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("FXs")]
         public RenderingLayerMask PhasePreviewRenderingLayer { get; private set; }
+
+
+        [field: SerializeField, BoxGroup("UI")]
+        public DualPairing<Element, ElementInfos> ElementInfos { get; private set; }
 
         [field: SerializeField, BoxGroup("Layers")]
         public LayerMask CellLayer { get; private set; }

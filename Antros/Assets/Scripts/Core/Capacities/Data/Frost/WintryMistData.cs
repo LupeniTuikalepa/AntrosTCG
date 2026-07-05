@@ -14,6 +14,6 @@ namespace ATCG.Capacities.Frost
         public int Range { get; private set; }
         
         [field: SerializeField, BoxGroup("Custom")]
-        public FrostStatusData Status { get; private set; }
+        public FreezeStatusData Status { get; private set; }
     }
 }

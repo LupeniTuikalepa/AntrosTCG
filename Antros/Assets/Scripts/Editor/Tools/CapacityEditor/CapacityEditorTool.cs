@@ -1,0 +1,410 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
+using ATCG.Capacities;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using UnityEngine.UIElements;
+
+namespace ATCG.Editor.Tools.CapacityEditor
+{
+    /// <summary>
+    /// Hub tool to author a capacity's cutscene timeline. Two sub-tabs:
+    ///   Author   — pick a capacity (grouped by Element), build its cutscene stage,
+    ///              toggle auto-bindable channels, watch per-step QTE counts sync.
+    ///   Settings — director template + editing-scene path (persisted in a versioned
+    ///              CapacityEditorSettings asset).
+    /// Holds the "currently edited" context StepMarkerEditor's dropdown reads (option A).
+    /// </summary>
+    public sealed class CapacityEditorTool : IEditorTool
+    {
+        private const double ScanIntervalSeconds = 0.5;
+        private const string ThemeUss = "EditorTheme.uss";
+        private const string ToolUss = "CapacityEditor.uss";
+
+        public static CapacityData CurrentlyEdited { get; private set; }
+
+        public string DisplayName => "Capacity Editor";
+        public string Icon => "⏱";
+        public int Order => 50;
+
+        private CapacityData selected;
+
+        // Tabs
+        private VisualElement authorTab;
+        private VisualElement settingsTab;
+        private Button authorTabButton;
+        private Button settingsTabButton;
+
+        // Author widgets
+        private DropdownField capacityDropdown;
+        private Label statusLabel;
+        private Label directorStateLabel;
+        private VisualElement stepsPanel;
+        private VisualElement tracksPanel;
+        private HelpBox warningsBox;
+        private Button buildStageButton;
+
+        // Flat lookup: dropdown label -> capacity (labels are "Element/Name").
+        private readonly Dictionary<string, CapacityData> capacitiesByLabel = new();
+
+        private double lastScanTime;
+
+        public VisualElement BuildUI()
+        {
+            VisualElement root = new();
+            root.AddToClassList("ce-root");
+            EditorStyleLoader.Load(root, ThemeUss);
+            EditorStyleLoader.Load(root, ToolUss);
+
+            VisualElement tabBar = new();
+            tabBar.AddToClassList("ce-tabbar");
+            authorTabButton = new Button(() => ShowTab(true)) { text = "Author" };
+            settingsTabButton = new Button(() => ShowTab(false)) { text = "Settings" };
+            authorTabButton.AddToClassList("ce-tab-btn");
+            settingsTabButton.AddToClassList("ce-tab-btn");
+            tabBar.Add(authorTabButton);
+            tabBar.Add(settingsTabButton);
+            root.Add(tabBar);
+
+            authorTab = BuildAuthorTab();
+            settingsTab = BuildSettingsTab();
+            root.Add(authorTab);
+            root.Add(settingsTab);
+
+            ShowTab(true);
+            return root;
+        }
+
+        // ---- Author tab ------------------------------------------------------
+
+        private VisualElement BuildAuthorTab()
+        {
+            VisualElement tab = new();
+            tab.AddToClassList("ce-tab");
+
+            VisualElement pickerRow = new();
+            pickerRow.AddToClassList("ce-row");
+            capacityDropdown = new DropdownField("Capacity");
+            capacityDropdown.style.flexGrow = 1;
+            capacityDropdown.RegisterValueChangedCallback(OnCapacityDropdownChanged);
+            pickerRow.Add(capacityDropdown);
+            pickerRow.Add(new Button(RefreshCatalog) { text = "↻" });
+            pickerRow.Add(new Button(PingSelected) { text = "Ping" });
+            tab.Add(pickerRow);
+
+            directorStateLabel = new Label();
+            directorStateLabel.AddToClassList("ce-status");
+            tab.Add(directorStateLabel);
+
+            buildStageButton = new Button(BuildStage) { text = "Create Cutscene Stage" };
+            buildStageButton.style.display = DisplayStyle.None;
+            tab.Add(buildStageButton);
+
+            VisualElement sceneRow = new();
+            sceneRow.AddToClassList("ce-row");
+            sceneRow.Add(new Button(OpenDebugScene) { text = "Open Editing Scene" });
+            sceneRow.Add(new Button(RunScan) { text = "Rescan" });
+            tab.Add(sceneRow);
+
+            statusLabel = new Label();
+            statusLabel.AddToClassList("ce-status");
+            tab.Add(statusLabel);
+
+            Label stepsTitle = new("Steps");
+            stepsTitle.AddToClassList("ce-section-title");
+            tab.Add(stepsTitle);
+            stepsPanel = new VisualElement();
+            stepsPanel.AddToClassList("ce-steps-panel");
+            tab.Add(stepsPanel);
+
+            Label tracksTitle = new("Auto-bindable Tracks");
+            tracksTitle.AddToClassList("ce-section-title");
+            tab.Add(tracksTitle);
+            tracksPanel = new VisualElement();
+            tracksPanel.AddToClassList("ce-tracks-panel");
+            tab.Add(tracksPanel);
+
+            warningsBox = new HelpBox(string.Empty, HelpBoxMessageType.Warning);
+            warningsBox.AddToClassList("ce-warnings");
+            warningsBox.style.display = DisplayStyle.None;
+            tab.Add(warningsBox);
+
+            return tab;
+        }
+
+        private VisualElement BuildSettingsTab()
+        {
+            VisualElement tab = new();
+            tab.AddToClassList("ce-tab");
+
+            CapacityEditorSettings settings = CapacityEditorSettings.GetOrCreate();
+
+            Label title = new("Capacity Editor Settings");
+            title.AddToClassList("ce-section-title");
+            tab.Add(title);
+
+            ObjectField templateField = new("Director Template")
+            {
+                objectType = typeof(GameObject),
+                allowSceneObjects = false,
+                value = settings.directorTemplate
+            };
+            templateField.RegisterValueChangedCallback(evt =>
+            {
+                settings.directorTemplate = evt.newValue as GameObject;
+                settings.Save();
+            });
+            tab.Add(templateField);
+
+            TextField scenePathField = new("Editing Scene Path") { value = settings.editingScenePath };
+            scenePathField.RegisterValueChangedCallback(evt =>
+            {
+                settings.editingScenePath = evt.newValue;
+                settings.Save();
+            });
+            tab.Add(scenePathField);
+
+            VisualElement row = new();
+            row.AddToClassList("ce-row");
+            row.Add(new Button(() =>
+            {
+                CapacityEditorSettings s = CapacityEditorSettings.GetOrCreate();
+                Selection.activeObject = s;
+                EditorGUIUtility.PingObject(s);
+            }) { text = "Ping Settings Asset" });
+            tab.Add(row);
+
+            tab.Add(new HelpBox(
+                "Creating a stage builds Assets/Project/Capacities/{Element}/{Capacity}/ with a prefab " +
+                "variant of the template and its timeline. The variant keeps template changes flowing. " +
+                "The editing scene is a scratch workspace, never referenced by capacity data.",
+                HelpBoxMessageType.Info));
+
+            return tab;
+        }
+
+        private void ShowTab(bool author)
+        {
+            authorTab.style.display = author ? DisplayStyle.Flex : DisplayStyle.None;
+            settingsTab.style.display = author ? DisplayStyle.None : DisplayStyle.Flex;
+            authorTabButton.EnableInClassList("ce-tab-btn--active", author);
+            settingsTabButton.EnableInClassList("ce-tab-btn--active", !author);
+        }
+
+        // ---- lifecycle -------------------------------------------------------
+
+        public void OnActivated()
+        {
+            EditorToolBus.Subscribe<StepMarkerChangedEvent>(OnStepMarkerChanged);
+            EditorApplication.update += OnEditorUpdate;
+            RefreshCatalog();
+        }
+
+        public void OnDeactivated()
+        {
+            CurrentlyEdited = null;
+            EditorToolBus.Unsubscribe<StepMarkerChangedEvent>(OnStepMarkerChanged);
+            EditorApplication.update -= OnEditorUpdate;
+        }
+
+        // ---- capacity picker -------------------------------------------------
+
+        private void RefreshCatalog()
+        {
+            capacitiesByLabel.Clear();
+            List<string> choices = new();
+
+            foreach (var group in CapacityCatalog.GroupedByElement())
+            {
+                foreach (CapacityData capacity in group.Value)
+                {
+                    string label = $"{group.Key}/{capacity.name}";
+                    capacitiesByLabel[label] = capacity;
+                    choices.Add(label);
+                }
+            }
+
+            capacityDropdown.choices = choices;
+
+            if (selected != null)
+            {
+                string current = choices.Find(c => capacitiesByLabel[c] == selected);
+                capacityDropdown.SetValueWithoutNotify(current);
+            }
+        }
+
+        private void OnCapacityDropdownChanged(ChangeEvent<string> evt)
+        {
+            capacitiesByLabel.TryGetValue(evt.newValue ?? string.Empty, out selected);
+            CurrentlyEdited = selected;
+            OnSelectionChanged();
+        }
+
+        private void PingSelected()
+        {
+            if (selected != null)
+                EditorGUIUtility.PingObject(selected);
+        }
+
+        private void OnSelectionChanged()
+        {
+            statusLabel.text = selected != null ? $"Editing: {selected.name}" : string.Empty;
+            RefreshBuildButton();
+            RefreshDirectorState();
+            RebuildStepsPanel();
+            RebuildTracksPanel();
+        }
+
+        private void RefreshDirectorState()
+        {
+            if (selected == null)
+            {
+                directorStateLabel.text = string.Empty;
+                return;
+            }
+
+            bool hasDirector = selected.CutsceneDirector != null;
+            bool hasTimeline = selected.CutsceneTimeline != null;
+            directorStateLabel.text =
+                $"Director: {(hasDirector ? "✓" : "✗")}   Timeline: {(hasTimeline ? "✓" : "✗")}";
+        }
+
+        // Stage build is offered until both a director and its timeline exist.
+        private void RefreshBuildButton()
+        {
+            bool needsStage = selected != null &&
+                              (selected.CutsceneDirector == null || selected.CutsceneTimeline == null);
+            buildStageButton.style.display = needsStage ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void BuildStage()
+        {
+            if (CapacityStageBuilder.TryBuild(selected, out string message))
+                OnSelectionChanged();
+            statusLabel.text = message;
+        }
+
+        private void OpenDebugScene()
+        {
+            CapacityDebugSceneUtility.OpenOrCreate(out string message);
+            statusLabel.text = message;
+            RebuildTracksPanel();
+        }
+
+        // ---- steps / QTE counts ---------------------------------------------
+
+        private void RebuildStepsPanel()
+        {
+            stepsPanel.Clear();
+            if (selected == null)
+                return;
+
+            foreach (string step in GetDeclaredSteps(selected))
+            {
+                selected.TryGetStep(step, out CapacityStepData data);
+                Label row = new($"{step} — {data.QTEsCount} QTE(s)");
+                row.AddToClassList("ce-step-row");
+                stepsPanel.Add(row);
+            }
+        }
+
+        // Resolves the timeline straight from the capacity's director (its prefab),
+        // so scanning/track editing works with no stage loaded in the scene.
+        private TimelineAsset ResolveTimeline()
+        {
+            return selected != null ? selected.CutsceneTimeline : null;
+        }
+
+        private void RunScan()
+        {
+            if (selected == null)
+                return;
+
+            TimelineAsset timeline = ResolveTimeline();
+            if (timeline == null)
+                return;
+
+            string[] declaredSteps = GetDeclaredSteps(selected);
+            CapacityTimelineScanner.Result result = CapacityTimelineScanner.Scan(timeline, declaredSteps);
+
+            bool anyChanged = false;
+            foreach (var kv in result.QteCountByStep)
+                anyChanged |= CapacityStepDataWriter.TrySetQteCount(selected, kv.Key, kv.Value);
+
+            if (anyChanged)
+                RebuildStepsPanel();
+
+            warningsBox.text = string.Join("\n", result.Warnings);
+            warningsBox.style.display = result.Warnings.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void OnEditorUpdate()
+        {
+            if (selected == null)
+                return;
+            if (EditorApplication.timeSinceStartup - lastScanTime < ScanIntervalSeconds)
+                return;
+
+            lastScanTime = EditorApplication.timeSinceStartup;
+            RunScan();
+        }
+
+        private void OnStepMarkerChanged(StepMarkerChangedEvent evt) => RunScan();
+
+        // ---- auto-bindable tracks checklist ----------------------------------
+
+        private void RebuildTracksPanel()
+        {
+            tracksPanel.Clear();
+
+            TimelineAsset timeline = ResolveTimeline();
+            if (timeline == null)
+            {
+                tracksPanel.Add(new Label("No timeline yet — create a stage to manage tracks."));
+                return;
+            }
+
+            PlayableDirector sceneDirector = CapacityStageInstantiator.FindActiveDirector();
+            DebugCutsceneRig rig = UnityEngine.Object.FindFirstObjectByType<DebugCutsceneRig>();
+
+            foreach (AutoBindChannel channel in CutsceneChannels.All)
+            {
+                AutoBindChannel captured = channel;
+                Toggle toggle = new(channel.displayName)
+                {
+                    value = CapacityTimelineTrackBinder.HasTrack(timeline, channel)
+                };
+                toggle.AddToClassList("ce-track-toggle");
+                toggle.AddToClassList("atcg-toggle-accent");
+                toggle.RegisterValueChangedCallback(evt =>
+                {
+                    if (evt.newValue)
+                        CapacityTimelineTrackBinder.AddTrack(timeline, captured, sceneDirector, rig);
+                    else
+                        CapacityTimelineTrackBinder.RemoveTrack(timeline, captured);
+
+                    RebuildTracksPanel();
+                });
+                tracksPanel.Add(toggle);
+            }
+        }
+
+        // Reads the generated `static string[] DeclaredSteps` off the concrete type.
+        public static string[] GetDeclaredSteps(CapacityData capacity)
+        {
+            if (capacity == null)
+                return Array.Empty<string>();
+
+            FieldInfo field = capacity.GetType().GetField(
+                "DeclaredSteps",
+                BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+
+            return field?.GetValue(null) as string[] ?? Array.Empty<string>();
+        }
+    }
+}

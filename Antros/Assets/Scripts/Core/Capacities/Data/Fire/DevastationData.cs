@@ -5,7 +5,6 @@ using UnityEngine;
 namespace ATCG.Capacities.Fire
 {
     [CreateAssetMenu(menuName = "ATCG/Capacities/Fire/Devastation")]
-
     [WithStep("Explosion")]
     public partial class DevastationData : CapacityData
     {
@@ -14,6 +13,5 @@ namespace ATCG.Capacities.Fire
 
         [field: SerializeField, BoxGroup("Custom")]
         public AnimationCurve Damage { get; private set; }
-
     }
 }

@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: PoisonStatus
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Status.PoisonStatusData
   guidText: 78b33e39-d61e-44aa-96b8-d21995652f5c
+  <Name>k__BackingField: Poison
+  <Color>k__BackingField: {r: 0.55405384, g: 0.34109113, b: 0.6886792, a: 0}
+  <Element>k__BackingField: 0
   <RuntimeStatus>k__BackingField: {fileID: 1034227222644561179, guid: 1d612e8e48952a948a42a40b588ac2f4, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 4d3737e7ea7a2154680868bbd5865acd, type: 3}
   <Duration>k__BackingField: 3
   <Damage>k__BackingField: 1
