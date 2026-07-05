@@ -274,10 +274,10 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         private CapacityCutscene SpawnCutsceneFor(RuntimeLocalBattlePlayer player)
         {
-            if (data.CutscenePrefab == null)
+            if (data.CutsceneDirector == null)
                 return null;
 
-            GameObject instance = Object.Instantiate(data.CutscenePrefab, player.transform);
+            var instance = Object.Instantiate(data.CutsceneDirector, player.transform);
             CapacityCutscene spawnCutsceneFor = instance.GetComponent<CapacityCutscene>();
 
             return spawnCutsceneFor;

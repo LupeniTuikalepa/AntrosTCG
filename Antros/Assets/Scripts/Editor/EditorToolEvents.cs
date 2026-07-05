@@ -26,4 +26,7 @@ namespace ATCG.Editor
         public readonly int EntityId;
         public FocusEntityRequest(int entityId) => EntityId = entityId;
     }
+
+    /// <summary>A StepMarker's assigned step changed; prompts a QTE re-scan.</summary>
+    public readonly struct StepMarkerChangedEvent { }
 }

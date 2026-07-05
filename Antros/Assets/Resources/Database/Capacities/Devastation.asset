@@ -16,13 +16,11 @@ MonoBehaviour:
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Devastation
   <Description>k__BackingField: Boom
+  <Element>k__BackingField: 1
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 2899897746609406451
-  steps:
-  - <StepName>k__BackingField: Explosion
-    <QTEsCount>k__BackingField: 2
-  <CutscenePrefab>k__BackingField: {fileID: 2981106221713600082, guid: 9bce9ba43db47434d8cfbfb5d2d49683, type: 3}
+  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 9bce9ba43db47434d8cfbfb5d2d49683, type: 3}
   <Range>k__BackingField: 3
   <Damage>k__BackingField:
     serializedVersion: 2
@@ -48,6 +46,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  <ExplosionStepData>k__BackingField:
+    <StepName>k__BackingField: Explosion
+    <QTEsCount>k__BackingField: 2
   references:
     version: 2
     RefIds:

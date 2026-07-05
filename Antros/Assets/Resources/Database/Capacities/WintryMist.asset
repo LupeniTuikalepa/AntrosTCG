@@ -16,15 +16,16 @@ MonoBehaviour:
   <Cost>k__BackingField: 1
   <Name>k__BackingField: "Br\xFBme Hivernal"
   <Description>k__BackingField: "Applique l'etat Gel\xE9e a une ligne de case"
+  <Element>k__BackingField: 0
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 7630467839202951329
-  steps:
-  - <StepName>k__BackingField: BlackIce
-    <QTEsCount>k__BackingField: 0
-  <CutscenePrefab>k__BackingField: {fileID: 2981106221713600082, guid: f9b4a6111b641de49aab350bffbb6a8d, type: 3}
+  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: f9b4a6111b641de49aab350bffbb6a8d, type: 3}
   <Range>k__BackingField: 3
   <Status>k__BackingField: {fileID: 11400000, guid: 4d2f6fb665f44cf47ae99d76458c9ca0, type: 2}
+  <BlackIceStepData>k__BackingField:
+    <StepName>k__BackingField: BlackIce
+    <QTEsCount>k__BackingField: 0
   references:
     version: 2
     RefIds:

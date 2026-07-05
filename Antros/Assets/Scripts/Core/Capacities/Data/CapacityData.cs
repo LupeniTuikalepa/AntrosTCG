@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Databases;
+using ATCG.Enums;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.DataMapping;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace ATCG.Capacities
 {
@@ -18,16 +21,24 @@ namespace ATCG.Capacities
 
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
+        [field: SerializeField, BoxGroup("Base")]
+        public Element Element { get; private set; }
 
         [field: BoxGroup("Base")]
         [field: SerializeField, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public PatternGroup CastPatterns { get; private set; }
 
+        // The cutscene stage as a prefab. Its PlayableDirector already owns the
+        // authored TimelineAsset (via playableAsset), so we reference the director
+        // directly rather than storing a second, redundant timeline reference.
         [field: BoxGroup("Base")]
-        [field: SerializeField, Tooltip("Steps of this capacity. Structure is driven by [WithStep] on the concrete data type; only metrics are editable.")]
-        private CapacityStepData[] steps;
         [field: SerializeField, BoxGroup("Base")]
-        public GameObject CutscenePrefab { get; private set; }
+        public PlayableDirector CutsceneDirector { get; private set; }
+
+        // Convenience accessor: the timeline the director plays, if any.
+        public TimelineAsset CutsceneTimeline => CutsceneDirector != null
+            ? CutsceneDirector.playableAsset as TimelineAsset
+            : null;
 
         private Dictionary<string, CapacityStepData> mappedSteps;
 
