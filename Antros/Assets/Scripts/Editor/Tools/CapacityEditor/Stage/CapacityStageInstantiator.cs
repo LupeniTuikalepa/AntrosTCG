@@ -8,10 +8,10 @@ using UnityEngine.Playables;
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Instantiates a capacity's CutsceneDirector prefab into the currently-open
-    /// editing scene, replacing whatever was loaded before. The director inside the
-    /// prefab already carries the authored TimelineAsset (playableAsset), so the
-    /// scene instance inherits it — nothing to push here.
+    /// Instantiates a capacity's cutscene stage (the prefab hosting its
+    /// PlayableDirector) into the current scene. The editing scene is reloaded fresh
+    /// before each call (see CapacityDebugSceneUtility.Reopen), so there's nothing to
+    /// clean up here and no marker component is needed.
     /// </summary>
     public static class CapacityStageInstantiator
     {
@@ -20,35 +20,50 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (capacity == null || capacity.CutsceneDirector == null)
                 return null;
 
-            string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(capacity));
-
-            CapacityStageAnchor existing = Object.FindFirstObjectByType<CapacityStageAnchor>();
-            if (existing != null)
+            GameObject prefabRoot = ResolvePrefabRoot(capacity.CutsceneDirector);
+            if (prefabRoot == null)
             {
-                if (existing.CapacityGuid == guid)
-                    return existing.GetComponentInChildren<CapacityCutscene>();
-
-                Object.DestroyImmediate(existing.gameObject);
+                Debug.LogWarning(
+                    $"[CapacityTimelineEditor] Couldn't resolve the prefab for '{capacity.name}'. " +
+                    $"CutsceneDirector must reference a PlayableDirector that lives inside a prefab asset.");
+                return null;
             }
 
-            // CutsceneDirector is a component living in the prefab asset; its
-            // gameObject IS the prefab GO, so InstantiatePrefab takes it directly.
-            // The prefab root may be an ancestor if the director sits on a child.
-            GameObject prefabGo = capacity.CutsceneDirector.transform.root.gameObject;
-            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefabGo);
-
-            CapacityStageAnchor anchor = instance.AddComponent<CapacityStageAnchor>();
-            anchor.CapacityGuid = guid;
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefabRoot);
+            if (instance == null)
+            {
+                Debug.LogWarning(
+                    $"[CapacityTimelineEditor] InstantiatePrefab returned null for '{prefabRoot.name}'.");
+                return null;
+            }
 
             EditorSceneManager.MarkSceneDirty(instance.scene);
-
             return instance.GetComponentInChildren<CapacityCutscene>();
         }
 
+        // The editing scene is reset before each load, so the only stage director
+        // present is the one just instantiated (the DebugCutsceneRig has no director).
         public static PlayableDirector FindActiveDirector()
         {
-            CapacityStageAnchor anchor = Object.FindFirstObjectByType<CapacityStageAnchor>();
-            return anchor != null ? anchor.GetComponentInChildren<PlayableDirector>() : null;
+            return Object.FindFirstObjectByType<PlayableDirector>();
+        }
+
+        private static GameObject ResolvePrefabRoot(PlayableDirector director)
+        {
+            GameObject go = director.gameObject;
+
+            GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(go);
+            if (source != null)
+                go = source;
+
+            string path = AssetDatabase.GetAssetPath(go);
+            if (string.IsNullOrEmpty(path))
+                path = AssetDatabase.GetAssetPath(director);
+
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            return AssetDatabase.LoadAssetAtPath<GameObject>(path);
         }
     }
 }

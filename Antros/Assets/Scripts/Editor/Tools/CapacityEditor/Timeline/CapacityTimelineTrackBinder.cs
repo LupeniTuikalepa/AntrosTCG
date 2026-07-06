@@ -10,10 +10,9 @@ namespace ATCG.Editor.Tools.CapacityEditor
     /// <summary>
     /// Adds/removes the auto-bindable channels (CutsceneChannels.All) on a capacity's
     /// timeline. The checklist always lists the POSSIBLE channels; a channel is ticked
-    /// when a track with its exact name+type already exists on the timeline. Matching
-    /// is by name (intentionally): multiple tracks can share a type while only some are
-    /// auto-bound. Binding to the DebugCutsceneRig only happens when the editing scene
-    /// (with the rig) is open; otherwise the track is created and a warning is logged.
+    /// when a track with its exact name+type already exists. Matching is by name
+    /// (intentionally): multiple tracks can share a type while only some are auto-bound.
+    /// Debug binding reads the DebugCutsceneRig's channel table (no runtime resolveDebug).
     /// </summary>
     public static class CapacityTimelineTrackBinder
     {
@@ -23,21 +22,13 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 .Any(t => t.name == channel.trackName && t.GetType() == channel.trackType);
         }
 
-        // director may be null (no stage in scene); binding is then skipped with a warning.
         public static void AddTrack(TimelineAsset timeline, AutoBindChannel channel, PlayableDirector director, DebugCutsceneRig rig)
         {
             if (HasTrack(timeline, channel))
                 return;
 
             TrackAsset track = timeline.CreateTrack(channel.trackType, null, channel.trackName);
-
-            Object binding = rig != null ? channel.resolveDebug?.Invoke(rig) : null;
-            if (binding != null && director != null)
-                director.SetGenericBinding(track, binding);
-            else
-                Debug.LogWarning(
-                    $"[CapacityTimelineEditor] Track '{channel.trackName}' created but not bound " +
-                    $"(open the editing scene with a DebugCutsceneRig to bind it).");
+            BindTrack(director, track, channel, rig);
 
             EditorUtility.SetDirty(timeline);
             AssetDatabase.SaveAssetIfDirty(timeline);
@@ -61,6 +52,20 @@ namespace ATCG.Editor.Tools.CapacityEditor
             timeline.DeleteTrack(track);
             EditorUtility.SetDirty(timeline);
             AssetDatabase.SaveAssetIfDirty(timeline);
+        }
+
+        // Binds one track to the rig's reference for its channel, if present.
+        public static void BindTrack(PlayableDirector director, TrackAsset track, AutoBindChannel channel, DebugCutsceneRig rig)
+        {
+            if (director == null || track == null)
+                return;
+
+            if (rig != null && rig.TryGet(channel.trackName, out Object reference))
+                director.SetGenericBinding(track, reference);
+            else
+                Debug.LogWarning(
+                    $"[CapacityTimelineEditor] No rig reference for channel '{channel.trackName}'. " +
+                    $"Fill it on the DebugCutsceneRig (Populate from CutsceneChannels).");
         }
     }
 }

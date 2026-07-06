@@ -4,10 +4,9 @@ using UnityEngine;
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Versioned settings for the Capacity Editor tool: the director prefab template
-    /// new cutscene stages are derived from, and the scratch editing-scene path.
-    /// Stored as an asset (not EditorPrefs) so it survives recompiles, is a real
-    /// asset reference that follows renames, and is shared across the team via VCS.
+    /// Versioned settings for the Capacity Editor tool. Stored as an asset (not
+    /// EditorPrefs) so it survives recompiles, is a real asset reference that follows
+    /// renames, and is shared across the team via VCS.
     /// </summary>
     public sealed class CapacityEditorSettings : ScriptableObject
     {
@@ -16,8 +15,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
         [Tooltip("Prefab template new cutscene stages are created from (as prefab variants).")]
         public GameObject directorTemplate;
 
-        [Tooltip("Scratch scene used to author capacity timelines. Never referenced by any CapacityData.")]
-        public string editingScenePath = "Assets/Scenes/Editor/CapacitiesEdition.unity";
+        [Tooltip("Test environment instantiated inside the cutscene edit stage: hero prefab " +
+                 "(for animations), camera with CinemachineBrain, and the DebugCutsceneRig for " +
+                 "edit-mode binding. Acts as the reusable 'scene' the cutscene is authored against.")]
+        public GameObject testEnvironmentPrefab;
 
         private static CapacityEditorSettings cached;
 

@@ -107,7 +107,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             VisualElement sceneRow = new();
             sceneRow.AddToClassList("ce-row");
-            sceneRow.Add(new Button(OpenDebugScene) { text = "Open Editing Scene" });
+            sceneRow.Add(new Button(EditCutscene) { text = "Edit Cutscene" });
             sceneRow.Add(new Button(RunScan) { text = "Rescan" });
             tab.Add(sceneRow);
 
@@ -161,13 +161,18 @@ namespace ATCG.Editor.Tools.CapacityEditor
             });
             tab.Add(templateField);
 
-            TextField scenePathField = new("Editing Scene Path") { value = settings.editingScenePath };
-            scenePathField.RegisterValueChangedCallback(evt =>
+            ObjectField envField = new("Test Environment")
             {
-                settings.editingScenePath = evt.newValue;
+                objectType = typeof(GameObject),
+                allowSceneObjects = false,
+                value = settings.testEnvironmentPrefab
+            };
+            envField.RegisterValueChangedCallback(evt =>
+            {
+                settings.testEnvironmentPrefab = evt.newValue as GameObject;
                 settings.Save();
             });
-            tab.Add(scenePathField);
+            tab.Add(envField);
 
             VisualElement row = new();
             row.AddToClassList("ce-row");
@@ -180,9 +185,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
             tab.Add(row);
 
             tab.Add(new HelpBox(
-                "Creating a stage builds Assets/Project/Capacities/{Element}/{Capacity}/ with a prefab " +
-                "variant of the template and its timeline. The variant keeps template changes flowing. " +
-                "The editing scene is a scratch workspace, never referenced by capacity data.",
+                "Director Template: cloned as a prefab variant per capacity when you create a stage, " +
+                "under Assets/Project/Capacities/{Element}/{Capacity}/.\n" +
+                "Test Environment: hero + camera (CinemachineBrain) + DebugCutsceneRig, instantiated " +
+                "inside the isolated cutscene stage so bindings preview correctly. It's scenery — never saved.",
                 HelpBoxMessageType.Info));
 
             return tab;
@@ -289,11 +295,22 @@ namespace ATCG.Editor.Tools.CapacityEditor
             statusLabel.text = message;
         }
 
-        private void OpenDebugScene()
+        // Opens the isolated cutscene stage (Prefab-Mode-like) for the selection.
+        private void EditCutscene()
         {
-            CapacityDebugSceneUtility.OpenOrCreate(out string message);
-            statusLabel.text = message;
-            RebuildTracksPanel();
+            if (selected == null)
+            {
+                statusLabel.text = "Select a capacity first.";
+                return;
+            }
+            if (selected.CutsceneDirector == null)
+            {
+                statusLabel.text = $"'{selected.name}' has no cutscene stage yet.";
+                return;
+            }
+
+            CapacityCutsceneStage.Open(selected);
+            statusLabel.text = $"Editing '{selected.name}' cutscene in an isolated stage.";
         }
 
         // ---- steps / QTE counts ---------------------------------------------
@@ -313,11 +330,19 @@ namespace ATCG.Editor.Tools.CapacityEditor
             }
         }
 
-        // Resolves the timeline straight from the capacity's director (its prefab),
-        // so scanning/track editing works with no stage loaded in the scene.
+        // When the cutscene stage is open for this capacity, read the timeline from the
+        // stage's live director (reflects unsaved edits); otherwise fall back to the
+        // capacity's director prefab timeline.
         private TimelineAsset ResolveTimeline()
         {
-            return selected != null ? selected.CutsceneTimeline : null;
+            if (selected == null)
+                return null;
+
+            CapacityCutsceneStage stage = CapacityCutsceneStage.Current;
+            if (stage != null && stage.Capacity == selected && stage.Director != null)
+                return stage.Director.playableAsset as TimelineAsset;
+
+            return selected.CutsceneTimeline;
         }
 
         private void RunScan()
@@ -337,7 +362,15 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 anyChanged |= CapacityStepDataWriter.TrySetQteCount(selected, kv.Key, kv.Value);
 
             if (anyChanged)
+            {
                 RebuildStepsPanel();
+
+                // If the cutscene stage is open for this capacity, persist the scan
+                // write-back too (respecting the Auto Save toggle).
+                CapacityCutsceneStage stage = CapacityCutsceneStage.Current;
+                if (stage != null && stage.Capacity == selected)
+                    stage.AutoSaveIfEnabled();
+            }
 
             warningsBox.text = string.Join("\n", result.Warnings);
             warningsBox.style.display = result.Warnings.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
@@ -369,8 +402,9 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 return;
             }
 
-            PlayableDirector sceneDirector = CapacityStageInstantiator.FindActiveDirector();
-            DebugCutsceneRig rig = UnityEngine.Object.FindFirstObjectByType<DebugCutsceneRig>();
+            CapacityCutsceneStage stage = CapacityCutsceneStage.Current;
+            PlayableDirector sceneDirector = stage != null ? stage.Director : null;
+            DebugCutsceneRig rig = stage != null ? stage.Rig : null;
 
             foreach (AutoBindChannel channel in CutsceneChannels.All)
             {
