@@ -33,5 +33,6 @@ namespace ATCG.Battle.Entities.Components
             else if (CurrentHealth >= MaxHealth)
                 CurrentHealth = MaxHealth;
         }
+        
     }
 }
