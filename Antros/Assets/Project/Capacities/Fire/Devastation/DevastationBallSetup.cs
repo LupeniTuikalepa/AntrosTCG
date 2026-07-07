@@ -1,9 +1,8 @@
-﻿using ATCG.Battle.CapacitySystem;
-using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
+﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
+using ATCG.Battle.CapacitySystem.Core.Properties;
 using ATCG.Battle.Entities.Runtime;
-using ATCG.Battle.Players.Local.Runtime;
-using ATCG.HexGrids.Runtime;
+using ATCG.HexGrids;
 using UnityEngine;
 
 namespace ATCG.Capacities.Devastation
@@ -24,26 +23,34 @@ namespace ATCG.Capacities.Devastation
         [SerializeField]
         private float ballDistance;
 
-        public void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer, CastCapacityPhase capacityPhase)
+        public void Connect(ICapacityContext context)
         {
-            if (capacityPhase.TryGetRuntimeCaster(runtimeLocalBattlePlayer, out IRuntimeEntity runtimeEntity))
-            {
-                RuntimeHexGrid runtimeHexGrid = runtimeLocalBattlePlayer.RuntimeBattleGrid.RuntimeHexGrid;
-                Vector3 hitPosition = runtimeHexGrid.GetPositionAt(capacityPhase.castPoint);
+            if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
+                return;
+            if (!context.TryGetProperty(CapacityContextKeys.CAST_POINT, out HexCoordinates castPoint))
+                return;
+            if (!context.TryGetProperty(CapacityContextKeys.COORDINATE_SOLVER, out ICutsceneCoordinateSolver solver))
+                return;
 
-                Vector3 toPosition = (hitPosition - runtimeEntity.transform.position).normalized;
-                toPosition.y = 0;
+            Vector3 hitPosition = solver.ToWorld(castPoint);
 
-                ballHeight = .3f;
+            Vector3 toPosition = (hitPosition - caster.transform.position).normalized;
+            toPosition.y = 0;
 
-                Vector3 startBallPosition = runtimeEntity.transform.position + Vector3.up * ballHeight + toPosition * ballDistance;
+            ballHeight = .3f;
 
-                initialBall.transform.position = startBallPosition;
-                start.position = startBallPosition;
+            Vector3 startBallPosition = caster.transform.position + Vector3.up * ballHeight + toPosition * ballDistance;
 
-                explosion.transform.position = hitPosition;
-                destination.position = hitPosition;
-            }
+            initialBall.transform.position = startBallPosition;
+            start.position = startBallPosition;
+
+            explosion.transform.position = hitPosition;
+            destination.position = hitPosition;
+        }
+
+        public void Disconnect(ICapacityContext context)
+        {
+
         }
     }
 }

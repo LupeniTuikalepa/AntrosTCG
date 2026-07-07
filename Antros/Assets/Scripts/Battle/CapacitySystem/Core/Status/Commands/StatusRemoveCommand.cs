@@ -1,5 +1,4 @@
-﻿using ATCG.Battle.CapacitySystem.Status;
-using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Capacities.Data.Status;

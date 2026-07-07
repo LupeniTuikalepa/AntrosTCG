@@ -24,6 +24,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
             return builder;
         }
 
+
         private partial void ExecuteExplosion(DevastationData data, CapacityStepContext ctx)
         {
             BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
@@ -48,5 +49,4 @@ namespace ATCG.Battle.CapacitySystem.Capacities
             }
         }
     }
-
 }

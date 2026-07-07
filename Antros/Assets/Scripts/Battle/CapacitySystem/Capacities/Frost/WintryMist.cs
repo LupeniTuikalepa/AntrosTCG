@@ -1,19 +1,13 @@
-﻿using System.Collections.Generic;
-using ATCG.Battle.CapacitySystem.Core;
+﻿using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
 using ATCG.Capacities.Frost;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
-using ATCG.Utilities;
-using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 {

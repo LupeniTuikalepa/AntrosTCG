@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using ATCG.Battle.Entities.Runtime;
@@ -68,7 +68,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             }
 
             for (int i = 0; i < elements.Length; i++)
-                elements[i].Connect(screenPlayer, capacityPhase);
+                elements[i].Connect(capacityPhase);
 
         }
 
@@ -89,7 +89,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             finished = null;
 
             UnhookInput();
+
         }
+
 
         public async Awaitable Stop(CancellationToken token)
         {
@@ -97,7 +99,14 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             await Awaitable.MainThreadAsync();
         }
 
-        public void Dispose() => gameObject.Destroy();
+
+        public void Dispose()
+        {
+            for (int i = 0; i < elements.Length; i++)
+                elements[i].Disconnect(castCapacityPhase);
+
+            gameObject.Destroy();
+        }
 
         private void OnDirectorStopped(PlayableDirector _) => finished?.TrySetResult();
 

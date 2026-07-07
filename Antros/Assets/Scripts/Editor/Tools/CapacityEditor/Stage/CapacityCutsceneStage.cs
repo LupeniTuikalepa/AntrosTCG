@@ -1,8 +1,10 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using ATCG.Capacities;
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -36,12 +38,18 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private CapacityData capacity;
         private GameObject stageInstance;   // the instantiated director prefab (edited)
         private DebugCutsceneRig rig;
+        private DebugCapacityContext previewContext;
 
         public CapacityData Capacity => capacity;
+
         public PlayableDirector Director => stageInstance != null
             ? stageInstance.GetComponentInChildren<PlayableDirector>(true)
             : null;
+
+        public CinemachineBrain Brain=> rig.TryGet(CutsceneChannels.MainCamera, out Object cam) && cam is CinemachineBrain brain ? brain : null;
         public DebugCutsceneRig Rig => rig;
+        public DebugCapacityContext PreviewContext => previewContext;
+
 
         public static void Open(CapacityData capacity)
         {
@@ -92,6 +100,9 @@ namespace ATCG.Editor.Tools.CapacityEditor
             // The prefab's serialized bindings point at objects outside this stage;
             // reconnect every auto-bindable track to the rig present here.
             CapacityAutoBinder.RebindAll(Director, rig);
+            ConnectElements();
+
+            OpenAndLockTimeline();
 
             Current = this;
             return true;
@@ -102,10 +113,66 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (AutoSave)
                 Save();
 
+            UnlockTimeline();
+
             if (Current == this)
                 Current = null;
 
             base.OnCloseStage();
+        }
+
+        // Wires the cutscene elements to a preview context so VFX (particles, etc.)
+        // resolve their caster from the test hero instead of a running game. The hero
+        // is the object bound to the HeroAnimator channel on the rig.
+        private void ConnectElements()
+        {
+            if (stageInstance == null)
+                return;
+
+            Transform heroRoot = null;
+            Animator heroAnimator = null;
+            if (rig != null && rig.TryGet(CutsceneChannels.HeroAnimator.trackName, out Object heroRef))
+            {
+                heroAnimator = heroRef as Animator;
+                if (heroRef is Component heroComponent)
+                    heroRoot = heroComponent.transform;
+            }
+
+            previewContext = new DebugCapacityContext(capacity, heroRoot, heroAnimator);
+            ReconnectElements();
+        }
+
+        // Re-runs Connect on every element with the current preview context. Called on
+        // open and again whenever the tweak panel changes a property value.
+        public void ReconnectElements()
+        {
+            if (stageInstance == null || previewContext == null)
+                return;
+
+            ICapacityCutsceneElement[] elements = stageInstance.GetComponentsInChildren<ICapacityCutsceneElement>(true);
+            for (int i = 0; i < elements.Length; i++)
+                elements[i].Connect(previewContext);
+        }
+
+        // Loads the stage director into the Timeline window and locks it, so editing
+        // stays pinned to this cutscene even when selection changes elsewhere.
+        private void OpenAndLockTimeline()
+        {
+            PlayableDirector director = Director;
+            if (director == null)
+                return;
+
+            TimelineEditorWindow window = TimelineEditor.GetOrCreateWindow();
+            window.SetTimeline(director);
+            window.locked = true;
+            window.Show();
+        }
+
+        private static void UnlockTimeline()
+        {
+            TimelineEditorWindow window = TimelineEditor.GetWindow();
+            if (window != null)
+                window.locked = false;
         }
 
         /// <summary>

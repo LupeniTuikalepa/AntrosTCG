@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 {
@@ -28,7 +29,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 
         public IReadOnlyList<ChannelBinding> Bindings => bindings;
 
-        public bool TryGet(string channelName, out UnityEngine.Object reference)
+        public bool TryGet(string channelName, out Object reference)
         {
             for (int i = 0; i < bindings.Count; i++)
             {
@@ -41,5 +42,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             reference = null;
             return false;
         }
+
+        public bool TryGet(AutoBindChannel channelName, out Object reference)
+            => TryGet(channelName.trackName, out reference);
     }
 }

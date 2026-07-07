@@ -68,3 +68,10 @@
 .ce-warnings {
     margin-top: 6px;
 }
+
+.ce-props-panel {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 4px;
+    padding: 6px;
+    margin-bottom: 4px;
+}

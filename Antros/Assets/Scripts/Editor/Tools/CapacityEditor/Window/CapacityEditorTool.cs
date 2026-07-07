@@ -46,6 +46,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private Label directorStateLabel;
         private VisualElement stepsPanel;
         private VisualElement tracksPanel;
+        private VisualElement propertiesPanel;
         private HelpBox warningsBox;
         private Button buildStageButton;
 
@@ -128,6 +129,13 @@ namespace ATCG.Editor.Tools.CapacityEditor
             tracksPanel = new VisualElement();
             tracksPanel.AddToClassList("ce-tracks-panel");
             tab.Add(tracksPanel);
+
+            Label propsTitle = new("Properties");
+            propsTitle.AddToClassList("ce-section-title");
+            tab.Add(propsTitle);
+            propertiesPanel = new VisualElement();
+            propertiesPanel.AddToClassList("ce-props-panel");
+            tab.Add(propertiesPanel);
 
             warningsBox = new HelpBox(string.Empty, HelpBoxMessageType.Warning);
             warningsBox.AddToClassList("ce-warnings");
@@ -264,6 +272,15 @@ namespace ATCG.Editor.Tools.CapacityEditor
             RefreshDirectorState();
             RebuildStepsPanel();
             RebuildTracksPanel();
+            RebuildPropertiesPanel();
+        }
+
+        private void RebuildPropertiesPanel()
+        {
+            propertiesPanel.Clear();
+            if (selected == null)
+                return;
+            propertiesPanel.Add(new CapacityPropertyEditor(selected).Build());
         }
 
         private void RefreshDirectorState()

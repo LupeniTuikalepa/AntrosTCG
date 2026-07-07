@@ -1,5 +1,5 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement;
-using ATCG.Battle.Players.Local.Runtime;
+﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
+using ATCG.Battle.CapacitySystem.Core.Properties;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -19,17 +19,22 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops
         [SerializeField]
         protected PlayableDirector playableDirector;
 
-        protected CastCapacityPhase phase;
-        protected RuntimeLocalBattlePlayer screenPlayer;
+        // The driving context (game phase or editor preview). Subclasses read their
+        // deterministic data (injected arrays, refs) from it via TryGetProperty.
+        protected ICapacityContext context;
 
         private double segmentStart;
 
-        // Element hook: cache the runtime context. Count is resolved per turn.
-        void ICapacityCutsceneElement.Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer, CastCapacityPhase capacityPhase)
+        // Element hook: cache the context. Count is resolved per turn.
+        void ICapacityCutsceneElement.Connect(ICapacityContext capacityContext)
         {
-            screenPlayer = runtimeLocalBattlePlayer;
-            phase = capacityPhase;
+            context = capacityContext;
             OnConnect();
+        }
+
+        void ICapacityCutsceneElement.Disconnect(ICapacityContext context)
+        {
+
         }
 
         // Stores the rewind point for this segment.

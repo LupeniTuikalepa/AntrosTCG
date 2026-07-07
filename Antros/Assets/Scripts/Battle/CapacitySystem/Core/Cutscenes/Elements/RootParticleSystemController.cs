@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using ATCG.Battle.Entities.Runtime;
-using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Battle.CapacitySystem.Core.Properties;
 using Helteix.Tools;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Timeline;
 
-namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
+namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
 {
     public class RootParticleSystemController : MonoBehaviour,
         ICapacityCutsceneElement,
@@ -21,22 +20,33 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
         private Transform container;
 
         private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
-        void ICapacityCutsceneElement.Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer, CastCapacityPhase capacityPhase)
-        {
-            if (capacityPhase.TryGetRuntimeCaster(runtimeLocalBattlePlayer, out IRuntimeEntity runtimeEntity))
-            {
-                using (ListPool<SkinnedMeshRenderer>.Get(out var list))
-                {
-                    for (int i = 0; i < runtimeEntity.Models.Length; i++)
-                    {
-                        if(runtimeEntity.Models[i] is SkinnedMeshRenderer skinnedMeshRenderer)
-                            list.Add(skinnedMeshRenderer);
-                    }
 
-                    skinnedMeshRenderers = list.ToArray();
+        // Pulls the caster actor from the context (game phase or editor preview) and
+        // caches its skinned renderers. No runtime/World coupling, no editor-only path:
+        // the context abstracts where the actor comes from.
+        void ICapacityCutsceneElement.Connect(ICapacityContext context)
+        {
+            if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
+                return;
+
+            using (ListPool<SkinnedMeshRenderer>.Get(out var list))
+            {
+                Renderer[] models = caster.Models;
+                for (int i = 0; i < models.Length; i++)
+                {
+                    if (models[i] is SkinnedMeshRenderer skinnedMeshRenderer)
+                        list.Add(skinnedMeshRenderer);
                 }
+
+                skinnedMeshRenderers = list.ToArray();
             }
         }
+
+        public void Disconnect(ICapacityContext context)
+        {
+            Clear();
+        }
+
         private double lastTime;
 
         void ITimeControl.SetTime(double time)
@@ -58,13 +68,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
                 }
             }
         }
+
         void ITimeControl.OnControlTimeStart()
         {
-#if UNITY_EDITOR
-            if(!Application.isPlaying && skinnedMeshRenderers == null)
-                skinnedMeshRenderers = FindObjectsByType<SkinnedMeshRenderer>();
-#endif
-            if (source != null)
+            if (source != null && skinnedMeshRenderers != null)
             {
                 Clear();
                 for (int i = 0; i < skinnedMeshRenderers.Length; i++)
@@ -81,7 +88,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
             }
         }
 
-
         void ITimeControl.OnControlTimeStop()
         {
             Clear();
@@ -89,7 +95,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
 
         private static async Awaitable StopParticleSystems(ParticleSystem particleSystem)
         {
-            if(particleSystem == null)
+            if (particleSystem == null)
                 return;
 
             // Sort du mode "paused" laissé par Simulate : réactive la simulation autonome.
@@ -99,7 +105,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
             {
                 await Awaitable.NextFrameAsync();
             }
-            if(particleSystem)
+            if (particleSystem)
                 particleSystem.DestroyGameObject();
         }
 
@@ -119,6 +125,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement
 
             particleSystems.Clear();
         }
+
         private void OnDestroy() => Clear();
     }
 }
