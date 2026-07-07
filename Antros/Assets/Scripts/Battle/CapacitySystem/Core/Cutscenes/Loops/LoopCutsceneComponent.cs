@@ -35,7 +35,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops
         // Reads the injected array fresh so a runtime change is reflected.
         private bool TryGetElements(out T[] elements)
         {
-            if (phase.TryGetProperty(PropertyName, out T[] value) && value != null)
+            if (context.TryGetProperty(PropertyName, out T[] value) && value != null)
             {
                 elements = value;
                 return true;

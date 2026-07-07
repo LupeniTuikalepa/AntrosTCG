@@ -1,0 +1,77 @@
+﻿.ce-root {
+    padding: 8px;
+}
+
+.ce-tabbar {
+    flex-direction: row;
+    margin-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--atcg-hairline);
+}
+
+.ce-tab-btn {
+    background-color: transparent;
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: transparent;
+    padding: 6px 14px;
+    margin: 0;
+    color: var(--atcg-text-muted);
+}
+
+.ce-tab-btn--active {
+    color: var(--atcg-text-strong);
+    border-bottom-color: var(--atcg-accent);
+}
+
+.ce-tab {
+    flex-grow: 1;
+}
+
+.ce-row {
+    flex-direction: row;
+    margin-bottom: 6px;
+}
+
+.ce-row > Button {
+    margin-right: 6px;
+}
+
+.ce-section-title {
+    -unity-font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    color: var(--atcg-text-strong);
+}
+
+.ce-status {
+    margin-bottom: 6px;
+    color: var(--atcg-text-muted);
+}
+
+.ce-steps-panel, .ce-tracks-panel {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 4px;
+    padding: 6px;
+    margin-bottom: 4px;
+}
+
+.ce-step-row {
+    padding: 2px 0;
+    color: var(--atcg-text-soft);
+}
+
+.ce-track-toggle {
+    margin-bottom: 2px;
+}
+
+.ce-warnings {
+    margin-top: 6px;
+}
+
+.ce-props-panel {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 4px;
+    padding: 6px;
+    margin-bottom: 4px;
+}

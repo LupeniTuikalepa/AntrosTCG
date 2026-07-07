@@ -12,7 +12,7 @@ namespace ATCG.Battle.Entities.Runtime
     {
         GameObject gameObject { get; }
         Transform transform { get; }
-	    Transform HoveredRoot { get; }
+        Transform HoveredRoot { get; }
         EntityAddress Address { get; }
         RuntimeEntityManager Manager { get; }
         IRuntimeBattlePlayer<LocalBattlePlayer> RuntimeBattlePlayer { get; }

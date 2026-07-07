@@ -25,7 +25,7 @@ namespace ATCG.Battle
         private readonly HexCoordinates from;
 
 
-        private class CapacityHitPreview : ISelectionPatternPreview
+        private sealed class CapacityHitPreview : ISelectionPatternPreview
         {
             private readonly CapacityData data;
             private readonly BattleGrid battleGrid;
@@ -100,4 +100,5 @@ namespace ATCG.Battle
             await CapacityManager.CastCapacityAsync(capacityData, setup);
         }
     }
+
 }

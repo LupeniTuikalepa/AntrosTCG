@@ -35,8 +35,7 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
         public EntityInspectorTab OpenedTab => tabs[OpenedTabIndex];
 
         private InspectEntityPhase current;
-
-
+        
         private List<EntityInspectorTab> activeTabs = new();
 
         private void Awake()
@@ -145,14 +144,12 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
 
         void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
         {
-            Debug.Log("Enter");
             if(current != null)
                 current.isActive.AddPriority(this, PriorityTags.High, true);
         }
 
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("Exit");
             if (current != null)
                 current.isActive.RemovePriority(this);
         }

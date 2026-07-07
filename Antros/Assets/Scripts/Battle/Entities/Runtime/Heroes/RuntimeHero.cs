@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Entities.Aspects;
+﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Animations;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Players.Local;
@@ -14,7 +15,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
 {
-    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, ILocalPlayerPhaseListener<SelectEntityActionPhase>, IRuntimeEntityWithAnimator
+    public partial class RuntimeHero : RuntimeEntity<HeroEntityAspect>, ICutsceneActor, ILocalPlayerPhaseListener<SelectEntityActionPhase>, IRuntimeEntityWithAnimator
     {
         [SerializeField, BoxGroup("UI")]
         private TMP_Text heroName;

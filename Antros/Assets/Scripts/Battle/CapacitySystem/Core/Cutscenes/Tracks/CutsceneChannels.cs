@@ -11,10 +11,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     public static class CutsceneChannels
     {
         public static readonly AutoBindChannel HeroAnimator =
-            AutoBindChannel.Create<AnimationTrack>("HeroAnimator", ResolveHeroAnimator, ResolveDebugHeroAnimator);
+            AutoBindChannel.Create<AnimationTrack>("HeroAnimator", ResolveHeroAnimator);
 
         public static readonly AutoBindChannel MainCamera =
-            AutoBindChannel.Create<CinemachineTrack>("MainCamera", ResolveCameraBrain, ResolveDebugCameraBrain);
+            AutoBindChannel.Create<CinemachineTrack>("MainCamera", ResolveCameraBrain);
 
         public static readonly AutoBindChannel[] All = { HeroAnimator, MainCamera };
 
@@ -65,9 +65,5 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
         {
             return ctx.screenPlayer.Camera.Component.CinemachineBrain;
         }
-
-        private static Object ResolveDebugHeroAnimator(DebugCutsceneRig rig) => rig.HeroAnimator;
-
-        private static Object ResolveDebugCameraBrain(DebugCutsceneRig rig) => rig.CinemachineBrain;
     }
 }

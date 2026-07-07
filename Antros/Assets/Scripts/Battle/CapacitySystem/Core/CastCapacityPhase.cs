@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
-using ATCG.Battle.CapacitySystem.Core.Properties;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.GameCommands.Capacities;
@@ -26,7 +25,7 @@ using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.CapacitySystem.Core
 {
-    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>
+    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>, ATCG.Battle.CapacitySystem.Core.Properties.ICapacityContext
     {
         public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
         public bool HasCaster => caster.IsValid;
@@ -42,7 +41,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         public readonly EntityAddress caster;
         public readonly BattleID casterPlayerId;
 
-        private Dictionary<string, ICapacityProperty> properties;
+        private readonly ATCG.Battle.CapacitySystem.Core.Properties.CapacityPropertyBag properties = new();
 
         public Dictionary<RuntimeLocalBattlePlayer, CapacityDirector> directors;
 
@@ -75,6 +74,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             qtes = ListPool<float>.Get();
             directors = DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Get();
             stepsByName = DictionaryPool<string, ICapacityStep>.Get();
+            properties.Declare(data.PropertyDefinitions);
 
             this.RegisterListener();
 
@@ -149,23 +149,9 @@ namespace ATCG.Battle.CapacitySystem.Core
             OnStepReportedAsync(stepName)
                 .ListenForExceptions();
 
-        public bool TryGetProperty<T>(string name, out T value)
-        {
-            if (properties.TryGetValue(name, out ICapacityProperty property) &&
-                property is CapacityProperty<T> capacityProperty)
-            {
-                value = capacityProperty.Value;
-                return true;
-            }
+        public bool TryGetProperty<T>(string name, out T value) => properties.TryGet(name, out value);
 
-            value = default;
-            return false;
-        }
-
-        public void InjectProperty<T>(string name, T value)
-        {
-            properties[name] = new CapacityProperty<T>(value);
-        }
+        public void InjectProperty<T>(string name, T value) => properties.Set(name, value);
 
         private async Awaitable OnStepReportedAsync(string stepName)
         {
@@ -207,6 +193,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Release(directors);
             ListPool<float>.Release(qtes);
             DictionaryPool<string, ICapacityStep>.Release(stepsByName);
+            properties.Clear();
 
             return base.Dispose(token);
         }

@@ -6,6 +6,7 @@ using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.CapacitySystem.Core
 {
+
     [GenerateContainer]
     public interface ICapacity<in T> : IBehaviour<T> where T : CapacityData
     {

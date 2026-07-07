@@ -15,38 +15,30 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
         // bindable (e.g. HeroAnimator for a spell with no caster).
         public readonly Func<CutsceneBindContext, UnityEngine.Object> resolve;
 
-        // Resolves the object to bind from the editor's DebugCutsceneRig. Used by
-        // the capacity timeline editor tool to preview bindings outside Play Mode.
-        public readonly Func<DebugCutsceneRig, UnityEngine.Object> resolveDebug;
-
         public static AutoBindChannel Create<T>(
             string trackName,
-            Func<CutsceneBindContext, UnityEngine.Object> resolve,
-            Func<DebugCutsceneRig, UnityEngine.Object> resolveDebug)
+            Func<CutsceneBindContext, UnityEngine.Object> resolve)
             where T : TrackAsset
         {
-            return Create<T>(trackName, trackName, resolve, resolveDebug);
+            return Create<T>(trackName, trackName, resolve);
         }
 
         public static AutoBindChannel Create<T>(
             string trackName, string displayName,
-            Func<CutsceneBindContext, UnityEngine.Object> resolve,
-            Func<DebugCutsceneRig, UnityEngine.Object> resolveDebug)
+            Func<CutsceneBindContext, UnityEngine.Object> resolve)
             where T : TrackAsset
         {
-            return new AutoBindChannel(trackName, typeof(T), displayName, resolve, resolveDebug);
+            return new AutoBindChannel(trackName, typeof(T), displayName, resolve);
         }
 
         private AutoBindChannel(
             string trackName, Type trackType, string displayName,
-            Func<CutsceneBindContext, UnityEngine.Object> resolve,
-            Func<DebugCutsceneRig, UnityEngine.Object> resolveDebug)
+            Func<CutsceneBindContext, UnityEngine.Object> resolve)
         {
             this.trackName = trackName;
             this.trackType = trackType;
             this.displayName = displayName;
             this.resolve = resolve;
-            this.resolveDebug = resolveDebug;
         }
     }
 }
