@@ -27,7 +27,7 @@ namespace ATCG.Battle.Grids
                     newCoordinates = HexCoordinates.None;
                     return false;
                 }
-
+                
                 //TODO check good component
                 if (toCellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
                 {
@@ -41,7 +41,9 @@ namespace ATCG.Battle.Grids
 
                     var redirectedCoord = to + direction;
                     Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
-                    if (TryRedirect(to, redirectedCoord, battleGrid, out var coord))
+                    
+                    if (battleGrid.TryGetBattleCell(redirectedCoord, out _) 
+                        && TryRedirect(to, redirectedCoord, battleGrid, out var coord))
                     {
                         newCoordinates = coord;
                         return true;
@@ -50,7 +52,7 @@ namespace ATCG.Battle.Grids
                     newCoordinates = redirectedCoord;
                     return true;
                 }
-                newCoordinates = HexCoordinates.None;
+                newCoordinates = to;
                 return false;
             }
         }
@@ -90,18 +92,11 @@ namespace ATCG.Battle.Grids
     cameFrom.Clear();
     frontier.Clear();
 
-    if (!battleGrid.TryGetBattleCell(start, out var startCell))
+    if (!battleGrid.TryGetBattleCell(start, out _))
         return false;
     
-    HexCoordinates actualGoal = goal;
+    var actualGoal = GetGoal(start, goal, battleGrid, controller);
 
-    HexCoordinates entryNeighbor = goal - start.GetNormalizedDirection(goal);
-    if (battleGrid.TryGetBattleCell(entryNeighbor, out _) 
-        && controller.TryRedirect(entryNeighbor, goal, battleGrid, out HexCoordinates redirectedGoal))
-    {
-        actualGoal = redirectedGoal;
-    }
-    
     frontier.Add(new PriorityHexCoordinates(start, 0));
     cameFrom[start] = start;
     costSoFar[start] = 0;
@@ -114,11 +109,15 @@ namespace ATCG.Battle.Grids
 
         if (current == actualGoal)
             break;
+        
+        if(!battleGrid.TryGetBattleCell(current, out _))
+            continue;
 
         foreach (HexCoordinates next in GetNeighbors(current, battleGrid))
         {
             if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
                 continue;
+            
             HexCoordinates actual = next;
 
             if (controller.TryRedirect(current, next, battleGrid, out HexCoordinates redirected))
@@ -126,7 +125,7 @@ namespace ATCG.Battle.Grids
                 costSoFar[next] = int.MaxValue;
                 cameFrom[next] = current;
                 cameFrom[actual] = current;
-
+                
                 if (!battleGrid.TryGetBattleCell(redirected, out BattleCellAspect redirectedCell))
                 {
                     if (!IsCoordinatesValid(redirected, actualGoal, battleGrid, controller))
@@ -150,11 +149,33 @@ namespace ATCG.Battle.Grids
                 int priority = newCost + actual.Distance(actualGoal);
                 frontier.Add(new PriorityHexCoordinates(actual, priority));
                 cameFrom[actual] = current;
+                
             }
         }
     }
     return ReconstructPath(start, actualGoal, path);
 }
+
+        private HexCoordinates GetGoal<TController>(HexCoordinates start, HexCoordinates goal, BattleGrid battleGrid,
+            TController controller) where TController : IPathfinderController
+        {
+            HexCoordinates entryNeighbor = goal - start.GetNormalizedDirection(goal);
+            Debug.Log($"Entry: {entryNeighbor}");
+
+            if (battleGrid.TryGetBattleCell(entryNeighbor, out var cellAspect)
+                && cellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
+            {
+                //TODO faire en sorte qu'il prenne un voisin valide
+            }
+            
+            if (battleGrid.TryGetBattleCell(entryNeighbor, out _) 
+                && controller.TryRedirect(entryNeighbor, goal, battleGrid, out HexCoordinates redirectedGoal))
+            {
+                return redirectedGoal;
+            }
+            
+            return goal;
+        }
 
         private IEnumerable<HexCoordinates> GetNeighbors(
             HexCoordinates from,
@@ -197,6 +218,7 @@ namespace ATCG.Battle.Grids
             if(!cameFrom.ContainsKey(start))
                 return false;
 
+            Debug.Log($"Reconstruct path from {start} to {goal}");
             HexCoordinates current = goal;
             while (current != start)
             {

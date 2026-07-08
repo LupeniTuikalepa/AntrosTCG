@@ -111,9 +111,12 @@ namespace ATCG.Battle.Players.Local.Phases
                         {
                             if (center != coord)
                                 CurrentPath.Add(coord);
-                            
+
                             if (!BattleGrid.TryGetBattleCell(coord, out _))
+                            {
+                                OnPathChanged?.Invoke(this);
                                 return CurrentPath.ToArray();
+                            }
                         }
 
                         center = CurrentPath[^1];
