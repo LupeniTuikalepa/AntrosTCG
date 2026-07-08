@@ -15,7 +15,7 @@ namespace ATCG.Battle.Players.Local.Phases
             using var hexPathfinder = new HexPathfinder(MAX_STEPS);
             using (ListPool<HexCoordinates>.Get(out var path))
             {
-                hexPathfinder.FindPath(a, b, path, context.battleGrid);
+                hexPathfinder.TryFindPath(a, b, path, context.battleGrid);
 
                 foreach (var coord in path)
                 {
