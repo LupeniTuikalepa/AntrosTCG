@@ -6,13 +6,12 @@ using UnityEngine;
 namespace ATCG.Capacities.Frost
 {
     [CreateAssetMenu(menuName = "ATCG/Capacities/Frost/WintryMist")]
-
     [WithStep("BlackIce")]
     public partial class WintryMistData : CapacityData
     {
         [field: SerializeField, BoxGroup("Custom")]
         public int Range { get; private set; }
-        
+
         [field: SerializeField, BoxGroup("Custom")]
         public FreezeStatusData Status { get; private set; }
     }

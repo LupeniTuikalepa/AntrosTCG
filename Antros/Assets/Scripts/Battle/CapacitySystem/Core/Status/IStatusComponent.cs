@@ -7,7 +7,7 @@ using ATCG.Capacities.Data.Status;
 namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     [IteratableComponent]
-    public interface IStatusComponent: IEntityComponent
+    public interface IStatusComponent : IEntityComponent
     {
         public StatusData StatusData { get; }
         void Trigger(EntityAddress address, BattlePhase battlePhase);

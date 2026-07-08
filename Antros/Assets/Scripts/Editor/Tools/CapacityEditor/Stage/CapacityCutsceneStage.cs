@@ -46,7 +46,25 @@ namespace ATCG.Editor.Tools.CapacityEditor
             ? stageInstance.GetComponentInChildren<PlayableDirector>(true)
             : null;
 
-        public CinemachineBrain Brain=> rig.TryGet(CutsceneChannels.MainCamera, out Object cam) && cam is CinemachineBrain brain ? brain : null;
+        // Resolve the CinemachineBrain from the STAGE SCENE, not the rig table: a rig
+        // reference points at the environment PREFAB ASSET (scene invalid), and a camera
+        // with no valid scene culls nothing and renders black in the preview. Searching
+        // the stage scene returns the live instance whose scene is valid.
+        public CinemachineBrain Brain
+        {
+            get
+            {
+                //Debug.Log($"[BrainDiag] stage.scene name='{scene.name}' valid={scene.IsValid()} isLoaded={scene.isLoaded} handle={scene.handle}");
+                if (!scene.IsValid())
+                    return null;
+                foreach (GameObject root in scene.GetRootGameObjects())
+                {
+                    CinemachineBrain found = root.GetComponentInChildren<CinemachineBrain>(true);
+                    return found;
+                }
+                return null;
+            }
+        }
         public DebugCutsceneRig Rig => rig;
         public DebugCapacityContext PreviewContext => previewContext;
 

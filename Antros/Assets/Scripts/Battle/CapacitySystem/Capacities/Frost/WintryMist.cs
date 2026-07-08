@@ -33,7 +33,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
             {
                 var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
                 statusCommand.Run(ctx.BattlePhase);
-
             }
         }
     }

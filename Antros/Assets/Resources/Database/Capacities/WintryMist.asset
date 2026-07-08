@@ -15,6 +15,7 @@ MonoBehaviour:
   guidText: 06848562-1c7a-4259-8b8e-7410aff7b0fb
   <Cost>k__BackingField: 1
   <Name>k__BackingField: "Br\xFBme Hivernal"
+  <Element>k__BackingField: 0
   <Description>k__BackingField: "Applique l'etat Gel\xE9e a une ligne de case"
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
@@ -34,7 +35,7 @@ MonoBehaviour:
       type: {class: HexCoordinatesPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
       data:
         name: AimedCoord
-        isArray: 0
+        isArray: 1
     - rid: 7630467839202951329
       type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:
