@@ -9,6 +9,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
         // screen player, capacity data — instead of depending on the concrete phase.
         void Connect(ICapacityContext context);
 
-        void Disconnect(ICapacityContext context);
+        void Disconnect();
     }
 }

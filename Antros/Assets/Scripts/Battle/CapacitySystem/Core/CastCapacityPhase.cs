@@ -25,7 +25,7 @@ using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.CapacitySystem.Core
 {
-    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>, ATCG.Battle.CapacitySystem.Core.Properties.ICapacityContext
+    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>
     {
         public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
         public bool HasCaster => caster.IsValid;

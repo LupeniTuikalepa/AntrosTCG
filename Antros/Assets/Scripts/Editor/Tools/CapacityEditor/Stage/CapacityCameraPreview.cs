@@ -1,33 +1,36 @@
 ﻿using Unity.Cinemachine;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Renders the cutscene stage's camera into a RenderTexture for the overlay.
-    /// URP 17 / Render Graph: on-demand render via SubmitRenderRequest.
-    /// TEMP: [PreviewDiag]/[PixelProbe] logs to locate the black-screen cause.
+    /// Renders the cutscene stage's camera into a RenderTexture for the overlay. The key
+    /// detail for a PreviewSceneStage: the camera must have its scene culling bound to
+    /// the stage scene (camera.scene = stageScene), otherwise it renders the global/open
+    /// scene in the background and never sees the stage's objects. URP 17 / Render Graph
+    /// then renders on-demand via SubmitRenderRequest. Cinemachine 3.1.7 / URP 17.5.
     /// </summary>
     public sealed class CapacityCameraPreview : System.IDisposable
     {
         private readonly Camera camera;
         private readonly CinemachineBrain brain;
         private readonly PlayableDirector director;
+        private readonly Scene stageScene;
         private RenderTexture target;
-        private bool loggedOnce;
 
         public RenderTexture Texture => target;
         public bool IsValid => camera != null;
         public Camera Camera => camera;
 
-        public CapacityCameraPreview(CinemachineBrain brain, PlayableDirector director)
+        public CapacityCameraPreview(CinemachineBrain brain, PlayableDirector director, Scene stageScene)
         {
             this.brain = brain;
             this.director = director;
+            this.stageScene = stageScene;
             camera = brain != null ? brain.GetComponent<Camera>() : null;
         }
 
@@ -38,30 +41,23 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             EnsureTexture(width, height);
 
+            // Bind culling to the stage scene so the camera sees the stage's objects and
+            // not the open/global scene. This is what makes a preview-scene camera render
+            // the isolated content.
+            if (stageScene.IsValid())
+                camera.scene = stageScene;
+
             if (director != null && director.playableAsset != null)
                 director.Evaluate();
 
-            bool hasPipeline = RenderPipelineManager.currentPipeline != null;
-            UniversalRenderPipeline.SingleCameraRequest request = new()
+            if (RenderPipelineManager.currentPipeline != null)
             {
-                destination = target
-            };
-            bool supports = hasPipeline && RenderPipeline.SupportsRenderRequest(camera, request);
-
-            if (!loggedOnce)
-            {
-                Debug.Log($"[PreviewDiag] cam='{camera.name}' enabled={camera.enabled} " +
-                          $"active={camera.gameObject.activeInHierarchy} scene='{camera.scene.name}' " +
-                          $"sceneValid={camera.scene.IsValid()} mask={camera.cullingMask} clear={camera.clearFlags} " +
-                          $"rt={target.width}x{target.height} fmt={target.format} " +
-                          $"hasPipeline={hasPipeline} supports={supports}");
-            }
-
-            if (supports)
-            {
-                RenderPipeline.SubmitRenderRequest(camera, request);
-                Probe("SubmitRenderRequest");
-                return;
+                UniversalRenderPipeline.SingleCameraRequest request = new() { destination = target };
+                if (RenderPipeline.SupportsRenderRequest(camera, request))
+                {
+                    RenderPipeline.SubmitRenderRequest(camera, request);
+                    return;
+                }
             }
 
             RenderTexture previousTarget = camera.targetTexture;
@@ -70,25 +66,6 @@ namespace ATCG.Editor.Tools.CapacityEditor
             camera.Render();
             camera.targetTexture = previousTarget;
             RenderTexture.active = previousActive;
-            Probe("camera.Render");
-        }
-
-        private void Probe(string path)
-        {
-            if (loggedOnce)
-                return;
-            loggedOnce = true;
-
-            RenderTexture prev = RenderTexture.active;
-            RenderTexture.active = target;
-            Texture2D t = new(1, 1, TextureFormat.RGBAFloat, false);
-            t.ReadPixels(new Rect(target.width / 2f, target.height / 2f, 1, 1), 0, 0);
-            t.Apply();
-            Color c = t.GetPixel(0, 0);
-            Object.DestroyImmediate(t);
-            RenderTexture.active = prev;
-
-            Debug.Log($"[PixelProbe] path={path} center={c}");
         }
 
         private void EnsureTexture(int width, int height)
@@ -99,15 +76,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (target != null)
                 target.Release();
 
-            // No alpha channel on purpose: PreviewSceneStage is a brand-new scene with no
-            // RenderSettings.skybox assigned, so a Skybox clear falls back to
-            // camera.backgroundColor — whose default alpha is 0. With an alpha-carrying
-            // format (DefaultHDR), the UI Toolkit Image control alpha-blends that onto its
-            // own black backgroundColor style, so the whole preview reads as black even
-            // though the RGB content rendered correctly. Dropping the alpha channel makes
-            // the texture always composite as opaque, regardless of what the pipeline
-            // writes into alpha.
-            target = new RenderTexture(width, height, 24, RenderTextureFormat.RGB111110Float)
+            target = new RenderTexture(width, height, 24, RenderTextureFormat.DefaultHDR)
             {
                 name = "CapacityCameraPreview",
                 antiAliasing = 1

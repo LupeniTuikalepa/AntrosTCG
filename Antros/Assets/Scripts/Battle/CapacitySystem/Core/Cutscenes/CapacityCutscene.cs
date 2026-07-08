@@ -4,6 +4,7 @@ using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
+using ATCG.Battle.CapacitySystem.Core.Properties;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Metrics;
@@ -67,9 +68,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
                 transform.rotation = runtimeEntity.transform.rotation;
             }
 
+            // Build the per-screen context (this is what injects the built-in properties:
+            // CASTER, SCREEN_PLAYER, CAST_POINT, COORDINATE_SOLVER...). Without this the
+            // elements receive a context that never had the built-ins injected.
+            CutsceneCapacityContext context = new(capacityPhase, screenPlayer);
             for (int i = 0; i < elements.Length; i++)
-                elements[i].Connect(capacityPhase);
-
+                elements[i].Connect(context);
         }
 
         public async Awaitable Play(CancellationToken token)
@@ -103,7 +107,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
         public void Dispose()
         {
             for (int i = 0; i < elements.Length; i++)
-                elements[i].Disconnect(castCapacityPhase);
+                elements[i].Disconnect();
 
             gameObject.Destroy();
         }

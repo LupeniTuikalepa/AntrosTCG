@@ -48,7 +48,7 @@ namespace ATCG.Capacities.Devastation
             destination.position = hitPosition;
         }
 
-        public void Disconnect(ICapacityContext context)
+        public void Disconnect()
         {
 
         }
