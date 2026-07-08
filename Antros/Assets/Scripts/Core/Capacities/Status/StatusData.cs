@@ -11,7 +11,8 @@ namespace ATCG.Capacities.Data.Status
         [field: SerializeField, BoxGroup("Base")]
         public string Name { get; private set; }
         [field: SerializeField, ColorUsage(false), BoxGroup("Base")]
-        public Color Color { get; private set; }
+        public Color Color { get; private set; } = Color.white;
+
         [field: SerializeField, BoxGroup("Base")]
         public Element Element { get; private set; }
 
