@@ -16,8 +16,10 @@ namespace ATCG.Capacities
         {
             if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
                 return;
+
             if (!context.TryGetProperty("AimedCoord", out HexCoordinates aimedCoord))
                 return;
+
             if (!context.TryGetProperty(CapacityContextKeys.COORDINATE_SOLVER, out ICutsceneCoordinateSolver solver))
                 return;
 

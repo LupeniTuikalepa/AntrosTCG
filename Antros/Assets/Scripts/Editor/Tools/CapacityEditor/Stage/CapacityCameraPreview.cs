@@ -1,15 +1,16 @@
 ﻿using Unity.Cinemachine;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Renders the cutscene stage's camera into a RenderTexture for display in the
-    /// tool overlay. In a PreviewSceneStage the camera isn't rendered by the normal
-    /// pipeline, so we drive it manually: the Timeline window's scrub evaluates the
-    /// director (which drives the CinemachineTrack, hence the brain), then we render
-    /// the brain's camera into the texture. Cinemachine 3.1.7 / URP 17.5.
+    /// Renders the cutscene stage's camera into a RenderTexture for the overlay.
+    /// URP 17 / Render Graph: on-demand render via SubmitRenderRequest.
+    /// TEMP: [PreviewDiag]/[PixelProbe] logs to locate the black-screen cause.
     /// </summary>
     public sealed class CapacityCameraPreview : System.IDisposable
     {
@@ -17,9 +18,11 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private readonly CinemachineBrain brain;
         private readonly PlayableDirector director;
         private RenderTexture target;
+        private bool loggedOnce;
 
         public RenderTexture Texture => target;
         public bool IsValid => camera != null;
+        public Camera Camera => camera;
 
         public CapacityCameraPreview(CinemachineBrain brain, PlayableDirector director)
         {
@@ -28,8 +31,6 @@ namespace ATCG.Editor.Tools.CapacityEditor
             camera = brain != null ? brain.GetComponent<Camera>() : null;
         }
 
-        // Evaluates the director at the current timeline time so the CinemachineTrack
-        // updates the brain, then renders the camera into the preview texture.
         public void Render(int width, int height)
         {
             if (camera == null || width <= 0 || height <= 0)
@@ -37,18 +38,57 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             EnsureTexture(width, height);
 
-            // The Timeline window already scrubs the director; re-evaluating here keeps
-            // the preview in sync even when repainting outside a scrub event.
             if (director != null && director.playableAsset != null)
                 director.Evaluate();
 
+            bool hasPipeline = RenderPipelineManager.currentPipeline != null;
+            UniversalRenderPipeline.SingleCameraRequest request = new()
+            {
+                destination = target
+            };
+            bool supports = hasPipeline && RenderPipeline.SupportsRenderRequest(camera, request);
+
+            if (!loggedOnce)
+            {
+                Debug.Log($"[PreviewDiag] cam='{camera.name}' enabled={camera.enabled} " +
+                          $"active={camera.gameObject.activeInHierarchy} scene='{camera.scene.name}' " +
+                          $"sceneValid={camera.scene.IsValid()} mask={camera.cullingMask} clear={camera.clearFlags} " +
+                          $"rt={target.width}x{target.height} fmt={target.format} " +
+                          $"hasPipeline={hasPipeline} supports={supports}");
+            }
+
+            if (supports)
+            {
+                RenderPipeline.SubmitRenderRequest(camera, request);
+                Probe("SubmitRenderRequest");
+                return;
+            }
+
             RenderTexture previousTarget = camera.targetTexture;
             RenderTexture previousActive = RenderTexture.active;
-
             camera.targetTexture = target;
             camera.Render();
             camera.targetTexture = previousTarget;
             RenderTexture.active = previousActive;
+            Probe("camera.Render");
+        }
+
+        private void Probe(string path)
+        {
+            if (loggedOnce)
+                return;
+            loggedOnce = true;
+
+            RenderTexture prev = RenderTexture.active;
+            RenderTexture.active = target;
+            Texture2D t = new(1, 1, TextureFormat.RGBAFloat, false);
+            t.ReadPixels(new Rect(target.width / 2f, target.height / 2f, 1, 1), 0, 0);
+            t.Apply();
+            Color c = t.GetPixel(0, 0);
+            Object.DestroyImmediate(t);
+            RenderTexture.active = prev;
+
+            Debug.Log($"[PixelProbe] path={path} center={c}");
         }
 
         private void EnsureTexture(int width, int height)
@@ -59,7 +99,15 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (target != null)
                 target.Release();
 
-            target = new RenderTexture(width, height, 24, RenderTextureFormat.DefaultHDR)
+            // No alpha channel on purpose: PreviewSceneStage is a brand-new scene with no
+            // RenderSettings.skybox assigned, so a Skybox clear falls back to
+            // camera.backgroundColor — whose default alpha is 0. With an alpha-carrying
+            // format (DefaultHDR), the UI Toolkit Image control alpha-blends that onto its
+            // own black backgroundColor style, so the whole preview reads as black even
+            // though the RGB content rendered correctly. Dropping the alpha channel makes
+            // the texture always composite as opaque, regardless of what the pipeline
+            // writes into alpha.
+            target = new RenderTexture(width, height, 24, RenderTextureFormat.RGB111110Float)
             {
                 name = "CapacityCameraPreview",
                 antiAliasing = 1

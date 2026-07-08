@@ -11,6 +11,8 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.StatusTab
     {
         [SerializeField]
         private Image icon;
+        [SerializeField]
+        private Image outline;
 
         [SerializeField]
         private GameObject durationRoot;
@@ -20,12 +22,18 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.StatusTab
         public void Connect<T>(EntityAddress address, T status) where T : struct, IStatusComponent
         {
             icon.sprite = status.StatusData.Icon;
-            icon.color = status.StatusData.Color;
+
+            Color color = status.StatusData.Color;
+            color.a = 1;
+
+            icon.color = color;
 
             if (address.TryGetComponentRO(out StatusDurationController<T> durationController))
             {
                 durationRoot.SetActive(true);
                 durationText.text = durationController.RemainingTicks.ToString();
+                outline.color = color;
+                durationText.color = color;
             }
             else
             {

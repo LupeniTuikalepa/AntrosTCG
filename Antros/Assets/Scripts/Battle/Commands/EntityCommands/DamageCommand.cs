@@ -8,7 +8,6 @@ namespace ATCG.Battle.Commands.EntityCommands
 {
     public class DamageCommand : EntityCommand<DeltaInRangeInfos<int>>
     {
-
         public readonly int quantity;
         public readonly bool triggerDealDamageReactions;
 

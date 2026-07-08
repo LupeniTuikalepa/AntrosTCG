@@ -1,9 +1,6 @@
-﻿
-using ATCG.Capacities.Data;
-using ATCG.Enums;
-using ATCG.HexGrids.Patterns;
+﻿using ATCG.Enums;
 using ATCG.HexGrids.Patterns.Building;
-using ATCG.Metrics;
+using Helteix.ChanneledProperties;
 using Helteix.ChanneledProperties.Formulas;
 using UnityEngine;
 
