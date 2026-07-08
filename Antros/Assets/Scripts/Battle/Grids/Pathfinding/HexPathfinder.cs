@@ -31,7 +31,7 @@ namespace ATCG.Battle.Grids
                 //TODO check good component
                 if (toCellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
                 {
-                    var direction = from.GetDirection(to).NearestCardinal();
+                    var direction = from.GetNormalizedDirection(to).NearestCardinal();
     
                     if (direction.X == 0 && direction.Y == 0)
                     {
@@ -40,7 +40,7 @@ namespace ATCG.Battle.Grids
                     }
 
                     var redirectedCoord = to + direction;
-                    Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
+                    //Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
                     
                     if (battleGrid.TryGetBattleCell(redirectedCoord, out _) 
                         && TryRedirect(to, redirectedCoord, battleGrid, out var coord))
@@ -156,25 +156,34 @@ namespace ATCG.Battle.Grids
     return ReconstructPath(start, actualGoal, path);
 }
 
-        private HexCoordinates GetGoal<TController>(HexCoordinates start, HexCoordinates goal, BattleGrid battleGrid,
+        private HexCoordinates GetGoal<TController>(HexCoordinates from, HexCoordinates to, BattleGrid battleGrid,
             TController controller) where TController : IPathfinderController
         {
-            HexCoordinates entryNeighbor = goal - start.GetNormalizedDirection(goal);
+            var finalGoal = to;
+            
+            var direction = from.GetDirection(to).NearestCardinal();
+            HexCoordinates entryNeighbor = from - direction;
+            
+            Debug.Log($"from: {from} to: {to}");
+            Debug.Log($"Direction: {direction}");
             Debug.Log($"Entry: {entryNeighbor}");
-
-            if (battleGrid.TryGetBattleCell(entryNeighbor, out var cellAspect)
-                && cellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
-            {
-                //TODO faire en sorte qu'il prenne un voisin valide
-            }
-            
             if (battleGrid.TryGetBattleCell(entryNeighbor, out _) 
-                && controller.TryRedirect(entryNeighbor, goal, battleGrid, out HexCoordinates redirectedGoal))
+                && controller.TryRedirect(from, entryNeighbor, battleGrid, out HexCoordinates redirectedEntry))
             {
-                return redirectedGoal;
+                Debug.Log($"Redirected: {redirectedEntry}");
+                finalGoal = GetGoal(redirectedEntry, to, battleGrid, controller);
             }
-            
-            return goal;
+
+            if (battleGrid.TryGetBattleCell(finalGoal, out _) 
+                && controller.TryRedirect(entryNeighbor, finalGoal, battleGrid, out HexCoordinates redirectedGoal))
+            {
+                Debug.Log($"Final goal: {finalGoal}");
+                finalGoal = redirectedGoal;
+                Debug.Log($"Redirected Final goal: {finalGoal}");
+                return finalGoal;
+            }
+
+            return to;
         }
 
         private IEnumerable<HexCoordinates> GetNeighbors(
