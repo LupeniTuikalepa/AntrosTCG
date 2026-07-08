@@ -46,7 +46,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             {
 	            berserkStatusComponent.GetValue().Trigger();
             }
-	           
+	        Debug.Log(berserkStatusComponent);
             
             if (componentHealth.CurrentHealth <= 0)
                 Embed(context, new DeathCommand(address));

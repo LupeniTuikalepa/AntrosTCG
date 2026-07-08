@@ -13,9 +13,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 	{
 		private readonly BerserkStatusData data;
 		private readonly ChannelKey channelKey;
-		public int CurrentDuration => data.Duration;
 		StatusData IStatusComponent.StatusData => data;
-		public ChannelKey ChannelKey => channelKey;
 		
 		public BerserkStatusComponent(BerserkStatusData data, ChannelKey channelKey)
 		{

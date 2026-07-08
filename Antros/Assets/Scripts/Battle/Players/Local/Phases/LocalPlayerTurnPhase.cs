@@ -22,11 +22,13 @@ namespace ATCG.Battle.Players.Local.Phases
         {
 	        private StatusContext statusContext;
 	        private bool isStart;
+	        private IBattlePlayer playerTurn;
 
-	        public StatusIterator(StatusContext statusContext, bool isStart)
+	        public StatusIterator(StatusContext statusContext, bool isStart, IBattlePlayer playerTurn)
 	        {
 		        this.statusContext = statusContext;
 		        this.isStart = isStart;
+		        this.playerTurn = playerTurn;
 	        }
 
 	        public void Process<TStatusComponent>() where TStatusComponent : struct, IStatusComponent
@@ -39,7 +41,14 @@ namespace ATCG.Battle.Players.Local.Phases
 	        {
 		        foreach (var componentRef in statusContext.battlePhase.world.Query<TTurnController>())
 		        {
+			        
 			        ref TTurnController component = ref componentRef.GetValue();
+			        
+			        if (componentRef.EntityAddress.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer))
+			        {
+				        if(belongsToPlayer.IsAllieOf(playerTurn))
+					        continue;
+			        }
 			        
 			        if (isStart)
 				        component.OnTurnStarted();
@@ -77,7 +86,7 @@ namespace ATCG.Battle.Players.Local.Phases
             localPlayerTurn.FillHand();
 
             var statusContext = new StatusContext(localPlayerTurn.BattlePhase);
-            StatusIterator iterator = new StatusIterator( statusContext, true);
+            StatusIterator iterator = new StatusIterator( statusContext, true, localPlayerTurn);
             iterator.ForeachStatusComponent();
             
             StatusManager.UpdateControllers(statusContext);
@@ -105,7 +114,7 @@ namespace ATCG.Battle.Players.Local.Phases
         public void EndTurn()
         {
             BattleTurn infos = new(turnID, localPlayerTurn.ID);
-            StatusIterator iterator = new StatusIterator( new StatusContext(localPlayerTurn.BattlePhase), false);
+            StatusIterator iterator = new StatusIterator( new StatusContext(localPlayerTurn.BattlePhase), false, localPlayerTurn);
             iterator.ForeachStatusComponent();
             SetResult(infos);
         }

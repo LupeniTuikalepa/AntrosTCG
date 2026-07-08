@@ -25,7 +25,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 				defenseComponent.defense.Subtract(channelKey, data.defenseReduction);
 
 			target.ApplyStatus(new BerserkStatusComponent(data, channelKey),
-				new StatusDurationController<BerserkStatusComponent>(data.Duration),
+				new StatusVolatileController<BerserkStatusComponent>(),
 				context);
 			
 			Debug.Log($"Applying Berserk status: {target} : BuffAttack ==> {basicAttackerComponent.strength}  : DeBuffDefense ==> {defenseComponent.defense}");
