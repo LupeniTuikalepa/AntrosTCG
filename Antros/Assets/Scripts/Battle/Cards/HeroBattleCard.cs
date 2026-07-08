@@ -16,6 +16,7 @@ namespace ATCG.Battle.Cards
         public int MaxHealth => Data.Health;
         public int Speed => Data.Speed;
         public int Strength => Data.Strength;
+        public int Defense => Data.Defense;
         public PatternGroup MovementPatterns => Data.MovementPatterns;
         public PatternGroup DeployPatterns => Data.DeployPatterns;
         public MovementType MovementType => Data.MovementType;

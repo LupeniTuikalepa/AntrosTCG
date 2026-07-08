@@ -2,6 +2,7 @@
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status;
+using ATCG.Battle.CapacitySystem.Status.Berserk;
 using ATCG.Battle.Entities.Components.Implementations;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.GameModes;
@@ -46,6 +47,7 @@ namespace ATCG.Battle.Players.Local.Phases
             //TODO a modifier plus tard
             var statusContext = new StatusContext(player.BattlePhase);
             StatusManager.ProcessAllStatus<PoisonStatusComponent>(statusContext);
+            StatusManager.ProcessAllStatus<BerserkStatusComponent>(statusContext);
             
             return base.Initialize(token);
         }

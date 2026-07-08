@@ -18,7 +18,6 @@ namespace ATCG.Battle.Entities.Components.Status
         {
             remainingTick--;
             return remainingTick <= 0;
-            
         }
     }
 }

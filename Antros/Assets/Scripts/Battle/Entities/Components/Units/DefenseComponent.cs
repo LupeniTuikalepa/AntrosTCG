@@ -1,35 +1,16 @@
 using System.Collections.Generic;
+using Helteix.ChanneledProperties.Formulas;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Components
 {
-	public class DefenseComponent : IEntityComponent
+	public readonly struct DefenseComponent : IEntityComponent
 	{
-		[SerializeField] private int defense;
-		private readonly List<DefenseModifier> temporaryModifiers = new List<DefenseModifier>();
-
-		public int Defense => defense;
-
-		public int TotalDefense
+		public readonly Formula<float> defense;
+		public int Defense => Mathf.FloorToInt(defense.Value);
+		public DefenseComponent(int baseDefense)
 		{
-			get
-			{
-				int total = defense;
-				for (int i = 0; i < temporaryModifiers.Count; i++)
-				{
-					total += temporaryModifiers[i].value;
-				}
-				return Mathf.Max(0, total); 
-			}
+			this.defense = new Formula<float>(baseDefense);
 		}
-
-		public void AddModifier(DefenseModifier modifier) => temporaryModifiers.Add(modifier);
-		public void RemoveModifier(DefenseModifier modifier) => temporaryModifiers.Remove(modifier);
-	}
-
-	public struct DefenseModifier
-	{
-		public int value;
-		public string sourceDescription;
 	}
 }

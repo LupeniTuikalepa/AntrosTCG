@@ -6,7 +6,9 @@ namespace ATCG.Capacities.Data.Status
 	public class BerserkStatusData : StatusData
 	{
 		[field: SerializeField] public float forceMultiplier = 1.5f;
-		[field: SerializeField]public int defenseDivision =2;
-		[field: SerializeField] public int Duration = 3;
+		
+		[field: SerializeField]public int defenseReduction =2;
+		
+		[field: SerializeField] public int Duration = 1;
 	}
 }

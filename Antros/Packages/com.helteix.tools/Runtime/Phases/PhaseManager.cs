@@ -144,7 +144,7 @@ namespace Helteix.Tools.Phases
                 await PhaseSingletonManager.WaitForSingleInstance(phaseSingleton, context.source.Token);
             }
 
-            Debug.Log("[Phase Manager] Beginning phase " + phase.GetType().Name);
+           // Debug.Log("[Phase Manager] Beginning phase " + phase.GetType().Name);
 
             RunningPhases.Add(phase, context.source);
 
@@ -167,7 +167,7 @@ namespace Helteix.Tools.Phases
                 return;
             }
 
-            Debug.Log("[Phase Manager] Ending phase " + phase.GetType().Name);
+            //Debug.Log("[Phase Manager] Ending phase " + phase.GetType().Name);
             using (ListPool<IPhaseListenerContainer>.Get(out var listeners))
             {
                 GetListenersFor(listeners, phase);

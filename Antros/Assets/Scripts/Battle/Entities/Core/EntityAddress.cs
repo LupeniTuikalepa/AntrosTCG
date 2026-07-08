@@ -64,7 +64,7 @@ namespace ATCG.Battle.Entities
             }
         }
         
-        public bool TryGetComponentRO<T>(out T component) where T : IEntityComponent
+        public bool TryGetComponentRO<T>(out T component) where T : struct,IEntityComponent
         {
             return world.TryGetROComponent(entity, out component);
         }

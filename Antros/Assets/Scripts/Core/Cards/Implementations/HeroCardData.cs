@@ -18,6 +18,9 @@ namespace ATCG.Cards.Implementations
 		[field: SerializeField, Range(1, 10), BoxGroup("Heroes")]
 		public int Strength { get; private set; } = 1;
 
+		[field: SerializeField, Range(1, 10), BoxGroup("Heroes")]
+		public int Defense { get; private set; } = 1;
+
 		[field: SerializeField, Range(1, 5), BoxGroup("Movement")]
 		public int Speed { get; private set; } = 1;
 

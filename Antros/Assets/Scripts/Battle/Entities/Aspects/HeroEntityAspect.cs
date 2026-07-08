@@ -19,7 +19,8 @@ namespace ATCG.Battle.Entities.Aspects
             DeathCostComponent,
             BattleIDOwner,
 			DeployTargetComponent,
-            PhysicalCellMemberTag>
+            PhysicalCellMemberTag,
+			DefenseComponent>
     {
         public struct Setup
         {
@@ -43,6 +44,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(battlePlayer.GetBattleID(), battlePlayer.GetPlayerNumber());
 
             componentsFactory.HealthComponent = new HealthComponent(setup.card.MaxHealth);
+            componentsFactory.DefenseComponent = new DefenseComponent(setup.card.Defense);
             componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns, setup.card.MovementType);
 
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
