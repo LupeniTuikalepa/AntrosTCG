@@ -41,10 +41,13 @@ namespace ATCG.Battle.Commands.EntityCommands
             
             infos.to = componentHealth.CurrentHealth;
             infos.max = componentHealth.MaxHealth;
-            
-            if (address.IsValid && address.HasComponent<BerserkStatusComponent>())
-	            address.RefreshBerserk();
 
+            if (address.TryGetComponent<StatusVolatileController<BerserkStatusComponent>>(out var berserkStatusComponent))
+            {
+	            berserkStatusComponent.GetValue().Trigger();
+            }
+	           
+            
             if (componentHealth.CurrentHealth <= 0)
                 Embed(context, new DeathCommand(address));
         }

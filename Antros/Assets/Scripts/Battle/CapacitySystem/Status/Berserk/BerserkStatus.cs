@@ -10,13 +10,15 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 {
 	public partial struct BerserkStatus : IStatus<BerserkStatusData>
 	{
+		private ChannelKey channelKey;
+		
 		public void Apply(BerserkStatusData data, EntityAddress target, StatusContext context)
 		{
 			Debug.Log($"Applying Berserk status: {target}");
 			
 			if(!target.TryGetComponentRO(out BasicAttackerComponent  basicAttackerComponent))
 				return;
-			var channelKey = ChannelKey.GetUniqueChannelKey("Berserk");
+			channelKey = ChannelKey.GetUniqueChannelKey("Berserk");
 			basicAttackerComponent.strength.Multiply(channelKey, data.forceMultiplier);
 			
 			if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
@@ -30,23 +32,25 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 		}
 
 		public void Remove(BerserkStatusData data, EntityAddress address, StatusContext context)
-		{
-			if (address.TryGetComponentRO(out BerserkStatusComponent berserkComponent))
-				berserkComponent.RemoveModifiers(address);
-
+		{ 
+			
+			if (address.TryGetComponentRO(out BasicAttackerComponent attackerComponent))
+					attackerComponent.strength.RemoveOperation(channelKey);
+			
+			if (address.TryGetComponentRO(out DefenseComponent defenseComponent))
+				defenseComponent.defense.RemoveOperation(channelKey);
+			
+			Debug.Log($" Attack == {attackerComponent.strength} Defense == {defenseComponent.defense}");
 			address.RemoveStatus<BerserkStatusComponent>(context);
 			
 		}
 
 		public void Tick(BerserkStatusData data, EntityAddress address, StatusContext context)
 		{
-			StatusManager.Trigger<BerserkStatusComponent>(address, context);
-			Debug.Log($"[BerserkStatus] Tick]");
 		}
 
 		public void TickAll(BerserkStatusData data, StatusContext context)
 		{
-			StatusManager.ProcessAllStatus<BerserkStatusComponent>(context);
 		}
 	}
 }
