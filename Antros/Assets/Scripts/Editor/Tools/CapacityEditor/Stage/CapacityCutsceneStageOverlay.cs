@@ -99,17 +99,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             try
             {
-                // Rebuild the preview when the stage changes OR when the resolved camera
-                // differs from the one the preview is holding. Relying on boundStage alone
-                // kept a stale camera (e.g. after a recompile or a rig/scene change), which
-                // is why the preview stayed black — the new Brain was never re-queried.
-                Camera currentBrainCam = stage.Brain != null ? stage.Brain.GetComponent<Camera>() : null;
-                bool needsRebuild = boundStage != stage || preview == null || preview.Camera != currentBrainCam;
-
-                if (needsRebuild)
+                if (boundStage != stage)
                 {
                     preview?.Dispose();
-                    preview = new CapacityCameraPreview(stage.Brain, stage.Director);
+                    preview = new CapacityCameraPreview(stage.Brain, stage.Director, stage.StageScene);
                     boundStage = stage;
                 }
 

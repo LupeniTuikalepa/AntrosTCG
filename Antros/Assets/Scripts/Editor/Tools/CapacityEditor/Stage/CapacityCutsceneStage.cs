@@ -54,18 +54,25 @@ namespace ATCG.Editor.Tools.CapacityEditor
         {
             get
             {
-                //Debug.Log($"[BrainDiag] stage.scene name='{scene.name}' valid={scene.IsValid()} isLoaded={scene.isLoaded} handle={scene.handle}");
+                Debug.Log($"[BrainDiag] stage.scene name='{scene.name}' valid={scene.IsValid()} isLoaded={scene.isLoaded} handle={scene.handle}");
                 if (!scene.IsValid())
                     return null;
                 foreach (GameObject root in scene.GetRootGameObjects())
                 {
+                    Debug.Log($"[BrainDiag] root='{root.name}' scene='{root.scene.name}'");
                     CinemachineBrain found = root.GetComponentInChildren<CinemachineBrain>(true);
-                    return found;
+                    if (found != null)
+                    {
+                        Debug.Log($"[BrainDiag] FOUND brain on '{found.name}' cam scene='{found.gameObject.scene.name}' valid={found.gameObject.scene.IsValid()}");
+                        return found;
+                    }
                 }
+                Debug.Log("[BrainDiag] no brain found in stage scene roots");
                 return null;
             }
         }
         public DebugCutsceneRig Rig => rig;
+        public UnityEngine.SceneManagement.Scene StageScene => scene;
         public DebugCapacityContext PreviewContext => previewContext;
 
 

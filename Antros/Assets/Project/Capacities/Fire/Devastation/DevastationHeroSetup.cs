@@ -28,7 +28,7 @@ namespace ATCG.Capacities.Devastation
                 caster.transform.rotation = Quaternion.LookRotation(toTarget);
         }
 
-        public void Disconnect(ICapacityContext context)
+        public void Disconnect()
         {
 
         }

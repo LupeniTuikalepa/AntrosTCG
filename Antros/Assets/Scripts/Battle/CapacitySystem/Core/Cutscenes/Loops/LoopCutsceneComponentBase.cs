@@ -32,7 +32,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops
             OnConnect();
         }
 
-        void ICapacityCutsceneElement.Disconnect(ICapacityContext context)
+        void ICapacityCutsceneElement.Disconnect()
         {
 
         }

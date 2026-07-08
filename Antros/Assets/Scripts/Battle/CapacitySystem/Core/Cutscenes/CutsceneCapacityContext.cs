@@ -7,37 +7,56 @@ using ATCG.HexGrids;
 namespace ATCG.Battle.CapacitySystem.Core.Properties
 {
     /// <summary>
-    /// The per-screen context handed to cutscene elements at Connect. Its property
-    /// schema is pre-declared from the capacity's PropertyDefinitions, then the
-    /// screen-specific defaults (caster actor, screen player, cast point, solver) are
-    /// written into it. Only declared properties can be written — same closed schema
-    /// as the game phase and the editor preview.
+    /// Per-screen cutscene context. Two layers:
+    ///  - LOCAL: screen-specific built-ins (caster actor, screen player, cast point,
+    ///    coordinate solver) that differ per screen.
+    ///  - GLOBAL: the CastCapacityPhase, shared across screens. Steps inject the real
+    ///    capacity values into the phase over time (e.g. Targets after a QTE); reads
+    ///    delegate to it LIVE so those injections are visible whenever they happen.
+    /// Local wins on key collision; everything else falls through to the phase.
     /// </summary>
     public sealed class CutsceneCapacityContext : ICapacityContext
     {
-        private readonly CapacityPropertyBag bag = new();
+        private readonly CastCapacityPhase phase;
+        private readonly CapacityPropertyBag local = new();
 
         public CutsceneCapacityContext(CastCapacityPhase phase, RuntimeLocalBattlePlayer screenPlayer)
         {
-            bag.Declare(phase.data.PropertyDefinitions);
+            this.phase = phase;
 
-            bag.Allow<RuntimeLocalBattlePlayer>(CapacityContextKeys.SCREEN_PLAYER);
-            bag.Allow<EntityAddress>(CapacityContextKeys.CASTER_ADDRESS);
-            bag.Allow<HexCoordinates>(CapacityContextKeys.CAST_POINT);
-            bag.Allow<ICutsceneCoordinateSolver>(CapacityContextKeys.COORDINATE_SOLVER);
-            bag.Allow<ICutsceneActor>(CapacityContextKeys.CASTER);
+            // Declare + fill the screen-local built-ins.
+            local.Allow<RuntimeLocalBattlePlayer>(CapacityContextKeys.SCREEN_PLAYER);
+            local.Allow<EntityAddress>(CapacityContextKeys.CASTER_ADDRESS);
+            local.Allow<HexCoordinates>(CapacityContextKeys.CAST_POINT);
+            local.Allow<ICutsceneCoordinateSolver>(CapacityContextKeys.COORDINATE_SOLVER);
+            local.Allow<ICutsceneActor>(CapacityContextKeys.CASTER);
 
-            InjectProperty(CapacityContextKeys.SCREEN_PLAYER, screenPlayer);
-            InjectProperty(CapacityContextKeys.CASTER_ADDRESS, phase.caster);
-            InjectProperty(CapacityContextKeys.CAST_POINT, phase.castPoint);
-            InjectProperty<ICutsceneCoordinateSolver>(
-                CapacityContextKeys.COORDINATE_SOLVER, new GridCoordinateSolver(screenPlayer));
+            local.Set(CapacityContextKeys.SCREEN_PLAYER, screenPlayer);
+            local.Set(CapacityContextKeys.CASTER_ADDRESS, phase.caster);
+            local.Set(CapacityContextKeys.CAST_POINT, phase.castPoint);
+            local.Set<ICutsceneCoordinateSolver>(CapacityContextKeys.COORDINATE_SOLVER, new GridCoordinateSolver(screenPlayer));
 
             if (phase.TryGetRuntimeCaster(screenPlayer, out IRuntimeEntity caster) && caster is ICutsceneActor actor)
-                InjectProperty(CapacityContextKeys.CASTER, actor);
+                local.Set(CapacityContextKeys.CASTER, actor);
         }
 
-        public bool TryGetProperty<T>(string name, out T value) => bag.TryGet(name, out value);
-        public void InjectProperty<T>(string name, T value) => bag.Set(name, value);
+        // Local (screen) first, then live-delegate to the phase (global) so values the
+        // steps inject during the cutscene are picked up.
+        public bool TryGetProperty<T>(string name, out T value)
+        {
+            if (local.IsDeclared(name) && local.TryGet(name, out value))
+                return true;
+            return phase.TryGetProperty(name, out value);
+        }
+
+        // Writing a built-in key updates the screen-local layer; anything else is a
+        // capacity property and goes to the shared phase.
+        public void InjectProperty<T>(string name, T value)
+        {
+            if (local.IsDeclared(name))
+                local.Set(name, value);
+            else
+                phase.InjectProperty(name, value);
+        }
     }
 }

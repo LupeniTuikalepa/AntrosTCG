@@ -29,7 +29,7 @@ namespace ATCG.Capacities
             spreadParticles.transform.forward = to - from;
         }
 
-        public void Disconnect(ICapacityContext context)
+        public void Disconnect()
         {
 
         }

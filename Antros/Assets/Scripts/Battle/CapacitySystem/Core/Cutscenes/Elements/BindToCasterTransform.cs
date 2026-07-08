@@ -29,7 +29,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
                 onConnected?.Invoke(caster.transform);
         }
 
-        public void Disconnect(ICapacityContext context)
+        public void Disconnect()
         {
 
         }

@@ -42,7 +42,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
             }
         }
 
-        public void Disconnect(ICapacityContext context)
+        public void Disconnect()
         {
             Clear();
         }
