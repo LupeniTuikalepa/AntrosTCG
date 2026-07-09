@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f07e5b0670245a198b1f326ff8f82c4, type: 3}
+  m_Name: North Wall
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Frost.NorthWallData
+  guidText: 6ac6ee36-7197-42b4-850c-ea436389c2b2
+  <Cost>k__BackingField: 1
+  <Name>k__BackingField: Mur du Nord
+  <Element>k__BackingField: 7
+  <Description>k__BackingField: 
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 7630467977162784896
+  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 3eff351ebe865534592b69cdbb65f285, type: 3}
+  <PropertyDefinitions>k__BackingField: []
+  <Radius>k__BackingField: 1
+  <DeployableData>k__BackingField: {fileID: 11400000, guid: 36a574091bccce54796001dcc563619d, type: 2}
+  <ConstructionStepData>k__BackingField:
+    <StepName>k__BackingField: 
+    <QTEsCount>k__BackingField: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7630467977162784896
+      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 1

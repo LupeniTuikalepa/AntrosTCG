@@ -37,7 +37,6 @@ namespace ATCG.Battle.Grids
                     }
 
                     var redirectedCoord = to + direction;
-                    //Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
                     
                     if (battleGrid.TryGetBattleCell(redirectedCoord, out _) 
                         && TryRedirect(to, redirectedCoord, battleGrid, out var coord))
@@ -150,19 +149,18 @@ namespace ATCG.Battle.Grids
 
             if (!cameFrom.TryGetValue(goal, out var entryCase))
                 return false;
-            
-            if (goalIsFrozen)
-            {
-                if (controller.TryRedirect(entryCase, goal, battleGrid, out HexCoordinates actualGoal))
-                {
-                    bool result = ReconstructPath(start, goal, path);
-                    if (result)
-                        path.Add(actualGoal);
-                    return result;
-                }
-            }
 
-            return ReconstructPath(start, goal, path);
+            if (!goalIsFrozen)
+                return ReconstructPath(start, goal, path);
+
+            if (!controller.TryRedirect(entryCase, goal, battleGrid, out HexCoordinates actualGoal))
+                return ReconstructPath(start, goal, path);
+
+            if (!ReconstructPath(start, goal, path)) 
+                return false;
+            
+            path.Add(actualGoal);
+            return true;
         }
 
         private IEnumerable<HexCoordinates> GetNeighbors(
@@ -176,26 +174,7 @@ namespace ATCG.Battle.Grids
                     yield return neighbor;
             }
         }
-
-        private bool IsCoordinatesValid<TController>(
-            HexCoordinates from,
-            HexCoordinates goal,
-            BattleGrid battleGrid,
-            TController controller)
-            where TController : IPathfinderController
-        {
-            if (from == goal)
-                return true;
-
-            if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect cell))
-                return false;
-
-            if (!controller.CanTraverse(cell))
-                return false;
-
-            return true;
-        }
-
+        
         private bool ReconstructPath(
             HexCoordinates start,
             HexCoordinates goal,
