@@ -1,6 +1,7 @@
 ﻿using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.Grids;
 using ATCG.Capacities;
 using ATCG.HexGrids;
 
@@ -17,6 +18,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         public CapacityData Data => capacityPhase.data;
         public HexCoordinates CastPoint => capacityPhase.castPoint;
         public EntityAddress Caster => capacityPhase.caster;
+        public BattleGrid BattleGrid => capacityPhase.battlePhase.BattleGrid;
 
         public  BattleID CastingPlayer => capacityPhase.casterPlayerId;
 
