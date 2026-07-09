@@ -17,7 +17,7 @@ namespace ATCG.Battle.Entities.Components.Implementations
 
         public void Remove(PoisonStatusData data, EntityAddress address, StatusContext context)
         {
-            address.RemoveStatus<PoisonStatusComponent>(context);
+            address.RemoveStatus<PoisonStatusComponent>(address,context);
         }
 
         public void Tick(PoisonStatusData data, EntityAddress address, StatusContext context)

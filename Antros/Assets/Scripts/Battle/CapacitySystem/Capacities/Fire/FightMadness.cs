@@ -10,6 +10,7 @@ using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.DataMapping;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
@@ -27,6 +28,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
 		{
+			Debug.Log($"DeployRage,{data.BerserkData}", data);
 			if (data.BerserkData.TryGet(out IStatusContainer statusContainer))
 			{
 				statusContainer.Apply(data.BerserkData,ctx.Caster,new StatusContext(ctx.BattlePhase));
@@ -35,6 +37,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 		private partial void ExecutePunch(FightMadnessData data, CapacityStepContext ctx)
 		{
+			Debug.Log($"Punch{data.PunchDamage}",data);
 			if (ctx.BattleGrid.TryGetBattleCell(ctx.CastPoint, out var cell))
 			{
 				foreach (var componentRef in cell.GetMembers())
