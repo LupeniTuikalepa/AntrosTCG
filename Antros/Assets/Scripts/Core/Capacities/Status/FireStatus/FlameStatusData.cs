@@ -9,8 +9,5 @@ namespace ATCG
     {
 		[field: SerializeField, BoxGroup("Specific")]
 		public int Damage { get; private set; }
-		
-		[field: SerializeField, BoxGroup("Specific")]
-		public int Duration { get; private set; }
     }
 }
