@@ -4,10 +4,10 @@ using ATCG.Capacities.Data.Status;
 
 namespace ATCG.Battle.Entities.Components.Status
 {
-	public struct StatusVolatileController<T>: IStatusController<T>,IStatusTurnController where T : struct, IStatusComponent
+	public struct StatusVolatileController : IStatusController ,IStatusTurnController
     {
         private bool willLast;
-        
+
         public void Reset()
         {
 	        willLast =  false;
@@ -18,14 +18,14 @@ namespace ATCG.Battle.Entities.Components.Status
 	        willLast = true;
         }
 
-        public bool IsFinished(ComponentRef<T> componentRef)
+        public bool IsFinished()
         {
             return !willLast;
         }
 
         public void OnTurnStarted()
         {
-	        
+
         }
 
         public void OnTurnEnded()

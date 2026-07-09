@@ -75,6 +75,16 @@ namespace ATCG.Battle.Entities
             throw new Exception($"Entity {e.id} does not have component {typeof(T).Name}. Use TryGetComponent or HasComponent first.");
         }
 
+        public ComponentRef<T> GetComponentRef<T>(Entity e) where T : struct, IEntityComponent
+        {
+            int id = ComponentID<T>.ID;
+
+            if (stores[id] is ComponentStore<T> store && store.Has(e.id))
+                return new ComponentRef<T>(this, store, e.id);
+
+            throw new Exception($"Entity {e.id} does not have component {typeof(T).Name}. Use TryGetComponent or HasComponent first.");
+        }
+
         public bool AddOrSetComponent<T>(Entity e) where T : struct, IEntityComponent
         {
             return AddOrSetComponent(e, new T());
@@ -132,7 +142,7 @@ namespace ATCG.Battle.Entities
 
             return false;
         }
-        
+
         public bool RemoveComponent<T>(Entity e) where T : struct, IEntityComponent
         {
             ref EntityMeta meta = ref entities[e];
@@ -149,5 +159,6 @@ namespace ATCG.Battle.Entities
 
             return false;
         }
+
     }
 }

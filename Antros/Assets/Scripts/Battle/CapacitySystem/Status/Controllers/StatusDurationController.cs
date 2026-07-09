@@ -1,17 +1,10 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status;
 using ATCG.Battle.Entities.Components.Implementations;
-using ATCG.Battle.Entities.Iterations;
 
 namespace ATCG.Battle.Entities.Components.Status
 {
-	[IteratableComponent]
-	public interface IStatusTurnController
-	{
-		void OnTurnStarted();
-		void OnTurnEnded();
-	}
-    public struct StatusDurationController<T> : IStatusController<T>, IStatusTurnController where T : struct, IStatusComponent
+	public struct StatusDurationController : IStatusController, IStatusTurnController
     {
         private int remainingTick;
         public int RemainingTicks => remainingTick;
@@ -26,17 +19,17 @@ namespace ATCG.Battle.Entities.Components.Status
 	        remainingTick += ticks;
         }
 
-        public bool IsFinished(ComponentRef<T> componentRef)
+        bool IStatusController.IsFinished()
         {
             return remainingTick <= 0;
         }
 
-        public void OnTurnStarted()
+        void IStatusTurnController.OnTurnStarted()
         {
-	        
+
         }
 
-        public void OnTurnEnded()
+        void IStatusTurnController.OnTurnEnded()
         {
 	        AddOrRemoveTicks(-1);
         }

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using ATCG.Battle.CapacitySystem.Status.Forst;
+using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
 using UnityEngine;
@@ -33,12 +34,12 @@ namespace ATCG.Battle.Grids
                     newCoordinates = HexCoordinates.None;
                     return false;
                 }
-                
+
                 //TODO check good component
-                if (toCellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
+                if (toCellAspect.EntityAddress.HasStatusWithData<FreezeStatusData>())
                 {
                     var direction = from.GetNormalizedDirection(to).NearestCardinal();
-    
+
                     if (direction.X == 0 && direction.Y == 0)
                     {
                         newCoordinates = HexCoordinates.None;
@@ -102,7 +103,7 @@ namespace ATCG.Battle.Grids
             if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell))
                 return false;
 
-            bool goalIsFrozen = goalCell.EntityAddress.HasComponent<FreezeStatusComponent>();
+            bool goalIsFrozen = goalCell.EntityAddress.HasStatusWithData<FreezeStatusData>() ;
 
             frontier.Add(new PriorityHexCoordinates(start, 0));
             cameFrom[start] = start;

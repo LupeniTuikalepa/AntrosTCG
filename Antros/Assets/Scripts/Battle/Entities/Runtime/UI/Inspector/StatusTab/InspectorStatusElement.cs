@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.Players.Local.Phases;
 using TMPro;
@@ -28,7 +29,8 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.StatusTab
 
             icon.color = color;
 
-            if (address.TryGetComponentRO(out StatusDurationController<T> durationController))
+            //TODO refactor
+            if (address.TryGetComponentRO(out StatusDurationController durationController))
             {
                 durationRoot.SetActive(true);
                 durationText.text = durationController.RemainingTicks.ToString();

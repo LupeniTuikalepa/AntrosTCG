@@ -41,6 +41,10 @@ namespace ATCG.Battle.Entities
             return world.HasComponent<T>(entity);
         }
 
+        public ComponentRef<T> GetComponentRef<T>() where T : struct, IEntityComponent
+        {
+            return world.GetComponentRef<T>(entity);
+        }
         public ref T GetComponent<T>() where T : struct, IEntityComponent
         {
             return ref world.GetComponent<T>(entity);
@@ -63,12 +67,12 @@ namespace ATCG.Battle.Entities
                 world.RemoveComponent(id, entity);
             }
         }
-        
+
         public bool TryGetComponentRO<T>(out T component) where T : struct,IEntityComponent
         {
             return world.TryGetROComponent(entity, out component);
         }
-        
+
         public bool TryGetComponent<T>(out ComponentRef<T> componentRef) where T : struct, IEntityComponent
         {
             return world.TryGetComponent(entity, out componentRef);

@@ -34,20 +34,14 @@ namespace ATCG.Battle.Commands.EntityCommands
             }
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
-            
+
             infos.from = componentHealth.CurrentHealth;
             componentHealth.AddOrRemoveHealth(-finalDamage);
             Debug.Log($"[Damage Command] Current Damage: {finalDamage}");
-            
+
             infos.to = componentHealth.CurrentHealth;
             infos.max = componentHealth.MaxHealth;
 
-            if (address.TryGetComponent<StatusVolatileController<BerserkStatusComponent>>(out var berserkStatusComponent))
-            {
-	            berserkStatusComponent.GetValue().Trigger();
-            }
-	        Debug.Log(berserkStatusComponent);
-            
             if (componentHealth.CurrentHealth <= 0)
                 Embed(context, new DeathCommand(address));
         }

@@ -20,7 +20,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
             if (Mapper.TryGet(data, out IStatusContainer container))
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
-                container.Tick(data, Target.ToAddress(context.World), statusContext);
+                EntityAddress target = Target.ToAddress(context.World);
+                
+                container.Tick(data, target, statusContext);
             }
         }
     }
