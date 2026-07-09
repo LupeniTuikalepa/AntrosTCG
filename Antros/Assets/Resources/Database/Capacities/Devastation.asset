@@ -15,12 +15,13 @@ MonoBehaviour:
   guidText: c6067dd9-4a40-4d73-9eff-cab6e4539271
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Devastation
-  <Description>k__BackingField: Boom
   <Element>k__BackingField: 1
+  <Description>k__BackingField: Boom
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 2899897746609406451
   <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 9bce9ba43db47434d8cfbfb5d2d49683, type: 3}
+  <PropertyDefinitions>k__BackingField: []
   <Range>k__BackingField: 3
   <Damage>k__BackingField:
     serializedVersion: 2
