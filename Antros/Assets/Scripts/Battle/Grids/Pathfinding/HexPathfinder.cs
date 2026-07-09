@@ -4,10 +4,7 @@ using ATCG.Battle.CapacitySystem.Status.Forst;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
-
-#if UNITY_EDITOR
 using CollectionDebugger.Core;
-#endif
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -27,11 +24,11 @@ namespace ATCG.Battle.Grids
                     newCoordinates = HexCoordinates.None;
                     return false;
                 }
-
+                
                 //TODO check good component
                 if (toCellAspect.EntityAddress.HasComponent<FreezeStatusComponent>())
                 {
-                    var direction = from.GetDirection(to).NearestCardinal();
+                    var direction = from.GetNormalizedDirection(to).NearestCardinal();
     
                     if (direction.X == 0 && direction.Y == 0)
                     {
@@ -40,8 +37,10 @@ namespace ATCG.Battle.Grids
                     }
 
                     var redirectedCoord = to + direction;
-                    Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
-                    if (TryRedirect(to, redirectedCoord, battleGrid, out var coord))
+                    //Debug.Log($"From {from} to {to} is redirected to {redirectedCoord}");
+                    
+                    if (battleGrid.TryGetBattleCell(redirectedCoord, out _) 
+                        && TryRedirect(to, redirectedCoord, battleGrid, out var coord))
                     {
                         newCoordinates = coord;
                         return true;
@@ -50,7 +49,7 @@ namespace ATCG.Battle.Grids
                     newCoordinates = redirectedCoord;
                     return true;
                 }
-                newCoordinates = HexCoordinates.None;
+                newCoordinates = to;
                 return false;
             }
         }
@@ -67,9 +66,7 @@ namespace ATCG.Battle.Grids
             cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
             frontier = ListPool<PriorityHexCoordinates>.Get();
 
-#if UNITY_EDITOR
             cameFrom.Watch(nameof(cameFrom));
-#endif
         }
 
         public bool TryFindPath(
@@ -80,81 +77,93 @@ namespace ATCG.Battle.Grids
             => TryFindPath(start, goal, path, battleGrid, new DefaultPathfinderController());
 
         public bool TryFindPath<TController>(
-    HexCoordinates start,
-    HexCoordinates goal,
-    List<HexCoordinates> path,
-    BattleGrid battleGrid,
-    TController controller) where TController : IPathfinderController
-{
-    costSoFar.Clear();
-    cameFrom.Clear();
-    frontier.Clear();
-
-    if (!battleGrid.TryGetBattleCell(start, out var startCell))
-        return false;
-    
-    HexCoordinates actualGoal = goal;
-
-    HexCoordinates entryNeighbor = goal - start.GetNormalizedDirection(goal);
-    if (battleGrid.TryGetBattleCell(entryNeighbor, out _) 
-        && controller.TryRedirect(entryNeighbor, goal, battleGrid, out HexCoordinates redirectedGoal))
-    {
-        actualGoal = redirectedGoal;
-    }
-    
-    frontier.Add(new PriorityHexCoordinates(start, 0));
-    cameFrom[start] = start;
-    costSoFar[start] = 0;
-
-    while (frontier.Count > 0)
-    {
-        frontier.Sort();
-        var current = frontier[0].coordinates;
-        frontier.RemoveAt(0);
-
-        if (current == actualGoal)
-            break;
-
-        foreach (HexCoordinates next in GetNeighbors(current, battleGrid))
+            HexCoordinates start,
+            HexCoordinates goal,
+            List<HexCoordinates> path,
+            BattleGrid battleGrid,
+            TController controller) where TController : IPathfinderController
         {
-            if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
-                continue;
-            HexCoordinates actual = next;
+            costSoFar.Clear();
+            cameFrom.Clear();
+            frontier.Clear();
 
-            if (controller.TryRedirect(current, next, battleGrid, out HexCoordinates redirected))
+            if (!battleGrid.TryGetBattleCell(start, out _))
+                return false;
+
+            if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell))
+                return false;
+
+            bool goalIsFrozen = goalCell.EntityAddress.HasComponent<FreezeStatusComponent>();
+
+            frontier.Add(new PriorityHexCoordinates(start, 0));
+            cameFrom[start] = start;
+            costSoFar[start] = 0;
+
+            while (frontier.Count > 0)
             {
-                costSoFar[next] = int.MaxValue;
-                cameFrom[next] = current;
-                cameFrom[actual] = current;
+                frontier.Sort();
+                var current = frontier[0].coordinates;
+                frontier.RemoveAt(0);
 
-                if (!battleGrid.TryGetBattleCell(redirected, out BattleCellAspect redirectedCell))
+                if (current == goal)
+                    break;
+
+                if (!battleGrid.TryGetBattleCell(current, out _))
+                    continue;
+
+                foreach (HexCoordinates next in GetNeighbors(current, battleGrid))
                 {
-                    if (!IsCoordinatesValid(redirected, actualGoal, battleGrid, controller))
-                    {
+                    if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
                         continue;
+
+                    HexCoordinates actual = next;
+
+                    bool nextIsGoal = next == goal && goalIsFrozen;
+
+                    if (controller.TryRedirect(current, next, battleGrid, out HexCoordinates redirected)
+                        && !nextIsGoal)
+                    {
+                        costSoFar[next] = int.MaxValue;
+                        cameFrom[next] = current;
+
+                        if (!battleGrid.TryGetBattleCell(redirected, out BattleCellAspect redirectedCell))
+                            continue;
+
+                        actual = redirected;
+                        nextCell = redirectedCell;
+                    }
+
+                    int newCost = costSoFar[current] + controller.GetCost(current, actual, nextCell);
+
+                    if (newCost > maxSteps)
+                        continue;
+
+                    if (!costSoFar.ContainsKey(actual) || newCost < costSoFar[actual])
+                    {
+                        costSoFar[actual] = newCost;
+                        int priority = newCost + actual.Distance(goal);
+                        frontier.Add(new PriorityHexCoordinates(actual, priority));
+                        cameFrom[actual] = current;
                     }
                 }
-
-                actual = redirected;
-                nextCell = redirectedCell;
             }
 
-            int newCost = costSoFar[current] + controller.GetCost(current, actual, nextCell);
-
-            if (newCost > maxSteps)
-                continue;
-
-            if (!costSoFar.ContainsKey(actual) || newCost < costSoFar[actual])
+            if (!cameFrom.TryGetValue(goal, out var entryCase))
+                return false;
+            
+            if (goalIsFrozen)
             {
-                costSoFar[actual] = newCost;
-                int priority = newCost + actual.Distance(actualGoal);
-                frontier.Add(new PriorityHexCoordinates(actual, priority));
-                cameFrom[actual] = current;
+                if (controller.TryRedirect(entryCase, goal, battleGrid, out HexCoordinates actualGoal))
+                {
+                    bool result = ReconstructPath(start, goal, path);
+                    if (result)
+                        path.Add(actualGoal);
+                    return result;
+                }
             }
+
+            return ReconstructPath(start, goal, path);
         }
-    }
-    return ReconstructPath(start, actualGoal, path);
-}
 
         private IEnumerable<HexCoordinates> GetNeighbors(
             HexCoordinates from,
@@ -197,6 +206,7 @@ namespace ATCG.Battle.Grids
             if(!cameFrom.ContainsKey(start))
                 return false;
 
+            Debug.Log($"Reconstruct path from {start} to {goal}");
             HexCoordinates current = goal;
             while (current != start)
             {
