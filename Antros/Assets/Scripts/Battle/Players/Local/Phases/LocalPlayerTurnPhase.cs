@@ -2,6 +2,8 @@
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status;
+using ATCG.Battle.CapacitySystem.Status.Berserk;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Implementations;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.GameModes;
@@ -16,13 +18,52 @@ namespace ATCG.Battle.Players.Local.Phases
 {
     public class LocalPlayerTurnPhase : PlayerTurnPhase
     {
+        private class StatusIterator : IStatusComponentIterator
+        {
+	        private StatusContext statusContext;
+	        private bool isStart;
+	        private IBattlePlayer playerTurn;
+
+	        public StatusIterator(StatusContext statusContext, bool isStart, IBattlePlayer playerTurn)
+	        {
+		        this.statusContext = statusContext;
+		        this.isStart = isStart;
+		        this.playerTurn = playerTurn;
+	        }
+
+	        public void Process<TStatusComponent>() where TStatusComponent : struct, IStatusComponent
+	        {
+		        ProcessTurnController<StatusDurationController<TStatusComponent>>();
+		        ProcessTurnController<StatusVolatileController<TStatusComponent>>();
+	        }
+
+	        private void ProcessTurnController<TTurnController>() where TTurnController : struct, IStatusTurnController, IEntityComponent
+	        {
+		        foreach (var componentRef in statusContext.battlePhase.world.Query<TTurnController>())
+		        {
+			        
+			        ref TTurnController component = ref componentRef.GetValue();
+			        
+			        if (componentRef.EntityAddress.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer))
+			        {
+				        if(belongsToPlayer.IsAllieOf(playerTurn))
+					        continue;
+			        }
+			        
+			        if (isStart)
+				        component.OnTurnStarted();
+			        else
+						component.OnTurnEnded();
+		        }
+	        }
+        }
         private static readonly ChannelKey ChannelKey = ChannelKey.GetUniqueChannelKey("Turn phase");
 
         public readonly LocalBattlePlayer localPlayerTurn;
         public readonly string turnID;
 
         //private List<IBattleActionInfos> actionInfosList;
-
+		
 
         public LocalPlayerTurnPhase(int turnNumber, LocalBattlePlayer localPlayerTurn) : base(turnNumber,
             localPlayerTurn)
@@ -33,6 +74,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
         protected override Awaitable Initialize(CancellationToken token)
         {
+	        
             //actionInfosList = ListPool<IBattleActionInfos>.Get();
             localPlayerTurn.AddOrRemoveMana(GameMetrics.Current.RecoveredManaOnTurnStart);
 
@@ -43,9 +85,11 @@ namespace ATCG.Battle.Players.Local.Phases
 
             localPlayerTurn.FillHand();
 
-            //TODO a modifier plus tard
-            var statusContext = new StatusContext(player.BattlePhase);
-            StatusManager.ProcessAllStatus<PoisonStatusComponent>(statusContext);
+            var statusContext = new StatusContext(localPlayerTurn.BattlePhase);
+            StatusIterator iterator = new StatusIterator( statusContext, true, localPlayerTurn);
+            iterator.ForeachStatusComponent();
+            
+            StatusManager.UpdateControllers(statusContext);
             
             return base.Initialize(token);
         }
@@ -70,6 +114,8 @@ namespace ATCG.Battle.Players.Local.Phases
         public void EndTurn()
         {
             BattleTurn infos = new(turnID, localPlayerTurn.ID);
+            StatusIterator iterator = new StatusIterator( new StatusContext(localPlayerTurn.BattlePhase), false, localPlayerTurn);
+            iterator.ForeachStatusComponent();
             SetResult(infos);
         }
 

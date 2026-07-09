@@ -105,14 +105,14 @@ namespace ATCG.Battle.Entities
             int id = ComponentID<T>.ID;
             if (id >= stores.Length)
             {
-                Debug.Log($"Resizing store for Component {typeof(T).Name} with id {id}");
+               // Debug.Log($"Resizing store for Component {typeof(T).Name} with id {id}");
                 Array.Resize(ref stores, stores.Length * 2);
             }
 
             if (stores[id] != null)
                 return id;
 
-            Debug.Log($"Creating new store for Component {typeof(T).Name} with id {id}");
+           // Debug.Log($"Creating new store for Component {typeof(T).Name} with id {id}");
             stores[id] = new ComponentStore<T>(maxEntities);
             return id;
         }

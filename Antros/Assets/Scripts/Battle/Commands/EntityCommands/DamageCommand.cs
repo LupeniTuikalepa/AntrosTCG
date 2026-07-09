@@ -1,7 +1,9 @@
-﻿using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.CapacitySystem.Status.Berserk;
+using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Components.Status;
 using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
@@ -23,17 +25,29 @@ namespace ATCG.Battle.Commands.EntityCommands
 
             if (!address.TryGetComponent(out ComponentRef<HealthComponent> healthComponentRef))
                 return;
+            int finalDamage = quantity;
+
+            if (address.TryGetComponentRO(out DefenseComponent defenseComponent))
+            {
+	            int defenseValue = Mathf.Max(1, defenseComponent.Defense);
+	            finalDamage = Mathf.Max(1, finalDamage * (100 / (100 + defenseValue)));
+            }
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
-
-            Debug.Log($"[Damage Command] Current Health: {componentHealth.CurrentHealth}/{componentHealth.MaxHealth}");
+            
             infos.from = componentHealth.CurrentHealth;
-            componentHealth.AddOrRemoveHealth(-quantity);
-            Debug.Log($"[Damage Command] Current Health: {componentHealth.CurrentHealth}/{componentHealth.MaxHealth}");
-
+            componentHealth.AddOrRemoveHealth(-finalDamage);
+            Debug.Log($"[Damage Command] Current Damage: {finalDamage}");
+            
             infos.to = componentHealth.CurrentHealth;
             infos.max = componentHealth.MaxHealth;
 
+            if (address.TryGetComponent<StatusVolatileController<BerserkStatusComponent>>(out var berserkStatusComponent))
+            {
+	            berserkStatusComponent.GetValue().Trigger();
+            }
+	        Debug.Log(berserkStatusComponent);
+            
             if (componentHealth.CurrentHealth <= 0)
                 Embed(context, new DeathCommand(address));
         }

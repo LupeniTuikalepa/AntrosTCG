@@ -1,6 +1,8 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Status.Signals;
+﻿using System.Threading;
+using ATCG.Battle.CapacitySystem.Core.Status.Signals;
 using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.Entities.Queries;
 using UnityEngine.Pool;
@@ -9,6 +11,22 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public static class StatusManager
     {
+	    private class StatusControllerUpdater : IStatusComponentIterator
+	    {
+		    private StatusContext statusContext;
+		    public StatusControllerUpdater(StatusContext statusContext)
+		    {
+			    this.statusContext = statusContext;
+		    }
+
+		    public void Process<TStatusComponent>() where TStatusComponent : struct, IStatusComponent
+		    {
+			    UpdateAllStatusController< TStatusComponent, StatusDurationController<TStatusComponent>>(statusContext);
+			    UpdateAllStatusController< TStatusComponent, StatusVolatileController<TStatusComponent>>(statusContext);
+			    UpdateAllStatusController< TStatusComponent, StatusCustomController<TStatusComponent>>(statusContext);
+		    }
+	    }
+	    
         public static void Trigger<TStatus>(EntityAddress address, StatusContext statusContext) where TStatus : struct, IStatusComponent
         {
             if (address.TryGetComponent<TStatus>(out var componentRef))
@@ -20,7 +38,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 tickStatusSignal.Run(statusContext.battlePhase);
             }
 
-            UpdateControllers<TStatus>(address, statusContext);
+           
         }
 
         private static void UpdateControllers<TStatus>(EntityAddress address, StatusContext statusContext) where TStatus : struct, IStatusComponent
@@ -34,6 +52,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             {
                 address.RemoveStatus<TStatus>(statusContext);
             }
+        }
+
+        public static void UpdateControllers(StatusContext context)
+        {
+	        StatusControllerUpdater statusControllerUpdater = new StatusControllerUpdater(context);
+	        statusControllerUpdater.ForeachStatusComponent();
         }
 
         private static bool IsFinished<TStatus, TController>(EntityAddress address)
@@ -108,8 +132,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             {
                 EntityAddress address = new EntityAddress(world, entity);
                 Trigger<TStatus>(address, statusContext);
-
             }
+	        UpdateAllStatusController<TStatus, StatusDurationController<TStatus>>(statusContext);
         }
     }
 }
