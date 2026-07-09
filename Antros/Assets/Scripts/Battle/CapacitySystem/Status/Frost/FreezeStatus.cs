@@ -17,7 +17,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Forst
 
         public void Remove(FreezeStatusData data, EntityAddress address, StatusContext context)
         {
-            address.RemoveStatus<FreezeStatusComponent>(context);
+            address.RemoveStatus<FreezeStatusComponent>(address,context);
         }
 
         public void Tick(FreezeStatusData data, EntityAddress address, StatusContext context)

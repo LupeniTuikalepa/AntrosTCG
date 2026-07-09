@@ -45,12 +45,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
         {
             if (IsFinished<TStatus, StatusDurationController<TStatus>>(address))
             {
-                address.RemoveStatus<TStatus>(statusContext);
+                address.RemoveStatus<TStatus>(address,statusContext);
             }
 
             if (IsFinished<TStatus, StatusCustomController<TStatus>>(address))
             {
-                address.RemoveStatus<TStatus>(statusContext);
+                address.RemoveStatus<TStatus>(address,statusContext);
             }
         }
 
@@ -88,7 +88,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         }
 
-        public static void RemoveStatus<TStatus>(this EntityAddress address, StatusContext statusContext)
+        public static void RemoveStatus<TStatus>(this EntityAddress address, EntityAddress entityAddress,
+	        StatusContext statusContext)
             where TStatus : struct, IStatusComponent
         {
             if (address.TryGetComponentRO<StatusInfos<TStatus>>(out var component))
@@ -119,7 +120,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
                 foreach (var address in list)
                 {
-                    address.RemoveStatus<TStatus>(statusContext);
+                    address.RemoveStatus<TStatus>(address,statusContext);
                 }
 
             }

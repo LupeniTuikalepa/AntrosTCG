@@ -14,8 +14,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 		
 		public void Apply(BerserkStatusData data, EntityAddress target, StatusContext context)
 		{
-			Debug.Log($"Applying Berserk status: {target}");
-			
 			if(!target.TryGetComponentRO(out BasicAttackerComponent  basicAttackerComponent))
 				return;
 			channelKey = ChannelKey.GetUniqueChannelKey("Berserk");
@@ -27,8 +25,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 			target.ApplyStatus(new BerserkStatusComponent(data, channelKey),
 				new StatusVolatileController<BerserkStatusComponent>(),
 				context);
-			
-			Debug.Log($"Applying Berserk status: {target} : BuffAttack ==> {basicAttackerComponent.strength}  : DeBuffDefense ==> {defenseComponent.defense}");
 		}
 
 		public void Remove(BerserkStatusData data, EntityAddress address, StatusContext context)
@@ -40,8 +36,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 			if (address.TryGetComponentRO(out DefenseComponent defenseComponent))
 				defenseComponent.defense.RemoveOperation(channelKey);
 			
-			Debug.Log($" Attack == {attackerComponent.strength} Defense == {defenseComponent.defense}");
-			address.RemoveStatus<BerserkStatusComponent>(context);
+			address.RemoveStatus<BerserkStatusComponent>(address,context);
 			
 		}
 
