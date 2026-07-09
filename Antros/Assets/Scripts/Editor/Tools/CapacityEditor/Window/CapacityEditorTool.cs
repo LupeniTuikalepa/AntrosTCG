@@ -217,6 +217,12 @@ namespace ATCG.Editor.Tools.CapacityEditor
             EditorToolBus.Subscribe<StepMarkerChangedEvent>(OnStepMarkerChanged);
             EditorApplication.update += OnEditorUpdate;
             RefreshCatalog();
+
+            // The stage may restore its Current slightly after this runs on a domain
+            // reload; re-adopt it a tick later so the picker re-selects the edited
+            // capacity even if Current wasn't ready yet when RefreshCatalog first ran.
+            if (selected == null)
+                EditorApplication.delayCall += RefreshCatalog;
         }
 
         public void OnDeactivated()
@@ -245,10 +251,20 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             capacityDropdown.choices = choices;
 
+            // After a domain reload our own 'selected' is null, but the cutscene stage
+            // survives and knows its capacity — adopt it so the window doesn't fall back
+            // to an empty picker while a stage is still open.
+            if (selected == null && CapacityCutsceneStage.Current != null)
+            {
+                selected = CapacityCutsceneStage.Current.Capacity;
+                CurrentlyEdited = selected;
+            }
+
             if (selected != null)
             {
                 string current = choices.Find(c => capacitiesByLabel[c] == selected);
                 capacityDropdown.SetValueWithoutNotify(current);
+                OnSelectionChanged();
             }
         }
 

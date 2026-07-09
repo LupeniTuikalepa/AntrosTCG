@@ -35,8 +35,8 @@ namespace ATCG.Editor.Tools.CapacityEditor
             set => EditorPrefs.SetBool(AutoSavePrefKey, value);
         }
 
-        private CapacityData capacity;
-        private GameObject stageInstance;   // the instantiated director prefab (edited)
+        [SerializeField] private CapacityData capacity;
+        [SerializeField] private GameObject stageInstance;   // survives domain reload
         private DebugCutsceneRig rig;
         private DebugCapacityContext previewContext;
 
@@ -54,20 +54,14 @@ namespace ATCG.Editor.Tools.CapacityEditor
         {
             get
             {
-                Debug.Log($"[BrainDiag] stage.scene name='{scene.name}' valid={scene.IsValid()} isLoaded={scene.isLoaded} handle={scene.handle}");
                 if (!scene.IsValid())
                     return null;
                 foreach (GameObject root in scene.GetRootGameObjects())
                 {
-                    Debug.Log($"[BrainDiag] root='{root.name}' scene='{root.scene.name}'");
                     CinemachineBrain found = root.GetComponentInChildren<CinemachineBrain>(true);
                     if (found != null)
-                    {
-                        Debug.Log($"[BrainDiag] FOUND brain on '{found.name}' cam scene='{found.gameObject.scene.name}' valid={found.gameObject.scene.IsValid()}");
                         return found;
-                    }
                 }
-                Debug.Log("[BrainDiag] no brain found in stage scene roots");
                 return null;
             }
         }
@@ -87,6 +81,36 @@ namespace ATCG.Editor.Tools.CapacityEditor
             CapacityCutsceneStage stage = CreateInstance<CapacityCutsceneStage>();
             stage.capacity = capacity;
             StageUtility.GoToStage(stage, true);
+        }
+
+        // After a domain reload (recompile) the stage SO is reserialized: the
+        // [SerializeField] fields survive, but Current and the non-serialized derived
+        // state (rig, context, timeline lock) are lost while the visual stage remains —
+        // which is why the window thinks we left edit mode. Rebuild the derived state.
+        private void OnEnable()
+        {
+            if (stageInstance == null || !scene.IsValid())
+                return;
+
+            Current = this;
+
+            if (rig == null)
+                rig = FindRigInScene();
+
+            ConnectElements();
+            CapacityAutoBinder.RebindAll(Director, rig);
+            OpenAndLockTimeline();
+        }
+
+        private DebugCutsceneRig FindRigInScene()
+        {
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                DebugCutsceneRig found = root.GetComponentInChildren<DebugCutsceneRig>(true);
+                if (found != null)
+                    return found;
+            }
+            return null;
         }
 
         protected override bool OnOpenStage()
@@ -241,17 +265,20 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 EditorGUIUtility.IconContent("d_UnityEditor.Timeline.TimelineWindow").image);
         }
 
+        // Resolve the prefab asset root that the capacity references, WITHOUT walking up
+        // the variant chain. GetCorrespondingObjectFromSource climbs one step toward the
+        // base prefab, so for a VARIANT it returns the template — which would make the
+        // stage instantiate the template instead of the variant. Loading the asset at
+        // the referenced object's own path returns the correct root, variant included.
         private static GameObject ResolvePrefabRoot(PlayableDirector director)
         {
-            GameObject go = director.gameObject;
+            if (director == null)
+                return null;
 
-            GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(go);
-            if (source != null)
-                go = source;
-
-            string path = AssetDatabase.GetAssetPath(go);
+            // Path of the asset the reference actually lives in (the variant itself).
+            string path = AssetDatabase.GetAssetPath(director);
             if (string.IsNullOrEmpty(path))
-                path = AssetDatabase.GetAssetPath(director);
+                path = AssetDatabase.GetAssetPath(director.gameObject);
 
             if (string.IsNullOrEmpty(path))
                 return null;
