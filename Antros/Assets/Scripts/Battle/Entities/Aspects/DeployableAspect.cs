@@ -4,6 +4,7 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Aspects
@@ -18,6 +19,7 @@ namespace ATCG.Battle.Entities.Aspects
         public struct Setup
         {
             public EntityAddress caster;
+            public DeployableData data;
             public HexCoordinates coordinates;
             public BattleGrid grid;
             public BattleID battleID;
@@ -28,7 +30,7 @@ namespace ATCG.Battle.Entities.Aspects
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
         {
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
-            componentsFactory.DeployableEntityTag = new DeployableEntityTag(setup.caster);
+            componentsFactory.DeployableEntityTag = new DeployableEntityTag(setup.caster, setup.data);
             
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);

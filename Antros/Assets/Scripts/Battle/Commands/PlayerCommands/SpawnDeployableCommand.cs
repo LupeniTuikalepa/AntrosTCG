@@ -51,6 +51,7 @@ namespace ATCG.Battle.Commands.EntityCommands
                 new DeployableAspect.Setup()
                 {
                     caster = caster,
+                    data = data,
                     coordinates = Destination,
                     grid = context.Grid,
                     battleID = BattleID.CreateNew()

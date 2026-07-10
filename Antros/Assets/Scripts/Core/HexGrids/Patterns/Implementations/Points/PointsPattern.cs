@@ -14,7 +14,7 @@ namespace ATCG.HexGrids.Patterns
         public IEnumerable<HexCoordinates> GetAll(HexCoordinates from, IHexPatternController controller)
         {
             for (int i = 0; i < points.Length; i++)
-                yield return from + points[i];
+                yield return points[i];
         }
     }
 }

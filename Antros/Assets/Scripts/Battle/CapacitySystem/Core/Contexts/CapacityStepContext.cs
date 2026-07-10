@@ -17,6 +17,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         public BattlePhase BattlePhase => capacityPhase.battlePhase;
         public CapacityData Data => capacityPhase.data;
         public HexCoordinates CastPoint => capacityPhase.castPoint;
+        public HexCoordinates CasterOrigin => capacityPhase.CasterOrigin;
         public EntityAddress Caster => capacityPhase.caster;
         public BattleGrid BattleGrid => capacityPhase.battlePhase.BattleGrid;
 
