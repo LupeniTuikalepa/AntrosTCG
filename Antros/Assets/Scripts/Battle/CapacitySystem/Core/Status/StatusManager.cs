@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Threading;
+using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.CapacitySystem.Core.Status.Signals;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
@@ -12,6 +15,57 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public static class StatusManager
     {
+        private readonly struct FinishedStatusControllerIterator : IStatusControllerIterator
+        {
+            private readonly StatusContext statusContext;
+            private readonly List<ComponentRef<StatusTag>> statusToRemove;
+
+            public FinishedStatusControllerIterator(StatusContext statusContext, List<ComponentRef<StatusTag>> statusToRemove)
+            {
+                this.statusContext = statusContext;
+                this.statusToRemove = statusToRemove;
+            }
+
+            public void Process<T>() where T : struct, IStatusController
+            {
+                foreach (ComponentRef<T> controller in statusContext.World.Query<T>())
+                {
+                    ref var controllerComponent = ref controller.GetValue();
+                    if (controllerComponent.IsFinished() && controller.EntityAddress.TryGetComponent<StatusTag>(out var tag))
+                        statusToRemove.Add(tag);
+                }
+            }
+        }
+        private readonly struct FinishedStatusControllerOnEntityIterator : IStatusControllerIterator
+        {
+            private readonly EntityAddress target;
+            private readonly StatusContext statusContext;
+            private readonly List<ComponentRef<StatusTag>> statusToRemove;
+
+            public FinishedStatusControllerOnEntityIterator(StatusContext statusContext, List<ComponentRef<StatusTag>> statusToRemove, EntityAddress target)
+            {
+                this.statusContext = statusContext;
+                this.statusToRemove = statusToRemove;
+                this.target = target;
+            }
+
+            public void Process<T>() where T : struct, IStatusController
+            {
+                if (target.TryGetComponent<StatusReceiver>(out var statusReceiverRef))
+                {
+                    foreach (var statusRef in statusReceiverRef.GetValue().AllStatus)
+                    {
+                        if (!statusRef.EntityAddress.TryGetComponent<T>(out var controller))
+                            continue;
+
+                        ref var controllerComponent = ref controller.GetValue();
+                        if (controllerComponent.IsFinished() &&
+                            controller.EntityAddress.TryGetComponent<StatusTag>(out var tag))
+                            statusToRemove.Add(tag);
+                    }
+                }
+            }
+        }
 
         public static bool HasStatusWithData<T>(this EntityAddress address) where T : StatusData
         {
@@ -28,108 +82,43 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             return false;
         }
 
-        public static void RemoveAllFinishedStatus()
-        {
-            
-        }
-        /*
-        public static void Tick<TStatus>(EntityAddress address, StatusContext statusContext) where TStatus : struct, IStatusComponent
-        {
-            if (address.TryGetComponent<TStatus>(out var componentRef))
-            {
-                ref var component = ref componentRef.GetValue();
-                component.Trigger(address, statusContext.battlePhase);
 
-                var tickStatusSignal = new StatusSignal(address, StatusAction.Tick, component.StatusData);
-                tickStatusSignal.Run(statusContext.battlePhase);
-            }
-        }
-
-        private static bool IsFinished<TStatus, TController>(EntityAddress address)
-            where TStatus : struct, IStatusComponent
-            where TController : struct, IStatusController<TStatus>
+        public static void RemoveAllFinishedStatus(in StatusContext statusContext, EntityAddress target)
         {
-            if (address.TryGetComponent<TController>(out var componentRef))
+            using (ListPool<ComponentRef<StatusTag>>.Get(out var statusToRemove))
             {
-                ref TController component = ref componentRef.GetValue();
-                if (componentRef.EntityAddress.TryGetComponent<TStatus>(out var statusRef))
-                    if (component.IsFinished(statusRef))
-                        return true;
-            }
-            return false;
-        }
+                FinishedStatusControllerOnEntityIterator finishedStatusControllerIterator = new(statusContext, statusToRemove, target);
 
-        public static void ApplyStatus<TStatus, TController>(this EntityAddress address, TStatus status, TController controller, StatusContext statusContext)
-            where TStatus : struct, IStatusComponent
-            where TController : struct, IStatusController
-        {
-            if (address.TryGetComponent<StatusReceiver>(out var receiverRef))
-            {
-                ref StatusReceiver statusReceiver = ref receiverRef.GetValue();
-                if (statusReceiver.TryGetStatus<TStatus>(out var statusRef))
+                finishedStatusControllerIterator.ForeachStatusController();
+
+                foreach (var statusRef in statusToRemove)
                 {
-                    statusRef.GetValue().Trigger();
+                    StatusTag statusTag = statusRef.GetValue();
+                    StatusRemoveCommand statusRemoveCommand = new StatusRemoveCommand(target, statusTag.data);
+                    statusRemoveCommand.Run(statusContext.battlePhase);
                 }
-
-                Entity entity = address.entity;
-
-                address.AddOrSetComponent(status);
-                address.AddOrSetComponent(controller);
-
-                var removeStatusSignal = new StatusSignal(address, StatusAction.Apply, status.StatusData);
-                removeStatusSignal.Run(statusContext.battlePhase);
-
             }
         }
 
-        public static void RemoveStatus<TStatus>(this EntityAddress address, EntityAddress entityAddress,
-	        StatusContext statusContext)
-            where TStatus : struct, IStatusComponent
+        public static void RemoveAllFinishedStatus(in StatusContext statusContext)
         {
-            if (address.TryGetComponentRO<StatusInfos<TStatus>>(out var component))
+            using (ListPool<ComponentRef<StatusTag>>.Get(out var statusToRemove))
             {
-                address.RemoveAll(component.componentMask);
-                address.RemoveComponent<StatusInfos<TStatus>>();
+                FinishedStatusControllerIterator finishedStatusControllerIterator =
+                    new FinishedStatusControllerIterator(statusContext, statusToRemove);
 
-                var removeStatusSignal = new StatusSignal(address, StatusAction.Remove, component.statusData);
-                removeStatusSignal.Run(statusContext.battlePhase);
-            }
-        }
+                finishedStatusControllerIterator.ForeachStatusController();
 
-        public static void UpdateAllStatusController<TStatus, TController>(StatusContext statusContext)
-            where TStatus : struct, IStatusComponent
-            where TController : struct, IStatusController<TStatus>
-        {
-            using (ListPool<EntityAddress>.Get(out var list))
-            {
-                foreach (var componentRef in statusContext.battlePhase.world.Query<TController>())
+                foreach (var statusRef in statusToRemove)
                 {
-                    ref TController component = ref componentRef.GetValue();
-                    if (componentRef.EntityAddress.TryGetComponent<TStatus>(out var statusRef))
-                    {
-                        if(component.IsFinished(statusRef))
-                            list.Add(componentRef.EntityAddress);
-                    }
-                }
+                    StatusTag statusTag = statusRef.GetValue();
 
-                foreach (var address in list)
-                {
-                    address.RemoveStatus<TStatus>(address,statusContext);
+                    EntityAddress target = new EntityAddress(statusContext.World, statusTag.targetEntity);
+                    StatusRemoveCommand statusRemoveCommand = new StatusRemoveCommand(target, statusTag.data);
+                    statusRemoveCommand.Run(statusContext.battlePhase);
                 }
-
             }
         }
 
-        public static void ProcessAllStatus<TStatus>(StatusContext statusContext) where TStatus : struct, IStatusComponent
-        {
-            var world = statusContext.battlePhase.world;
-            foreach (var entity in world.Query(EntityQuery.With<TStatus>()))
-            {
-                EntityAddress address = new EntityAddress(world, entity);
-                Tick<TStatus>(address, statusContext);
-            }
-	        UpdateAllStatusController<TStatus, StatusDurationController<TStatus>>(statusContext);
-        }
-        */
     }
 }

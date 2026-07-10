@@ -15,6 +15,10 @@ namespace ATCG.Battle.Entities
 
         public bool IsValid => world != null && entity.id != -1;
 
+        public EntityAddress(Entity entity, World world) : this(world, entity)
+        {
+
+        }
         public EntityAddress(World world, Entity entity)
         {
             this.world = world;

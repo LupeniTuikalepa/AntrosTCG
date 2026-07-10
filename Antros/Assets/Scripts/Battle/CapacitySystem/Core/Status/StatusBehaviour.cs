@@ -69,7 +69,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 Entity statusEntity = world.CreateEntity(target);
                 EntityAddress statusEntityAddress = new EntityAddress(world, statusEntity);
 
-                world.AddOrSetComponent(statusEntityAddress, new StatusTag(data, ComponentID<TComponent>.ID, ComponentID<TController>.ID));
+                StatusTag statusTag = new StatusTag(data, ComponentID<TComponent>.ID, ComponentID<TController>.ID, target);
+                world.AddOrSetComponent(statusEntityAddress, statusTag);
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusComponent(data, context));
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusController(data, context));
 
@@ -109,7 +110,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         void IStatus<TData>.Tick(TData data, EntityAddress target, StatusContext context)
         {
+            OnTick(data, target, context);
 
+            //Only checking for the target to avoid non-necessary queries
+            StatusManager.RemoveAllFinishedStatus(context, target);
         }
 
         protected abstract TComponent CreateStatusComponent(TData data, in StatusContext context);
@@ -131,7 +135,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         }
 
-        protected virtual void OnTick(TData data, in EntityStatusInfos statusInfos, in StatusContext context)
+        protected virtual void OnTick(TData data, EntityAddress target, StatusContext context)
         {
 
         }

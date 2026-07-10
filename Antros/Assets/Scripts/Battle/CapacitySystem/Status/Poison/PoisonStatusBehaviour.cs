@@ -14,12 +14,12 @@ namespace ATCG.Battle.Entities.Components.Implementations
             return new StatusDurationController(data.Duration);
         }
 
-        protected override void OnTick(PoisonStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
+        protected override void OnTick(PoisonStatusData data, EntityAddress target, StatusContext context)
         {
-            DamageCommand damageCommand = new DamageCommand(data.Damage, statusInfos.targetAddress);
+            DamageCommand damageCommand = new DamageCommand(data.Damage, target);
             damageCommand.Run(context.battlePhase);
-            
-            base.OnTick(data, in statusInfos, in context);
+
+            base.OnTick(data, target, context);
         }
 
         protected override void OnStack(PoisonStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
