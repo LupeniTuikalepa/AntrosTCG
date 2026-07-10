@@ -5,6 +5,6 @@ namespace ATCG.Battle.Players.Local.Phases
 {
     public interface IPathGenerator
     {
-        IEnumerable<HexCoordinates> GetPathBetween(HexCoordinates a, HexCoordinates b, PathGenerationContext context);
+        IEnumerable<HexCoordinates> GetPathBetween(HexCoordinates a, HexCoordinates b, HexCoordinates heroCoordinates, PathGenerationContext context);
     }
 }

@@ -37,14 +37,16 @@ namespace ATCG.Battle.Commands.EntityCommands
         private readonly IBattlePlayer player;
         private readonly DeployableData data;
         private readonly BattleCellAspect cell;
-        
+        private readonly EntityAddress caster;
+
         private HexCoordinates Destination => cell.Coordinate;
 
-        public SpawnDeployableCommand(IBattlePlayer player, DeployableData data, BattleCellAspect cell) : base(player)
+        public SpawnDeployableCommand(IBattlePlayer player, DeployableData data, BattleCellAspect cell, EntityAddress caster) : base(player)
         {
             this.player = player;
             this.data = data;
             this.cell = cell;
+            this.caster = caster;
         }
 
         protected override void Process(in CommandContext context)
@@ -52,6 +54,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             DeployableAspect deployableAspect = DeployableAspect.CreateAspect(context.World,
                 new DeployableAspect.Setup()
                 {
+                    caster = caster,
                     coordinates = Destination,
                     grid = context.Grid,
                     battleID = BattleID.CreateNew()

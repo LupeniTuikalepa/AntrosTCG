@@ -106,7 +106,7 @@ namespace ATCG.Battle.Players.Local.Phases
                     EntityAddress entityAddress = result[j];
                     if (entityAddress.TryGetComponentRO(out GridMemberComponent gridMemberComponent))
                     {
-                        IEnumerable<HexCoordinates> pathBetween = PathGenerator.GetPathBetween(center, gridMemberComponent.coordinates, new PathGenerationContext(BattleGrid));
+                        IEnumerable<HexCoordinates> pathBetween = PathGenerator.GetPathBetween(center, gridMemberComponent.coordinates, StartingPoint, new PathGenerationContext(BattleGrid));
                         foreach (HexCoordinates coord in pathBetween)
                         {
                             if (center != coord)
@@ -140,7 +140,7 @@ namespace ATCG.Battle.Players.Local.Phases
             if (address.TryGetComponentRO(out GridMemberComponent gridMemberComponent))
             {
                 TemporaryPath.Clear();
-                TemporaryPath.AddRange(PathGenerator.GetPathBetween(CurrentPath[^1], gridMemberComponent.coordinates, new PathGenerationContext(BattleGrid)));
+                TemporaryPath.AddRange(PathGenerator.GetPathBetween(CurrentPath[^1], gridMemberComponent.coordinates, StartingPoint, new PathGenerationContext(BattleGrid)));
                 OnPathChanged?.Invoke(this);
             }
         }

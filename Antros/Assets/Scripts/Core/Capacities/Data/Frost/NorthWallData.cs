@@ -10,7 +10,7 @@ namespace ATCG.Capacities.Frost
     public partial class NorthWallData : CapacityData
     {
         [field: SerializeField, BoxGroup("Custom")]
-        public int Radius { get; private set; }
+        public int Size { get; private set; }
         
         [field: SerializeField, BoxGroup("Custom")]
         public DeployableData DeployableData { get; private set; }

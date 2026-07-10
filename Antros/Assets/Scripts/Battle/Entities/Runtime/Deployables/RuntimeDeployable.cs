@@ -2,6 +2,7 @@
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
+using ATCG.HexGrids.Utility;
 using Helteix.Tools;
 using PrimeTween;
 using Sirenix.OdinInspector;
@@ -14,16 +15,12 @@ namespace ATCG.Battle.Entities.Runtime.Deployables
 {
     public partial class RuntimeDeployable : RuntimeEntity<DeployableAspect>
     {
-        [SerializeField, BoxGroup("UI")]
-        private TMP_Text deployableName;
-
         [field: SerializeField, BoxGroup("GameFeel"),]
         public Animator Animator { get; private set; }
         
         public override async Awaitable Spawn(RuntimeEntityManager manager, DeployableAspect aspect)
         {
             await base.Spawn(manager, aspect);
-            deployableName.text = "Deployable"; //TODO replace with DeployableName
 
             manager.RegisterRuntimeEntity(this);
 
@@ -33,6 +30,15 @@ namespace ATCG.Battle.Entities.Runtime.Deployables
 
                 Tween.StopAll(transform);
                 await Tween.PunchScale(transform, Vector3.one * -2, .25f);
+            }
+
+            if (manager.TryGetRuntimeEntity(aspect.DeployableEntityTag.caster, out var runtimeEntity))
+            {
+                HexOperations.ComputeQuaternion(
+                                    transform.position,
+                                    runtimeEntity.transform.position,
+                                    out var deployableTargetRotation);
+                await Tween.Rotation(transform, deployableTargetRotation, 0, Ease.InOutQuint);
             }
         }
 

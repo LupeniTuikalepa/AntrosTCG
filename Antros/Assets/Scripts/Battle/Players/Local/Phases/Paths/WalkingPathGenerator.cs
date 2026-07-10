@@ -10,12 +10,12 @@ namespace ATCG.Battle.Players.Local.Phases
     {
         private const int MAX_STEPS = 10000;
 
-        public IEnumerable<HexCoordinates> GetPathBetween(HexCoordinates a, HexCoordinates b, PathGenerationContext context)
+        public IEnumerable<HexCoordinates> GetPathBetween(HexCoordinates a, HexCoordinates b, HexCoordinates heroCoordinates, PathGenerationContext context)
         {
             using var hexPathfinder = new HexPathfinder(MAX_STEPS);
             using (ListPool<HexCoordinates>.Get(out var path))
             {
-                hexPathfinder.TryFindPath(a, b, path, context.battleGrid);
+                hexPathfinder.TryFindPath(a, b, heroCoordinates, path, context.battleGrid);
 
                 foreach (var coord in path)
                 {
