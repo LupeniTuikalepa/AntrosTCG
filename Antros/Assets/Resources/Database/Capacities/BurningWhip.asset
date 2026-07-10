@@ -18,9 +18,11 @@ MonoBehaviour:
   <Element>k__BackingField: 1
   <Description>k__BackingField: 
   <CastPatterns>k__BackingField:
-    <Data>k__BackingField: []
-  <CutsceneDirector>k__BackingField: {fileID: 0}
+    <Data>k__BackingField:
+    - rid: 579207565952942204
+  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 317788607505f54478d7f678ef03cbdd, type: 3}
   <PropertyDefinitions>k__BackingField: []
+  <Status>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}
   <Range>k__BackingField: 5
   <Damage>k__BackingField: 1
   <BurningWhipStepData>k__BackingField:
@@ -28,4 +30,13 @@ MonoBehaviour:
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 579207565952942204
+      type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 6
