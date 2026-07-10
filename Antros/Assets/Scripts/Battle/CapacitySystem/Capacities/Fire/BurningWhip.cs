@@ -23,7 +23,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
 			HexPatternBuilder builder = new HexPatternBuilder(casterOrigin, hexPatternController)
-				.With(new TridentPattern(castPoint, data.Range), casterOrigin)
+				.With(new TridentPattern(castPoint, data.TridentPatternData), casterOrigin)
 				.Without(casterOrigin);
 
 			return builder;

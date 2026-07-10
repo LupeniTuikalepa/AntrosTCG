@@ -25,6 +25,15 @@ MonoBehaviour:
   <Status>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}
   <Range>k__BackingField: 5
   <Damage>k__BackingField: 1
+  <TridentPatternData>k__BackingField:
+    <IsAdditive>k__BackingField: 1
+    <OverridePatternOrigin>k__BackingField: 0
+    <Offset>k__BackingField:
+      <X>k__BackingField: 0
+      <Y>k__BackingField: 0
+    <Range>k__BackingField: 5
+    <BranchCount>k__BackingField: 6
+    <AngleStepDegrees>k__BackingField: 106
   <BurningWhipStepData>k__BackingField:
     <StepName>k__BackingField: 
     <QTEsCount>k__BackingField: 0
@@ -39,4 +48,4 @@ MonoBehaviour:
         <Offset>k__BackingField:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
-        <Distance>k__BackingField: 6
+        <Distance>k__BackingField: 1

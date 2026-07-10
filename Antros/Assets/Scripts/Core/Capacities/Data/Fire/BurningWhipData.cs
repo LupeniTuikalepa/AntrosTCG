@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ATCG.Capacities.Attributs;
+using ATCG.HexGrids.Patterns;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,5 +18,8 @@ namespace ATCG.Capacities.Data.Fire
 
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Damage { get; private set; }
+		
+		[field: SerializeField, BoxGroup("Custom")]
+		public TridentPatternData TridentPatternData { get; private set; }
 	}
 }
