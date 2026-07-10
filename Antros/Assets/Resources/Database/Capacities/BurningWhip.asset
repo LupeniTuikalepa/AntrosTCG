@@ -32,8 +32,8 @@ MonoBehaviour:
       <X>k__BackingField: 0
       <Y>k__BackingField: 0
     <Range>k__BackingField: 5
-    <BranchCount>k__BackingField: 6
-    <AngleStepDegrees>k__BackingField: 106
+    <BranchCount>k__BackingField: 1
+    <AngleStepDegrees>k__BackingField: 90
   <BurningWhipStepData>k__BackingField:
     <StepName>k__BackingField: 
     <QTEsCount>k__BackingField: 0
