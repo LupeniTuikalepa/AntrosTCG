@@ -15,8 +15,5 @@ namespace ATCG.Capacities.Frost
         
         [field: SerializeField, BoxGroup("Custom")]
         public int PushbackMultiplier { get; private set; }
-        
-        [field: SerializeField, BoxGroup("Custom")]
-        public DeployableData Breakable { get; private set; }
     }
 }

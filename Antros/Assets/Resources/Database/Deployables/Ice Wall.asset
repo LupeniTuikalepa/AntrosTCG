@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ice Wall
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Frost.IceWallData
   guidText: 1b8baefa-d893-485f-8384-314baab14705
-  <Prefab>k__BackingField: {fileID: 5326741636448155759, guid: a2769d030ebd7524385473d7ecd1dafa, type: 3}
+  <Prefab>k__BackingField: {fileID: 2995692861963575999, guid: a8e5648ff73b4ff448d8341b284412ae, type: 3}
   <Health>k__BackingField: 5

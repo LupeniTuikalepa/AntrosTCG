@@ -20,7 +20,6 @@ namespace ATCG.Battle.Commands.EntityCommands
             public readonly DeployableAspect deployable;
             public readonly BattleGrid grid;
 
-            public HexCoordinates Destination => cell.Coordinate;
             public Infos(DeployableData data, BattleCellAspect cell, DeployableAspect deployable, BattleGrid grid)
             {
                 this.data = data;

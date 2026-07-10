@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcedfa8a9ac4ab4a98f7729ed0a7065, type: 3}
+  m_Name: Build Boiler
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.BuildBoilerData
+  guidText: acb2f08f-12e8-4834-bd28-35dc2775895c
+  <Cost>k__BackingField: 0
+  <Name>k__BackingField: Build Boiler
+  <Element>k__BackingField: 1
+  <Description>k__BackingField: 
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 7630467998984700067
+  <CutsceneDirector>k__BackingField: {fileID: 8403043067648630360, guid: 1701fb3803fa7b147843acf91221272e, type: 3}
+  <PropertyDefinitions>k__BackingField: []
+  <DeployableData>k__BackingField: {fileID: 11400000, guid: f0561dde28b60d14d9fb9f142ce9c3f1, type: 2}
+  <BuildStepData>k__BackingField:
+    <StepName>k__BackingField: 
+    <QTEsCount>k__BackingField: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7630467998984700067
+      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 2
