@@ -8,6 +8,7 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using Helteix.ChanneledProperties;
+using Helteix.Tools.DataMapping;
 using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Berserk
@@ -31,15 +32,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 
             private void Trigger()
             {
-                Debug.Log("Trigger");
                 volatileControllerRef.GetValue().Trigger();
             }
         }
 
         public readonly ChannelKey channelKey;
         public StatusData StatusData { get; }
-
-
         public BerserkWatcher Watcher { get; private set; }
 
         public BerserkStatusComponent(BerserkStatusData data, ChannelKey channelKey)
@@ -51,7 +49,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 
         public void Watch(EntityAddress target, ComponentRef<StatusVolatileController> volatileControllerRef)
         {
-            Debug.Log("Begin watching");
             Watcher?.UnregisterWatcher();
             Watcher = new BerserkWatcher(target, volatileControllerRef);
             Watcher.RegisterWatcher();

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Core.Status
 {
-    public abstract class StatusBehaviour<TData, TController> : StatusBehaviour<TData, DefaultStatusComponent<TData>, TController>
+    public abstract class Status<TData, TController> : Status<TData, DefaultStatusComponent<TData>, TController>
         where TData : StatusData
         where TController : struct, IStatusController
     {
@@ -15,7 +15,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
         }
     }
 
-    public abstract class StatusBehaviour<TData, TComponent, TController> : IStatus<TData>
+    public abstract class Status<TData, TComponent, TController> : IStatus<TData>
         where TData : StatusData
         where TComponent : struct, IStatusComponent
         where TController : struct, IStatusController
@@ -103,6 +103,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             if (statusReceiver.Has<TData>(out var statusTagRef))
             {
                 EntityAddress statusAddress = statusTagRef.EntityAddress;
+                EntityStatusInfos statusInfos = GetInfosFromTag(statusTagRef, in context);
+                OnRemove(data, in statusInfos, in context);
+
                 statusReceiver.UnregisterStatus(statusTagRef);
                 context.World.DestroyEntity(statusAddress.entity);
             }
@@ -110,16 +113,30 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         void IStatus<TData>.Tick(TData data, EntityAddress target, StatusContext context)
         {
-            OnTick(data, target, context);
+            if (target.HasStatusWithData<TData>(out ComponentRef<StatusTag> statusTagRef))
+            {
+                EntityStatusInfos statusInfos = GetInfosFromTag(statusTagRef, in context);
+                OnTick(data, in statusInfos, in context);
 
-            //Only checking for the target to avoid non-necessary queries
-            StatusManager.RemoveAllFinishedStatus(context, target);
+                //Only checking for the target to avoid non-necessary queries
+                StatusManager.RemoveAllFinishedStatus(context, target);
+            }
         }
 
         protected abstract TComponent CreateStatusComponent(TData data, in StatusContext context);
         protected abstract TController CreateStatusController(TData data, in StatusContext context);
 
 
+        private EntityStatusInfos GetInfosFromTag(ComponentRef<StatusTag> tagRef, in StatusContext context)
+        {
+            return new EntityStatusInfos()
+            {
+                targetAddress = new EntityAddress(tagRef.GetValue().targetEntity, context.World),
+                statusAddress = tagRef.EntityAddress,
+                statusComponentRef = tagRef.EntityAddress.GetComponentRef<TComponent>(),
+                statusControllerRef = tagRef.EntityAddress.GetComponentRef<TController>(),
+            };
+        }
         protected virtual void OnApply(TData data, in EntityStatusInfos statusInfos, in StatusContext context)
         {
 
@@ -135,7 +152,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         }
 
-        protected virtual void OnTick(TData data, EntityAddress target, StatusContext context)
+        protected virtual void OnTick(TData data, in EntityStatusInfos statusInfos, in StatusContext context)
         {
 
         }

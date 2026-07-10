@@ -64,17 +64,21 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
         }
 
         public static bool HasStatusWithData<T>(this EntityAddress address) where T : StatusData
+            => HasStatusWithData<T>(address, out _);
+
+        public static bool HasStatusWithData<T>(this EntityAddress address, out ComponentRef<StatusTag> tag) where T : StatusData
         {
             if (address.TryGetComponentRO(out StatusReceiver statusReceiver))
             {
                 foreach (ComponentRef<StatusTag> statusTagRef in statusReceiver.AllStatus)
                 {
+                    tag = statusTagRef;
                     StatusTag statusTag = statusTagRef.GetValue();
                     if(statusTag.data is T)
                         return true;
                 }
             }
-
+            tag = default;
             return false;
         }
 

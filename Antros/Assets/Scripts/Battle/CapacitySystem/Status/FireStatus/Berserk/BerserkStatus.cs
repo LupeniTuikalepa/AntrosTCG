@@ -8,10 +8,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Berserk
 {
-	public partial class BerserkStatusBehaviour : StatusBehaviour<
-		BerserkStatusData,
-		BerserkStatusComponent,
-		StatusVolatileController>
+	public partial class BerserkStatus : Status<BerserkStatusData, BerserkStatusComponent, StatusVolatileController>
 	{
 		protected override BerserkStatusComponent CreateStatusComponent(BerserkStatusData data, in StatusContext context)
 		{

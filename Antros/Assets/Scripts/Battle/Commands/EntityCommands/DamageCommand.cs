@@ -1,9 +1,7 @@
-﻿using ATCG.Battle.CapacitySystem.Status.Berserk;
-using ATCG.Battle.Commands.Entities;
+﻿using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Status;
 using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands

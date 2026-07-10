@@ -1,13 +1,11 @@
 ﻿using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.CapacitySystem.Core.Status.Commands;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
 using ATCG.Capacities.Frost;
 using ATCG.HexGrids;
-using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Arc;
 using ATCG.HexGrids.Patterns.Building;
 

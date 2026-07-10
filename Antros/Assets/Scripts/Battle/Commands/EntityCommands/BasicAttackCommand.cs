@@ -1,9 +1,6 @@
 using ATCG.Battle.Commands.Entities;
-using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components.Implementations;
-using ATCG.Metrics;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {

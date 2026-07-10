@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Grids;
 using ATCG.HexGrids;
-using UnityEngine.Pool;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {

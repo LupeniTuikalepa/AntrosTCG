@@ -5,9 +5,6 @@ using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
-using ATCG.Battle.Players.UI;
-using ATCG.UI;
-using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
