@@ -1,8 +1,6 @@
 ﻿using System;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Entities.Components;
 
-namespace ATCG.Battle.Commands.Trace
+namespace ATCG.Battle.Commands
 {
     /// <summary>
     /// Neutral observation surface for the command pipeline, living in the runtime

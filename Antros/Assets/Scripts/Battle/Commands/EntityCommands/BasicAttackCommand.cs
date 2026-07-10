@@ -1,4 +1,4 @@
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
@@ -32,7 +32,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 		protected override void Process(in CommandContext context)
 		{
 			DamageCommand command = new DamageCommand(strength, victim.ToAddress(context.World));
-			Embed(in context, command);
+			Inject(in context, command);
 		}
 	}
 }

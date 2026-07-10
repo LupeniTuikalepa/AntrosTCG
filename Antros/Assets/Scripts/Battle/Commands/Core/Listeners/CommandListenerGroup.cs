@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+﻿using System.Collections.Generic;
 using Helteix.Tools;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Players
+namespace ATCG.Battle.Commands.Listeners
 {
-
-    public interface ICommandListenerGroup : IDisposable
-    {
-        /// <summary>
-        /// Start command player execution with the given context
-        /// </summary>
-        /// <param name="context">Execution context for the command</param>
-        Awaitable Run(CommandContext context);
-    }
-
     /// <summary>
     /// Temporary grouping of player that will react to a specific command type.
     /// Used as a cache way to group command player by the types of command they listen to.
@@ -73,7 +60,5 @@ namespace ATCG.Battle.Commands.Players
             foreach (ICommandListener<T> player in players)
                 player.OnEnd(state, context, command);
         }
-
-
     }
 }

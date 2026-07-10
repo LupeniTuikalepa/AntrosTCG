@@ -1,6 +1,6 @@
 ﻿using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;

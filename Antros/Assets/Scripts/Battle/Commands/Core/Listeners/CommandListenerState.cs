@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
 using Helteix.Tools;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Players
+namespace ATCG.Battle.Commands.Listeners
 {
     public readonly struct CommandListenerState : IDisposable
     {

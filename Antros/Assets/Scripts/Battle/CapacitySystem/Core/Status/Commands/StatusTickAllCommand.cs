@@ -1,4 +1,4 @@
-﻿using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;

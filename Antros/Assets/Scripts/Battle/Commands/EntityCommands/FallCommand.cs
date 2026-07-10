@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
@@ -28,7 +28,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 			{
 				if (!gridMemberComponent.grid.TryGetBattleCell(gridMemberComponent.coordinates, out _))
 				{
-					Embed(in context, new DeathCommand(address));
+					Inject(in context, new DeathCommand(address));
 				}
 			}
 		}

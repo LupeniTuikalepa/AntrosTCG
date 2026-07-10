@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.Cards;
 using ATCG.Battle.Cards.UI;
-using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Grids;

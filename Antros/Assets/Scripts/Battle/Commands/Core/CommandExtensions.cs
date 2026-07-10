@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using ATCG.Battle.Entities.Components;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands
 {
     public static class CommandExtensions
     {

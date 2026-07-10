@@ -1,6 +1,7 @@
-﻿using ATCG.Battle.Entities;
+﻿using ATCG.Battle.Commands.Listeners;
+using ATCG.Battle.Entities;
 
-namespace ATCG.Battle.Commands.Core.Players
+namespace ATCG.Battle.Commands.Entities
 {
     public interface IEntityCommandListener<in T> : ICommandListener<T> where T : IEntityCommand
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Players;
 using UnityEngine;
 

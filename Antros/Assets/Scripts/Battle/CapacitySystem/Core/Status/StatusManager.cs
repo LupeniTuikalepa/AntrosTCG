@@ -1,6 +1,5 @@
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Status.Signals;
-using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;

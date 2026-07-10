@@ -1,18 +1,12 @@
-﻿using ATCG.Battle;
-using ATCG.Battle.CapacitySystem.Core.Status.Commands;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.EntityCommands;
+﻿using ATCG.Battle.CapacitySystem.Core.Status.Commands;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Entities.Runtime.Heroes;
 using ATCG.Battle.GameModes;
-using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.Phases.Listeners;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ATCG.Debugging.Debugging.Gameplay
 {

@@ -73,6 +73,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusComponent(data, context));
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusController(data, context));
 
+                if(target.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent))
+                    statusEntityAddress.AddOrSetComponent(new BelongsToPlayerComponent(belongsToPlayerComponent.playerId, belongsToPlayerComponent.playerNumber));
+
                 statusReceiver.RegisterStatus(statusEntityAddress.GetComponentRef<StatusTag>());
 
                 EntityStatusInfos statusInfos = new EntityStatusInfos()

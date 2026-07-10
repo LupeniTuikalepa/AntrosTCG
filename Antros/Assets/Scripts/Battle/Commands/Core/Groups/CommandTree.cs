@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ATCG.Battle.Entities.Components;
 using UnityEngine;
-using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands.Groups
 {
     [Serializable]
     public class CommandTree : ISerializationCallbackReceiver

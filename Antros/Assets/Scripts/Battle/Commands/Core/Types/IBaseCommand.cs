@@ -1,4 +1,4 @@
-﻿namespace ATCG.Battle.Commands.Core
+﻿namespace ATCG.Battle.Commands
 {
     public interface IBaseCommand
     {

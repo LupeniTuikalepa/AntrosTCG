@@ -1,8 +1,7 @@
-﻿using ATCG.Battle.Commands.Core.Players;
-using ATCG.Battle.Commands.Players;
+﻿using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Players;
 
-namespace ATCG.Battle.Commands
+namespace ATCG.Battle.Commands.Players
 {
     public interface IPlayerCommandListener<in T> : ICommandListener<T> where T : IPlayerCommand
     {

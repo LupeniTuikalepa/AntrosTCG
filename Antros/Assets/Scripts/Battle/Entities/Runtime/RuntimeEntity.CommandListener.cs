@@ -1,7 +1,8 @@
 using ATCG.Battle.CapacitySystem.Core.Status.Signals;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Grid;

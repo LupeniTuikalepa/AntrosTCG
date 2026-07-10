@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
@@ -30,7 +30,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             foreach (HexCoordinates coord in path)
             {
                 var moveCommand = new MoveCommand(Target.ToAddress(context), coord);
-                Embed(context, moveCommand);
+                Inject(context, moveCommand);
             }
 
             infos.path = path.ToArray();

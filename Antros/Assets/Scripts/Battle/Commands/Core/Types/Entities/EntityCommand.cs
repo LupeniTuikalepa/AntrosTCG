@@ -3,7 +3,7 @@ using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using UnityEngine;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands.Entities
 {
     [Serializable]
     public abstract class EntityCommand<T> : Command<T>, IEntityCommand

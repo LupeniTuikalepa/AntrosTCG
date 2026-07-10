@@ -6,23 +6,23 @@ namespace ATCG.Battle.Entities.Components.Status
 {
 	public struct StatusDurationController : IStatusController, IStatusTurnController
     {
-        private int remainingTick;
-        public int RemainingTicks => remainingTick;
+        public int RemainingTicks { get; private set; }
 
         public StatusDurationController(int remainingTick)
         {
-            this.remainingTick = remainingTick;
+            this.RemainingTicks = remainingTick;
         }
 
         public void AddOrRemoveTicks(int ticks)
         {
-	        remainingTick += ticks;
+	        RemainingTicks += ticks;
         }
 
         bool IStatusController.IsFinished()
         {
-            return remainingTick <= 0;
+            return RemainingTicks <= 0;
         }
+
 
         void IStatusTurnController.OnTurnStarted()
         {

@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Commands.Core;
+﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Capacities.Data.Status;
@@ -21,7 +22,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
                 EntityAddress target = Target.ToAddress(context.World);
-                
+
                 container.Tick(data, target, statusContext);
             }
         }

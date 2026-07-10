@@ -44,6 +44,8 @@ namespace ATCG.Battle.Entities.Components
             int lastIndex = Count - 1;
             int lastEntityId = denseToEntity[lastIndex];
 
+            dense[index].Dispose();
+
             //Écrase le trou avec le dernier élément
             dense[index] = dense[lastIndex];
             denseToEntity[index] = lastEntityId;

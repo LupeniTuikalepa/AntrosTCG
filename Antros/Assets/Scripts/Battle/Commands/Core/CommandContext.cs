@@ -1,19 +1,14 @@
 using System;
 using System.Collections.Generic;
-using ATCG.Battle.Commands.Core.Players;
-using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.Players;
-using ATCG.Battle.Commands.Trace;
+using ATCG.Battle.Commands.Groups;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
-using UnityEngine;
 using UnityEngine.Pool;
-using Object = UnityEngine.Object;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands
 {
     public readonly struct CommandContext: IDisposable
     {
@@ -23,17 +18,15 @@ namespace ATCG.Battle.Commands.Core
 
         public World World => battlePhase.world;
 
-        private readonly List<ICommandListener> commandListener;
         private readonly Dictionary<ICommand, ICommandListenerGroup> pairings;
         private readonly CommandTree commandTree;
         private readonly BattleID groupID;
 
 
-        public CommandContext(BattlePhase battlePhase, List<ICommandListener> commandListener, CommandTree commandTree, BattleID groupID)
+        public CommandContext(BattlePhase battlePhase, CommandTree commandTree, BattleID groupID)
         {
             pairings = DictionaryPool<ICommand, ICommandListenerGroup>.Get();
             this.battlePhase = battlePhase;
-            this.commandListener = commandListener;
             this.commandTree = commandTree;
             this.groupID = groupID;
         }
@@ -80,9 +73,11 @@ namespace ATCG.Battle.Commands.Core
             CommandListenerGroup<T> group = new(command);
             pairings[command]= group;
             commandTree.AddCommand(command);
-            CommandTrace.ReportCommandRegistered(groupID, command);  // <-- ajoute ceci
 
-            foreach (ICommandListener commandPlayer in commandListener)
+            CommandTrace.ReportCommandRegistered(groupID, command);
+            CommandManager.TriggerWatchers(command);
+
+            foreach (ICommandListener commandPlayer in CommandManager.Listeners)
             {
                 if(commandPlayer is not ICommandListener<T> player)
                     continue;

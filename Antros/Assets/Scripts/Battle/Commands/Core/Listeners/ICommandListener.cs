@@ -1,7 +1,6 @@
-﻿using ATCG.Battle.Commands.Players;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace ATCG.Battle.Commands.Core.Players
+namespace ATCG.Battle.Commands.Listeners
 {
     public interface ICommandListener { }
     public interface ICommandListener<in T> : ICommandListener where T : ICommand
