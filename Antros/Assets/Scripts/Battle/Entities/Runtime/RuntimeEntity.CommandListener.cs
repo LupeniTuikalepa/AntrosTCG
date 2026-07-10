@@ -21,8 +21,7 @@ namespace ATCG.Battle.Entities.Runtime
 		IEntityCommandListener<BasicAttackCommand>,
 		IEntityCommandListener<StatusApplyCommand>,
 		IEntityCommandListener<StatusTickCommand>,
-		IEntityCommandListener<StatusRemoveCommand>
-		IEntityCommandListener<StatusSignal>,
+		IEntityCommandListener<StatusRemoveCommand>,
 		IEntityCommandListener<PushbackCommand>
 
 	{

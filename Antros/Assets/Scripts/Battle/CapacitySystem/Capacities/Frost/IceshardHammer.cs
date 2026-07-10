@@ -1,5 +1,5 @@
 ﻿using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
