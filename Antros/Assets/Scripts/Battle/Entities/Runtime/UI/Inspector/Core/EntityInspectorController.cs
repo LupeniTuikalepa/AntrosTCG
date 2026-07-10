@@ -23,8 +23,21 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
         private CanvasGroup canvasGroup;
 
         [Header("Setting")]
+        [Tooltip("Authored for a 1920x1080 reference resolution; scaled at runtime to the " +
+                 "actual screen size so it stays the same apparent distance on any resolution.")]
         [SerializeField]
         private Vector2 offset;
+
+        // WorldToScreenPoint's base tracking is correct as-is (this World Space canvas is
+        // rendered by a HUD camera calibrated 1:1 with the real screen pixels), so it must
+        // stay untouched. Only `offset` is authored against a fixed 1920x1080 mental model;
+        // it needs to be rescaled to whatever the actual current resolution is, or it reads
+        // as way too large (small screen) or too small (large screen) relative to the panel.
+        private static readonly Vector2 ReferenceResolution = new(1920f, 1080f);
+
+        private Vector2 ScaledOffset => new(
+            offset.x * (Screen.width / ReferenceResolution.x),
+            offset.y * (Screen.height / ReferenceResolution.y));
 
         private RuntimeLocalBattlePlayer runtimeLocalBattlePlayer;
         public Camera OutputCamera => runtimeLocalBattlePlayer.Camera.Component.OutputCamera;
@@ -34,7 +47,7 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
         public EntityInspectorTab OpenedTab => tabs[OpenedTabIndex];
 
         private InspectEntityPhase current;
-        
+
         private List<EntityInspectorTab> activeTabs = new();
 
         private void Awake()
@@ -50,7 +63,7 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
                 Vector3 pos = current.RuntimeEntity.HoveredRoot.position;
                 Vector2 position = OutputCamera.WorldToScreenPoint(pos);
                 canvasGroup.Show(.2f);
-                transform.position = Vector3.Lerp(transform.position, position + offset, Time.deltaTime * 25f);
+                transform.position = Vector3.Lerp(transform.position, position + ScaledOffset, Time.deltaTime * 25f);
             }
         }
 
@@ -104,7 +117,7 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
                 tabContainer.RemoveTab(tab);
             }
 
-            Tween.Position(transform, transform.position - (Vector3)offset, .2f);
+            Tween.Position(transform, transform.position - (Vector3)ScaledOffset, .2f);
 
             base.OnPhaseEnd(phase);
         }

@@ -184,16 +184,12 @@ namespace ATCG.Battle.Players.Local.Phases
             if (!IsWaiting)
                 return;
 
-            if (!IsInPattern(address))
+            if (!IsInPattern(address) || !AcceptsWithRelated(ref address))
             {
                 selection.Clear();
                 IsWaiting = false;
                 return;
             }
-
-            if (!AcceptsWithRelated(ref address))
-                return;
-
 
             selection.Add(address);
             if (selection.Count >= MaxSelectableEntities)

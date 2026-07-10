@@ -18,7 +18,7 @@ public class OutlineSettings : ScriptableObject {
     [Range(0, 5)]
     [Tooltip("The width of the lines in screen space. If 'Resolution Invariant' is disabled, " +
              "this is the width in pixels. Otherwise, it is a relative width.")]
-    public int thickness = 1;
+    public float thickness = 1;
 
     [Tooltip("If enabled, the line width will stay constant regardless of the rendering resolution. " +
              "However, some of the lines may appear blurry.")]
