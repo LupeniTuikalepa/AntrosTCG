@@ -1,10 +1,9 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.CapacitySystem.Status;
-using ATCG.Battle.Entities.Components.Implementations;
+using ATCG.Battle.CapacitySystem.Status.Iterations;
 
 namespace ATCG.Battle.Entities.Components.Status
 {
-	public struct StatusDurationController : IStatusController, IStatusTurnController
+	public struct StatusDurationController : IStatusController, IUpdateControllerOnTurnEnd
     {
         public int RemainingTicks { get; private set; }
 
@@ -24,12 +23,7 @@ namespace ATCG.Battle.Entities.Components.Status
         }
 
 
-        void IStatusTurnController.OnTurnStarted()
-        {
-
-        }
-
-        void IStatusTurnController.OnTurnEnded()
+        void IUpdateControllerOnTurnEnd.Process()
         {
 	        AddOrRemoveTicks(-1);
         }

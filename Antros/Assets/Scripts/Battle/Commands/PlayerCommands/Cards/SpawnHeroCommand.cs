@@ -3,7 +3,6 @@ using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
 using UnityEngine;

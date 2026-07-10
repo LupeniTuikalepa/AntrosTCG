@@ -1,13 +1,13 @@
 ﻿using System;
 using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Iterations;
+using ATCG.Battle.Utilities.Iterations;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.CapacitySystem.Core.Status
 {
 
-    [IteratableComponent]
+    [GenerateIterator]
     public interface IStatus { }
 
     [GenerateContainer]

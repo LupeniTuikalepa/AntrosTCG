@@ -1,9 +1,9 @@
 ﻿using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Iterations;
+using ATCG.Battle.Utilities.Iterations;
 
 namespace ATCG.Battle.CapacitySystem.Core.Status
 {
-    [IteratableComponent]
+    [GenerateComponentIterator]
     public interface IStatusController : IEntityComponent
     {
         public bool IsFinished();

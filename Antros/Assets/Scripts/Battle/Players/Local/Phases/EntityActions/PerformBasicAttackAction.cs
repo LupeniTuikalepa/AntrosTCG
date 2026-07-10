@@ -74,11 +74,6 @@ namespace ATCG.Battle
 	        if(result.Length == 0)
 		        return;
 
-	        if (address.TryGetComponent<StatusVolatileController>(out var berserkStatusComponent))
-	        {
-		        berserkStatusComponent.GetValue().Trigger();
-	        }
-
 	        using (CommandManager.BeginGroup($"[{address.entity.id}] Entity Basic Attack"))
 	        {
 		        //Le player a l'origine de l'action perd de la mana

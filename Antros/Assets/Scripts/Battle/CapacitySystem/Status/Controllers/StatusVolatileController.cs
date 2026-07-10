@@ -1,10 +1,10 @@
 
 using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Capacities.Data.Status;
+using ATCG.Battle.CapacitySystem.Status.Iterations;
 
 namespace ATCG.Battle.Entities.Components.Status
 {
-	public struct StatusVolatileController : IStatusController ,IStatusTurnController
+	public struct StatusVolatileController : IStatusController ,IUpdateControllerOnTurnEnd, IUpdateControllerOnTurnBegin
     {
         private bool destroyOnNextCheck;
         private bool wasTriggered;
@@ -15,13 +15,13 @@ namespace ATCG.Battle.Entities.Components.Status
         bool IStatusController.IsFinished() => destroyOnNextCheck;
 
 
-        void IStatusTurnController.OnTurnStarted()
+        void IUpdateControllerOnTurnBegin.Process()
         {
             if (!wasTriggered)
                 destroyOnNextCheck = true;
         }
 
-        void IStatusTurnController.OnTurnEnded()
+        void IUpdateControllerOnTurnEnd.Process()
         {
             wasTriggered = false;
         }
