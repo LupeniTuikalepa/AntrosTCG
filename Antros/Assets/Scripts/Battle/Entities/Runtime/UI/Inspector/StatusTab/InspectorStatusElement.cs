@@ -1,7 +1,5 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
-using ATCG.Battle.Players.Local.Phases;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

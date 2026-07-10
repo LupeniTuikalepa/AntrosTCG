@@ -6,31 +6,24 @@ namespace ATCG.Battle.Entities.Components.Status
 {
 	public struct StatusVolatileController : IStatusController ,IStatusTurnController
     {
-        private bool destroyOnTurnEnd;
+        private bool destroyOnNextCheck;
+        private bool wasTriggered;
 
-        public StatusVolatileController(bool destroyOnTurnEnd)
-        {
-            this.destroyOnTurnEnd = destroyOnTurnEnd;
-        }
 
-        public void Reset()
-        {
-	        destroyOnTurnEnd =  true;
-        }
+        public void Trigger() => wasTriggered = true;
 
-        public void Trigger() => destroyOnTurnEnd = false;
-
-        bool IStatusController.IsFinished() => destroyOnTurnEnd;
+        bool IStatusController.IsFinished() => destroyOnNextCheck;
 
 
         void IStatusTurnController.OnTurnStarted()
         {
-
+            if (!wasTriggered)
+                destroyOnNextCheck = true;
         }
 
         void IStatusTurnController.OnTurnEnded()
         {
-	        Reset();
+            wasTriggered = false;
         }
     }
 }

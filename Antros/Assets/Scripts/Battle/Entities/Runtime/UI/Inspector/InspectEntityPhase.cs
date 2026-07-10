@@ -1,7 +1,6 @@
 using System.Threading;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
-using Helteix.ChanneledProperties.Conditions;
 using Helteix.ChanneledProperties.Priorities;
 using Helteix.Tools.Phases;
 using UnityEngine;

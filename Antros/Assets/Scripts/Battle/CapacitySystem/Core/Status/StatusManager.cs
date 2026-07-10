@@ -1,14 +1,9 @@
 using System.Collections.Generic;
-using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
-using ATCG.Battle.CapacitySystem.Core.Status.Signals;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Status;
-using ATCG.Battle.Entities.Queries;
 using ATCG.Capacities.Data.Status;
-using Helteix.Tools.DataMapping;
 using UnityEngine;
 using UnityEngine.Pool;
 

@@ -350,9 +350,11 @@ namespace ATCG.Battle.Entities.EditorTools
                     selectedEntityId = -1;
             }
 
-            // Repopulate the component pane only when the selection changed — never on a
-            // plain data tick, so open foldouts stay open.
-            if (selectedEntityId != populatedEntityId)
+            // Repopulate the component pane when the selection changed, or when this
+            // entity's own fingerprint changed since the last snapshot. Foldout state
+            // survives rebuilds via the `expansion` dictionary, so this no longer causes
+            // foldouts to snap shut — it just stops the pane from freezing on stale values.
+            if (selectedEntityId != populatedEntityId || recentlyChanged.Contains(selectedEntityId))
                 RefreshComponents();
         }
 

@@ -1,6 +1,4 @@
-﻿using ATCG.Capacities.Data.Status;
-
-namespace ATCG.Battle.Entities.Runtime.Status
+﻿namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatusAudio : RuntimeStatusComponent
     {

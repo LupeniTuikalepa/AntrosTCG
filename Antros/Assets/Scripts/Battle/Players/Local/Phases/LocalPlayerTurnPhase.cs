@@ -74,6 +74,12 @@ namespace ATCG.Battle.Players.Local.Phases
 
         public void EndTurn()
         {
+            var statusContext = new StatusContext(localPlayerTurn.BattlePhase);
+            TriggerTurnStatusControllerIterator turnControllerIterator = new TriggerTurnStatusControllerIterator(statusContext, false, localPlayerTurn);
+            turnControllerIterator.ForeachStatusTurnController();
+
+            StatusManager.RemoveAllFinishedStatus(in statusContext);
+
             BattleTurn infos = new(turnID, localPlayerTurn.ID);
             SetResult(infos);
         }

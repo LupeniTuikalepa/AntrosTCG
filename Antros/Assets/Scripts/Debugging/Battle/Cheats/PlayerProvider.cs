@@ -7,15 +7,14 @@ using UnityEngine;
 namespace ATCG.Debugging.Debugging.Battle
 {
     public class PlayerProvider : CheatProvider
-    { 
-		[SerializeField] 
+    {
+		[SerializeField]
 		private RuntimeLocalBattlePlayer player;
-		
+
 		public override IEnumerable<ICheat> GetCheats()
 		{
 			yield return new StatusApplyCheat(player.BattlePlayer);
 			yield return new StatusRemoveCheat(player.BattlePlayer);
-			yield return new StatusAllCheat(player.BattlePlayer);
 			yield return new KillEntityCheat(player.BattlePlayer);
 			yield return new TeleportEntityCheat(player.BattlePlayer);
 			yield return new AddHealthCheat(player);
@@ -24,6 +23,6 @@ namespace ATCG.Debugging.Debugging.Battle
 			yield return new RemoveManaCheat(player);
 			yield return new BreakCheat();
 		}
-	    
+
     }
 }

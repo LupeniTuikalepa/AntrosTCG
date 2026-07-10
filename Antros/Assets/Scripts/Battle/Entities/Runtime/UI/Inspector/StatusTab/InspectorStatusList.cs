@@ -1,5 +1,4 @@
-﻿using System;
-using ATCG.Battle.CapacitySystem.Core.Status;
+﻿using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.Players.Local.Phases;
 using Helteix.Tools;
 using UnityEngine;

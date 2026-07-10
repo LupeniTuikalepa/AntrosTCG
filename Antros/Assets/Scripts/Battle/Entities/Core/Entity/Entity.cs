@@ -74,6 +74,8 @@ namespace ATCG.Battle.Entities
             return id == other.id;
         }
 
+        public override string ToString() => id.ToString();
+
         [BurstDiscard]
         public override bool Equals(object obj)
         {

@@ -1,13 +1,11 @@
-using ATCG.Battle.CapacitySystem.Core.Status.Signals;
+using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Listeners;
-using ATCG.Battle.Commands.Players;
-using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.Grids.Runtime;
+using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids.Utility;
 using ATCG.HexGrids;
 using PrimeTween;
@@ -21,7 +19,9 @@ namespace ATCG.Battle.Entities.Runtime
 		IEntityCommandListener<MoveCommand>,
 		IEntityCommandListener<FallCommand>,
 		IEntityCommandListener<BasicAttackCommand>,
-		IEntityCommandListener<StatusSignal>
+		IEntityCommandListener<StatusApplyCommand>,
+		IEntityCommandListener<StatusTickCommand>,
+		IEntityCommandListener<StatusRemoveCommand>
 
 	{
 		public Entity Entity => Address.entity;
@@ -136,40 +136,13 @@ namespace ATCG.Battle.Entities.Runtime
 
 		}
 
-		async Awaitable ICommandListener<StatusSignal>.Play(CommandListenerState state, CommandContext context,
-			StatusSignal command)
+		async Awaitable ICommandListener<StatusApplyCommand>.Play(CommandListenerState state, CommandContext context, StatusApplyCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
 
 			var infos = command.GetInfos();
 			var runtimeContext = new RuntimeStatusContext(infos.data, Entity, this);
-
-			switch (infos.action)
-			{
-				case StatusAction.Apply:
-					ApplyRuntimeStatus(runtimeContext);
-					return;
-
-				case StatusAction.Remove:
-					RemoveRuntimeStatus(runtimeContext);
-					return;
-
-				case StatusAction.Tick:
-					TickRuntimeStatus(runtimeContext);
-					return;
-			}
-		}
-
-		private void TickRuntimeStatus(RuntimeStatusContext runtimeContext)
-		{
-			var statusData = runtimeContext.statusData;
-			if (statusDatas.TryGetValue(statusData, out RuntimeStatus tickStatus))
-				tickStatus.Tick(runtimeContext);
-		}
-
-		private void ApplyRuntimeStatus(RuntimeStatusContext runtimeContext)
-		{
 			var statusData = runtimeContext.statusData;
 			if (statusDatas.ContainsKey(statusData))
 				return;
@@ -185,16 +158,35 @@ namespace ATCG.Battle.Entities.Runtime
 			runtimeStatus.Apply(runtimeContext);
 		}
 
-	private void RemoveRuntimeStatus(RuntimeStatusContext runtimeContext)
-	{
-		var statusData = runtimeContext.statusData;
-		if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus))
-			return;
+		async Awaitable ICommandListener<StatusTickCommand>.Play(CommandListenerState state, CommandContext context, StatusTickCommand command)
+		{
+			await Awaitable.MainThreadAsync();
+			state.CompleteAll(this);
 
-		removeStatus.Remove(runtimeContext);
-		Destroy(removeStatus.gameObject);
-		statusDatas.Remove(statusData);
-	}
+			var infos = command.GetInfos();
+			RuntimeStatusContext runtimeContext = new RuntimeStatusContext(infos.data, Entity, this);
+			StatusData statusData = runtimeContext.statusData;
+			if (statusDatas.TryGetValue(statusData, out RuntimeStatus tickStatus))
+				tickStatus.Tick(runtimeContext);
+		}
+
+		async Awaitable ICommandListener<StatusRemoveCommand>.Play(CommandListenerState state, CommandContext context, StatusRemoveCommand command)
+		{
+			await Awaitable.MainThreadAsync();
+			state.CompleteAll(this);
+
+			var infos = command.GetInfos();
+			var runtimeContext = new RuntimeStatusContext(infos.data, Entity, this);
+			var statusData = runtimeContext.statusData;
+			if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus))
+				return;
+
+			removeStatus.Remove(runtimeContext);
+			Destroy(removeStatus.gameObject);
+			statusDatas.Remove(statusData);
+		}
+
+
 	public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
 	{
 		Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
@@ -207,5 +199,6 @@ namespace ATCG.Battle.Entities.Runtime
 			Tween.StopAll(transform);
 			await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
 		}
+
 	}
 }

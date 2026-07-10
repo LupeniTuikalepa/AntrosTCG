@@ -69,13 +69,6 @@ namespace ATCG.Debugging.Debugging.Gameplay
                 statusApplyCommand.Run(battlePhase);
             }
         }
-
-        [Button, DisableInEditorMode]
-        private void TickAll()
-        {
-            var statusApplyCommand = new StatusTickAllCommand(data);
-            statusApplyCommand.Run(battlePhase);
-        }
     }
     #endif
 }

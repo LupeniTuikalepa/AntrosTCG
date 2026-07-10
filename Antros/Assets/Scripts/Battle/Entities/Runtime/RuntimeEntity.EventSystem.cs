@@ -1,6 +1,4 @@
-﻿using ATCG.Metrics;
-using Helteix.Tools;
-using UnityEngine.EventSystems;
+﻿using UnityEngine.EventSystems;
 
 namespace ATCG.Battle.Entities.Runtime
 {
