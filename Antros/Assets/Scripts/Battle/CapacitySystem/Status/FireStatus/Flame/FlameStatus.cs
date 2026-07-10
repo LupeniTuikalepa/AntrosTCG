@@ -23,11 +23,11 @@ namespace ATCG.Battle
 			    if (target.TryGetComponent<StatusDurationController<FlameStatusComponent>>(out var controller))
 			    {
 				    controller.GetValue().AddOrRemoveTicks(1);
-				    
+				    return;
 			    }
 		    }
 		    target.ApplyStatus(new FlameStatusComponent(data, channelKey),
-			    new StatusDurationController<FlameStatusComponent>(),
+			    new StatusDurationController<FlameStatusComponent>(data.normalDuration),
 			    context);
 	    }
 
