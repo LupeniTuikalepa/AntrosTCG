@@ -16,8 +16,8 @@ MonoBehaviour:
   thickness: 0.35
   resolutionInvariant: 1
   fadeWithDistance: 1
-  fadeRangeStart: 0
-  fadeRangeEnd: 0
+  fadeRangeStart: 3
+  fadeRangeEnd: 30
   useDepth: 1
   minDepthThreshold: 0.1
   maxDepthThreshold: 0.25
@@ -76,8 +76,8 @@ Material:
     - _ColorThresholdMin: 0.2
     - _DepthThresholdMax: 0.25
     - _DepthThresholdMin: 0.1
-    - _FadeRangeEnd: 0
-    - _FadeRangeStart: 0
+    - _FadeRangeEnd: 30
+    - _FadeRangeStart: 3
     - _NormalThresholdMax: 0.25
     - _NormalThresholdMin: 0.1
     - _Thickness: 0.35
