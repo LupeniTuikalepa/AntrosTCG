@@ -1,4 +1,5 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.Iterations;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace ATCG.Battle
 {
-    public partial class FlameStatus : Status<FlameStatusData, FlameStatusComponent, StatusDurationController>
+    public partial class FlameStatus : Status<FlameStatusData, FlameStatusComponent, StatusDurationController>,ITickOnTurnBegin
     {
 	    protected override FlameStatusComponent CreateStatusComponent(FlameStatusData data, in StatusContext context)
 	    {

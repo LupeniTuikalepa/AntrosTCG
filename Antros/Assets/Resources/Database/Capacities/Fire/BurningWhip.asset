@@ -20,7 +20,7 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579207565952942204
-  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 317788607505f54478d7f678ef03cbdd, type: 3}
+  <CutsceneDirector>k__BackingField: {fileID: 100585977581967798, guid: f074f7f61e97d3942a9aa9df46af13a3, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}
   <Range>k__BackingField: 5
@@ -32,10 +32,10 @@ MonoBehaviour:
       <X>k__BackingField: 0
       <Y>k__BackingField: 0
     <Range>k__BackingField: 5
-    <BranchCount>k__BackingField: 1
-    <AngleStepDegrees>k__BackingField: 90
+    <BranchCount>k__BackingField: 3
+    <AngleStepDegrees>k__BackingField: 25
   <BurningWhipStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: BurningWhip
     <QTEsCount>k__BackingField: 0
   references:
     version: 2

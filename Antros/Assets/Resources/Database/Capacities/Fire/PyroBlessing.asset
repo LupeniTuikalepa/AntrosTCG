@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f96508370f24f34ae6f4e39aa3d6f7e, type: 3}
+  m_Name: PyroBlessing
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.PyroBlessingData
+  guidText: 4a3b74cd-4376-44b0-bcad-0030d86caaf8
+  <Cost>k__BackingField: 1
+  <Name>k__BackingField: Pyro Bleesing
+  <Element>k__BackingField: 1
+  <Description>k__BackingField: For God's sake, give one of your heroes the power
+    against life.
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField: []
+  <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: d7d69fc76be6c82489fe4e8f3e5cb555, type: 3}
+  <PropertyDefinitions>k__BackingField: []
+  <Status>k__BackingField: {fileID: 11400000, guid: 31c6e13350ce4634888c35b2c0fcf924, type: 2}
+  <PyroBlessingStepData>k__BackingField:
+    <StepName>k__BackingField: PyroBlessing
+    <QTEsCount>k__BackingField: 0
+  references:
+    version: 2
+    RefIds: []
