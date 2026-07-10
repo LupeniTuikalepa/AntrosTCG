@@ -10,6 +10,7 @@ namespace ATCG.Battle.Entities.Aspects
 {
     public readonly partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
         IEntityAspect<BattleCardComponent,
+            StatusReceiver,
             BelongsToPlayerComponent,
             HealthComponent,
             MovementComponent,
@@ -52,6 +53,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
+            componentsFactory.StatusReceiver = new StatusReceiver(64);
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();

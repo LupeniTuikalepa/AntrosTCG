@@ -9,6 +9,7 @@ using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.CapacitySystem.Core.Status
@@ -116,6 +117,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                     EntityAddress target = new EntityAddress(statusContext.World, statusTag.targetEntity);
                     StatusRemoveCommand statusRemoveCommand = new StatusRemoveCommand(target, statusTag.data);
                     statusRemoveCommand.Run(statusContext.battlePhase);
+                    Debug.Log($"Removing status {statusTag.data.Name} on {target.entity.id}");
                 }
             }
         }
