@@ -516,7 +516,7 @@ MonoBehaviour:
   - {fileID: 8141428700912679842}
   tabContainer: {fileID: 5609509095211747326}
   canvasGroup: {fileID: 8195251035400244935}
-  offset: {x: -150, y: 150}
+  offset: {x: -300, y: 150}
 --- !u!114 &1525110086503874009
 MonoBehaviour:
   m_ObjectHideFlags: 0

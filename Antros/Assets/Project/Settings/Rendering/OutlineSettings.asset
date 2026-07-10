@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130791d3e20646d2b6d81688877b0909, type: 3}
   m_Name: OutlineSettings
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::FlatKit.OutlineSettings
-  edgeColor: {r: 0, g: 0, b: 0, a: 1}
-  thickness: 1
+  edgeColor: {r: 0.17735851, g: 0.17735851, b: 0.17735851, a: 1}
+  thickness: 0.35
   resolutionInvariant: 1
   fadeWithDistance: 1
   fadeRangeStart: 3
@@ -80,8 +80,8 @@ Material:
     - _FadeRangeStart: 3
     - _NormalThresholdMax: 0.25
     - _NormalThresholdMin: 0.1
-    - _Thickness: 1
+    - _Thickness: 0.35
     m_Colors:
-    - _EdgeColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EdgeColor: {r: 0.17735851, g: 0.17735851, b: 0.17735851, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
 using TMPro;
 using UnityEngine;
@@ -18,17 +19,17 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.StatusTab
         [SerializeField]
         private TMP_Text durationText;
 
-        public void Connect<T>(EntityAddress address, T status) where T : struct, IStatusComponent
+        public void Connect(EntityAddress address, ComponentRef<StatusTag> tagRef)
         {
-            icon.sprite = status.StatusData.Icon;
+            var statusTag = tagRef.GetValue();
+            icon.sprite = statusTag.data.Icon;
 
-            Color color = status.StatusData.Color;
+            Color color = statusTag.data.Color;
             color.a = 1;
 
             icon.color = color;
 
-            //TODO refactor
-            if (address.TryGetComponentRO(out StatusDurationController durationController))
+            if (tagRef.EntityAddress.TryGetComponentRO(out StatusDurationController durationController))
             {
                 durationRoot.SetActive(true);
                 durationText.text = durationController.RemainingTicks.ToString();

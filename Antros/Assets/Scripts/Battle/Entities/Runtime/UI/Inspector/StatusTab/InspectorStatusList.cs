@@ -7,18 +7,18 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.StatusTab
 {
     public class InspectorStatusList : EntityInspectorTabElement
     {
-        private sealed class CreateIconForStatus : IStatusComponentIterator
+        private sealed class CreateIconForStatus : IStatusIterator
         {
             public EntityAddress address;
             public InspectorStatusElement statusElementPrefab;
             public Transform container;
 
-            public void Process<T>() where T : struct, IStatusComponent
+            void IStatusIterator.Process<T>()
             {
-                if (address.TryGetComponentRO(out T status))
+                if (address.HasStatus<T>(out var tag))
                 {
                     InspectorStatusElement instance = statusElementPrefab.InstantiatePrefab(container);
-                    instance.Connect(address, status);
+                    instance.Connect(address, tag);
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.StatusTab
                 container = container
             };
 
-            createIconForStatus.ForeachStatusComponent();
+            createIconForStatus.ForeachStatus();
             return container.childCount > 0;
         }
 

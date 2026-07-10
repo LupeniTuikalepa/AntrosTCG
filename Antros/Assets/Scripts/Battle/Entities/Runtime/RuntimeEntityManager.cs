@@ -67,6 +67,7 @@ namespace ATCG.Battle.Entities.Runtime
         {
             runtimeEntities = new Dictionary<Entity, IRuntimeEntity>();
             selectedEntities = new();
+            hoveredEntity = Entity.None;
 
             Selectable = new Condition();
             SelectionController = new Priority<IEntitySelectionController>(new DefaultSelectionController());
@@ -132,8 +133,19 @@ namespace ATCG.Battle.Entities.Runtime
             if (!Selectable)
                 return;
 
-            if (hoveredEntity.IsValid && TryGetRuntimeEntity(hoveredEntity, out IRuntimeEntity entity))
-                EndHover(entity);
+            Entity incoming = runtimeEntity.Address.entity;
+
+            // A stale/out-of-order Exit for the previous entity may not have arrived yet
+            // (fast mouse movement between adjacent colliders doesn't guarantee Exit-before-Enter
+            // ordering). End it explicitly here rather than trusting a later Exit callback.
+            if (hoveredEntity.IsValid && hoveredEntity != incoming &&
+                TryGetRuntimeEntity(hoveredEntity, out IRuntimeEntity previous))
+                EndHover(previous);
+
+            // Track the raw entity (the one whose collider raised the event), matching
+            // what EndHover's guard compares against — not the address as possibly
+            // resolved by the controller's own AcceptsWithRelated redirection.
+            hoveredEntity = incoming;
 
             EntityAddress address = runtimeEntity.Address;
             SelectionController.Value.OnHoverBegin(runtimeEntity, ref address);
@@ -149,16 +161,22 @@ namespace ATCG.Battle.Entities.Runtime
         {
             if (!Selectable)
                 return;
-            if (hoveredEntity.IsValid && TryGetRuntimeEntity(hoveredEntity, out IRuntimeEntity entity))
-            {
-                EntityAddress address = runtimeEntity.Address;
-                SelectionController.Value.OnHoverEnd(runtimeEntity, ref address);
 
-                if (TryGetRuntimeEntity(address, out runtimeEntity))
-                {
-                    runtimeEntity.OnUnhovered();
-                    OnEntityHoverEnd?.Invoke(runtimeEntity);
-                }
+            // Guard against stale Exit events: only end the hover that is still the
+            // current one. Without this, a late Exit(A) arriving after Enter(B) would
+            // wipe out B's freshly-set preview.
+            if (!hoveredEntity.IsValid || hoveredEntity != runtimeEntity.Address.entity)
+                return;
+
+            EntityAddress address = runtimeEntity.Address;
+            SelectionController.Value.OnHoverEnd(runtimeEntity, ref address);
+
+            hoveredEntity = Entity.None;
+
+            if (TryGetRuntimeEntity(address, out runtimeEntity))
+            {
+                runtimeEntity.OnUnhovered();
+                OnEntityHoverEnd?.Invoke(runtimeEntity);
             }
         }
 
