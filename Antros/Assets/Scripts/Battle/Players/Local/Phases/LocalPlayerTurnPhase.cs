@@ -3,6 +3,9 @@ using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status;
 using ATCG.Battle.CapacitySystem.Status.Berserk;
+using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Implementations;
 using ATCG.Battle.Entities.Components.Status;
@@ -23,9 +26,6 @@ namespace ATCG.Battle.Players.Local.Phases
         public readonly LocalBattlePlayer localPlayerTurn;
         public readonly string turnID;
 
-        //private List<IBattleActionInfos> actionInfosList;
-
-
         public LocalPlayerTurnPhase(int turnNumber, LocalBattlePlayer localPlayerTurn) : base(turnNumber,
             localPlayerTurn)
         {
@@ -35,51 +35,43 @@ namespace ATCG.Battle.Players.Local.Phases
 
         protected override Awaitable Initialize(CancellationToken token)
         {
+            using (CommandManager.BeginGroup("Begin turn"))
+            {
+                ModifyPlayerManaCommand modifyPlayerManaCommand = new ModifyPlayerManaCommand(localPlayerTurn, GameMetrics.Current.RecoveredManaOnTurnStart);
+                modifyPlayerManaCommand.Run(localPlayerTurn.BattlePhase);
 
-            //actionInfosList = ListPool<IBattleActionInfos>.Get();
-            localPlayerTurn.AddOrRemoveMana(GameMetrics.Current.RecoveredManaOnTurnStart);
+                FillPlayerHandCommand fillPlayerHandCommand = new FillPlayerHandCommand(localPlayerTurn);
+                fillPlayerHandCommand.Run(localPlayerTurn.BattlePhase);
 
-            localPlayerTurn.canDeployHeroes.AddCondition(ChannelKey);
-            localPlayerTurn.canMoveHeroes.AddCondition(ChannelKey);
-            localPlayerTurn.canUseHeroesAbilities.AddCondition(ChannelKey);
-            localPlayerTurn.canDoBasicAttack.AddCondition(ChannelKey);
+                localPlayerTurn.canDeployHeroes.AddCondition(ChannelKey);
+                localPlayerTurn.canMoveHeroes.AddCondition(ChannelKey);
+                localPlayerTurn.canUseHeroesAbilities.AddCondition(ChannelKey);
+                localPlayerTurn.canDoBasicAttack.AddCondition(ChannelKey);
 
-            localPlayerTurn.FillHand();
-
-            var statusContext = new StatusContext(localPlayerTurn.BattlePhase);
-
-            TriggerTurnStatusControllerIterator turnControllerIterator = new TriggerTurnStatusControllerIterator(statusContext, true, localPlayerTurn);
-            turnControllerIterator.ForeachStatusTurnController();
-
-            StatusManager.RemoveAllFinishedStatus(in statusContext);
+                BeginTurnCommand beginTurnCommand = new BeginTurnCommand(localPlayerTurn);
+                beginTurnCommand.Run(localPlayerTurn.BattlePhase);
+            }
             return base.Initialize(token);
         }
 
         protected override Awaitable Dispose(CancellationToken token)
         {
-            //ListPool<IBattleActionInfos>.Release(actionInfosList);
+            using (CommandManager.BeginGroup("End turn"))
+            {
+                EndTurnCommand endTurnCommand = new EndTurnCommand(localPlayerTurn);
+                endTurnCommand.Run(localPlayerTurn.BattlePhase);
 
-            localPlayerTurn.canDoBasicAttack.RemoveCondition(ChannelKey);
-            localPlayerTurn.canDeployHeroes.RemoveCondition(ChannelKey);
-            localPlayerTurn.canMoveHeroes.RemoveCondition(ChannelKey);
-            localPlayerTurn.canUseHeroesAbilities.RemoveCondition(ChannelKey);
+                localPlayerTurn.canDoBasicAttack.RemoveCondition(ChannelKey);
+                localPlayerTurn.canDeployHeroes.RemoveCondition(ChannelKey);
+                localPlayerTurn.canMoveHeroes.RemoveCondition(ChannelKey);
+                localPlayerTurn.canUseHeroesAbilities.RemoveCondition(ChannelKey);
+            }
 
             return base.Dispose(token);
         }
 
-        public void DeployHero()
-        {
-
-        }
-
         public void EndTurn()
         {
-            var statusContext = new StatusContext(localPlayerTurn.BattlePhase);
-            TriggerTurnStatusControllerIterator turnControllerIterator = new TriggerTurnStatusControllerIterator(statusContext, false, localPlayerTurn);
-            turnControllerIterator.ForeachStatusTurnController();
-
-            StatusManager.RemoveAllFinishedStatus(in statusContext);
-
             BattleTurn infos = new(turnID, localPlayerTurn.ID);
             SetResult(infos);
         }

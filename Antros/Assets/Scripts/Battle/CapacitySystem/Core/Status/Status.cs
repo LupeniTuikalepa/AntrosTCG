@@ -20,8 +20,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
         where TComponent : struct, IStatusComponent
         where TController : struct, IStatusController
     {
-
-        protected struct EntityStatusInfos
+        public struct EntityStatusInfos
         {
             public EntityAddress targetAddress;
             public EntityAddress statusAddress;
@@ -73,6 +72,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 world.AddOrSetComponent(statusEntityAddress, statusTag);
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusComponent(data, context));
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusController(data, context));
+                AddSignature(statusEntityAddress);
 
                 if(target.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent))
                     statusEntityAddress.AddOrSetComponent(new BelongsToPlayerComponent(belongsToPlayerComponent.playerId, belongsToPlayerComponent.playerNumber));
@@ -123,11 +123,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             }
         }
 
-        protected abstract TComponent CreateStatusComponent(TData data, in StatusContext context);
-        protected abstract TController CreateStatusController(TData data, in StatusContext context);
 
-
-        private EntityStatusInfos GetInfosFromTag(ComponentRef<StatusTag> tagRef, in StatusContext context)
+        public static EntityStatusInfos GetInfosFromTag(ComponentRef<StatusTag> tagRef, in StatusContext context)
         {
             return new EntityStatusInfos()
             {
@@ -137,6 +134,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 statusControllerRef = tagRef.EntityAddress.GetComponentRef<TController>(),
             };
         }
+
+
+        protected abstract TComponent CreateStatusComponent(TData data, in StatusContext context);
+        protected abstract TController CreateStatusController(TData data, in StatusContext context);
+        protected abstract void AddSignature(EntityAddress address);
+
         protected virtual void OnApply(TData data, in EntityStatusInfos statusInfos, in StatusContext context)
         {
 
@@ -156,5 +159,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
         {
 
         }
+
     }
 }

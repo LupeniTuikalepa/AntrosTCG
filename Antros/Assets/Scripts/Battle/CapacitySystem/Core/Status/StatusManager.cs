@@ -63,6 +63,27 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             }
         }
 
+        public static bool HasStatus<T>(this EntityAddress address) where T : IStatus
+            => HasStatus<T>(address, out _);
+
+        public static bool HasStatus<T>(this EntityAddress address, out ComponentRef<StatusTag> tag) where T : IStatus
+        {
+            if (address.TryGetComponentRO(out StatusReceiver statusReceiver))
+            {
+                foreach (ComponentRef<StatusTag> statusTagRef in statusReceiver.AllStatus)
+                {
+                    tag = statusTagRef;
+                    if (statusTagRef.EntityAddress.HasComponent<StatusSignature<T>>())
+                    {
+                        tag = statusTagRef;
+                        return true;
+                    }
+                }
+            }
+            tag = default;
+            return false;
+
+        }
         public static bool HasStatusWithData<T>(this EntityAddress address) where T : StatusData
             => HasStatusWithData<T>(address, out _);
 
@@ -100,26 +121,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             }
         }
 
-        public static void RemoveAllFinishedStatus(in StatusContext statusContext)
+        public static void GetAllFinishedStatus(in StatusContext statusContext,  List<ComponentRef<StatusTag>> output)
         {
-            using (ListPool<ComponentRef<StatusTag>>.Get(out var statusToRemove))
-            {
                 FinishedStatusControllerIterator finishedStatusControllerIterator =
-                    new FinishedStatusControllerIterator(statusContext, statusToRemove);
+                    new FinishedStatusControllerIterator(statusContext, output);
 
                 finishedStatusControllerIterator.ForeachStatusController();
-
-                foreach (var statusRef in statusToRemove)
-                {
-                    StatusTag statusTag = statusRef.GetValue();
-
-                    EntityAddress target = new EntityAddress(statusContext.World, statusTag.targetEntity);
-                    StatusRemoveCommand statusRemoveCommand = new StatusRemoveCommand(target, statusTag.data);
-                    statusRemoveCommand.Run(statusContext.battlePhase);
-                    Debug.Log($"Removing status {statusTag.data.Name} on {target.entity.id}");
-                }
-            }
         }
-
     }
 }

@@ -12,28 +12,41 @@ namespace ATCG.SourceGen.Generators
     [Generator]
     public sealed class IteratableComponentGenerator : IIncrementalGenerator
     {
-        // The attribute is declared by hand in the consuming assembly, under this namespace.
-        private const string AttributeFullName = "ATCG.Battle.Entities.Iterations.IteratableComponentAttribute";
+        // Both attributes are declared by hand in the consuming assembly, under this namespace.
+        // GenerateIterator: any type (struct or class) implementing the marked interface.
+        // GenerateComponentIterator: ECS components only — keeps the struct, IEntityComponent
+        // constraint so Process<T>() stays usable with World.Query / EntityAddress.TryGetComponent.
+        private const string AttributeFullName = "ATCG.Battle.Utilities.Iterations.GenerateIteratorAttribute";
+        private const string ComponentAttributeFullName = "ATCG.Battle.Utilities.Iterations.GenerateComponentIteratorAttribute";
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
+            RegisterFor(context, AttributeFullName, requireStruct: false);
+            RegisterFor(context, ComponentAttributeFullName, requireStruct: true);
+        }
+
+        private static void RegisterFor(
+            IncrementalGeneratorInitializationContext context,
+            string attributeFullName,
+            bool requireStruct)
+        {
             var targetInterfaces = context.SyntaxProvider
                 .ForAttributeWithMetadataName(
-                    AttributeFullName,
+                    attributeFullName,
                     predicate: static (node, _) => node is InterfaceDeclarationSyntax,
                     transform: static (ctx, _) => (INamedTypeSymbol)ctx.TargetSymbol)
                 .Collect();
 
             var combined = targetInterfaces.Combine(context.CompilationProvider);
 
-            context.RegisterSourceOutput(combined, static (spc, source) =>
+            context.RegisterSourceOutput(combined, (spc, source) =>
             {
                 var (interfaces, compilation) = source;
 
                 foreach (var targetInterface in interfaces.Distinct(SymbolEqualityComparer.Default)
                              .Cast<INamedTypeSymbol>())
                 {
-                    Execute(targetInterface, compilation, spc);
+                    Execute(targetInterface, compilation, spc, requireStruct);
                 }
             });
         }
@@ -41,9 +54,10 @@ namespace ATCG.SourceGen.Generators
         private static void Execute(
             INamedTypeSymbol targetInterface,
             Compilation compilation,
-            SourceProductionContext spc)
+            SourceProductionContext spc,
+            bool requireStruct)
         {
-            var implementors = FindImplementingStructs(targetInterface, compilation);
+            var implementors = FindImplementingTypes(targetInterface, compilation, requireStruct);
 
             string interfaceName = targetInterface.Name;                          // "IStatusComponent"
             string iteratorInterfaceName = interfaceName + "Iterator";            // "IStatusComponentIterator"
@@ -73,7 +87,8 @@ namespace ATCG.SourceGen.Generators
             // Iterator interface is always generated (single source of truth: the marked interface).
             sb.AppendLine($"{indent}public interface {iteratorInterfaceName}");
             sb.AppendLine($"{indent}{{");
-            sb.AppendLine($"{indent}    void Process<T>() where T : struct, {fqInterfaceName};");
+            string constraint = requireStruct ? $"struct, {fqInterfaceName}" : fqInterfaceName;
+            sb.AppendLine($"{indent}    void Process<T>() where T : {constraint};");
             sb.AppendLine($"{indent}}}");
             sb.AppendLine();
 
@@ -82,7 +97,9 @@ namespace ATCG.SourceGen.Generators
             sb.AppendLine($"{indent}    public static void {methodName}(this {iteratorInterfaceName} iterator)");
             sb.AppendLine($"{indent}    {{");
 
-            // One non-boxing dispatch per concrete struct that implements the marked interface.
+            // One dispatch per concrete type that implements the marked interface.
+            // Under GenerateComponentIterator, that set is struct-only (non-boxing);
+            // under GenerateIterator, classes are included too (and box as usual for T).
             foreach (var impl in implementors)
             {
                 string fqImpl = impl.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -98,17 +115,24 @@ namespace ATCG.SourceGen.Generators
             spc.AddSource($"{iteratorInterfaceName}.g.cs", sb.ToString());
         }
 
-        private static ImmutableArray<INamedTypeSymbol> FindImplementingStructs(
+        private static ImmutableArray<INamedTypeSymbol> FindImplementingTypes(
             INamedTypeSymbol targetInterface,
-            Compilation compilation)
+            Compilation compilation,
+            bool requireStruct)
         {
             var seen = new HashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
             var result = ImmutableArray.CreateBuilder<INamedTypeSymbol>();
 
             void VisitType(INamedTypeSymbol type)
             {
-                // Only non-abstract, non-generic structs that implement the marked interface.
-                if (type.TypeKind == TypeKind.Struct
+                // Non-abstract, non-generic types that implement the marked interface.
+                // GenerateComponentIterator restricts this to structs (ECS component
+                // storage is struct-only); GenerateIterator allows classes too.
+                bool kindAllowed = requireStruct
+                    ? type.TypeKind == TypeKind.Struct
+                    : type.TypeKind == TypeKind.Struct || type.TypeKind == TypeKind.Class;
+
+                if (kindAllowed
                     && !type.IsAbstract
                     && type.Arity == 0
                     && type.AllInterfaces.Contains(targetInterface, SymbolEqualityComparer.Default)
