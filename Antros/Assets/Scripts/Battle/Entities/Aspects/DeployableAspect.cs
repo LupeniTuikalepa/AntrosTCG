@@ -8,7 +8,7 @@ using ATCG.HexGrids;
 
 namespace ATCG.Battle.Entities.Aspects
 {
-    public readonly partial struct DeployableAspect :ICreateEntityAspect<DeployableAspect.Setup>,
+    public partial struct DeployableAspect :ICreateEntityAspect<DeployableAspect.Setup>,
         IEntityAspect<
         GridMemberComponent,
         PhysicalCellMemberTag,
@@ -17,18 +17,18 @@ namespace ATCG.Battle.Entities.Aspects
     {
         public struct Setup
         {
+            public EntityAddress caster;
             public HexCoordinates coordinates;
             public BattleGrid grid;
             public BattleID battleID;
         }
         
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
-
+        
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
         {
-            
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
-            componentsFactory.DeployableEntityTag = new DeployableEntityTag();
+            componentsFactory.DeployableEntityTag = new DeployableEntityTag(setup.caster);
             
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);

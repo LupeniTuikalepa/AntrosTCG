@@ -20,7 +20,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
         {
             BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
             HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
-                .With(new ArcPattern(casterOrigin ,castPoint, data.Radius))
+                .With(new ArcPattern(casterOrigin ,castPoint, data.Size))
                 .Without(casterOrigin);
 
             return builder;
@@ -34,7 +34,11 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 
             foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))
             {
-                var spawnDeployable = new SpawnDeployableCommand(ctx.BattlePhase.CurrentPlayer ,data.DeployableData, cellAspect);
+                var spawnDeployable = new SpawnDeployableCommand(
+                    ctx.BattlePhase.CurrentPlayer,
+                    data.DeployableData,
+                    cellAspect,
+                    ctx.Caster);
                 spawnDeployable.Run(ctx.BattlePhase);
             }
         }

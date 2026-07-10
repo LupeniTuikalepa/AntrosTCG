@@ -7,15 +7,15 @@ namespace ATCG.HexGrids.Patterns.Arc
     {
         private readonly HexCoordinates casterCoord;
         private readonly HexCoordinates to;
-        private readonly int radius;
+        private readonly int size;
 
-        public ArcPattern(HexCoordinates casterCoord, HexCoordinates to, int radius)
+        public ArcPattern(HexCoordinates casterCoord, HexCoordinates to, int size)
         {
             this.casterCoord = casterCoord;
             this.to = to;
-            this.radius = radius;
+            this.size = size;
         }
         public IEnumerable<HexCoordinates> GetAll(HexCoordinates from, IHexPatternController controller) 
-            => casterCoord.GetArc(to, radius);
+            => casterCoord.GetArc(to, size);
     }
 }

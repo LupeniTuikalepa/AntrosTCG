@@ -11,7 +11,7 @@ namespace ATCG.Battle.Players.Local.Phases
     {
         private const int MAX_STEPS = 10000;
 
-        public IEnumerable<HexCoordinates> GetPathBetween(HexCoordinates a, HexCoordinates b, PathGenerationContext context)
+        public IEnumerable<HexCoordinates> GetPathBetween(HexCoordinates a, HexCoordinates b, HexCoordinates heroCoordinates, PathGenerationContext context)
         {
             return a.GetLine(b);
         }

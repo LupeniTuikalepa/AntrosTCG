@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.HexGrids.Utility
 {
@@ -147,54 +148,27 @@ namespace ATCG.HexGrids.Utility
             }
         }
 
-        public static IEnumerable<HexCoordinates> GetArc(this HexCoordinates center, HexCoordinates selected,
-            int size)
+        public static IEnumerable<HexCoordinates> GetArc(this HexCoordinates center, HexCoordinates selected, int size)
         {
-            //TODO a rework pour vraiment faire un arc de cercle
-            /*
-            var distance = Distance(center, selected);
-            return center.GetRing(distance);
-            var ring = GetRing(center, distance);
-            foreach (var coordinate in ring)
-            {
-                for (int i = 0; i < directions.Length; i++)
-                {
-                    var direction = directions[i];
-                    if (coordinate == selected + direction)
-                    {
-                        yield return coordinate;
-                    }
-                }
-            }
-            */
-            
-            // Direction du centre vers la case sélectionnée
-            HexCoordinates direction = center.GetDirection(selected).NearestCardinal();
-    
-            // Trouver l'index de cette direction dans le tableau
-            int dirIndex = -1;
-            for (int i = 0; i < directions.Length; i++)
-            {
-                if (directions[i] == direction)
-                {
-                    dirIndex = i;
-                    break;
-                }
-            }
-    
-            if (dirIndex == -1)
-                yield break;
-    
             int radius = center.Distance(selected);
             if (radius == 0)
                 yield break;
-    
-            // Retourner les cases du ring à distance radius
-            // dans l'arc centré sur dirIndex, de taille (size * 2 + 1)
-            for (int offset = -size; offset <= size; offset++)
+
+            using (ListPool<HexCoordinates>.Get(out var ring))
             {
-                int idx = ((dirIndex + offset) % directions.Length + directions.Length) % directions.Length;
-                yield return center + directions[idx] * radius;
+                center.GetRing(radius, ring);
+
+                int selectedIndex = ring.IndexOf(selected);
+                if (selectedIndex == -1)
+                    yield break;
+
+                int ringCount = ring.Count;
+
+                for (int offset = -size; offset <= size; offset++)
+                {
+                    int idx = ((selectedIndex + offset) % ringCount + ringCount) % ringCount;
+                    yield return ring[idx];
+                }
             }
         }
         

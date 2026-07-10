@@ -4,7 +4,6 @@ using ATCG.Battle.CapacitySystem.Status.Forst;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
-using CollectionDebugger.Core;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -12,10 +11,20 @@ namespace ATCG.Battle.Grids
 {
     public readonly struct HexPathfinder : IDisposable
     {
-        private struct DefaultPathfinderController : IPathfinderController
+        private readonly struct DefaultPathfinderController : IPathfinderController
         {
-            bool IPathfinderController.CanTraverse(BattleCellAspect cell) => 
-                cell.EntityAddress.HasComponent<FreezeStatusComponent>() || cell.CanBeMovedOn();
+            private readonly HexCoordinates heroCoordinates;
+
+            public DefaultPathfinderController(HexCoordinates heroCoordinates)
+            {
+                this.heroCoordinates = heroCoordinates;
+            }
+
+            bool IPathfinderController.CanTraverse(BattleCellAspect cell)
+            {
+                return cell.CanBeMovedOn() || cell.Coordinate == heroCoordinates;
+            }
+
             int IPathfinderController.GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell) => 1;
             public bool TryRedirect(HexCoordinates from, HexCoordinates to, BattleGrid battleGrid, out HexCoordinates newCoordinates)
             {
@@ -65,15 +74,16 @@ namespace ATCG.Battle.Grids
             cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
             frontier = ListPool<PriorityHexCoordinates>.Get();
 
-            cameFrom.Watch(nameof(cameFrom));
         }
 
         public bool TryFindPath(
             HexCoordinates start,
             HexCoordinates goal,
+            HexCoordinates heroCoordinates,
             List<HexCoordinates> path,
-            BattleGrid battleGrid)
-            => TryFindPath(start, goal, path, battleGrid, new DefaultPathfinderController());
+            BattleGrid battleGrid) 
+                => TryFindPath(start, goal, path, battleGrid, new DefaultPathfinderController(heroCoordinates));
+
 
         public bool TryFindPath<TController>(
             HexCoordinates start,
@@ -85,8 +95,8 @@ namespace ATCG.Battle.Grids
             costSoFar.Clear();
             cameFrom.Clear();
             frontier.Clear();
-
-            if (!battleGrid.TryGetBattleCell(start, out _))
+            
+            if (!battleGrid.TryGetBattleCell(start, out BattleCellAspect startCell))
                 return false;
 
             if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell))
@@ -115,6 +125,10 @@ namespace ATCG.Battle.Grids
                     if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
                         continue;
 
+                    if (!controller.CanTraverse(nextCell))
+                        continue;
+
+                    
                     HexCoordinates actual = next;
 
                     bool nextIsGoal = next == goal && goalIsFrozen;
@@ -131,7 +145,6 @@ namespace ATCG.Battle.Grids
                         actual = redirected;
                         nextCell = redirectedCell;
                     }
-
                     int newCost = costSoFar[current] + controller.GetCost(current, actual, nextCell);
 
                     if (newCost > maxSteps)
@@ -139,6 +152,7 @@ namespace ATCG.Battle.Grids
 
                     if (!costSoFar.ContainsKey(actual) || newCost < costSoFar[actual])
                     {
+                        Debug.Log($"Actual is start {actual == start}, Start {start}");
                         costSoFar[actual] = newCost;
                         int priority = newCost + actual.Distance(goal);
                         frontier.Add(new PriorityHexCoordinates(actual, priority));
@@ -149,7 +163,6 @@ namespace ATCG.Battle.Grids
 
             if (!cameFrom.TryGetValue(goal, out var entryCase))
                 return false;
-
             if (!goalIsFrozen)
                 return ReconstructPath(start, goal, path);
 

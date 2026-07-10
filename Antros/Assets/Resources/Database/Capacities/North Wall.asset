@@ -22,7 +22,7 @@ MonoBehaviour:
     - rid: 7630467977162784896
   <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 3eff351ebe865534592b69cdbb65f285, type: 3}
   <PropertyDefinitions>k__BackingField: []
-  <Radius>k__BackingField: 1
+  <Size>k__BackingField: 2
   <DeployableData>k__BackingField: {fileID: 11400000, guid: 36a574091bccce54796001dcc563619d, type: 2}
   <ConstructionStepData>k__BackingField:
     <StepName>k__BackingField: 
@@ -38,4 +38,4 @@ MonoBehaviour:
         <Offset>k__BackingField:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
+        <Distance>k__BackingField: 3
