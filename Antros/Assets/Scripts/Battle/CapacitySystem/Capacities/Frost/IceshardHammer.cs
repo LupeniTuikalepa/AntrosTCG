@@ -3,6 +3,7 @@ using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
 using ATCG.Capacities.Frost;
@@ -43,7 +44,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                         var direction = ctx.CasterOrigin.GetNormalizedDirection(ctx.CastPoint);
                         var propagation = member.GetValue().coordinates + direction;
                         
-                        if (!deployableData == data.Breakable)
+                        if (deployableData is not IceWallData)
                             continue;   
                         
                         var damageCommand = new DamageCommand(99, memberEntityAddress);
@@ -57,7 +58,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                         }
                         
                     }
-                    else if (memberEntityAddress.Is<HeroEntityAspect>(out _))
+                    else if (memberEntityAddress.TryGetComponentRO<MovementComponent>(out _))
                     {
                         var direction = ctx.CasterOrigin.GetNormalizedDirection(cellAspect.Coordinate);
                         var destination = cellAspect.Coordinate + direction * data.PushbackMultiplier;

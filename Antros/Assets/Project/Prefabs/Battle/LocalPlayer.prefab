@@ -406,6 +406,7 @@ Transform:
   m_Children:
   - {fileID: 4067035915860277414}
   - {fileID: 3895387586081032585}
+  - {fileID: 5871745588747411983}
   m_Father: {fileID: 3863691666134329178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7671588500508419661
@@ -498,6 +499,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36ea14253f4a40b7ad5e9ec61a93bd2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Heroes.RuntimeHeroSpawner
+  runtimeEntityManager: {fileID: 7671588500508419661}
+--- !u!1 &3614827924869429230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5871745588747411983}
+  - component: {fileID: 8084928064076080439}
+  m_Layer: 0
+  m_Name: Constructions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5871745588747411983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3614827924869429230}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3216813312829335074}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8084928064076080439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3614827924869429230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50165ac671745f5a9e141f0e671f9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Constructions.RuntimeConstructionSpawner
   runtimeEntityManager: {fileID: 7671588500508419661}
 --- !u!1 &3664716065981829095
 GameObject:
@@ -2126,7 +2172,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 602626987912461229, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00068386423
+      value: 0.000365213
       objectReference: {fileID: 0}
     - target: {fileID: 972060252572710618, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: m_Pivot.x
