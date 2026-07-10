@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: Step Marker
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
   m_Time: 3.516667
-  stepName: BurningWhip
+  stepName: Devastation
   id: d5b75e4d-20aa-4866-bef7-3548cc4935e3
 --- !u!114 &-5336397064738937517
 MonoBehaviour:
