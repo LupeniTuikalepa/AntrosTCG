@@ -1,8 +1,8 @@
 ﻿using System;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
@@ -14,7 +14,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Players.UI
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIconBar")]
-    public class ListenerManaIconBar : MonoBehaviour, IPlayerStatUI, ICommandListener<ModifyPlayerManaCommand>
+    public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI, ICommandListener<ModifyPlayerManaCommand>
     {
         [SerializeField]
         private TMP_Text valueText;

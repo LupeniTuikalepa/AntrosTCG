@@ -1,12 +1,6 @@
-﻿using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+﻿using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Commands.Players;
-using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Runtime.Heroes;
-using ATCG.Metrics;
+using ATCG.Battle.Commands.Listeners;
 using Helteix.Tools;
 using UnityEngine;
 
@@ -37,7 +31,7 @@ namespace ATCG.Battle.Entities.Runtime.Deployables
 
             if (instance.TryGetComponent(out RuntimeDeployable runtimeDeployable))
                 await runtimeDeployable.Spawn(runtimeEntityManager, infos.deployable);
-            
+
 
             state.CompleteFollowThrough(this);
         }

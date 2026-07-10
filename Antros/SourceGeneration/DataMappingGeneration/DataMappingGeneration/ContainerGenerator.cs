@@ -78,12 +78,18 @@ namespace Helteix.Tools.DataMapping.SourceGen
                         ctx.SemanticModel.GetDeclaredSymbol(ctx.Node) as INamedTypeSymbol)
                 .Where(static s => s is not null);
 
-            // Phase 2: candidate structs (partial, with a base list)
+            // Phase 2: candidate behaviour implementers — partial struct OR partial
+            // class, with a base list. Abstract classes are excluded here (they are
+            // not instantiable, so they get no self-mapping); an intermediate
+            // abstract base like StatusBase<,> is filtered out. Concrete leaf
+            // classes that inherit the decorated interface transitively are kept.
             var structs = context.SyntaxProvider.CreateSyntaxProvider(
                     predicate: static (node, _) =>
-                        node is StructDeclarationSyntax s &&
-                        s.BaseList is not null &&
-                        s.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)),
+                        node is TypeDeclarationSyntax t &&
+                        (t is StructDeclarationSyntax || t is ClassDeclarationSyntax) &&
+                        t.BaseList is not null &&
+                        t.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)) &&
+                        !t.Modifiers.Any(m => m.IsKind(SyntaxKind.AbstractKeyword)),
                     transform: static (ctx, _) =>
                         ctx.SemanticModel.GetDeclaredSymbol(ctx.Node) as INamedTypeSymbol)
                 .Where(static s => s is not null);
@@ -327,10 +333,22 @@ namespace Helteix.Tools.DataMapping.SourceGen
         private static MappingModel MatchStruct(
             INamedTypeSymbol st, Dictionary<INamedTypeSymbol, DomainModel> domains)
         {
+            // Abstract types are not instantiable and must not be mapped. The
+            // syntactic predicate already drops 'abstract', but an intermediate
+            // base could reach here through other means — guard semantically too.
+            if (st.IsAbstract) return null;
+
             foreach (var iface in st.AllInterfaces)
             {
                 if (!domains.TryGetValue(iface.OriginalDefinition, out var domain)) continue;
                 if (iface.TypeArguments.Length != 1) continue;
+
+                // The data type argument must be fully closed (a real type), not an
+                // open type parameter inherited from a still-generic base. A leaf
+                // like PoisonStatus : StatusBase<PoisonStatus, PoisonData> closes it
+                // to PoisonData; a generic base itself would leave a type parameter.
+                if (iface.TypeArguments[0] is ITypeParameterSymbol) continue;
+
                 return new MappingModel
                 {
                     Struct = st,
@@ -359,7 +377,7 @@ namespace Helteix.Tools.DataMapping.SourceGen
             var sb = Header();
             HeaderWithUsings(sb, scope, m.Namespace, out bool hasNs);
 
-            string keyword = m.Struct.IsReadOnly ? "readonly partial struct" : "partial struct";
+            string keyword = BuildPartialKeyword(m.Struct);
             sb.Append("    ").Append(keyword).Append(' ').Append(m.Struct.Name)
               .Append(" : global::Helteix.Tools.DataMapping.ISelfMapping<").Append(dataName).AppendLine(">");
             sb.AppendLine("    {");
@@ -592,6 +610,23 @@ namespace Helteix.Tools.DataMapping.SourceGen
             RefKind.Ref => "ref ",
             _ => "",
         };
+
+        /// <summary>
+        /// The partial declaration keyword matching the concrete type: 'partial
+        /// struct', 'readonly partial struct', 'partial class', or a record form.
+        /// The generated partial must agree with the user's own declaration.
+        /// </summary>
+        private static string BuildPartialKeyword(INamedTypeSymbol t)
+        {
+            if (t.TypeKind == TypeKind.Struct)
+            {
+                if (t.IsRecord) return t.IsReadOnly ? "readonly partial record struct" : "partial record struct";
+                return t.IsReadOnly ? "readonly partial struct" : "partial struct";
+            }
+            // class
+            if (t.IsRecord) return "partial record";
+            return "partial class";
+        }
 
         private static string SafeIdent(string s)
         {

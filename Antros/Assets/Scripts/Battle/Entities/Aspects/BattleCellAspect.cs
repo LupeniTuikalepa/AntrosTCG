@@ -10,7 +10,11 @@ using UnityEngine;
 namespace ATCG.Battle.Entities.Aspects
 {
     public readonly partial struct BattleCellAspect : ICreateEntityAspect<BattleCellAspect.Setup>,
-        IEntityAspect<GridMemberComponent, BattleCellComponent, BattleIDOwner>
+        IEntityAspect<
+            StatusReceiver,
+            GridMemberComponent,
+            BattleCellComponent,
+            BattleIDOwner>
     {
         public readonly struct IsCellMemberFilter : IFilter<GridMemberComponent>
         {
@@ -112,6 +116,7 @@ namespace ATCG.Battle.Entities.Aspects
                 componentsFactory.GridMemberComponent = new GridMemberComponent(setup.battleGrid, setup.coordinates);
                 componentsFactory.BattleCellComponent = new BattleCellComponent();
                 componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
+                componentsFactory.StatusReceiver = new StatusReceiver(64);
             }
             catch (Exception e)
             {

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Collections.Generic;
-using ATCG.Capacities.Data.Status;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Status

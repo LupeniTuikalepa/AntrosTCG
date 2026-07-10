@@ -1,6 +1,4 @@
 using ATCG.Battle.Entities.Components;
-using TMPro;
-using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Actions.UI.EntityStat
 {

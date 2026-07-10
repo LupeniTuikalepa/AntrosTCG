@@ -1,5 +1,5 @@
 ﻿using ATCG.Battle.CapacitySystem.Status.Berserk;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities;
@@ -73,12 +73,12 @@ namespace ATCG.Battle
 	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(fromPlayer, filter, builder);
 	        if(result.Length == 0)
 		        return;
-	        
-	        if (address.TryGetComponent<StatusVolatileController<BerserkStatusComponent>>(out var berserkStatusComponent))
+
+	        if (address.TryGetComponent<StatusVolatileController>(out var berserkStatusComponent))
 	        {
 		        berserkStatusComponent.GetValue().Trigger();
 	        }
-	        
+
 	        using (CommandManager.BeginGroup($"[{address.entity.id}] Entity Basic Attack"))
 	        {
 		        //Le player a l'origine de l'action perd de la mana

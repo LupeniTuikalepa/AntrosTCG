@@ -1,15 +1,9 @@
 ﻿using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Grid;
-using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Runtime;
 using ATCG.HexGrids.Utility;
-using Helteix.Tools;
 using PrimeTween;
 using Sirenix.OdinInspector;
-using TMPro;
-using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ATCG.Battle.Entities.Runtime.Deployables
 {

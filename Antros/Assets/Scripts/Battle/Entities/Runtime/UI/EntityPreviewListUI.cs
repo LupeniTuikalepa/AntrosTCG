@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Commands;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
 using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
@@ -16,12 +15,12 @@ namespace ATCG.Battle
 	public class EntityPreviewListUI : PlayerHUDElement,
 		IPlayerCommandListener<SpawnHeroCommand>
 	{
-		
+
 		public IBattlePlayer BattlePlayer => RuntimePlayer.BattlePlayer;
 
 		[SerializeField] private Transform container;
 		[SerializeField] private EntityPreviewUI prefabEntityPreviewUI;
-		
+
 		private Dictionary<Entity, EntityPreviewUI> previews = new Dictionary<Entity, EntityPreviewUI>();
 
 		private void Awake()
@@ -45,7 +44,7 @@ namespace ATCG.Battle
 			if (command.SpawnID.TryGetEntityWithBattleID(context.World, out EntityAddress address))
 			{
 				await Awaitable.EndOfFrameAsync();
-				
+
 				EntityPreviewUI instance = prefabEntityPreviewUI.InstantiatePrefab(container);
 				await instance.Connect(this, address);
 				previews.Add(address, instance);

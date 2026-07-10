@@ -1,33 +1,32 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Components.Implementations
 {
-    public partial struct PoisonStatus : IStatus<PoisonStatusData>
+    public partial class PoisonStatus: Status<PoisonStatusData, StatusDurationController>
     {
-        public void Apply(PoisonStatusData data, EntityAddress target, StatusContext context)
+        protected override StatusDurationController CreateStatusController(PoisonStatusData data, in StatusContext context)
         {
-	        Debug.Log($"Applying PoisonStatusData: {target}");
-            target.ApplyStatus(new PoisonStatusComponent(data),
-                new StatusDurationController<PoisonStatusComponent>(data.Duration),
-                context);
+            return new StatusDurationController(data.Duration);
         }
 
-        public void Remove(PoisonStatusData data, EntityAddress address, StatusContext context)
+        protected override void OnTick(PoisonStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
         {
-            address.RemoveStatus<PoisonStatusComponent>(address,context);
+            DamageCommand damageCommand = new DamageCommand(data.Damage, statusInfos.targetAddress);
+            damageCommand.Run(context.battlePhase);
+
+            base.OnTick(data, in statusInfos, context);
         }
 
-        public void Tick(PoisonStatusData data, EntityAddress address, StatusContext context)
+        protected override void OnStack(PoisonStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
         {
-            StatusManager.Trigger<PoisonStatusComponent>(address, context);
-        }
+            statusInfos.StatusController.AddOrRemoveTicks(data.Duration);
 
-        public void TickAll(PoisonStatusData data, StatusContext context)
-        {
-            StatusManager.ProcessAllStatus<PoisonStatusComponent>(context);
+            base.OnStack(data, in statusInfos, in context);
         }
     }
 }

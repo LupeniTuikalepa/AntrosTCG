@@ -1,7 +1,7 @@
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status.Berserk;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;

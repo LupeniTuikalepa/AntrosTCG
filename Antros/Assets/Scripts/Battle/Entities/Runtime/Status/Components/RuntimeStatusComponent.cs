@@ -1,5 +1,4 @@
-﻿using ATCG.Capacities.Data.Status;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Status
 {

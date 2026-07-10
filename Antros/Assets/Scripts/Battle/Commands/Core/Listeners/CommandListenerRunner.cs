@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Commands.Core.Players;
-using ATCG.Battle.Commands.Players;
-using Helteix.Tools;
-using UnityEngine;
-using UnityEngine.Pool;
+﻿using UnityEngine;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands.Listeners
 {
     public readonly struct CommandListenerRunner
     {

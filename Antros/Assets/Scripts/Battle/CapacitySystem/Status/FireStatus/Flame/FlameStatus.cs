@@ -1,60 +1,44 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Implementations;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
-using Helteix.ChanneledProperties;
 using UnityEngine;
 
 namespace ATCG.Battle
 {
-    public partial struct FlameStatus : IStatus<FlameStatusData>
+    public partial class FlameStatus : Status<FlameStatusData, FlameStatusComponent, StatusDurationController>
     {
-	    private ChannelKey channelKey;
-	    
-	    
-	    public void Apply(FlameStatusData data, EntityAddress target, StatusContext context)
+	    protected override FlameStatusComponent CreateStatusComponent(FlameStatusData data, in StatusContext context)
 	    {
-		    if (target.HasComponent<FlameStatusComponent>())
-		    {
-			    if (target.TryGetComponent<StatusDurationController<FlameStatusComponent>>(out var controller))
-			    {
-				    controller.GetValue().AddOrRemoveTicks(1);
-				    return;
-			    }
-		    }
-		    target.ApplyStatus(new FlameStatusComponent(data, channelKey),
-			    new StatusDurationController<FlameStatusComponent>(data.normalDuration),
-			    context);
+		    return new FlameStatusComponent(data);
 	    }
 
-	    public void Remove(FlameStatusData data, EntityAddress address, StatusContext context)
+	    protected override StatusDurationController CreateStatusController(FlameStatusData data, in StatusContext context)
 	    {
-		    address.RemoveStatus<FlameStatusComponent>(address, context);
+		    return new StatusDurationController(data.normalDuration);
 	    }
 
-	    public void Tick(FlameStatusData data, EntityAddress address, StatusContext context)
-	    {
-		    StatusManager.Trigger<FlameStatusComponent>(address, context);
-		    
-		    int damage = data.Damage;
-		    if (address.TryGetComponentRO<StatusDurationController<FlameStatusComponent>>(out var controller))
-		    {
-			    damage *= controller.RemainingTicks;
-		    }
 
-		    if (address.HasComponent<HealthComponent>())
+	    protected override void OnStack(FlameStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
+	    {
+		    statusInfos.StatusController.AddOrRemoveTicks(data.normalDuration);
+		    base.OnStack(data, in statusInfos, in context);
+	    }
+
+	    protected override void OnTick(FlameStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
+	    {
+		    base.OnTick(data, in statusInfos, context);
+		    int damage = data.Damage * statusInfos.StatusController.RemainingTicks;
+
+		    if (statusInfos.targetAddress.HasComponent<HealthComponent>())
 		    {
-			    var damageCommand = new DamageCommand(damage, address);
+			    DamageCommand damageCommand = new DamageCommand(damage, statusInfos.targetAddress);
 			    damageCommand.Run(context.battlePhase);
 		    }
-	    }
-
-	    public void TickAll(FlameStatusData data, StatusContext context)
-	    {
 	    }
     }
 }

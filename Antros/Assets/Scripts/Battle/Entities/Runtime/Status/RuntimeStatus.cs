@@ -1,6 +1,4 @@
 ﻿using System;
-using ATCG.Capacities.Data.Status;
-using Helteix.Tools;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Status
@@ -10,9 +8,9 @@ namespace ATCG.Battle.Entities.Runtime.Status
         private event Action<RuntimeStatusContext> OnApplyStatus;
         private event Action<RuntimeStatusContext> OnRemoveStatus;
         private event Action<RuntimeStatusContext> OnTickStatus;
-        
-        private IRuntimeStatusComponent[] components; 
-        
+
+        private IRuntimeStatusComponent[] components;
+
         protected virtual void Awake()
         {
             components = GetComponentsInChildren<IRuntimeStatusComponent>();
@@ -39,7 +37,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
                 OnTickStatus -= component.OnTickStatus;
             }
         }
-        
+
         public void Apply(RuntimeStatusContext context)
         {
             OnApplyStatus?.Invoke(context);
@@ -49,7 +47,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
         {
             OnRemoveStatus?.Invoke(context);
         }
-        
+
         public void Tick(RuntimeStatusContext context)
         {
             OnTickStatus?.Invoke(context);

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Capacities;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
@@ -199,6 +199,11 @@ namespace ATCG.Battle.CapacitySystem.Core
         }
 
         // ---- QteCommand listener --------------------------------------------
+
+        public async Awaitable Play(CommandListenerState state, CommandContext context, QteCommand command)
+        {
+            throw new NotImplementedException();
+        }
 
         void ICommandListener<QteCommand>.OnBegin(in CommandListenerState state, CommandContext context,
             QteCommand command)

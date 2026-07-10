@@ -1,29 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using ATCG.Battle.Commands.Core.Exceptions;
-using ATCG.Battle.Commands.Core.Players;
+﻿using System.Collections.Generic;
+using ATCG.Battle.Commands.Exceptions;
 using ATCG.Battle.Commands.Groups;
-using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Commands.Listeners;
+using ATCG.Battle.Commands.Watchers;
 using ATCG.Battle.GameModes;
-using Helteix.Singletons.MonoSingletons;
 using Helteix.Singletons.MonoSingletons.Attributes;
 using Helteix.Tools;
 using UnityEngine;
-using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands
 {
     [DontDestroyOnLoad]
     public static class CommandManager
     {
-        private static readonly List<ICommandListener> CommandsPlayers = new List<ICommandListener>();
-        private static readonly Stack<CommandGroup> groupsQueue = new Stack<CommandGroup>();
+        public static IReadOnlyCollection<ICommandListener> Listeners => CommandsListeners;
+
+        private static readonly HashSet<ICommandListener> CommandsListeners = new();
+        private static readonly HashSet<ICommandWatcher> CommandsWatcher = new();
+
+        private static readonly Stack<CommandGroup> GroupsQueue = new Stack<CommandGroup>();
 
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
         {
-            CommandsPlayers.Clear();
-            groupsQueue.Clear();
+            CommandsListeners.Clear();
+            GroupsQueue.Clear();
         }
 
         public static void Run<T>(this T command, BattlePhase battlePhase) where T : ICommand
@@ -33,25 +34,25 @@ namespace ATCG.Battle.Commands.Core
 
         public static CommandGroupHandle BeginGroup(string label)
         {
-            CommandGroup group = groupsQueue.TryPeek(out var parent) ? new CommandGroup(label, parent) : new CommandGroup(label);
-            groupsQueue.Push(group);
+            CommandGroup group = GroupsQueue.TryPeek(out var parent) ? new CommandGroup(label, parent) : new CommandGroup(label);
+            GroupsQueue.Push(group);
 
-            Trace.CommandTrace.ReportGroupBegan(group.GroupID, group.ParentGroupID, label);
+            CommandTrace.ReportGroupBegan(group.GroupID, group.ParentGroupID, label);
 
             return new CommandGroupHandle(group.GroupID);
         }
 
         public static void EndGroup()
         {
-            if(groupsQueue.TryPeek(out var group))
+            if(GroupsQueue.TryPeek(out var group))
                 EndGroup(group.GroupID);
         }
         public static void EndGroup(BattleID id)
         {
-            if (groupsQueue.TryPeek(out var group) && group.GroupID == id)
+            if (GroupsQueue.TryPeek(out var group) && group.GroupID == id)
             {
-                groupsQueue.Pop();
-                Trace.CommandTrace.ReportGroupEnded(group.GroupID);
+                GroupsQueue.Pop();
+                CommandTrace.ReportGroupEnded(group.GroupID);
             }
         }
 
@@ -59,17 +60,17 @@ namespace ATCG.Battle.Commands.Core
         {
             //If it's the first command called and no group was setup first
 
-            bool useAutoGroup = groupsQueue.Count == 0;
+            bool useAutoGroup = GroupsQueue.Count == 0;
             if (useAutoGroup)
                 BeginGroup($"Auto_{command.GetType().Name}");
 
-            CommandGroup group = groupsQueue.Peek();
+            CommandGroup group = GroupsQueue.Peek();
             CommandTree tree = new CommandTree(command);
             group.AddTree(tree);
 
-            Trace.CommandTrace.ReportTreeBegan(group.GroupID, command.ID);
+            CommandTrace.ReportTreeBegan(group.GroupID, command.ID);
 
-            using CommandContext context = new(battlePhase, CommandsPlayers, tree, group.GroupID);
+            using CommandContext context = new(battlePhase, tree, group.GroupID);
             context.Register(command);
 
             try
@@ -90,12 +91,35 @@ namespace ATCG.Battle.Commands.Core
 
         public static void RegisterListener(this ICommandListener listener)
         {
-            CommandsPlayers.Add(listener);
+            CommandsListeners.Add(listener);
         }
 
         public static void UnregisterListener(this ICommandListener listener)
         {
-            CommandsPlayers.Remove(listener);
+            CommandsListeners.Remove(listener);
+        }
+
+
+        public static void RegisterWatcher(this ICommandWatcher watcher)
+        {
+            CommandsWatcher.Add(watcher);
+        }
+
+        public static void UnregisterWatcher(this ICommandWatcher watcher)
+        {
+            CommandsWatcher.Remove(watcher);
+        }
+
+        public static void TriggerWatchers<T>(T command)
+        {
+            foreach (var watcher in CommandsWatcher)
+            {
+                if (watcher is not ICommandWatcher<T> w)
+                    continue;
+
+                if (w.Accepts(command))
+                    w.Trigger(command);
+            }
         }
     }
 }

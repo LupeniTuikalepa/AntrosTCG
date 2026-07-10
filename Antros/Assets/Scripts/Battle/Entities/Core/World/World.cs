@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Components.Premade;
+using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities
 {
@@ -56,6 +59,13 @@ namespace ATCG.Battle.Entities
             return new Entity(id);
         }
 
+        public Entity CreateEntity(EntityAddress parent)
+        {
+            Entity entity = CreateEntity();
+            AddOrSetComponent(entity, new ChildOfComponent(parent));
+
+            return entity;
+        }
         public bool IsAlive(in Entity e)
         {
             return entities.Has(e.id);
@@ -87,11 +97,53 @@ namespace ATCG.Battle.Entities
 
         public void DestroyEntity(in Entity e)
         {
-            foreach (IComponentStore store in stores)
-                store?.Remove(e.id);
+            int id = ComponentID<ChildOfComponent>.ID;
 
-            entities.Remove(e.id);
-            freeIds.Push(e.id);
+            if (stores[id] is not ComponentStore<ChildOfComponent> store)
+                return;
+
+            using (HashSetPool<int>.Get(out var toDestroy))
+            {
+                toDestroy.Add(e);
+                CollectDeathDependencies(e, store, toDestroy);
+
+                foreach (int entity in toDestroy)
+                    RemoveEntity(entity);
+            }
+        }
+
+        private void RemoveEntity(int e)
+        {
+            for (int i = 0; i < stores.Length; i++)
+            {
+                IComponentStore store = stores[i];
+                store?.Remove(e);
+            }
+
+            entities.Remove(e);
+            freeIds.Push(e);
+        }
+
+        private void CollectDeathDependencies(Entity e, ComponentStore<ChildOfComponent> childOfComponents, HashSet<int> entitiesToDestroy)
+        {
+            for (int i = 0; i < childOfComponents.Count; i++)
+            {
+                ChildOfComponent component = childOfComponents.AllComponents[i];
+                int entity = childOfComponents.AllEntities[i];
+
+                if (component.entity == e)
+                {
+                    if (entitiesToDestroy.Add(entity))
+                    {
+                        CollectDeathDependencies(new Entity(entity), childOfComponents, entitiesToDestroy);
+                    }
+                    else
+                    {
+                        Debug.LogError("[Entity] A circular relation was detected when destroying entity " + e + ".");
+                        return;
+                    }
+                }
+            }
         }
     }
 }

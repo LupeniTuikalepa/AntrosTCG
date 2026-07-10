@@ -1,7 +1,6 @@
-﻿using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+﻿using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Commands.Players;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Metrics;

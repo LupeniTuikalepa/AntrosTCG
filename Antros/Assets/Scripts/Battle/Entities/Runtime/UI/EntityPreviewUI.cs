@@ -1,7 +1,7 @@
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.Players;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.UI;
@@ -63,7 +63,7 @@ namespace ATCG.Battle
 
 			await RefreshAsync();
 		}
-		
+
 		public async Awaitable Play(CommandListenerState state, CommandContext context, DeathCommand command)
 		{
 			state.CompleteAll(this);

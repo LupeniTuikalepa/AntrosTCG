@@ -1,7 +1,7 @@
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Capacities;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local.Runtime;

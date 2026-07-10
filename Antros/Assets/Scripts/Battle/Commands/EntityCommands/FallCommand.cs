@@ -1,15 +1,7 @@
-using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Runtime;
-using ATCG.Battle.GameModes;
-using ATCG.Battle.Grids;
-using ATCG.Battle.Players.Local;
-using ATCG.HexGrids;
-using PrimeTween;
-using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
@@ -28,7 +20,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 			{
 				if (!gridMemberComponent.grid.TryGetBattleCell(gridMemberComponent.coordinates, out _))
 				{
-					Embed(in context, new DeathCommand(address));
+					Inject(in context, new DeathCommand(address));
 				}
 			}
 		}

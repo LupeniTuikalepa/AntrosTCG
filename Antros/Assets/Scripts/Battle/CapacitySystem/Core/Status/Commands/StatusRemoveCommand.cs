@@ -1,26 +1,31 @@
-﻿using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Infos;
+﻿using System;
+using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Entities;
 using ATCG.Capacities.Data.Status;
 using Helteix.Tools.DataMapping;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
 {
-    public class StatusRemoveCommand : EntityCommand<NoInfos>
+    [Serializable]
+    public class StatusRemoveCommand : EntityCommand<StatusCommandInfos>
     {
-        private readonly StatusData data;
+        [field: SerializeField]
+        public StatusData Data { get; private set; }
 
         public StatusRemoveCommand(EntityAddress address, StatusData data) : base(address)
         {
-            this.data = data;
+            this.Data = data;
         }
 
         protected override void Process(in CommandContext context)
         {
-            if (Mapper.TryGet(data, out IStatusContainer container))
+            infos.data = Data;
+            if (Mapper.TryGet(Data, out IStatusContainer container))
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
-                container.Remove(data, Target.ToAddress(context.World), statusContext);
+                container.Remove(Data, Target.ToAddress(context.World), statusContext);
             }
         }
     }

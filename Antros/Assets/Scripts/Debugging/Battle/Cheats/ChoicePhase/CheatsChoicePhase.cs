@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Threading;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
-using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle.ChoicePhase
 {

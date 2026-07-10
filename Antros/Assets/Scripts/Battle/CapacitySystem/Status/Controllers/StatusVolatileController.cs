@@ -4,33 +4,26 @@ using ATCG.Capacities.Data.Status;
 
 namespace ATCG.Battle.Entities.Components.Status
 {
-	public struct StatusVolatileController<T>: IStatusController<T>,IStatusTurnController where T : struct, IStatusComponent
+	public struct StatusVolatileController : IStatusController ,IStatusTurnController
     {
-        private bool willLast;
-        
-        public void Reset()
+        private bool destroyOnNextCheck;
+        private bool wasTriggered;
+
+
+        public void Trigger() => wasTriggered = true;
+
+        bool IStatusController.IsFinished() => destroyOnNextCheck;
+
+
+        void IStatusTurnController.OnTurnStarted()
         {
-	        willLast =  false;
+            if (!wasTriggered)
+                destroyOnNextCheck = true;
         }
 
-        public void Trigger()
+        void IStatusTurnController.OnTurnEnded()
         {
-	        willLast = true;
-        }
-
-        public bool IsFinished(ComponentRef<T> componentRef)
-        {
-            return !willLast;
-        }
-
-        public void OnTurnStarted()
-        {
-	        
-        }
-
-        public void OnTurnEnded()
-        {
-	        Reset();
+            wasTriggered = false;
         }
     }
 }

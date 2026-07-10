@@ -1,16 +1,12 @@
-﻿using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Infos;
+﻿using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Deployables;
-using ATCG.Battle.Entities.Runtime.Deployables;
-using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.Capacities;
 using ATCG.HexGrids;
-using Helteix.Tools;
 using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.Commands.EntityCommands
@@ -24,7 +20,7 @@ namespace ATCG.Battle.Commands.EntityCommands
             public readonly DeployableAspect deployable;
             public readonly BattleGrid grid;
 
-            public HexCoordinates Destination => cell.Coordinate; 
+            public HexCoordinates Destination => cell.Coordinate;
             public Infos(DeployableData data, BattleCellAspect cell, DeployableAspect deployable, BattleGrid grid)
             {
                 this.data = data;
@@ -64,7 +60,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
             if (data.TryGet(out IDeployableContainer container))
                 container.SetupEntity(data, deployableAspect);
-            
+
         }
     }
 }

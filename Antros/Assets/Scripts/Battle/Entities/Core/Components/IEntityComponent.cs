@@ -2,5 +2,6 @@
 {
     public interface IEntityComponent
     {
+        internal void Dispose() { }
     }
 }

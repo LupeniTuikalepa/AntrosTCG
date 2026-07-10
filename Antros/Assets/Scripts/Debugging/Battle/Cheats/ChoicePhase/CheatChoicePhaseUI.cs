@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using ATCG.Utilities;
 using Helteix.Tools.Phases.Listeners;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ATCG.Debugging.Debugging.Battle.ChoicePhase
 {

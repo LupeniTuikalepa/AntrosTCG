@@ -1,5 +1,4 @@
 using System;
-using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Components;

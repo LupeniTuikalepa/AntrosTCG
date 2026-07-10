@@ -10,7 +10,7 @@ namespace ATCG.Battle.Players.Local.UI.Stats
         private PlayerHealthBar healthBar;
 
         [SerializeField]
-        private ListenerManaIconBar manaBar;
+        private PlayerManaIconBar manaBar;
 
         protected override void OnConnect()
         {

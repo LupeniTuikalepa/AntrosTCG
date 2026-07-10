@@ -8,44 +8,52 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Berserk
 {
-	public partial struct BerserkStatus : IStatus<BerserkStatusData>
+	public partial class BerserkStatus : Status<BerserkStatusData, BerserkStatusComponent, StatusVolatileController>
 	{
-		private ChannelKey channelKey;
-		
-		public void Apply(BerserkStatusData data, EntityAddress target, StatusContext context)
+		protected override BerserkStatusComponent CreateStatusComponent(BerserkStatusData data, in StatusContext context)
 		{
+			BerserkStatusComponent berserkStatusComponent = new BerserkStatusComponent(data, ChannelKey.GetUniqueChannelKey("Berserk"));
+			return berserkStatusComponent;
+		}
+
+		protected override StatusVolatileController CreateStatusController(BerserkStatusData data, in StatusContext context) => new();
+
+		protected override void OnApply(BerserkStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		{
+			EntityAddress target = statusInfos.targetAddress;
+
+			//listens for entity events
+			ref BerserkStatusComponent berserkStatusComponent = ref statusInfos.statusComponentRef.GetValue();
+			berserkStatusComponent.Watch(statusInfos.targetAddress, statusInfos.statusControllerRef);
+
+			//Debug.Log($"Applying Berserk status: {target}");
 			if(!target.TryGetComponentRO(out BasicAttackerComponent  basicAttackerComponent))
 				return;
-			channelKey = ChannelKey.GetUniqueChannelKey("Berserk");
+
+			ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
 			basicAttackerComponent.strength.Multiply(channelKey, data.forceMultiplier);
-			
+
 			if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
 				defenseComponent.defense.Subtract(channelKey, data.defenseReduction);
 
-			target.ApplyStatus(new BerserkStatusComponent(data, channelKey),
-				new StatusVolatileController<BerserkStatusComponent>(),
-				context);
+			base.OnApply(data, in statusInfos, in context);
 		}
 
-		public void Remove(BerserkStatusData data, EntityAddress address, StatusContext context)
-		{ 
-			
-			if (address.TryGetComponentRO(out BasicAttackerComponent attackerComponent))
-					attackerComponent.strength.RemoveOperation(channelKey);
-			
-			if (address.TryGetComponentRO(out DefenseComponent defenseComponent))
+
+		protected override void OnRemove(BerserkStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		{
+			EntityAddress target = statusInfos.targetAddress;
+
+			if(!target.TryGetComponentRO(out BasicAttackerComponent  basicAttackerComponent))
+				return;
+
+			ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
+			basicAttackerComponent.strength.RemoveOperation(channelKey);
+
+			if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
 				defenseComponent.defense.RemoveOperation(channelKey);
-			
-			address.RemoveStatus<BerserkStatusComponent>(address,context);
-			
-		}
 
-		public void Tick(BerserkStatusData data, EntityAddress address, StatusContext context)
-		{
-		}
-
-		public void TickAll(BerserkStatusData data, StatusContext context)
-		{
+			base.OnRemove(data, in statusInfos, in context);
 		}
 	}
 }

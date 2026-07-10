@@ -1,8 +1,8 @@
 ﻿using System;
-using ATCG.Battle.Commands.Core;
-using ATCG.Battle.Commands.Core.Players;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
@@ -13,11 +13,11 @@ using UnityEngine;
 namespace ATCG.Battle.Players.UI
 {
 	[AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerHealthBar")]
-	public class PlayerHealthBar : BarUI, IPlayerStatUI, ICommandListener<ModifyPlayerHealthCommand> 
+	public class PlayerHealthBar : BarUI, IPlayerStatUI, ICommandListener<ModifyPlayerHealthCommand>
 	{
 		public IBattlePlayer BattlePlayer { get; private set; }
 
-		
+
 		private void OnEnable()
 		{
 			this.RegisterListener();
@@ -43,13 +43,13 @@ namespace ATCG.Battle.Players.UI
 			BattlePlayer = null;
 		}
 
-		
+
 		public async Awaitable Play(CommandListenerState state, CommandContext context, ModifyPlayerHealthCommand command)
 		{
 			state.CompleteWindUp(this);
 
 			DeltaInRangeInfos<int> infos = command.GetInfos();
-			MaxValue = infos.max; 
+			MaxValue = infos.max;
 			CurrentValue = infos.to;
 
 			await RefreshAsync();

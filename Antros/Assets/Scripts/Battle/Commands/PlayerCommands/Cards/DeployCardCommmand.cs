@@ -1,8 +1,8 @@
 ﻿using System;
 using ATCG.Battle.Cards;
-using ATCG.Battle.Commands.Core;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
@@ -36,11 +36,11 @@ namespace ATCG.Battle.Commands.GameCommands
             if (card.InvocationCost > player.CurrentMana)
                 return;
 
-            Embed(in context, new ModifyPlayerManaCommand(player, -card.InvocationCost));
+            Inject(in context, new ModifyPlayerManaCommand(player, -card.InvocationCost));
             switch (card)
             {
                 case HeroBattleCard heroBattleCard:
-                    Embed(in context, new SpawnHeroCommand(player, heroBattleCard, Destination));
+                    Inject(in context, new SpawnHeroCommand(player, heroBattleCard, Destination));
                     player.Hand.TryRemoveCard(card);
                     break;
             }

@@ -1,7 +1,6 @@
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Players.Local.Runtime;
-using ATCG.Battle.Players.Runtime;
 using Cheats.Core;
 using UnityEngine;
 

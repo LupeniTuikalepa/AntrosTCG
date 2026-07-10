@@ -1,17 +1,13 @@
 ﻿using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using ATCG.Battle;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
-using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Turns;
 using ATCG.Cards;
 using ATCG.GameModes;
 using ATCG.Players;
 using Helteix.Tools.Phases;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Gameplay

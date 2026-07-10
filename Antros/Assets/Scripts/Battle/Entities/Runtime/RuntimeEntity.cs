@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using ATCG.Battle.Commands.Core;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Capacities.Data.Status;
 using ATCG.Metrics;

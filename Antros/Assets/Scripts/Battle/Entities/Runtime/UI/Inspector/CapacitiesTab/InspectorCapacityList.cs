@@ -1,5 +1,4 @@
-﻿using System;
-using ATCG.Battle.Entities.Components;
+﻿using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
 using Helteix.Tools;

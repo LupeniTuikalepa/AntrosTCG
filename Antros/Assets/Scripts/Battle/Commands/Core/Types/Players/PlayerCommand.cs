@@ -1,11 +1,9 @@
 ﻿using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Commands.Players;
-using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using UnityEngine;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands.Players
 {
     [System.Serializable]
     public abstract class PlayerCommand<T> : Command<T>, IPlayerCommand

@@ -1,31 +1,16 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 
 namespace ATCG.Battle.CapacitySystem.Status.Forst
 {
-    public partial struct FreezeStatus : IStatus<FreezeStatusData>
+    public partial class FreezeStatus : Status<FreezeStatusData, StatusDurationController>
     {
-        public void Apply(FreezeStatusData data, EntityAddress target, StatusContext context)
+        protected override StatusDurationController CreateStatusController(FreezeStatusData data, in StatusContext context)
         {
-            target.ApplyStatus(
-                new FreezeStatusComponent(data),
-                new StatusDurationController<FreezeStatusComponent>(data.Duration),
-                context);
+            return new StatusDurationController(data.Duration);
         }
-
-        public void Remove(FreezeStatusData data, EntityAddress address, StatusContext context)
-        {
-            address.RemoveStatus<FreezeStatusComponent>(address,context);
-        }
-
-        public void Tick(FreezeStatusData data, EntityAddress address, StatusContext context)
-        {
-        }
-
-        public void TickAll(FreezeStatusData data, StatusContext context)
-        {
-        }
+        
     }
 }

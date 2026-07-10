@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ATCG.Battle.Commands.Core.Exceptions;
+using ATCG.Battle.Commands.Exceptions;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.GameModes;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Core
+namespace ATCG.Battle.Commands
 {
     [Serializable]
     public abstract partial class Command<TInfos> : IDisposable, ICommand
@@ -62,19 +58,20 @@ namespace ATCG.Battle.Commands.Core
 
         protected abstract void Process(in CommandContext context);
 
-        public void Embed<TCommand>(in CommandContext context)
+        public void Inject<TCommand>(in CommandContext context)
             where TCommand : ICommand, new()
         {
-            Embed(context, new TCommand());
+            Inject(context, new TCommand());
         }
 
-        public void Embed<TCommand>(in CommandContext context, TCommand command)
+        public void Inject<TCommand>(in CommandContext context, TCommand command)
             where TCommand : ICommand
         {
             context.Register(command);
 
             embeds.Add(command.ID);
             command.SetParent(this);
+
             command.Process(in context);
         }
 
