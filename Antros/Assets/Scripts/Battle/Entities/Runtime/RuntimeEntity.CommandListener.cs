@@ -127,12 +127,12 @@ namespace ATCG.Battle.Entities.Runtime
 		async Awaitable ICommandListener<PushbackCommand>.Play(CommandListenerState state, CommandContext context, PushbackCommand command)
 		{
 			state.CompleteWindUp(this);
-			
+
 			var infos = command.GetInfos();
 			var destination = RuntimeBattleGrid.GetPositionAt(infos.to);
-			
+
 			await Tween.Position(transform, destination, .15f, Ease.OutCirc);
-			
+
 			state.CompleteFollowThrough(this);
 		}
 
@@ -166,6 +166,10 @@ namespace ATCG.Battle.Entities.Runtime
 			}
 
 			RuntimeStatus runtimeStatus = Instantiate(prefabStatus, statusRoot);
+			runtimeStatus.transform.localScale = Vector3.one;
+			runtimeStatus.transform.localPosition = Vector3.zero;
+			runtimeStatus.transform.localRotation = Quaternion.identity;
+			
 			statusDatas.Add(statusData, runtimeStatus);
 			runtimeStatus.Apply(runtimeContext);
 		}

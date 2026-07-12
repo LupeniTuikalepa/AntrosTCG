@@ -59,11 +59,11 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             // 4. Wire timeline into the variant's director (edit prefab contents so it
             //    persists on the asset, not on a throwaway instance).
-            PlayableDirector director;
             GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+            bool saved;
             try
             {
-                director = root.GetComponentInChildren<PlayableDirector>();
+                PlayableDirector director = root.GetComponentInChildren<PlayableDirector>();
                 if (director == null)
                 {
                     message = "Template has no PlayableDirector — fix the template and retry.";
@@ -71,19 +71,40 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 }
 
                 director.playableAsset = timeline;
-                PrefabUtility.SavePrefabAsset(root);
+                saved = PrefabUtility.SavePrefabAsset(root);
             }
             finally
             {
                 PrefabUtility.UnloadPrefabContents(root);
             }
 
-            // 5. Assign the variant's director (on the saved asset) back to the data.
-            PlayableDirector assetDirector = variant.GetComponentInChildren<PlayableDirector>();
-            AssignDirector(capacity, assetDirector);
+            if (!saved)
+            {
+                message = "Failed to save the timeline onto the prefab's PlayableDirector.";
+                return false;
+            }
 
+            // Flush before reading the asset back — `variant` was obtained before this
+            // second save to the same path, so its in-memory component references aren't
+            // guaranteed to reflect what was just written. Reload from disk instead of
+            // trusting `variant.GetComponentInChildren<PlayableDirector>()`.
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            GameObject savedVariant = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            PlayableDirector assetDirector = savedVariant != null
+                ? savedVariant.GetComponentInChildren<PlayableDirector>()
+                : null;
+
+            if (assetDirector == null)
+            {
+                message = "Prefab was saved but its PlayableDirector couldn't be reloaded — " +
+                           "CutsceneDirector was left unassigned.";
+                return false;
+            }
+
+            // 5. Assign the variant's director (on the saved asset) back to the data.
+            AssignDirector(capacity, assetDirector);
 
             message = $"Built cutscene stage for '{capacity.name}' under " +
                       $"{System.IO.Path.GetDirectoryName(prefabPath)}.";

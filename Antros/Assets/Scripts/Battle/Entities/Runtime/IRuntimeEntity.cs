@@ -1,3 +1,4 @@
+using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {
-    public interface IRuntimeEntity
+    public interface IRuntimeEntity : ILinkedRendererSource
     {
         GameObject gameObject { get; }
         Transform transform { get; }
@@ -20,8 +21,6 @@ namespace ATCG.Battle.Entities.Runtime
         BattlePhase BattlePhase { get; }
         Transform actionUIRoot { get; }
         Transform statusRoot { get; }
-        Renderer[] Models { get; }
-
         void OnHovered();
         void OnUnhovered();
         void OnSelected();

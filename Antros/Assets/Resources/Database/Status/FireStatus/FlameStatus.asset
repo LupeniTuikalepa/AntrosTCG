@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.FlameStatusData
   guidText: e924d0d4-032d-49dc-a97a-5ee4eb0df68a
   <Name>k__BackingField: Flame
-  <Color>k__BackingField: {r: 0.8679245, g: 0.06959773, b: 0.06959773, a: 1}
+  <Color>k__BackingField: {r: 0.8666667, g: 0.21669307, b: 0.07058823, a: 1}
   <Element>k__BackingField: 1
-  <RuntimeStatus>k__BackingField: {fileID: 1034227222644561179, guid: d9a6af84a2c5b654d92396a7dfbd735b, type: 3}
+  <RuntimeStatus>k__BackingField: {fileID: 2825243117672663037, guid: d9a6af84a2c5b654d92396a7dfbd735b, type: 3}
   <Icon>k__BackingField: {fileID: 21300000, guid: 7179d957860c6304e8d495d0f4fbbf05, type: 3}
   <Damage>k__BackingField: 1
   <normalDuration>k__BackingField: 2

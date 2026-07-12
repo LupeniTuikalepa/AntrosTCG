@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities.Runtime.Status;
+using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
@@ -44,7 +45,7 @@ namespace ATCG.Battle.Entities.Runtime
 
 
         [field: ShowInInspector, ReadOnly, BoxGroup("Debug")]
-        public Renderer[] Models { get; private set; }
+        public LinkedRendererGroup Models { get; private set; }
 
         [field: SerializeField, BoxGroup("UI")]
         public Transform actionUIRoot { get; private set; }
@@ -53,12 +54,12 @@ namespace ATCG.Battle.Entities.Runtime
         public Transform statusRoot { get; private set; }
         [field: SerializeField, BoxGroup("UI")]
         public Transform HoveredRoot { get; private set; }
-        
+
         private Dictionary<StatusData, RuntimeStatus> statusDatas;
 
         protected virtual void Awake()
         {
-            Models = GetComponentsInChildren<Renderer>();
+            Models = new LinkedRendererGroup(GetComponentsInChildren<LinkedRenderer>());
             IsInteractable = new Condition();
             statusDatas = new();
         }
@@ -106,10 +107,10 @@ namespace ATCG.Battle.Entities.Runtime
         void IRuntimeEntity.OnSelected()
         {
             OnSelected();
-            for (int i = 0; i < Models.Length; i++)
+            foreach (var model in Models.GetAll())
             {
-                if(Models[i] != null)
-                    Models[i].EnableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
+                if(model.Renderer != null)
+                    model.Renderer.EnableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             }
             OnEntitySelected?.Invoke();
         }
@@ -117,20 +118,22 @@ namespace ATCG.Battle.Entities.Runtime
         void IRuntimeEntity.OnDeselected()
         {
             OnDeselected();
-            for (int i = 0; i < Models.Length; i++)
+
+
+            foreach (var model in Models.GetAll())
             {
-                if(Models[i] != null)
-                    Models[i].DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
+                if(model.Renderer != null)
+                    model.Renderer.DisableRenderingLayer(GameMetrics.Current.SelectedRenderingLayer);
             }
             OnEntityDeselected?.Invoke();
         }
         void IRuntimeEntity.OnHovered()
         {
             OnHovered();
-            for (int i = 0; i < Models.Length; i++)
+            foreach (var model in Models.GetAll())
             {
-                if (Models[i] != null)
-                    Models[i].EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+                if(model.Renderer != null)
+                    model.Renderer.EnableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
             }
 
         }
@@ -138,10 +141,10 @@ namespace ATCG.Battle.Entities.Runtime
         void IRuntimeEntity.OnUnhovered()
         {
             OnUnhovered();
-            for (int i = 0; i < Models.Length; i++)
+            foreach (var model in Models.GetAll())
             {
-                if (Models[i] != null)
-                    Models[i].DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
+                if(model.Renderer != null)
+                    model.Renderer.DisableRenderingLayer(GameMetrics.Current.HoverRenderingLayer);
             }
         }
     }

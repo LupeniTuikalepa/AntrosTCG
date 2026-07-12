@@ -34,6 +34,18 @@ namespace ATCG.Editor.Tools.CapacityEditor
             var choices = declaredSteps.ToList();
             int currentIndex = choices.IndexOf(stepNameProp.stringValue);
 
+            // A freshly created marker has an empty stepName. The dropdown used to just
+            // *display* index 0 in that case without writing it back, so the inspector
+            // looked assigned to the first step while the serialized string stayed empty.
+            // Default and persist it here so the display matches the actual data. A
+            // non-empty value that simply isn't in the list (a since-removed step) is left
+            // alone below, with a warning, instead of being silently overwritten.
+            if (currentIndex < 0 && string.IsNullOrEmpty(stepNameProp.stringValue))
+            {
+                currentIndex = 0;
+                ApplyStepName(stepNameProp, choices[0]);
+            }
+
             DropdownField dropdown = new("Step", choices, currentIndex >= 0 ? currentIndex : 0);
             dropdown.RegisterValueChangedCallback(evt => ApplyStepName(stepNameProp, evt.newValue));
             root.Add(dropdown);

@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Entities.Runtime.VFX;
 using UnityEngine;
 
 namespace ATCG.Editor.Tools.CapacityEditor
@@ -12,16 +13,16 @@ namespace ATCG.Editor.Tools.CapacityEditor
     public sealed class DebugCutsceneActor : ICutsceneActor
     {
         public Transform transform { get; }
-        public Renderer[] Models { get; }
+        public LinkedRendererGroup Models { get; }
         public Animator Animator { get; }
 
         public DebugCutsceneActor(Transform root, Animator animator)
         {
             transform = root;
             Animator = animator;
-            Models = root != null
-                ? root.GetComponentsInChildren<Renderer>(true)
-                : System.Array.Empty<Renderer>();
+            Models = new LinkedRendererGroup(root != null
+                ? root.GetComponentsInChildren<LinkedRenderer>(true)
+                : System.Array.Empty<LinkedRenderer>());
         }
     }
 }

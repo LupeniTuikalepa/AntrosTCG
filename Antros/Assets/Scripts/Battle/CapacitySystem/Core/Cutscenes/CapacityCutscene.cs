@@ -44,6 +44,15 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
 
         private ICapacityCutsceneElement[] elements;
 
+        // The "HeroAnimator" track binds straight onto the real caster's own Animator
+        // (see CutsceneChannels.ResolveHeroAnimator) — root motion or keyframed position
+        // in the clip moves the actual battle entity, and Timeline never reverts a driven
+        // transform when it stops. Cached here and restored in Dispose() so the caster
+        // ends up back on its hex cell instead of wherever the clip's last frame left it.
+        private IRuntimeEntity runtimeCaster;
+        private Vector3 casterInitialPosition;
+        private Quaternion casterInitialRotation;
+
         public bool IsHost => castCapacityPhase.casterPlayerId == ScreenPlayer.BattlePlayer.ID;
 
         private readonly Dictionary<BattleID, Qte> qtes = new();
@@ -66,6 +75,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             {
                 transform.position = runtimeEntity.transform.position;
                 transform.rotation = runtimeEntity.transform.rotation;
+
+                runtimeCaster = runtimeEntity;
+                casterInitialPosition = runtimeEntity.transform.position;
+                casterInitialRotation = runtimeEntity.transform.rotation;
             }
 
             // Build the per-screen context (this is what injects the built-in properties:
@@ -108,6 +121,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
         {
             for (int i = 0; i < elements.Length; i++)
                 elements[i].Disconnect();
+
+            if (runtimeCaster != null)
+            {
+                runtimeCaster.transform.position = casterInitialPosition;
+                runtimeCaster.transform.rotation = casterInitialRotation;
+            }
 
             gameObject.Destroy();
         }

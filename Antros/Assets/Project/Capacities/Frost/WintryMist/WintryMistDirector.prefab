@@ -2524,14 +2524,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2454774086203462867}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -8665,11 +8665,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5605399348697614650}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5316f2b510a6b2f43b363147b9e1427e, type: 3}
+  m_Script: {fileID: 11500000, guid: bb672371da4840508fdd5ed66d711e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.CutsceneElement.RootParticleSystemController
-  source: {fileID: 2066389346291051400}
   container: {fileID: 1908942769387899395}
+  source: {fileID: 2066389346291051400}
+  keys: -1
 --- !u!1 &5739434525962582556
 GameObject:
   m_ObjectHideFlags: 0
@@ -8713,14 +8714,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5739434525962582556}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -11422,7 +11423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3436563447295656197
 Transform:
   m_ObjectHideFlags: 0

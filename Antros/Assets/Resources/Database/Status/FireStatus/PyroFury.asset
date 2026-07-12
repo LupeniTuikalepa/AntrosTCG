@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Status.FireStatus.PyroFuryData
   guidText: 6bf9d8d2-2c29-43ee-b76c-2babe3303390
   <Name>k__BackingField: PyroFury
-  <Color>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
+  <Color>k__BackingField: {r: 1, g: 0, b: 0.24449515, a: 1}
   <Element>k__BackingField: 1
-  <RuntimeStatus>k__BackingField: {fileID: 3787760227535759248, guid: b15682f9d37cd05448320c84fdcb0c69, type: 3}
+  <RuntimeStatus>k__BackingField: {fileID: 8578298289923643533, guid: b15682f9d37cd05448320c84fdcb0c69, type: 3}
   <Icon>k__BackingField: {fileID: 21300000, guid: b59ebfac32179ed40b359e549d709fe2, type: 3}
   <AttackBuff>k__BackingField: 5
   <Duration>k__BackingField: 2

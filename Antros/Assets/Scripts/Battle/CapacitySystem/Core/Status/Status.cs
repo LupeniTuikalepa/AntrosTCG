@@ -72,7 +72,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 world.AddOrSetComponent(statusEntityAddress, statusTag);
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusComponent(data, context));
                 world.AddOrSetComponent(statusEntityAddress, CreateStatusController(data, context));
-                AddSignature(statusEntityAddress);
+                AddSignature(statusEntityAddress, data);
 
                 if(target.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent))
                     statusEntityAddress.AddOrSetComponent(new BelongsToPlayerComponent(belongsToPlayerComponent.playerId, belongsToPlayerComponent.playerNumber));
@@ -138,7 +138,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         protected abstract TComponent CreateStatusComponent(TData data, in StatusContext context);
         protected abstract TController CreateStatusController(TData data, in StatusContext context);
-        protected abstract void AddSignature(EntityAddress address);
+        protected abstract void AddSignature(EntityAddress address, StatusData statusData);
 
         protected virtual void OnApply(TData data, in EntityStatusInfos statusInfos, in StatusContext context)
         {

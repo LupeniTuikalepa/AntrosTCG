@@ -1,6 +1,7 @@
 using System.Linq;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using UnityEditor;
+using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -32,6 +33,11 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             EditorUtility.SetDirty(timeline);
             AssetDatabase.SaveAssetIfDirty(timeline);
+
+            // Editing a TimelineAsset via script doesn't repaint an already-open Timeline
+            // window on its own — without this, the new track only appears after
+            // deselecting and reselecting the timeline.
+            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
         }
 
         public static void RemoveTrack(TimelineAsset timeline, AutoBindChannel channel)
@@ -52,6 +58,8 @@ namespace ATCG.Editor.Tools.CapacityEditor
             timeline.DeleteTrack(track);
             EditorUtility.SetDirty(timeline);
             AssetDatabase.SaveAssetIfDirty(timeline);
+
+            TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
         }
 
         // Binds one track to the rig's reference for its channel, if present.

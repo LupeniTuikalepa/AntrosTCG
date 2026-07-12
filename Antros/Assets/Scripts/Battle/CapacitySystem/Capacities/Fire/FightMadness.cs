@@ -1,5 +1,6 @@
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.CapacitySystem.Status.Berserk;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
@@ -29,10 +30,15 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
 		{
 			Debug.Log($"DeployRage,{data.BerserkData}", data);
-			if (data.BerserkData.TryGet(out IStatusContainer statusContainer))
-			{
-				statusContainer.Apply(data.BerserkData,ctx.Caster,new StatusContext(ctx.BattlePhase));
-			}
+
+			// Must go through StatusApplyCommand (not IStatusContainer.Apply directly):
+			// running it is what dispatches to RuntimeEntity's StatusApplyCommand listener,
+			// which instantiates the status's RuntimeStatus prefab and fires
+			// IRuntimeStatusComponent.OnApplyStatus — i.e. the VFX. Calling container.Apply
+			// straight away only does the ECS-side status/controller/signature bookkeeping,
+			// with nothing spawning the visual side.
+			var statusCommand = new StatusApplyCommand(ctx.Caster, data.BerserkData);
+			statusCommand.Run(ctx.BattlePhase);
 		}
 
 		private partial void ExecutePunch(FightMadnessData data, CapacityStepContext ctx)
