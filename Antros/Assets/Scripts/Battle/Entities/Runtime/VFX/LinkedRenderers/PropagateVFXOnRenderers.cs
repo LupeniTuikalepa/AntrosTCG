@@ -157,6 +157,23 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             }
         }
 
+        // Toggles new emission on every instance this component currently manages, without
+        // touching particles already alive — used by PropagateVFXBehaviour's ease-out
+        // window (Timeline keeps calling SetTime/Simulate on the same instances, so
+        // whatever's already emitted keeps dying naturally instead of being cut off).
+        // Re-enabling (scrubbing back before the hold point) resumes normal emission.
+        public void SetEmissionEnabled(bool enabled)
+        {
+            foreach (var p in particleSystems)
+            {
+                if (p == null)
+                    continue;
+
+                ParticleSystem.EmissionModule emission = p.emission;
+                emission.enabled = enabled;
+            }
+        }
+
         private static async Awaitable StopParticleSystems(ParticleSystem particleSystem)
         {
             if (particleSystem == null)
