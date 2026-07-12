@@ -2,6 +2,7 @@
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
+using ATCG.Metrics;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -12,6 +13,9 @@ namespace ATCG.Battle.Entities.Runtime.Grid
     {
         public HexCoordinates Coordinates => Aspect.GridMemberComponent.coordinates;
 
+        [SerializeField]
+        private MeshRenderer outline;
+
 
         public override async Awaitable Spawn(RuntimeEntityManager manager, BattleCellAspect aspect)
         {
@@ -19,35 +23,27 @@ namespace ATCG.Battle.Entities.Runtime.Grid
 
             await Awaitable.EndOfFrameAsync();
 
-            using (ListPool<Material>.Get(out var list))
+            bool found = false;
+            Material outlineMaterial = RuntimeBattleGrid.CellMaterial;
+
+            BattlePhase battlePhase = BattlePhase;
+            foreach (IBattlePlayer player in battlePhase.Players)
             {
-                bool found = false;
-
-                BattlePhase battlePhase = BattlePhase;
-                foreach (IBattlePlayer player in battlePhase.Players)
+                foreach (HexCoordinates coord in player.GetStartingLine())
                 {
-                    foreach (HexCoordinates coord in player.GetStartingLine())
+                    if (coord == Coordinates)
                     {
-                        if (coord == Coordinates)
-                        {
-                            Material modelMaterial = RuntimeBattleGrid.GetCellPlayerMaterial(player);
-                            list.Add(modelMaterial);
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found)
+                        outlineMaterial = RuntimeBattleGrid.GetCellPlayerMaterial(player);
+                        found = true;
                         break;
+                    }
                 }
-                if(!found)
-                    list.Add(RuntimeBattleGrid.CellMaterial);
 
-                list.Add(RuntimeBattleGrid.CellMaterial);
-
-                for (int i = 0; i < Models.Length; i++)
-                    Models[i].SetMaterials(list);
+                if (found)
+                    break;
             }
+
+            outline.material = outlineMaterial;
             transform.localScale = Vector3.zero;
             float delay = Coordinates.Length() * .2f;
             Easing overshoot = Easing.Overshoot(.3f);

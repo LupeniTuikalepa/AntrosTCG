@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using UnityEngine.Timeline;
 
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs.Timeline
@@ -8,6 +9,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs.Timeline
     /// the cutscene as playerData and can register its window. One QTE per clip;
     /// clip length = QTE duration.
     /// </summary>
+    [DisplayName("ATCG/QTE Track")]
     [TrackColor(0.9f, 0.6f, 0.1f)]
     [TrackClipType(typeof(QtePlayableAsset))]
     [TrackBindingType(typeof(CapacityCutscene))]

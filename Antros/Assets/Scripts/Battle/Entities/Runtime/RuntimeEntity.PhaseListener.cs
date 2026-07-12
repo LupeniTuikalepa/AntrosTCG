@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Players.Local.Phases;
+﻿using ATCG.Battle.Entities.Runtime.VFX;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
@@ -25,11 +26,11 @@ namespace ATCG.Battle.Entities.Runtime
 
                 if (accepts || isRelated)
                 {
-                    foreach (var model in Models)
+                    foreach (LinkedRenderer model in Models.GetAll())
                     {
-                        model.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                        model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                        model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
+                        model.Renderer.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
+                        model.Renderer.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
+                        model.Renderer.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
                     }
                 }
                 else

@@ -5,9 +5,6 @@ namespace ATCG.Battle.Entities.Runtime.Status
 {
     public class RuntimeStatus : MonoBehaviour
     {
-        private event Action<RuntimeStatusContext> OnApplyStatus;
-        private event Action<RuntimeStatusContext> OnRemoveStatus;
-        private event Action<RuntimeStatusContext> OnTickStatus;
 
         private IRuntimeStatusComponent[] components;
 
@@ -18,13 +15,7 @@ namespace ATCG.Battle.Entities.Runtime.Status
 
         private void OnEnable()
         {
-            for (int i = 0; i < components.Length; i++)
-            {
-                var component = components[i];
-                OnApplyStatus += component.OnApplyStatus;
-                OnRemoveStatus += component.OnRemoveStatus;
-                OnTickStatus += component.OnTickStatus;
-            }
+
         }
 
         private void OnDisable()
@@ -32,25 +23,34 @@ namespace ATCG.Battle.Entities.Runtime.Status
             for (int i = 0; i < components.Length; i++)
             {
                 var component = components[i];
-                OnApplyStatus -= component.OnApplyStatus;
-                OnRemoveStatus -= component.OnRemoveStatus;
-                OnTickStatus -= component.OnTickStatus;
             }
         }
 
         public void Apply(RuntimeStatusContext context)
         {
-            OnApplyStatus?.Invoke(context);
+            for (int i = 0; i < components.Length; i++)
+            {
+                var component = components[i];
+                component.OnApplyStatus(context);
+            }
         }
 
         public void Remove(RuntimeStatusContext context)
         {
-            OnRemoveStatus?.Invoke(context);
+            for (int i = 0; i < components.Length; i++)
+            {
+                var component = components[i];
+                component.OnRemoveStatus(context);
+            }
         }
 
         public void Tick(RuntimeStatusContext context)
         {
-            OnTickStatus?.Invoke(context);
+            for (int i = 0; i < components.Length; i++)
+            {
+                var component = components[i];
+                component.OnTickStatus(context);
+            }
         }
     }
 }

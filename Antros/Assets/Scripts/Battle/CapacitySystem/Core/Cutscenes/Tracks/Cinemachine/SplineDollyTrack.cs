@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -10,6 +11,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     /// Bind the track to the dolly component; each clip sweeps normalized from→to over
     /// its duration, so a default 0→1 clip walks the whole spline end to end.
     /// </summary>
+    [DisplayName("ATCG/Cinemachine/Spline Dolly Track")]
     [TrackColor(0.2f, 0.65f, 0.9f)]
     [TrackClipType(typeof(SplineDollyClip))]
     [TrackBindingType(typeof(CinemachineSplineDolly))]

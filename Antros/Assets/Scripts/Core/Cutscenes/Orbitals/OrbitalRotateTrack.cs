@@ -7,6 +7,7 @@ using UnityEngine.Timeline;
 
 namespace ATCG.Core.Cutscenes
 {
+    [DisplayName("ATCG/Cinemachine/Orbital Rotate Track")]
     [TrackColor(0.3f, 0.5f, 0.9f)]
     [TrackClipType(typeof(OrbitalRotateClip))]
     [TrackClipType(typeof(OrbitalSpeedRotateClip))]

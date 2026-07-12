@@ -15611,11 +15611,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8600650715982393210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5316f2b510a6b2f43b363147b9e1427e, type: 3}
+  m_Script: {fileID: 11500000, guid: bb672371da4840508fdd5ed66d711e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.RootParticleSystemController
-  source: {fileID: 32973286914868951}
   container: {fileID: 5916556579088416881}
+  source: {fileID: 32973286914868951}
+  keys: 08000000000000000a0000000d0000000f0000000e000000100000000100000003000000020000000400000012000000110000000b0000000c000000
 --- !u!1 &8614395667123512102
 GameObject:
   m_ObjectHideFlags: 0

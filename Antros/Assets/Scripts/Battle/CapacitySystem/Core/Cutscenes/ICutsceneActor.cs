@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ATCG.Battle.Entities.Runtime.VFX;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
 {
@@ -13,10 +14,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
     /// letting any MonoBehaviour or IRuntimeEntity satisfy the contract without remaps.
     /// Animator may be null for actors that have none — consumers must null-check.
     /// </summary>
-    public interface ICutsceneActor
+    public interface ICutsceneActor : ILinkedRendererSource
     {
         Transform transform { get; }
-        Renderer[] Models { get; }
         Animator Animator { get; }
     }
 }

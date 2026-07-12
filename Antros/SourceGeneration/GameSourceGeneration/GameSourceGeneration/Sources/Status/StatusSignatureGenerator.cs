@@ -23,6 +23,7 @@ namespace GameSourceGeneration.Sources.Status
         private const string StatusMetadataName3 = "Status`3";
         private const string StatusNamespace = "ATCG.Battle.CapacitySystem.Core.Status";
         private const string EntityAddressNamespace = "ATCG.Battle.Entities";
+        private const string StatusDataNamespace = "ATCG.Capacities.Data.Status";
 
         private static readonly DiagnosticDescriptor NotPartial = new(
             id: "STA001",
@@ -102,6 +103,7 @@ namespace GameSourceGeneration.Sources.Status
             sb.AppendLine();
             sb.AppendLine($"using {EntityAddressNamespace};");
             sb.AppendLine($"using {StatusNamespace};");
+            sb.AppendLine($"using {StatusDataNamespace};");
             sb.AppendLine();
 
             bool hasNamespace = model.Namespace != null;
@@ -115,7 +117,7 @@ namespace GameSourceGeneration.Sources.Status
 
             sb.AppendLine($"{indent}public partial class {model.TypeName}");
             sb.AppendLine($"{indent}{{");
-            sb.AppendLine($"{indent}    protected sealed override void AddSignature(EntityAddress address) => address.AddOrSetComponent<StatusSignature<{model.TypeName}>>();");
+            sb.AppendLine($"{indent}    protected sealed override void AddSignature(EntityAddress address, StatusData data) => address.AddOrSetComponent<StatusSignature<{model.TypeName}>>(new StatusSignature<{model.TypeName}>(data));");
             sb.AppendLine($"{indent}}}");
 
             if (hasNamespace)
@@ -123,6 +125,7 @@ namespace GameSourceGeneration.Sources.Status
 
             spc.AddSource($"{model.TypeName}.AddSignature.g.cs", sb.ToString());
         }
+
 
         private readonly struct StatusModel
         {
