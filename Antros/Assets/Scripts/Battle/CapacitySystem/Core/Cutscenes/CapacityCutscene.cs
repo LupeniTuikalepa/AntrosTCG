@@ -57,7 +57,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
 
         private readonly Dictionary<BattleID, Qte> qtes = new();
 
-        private void Awake() => elements = GetComponentsInChildren<ICapacityCutsceneElement>();
+        private void Awake() => elements = GetComponentsInChildren<ICapacityCutsceneElement>(true);
 
         private void Reset() => playableDirector = GetComponent<PlayableDirector>();
 

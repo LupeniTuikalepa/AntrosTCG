@@ -8,7 +8,7 @@ using Helteix.Tools.Phases;
 
 namespace ATCG.Battle
 {
-    public class SelectEntityActionPhase : LocalPlayerPhaseCompletionSource<EntityAction>, IEntitySelectionController, ISinglePhase, IHUDPhase<SelectEntityActionPhase>
+    public class SelectEntityActionPhase : LocalPlayerPhaseCompletionSource<EntityAction>, IEntitySelectionController, ISinglePhase, ILocalHUDPhase<SelectEntityActionPhase>
     {
         string ISinglePhase.Channel => nameof(SelectEntityActionPhase);
         bool ISinglePhase.AllowQueuing => false;

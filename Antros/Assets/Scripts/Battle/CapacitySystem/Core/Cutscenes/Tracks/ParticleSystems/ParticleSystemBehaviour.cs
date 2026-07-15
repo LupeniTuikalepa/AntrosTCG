@@ -15,6 +15,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     /// (Capacity Editor scrubbing) there is no such update, so a Play()-driven system
     /// just sits static. Simulate() is deterministic from the clip's own local time, so
     /// it scrubs correctly both in Play Mode and in edit-mode preview.
+    /// Object activation (SetActive true/false on entry/exit) only happens when the clip's
+    /// HandleObjectActivation is checked — leave it off if the GameObject's active state is
+    /// owned elsewhere and this clip should only drive emission.
     ///   1. Clip start: Clear + reset the local time accumulator.
     ///   2. Every frame: advance the sim by the clip-local time delta (or hard re-simulate
     ///      from 0 when scrubbing backward). Emission is only on between the clip's own
@@ -30,6 +33,13 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     {
         public ParticleSystem ParticleSystem;
         public TimelineClip Clip;
+        public bool HandleObjectActivation;
+
+        // Clear/Stop/Simulate all take a withChildren flag and cascade on their own, but
+        // EmissionModule.enabled doesn't — it's per-instance, so a child particle system
+        // (e.g. a sparks sub-emitter parented under the main burst) kept emitting straight
+        // through the ease-out window. Cached once so every child gets toggled too.
+        private ParticleSystem[] allSystems;
 
         private double lastTime;
         private bool emissionEnabled;
@@ -39,7 +49,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             if (ParticleSystem == null)
                 return;
 
-            ParticleSystem.gameObject.SetActive(true);
+            allSystems = ParticleSystem.GetComponentsInChildren<ParticleSystem>(true);
+
+            if (HandleObjectActivation)
+                ParticleSystem.gameObject.SetActive(true);
+
             ParticleSystem.Clear(true);
 
             lastTime = 0d;
@@ -91,13 +105,24 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
                 return;
 
             ParticleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            ParticleSystem.gameObject.SetActive(false);
+
+            if (HandleObjectActivation)
+                ParticleSystem.gameObject.SetActive(false);
         }
 
         private void SetEmissionEnabled(bool enabled)
         {
-            ParticleSystem.EmissionModule emission = ParticleSystem.emission;
-            emission.enabled = enabled;
+            if (allSystems == null)
+                return;
+
+            foreach (ParticleSystem system in allSystems)
+            {
+                if (system == null)
+                    continue;
+
+                ParticleSystem.EmissionModule emission = system.emission;
+                emission.enabled = enabled;
+            }
         }
     }
 }

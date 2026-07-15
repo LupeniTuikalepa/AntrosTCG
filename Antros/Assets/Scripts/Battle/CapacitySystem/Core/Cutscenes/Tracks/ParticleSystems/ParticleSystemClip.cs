@@ -17,6 +17,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     {
         public ExposedReference<ParticleSystem> particleSystem;
 
+        [Tooltip("If checked, the clip activates the ParticleSystem's GameObject on entry " +
+                 "and deactivates it on exit. Leave off if something else owns activation " +
+                 "(e.g. it's already active/managed elsewhere) and the clip should only drive emission.")]
+        public bool handleObjectActivation = true;
+
         // Injected by ParticleSystemTrack.CreateTrackMixer before CreatePlayable runs.
         // Kept as a live TimelineClip reference rather than copied doubles: the drag
         // handles mutate this same object directly, so reading it fresh every
@@ -31,6 +36,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             var playable = ScriptPlayable<ParticleSystemBehaviour>.Create(graph);
             ParticleSystemBehaviour behaviour = playable.GetBehaviour();
             behaviour.ParticleSystem = particleSystem.Resolve(graph.GetResolver());
+            behaviour.HandleObjectActivation = handleObjectActivation;
             behaviour.Clip = clip;
             return playable;
         }

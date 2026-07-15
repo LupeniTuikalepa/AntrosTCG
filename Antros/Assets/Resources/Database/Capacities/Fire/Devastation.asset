@@ -20,7 +20,7 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 2899897746609406451
-  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 9bce9ba43db47434d8cfbfb5d2d49683, type: 3}
+  <CutsceneDirector>k__BackingField: {fileID: 3031218672066290853, guid: 3fa78344cf732894d9141a24494dd9e0, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Range>k__BackingField: 3
   <Damage>k__BackingField:

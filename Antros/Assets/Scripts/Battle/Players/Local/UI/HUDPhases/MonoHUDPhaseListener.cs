@@ -10,12 +10,12 @@ using UnityEngine;
 namespace ATCG.Battle.Players.Local.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class MonoHUDPhaseListener : LocalPlayerMonoPhaseListener<IHUDPhase>
+    public class MonoHUDPhaseListener : LocalPlayerMonoPhaseListener<ILocalHUDPhase>, IPhaseListener<IGlobalHUDPhase>
     {
         [SerializeField]
         private CanvasGroup group;
 
-        [SerializeField, TypeRefOf(typeof(IHUDPhase))]
+        [SerializeField, TypeRefOf(typeof(IBaseHUDPhase))]
         private List<TypeRef> phaseToHide = new List<TypeRef>();
 
         [SerializeField]
@@ -35,6 +35,19 @@ namespace ATCG.Battle.Players.Local.UI
             isVisible.AddOnValueChangeCallback(HideGroupPriorityOnOnValueChanged, true);
         }
 
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            PhaseManager.Register<IGlobalHUDPhase>(this);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            PhaseManager.Unregister<IGlobalHUDPhase>(this);
+        }
+
         private void HideGroupPriorityOnOnValueChanged(bool show)
         {
             if (show)
@@ -43,14 +56,38 @@ namespace ATCG.Battle.Players.Local.UI
                 group.Hide(fadeDuration);
         }
 
-        protected virtual bool GetValueFor(IHUDPhase phase) =>
+        protected virtual bool GetValueFor(IBaseHUDPhase phase) =>
             false; //TODO faire en sorte que la methode trie les phases
 
-        protected virtual PriorityTags GetPriorityFor(IHUDPhase phase) => PriorityTags.Small;
+        protected virtual PriorityTags GetPriorityFor(IBaseHUDPhase phase) => PriorityTags.Small;
 
 
-        protected override void OnPhaseBegin(IHUDPhase phase)
+        protected override void OnPhaseBegin(ILocalHUDPhase phase)
         {
+            OnBasePhaseBegin(phase);
+        }
+
+        protected override void OnPhaseEnd(ILocalHUDPhase phase)
+        {
+            OnBasePhaseEnd(phase);
+        }
+
+        void IPhaseListener<IGlobalHUDPhase>.OnPhaseBegin(IGlobalHUDPhase phase)
+        {
+            OnBasePhaseBegin(phase);
+        }
+
+        void IPhaseListener<IGlobalHUDPhase>.OnPhaseEnd(IGlobalHUDPhase phase)
+        {
+            OnBasePhaseEnd(phase);
+        }
+
+        private void OnBasePhaseBegin(IBaseHUDPhase phase)
+        {
+            if (phaseToHide.Count == 0)
+            {
+                isVisible.AddPriority(phase.ChannelKey, GetPriorityFor(phase), GetValueFor(phase));
+            }
             foreach (var type in phaseToHide)
             {
                 if (!type.IsAssignableFrom(phase.GetType()))
@@ -60,11 +97,10 @@ namespace ATCG.Battle.Players.Local.UI
                 return;
             }
         }
-
-        protected override void OnPhaseEnd(IHUDPhase phase)
+        private void OnBasePhaseEnd(IBaseHUDPhase phase)
         {
             isVisible.RemovePriority(phase.ChannelKey);
-
         }
+
     }
 }

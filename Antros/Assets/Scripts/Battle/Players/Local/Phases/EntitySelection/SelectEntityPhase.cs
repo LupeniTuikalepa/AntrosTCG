@@ -24,7 +24,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Players.Local.Phases
 {
     public sealed class SelectEntityPhase<T> : LocalPlayerPhase<EntityAddress[]>,
-        ISelectEntityPhase, IHUDPhase<ISelectEntityPhase> where T : IEntityFilter
+        ISelectEntityPhase, ILocalHUDPhase<ISelectEntityPhase> where T : IEntityFilter
     {
 
         public event Action<ISelectEntityPhase> OnPreviewChanged;

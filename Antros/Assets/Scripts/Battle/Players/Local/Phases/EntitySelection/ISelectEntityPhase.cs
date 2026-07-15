@@ -6,7 +6,7 @@ using Helteix.Tools.Phases;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
-    public interface ISelectEntityPhase : ISinglePhase, IEntitySelectionController, IHUDPhase
+    public interface ISelectEntityPhase : ISinglePhase, IEntitySelectionController, ILocalHUDPhase
     {
         string ISinglePhase.Channel => "SelectPhaseChannel";
 
