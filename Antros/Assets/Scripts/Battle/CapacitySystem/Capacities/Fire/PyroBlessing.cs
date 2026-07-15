@@ -8,6 +8,7 @@ using ATCG.Capacities.Data.Fire;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
@@ -18,7 +19,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
 			HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
-				.With(new PointsPattern(casterOrigin));
+				.With(new PointsPattern(castPoint));
 
 			return builder;
 		}
@@ -27,7 +28,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
 			using HexPatternBuilder patternBuilder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-
+			
 			foreach (BattleCellAspect cellAspect in patternBuilder.GetBattleCells(battleGrid))
 			{
 				foreach (var member in cellAspect.GetMembers())

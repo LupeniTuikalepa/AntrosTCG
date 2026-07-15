@@ -19,7 +19,8 @@ MonoBehaviour:
   <Description>k__BackingField: For God's sake, give one of your heroes the power
     against life.
   <CastPatterns>k__BackingField:
-    <Data>k__BackingField: []
+    <Data>k__BackingField:
+    - rid: 579207679704563712
   <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: d7d69fc76be6c82489fe4e8f3e5cb555, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 31c6e13350ce4634888c35b2c0fcf924, type: 2}
@@ -28,4 +29,13 @@ MonoBehaviour:
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 579207679704563712
+      type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 5

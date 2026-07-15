@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace ATCG.Battle
 {
-    public partial class FlameStatus : Status<FlameStatusData, FlameStatusComponent, StatusDurationController>,ITickOnTurnBegin
+    public partial class FlameStatus : Status<FlameStatusData, FlameStatusComponent, StatusDurationController>, ITickOnTurnBegin
     {
 	    protected override FlameStatusComponent CreateStatusComponent(FlameStatusData data, in StatusContext context)
 	    {
@@ -39,6 +39,7 @@ namespace ATCG.Battle
 		    {
 			    DamageCommand damageCommand = new DamageCommand(damage, statusInfos.targetAddress);
 			    damageCommand.Run(context.battlePhase);
+			    Debug.Log(damage + " damage sur " + statusInfos.targetAddress);
 		    }
 	    }
     }
