@@ -54,6 +54,7 @@ namespace ATCG.Editor
             contentContainer = new VisualElement();
             contentContainer.AddToClassList("ae-content");
             contentContainer.style.flexGrow = 1;
+            contentContainer.style.minHeight = 0;
             root.Add(contentContainer);
 
             DiscoverTools();
@@ -176,6 +177,7 @@ namespace ATCG.Editor
                 builtUI[tool] = ui;
             }
             ui.style.flexGrow = 1;
+            ui.style.minHeight = 0;
             contentContainer.Add(ui);
 
             foreach (KeyValuePair<IEditorTool, Button> kv in railButtons)

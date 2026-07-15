@@ -49,7 +49,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   <ExplosionStepData>k__BackingField:
     <StepName>k__BackingField: Explosion
-    <QTEsCount>k__BackingField: 0
+    <QTEsCount>k__BackingField: 2
   references:
     version: 2
     RefIds:

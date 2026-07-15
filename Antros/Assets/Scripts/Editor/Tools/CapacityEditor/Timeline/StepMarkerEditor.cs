@@ -34,26 +34,29 @@ namespace ATCG.Editor.Tools.CapacityEditor
             var choices = declaredSteps.ToList();
             int currentIndex = choices.IndexOf(stepNameProp.stringValue);
 
-            // A freshly created marker has an empty stepName. The dropdown used to just
-            // *display* index 0 in that case without writing it back, so the inspector
-            // looked assigned to the first step while the serialized string stayed empty.
-            // Default and persist it here so the display matches the actual data. A
-            // non-empty value that simply isn't in the list (a since-removed step) is left
-            // alone below, with a warning, instead of being silently overwritten.
-            if (currentIndex < 0 && string.IsNullOrEmpty(stepNameProp.stringValue))
+            // A freshly created marker has an empty stepName, or an existing marker can be
+            // pointing at a step that's since been renamed/removed. Either way the dropdown
+            // used to just *display* index 0 without writing it back — the normal Inspector
+            // looked assigned to the first declared step while the serialized string stayed
+            // empty/stale underneath (only visible by switching to Debug mode). Default and
+            // persist to the first declared step here so the data actually matches what's
+            // shown, instead of leaving a dangling reference behind a correct-looking label.
+            string previousValue = stepNameProp.stringValue;
+            bool wasInvalid = currentIndex < 0;
+            if (wasInvalid)
             {
                 currentIndex = 0;
                 ApplyStepName(stepNameProp, choices[0]);
             }
 
-            DropdownField dropdown = new("Step", choices, currentIndex >= 0 ? currentIndex : 0);
+            DropdownField dropdown = new("Step", choices, currentIndex);
             dropdown.RegisterValueChangedCallback(evt => ApplyStepName(stepNameProp, evt.newValue));
             root.Add(dropdown);
 
-            if (currentIndex < 0 && !string.IsNullOrEmpty(stepNameProp.stringValue))
+            if (wasInvalid && !string.IsNullOrEmpty(previousValue))
             {
                 root.Add(new HelpBox(
-                    $"'{stepNameProp.stringValue}' isn't a declared step anymore. Pick one from the list.",
+                    $"'{previousValue}' wasn't a declared step anymore — reset to '{choices[0]}'.",
                     HelpBoxMessageType.Warning));
             }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 {
@@ -16,17 +17,19 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     /// it scrubs correctly both in Play Mode and in edit-mode preview.
     ///   1. Clip start: Clear + reset the local time accumulator.
     ///   2. Every frame: advance the sim by the clip-local time delta (or hard re-simulate
-    ///      from 0 when scrubbing backward). Past duration - EaseOutDuration (the clip's
-    ///      Ease Out handle), emission is disabled — no new particles, but everything
-    ///      already alive keeps simulating/dying on its own timing since Simulate keeps
-    ///      running. Scrubbing back before that point re-enables emission.
+    ///      from 0 when scrubbing backward). Emission is only on between the clip's own
+    ///      live Ease In and (duration - Ease Out) — read straight from the TimelineClip
+    ///      every frame, so it's always exactly what the drag handles show, no copied
+    ///      value that can fall out of sync. Outside that window, no new particles, but
+    ///      everything already alive keeps simulating/dying on its own timing since
+    ///      Simulate keeps running.
     ///   3. Clip exit (natural end, scrub-away, or an interrupted cutscene — anything that
     ///      ends this clip's active window): Stop(StopEmittingAndClear) + deactivate.
     /// </summary>
     public sealed class ParticleSystemBehaviour : PlayableBehaviour
     {
         public ParticleSystem ParticleSystem;
-        public double EaseOutDuration;
+        public TimelineClip Clip;
 
         private double lastTime;
         private bool emissionEnabled;
@@ -46,6 +49,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             // Kicks the system into Simulate-driven mode at t=0 instead of Play()'s
             // real-time mode — PrepareFrame takes over from here every frame.
             ParticleSystem.Simulate(0f, true, true, false);
+            ParticleSystem.Pause(true);
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
@@ -54,9 +58,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
                 return;
 
             double time = playable.GetTime();
-            double holdEnd = playable.GetDuration() - EaseOutDuration;
+            double duration = Clip != null ? Clip.duration : playable.GetDuration();
+            double easeIn = Clip != null ? Clip.easeInDuration : 0d;
+            double easeOut = Clip != null ? Clip.easeOutDuration : 0d;
 
-            bool shouldEmit = time < holdEnd;
+            bool shouldEmit = time >= easeIn && time < duration - easeOut;
             if (shouldEmit != emissionEnabled)
             {
                 emissionEnabled = shouldEmit;
@@ -70,6 +76,13 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
                 ParticleSystem.Simulate((float)time, true, true, false);
             else
                 ParticleSystem.Simulate(delta, true, false, false);
+
+            // Simulate() implicitly resumes the system (isPlaying = true); left alone,
+            // Unity's own editor-side particle preview then keeps advancing it in real
+            // wall-clock time on every subsequent repaint, even with the playhead
+            // stationary. Pausing right after freezes it exactly at the simulated frame
+            // until the next explicit Simulate call moves it.
+            ParticleSystem.Pause(true);
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)

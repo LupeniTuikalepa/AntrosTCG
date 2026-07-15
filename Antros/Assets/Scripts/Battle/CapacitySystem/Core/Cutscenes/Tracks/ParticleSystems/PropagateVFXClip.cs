@@ -8,17 +8,17 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
     /// <summary>
     /// Points to its PropagateVFXOnRenderers via an ExposedReference (like ParticleSystemClip
     /// / CinemachineShot), so several clips can each drive a different propagator with no
-    /// track binding. Ease Out is read the same way as ParticleSystemClip: the shutdown
-    /// window during which the propagator stops emitting new particles on every instance it
-    /// spawned, but lets whatever's already alive keep dying on its own.
+    /// track binding. Ease In / Ease Out are read the same way as ParticleSystemClip: the
+    /// window outside which the propagator stops emitting new particles on every instance
+    /// it spawned, but lets whatever's already alive keep dying on its own.
     /// </summary>
     public sealed class PropagateVFXClip : PlayableAsset, ITimelineClipAsset
     {
         public ExposedReference<PropagateVFXOnRenderers> propagator;
 
-        // Injected by PropagateVFXTrack.CreateTrackMixer before CreatePlayable runs — same
-        // trick as ParticleSystemClip/LoopClip.
-        public double easeOutDuration;
+        // Injected by PropagateVFXTrack.CreateTrackMixer before CreatePlayable runs. Kept
+        // as a live TimelineClip reference (not copied doubles) — see ParticleSystemClip.
+        [System.NonSerialized] public TimelineClip clip;
 
         public ClipCaps clipCaps => ClipCaps.Blending;
 
@@ -27,7 +27,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             var playable = ScriptPlayable<PropagateVFXBehaviour>.Create(graph);
             PropagateVFXBehaviour behaviour = playable.GetBehaviour();
             behaviour.Propagator = propagator.Resolve(graph.GetResolver());
-            behaviour.EaseOutDuration = easeOutDuration;
+            behaviour.Clip = clip;
             return playable;
         }
     }

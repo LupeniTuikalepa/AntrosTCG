@@ -43,7 +43,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 		private partial void ExecutePunch(FightMadnessData data, CapacityStepContext ctx)
 		{
-			Debug.Log($"Punch{data.PunchDamage}",data);
 			if (ctx.BattleGrid.TryGetBattleCell(ctx.CastPoint, out var cell))
 			{
 				foreach (var componentRef in cell.GetMembers())
