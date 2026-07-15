@@ -59,6 +59,8 @@ namespace ATCG.Editor.Tools.CapacityEditor
         {
             VisualElement root = new();
             root.AddToClassList("ce-root");
+            root.style.flexGrow = 1;
+            root.style.minHeight = 0;
             EditorStyleLoader.Load(root, ThemeUss);
             EditorStyleLoader.Load(root, ToolUss);
 
@@ -87,6 +89,21 @@ namespace ATCG.Editor.Tools.CapacityEditor
         {
             VisualElement tab = new();
             tab.AddToClassList("ce-tab");
+            // flexGrow alone isn't enough here: Yoga flex items default to
+            // min-height:auto (i.e. "never shrink below my content"), which is exactly
+            // what was still forcing everything to cram instead of scroll. Zeroing it
+            // lets this tab actually shrink to the space it's given, so the ScrollView
+            // below gets a real bounded height to scroll within instead of just growing
+            // past the window.
+            tab.style.flexGrow = 1;
+            tab.style.minHeight = 0;
+
+            // All the actual content lives in a ScrollView so a cramped/docked window
+            // scrolls instead of squishing every row down to nothing.
+            ScrollView scroll = new(ScrollViewMode.Vertical);
+            scroll.style.flexGrow = 1;
+            scroll.style.minHeight = 0;
+            tab.Add(scroll);
 
             VisualElement pickerRow = new();
             pickerRow.AddToClassList("ce-row");
@@ -96,51 +113,51 @@ namespace ATCG.Editor.Tools.CapacityEditor
             pickerRow.Add(capacityDropdown);
             pickerRow.Add(new Button(RefreshCatalog) { text = "↻" });
             pickerRow.Add(new Button(PingSelected) { text = "Ping" });
-            tab.Add(pickerRow);
+            scroll.Add(pickerRow);
 
             directorStateLabel = new Label();
             directorStateLabel.AddToClassList("ce-status");
-            tab.Add(directorStateLabel);
+            scroll.Add(directorStateLabel);
 
             buildStageButton = new Button(BuildStage) { text = "Create Cutscene Stage" };
             buildStageButton.style.display = DisplayStyle.None;
-            tab.Add(buildStageButton);
+            scroll.Add(buildStageButton);
 
             VisualElement sceneRow = new();
             sceneRow.AddToClassList("ce-row");
             sceneRow.Add(new Button(EditCutscene) { text = "Edit Cutscene" });
             sceneRow.Add(new Button(RunScan) { text = "Rescan" });
-            tab.Add(sceneRow);
+            scroll.Add(sceneRow);
 
             statusLabel = new Label();
             statusLabel.AddToClassList("ce-status");
-            tab.Add(statusLabel);
+            scroll.Add(statusLabel);
 
             Label stepsTitle = new("Steps");
             stepsTitle.AddToClassList("ce-section-title");
-            tab.Add(stepsTitle);
+            scroll.Add(stepsTitle);
             stepsPanel = new VisualElement();
             stepsPanel.AddToClassList("ce-steps-panel");
-            tab.Add(stepsPanel);
+            scroll.Add(stepsPanel);
 
             Label tracksTitle = new("Auto-bindable Tracks");
             tracksTitle.AddToClassList("ce-section-title");
-            tab.Add(tracksTitle);
+            scroll.Add(tracksTitle);
             tracksPanel = new VisualElement();
             tracksPanel.AddToClassList("ce-tracks-panel");
-            tab.Add(tracksPanel);
+            scroll.Add(tracksPanel);
 
             Label propsTitle = new("Properties");
             propsTitle.AddToClassList("ce-section-title");
-            tab.Add(propsTitle);
+            scroll.Add(propsTitle);
             propertiesPanel = new VisualElement();
             propertiesPanel.AddToClassList("ce-props-panel");
-            tab.Add(propertiesPanel);
+            scroll.Add(propertiesPanel);
 
             warningsBox = new HelpBox(string.Empty, HelpBoxMessageType.Warning);
             warningsBox.AddToClassList("ce-warnings");
             warningsBox.style.display = DisplayStyle.None;
-            tab.Add(warningsBox);
+            scroll.Add(warningsBox);
 
             return tab;
         }
@@ -149,12 +166,19 @@ namespace ATCG.Editor.Tools.CapacityEditor
         {
             VisualElement tab = new();
             tab.AddToClassList("ce-tab");
+            tab.style.flexGrow = 1;
+            tab.style.minHeight = 0;
+
+            ScrollView scroll = new(ScrollViewMode.Vertical);
+            scroll.style.flexGrow = 1;
+            scroll.style.minHeight = 0;
+            tab.Add(scroll);
 
             CapacityEditorSettings settings = CapacityEditorSettings.GetOrCreate();
 
             Label title = new("Capacity Editor Settings");
             title.AddToClassList("ce-section-title");
-            tab.Add(title);
+            scroll.Add(title);
 
             ObjectField templateField = new("Director Template")
             {
@@ -167,7 +191,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 settings.directorTemplate = evt.newValue as GameObject;
                 settings.Save();
             });
-            tab.Add(templateField);
+            scroll.Add(templateField);
 
             ObjectField envField = new("Test Environment")
             {
@@ -180,7 +204,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 settings.testEnvironmentPrefab = evt.newValue as GameObject;
                 settings.Save();
             });
-            tab.Add(envField);
+            scroll.Add(envField);
 
             VisualElement row = new();
             row.AddToClassList("ce-row");
@@ -190,9 +214,9 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 Selection.activeObject = s;
                 EditorGUIUtility.PingObject(s);
             }) { text = "Ping Settings Asset" });
-            tab.Add(row);
+            scroll.Add(row);
 
-            tab.Add(new HelpBox(
+            scroll.Add(new HelpBox(
                 "Director Template: cloned as a prefab variant per capacity when you create a stage, " +
                 "under Assets/Project/Capacities/{Element}/{Capacity}/.\n" +
                 "Test Environment: hero + camera (CinemachineBrain) + DebugCutsceneRig, instantiated " +

@@ -15616,7 +15616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.RootParticleSystemController
   container: {fileID: 5916556579088416881}
   source: {fileID: 32973286914868951}
-  keys: 08000000000000000a0000000d0000000f0000000e000000100000000100000003000000020000000400000012000000110000000b0000000c000000
+  keys: 640942080
 --- !u!1 &8614395667123512102
 GameObject:
   m_ObjectHideFlags: 0
@@ -21255,7 +21255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2032574706760072843, guid: ba323b9d02337914c8ec7627439ab58b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.28125
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2032574706760072843, guid: ba323b9d02337914c8ec7627439ab58b, type: 3}
       propertyPath: m_LocalPosition.z

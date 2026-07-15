@@ -28,7 +28,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
             else
             {
                 onConnected?.Invoke(caster.transform);
-                Debug.Log(caster.transform, caster.transform);
             }
         }
 

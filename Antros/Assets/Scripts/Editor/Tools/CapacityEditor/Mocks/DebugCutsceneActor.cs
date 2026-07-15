@@ -1,6 +1,7 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.VFX;
+using ATCG.HexGrids;
 using UnityEngine;
 
 namespace ATCG.Editor.Tools.CapacityEditor
@@ -16,6 +17,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
         public LinkedRendererGroup Models { get; }
         public Animator Animator { get; }
 
+
         public DebugCutsceneActor(Transform root, Animator animator)
         {
             transform = root;
@@ -23,6 +25,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
             Models = new LinkedRendererGroup(root != null
                 ? root.GetComponentsInChildren<LinkedRenderer>(true)
                 : System.Array.Empty<LinkedRenderer>());
+        }
+        public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration)
+        {
+            transform.forward = Vector3.forward;
         }
     }
 }

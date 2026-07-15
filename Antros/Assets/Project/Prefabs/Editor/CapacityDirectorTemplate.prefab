@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8794552388588278017}
   - component: {fileID: 5095541334483400309}
   - component: {fileID: 3609414993029230218}
+  - component: {fileID: 3017558514025013025}
   m_Layer: 0
   m_Name: CapacityDirectorTemplate
   m_TagString: Untagged
@@ -118,6 +119,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.CapacityCutscene
   playableDirector: {fileID: 5095541334483400309}
+--- !u!114 &3017558514025013025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5343690089734063637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c703dab444e51cf4baf49a5d159346a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.DefaultCapacitySetup
+  directorTransform: {fileID: 8794552388588278017}
+  lookAtCastPoint: 1
 --- !u!1 &8784126211103984291
 GameObject:
   m_ObjectHideFlags: 0

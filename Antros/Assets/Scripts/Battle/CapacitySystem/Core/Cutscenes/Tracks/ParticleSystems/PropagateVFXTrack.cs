@@ -7,8 +7,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 {
     /// <summary>
     /// Track for PropagateVFXOnRenderers clips referenced individually (no track binding —
-    /// see PropagateVFXClip). Injects each clip's Ease Out duration before its playable is
-    /// created, same trick as ParticleSystemTrack/LoopTrack.
+    /// see PropagateVFXClip). Hands each clip its own live TimelineClip reference before its
+    /// playable is created, same trick as ParticleSystemTrack.
     /// </summary>
     [DisplayName("ATCG/VFX/Propagate VFX Track")]
     [TrackColor(0.15f, 0.7f, 0.55f)]
@@ -20,7 +20,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             foreach (TimelineClip clip in GetClips())
             {
                 if (clip.asset is PropagateVFXClip propagateClip)
-                    propagateClip.easeOutDuration = clip.easeOutDuration;
+                    propagateClip.clip = clip;
             }
 
             return base.CreateTrackMixer(graph, go, inputCount);

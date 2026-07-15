@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.Entities.Runtime.VFX;
+using ATCG.HexGrids;
 using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
@@ -18,5 +19,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
     {
         Transform transform { get; }
         Animator Animator { get; }
+        Awaitable LookAtCoord(HexCoordinates coordinates, float duration);
     }
 }
