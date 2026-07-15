@@ -41,7 +41,9 @@ namespace ATCG.Battle
             public HexPatternBuilder GetPreview(HexCoordinates coordinates)
             {
                 if (data.TryGet(out ICapacityContainer container))
-                    return container.GetHitPattern(data, battleGrid, coordinates, from);
+                {
+                    container.GetHitPattern(data, battleGrid, coordinates, from);
+                }
 
                 return new HexPatternBuilder(coordinates, new BattlePatternController(battleGrid));
             }

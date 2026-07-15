@@ -8,14 +8,17 @@ using ATCG.Battle.Commands.GameCommands.Capacities;
 using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Capacities;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools;
 using Helteix.Tools.DataMapping;
 using Helteix.Tools.Phases;
@@ -29,10 +32,11 @@ namespace ATCG.Battle.CapacitySystem.Core
     {
         public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
         public bool HasCaster => caster.IsValid;
+
         public HexCoordinates CasterOrigin =>
-            HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMemberComponent)?
-            gridMemberComponent.coordinates:
-            castPoint;
+            HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMemberComponent)
+                ? gridMemberComponent.coordinates
+                : castPoint;
 
         public readonly BattlePhase battlePhase;
         public readonly CapacityData data;
@@ -171,9 +175,27 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         private void RunStepNow(ICapacityStep step)
         {
-            float effectiveness = ReadQtes();
-            CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName));
-            step.RunStep(ctx);
+            using (ListPool<CapacityTarget>.Get(out List<CapacityTarget> targets))
+            {
+                float effectiveness = ReadQtes();
+
+                if (!data.TryGet(out ICapacityContainer capacityContainer))
+                    return;
+
+                using HexPatternBuilder patternBuilder = capacityContainer.GetHitPattern(data, battlePhase.BattleGrid, castPoint, CasterOrigin);
+                foreach (BattleCellAspect battleCell in patternBuilder.GetBattleCells(battlePhase.BattleGrid))
+                {
+                    using (ListPool<EntityAddress>.Get(out var cellTargets))
+                    {
+                        capacityContainer.GetTargets(data, battleCell, cellTargets);
+                        foreach (EntityAddress target in cellTargets)
+                            targets.Add(new CapacityTarget(battleCell.Coordinate, target));
+                    }
+                }
+
+                CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName), targets, patternBuilder);
+                step.RunStep(ctx);
+            }
         }
 
         private CapacityStepData ResolveStepData(string stepName)
@@ -227,6 +249,7 @@ namespace ATCG.Battle.CapacitySystem.Core
                 qtes.Clear();
                 consumedSinceLastFill = false;
             }
+
             qtes.Add(qte);
         }
 
