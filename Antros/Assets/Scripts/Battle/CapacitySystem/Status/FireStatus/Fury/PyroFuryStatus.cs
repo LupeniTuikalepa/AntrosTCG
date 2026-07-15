@@ -30,11 +30,9 @@ namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 			if (statusInfos.targetAddress.HasStatusWithData<FlameStatusData>(out var tag))
 			{
 				if (tag.EntityAddress.TryGetComponentRO(out StatusDurationController durationController))
-				{
 					finalBuff = durationController.RemainingTicks;
-				}
 
-				if (tag.EntityAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
+				if (statusInfos.targetAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
 				{
 					ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
 					basicAttackerComponent.strength.Multiply(channelKey, finalBuff);
@@ -46,12 +44,11 @@ namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 
 		protected override void OnRemove(PyroFuryData data, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			if (statusInfos.statusAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
+			if (statusInfos.targetAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
 			{
 				ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
 				basicAttackerComponent.strength.RemoveOperation(channelKey);
 			}
-
 			base.OnRemove(data, in statusInfos, in context);
 		}
 	}
