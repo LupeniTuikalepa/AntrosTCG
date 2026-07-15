@@ -224,7 +224,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
                 if (preview != null && address.TryGetComponentRO(out GridMemberComponent battleGridElement))
                 {
-                    HexPatternBuilder builder = preview.GetPreview(battleGridElement.coordinates);
+                    using HexPatternBuilder builder = preview.GetPreview(battleGridElement.coordinates);
                     previewedCoordinates.AddRange(builder.GetCoordinates());
                 }
             }

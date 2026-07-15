@@ -1,6 +1,9 @@
-﻿using ATCG.Battle.CapacitySystem.Core;
+﻿using System;
+using System.Collections.Generic;
+using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
@@ -15,6 +18,18 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
     public partial struct Devastation : ICapacity<DevastationData>
     {
+        public void GetTargets(DevastationData data, BattleCellAspect battleCell, List<EntityAddress> output)
+        {
+            output.Add(battleCell.EntityAddress);
+            foreach (var member in battleCell.GetMembers())
+            {
+                if (!member.EntityAddress.HasComponent<HealthComponent>())
+                    continue;
+
+                output.Add(member.EntityAddress);
+            }
+        }
+
         public HexPatternBuilder GetHitPattern(DevastationData data, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
         {
             BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
@@ -27,24 +42,16 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
         private partial void ExecuteExplosion(DevastationData data, CapacityStepContext ctx)
         {
-            BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-
-            using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-
             int damage = GameMaths.Round(data.Damage.Evaluate(ctx.effectiveness));
-
-            foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))
+            foreach (CapacityTarget target in ctx.Targets)
             {
-                foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())
-                {
-                    if (!member.EntityAddress.HasComponent<HealthComponent>())
-                        continue;
+                if (!target.address.HasComponent<HealthComponent>())
+                    continue;
 
-                    if (!ctx.IsAlly(member.EntityAddress))
-                    {
-                        DamageCommand damageCommand = new DamageCommand(damage, member.EntityAddress);
-                        damageCommand.Run(ctx.BattlePhase);
-                    }
+                if (!ctx.IsAlly(target.address))
+                {
+                    DamageCommand damageCommand = new DamageCommand(damage, target.address);
+                    damageCommand.Run(ctx.BattlePhase);
                 }
             }
         }
