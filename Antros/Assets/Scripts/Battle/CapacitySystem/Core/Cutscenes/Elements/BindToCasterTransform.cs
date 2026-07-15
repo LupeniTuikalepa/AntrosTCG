@@ -1,4 +1,4 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Properties;
+﻿ using ATCG.Battle.CapacitySystem.Core.Properties;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,7 +26,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
             if (bindToBone && caster.Animator != null)
                 onConnected?.Invoke(caster.Animator.GetBoneTransform(customBone));
             else
+            {
                 onConnected?.Invoke(caster.transform);
+                Debug.Log(caster.transform, caster.transform);
+            }
         }
 
         public void Disconnect()

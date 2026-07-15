@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
+using ATCG.Battle.Entities.Runtime;
 using ATCG.Capacities;
 using Unity.Cinemachine;
 using UnityEditor;
@@ -183,8 +184,8 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (rig != null && rig.TryGet(CutsceneChannels.HeroAnimator.trackName, out Object heroRef))
             {
                 heroAnimator = heroRef as Animator;
-                if (heroRef is Component heroComponent)
-                    heroRoot = heroComponent.transform;
+                if(heroAnimator)
+                    heroRoot = heroAnimator.GetComponentInParent<IRuntimeEntity>().transform;
             }
 
             previewContext = new DebugCapacityContext(capacity, heroRoot, heroAnimator);

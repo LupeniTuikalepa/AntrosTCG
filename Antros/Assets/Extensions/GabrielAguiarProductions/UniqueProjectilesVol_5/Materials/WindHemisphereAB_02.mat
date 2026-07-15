@@ -101,18 +101,20 @@ Material:
     - _DissolveFeather: 1.5
     - _DistortionAmount: 0
     - _DstBlend: 1
+    - _DstBlendAlpha: 1
     - _IntersectionDepth: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SoftParticle: 20
     - _SoftParticles: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 0.9999999, g: 0.9999999, b: 0.9999999, a: 1}
+    - _Color: {r: 1.9999998, g: 1.9999998, b: 1.9999998, a: 1}
     - _DissolveSpeed: {r: 0, g: 4, b: 0, a: 0}
     - _DissolveTexSpeed: {r: 0, g: 0.5, b: 0, a: 0}
     - _DissolveTexTiling: {r: 1, g: 0.1, b: 0, a: 0}
