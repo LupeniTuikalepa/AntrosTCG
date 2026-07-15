@@ -1,4 +1,6 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.Iterations;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
@@ -9,48 +11,45 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 {
-	public partial class PyroFuryStatus : Status< PyroFuryData, PyroFuryComponent, StatusDurationController>
+	public partial class PyroFuryStatus : Status<PyroFuryData, PyroFuryComponent, StatusDurationController>
 	{
 		private int finalBuff = 1;
+
 		protected override PyroFuryComponent CreateStatusComponent(PyroFuryData data, in StatusContext context)
-       {
-          return new PyroFuryComponent(data, finalBuff , ChannelKey.GetUniqueChannelKey("PyroFury"));
-       }
+		{
+			return new PyroFuryComponent(data, ChannelKey.GetUniqueChannelKey("PyroFury"));
+		}
 
-       protected override StatusDurationController CreateStatusController(PyroFuryData data, in StatusContext context)
-       {
-          return new StatusDurationController(data.Duration);
-       }
+		protected override StatusDurationController CreateStatusController(PyroFuryData data, in StatusContext context)
+		{
+			return new StatusDurationController(data.Duration);
+		}
 
-       protected override void OnApply(PyroFuryData data, in EntityStatusInfos statusInfos, in StatusContext context)
-       {
-	       if (statusInfos.targetAddress.HasStatusWithData<FlameStatusData>(out var tag))
-	       {
-		       if (tag.EntityAddress.TryGetComponentRO(out StatusDurationController durationController))
-		       {
-			       finalBuff = durationController.RemainingTicks;
-		       }
-	       }
-	       
-	       if (tag.EntityAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
-	       {
-		       ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
-		       basicAttackerComponent.strength.Multiply(channelKey,finalBuff);
-	       }
-	       Debug.Log(finalBuff);
-	       
-       }
+		protected override void OnApply(PyroFuryData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		{
+			if (statusInfos.targetAddress.HasStatusWithData<FlameStatusData>(out var tag))
+			{
+				if (tag.EntityAddress.TryGetComponentRO(out StatusDurationController durationController))
+					finalBuff = durationController.RemainingTicks;
 
-       protected override void OnRemove(PyroFuryData data, in EntityStatusInfos statusInfos, in StatusContext context)
-       {
-	       if (statusInfos.statusAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
-	       {
-		       ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
-		       basicAttackerComponent.strength.RemoveOperation(channelKey);
-	       }
-	       
-          base.OnRemove(data, in statusInfos, in context);
-       }
+				if (statusInfos.targetAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
+				{
+					ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
+					basicAttackerComponent.strength.Multiply(channelKey, finalBuff);
+				}
+			}
+			else
+				Debug.Log("N'a pas de Flame sur lui donc aucun buff");
+		}
+
+		protected override void OnRemove(PyroFuryData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		{
+			if (statusInfos.targetAddress.TryGetComponentRO(out BasicAttackerComponent basicAttackerComponent))
+			{
+				ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
+				basicAttackerComponent.strength.RemoveOperation(channelKey);
+			}
+			base.OnRemove(data, in statusInfos, in context);
+		}
 	}
-	
 }

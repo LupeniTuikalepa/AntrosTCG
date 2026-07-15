@@ -9,13 +9,11 @@ namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 	{
 		public readonly PyroFuryData data;
 		public StatusData StatusData => data;
-		public readonly int calculatedAttackBuff;
 		public readonly ChannelKey channelKey;
 
-		public PyroFuryComponent(PyroFuryData data, int calculatedAttackBuff, ChannelKey channelKey)
+		public PyroFuryComponent(PyroFuryData data, ChannelKey channelKey)
 		{
 			this.data = data;
-			this.calculatedAttackBuff = calculatedAttackBuff;
 			this.channelKey = channelKey;
 		}
 
