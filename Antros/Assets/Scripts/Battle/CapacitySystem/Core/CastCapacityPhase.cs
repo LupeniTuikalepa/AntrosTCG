@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
+using ATCG.Battle.CapacitySystem.Core.Properties;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Capacities;
 using ATCG.Battle.Commands.Listeners;
@@ -15,10 +16,13 @@ using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
+using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Battle.Players.Local.UI;
 using ATCG.Capacities;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Building;
+using Helteix.ChanneledProperties;
 using Helteix.Tools;
 using Helteix.Tools.DataMapping;
 using Helteix.Tools.Phases;
@@ -28,8 +32,10 @@ using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.CapacitySystem.Core
 {
-    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>
+    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>, IGlobalHUDPhase
     {
+        public ChannelKey ChannelKey { get; }
+
         public IBattlePlayer CasterPlayer => battlePhase.GetPlayer(casterPlayerId);
         public bool HasCaster => caster.IsValid;
 
@@ -45,7 +51,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         public readonly EntityAddress caster;
         public readonly BattleID casterPlayerId;
 
-        private readonly ATCG.Battle.CapacitySystem.Core.Properties.CapacityPropertyBag properties = new();
+        private readonly CapacityPropertyBag properties = new();
 
         public Dictionary<RuntimeLocalBattlePlayer, CapacityDirector> directors;
 
@@ -66,6 +72,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             EntityAddress caster,
             BattleID casterPlayerId)
         {
+            ChannelKey = ChannelKey.GetUniqueChannelKey();
             this.battlePhase = battlePhase;
             this.data = data;
             this.castPoint = castPoint;
@@ -307,5 +314,6 @@ namespace ATCG.Battle.CapacitySystem.Core
 
             return runtimeLocalBattlePlayer.RuntimeEntityManager.TryGetRuntimeEntity(caster, out runtimeEntity);
         }
+
     }
 }

@@ -84,6 +84,24 @@ namespace ATCG.Editor.Tools.CapacityEditor
             StageUtility.GoToStage(stage, true);
         }
 
+        // Safety net for "quitting Unity while the stage is still open": OnCloseStage is
+        // the normal save point (back button, switching capacity/stage), but it isn't
+        // guaranteed to fire on an outright Editor quit. Hooking quitting directly means
+        // unsaved edits still land even if the stage never gets a clean close.
+        private void HookQuitSave()
+        {
+            EditorApplication.quitting -= OnEditorQuitting;
+            EditorApplication.quitting += OnEditorQuitting;
+        }
+
+        private void UnhookQuitSave() => EditorApplication.quitting -= OnEditorQuitting;
+
+        private void OnEditorQuitting()
+        {
+            if (AutoSave)
+                Save();
+        }
+
         // After a domain reload (recompile) the stage SO is reserialized: the
         // [SerializeField] fields survive, but Current and the non-serialized derived
         // state (rig, context, timeline lock) are lost while the visual stage remains —
@@ -101,6 +119,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             ConnectElements();
             CapacityAutoBinder.RebindAll(Director, rig);
             OpenAndLockTimeline();
+            HookQuitSave();
         }
 
         private DebugCutsceneRig FindRigInScene()
@@ -155,6 +174,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             OpenAndLockTimeline();
 
             Current = this;
+            HookQuitSave();
             return true;
         }
 
@@ -163,6 +183,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (AutoSave)
                 Save();
 
+            UnhookQuitSave();
             UnlockTimeline();
 
             if (Current == this)
@@ -206,16 +227,30 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         // Loads the stage director into the Timeline window and locks it, so editing
         // stays pinned to this cutscene even when selection changes elsewhere.
+        //
+        // Deferred one editor tick: right as the stage first opens (or is restored after
+        // a domain reload), TimelineEditor.GetOrCreateWindow() can hand back a window
+        // that hasn't finished its own init yet — setting locked before it's ready got
+        // silently dropped, which is why the timeline wasn't locking on scene open.
+        // Showing the window before binding it, then locking last, avoids that race.
         private void OpenAndLockTimeline()
         {
+            EditorApplication.delayCall += TryLockTimeline;
+        }
+
+        private void TryLockTimeline()
+        {
+            if (Current != this)
+                return;
+
             PlayableDirector director = Director;
             if (director == null)
                 return;
 
             TimelineEditorWindow window = TimelineEditor.GetOrCreateWindow();
+            window.Show();
             window.SetTimeline(director);
             window.locked = true;
-            window.Show();
         }
 
         private static void UnlockTimeline()
@@ -232,8 +267,16 @@ namespace ATCG.Editor.Tools.CapacityEditor
         /// </summary>
         public bool Save()
         {
+            // Logged rather than silent: "does this actually save?" is hard to tell from
+            // the overlay alone, and a stale/destroyed stageInstance reference (e.g. if
+            // the stage's scene has already started tearing down by the time this runs)
+            // would otherwise return true here and look like a successful no-op save.
             if (stageInstance == null)
+            {
+                Debug.LogWarning("[CapacityTimelineEditor] Save skipped: stageInstance is null " +
+                                 "(stage already torn down?).");
                 return true;
+            }
 
             string prefabPath = AssetDatabase.GetAssetPath(capacity.CutsceneDirector);
             if (string.IsNullOrEmpty(prefabPath))
@@ -242,14 +285,36 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 return false;
             }
 
-            PrefabUtility.ApplyPrefabInstance(stageInstance, InteractionMode.AutomatedAction);
+            // ApplyPrefabInstance can throw (e.g. stageInstance no longer recognized as an
+            // outermost prefab instance root by the time this runs). If it did and nothing
+            // guarded it, the exception used to abort Save() right there — skipping the
+            // SetDirty/SaveAssets below entirely, so NEITHER the GameObject overrides NOR
+            // the timeline got flushed, with nothing but a maybe-swallowed exception to
+            // show for it (Stage close callbacks aren't guaranteed to surface exceptions
+            // loudly). Catching it here means clip/timeline data still saves even if the
+            // prefab-instance side fails, and the failure is now impossible to miss.
+            bool prefabApplied = true;
+            try
+            {
+                PrefabUtility.ApplyPrefabInstance(stageInstance, InteractionMode.AutomatedAction);
+            }
+            catch (System.Exception e)
+            {
+                prefabApplied = false;
+                Debug.LogError($"[CapacityTimelineEditor] ApplyPrefabInstance failed for " +
+                                $"'{capacity.name}': {e}");
+            }
 
             if (capacity.CutsceneTimeline != null)
                 EditorUtility.SetDirty(capacity.CutsceneTimeline);
             EditorUtility.SetDirty(capacity);
 
             AssetDatabase.SaveAssets();
-            return true;
+
+            if (prefabApplied)
+                Debug.Log($"[CapacityTimelineEditor] Saved '{capacity.name}' to '{prefabPath}'.");
+
+            return prefabApplied;
         }
 
         /// <summary>Saves only when auto-save is enabled (used by the periodic scan).</summary>

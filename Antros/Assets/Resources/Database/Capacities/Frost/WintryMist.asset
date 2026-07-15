@@ -21,8 +21,7 @@ MonoBehaviour:
     <Data>k__BackingField:
     - rid: 7630467839202951329
   <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: f9b4a6111b641de49aab350bffbb6a8d, type: 3}
-  <PropertyDefinitions>k__BackingField:
-  - rid: 6882995742485512364
+  <PropertyDefinitions>k__BackingField: []
   <Range>k__BackingField: 3
   <Status>k__BackingField: {fileID: 11400000, guid: 4d2f6fb665f44cf47ae99d76458c9ca0, type: 2}
   <BlackIceStepData>k__BackingField:
@@ -31,11 +30,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6882995742485512364
-      type: {class: HexCoordinatesPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
-      data:
-        name: AimedCoord
-        isArray: 1
     - rid: 7630467839202951329
       type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:

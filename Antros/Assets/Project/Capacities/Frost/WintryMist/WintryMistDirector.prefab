@@ -2509,13 +2509,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2454774086203462867}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.59514594, y: -0, z: -0, w: 0.80361766}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.032, y: -0.993, z: 0.771}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3316926435630302641}
-  m_LocalEulerAnglesHint: {x: 73.046, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!198 &3406873450209457965
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -2524,7 +2524,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2454774086203462867}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -2599,8 +2599,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 10
-      minScalar: 5
+      scalar: 3
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve: []
@@ -5192,6 +5192,7 @@ GameObject:
   - component: {fileID: 8356977378417627701}
   - component: {fileID: 3881855433915853631}
   - component: {fileID: 1401890646919607509}
+  - component: {fileID: 6104796328481496567}
   m_Layer: 0
   m_Name: WintryMistDirector
   m_TagString: Untagged
@@ -5248,6 +5249,7 @@ PlayableDirector:
     - 3e4f291f55aa7004e87d4e242c745522: {fileID: 0}
     - 693fa1f7d9a0fa34f8d8627c23ae12f0: {fileID: 4474899863404161905}
     - 502ed5a817c0b8b4687ffe1b49e8bb7f: {fileID: 1667149176414408211}
+    - fe8ff8d723303a446866b2a65d343336: {fileID: 1049117168173920534}
     - ee2910fed011fa040bf5cd0861cb92b2: {fileID: 0}
     - 9b64c3f72f129844b99f31c105f8cbcd: {fileID: 0}
     - 793e6a118216a1a428ae7c44badda08d: {fileID: 0}
@@ -5299,6 +5301,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ATCG.Capacities::ATCG.Capacities.WintryMistSetup
   spreadParticles: {fileID: 3316926435630302641}
+--- !u!114 &6104796328481496567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2981106221713600082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c703dab444e51cf4baf49a5d159346a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.DefaultCapacitySetup
+  directorTransform: {fileID: 776718084862189352}
+  lookAtCastPoint: 0
 --- !u!1 &3265827892636896625
 GameObject:
   m_ObjectHideFlags: 0
@@ -5357,7 +5373,7 @@ Transform:
   m_GameObject: {fileID: 3646049880135084750}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.7277778, z: 0.76111114}
+  m_LocalPosition: {x: 0, y: 1.03, z: -0.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8526,7 +8542,7 @@ Transform:
   m_GameObject: {fileID: 4379670522474992857}
   serializedVersion: 2
   m_LocalRotation: {x: -0.010108993, y: 0.9895012, z: -0.114944346, w: -0.08702351}
-  m_LocalPosition: {x: 0.21493173, y: 0.92, z: 1.2124897}
+  m_LocalPosition: {x: -3.84, y: 0.92, z: -1.8899999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8714,7 +8730,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5739434525962582556}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -8789,8 +8805,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 10
-      minScalar: 5
+      scalar: 3
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve: []
@@ -14211,7 +14227,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7433829297144585627}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -14286,7 +14302,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
+      scalar: 3
       minScalar: 2
       maxCurve:
         serializedVersion: 2
