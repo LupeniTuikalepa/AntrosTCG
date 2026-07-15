@@ -20,12 +20,12 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 7630467977162784896
-  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: 3eff351ebe865534592b69cdbb65f285, type: 3}
+  <CutsceneDirector>k__BackingField: {fileID: 1509459207510789216, guid: 7675d12de1ae54a4cb1430c8dfecc36a, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Size>k__BackingField: 2
   <DeployableData>k__BackingField: {fileID: 11400000, guid: 36a574091bccce54796001dcc563619d, type: 2}
   <ConstructionStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Construction
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
