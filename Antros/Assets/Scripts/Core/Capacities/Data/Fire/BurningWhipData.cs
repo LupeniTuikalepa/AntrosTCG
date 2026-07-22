@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ATCG.Capacities.Attributs;
+using ATCG.Capacities.Status.FireStatus;
 using ATCG.HexGrids.Patterns;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace ATCG.Capacities.Data.Fire
 	public partial class BurningWhipData : CapacityData
 	{
 		[field:SerializeField,BoxGroup("Specific")]
-		public BurnStatusData Status { get;private set; }
+		public FournaiseData Status { get;private set; }
 		
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Range { get; private set; }
