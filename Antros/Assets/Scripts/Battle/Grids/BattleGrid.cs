@@ -57,24 +57,6 @@ namespace ATCG.Battle.Grids
             return battleCellsEntities.TryGetValue(coordinates, out cellAspect);
         }
 
-        public EntityQueryResult GetGridMembers()
-        {
-            return World.Query(EntityQuery.With<GridMemberComponent>());
-        }
-
-        public void FillDeployableCells(List<HexCoordinates> list)
-        {
-            list.AddRange(AllCellsCoordinates);
-
-            foreach (Entity entity in World.Query(EntityQuery.With<PhysicalCellMemberTag>()))
-            {
-                if (entity.TryGetROComponent(World, out GridMemberComponent gridEntityComponent))
-                {
-                    Debug.Log($"Removing {gridEntityComponent.coordinates}");
-                    list.Remove(gridEntityComponent.coordinates);
-                }
-            }
-        }
 
         public static implicit operator HexGrid(BattleGrid battleGrid) => battleGrid.grid;
     }

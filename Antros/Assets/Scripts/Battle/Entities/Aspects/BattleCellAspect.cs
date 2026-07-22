@@ -32,6 +32,7 @@ namespace ATCG.Battle.Entities.Aspects
                 return componentRef.GetValue().coordinates == coordinates && componentRef.entityID != cellEntityID;
             }
         }
+
         public readonly struct IsCellPhysicalMemberFilter : IFilter<GridMemberComponent>
         {
             private readonly HexCoordinates coordinates;

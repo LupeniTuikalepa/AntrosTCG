@@ -91,6 +91,7 @@ namespace ATCG.Battle.Entities.Queries
                 bool hasNoFilters = entityQuery.filters == null;
                 while (++index < entities.Length)
                 {
+                    EntityAddress entityAddress = new EntityAddress(world, Current);
                     if (!metas[index].MatchesQuery(in entityQuery))
                         continue;
 
@@ -100,7 +101,7 @@ namespace ATCG.Battle.Entities.Queries
                     bool passed = true;
                     for (int i = 0; i < entityQuery.filterCount; i++)
                     {
-                        if (entityQuery.filters[i].Accepts(new EntityAddress(world, Current)))
+                        if (entityQuery.filters[i].Accepts(entityAddress))
                             continue;
 
                         passed = false;
@@ -116,7 +117,7 @@ namespace ATCG.Battle.Entities.Queries
                 return false;
             }
 
-            public Entity Current => new(entities[index]);
+            public EntityAddress Current => new EntityAddress(new Entity(entities[index]), world);
         }
     }
 }
