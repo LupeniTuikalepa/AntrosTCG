@@ -166,7 +166,7 @@ namespace ATCG.Battle.Entities.EditorTools
 
         private bool MatchesAnyCheckedAspect(int entityId)
         {
-            EntityAddress address = new(world, new Entity(entityId));
+            EntityAddress address = new(world, new Entity(entityId, world.GetGeneration(entityId)));
             foreach (AspectCatalog.Entry e in aspectCatalog.Entries)
             {
                 if (!checkedAspects.Contains(e.Name))

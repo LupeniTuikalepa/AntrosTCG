@@ -30,7 +30,7 @@ namespace ATCG.Battle.Entities.EditorTools
             if (world == null || entityId < 0)
                 return;
 
-            Entity entity = new(entityId);
+            Entity entity = new(entityId, world.GetGeneration(entityId));
             if (!world.IsAlive(entity))
             {
                 pane.Add(Empty("(entity no longer alive)"));

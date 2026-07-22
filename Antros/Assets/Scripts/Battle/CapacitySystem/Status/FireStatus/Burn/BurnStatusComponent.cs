@@ -4,12 +4,12 @@ using ATCG.Capacities.Data.Status;
 
 namespace ATCG.Battle
 {
-    public readonly struct FlameStatusComponent : IStatusComponent
+    public readonly struct BurnStatusComponent : IStatusComponent
     {
 	    StatusData IStatusComponent.StatusData => data;
-	    private readonly FlameStatusData data;
+	    private readonly BurnStatusData data;
 
-	    public FlameStatusComponent(FlameStatusData data)
+	    public BurnStatusComponent(BurnStatusData data)
 	    {
 		    this.data = data;
 	    }

@@ -92,22 +92,28 @@ namespace ATCG.Battle.Entities
 
         public bool AddOrSetComponent<T>(Entity e, in T component) where T : struct, IEntityComponent
         {
-            ref EntityMeta meta = ref entities[e];
-            if (meta.HasComponent<T>())
+            int id = EnsureStore<T>();
+            if (stores[id] is not ComponentStore<T> store)
                 return false;
 
-            int id = EnsureStore<T>();
-            if (stores[id] is ComponentStore<T> store)
-            {
-                if (store.Has(e.id))
-                    return false;
+            ref EntityMeta meta = ref entities[e];
 
+            // Despite the name, this used to be Add-only: if the entity already had the
+            // component, it bailed out before ever reaching store.Set — reapplying/
+            // refreshing an existing component (e.g. a status stacking/refreshing its own
+            // signature) silently did nothing. Existing components now get overwritten
+            // with the new value instead of being skipped; the return value still tells
+            // the caller whether this was a fresh add (true) or an update (false), which
+            // matches how every existing caller already used the bool.
+            if (store.Has(e.id))
+            {
                 store.Set(e.id, component);
-                meta.AddComponentToMask<T>();
-                return true;
+                return false;
             }
 
-            return false;
+            store.Set(e.id, component);
+            meta.AddComponentToMask<T>();
+            return true;
         }
 
         private int EnsureStore<T>() where T : struct, IEntityComponent

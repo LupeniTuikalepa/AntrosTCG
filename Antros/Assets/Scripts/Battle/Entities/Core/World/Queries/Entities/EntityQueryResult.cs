@@ -117,7 +117,7 @@ namespace ATCG.Battle.Entities.Queries
                 return false;
             }
 
-            public EntityAddress Current => new EntityAddress(new Entity(entities[index]), world);
+            public EntityAddress Current => new EntityAddress(new Entity(entities[index], world.GetGeneration(entities[index])), world);
         }
     }
 }

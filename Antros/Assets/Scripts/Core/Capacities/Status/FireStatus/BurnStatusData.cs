@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ATCG
 {
 	[CreateAssetMenu(menuName = "ATCG/Status/Flame")]
-    public class FlameStatusData : StatusData
+    public class BurnStatusData : StatusData
     {
 		[field: SerializeField, BoxGroup("Specific")]
 		public int Damage { get; private set; }

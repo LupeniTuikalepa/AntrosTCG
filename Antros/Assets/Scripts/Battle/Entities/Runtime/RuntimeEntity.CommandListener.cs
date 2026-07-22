@@ -1,3 +1,4 @@
+using System.Linq;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Entities;
@@ -169,7 +170,7 @@ namespace ATCG.Battle.Entities.Runtime
 			runtimeStatus.transform.localScale = Vector3.one;
 			runtimeStatus.transform.localPosition = Vector3.zero;
 			runtimeStatus.transform.localRotation = Quaternion.identity;
-			
+
 			statusDatas.Add(statusData, runtimeStatus);
 			runtimeStatus.Apply(runtimeContext);
 		}
@@ -188,6 +189,11 @@ namespace ATCG.Battle.Entities.Runtime
 
 		async Awaitable ICommandListener<StatusRemoveCommand>.Play(CommandListenerState state, CommandContext context, StatusRemoveCommand command)
 		{
+			// Temporary diagnostics — please leave these in for the next test so we get
+			// a real read on what's happening (the previous pair got removed before the
+			// last test ran, so that test told us nothing new).
+			// Debug.Log($"[RuntimeEntity] StatusRemoveCommand.Play fired on entity {Entity.id}.");
+
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
 
@@ -195,8 +201,15 @@ namespace ATCG.Battle.Entities.Runtime
 			var runtimeContext = new RuntimeStatusContext(infos.data, Entity, this);
 			var statusData = runtimeContext.statusData;
 			if (!statusDatas.TryGetValue(statusData, out RuntimeStatus removeStatus))
+			{
+				string tracked = string.Join(", ", statusDatas.Keys.Select(k => k != null ? k.name : "null"));
+				Debug.LogWarning($"[RuntimeEntity] StatusRemoveCommand.Play: no tracked RuntimeStatus for " +
+					$"'{(statusData != null ? statusData.name : "null")}' on entity {Entity.id} — VFX won't be cleaned up. " +
+					$"Currently tracked: [{tracked}]");
 				return;
+			}
 
+			// Debug.Log($"[RuntimeEntity] Destroying RuntimeStatus '{removeStatus.name}' for '{statusData.name}' on entity {Entity.id}.");
 			removeStatus.Remove(runtimeContext);
 			Destroy(removeStatus.gameObject);
 			statusDatas.Remove(statusData);

@@ -26,16 +26,25 @@ namespace ATCG.Battle.Commands.GameCommands.Players
 
             void IUpdateControllerOnTurnBeginIterator.Process<T>()
             {
-                foreach (var componentRef in statusContext.battlePhase.world.Query<T>())
+                World world = statusContext.battlePhase.world;
+                foreach (var componentRef in world.Query<T>())
                 {
+                    // Only tick a controller on ITS OWNER's turn. Ownership is read from
+                    // the status TARGET (the source of truth), and the guard fails CLOSED:
+                    // if the owner can't be resolved we skip, instead of processing for
+                    // everyone. The old guard only skipped when a BelongsToPlayerComponent
+                    // was present AND not an ally, so any controller whose entity lacked
+                    // that component ticked on every player's turn — durations lost a tick
+                    // each turn regardless of who was playing.
+                    if (!componentRef.EntityAddress.TryGetComponentRO(out StatusTag statusTag))
+                        continue;
+
+                    EntityAddress target = new EntityAddress(world, statusTag.targetEntity);
+                    if (!target.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer)
+                        || !belongsToPlayer.IsAllieOf(playerTurn))
+                        continue;
+
                     ref T component = ref componentRef.GetValue();
-
-                    if (componentRef.EntityAddress.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayer))
-                    {
-                        if(!belongsToPlayer.IsAllieOf(playerTurn))
-                            continue;
-                    }
-
                     component.Process();
                 }
             }
@@ -95,8 +104,14 @@ namespace ATCG.Battle.Commands.GameCommands.Players
 
                 foreach (var statusRef in statusToTick)
                 {
-                    var component = statusRef.GetValue();
-                    StatusTickCommand statusTickCommand = new StatusTickCommand(statusRef.EntityAddress, component.data);
+                    StatusTag statusTag = statusRef.GetValue();
+                    // Aim the tick at the status TARGET (the entity that owns the
+                    // StatusReceiver), NOT at the status entity. Status.Tick resolves the
+                    // status through the target's StatusReceiver via HasStatusWithData; the
+                    // status entity has no StatusReceiver, so passing its address made that
+                    // check fail and OnTick never ran — the status never ticked.
+                    EntityAddress target = new EntityAddress(statusContext.World, statusTag.targetEntity);
+                    StatusTickCommand statusTickCommand = new StatusTickCommand(target, statusTag.data);
                     Inject(in context, statusTickCommand);
                 }
             }

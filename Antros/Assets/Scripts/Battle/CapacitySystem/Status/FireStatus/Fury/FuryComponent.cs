@@ -5,17 +5,16 @@ using Helteix.ChanneledProperties;
 
 namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 {
-	public readonly struct PyroFuryComponent : IStatusComponent
+	public readonly struct FuryComponent : IStatusComponent
 	{
 		public readonly PyroFuryData data;
 		public StatusData StatusData => data;
 		public readonly ChannelKey channelKey;
 
-		public PyroFuryComponent(PyroFuryData data, ChannelKey channelKey)
+		public FuryComponent(PyroFuryData data, ChannelKey channelKey)
 		{
 			this.data = data;
 			this.channelKey = channelKey;
 		}
-
 	}
 }

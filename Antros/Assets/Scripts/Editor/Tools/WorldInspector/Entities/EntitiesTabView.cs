@@ -190,7 +190,10 @@ namespace ATCG.Battle.Entities.EditorTools
             return chip;
         }
 
-        private readonly HashSet<int> knownIds = new();
+        // id -> generation seen in the previous snapshot. Keyed with generation because
+        // ids are recycled: a slot destroyed and re-created keeps its id but bumps its
+        // generation, and must be treated as a NEW entity, not a known one.
+        private readonly Dictionary<int, int> knownGenById = new();
         private readonly HashSet<int> newlyAppeared = new();
         private readonly HashSet<int> recentlyChanged = new();
         private readonly Dictionary<int, int> fingerprints = new();
@@ -214,15 +217,18 @@ namespace ATCG.Battle.Entities.EditorTools
                     int fp = ComputeFingerprint(id);
                     nextFingerprints[id] = fp;
 
-                    if (!knownIds.Contains(id))
+                    int gen = snapshot.GenerationOf(id);
+                    // New id, OR the same slot recycled into a different entity
+                    // (generation bumped) -> treat as newly appeared, not "known".
+                    if (!knownGenById.TryGetValue(id, out int prevGen) || prevGen != gen)
                         newlyAppeared.Add(id);
                     else if (fingerprints.TryGetValue(id, out int prev) && prev != fp)
                         recentlyChanged.Add(id);
                 }
 
-                knownIds.Clear();
+                knownGenById.Clear();
                 foreach (int id in snapshot.EntityIds)
-                    knownIds.Add(id);
+                    knownGenById[id] = snapshot.GenerationOf(id);
 
                 fingerprints.Clear();
                 foreach (KeyValuePair<int, int> kv in nextFingerprints)
@@ -239,7 +245,7 @@ namespace ATCG.Battle.Entities.EditorTools
             if (world == null)
                 return 0;
 
-            Entity entity = new(entityId);
+            Entity entity = new(entityId, world.GetGeneration(entityId));
             if (!world.IsAlive(entity))
                 return 0;
 
@@ -290,6 +296,10 @@ namespace ATCG.Battle.Entities.EditorTools
         }
 
         private readonly List<int> lastVisible = new();
+        // Generation of each entry in lastVisible, parallel by index. A recycled slot
+        // (same id, bumped generation) must count as a change even when the id-set is
+        // identical, otherwise the list never rebuilds and freezes on the dead entity.
+        private readonly List<int> lastVisibleGen = new();
         private int populatedEntityId = -2; // sentinel != any valid id and != -1
 
         private void ApplyFilter()
@@ -326,12 +336,17 @@ namespace ATCG.Battle.Entities.EditorTools
             // Compare as a SET, not a sequence: a mere reordering must NOT count as a
             // change, otherwise every auto-refresh tick rebuilds the list, steals focus
             // (dropdowns won't open) and recreates the component pane (foldouts snap shut).
+            // The comparison keys on (id, generation): comparing the bare id would miss a
+            // recycled slot — a destroyed entity replaced by a new one on the same id —
+            // and the list would freeze on the dead entity instead of showing the new one.
             bool changed = newVisible.Count != lastVisible.Count;
             if (!changed)
             {
                 for (int i = 0; i < newVisible.Count; i++)
                 {
-                    if (newVisible[i] != lastVisible[i]) { changed = true; break; }
+                    if (newVisible[i] != lastVisible[i] ||
+                        snapshot.GenerationOf(newVisible[i]) != lastVisibleGen[i])
+                    { changed = true; break; }
                 }
             }
 
@@ -341,6 +356,9 @@ namespace ATCG.Battle.Entities.EditorTools
                 visibleIds.AddRange(newVisible);
                 lastVisible.Clear();
                 lastVisible.AddRange(newVisible);
+                lastVisibleGen.Clear();
+                foreach (int id in newVisible)
+                    lastVisibleGen.Add(snapshot?.GenerationOf(id) ?? -1);
                 entityList?.RefreshItems();
 
                 int idx = visibleIds.IndexOf(selectedEntityId);
@@ -421,7 +439,7 @@ namespace ATCG.Battle.Entities.EditorTools
                 int n = 0;
                 foreach (int id in ids)
                 {
-                    EntityAddress address = new(world, new Entity(id));
+                    EntityAddress address = new(world, new Entity(id, world.GetGeneration(id)));
                     if (e.Matches(in address))
                         n++;
                 }

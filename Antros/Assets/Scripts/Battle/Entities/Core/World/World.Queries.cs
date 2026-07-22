@@ -44,7 +44,7 @@ namespace ATCG.Battle.Entities
 
             for (int i = 0; i < entities.Count; i++)
                 if (metas[i].MatchesQuery(entityQuery))
-                    action(new Entity(allElements[i]));
+                    action(new Entity(allElements[i], GetGeneration(allElements[i])));
         }
 
         public void Query<TCallback>(in EntityQuery entityQuery, ref TCallback callback)
@@ -55,7 +55,7 @@ namespace ATCG.Battle.Entities
 
             for (int i = 0; i < entities.Count; i++)
                 if (metas[i].MatchesQuery(entityQuery))
-                    callback.Execute(new Entity(allElements[i]));
+                    callback.Execute(new Entity(allElements[i], GetGeneration(allElements[i])));
         }
     }
 }

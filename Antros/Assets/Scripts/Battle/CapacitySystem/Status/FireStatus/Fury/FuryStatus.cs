@@ -11,13 +11,13 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 {
-	public partial class PyroFuryStatus : Status<PyroFuryData, PyroFuryComponent, StatusDurationController>
+	public partial class FuryStatus : Status<PyroFuryData, FuryComponent, StatusDurationController>
 	{
 		private int finalBuff = 1;
 
-		protected override PyroFuryComponent CreateStatusComponent(PyroFuryData data, in StatusContext context)
+		protected override FuryComponent CreateStatusComponent(PyroFuryData data, in StatusContext context)
 		{
-			return new PyroFuryComponent(data, ChannelKey.GetUniqueChannelKey("PyroFury"));
+			return new FuryComponent(data, ChannelKey.GetUniqueChannelKey("PyroFury"));
 		}
 
 		protected override StatusDurationController CreateStatusController(PyroFuryData data, in StatusContext context)
@@ -27,7 +27,7 @@ namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
 
 		protected override void OnApply(PyroFuryData data, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			if (statusInfos.targetAddress.HasStatusWithData<FlameStatusData>(out var tag))
+			if (statusInfos.targetAddress.HasStatusWithData<BurnStatusData>(out var tag))
 			{
 				if (tag.EntityAddress.TryGetComponentRO(out StatusDurationController durationController))
 					finalBuff = durationController.RemainingTicks;
