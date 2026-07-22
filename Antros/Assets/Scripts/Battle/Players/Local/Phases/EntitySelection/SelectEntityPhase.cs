@@ -48,24 +48,10 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private readonly T filter;
 
-        public ISelectionPatternPreview preview;
+        public ISelectionPreviewController previewController;
 
-        private List<HexCoordinates> previewedCoordinates;
+        private List<EntityAddress> currentPreview;
 
-        public static int PreviewSelectableQuantity(T filter, BattlePhase phase)
-        {
-            EntityQueryBuilder query = EntityQuery.WithFilter<T>(filter);
-
-            int count = 0;
-            World world = phase.world;
-            foreach (Entity entity in world.Query(query))
-            {
-                if (entity.HasComponent<GridMemberComponent>(world))
-                    count++;
-            }
-
-            return count;
-        }
 
         public SelectEntityPhase(LocalBattlePlayer localBattlePlayer, T filter, HexPatternBuilder pattern,
             int maxSelectableEntities = 1) : base(localBattlePlayer)
@@ -129,7 +115,7 @@ namespace ATCG.Battle.Players.Local.Phases
         protected override Awaitable Initialize(CancellationToken token)
         {
             HashSetPool<EntityAddress>.Get(out selection);
-            ListPool<HexCoordinates>.Get(out previewedCoordinates);
+            ListPool<EntityAddress>.Get(out currentPreview);
 
             ChannelKey = ChannelKey.GetUniqueChannelKey();
             IsWaiting = false;
@@ -140,7 +126,7 @@ namespace ATCG.Battle.Players.Local.Phases
         protected override Awaitable Dispose(CancellationToken token)
         {
             HashSetPool<EntityAddress>.Release(selection);
-            ListPool<HexCoordinates>.Release(previewedCoordinates);
+            ListPool<EntityAddress>.Release(currentPreview);
 
             selection = null;
             IsWaiting = false;
@@ -217,16 +203,11 @@ namespace ATCG.Battle.Players.Local.Phases
             if (!IsWaiting)
                 return;
 
-            previewedCoordinates.Clear();
+            currentPreview.Clear();
             if (AcceptsWithRelated(ref address))
             {
                 OnEntityHovered?.Invoke(address);
-
-                if (preview != null && address.TryGetComponentRO(out GridMemberComponent battleGridElement))
-                {
-                    using HexPatternBuilder builder = preview.GetPreview(battleGridElement.coordinates);
-                    previewedCoordinates.AddRange(builder.GetCoordinates());
-                }
+                previewController?.FillPreview(this, address, currentPreview);
             }
 
             OnPreviewChanged?.Invoke(this);
@@ -237,22 +218,15 @@ namespace ATCG.Battle.Players.Local.Phases
             if (!IsWaiting)
                 return;
 
-            previewedCoordinates.Clear();
+            currentPreview.Clear();
             if (AcceptsWithRelated(ref address))
                 OnEntityUnhovered?.Invoke(address);
 
             OnPreviewChanged?.Invoke(this);
         }
 
-        public bool IsInPreview(EntityAddress address)
-        {
-            if (address.TryGetComponentRO(out GridMemberComponent gridMemberComponent))
-                return IsInPreview(gridMemberComponent.coordinates);
+        public bool IsInPreview(EntityAddress address) => currentPreview.Contains(address);
 
-            return false;
-        }
-
-        public bool IsInPreview(HexCoordinates coordinates) => previewedCoordinates.Contains(coordinates);
 
         private bool AcceptsWithRelated(ref EntityAddress address)
         {

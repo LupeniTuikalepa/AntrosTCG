@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
@@ -25,11 +27,13 @@ namespace ATCG.Battle
         private readonly HexCoordinates from;
 
 
-        private sealed class CapacityHitPreview : ISelectionPatternPreview
+        private sealed class CapacityHitPreview : ISelectionPreviewController
         {
             private readonly CapacityData data;
             private readonly BattleGrid battleGrid;
             private readonly HexCoordinates from;
+
+            private HexPatternBuilder hexPatternBuilder;
 
             public CapacityHitPreview(CapacityData data, BattleGrid battleGrid, HexCoordinates from)
             {
@@ -47,9 +51,24 @@ namespace ATCG.Battle
 
                 return new HexPatternBuilder(coordinates, new BattlePatternController(battleGrid));
             }
+
+            public void FillPreview(ISelectEntityPhase phase, EntityAddress entityAddress, List<EntityAddress> previews)
+            {
+                if (entityAddress.TryGetComponentRO(out GridMemberComponent memberComponent))
+                {
+                    if (data.TryGet(out ICapacityContainer container))
+                    {
+                        using HexPatternBuilder builder = container.GetHitPattern(data, battleGrid, memberComponent.coordinates, from);
+
+                        foreach (var battleCellAspect in builder.GetBattleCells(battleGrid))
+                            container.GetTargets(data, battleCellAspect, previews);
+                    }
+                }
+            }
         }
 
-        public CastCapacityAction(LocalBattlePlayer fromPlayer, CapacityData capacityData, HexCoordinates from) : base(fromPlayer)
+        public CastCapacityAction(LocalBattlePlayer fromPlayer, CapacityData capacityData, HexCoordinates from) :
+            base(fromPlayer)
         {
             this.capacityData = capacityData;
             this.from = from;
@@ -74,7 +93,7 @@ namespace ATCG.Battle
                 SelectEntityPhase<AspectFilter<BattleCellAspect>> phase =
                     new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder)
                     {
-                        preview = new CapacityHitPreview(capacityData, BattleGrid, from),
+                        previewController = new CapacityHitPreview(capacityData, BattleGrid, from),
                     };
 
                 EntityAddress[] result = await phase;
@@ -102,5 +121,4 @@ namespace ATCG.Battle
             await CapacityManager.CastCapacityAsync(capacityData, setup);
         }
     }
-
 }
