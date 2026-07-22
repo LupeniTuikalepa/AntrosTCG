@@ -2,6 +2,7 @@ using System;
 using ATCG.Capacities;
 using ATCG.Databases;
 using ATCG.Enums;
+using ATCG.Passives.Datas;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using UnityEngine;
@@ -25,5 +26,7 @@ namespace ATCG.Cards
         [field: SerializeReference, BoxGroup("Common")]
         public CapacityData[] Capacities { get; private set; }
 
+        [field: SerializeReference, BoxGroup("Common")]
+        public PassiveData[] Passives { get; private set; }
     }
 }

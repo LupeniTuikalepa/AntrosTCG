@@ -1,8 +1,8 @@
 ﻿using System;
 using ATCG.Battle.Players;
 using ATCG.Cards.Implementations;
-using ATCG.Construction;
 using ATCG.HexGrids.Patterns.Building;
+using UnityEngine;
 
 namespace ATCG.Battle.Cards
 {
@@ -13,7 +13,7 @@ namespace ATCG.Battle.Cards
         public int DeathCost => Data.DeathCost;
         public int Defense => Data.Defense;
         public PatternGroup DeployPatterns => Data.DeployPatterns;
-        public ConstructionData ConstructionData => Data.ConstructionData;
+        public GameObject Prefab => Data.Prefab;
 
         public ConstructionBattleCard(ConstructionCardData data, IBattlePlayer player) : base(data, player)
         {

@@ -4,8 +4,8 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
-using ATCG.Construction;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
@@ -25,7 +25,7 @@ namespace ATCG.Battle.Entities.Aspects
     {
         public struct Setup
         {
-            public ConstructionData constructionData;
+            public GameObject prefab;
             public ConstructionBattleCard card;
             public HexCoordinates coordinates;
             public BattleGrid grid;
@@ -57,7 +57,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
             
-            componentsFactory.ConstructionTag = new ConstructionTag(setup.constructionData);
+            componentsFactory.ConstructionTag = new ConstructionTag();
         }
     }
 }
