@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Boiler
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Fire.BoilerData
   guidText: 85283695-fa43-4fe6-93a8-f24af644d891
-  <Prefab>k__BackingField: {fileID: 3871651612427460369, guid: 0d8aa9adf5ed7c04ab163006ab12cdf6, type: 3}
+  <Prefab>k__BackingField: {fileID: 6370457201449410584, guid: 6d77134fbe1f975439fe2ee5e11a066c, type: 3}
+  <AffectRange>k__BackingField: 0
   <StackAdd>k__BackingField: 2
   <Health>k__BackingField: 5

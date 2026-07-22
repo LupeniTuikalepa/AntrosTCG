@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258da64f506c42f4a5aaf2a68b3b3a85, type: 3}
+  m_Name: Boiler
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.ConstructionCardData
+  guidText: 66564ae3-7b82-444a-993b-fe526dbd1ab9
+  <Title>k__BackingField: Boiler
+  <Description>k__BackingField: 
+  <Element>k__BackingField: 1
+  <Rarity>k__BackingField: 0
+  <Capacities>k__BackingField: []
+  <Health>k__BackingField: 5
+  <DeathCost>k__BackingField: 1
+  <Defense>k__BackingField: 1
+  <DeployPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 7630468266232643740
+  <ConstructionData>k__BackingField: {fileID: 11400000, guid: f0561dde28b60d14d9fb9f142ce9c3f1, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7630468266232643740
+      type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 2

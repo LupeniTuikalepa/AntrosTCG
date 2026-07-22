@@ -1,48 +1,41 @@
 ﻿using ATCG.Battle.Cards;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Commands.Players;
-using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
-using ATCG.Battle.Entities.Construction;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
-using ATCG.Capacities;
-using ATCG.Construction;
 using ATCG.HexGrids;
-using Helteix.Tools.DataMapping;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.GameCommands
 {
     public class SpawnConstructionCommand : PlayerCommand<SpawnConstructionCommand.Infos>
     {
-        private readonly HeroBattleCard heroBattleCard;
-        private readonly ConstructionData data;
-        private readonly BattleCellAspect cell;
+        private readonly ConstructionBattleCard constructionBattleCard;
+        private readonly GameObject prefab;
+        private readonly HexCoordinates destination;
 
         public struct Infos : ICommandInfos
         {
-            public readonly ConstructionData data;
-            public readonly BattleCellAspect cell;
+            public readonly GameObject prefab;
+            public readonly HexCoordinates destination;
             public readonly ConstructionAspect construction;
             public readonly BattleGrid grid;
 
-            public Infos(ConstructionData data, BattleCellAspect cell, ConstructionAspect construction, BattleGrid grid)
+            public Infos(GameObject prefab, HexCoordinates destination, ConstructionAspect construction, BattleGrid grid)
             {
-                this.data = data;
-                this.cell = cell;
+                this.prefab = prefab;
+                this.destination = destination;
                 this.construction = construction;
                 this.grid = grid;
             }
         }
         
-        private HexCoordinates Destination => cell.Coordinate;
-        
-        //TODO replace HeroBattleCard with ConstructionCard
-        public SpawnConstructionCommand(IBattlePlayer battlePlayer, HeroBattleCard heroBattleCard, ConstructionData data, BattleCellAspect cell) : base(battlePlayer)
+        public SpawnConstructionCommand(IBattlePlayer battlePlayer, ConstructionBattleCard constructionBattleCard, HexCoordinates destination) : base(battlePlayer)
         {
-            this.heroBattleCard = heroBattleCard;
-            this.data = data;
-            this.cell = cell;
+            this.constructionBattleCard = constructionBattleCard;
+            prefab = constructionBattleCard.Prefab;
+            this.destination = destination;
         }
 
         protected override void Process(in CommandContext context)
@@ -50,17 +43,14 @@ namespace ATCG.Battle.Commands.GameCommands
             ConstructionAspect construction = ConstructionAspect.CreateAspect(context.World,
                 new ConstructionAspect.Setup()
                 {
-                    data = data,
-                    card =  heroBattleCard,
-                    coordinates = Destination,
+                    prefab = prefab,
+                    card =  constructionBattleCard,
+                    coordinates = destination,
                     grid = context.Grid,
-                    battleID = heroBattleCard.ID
+                    battleID = constructionBattleCard.ID
                 });
 
-            infos = new Infos(data, cell, construction, context.Grid);
-
-            if (data.TryGet(out IConstructionContainer container))
-                container.SetupEntity(data, construction);
+            infos = new Infos(prefab, destination, construction, context.Grid);
         }
     }
 }

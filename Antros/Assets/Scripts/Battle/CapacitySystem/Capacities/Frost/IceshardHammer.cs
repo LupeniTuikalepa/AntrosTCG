@@ -42,15 +42,15 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                     {
                         var deployableData = deployable.DeployableEntityTag.data;
                         var direction = ctx.CasterOrigin.GetNormalizedDirection(ctx.CastPoint);
-                        var propagation = member.GetValue().coordinates + direction;
+                        var shardDestination = member.GetValue().coordinates + direction;
                         
                         if (deployableData is not IceWallData)
-                            continue;   
+                            continue;
                         
                         var damageCommand = new DamageCommand(99, memberEntityAddress);
                         damageCommand.Run(ctx.BattlePhase);
 
-                        battleGrid.TryGetBattleCell(propagation, out var cell);
+                        battleGrid.TryGetBattleCell(shardDestination, out var cell);
                         foreach (var physicalMember in cell.GetPhysicalMembers())
                         {
                             var propagationDamageCommand = new DamageCommand(data.Damage, physicalMember.EntityAddress);
