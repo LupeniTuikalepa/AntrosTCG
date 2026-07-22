@@ -48,7 +48,7 @@ namespace ATCG.Battle.Entities.EditorTools
             if (IsEmpty)
                 return true;
 
-            Entity entity = new(entityId);
+            Entity entity = new(entityId, world.GetGeneration(entityId));
             if (!world.IsAlive(entity))
                 return false;
 

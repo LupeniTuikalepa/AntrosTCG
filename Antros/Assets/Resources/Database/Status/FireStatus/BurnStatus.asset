@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32f8d7ddc47e1cd4e80fd591bd995453, type: 3}
-  m_Name: FlameStatus
+  m_Name: BurnStatus
   m_EditorClassIdentifier: ATCG.Core::ATCG.FlameStatusData
   guidText: e924d0d4-032d-49dc-a97a-5ee4eb0df68a
   <Name>k__BackingField: Flame
@@ -19,4 +19,4 @@ MonoBehaviour:
   <RuntimeStatus>k__BackingField: {fileID: 2825243117672663037, guid: d9a6af84a2c5b654d92396a7dfbd735b, type: 3}
   <Icon>k__BackingField: {fileID: 21300000, guid: 7179d957860c6304e8d495d0f4fbbf05, type: 3}
   <Damage>k__BackingField: 1
-  <normalDuration>k__BackingField: 2
+  <normalDuration>k__BackingField: 3

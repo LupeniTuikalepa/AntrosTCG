@@ -47,7 +47,7 @@ namespace ATCG.Battle.Entities.EditorTools
             Color color = PlayerColorResolver.NoPlayer;
             bool active = false;
 
-            Entity entity = new(entityId);
+            Entity entity = new(entityId, world.GetGeneration(entityId));
             try { active = world.IsActive(entity); } catch { /* teardown race */ }
 
             if (!world.IsAlive(entity))

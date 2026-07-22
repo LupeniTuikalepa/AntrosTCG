@@ -30,8 +30,15 @@ namespace ATCG.Battle.Entities.Runtime.VFX
 
         void IRuntimeStatusComponent.OnRemoveStatus(RuntimeStatusContext context)
         {
-            current = null;
+            // Clear() must run BEFORE current is nulled out — it calls GetAllFor(), which
+            // reads current.Models. Clearing current first threw a NullReferenceException
+            // here, which aborted RuntimeStatus.Remove()'s loop over every
+            // IRuntimeStatusComponent partway through and propagated all the way up past
+            // RuntimeEntity's StatusRemoveCommand.Play — so Destroy(removeStatus.gameObject)
+            // was never reached, and the whole RuntimeStatus (VFX included) never got
+            // cleaned up, even though the status itself had already left on the ECS side.
             Clear();
+            current = null;
         }
 
         private IEnumerable<LinkedRenderer> GetAllFor()
@@ -69,8 +76,13 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             {
                 foreach (LinkedRenderer linkedRenderer in entityRenderers)
                 {
-                    mats.AddRange(linkedRenderer.Renderer.materials);
-                    mats.Add(material);
+                    // Read the SHARED materials, not .materials: the .materials getter
+                    // instantiates a unique clone per renderer, so the asset we add here
+                    // would come back as a different reference and Clear()'s Remove(material)
+                    // would never match it — the material could never be removed.
+                    linkedRenderer.Renderer.GetSharedMaterials(mats);
+                    if (!mats.Contains(material)) // guard against double-apply stacking copies
+                        mats.Add(material);
 
                     linkedRenderer.Renderer.SetMaterials(mats);
                     mats.Clear();
@@ -83,7 +95,9 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             {
                 foreach (LinkedRenderer linkedRenderer in GetAllFor())
                 {
-                    mats.AddRange(linkedRenderer.Renderer.materials);
+                    // Shared materials preserve the asset's reference identity, so
+                    // Remove(material) matches and actually strips the status material.
+                    linkedRenderer.Renderer.GetSharedMaterials(mats);
                     mats.Remove(material);
 
                     linkedRenderer.Renderer.SetMaterials(mats);

@@ -17,6 +17,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {
+    [SelectionBase]
     public abstract partial class RuntimeEntity<T> : MonoBehaviour, IRuntimeEntity where T : IEntityAspect
     {
         public event Action<T> OnEntityConnected;

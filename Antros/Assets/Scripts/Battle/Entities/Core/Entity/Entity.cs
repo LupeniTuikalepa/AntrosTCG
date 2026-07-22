@@ -13,9 +13,24 @@ namespace ATCG.Battle.Entities
 
         public readonly int id;
 
+        // Bumped by World every time this id's slot is destroyed and recycled. Equality
+        // (Equals/GetHashCode/==) deliberately stays id-only — existing Dictionary<Entity,>
+        // / HashSet<Entity> usage across the codebase depends on that. Generation is
+        // instead checked exclusively by World.IsAlive, so a handle captured before a
+        // destroy+recycle cycle reads as dead instead of silently aliasing whatever new
+        // entity now sits at the same id.
+        public readonly int generation;
+
         public Entity(int id)
         {
             this.id = id;
+            this.generation = 0;
+        }
+
+        public Entity(int id, int generation)
+        {
+            this.id = id;
+            this.generation = generation;
         }
 
 
