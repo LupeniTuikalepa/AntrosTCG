@@ -10,6 +10,7 @@ namespace ATCG.Core.Cutscenes
     [TrackColor(0.8f, 0.4f, 0.7f)]
     [TrackClipType(typeof(GoToClip))]
     [TrackClipType(typeof(FollowClip))]
+    [TrackClipType(typeof(FollowBoneClip))]
     [TrackBindingType(typeof(Transform))]
     public class TweenTrack : TrackAsset { }
 }

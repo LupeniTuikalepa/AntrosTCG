@@ -125,7 +125,9 @@ namespace ATCG.Battle.Entities.Runtime
 
 			state.CompleteFollowThrough(this);
 		}
-		async Awaitable ICommandListener<PushbackCommand>.Play(CommandListenerState state, CommandContext context, PushbackCommand command)
+
+		async Awaitable ICommandListener<PushbackCommand>.Play(CommandListenerState state, CommandContext context,
+			PushbackCommand command)
 		{
 			state.CompleteWindUp(this);
 
@@ -149,7 +151,8 @@ namespace ATCG.Battle.Entities.Runtime
 
 		}
 
-		async Awaitable ICommandListener<StatusApplyCommand>.Play(CommandListenerState state, CommandContext context, StatusApplyCommand command)
+		async Awaitable ICommandListener<StatusApplyCommand>.Play(CommandListenerState state, CommandContext context,
+			StatusApplyCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
@@ -175,7 +178,8 @@ namespace ATCG.Battle.Entities.Runtime
 			runtimeStatus.Apply(runtimeContext);
 		}
 
-		async Awaitable ICommandListener<StatusTickCommand>.Play(CommandListenerState state, CommandContext context, StatusTickCommand command)
+		async Awaitable ICommandListener<StatusTickCommand>.Play(CommandListenerState state, CommandContext context,
+			StatusTickCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
@@ -187,7 +191,8 @@ namespace ATCG.Battle.Entities.Runtime
 				tickStatus.Tick(runtimeContext);
 		}
 
-		async Awaitable ICommandListener<StatusRemoveCommand>.Play(CommandListenerState state, CommandContext context, StatusRemoveCommand command)
+		async Awaitable ICommandListener<StatusRemoveCommand>.Play(CommandListenerState state, CommandContext context,
+			StatusRemoveCommand command)
 		{
 			// Temporary diagnostics — please leave these in for the next test so we get
 			// a real read on what's happening (the previous pair got removed before the
@@ -204,8 +209,8 @@ namespace ATCG.Battle.Entities.Runtime
 			{
 				string tracked = string.Join(", ", statusDatas.Keys.Select(k => k != null ? k.name : "null"));
 				Debug.LogWarning($"[RuntimeEntity] StatusRemoveCommand.Play: no tracked RuntimeStatus for " +
-					$"'{(statusData != null ? statusData.name : "null")}' on entity {Entity.id} — VFX won't be cleaned up. " +
-					$"Currently tracked: [{tracked}]");
+				                 $"'{(statusData != null ? statusData.name : "null")}' on entity {Entity.id} — VFX won't be cleaned up. " +
+				                 $"Currently tracked: [{tracked}]");
 				return;
 			}
 
@@ -215,19 +220,17 @@ namespace ATCG.Battle.Entities.Runtime
 			statusDatas.Remove(statusData);
 		}
 
+		public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
+		{
+			Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
+			Vector3 from = transform.position;
+			Vector3 to = (target - from).normalized;
+			to.y = 0;
 
-	public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)
-	{
-		Vector3 target = RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
-		Vector3 from = transform.position;
-		Vector3 to = (target - from).normalized;
-		to.y = 0;
-
-		Quaternion rotation = Quaternion.LookRotation(to, Vector3.up);
+			Quaternion rotation = Quaternion.LookRotation(to, Vector3.up);
 
 			Tween.StopAll(transform);
 			await Tween.Rotation(transform, rotation, duration, Ease.OutQuad);
 		}
-
 	}
 }
