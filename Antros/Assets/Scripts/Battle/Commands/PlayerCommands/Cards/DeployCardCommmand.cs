@@ -42,6 +42,10 @@ namespace ATCG.Battle.Commands.GameCommands
                     Inject(in context, new SpawnHeroCommand(player, heroBattleCard, Destination));
                     player.Hand.TryRemoveCard(card);
                     break;
+                case ConstructionBattleCard constructionBattleCard:
+                    Inject(in context, new SpawnConstructionCommand(player, constructionBattleCard, Destination));
+                    player.Hand.TryRemoveCard(card);
+                    break;
             }
         }
 

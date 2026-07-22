@@ -29,7 +29,7 @@ namespace ATCG.Battle.Entities.Runtime.Constructions
 
             var infos = command.GetInfos();
 
-            GameObject instance = infos.data.Prefab.InstantiatePrefab(transform);
+            GameObject instance = infos.constructionData.Prefab.InstantiatePrefab(transform);
 
             if (instance.TryGetComponent(out RuntimeConstruction runtimeConstruction))
                 await runtimeConstruction.Spawn(runtimeEntityManager, infos.construction);

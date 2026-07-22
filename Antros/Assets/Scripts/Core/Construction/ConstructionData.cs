@@ -8,8 +8,5 @@ namespace ATCG.Construction
     {
         [field: SerializeField]
         public GameObject Prefab { get; private set; }
-        
-        [field: SerializeField]
-        public int AffectRange { get; private set; }
     }
 }

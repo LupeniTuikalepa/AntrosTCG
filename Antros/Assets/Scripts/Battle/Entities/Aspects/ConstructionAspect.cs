@@ -25,16 +25,16 @@ namespace ATCG.Battle.Entities.Aspects
     {
         public struct Setup
         {
-            public ConstructionData data;
-            public HeroBattleCard card;
+            public ConstructionData constructionData;
+            public ConstructionBattleCard card;
             public HexCoordinates coordinates;
             public BattleGrid grid;
             public BattleID battleID;
         }
         
-        public string Name => HeroCard.Title;
-        public IBattlePlayer Player => HeroCard.Player;
-        public HeroBattleCard HeroCard => BattleCardComponent.battleCard as HeroBattleCard;
+        public string Name => ConstructionCard.Title;
+        public IBattlePlayer Player => ConstructionCard.Player;
+        public ConstructionBattleCard ConstructionCard => BattleCardComponent.battleCard as ConstructionBattleCard;
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
 
@@ -57,7 +57,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
             
-            componentsFactory.ConstructionTag = new ConstructionTag(setup.data);
+            componentsFactory.ConstructionTag = new ConstructionTag(setup.constructionData);
         }
     }
 }

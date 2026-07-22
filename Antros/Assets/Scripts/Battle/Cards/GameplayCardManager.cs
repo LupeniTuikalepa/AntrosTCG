@@ -11,6 +11,7 @@ namespace ATCG.Battle.Cards
             return data switch
             {
                 HeroCardData heroCardData => new HeroBattleCard(heroCardData, player),
+                ConstructionCardData constructionCardData => new ConstructionBattleCard(constructionCardData, player),
                 _ => null
             };
         }

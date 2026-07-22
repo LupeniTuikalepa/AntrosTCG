@@ -8,8 +8,5 @@ namespace ATCG.Capacities.Fire
     {
         [field: SerializeField]
         public int StackAdd { get; private set; }
-        
-        [field: SerializeField]
-        public int Health { get; private set; }
     }
 }
