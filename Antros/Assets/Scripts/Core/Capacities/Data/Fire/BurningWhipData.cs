@@ -12,7 +12,7 @@ namespace ATCG.Capacities.Data.Fire
 	public partial class BurningWhipData : CapacityData
 	{
 		[field:SerializeField,BoxGroup("Specific")]
-		public FournaiseData Status { get;private set; }
+		public FurnaceData Status { get;private set; }
 		
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Range { get; private set; }
