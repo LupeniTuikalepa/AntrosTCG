@@ -20,28 +20,27 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 
 		protected override void OnApply(BerserkStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
+			base.OnApply(data, in statusInfos, in context);
 			EntityAddress target = statusInfos.targetAddress;
 
-			//listens for entity events
 			ref BerserkStatusComponent berserkStatusComponent = ref statusInfos.statusComponentRef.GetValue();
 			berserkStatusComponent.Watch(statusInfos.targetAddress, statusInfos.statusControllerRef);
 
-			//Debug.Log($"Applying Berserk status: {target}");
 			if(!target.TryGetComponentRO(out BasicAttackerComponent  basicAttackerComponent))
 				return;
 
 			ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
-			basicAttackerComponent.strength.Multiply(channelKey, data.forceMultiplier);
+			basicAttackerComponent.strength.Multiply(channelKey, data.ForceMultiplier);
 
 			if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
-				defenseComponent.defense.Subtract(channelKey, data.defenseReduction);
+				defenseComponent.defense.Subtract(channelKey, data.DefenseReduction);
 
-			base.OnApply(data, in statusInfos, in context);
 		}
 
 
 		protected override void OnRemove(BerserkStatusData data, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
+			base.OnRemove(data, in statusInfos, in context);
 			EntityAddress target = statusInfos.targetAddress;
 
 			if(!target.TryGetComponentRO(out BasicAttackerComponent  basicAttackerComponent))
@@ -53,7 +52,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 			if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
 				defenseComponent.defense.RemoveOperation(channelKey);
 
-			base.OnRemove(data, in statusInfos, in context);
 		}
 	}
 }

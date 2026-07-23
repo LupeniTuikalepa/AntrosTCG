@@ -36,7 +36,7 @@ namespace ATCG.Battle
 
 		    if (statusInfos.targetAddress.HasComponent<HealthComponent>())
 		    {
-			    Debug.Log(damage + " damage sur " + statusInfos.targetAddress);
+				 Debug.Log(damage + " damage sur " + statusInfos.targetAddress);
 			    DamageCommand damageCommand = new DamageCommand(damage, statusInfos.targetAddress);
 			    damageCommand.Run(context.battlePhase);
 		    }
