@@ -3,7 +3,7 @@ using Helteix.Tools;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Listeners
+namespace ATCG.Battle.Commands.Directors
 {
     /// <summary>
     /// Temporary grouping of player that will react to a specific command type.
@@ -13,51 +13,51 @@ namespace ATCG.Battle.Commands.Listeners
     /// as new command players could be added later on.
     /// </summary>
     /// <typeparam name="T">Commands to listen to </typeparam>
-    public sealed class CommandListenerGroup<T> : ICommandListenerGroup where T : ICommand
+    public sealed class CommandDirectorGroup<T> : ICommandDirectorGroup where T : ICommand
     {
         public readonly T command;
-        public readonly List<ICommandListener<T>> players;
+        public readonly List<ICommandDirector<T>> players;
 
-        public CommandListenerGroup(T command)
+        public CommandDirectorGroup(T command)
         {
             this.command = command;
-            players = ListPool<ICommandListener<T>>.Get();
+            players = ListPool<ICommandDirector<T>>.Get();
         }
 
-        public void Add(ICommandListener<T> listener)
+        public void Add(ICommandDirector<T> director)
         {
-            players.Add(listener);
+            players.Add(director);
         }
 
         public void Dispose()
         {
-            ListPool<ICommandListener<T>>.Release(players);
+            ListPool<ICommandDirector<T>>.Release(players);
         }
 
         public async Awaitable Run(CommandContext context)
         {
-            using CommandListenerState state = new(players, 5);
+            using CommandDirectorState state = new(players, 5);
 
-            foreach (ICommandListener<T> player in players)
+            foreach (ICommandDirector<T> player in players)
                 player.Play(state, context, command).ListenForExceptions();
 
-            foreach (ICommandListener<T> player in players)
+            foreach (ICommandDirector<T> player in players)
                 player.OnBegin(state, context, command);
 
             await state.WindUp;
 
-            foreach (ICommandListener<T> player in players)
+            foreach (ICommandDirector<T> player in players)
                 player.OnHit(state, context, command);
 
             foreach (ICommand embed in command.GetEmbeds(context))
             {
-                CommandListenerRunner runner = new CommandListenerRunner(embed);
+                CommandDirectorRunner runner = new CommandDirectorRunner(embed);
                 await runner.Run(context);
             }
 
             await state.FollowThrough;
 
-            foreach (ICommandListener<T> player in players)
+            foreach (ICommandDirector<T> player in players)
                 player.OnEnd(state, context, command);
         }
     }

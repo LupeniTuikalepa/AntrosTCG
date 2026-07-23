@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ATCG.Battle.Commands.Listeners
+namespace ATCG.Battle.Commands.Directors
 {
-    public interface ICommandListenerGroup : IDisposable
+    public interface ICommandDirectorGroup : IDisposable
     {
         /// <summary>
         /// Start command player execution with the given context

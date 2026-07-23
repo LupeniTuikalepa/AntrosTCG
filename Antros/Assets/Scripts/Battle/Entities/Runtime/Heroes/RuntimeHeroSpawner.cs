@@ -1,6 +1,6 @@
 ﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Metrics;
@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
 {
-    public class RuntimeHeroSpawner : MonoBehaviour, ICommandListener<SpawnHeroCommand>
+    public class RuntimeHeroSpawner : MonoBehaviour, ICommandDirector<SpawnHeroCommand>
     {
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
@@ -24,7 +24,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             this.UnregisterListener();
         }
 
-        public async Awaitable Play(CommandListenerState state, CommandContext context, SpawnHeroCommand command)
+        public async Awaitable Play(CommandDirectorState state, CommandContext context, SpawnHeroCommand command)
         {
             state.CompleteWindUp(this);
 

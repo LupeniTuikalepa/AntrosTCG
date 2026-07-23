@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Exceptions;
 using ATCG.Battle.Commands.Groups;
 using ATCG.Battle.Commands.Listeners;
-using ATCG.Battle.Commands.Watchers;
 using ATCG.Battle.GameModes;
 using Helteix.Singletons.MonoSingletons.Attributes;
 using Helteix.Tools;
@@ -13,10 +13,10 @@ namespace ATCG.Battle.Commands
     [DontDestroyOnLoad]
     public static class CommandManager
     {
-        public static IReadOnlyCollection<ICommandListener> Listeners => CommandsListeners;
+        public static IReadOnlyCollection<ICommandDirector> Listeners => CommandsListeners;
 
-        private static readonly HashSet<ICommandListener> CommandsListeners = new();
-        private static readonly HashSet<ICommandWatcher> CommandsWatcher = new();
+        private static readonly HashSet<ICommandDirector> CommandsListeners = new();
+        private static readonly HashSet<ICommandListener> CommandsWatcher = new();
 
         private static readonly Stack<CommandGroup> GroupsQueue = new Stack<CommandGroup>();
 
@@ -71,7 +71,7 @@ namespace ATCG.Battle.Commands
             CommandTrace.ReportTreeBegan(group.GroupID, command.ID);
 
             using CommandContext context = new(battlePhase, tree, group.GroupID);
-            context.Register(command);
+            context.Register(context, command);
 
             try
             {
@@ -82,43 +82,43 @@ namespace ATCG.Battle.Commands
                 Debug.Log($"Game Command was canceled because of : {breakCommandException.Cause}");
             }
 
-            CommandListenerRunner runner = new CommandListenerRunner(command);
+            CommandDirectorRunner runner = new CommandDirectorRunner(command);
             await runner.Run(context);
 
             if(useAutoGroup)
                 EndGroup();
         }
 
-        public static void RegisterListener(this ICommandListener listener)
+        public static void RegisterListener(this ICommandDirector director)
         {
-            CommandsListeners.Add(listener);
+            CommandsListeners.Add(director);
         }
 
-        public static void UnregisterListener(this ICommandListener listener)
+        public static void UnregisterListener(this ICommandDirector director)
         {
-            CommandsListeners.Remove(listener);
+            CommandsListeners.Remove(director);
         }
 
 
-        public static void RegisterWatcher(this ICommandWatcher watcher)
+        public static void RegisterWatcher(this ICommandListener listener)
         {
-            CommandsWatcher.Add(watcher);
+            CommandsWatcher.Add(listener);
         }
 
-        public static void UnregisterWatcher(this ICommandWatcher watcher)
+        public static void UnregisterWatcher(this ICommandListener listener)
         {
-            CommandsWatcher.Remove(watcher);
+            CommandsWatcher.Remove(listener);
         }
 
-        public static void TriggerWatchers<T>(T command)
+        public static void TriggerWatchers<T>(CommandContext context,T command)
         {
             foreach (var watcher in CommandsWatcher)
             {
-                if (watcher is not ICommandWatcher<T> w)
+                if (watcher is not ICommandListener<T> w)
                     continue;
 
-                if (w.Accepts(command))
-                    w.Trigger(command);
+                if (w.Accepts(context, command))
+                    w.Trigger(context, command);
             }
         }
     }

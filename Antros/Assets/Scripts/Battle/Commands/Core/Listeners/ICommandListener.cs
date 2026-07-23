@@ -1,15 +1,16 @@
-﻿using UnityEngine;
-
-namespace ATCG.Battle.Commands.Listeners
+﻿namespace ATCG.Battle.Commands.Listeners
 {
     public interface ICommandListener { }
-    public interface ICommandListener<in T> : ICommandListener where T : ICommand
-    {
-        bool CanPlay(T command) => true;
 
-        Awaitable Play(CommandListenerState state, CommandContext context, T command);
-        void OnBegin(in CommandListenerState state, CommandContext context, T command) { }
-        void OnHit(in CommandListenerState state, CommandContext context, T command) { }
-        void OnEnd(in CommandListenerState state, CommandContext context, T command) { }
+    /// <summary>
+    /// Like listeners, command watchers react when a command is executed.
+    /// Where Listeners are for playing an action in the scene, watchers are designed to react on the fly and inject additional behaviours into the command chains.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface ICommandListener<in T> : ICommandListener
+    {
+        bool Accepts(CommandContext context, T command) => true;
+
+        void Trigger(CommandContext context, T command);
     }
 }

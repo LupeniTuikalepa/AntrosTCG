@@ -1,7 +1,7 @@
 ﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.UI;
 using UnityEngine;
@@ -9,7 +9,7 @@ using UnityEngine;
 namespace ATCG.Battle.Players.UI
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaBar")]
-    public class PlayerManaBar : BarUI, IPlayerStatUI, IPlayerCommandListener<ModifyPlayerManaCommand>
+    public class PlayerManaBar : BarUI, IPlayerStatUI, IPlayerCommandDirector<ModifyPlayerManaCommand>
     {
         public IBattlePlayer BattlePlayer { get; private set; }
 
@@ -27,7 +27,7 @@ namespace ATCG.Battle.Players.UI
             BattlePlayer = null;
         }
 
-        public async Awaitable Play(CommandListenerState state, CommandContext context, ModifyPlayerManaCommand command)
+        public async Awaitable Play(CommandDirectorState state, CommandContext context, ModifyPlayerManaCommand command)
         {
             //No need to wait what follows
             state.CompleteAll(this);

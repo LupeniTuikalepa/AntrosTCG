@@ -1,7 +1,6 @@
 ﻿using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
@@ -18,13 +17,8 @@ namespace ATCG.Battle.PassiveSystem.Passives
     {
         private EntityAddress targetEntityAddress;
         private DeltaInRangeInfos<int> commandInfos;
-
-        public ExtendedDestruction(IBattlePlayer battlePlayer) : base(battlePlayer)
-        {
-        }
         
-        protected override void Process(in CommandContext context)
-        {
+        /*
             var battleGrid = context.Grid;
             
             if(!targetEntityAddress.TryGetComponentRO<GridMemberComponent>(out var gridMember))
@@ -34,7 +28,7 @@ namespace ATCG.Battle.PassiveSystem.Passives
                 return;
             
             DestroyNearbyWall(context, battleGrid, cell.Coordinate);
-        }
+        */
 
         private void DestroyNearbyWall(CommandContext context, BattleGrid battleGrid, HexCoordinates from)
         {
@@ -62,7 +56,7 @@ namespace ATCG.Battle.PassiveSystem.Passives
             }
         }
 
-        protected override bool CanInjectPassive(CommandContext context, DamageCommand command)
+        public override bool Accepts(CommandContext context, DamageCommand command)
         {
             targetEntityAddress = command.TargetEntityAddress(context.World);
             commandInfos = command.GetInfos();

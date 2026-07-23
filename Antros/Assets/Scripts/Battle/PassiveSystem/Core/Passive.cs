@@ -1,4 +1,5 @@
 ﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
@@ -8,21 +9,15 @@ using UnityEngine;
 namespace ATCG.Battle.PassiveSystem.Core
 {
     public abstract class Passive<TCommand> :
-        PlayerCommand<NoInfos>,
-        ICommandListener<TCommand>
+        ICommandListener<TCommand>,
+        ICommandDirector
         where TCommand : ICommand
     {
-        protected Passive(IBattlePlayer battlePlayer) : base(battlePlayer)
-        {
-        }
+        public abstract bool Accepts(CommandContext context, TCommand command);
 
-        async Awaitable ICommandListener<TCommand>.Play(CommandListenerState state, CommandContext context, TCommand command)
+        public void Trigger(CommandContext context, TCommand command)
         {
-            await Awaitable.MainThreadAsync();
-            if(CanInjectPassive(context, command))
-                Inject(context, this);
+            //Inject(context, this);
         }
-
-        protected abstract bool CanInjectPassive(CommandContext context, TCommand command);
     }
 }

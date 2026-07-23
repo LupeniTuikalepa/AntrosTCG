@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Groups;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
@@ -18,14 +18,14 @@ namespace ATCG.Battle.Commands
 
         public World World => battlePhase.world;
 
-        private readonly Dictionary<ICommand, ICommandListenerGroup> pairings;
+        private readonly Dictionary<ICommand, ICommandDirectorGroup> pairings;
         private readonly CommandTree commandTree;
         private readonly BattleID groupID;
 
 
         public CommandContext(BattlePhase battlePhase, CommandTree commandTree, BattleID groupID)
         {
-            pairings = DictionaryPool<ICommand, ICommandListenerGroup>.Get();
+            pairings = DictionaryPool<ICommand, ICommandDirectorGroup>.Get();
             this.battlePhase = battlePhase;
             this.commandTree = commandTree;
             this.groupID = groupID;
@@ -47,9 +47,9 @@ namespace ATCG.Battle.Commands
 
         public ICommand GetCommand(BattleID battleID) => commandTree.GetCommand(battleID);
 
-        public bool TryGetGroup<T>(T gameCommand, out CommandListenerGroup<T> group) where T : ICommand
+        public bool TryGetGroup<T>(T gameCommand, out CommandDirectorGroup<T> group) where T : ICommand
         {
-            if (pairings.TryGetValue(gameCommand, out var g) && g is CommandListenerGroup<T> cpg)
+            if (pairings.TryGetValue(gameCommand, out var g) && g is CommandDirectorGroup<T> cpg)
             {
                 group = cpg;
                 return true;
@@ -65,21 +65,21 @@ namespace ATCG.Battle.Commands
         /// <param name="command"></param>
         /// <param name="group"></param>
         /// <returns></returns>
-        public bool TryGetGroup(ICommand command, out ICommandListenerGroup group)
+        public bool TryGetGroup(ICommand command, out ICommandDirectorGroup group)
             => pairings.TryGetValue(command, out group);
 
-        public void Register<T>(T command) where T : ICommand
+        public void Register<T>(CommandContext context, T command) where T : ICommand
         {
-            CommandListenerGroup<T> group = new(command);
+            CommandDirectorGroup<T> group = new(command);
             pairings[command]= group;
             commandTree.AddCommand(command);
 
             CommandTrace.ReportCommandRegistered(groupID, command);
-            CommandManager.TriggerWatchers(command);
+            CommandManager.TriggerWatchers(context, command);
 
-            foreach (ICommandListener commandPlayer in CommandManager.Listeners)
+            foreach (ICommandDirector commandPlayer in CommandManager.Listeners)
             {
-                if(commandPlayer is not ICommandListener<T> player)
+                if(commandPlayer is not ICommandDirector<T> player)
                     continue;
 
                 if (player.CanPlay(command))
@@ -101,7 +101,7 @@ namespace ATCG.Battle.Commands
             foreach (var value in pairings.Values)
                 value.Dispose();
 
-            DictionaryPool<ICommand, ICommandListenerGroup>.Release(pairings);
+            DictionaryPool<ICommand, ICommandDirectorGroup>.Release(pairings);
         }
 
         public ICommand GetRoot() => commandTree.Root;
