@@ -1,8 +1,9 @@
-﻿using ATCG.Battle.Entities.Runtime.VFX;
+﻿using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Runtime;
+using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Capacities.Data.Status;
-using UnityEngine;
 
-namespace ATCG.Battle.Entities.Runtime.Status
+namespace ATCG.Battle.CapacitySystem.Status.Status
 {
     public readonly struct RuntimeStatusContext
     {

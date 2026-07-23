@@ -1,15 +1,14 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.Controllers;
 using ATCG.Battle.CapacitySystem.Status.Iterations;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Status;
 using UnityEngine;
 
-namespace ATCG.Battle
+namespace ATCG.Battle.CapacitySystem.Status.Burn
 {
 	public partial class BurnStatus : Status<BurnStatusData, StatusDurationController>,
 		ITickOnTurnBegin

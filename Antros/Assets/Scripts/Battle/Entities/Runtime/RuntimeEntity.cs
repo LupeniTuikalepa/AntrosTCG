@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using ATCG.Battle.CapacitySystem.Status.Status;
 using ATCG.Battle.Commands;
-using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;

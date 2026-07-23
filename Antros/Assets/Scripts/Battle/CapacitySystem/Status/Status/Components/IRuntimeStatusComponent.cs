@@ -1,4 +1,4 @@
-﻿namespace ATCG.Battle.Entities.Runtime.Status
+﻿namespace ATCG.Battle.CapacitySystem.Status.Status.Components
 {
     public interface IRuntimeStatusComponent
     {

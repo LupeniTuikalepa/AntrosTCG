@@ -1,8 +1,7 @@
-
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status.Iterations;
 
-namespace ATCG.Battle.Entities.Components.Status
+namespace ATCG.Battle.CapacitySystem.Status.Controllers
 {
 	public struct StatusVolatileController : IStatusController ,IUpdateControllerOnTurnEnd, IUpdateControllerOnTurnBegin
     {

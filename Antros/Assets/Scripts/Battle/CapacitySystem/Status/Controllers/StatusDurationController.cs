@@ -1,7 +1,7 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status.Iterations;
 
-namespace ATCG.Battle.Entities.Components.Status
+namespace ATCG.Battle.CapacitySystem.Status.Controllers
 {
 	public struct StatusDurationController : IStatusController, IUpdateControllerOnTurnEnd
     {
@@ -17,6 +17,10 @@ namespace ATCG.Battle.Entities.Components.Status
 	        RemainingTicks += ticks;
         }
 
+        public void SetTicks(int ticks)
+        {
+	        RemainingTicks = ticks;
+        }
         bool IStatusController.IsFinished()
         {
             return RemainingTicks <= 0;

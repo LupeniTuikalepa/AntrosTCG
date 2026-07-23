@@ -3,7 +3,7 @@ using ATCG.Capacities.Data.Status;
 using ATCG.Capacities.Status.FireStatus;
 using Helteix.ChanneledProperties;
 
-namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
+namespace ATCG.Battle.CapacitySystem.Status.Fury
 {
 	public readonly struct FuryComponent : IStatusComponent
 	{

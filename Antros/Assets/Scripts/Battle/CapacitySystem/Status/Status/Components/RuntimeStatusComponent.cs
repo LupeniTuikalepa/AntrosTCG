@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ATCG.Battle.Entities.Runtime.Status
+namespace ATCG.Battle.CapacitySystem.Status.Status.Components
 {
     public abstract class RuntimeStatusComponent : MonoBehaviour, IRuntimeStatusComponent
     {

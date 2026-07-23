@@ -1,19 +1,15 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.Controllers;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using Helteix.ChanneledProperties;
 
 namespace ATCG.Battle.CapacitySystem.Status.Frost.Hardening
 {
-    public partial class HardeningStatus : Status<HardeningData,HardeningComponent,StatusDurationController>
+    public partial class HardeningStatus : Status<HardeningData, StatusDurationController>
     {
-	    protected override HardeningComponent CreateStatusComponent(HardeningData data, in StatusContext context)
-	    {
-		    return new HardeningComponent(data, ChannelKey.GetUniqueChannelKey("HardeningStatus"));
-		    
-	    }
+	    private readonly ChannelKey channelKey = ChannelKey.GetUniqueChannelKey(nameof(HardeningStatus));
 
 	    protected override StatusDurationController CreateStatusController(HardeningData data, in StatusContext context)
 	    {
@@ -24,8 +20,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.Hardening
 	    {
 		    base.OnApply(data, in statusInfos, in context);
 		    EntityAddress target = statusInfos.targetAddress;
-		    ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
-		    
 		    if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
 			    defenseComponent.defense.Multiply(channelKey, data.DefenseBuff);
 	    }
@@ -34,8 +28,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.Hardening
 	    {
 		    base.OnRemove(data, in statusInfos, in context);
 		    EntityAddress target = statusInfos.targetAddress;
-		    ChannelKey channelKey = statusInfos.StatusComponent.channelKey;
-		    
 		    if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
 			    defenseComponent.defense.RemoveOperation(channelKey);
 	    }

@@ -1,7 +1,7 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.Controllers;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
 using Helteix.ChanneledProperties;
 using UnityEngine;

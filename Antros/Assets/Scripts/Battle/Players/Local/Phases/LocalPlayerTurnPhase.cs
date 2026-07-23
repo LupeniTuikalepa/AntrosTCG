@@ -8,7 +8,6 @@ using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Implementations;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Runtime;
