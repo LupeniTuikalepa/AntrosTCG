@@ -1,12 +1,12 @@
 ﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.Listeners;
 using Helteix.Tools;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Deployables
 {
-    public class RuntimeDeployableSpawner : MonoBehaviour, ICommandListener<SpawnDeployableCommand>
+    public class RuntimeDeployableSpawner : MonoBehaviour, ICommandDirector<SpawnDeployableCommand>
     {
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
@@ -21,7 +21,7 @@ namespace ATCG.Battle.Entities.Runtime.Deployables
             this.UnregisterListener();
         }
 
-        public async Awaitable Play(CommandListenerState state, CommandContext context, SpawnDeployableCommand command)
+        public async Awaitable Play(CommandDirectorState state, CommandContext context, SpawnDeployableCommand command)
         {
             state.CompleteWindUp(this);
 

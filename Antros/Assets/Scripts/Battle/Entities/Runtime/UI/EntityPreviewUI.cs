@@ -1,7 +1,7 @@
 using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.UI;
@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace ATCG.Battle
 {
-	public class EntityPreviewUI : BarUI, IEntityCommandListener<DamageCommand>,IEntityCommandListener<DeathCommand>
+	public class EntityPreviewUI : BarUI, IEntityCommandDirector<DamageCommand>,IEntityCommandDirector<DeathCommand>
 	{
 		private EntityPreviewListUI entityPreviewList;
 		public Entity Entity { get; private set; }
@@ -51,7 +51,7 @@ namespace ATCG.Battle
 			await Awaitable.MainThreadAsync();
 		}
 
-		public async Awaitable Play(CommandListenerState state, CommandContext context, DamageCommand command)
+		public async Awaitable Play(CommandDirectorState state, CommandContext context, DamageCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 
@@ -64,7 +64,7 @@ namespace ATCG.Battle
 			await RefreshAsync();
 		}
 
-		public async Awaitable Play(CommandListenerState state, CommandContext context, DeathCommand command)
+		public async Awaitable Play(CommandDirectorState state, CommandContext context, DeathCommand command)
 		{
 			state.CompleteAll(this);
 			await entityPreviewList.DestroyPreviewAsync(Entity);

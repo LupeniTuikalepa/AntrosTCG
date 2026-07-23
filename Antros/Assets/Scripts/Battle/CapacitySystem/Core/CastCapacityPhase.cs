@@ -5,8 +5,8 @@ using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
 using ATCG.Battle.CapacitySystem.Core.Properties;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands.Capacities;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
@@ -32,7 +32,7 @@ using Object = UnityEngine.Object;
 
 namespace ATCG.Battle.CapacitySystem.Core
 {
-    public class CastCapacityPhase : Phase, ICommandListener<QteCommand>, IGlobalHUDPhase
+    public class CastCapacityPhase : Phase, ICommandDirector<QteCommand>, IGlobalHUDPhase
     {
         public ChannelKey ChannelKey { get; }
 
@@ -229,16 +229,16 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         // ---- QteCommand listener --------------------------------------------
 
-        public async Awaitable Play(CommandListenerState state, CommandContext context, QteCommand command)
+        public async Awaitable Play(CommandDirectorState state, CommandContext context, QteCommand command)
         {
             throw new NotImplementedException();
         }
 
-        void ICommandListener<QteCommand>.OnBegin(in CommandListenerState state, CommandContext context,
+        void ICommandDirector<QteCommand>.OnBegin(in CommandDirectorState state, CommandContext context,
             QteCommand command)
             => AddQteResult(command.Result);
 
-        async Awaitable ICommandListener<QteCommand>.Play(CommandListenerState state, CommandContext context,
+        async Awaitable ICommandDirector<QteCommand>.Play(CommandDirectorState state, CommandContext context,
             QteCommand command)
         {
             state.CompleteAll(this);

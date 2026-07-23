@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
@@ -13,7 +13,7 @@ using UnityEngine;
 namespace ATCG.Battle
 {
 	public class EntityPreviewListUI : PlayerHUDElement,
-		IPlayerCommandListener<SpawnHeroCommand>
+		IPlayerCommandDirector<SpawnHeroCommand>
 	{
 
 		public IBattlePlayer BattlePlayer => RuntimePlayer.BattlePlayer;
@@ -37,7 +37,7 @@ namespace ATCG.Battle
 			this.UnregisterListener();
 		}
 
-		async Awaitable ICommandListener<SpawnHeroCommand>.Play(CommandListenerState state, CommandContext context,
+		async Awaitable ICommandDirector<SpawnHeroCommand>.Play(CommandDirectorState state, CommandContext context,
 			SpawnHeroCommand command)
 		{
 			state.CompleteAll(this);

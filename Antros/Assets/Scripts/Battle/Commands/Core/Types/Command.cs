@@ -67,7 +67,7 @@ namespace ATCG.Battle.Commands
         public void Inject<TCommand>(in CommandContext context, TCommand command)
             where TCommand : ICommand
         {
-            context.Register(command);
+            context.Register(context, command);
 
             embeds.Add(command.ID);
             command.SetParent(this);

@@ -1,14 +1,14 @@
 ﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities.Runtime.Deployables;
 using Helteix.Tools;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Constructions
 {
-    public class RuntimeConstructionSpawner : MonoBehaviour, ICommandListener<SpawnConstructionCommand>
+    public class RuntimeConstructionSpawner : MonoBehaviour, ICommandDirector<SpawnConstructionCommand>
     {
         [SerializeField]
         private RuntimeEntityManager runtimeEntityManager;
@@ -23,7 +23,7 @@ namespace ATCG.Battle.Entities.Runtime.Constructions
             this.UnregisterListener();
         }
 
-        public async Awaitable Play(CommandListenerState state, CommandContext context, SpawnConstructionCommand command)
+        public async Awaitable Play(CommandDirectorState state, CommandContext context, SpawnConstructionCommand command)
         {
             state.CompleteWindUp(this);
 

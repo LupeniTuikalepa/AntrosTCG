@@ -4,27 +4,27 @@ using Helteix.Tools;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ATCG.Battle.Commands.Listeners
+namespace ATCG.Battle.Commands.Directors
 {
-    public readonly struct CommandListenerState : IDisposable
+    public readonly struct CommandDirectorState : IDisposable
     {
         private readonly AwaitableCompletionSource windUpSource;
         private readonly AwaitableCompletionSource followThroughSource;
 
-        private readonly Dictionary<ICommandListener, bool> windUps;
-        private readonly Dictionary<ICommandListener, bool> followThrough;
+        private readonly Dictionary<ICommandDirector, bool> windUps;
+        private readonly Dictionary<ICommandDirector, bool> followThrough;
 
         public Awaitable WindUp => windUpSource.Awaitable;
         public Awaitable FollowThrough => followThroughSource.Awaitable;
 
 
-        public CommandListenerState(IEnumerable<ICommandListener> players, float timeout = 5f)
+        public CommandDirectorState(IEnumerable<ICommandDirector> players, float timeout = 5f)
         {
             windUpSource = new AwaitableCompletionSource();
             followThroughSource = new AwaitableCompletionSource();
 
-            windUps = DictionaryPool<ICommandListener, bool>.Get();
-            followThrough = DictionaryPool<ICommandListener, bool>.Get();
+            windUps = DictionaryPool<ICommandDirector, bool>.Get();
+            followThrough = DictionaryPool<ICommandDirector, bool>.Get();
 
             foreach (var player in players)
             {
@@ -56,9 +56,9 @@ namespace ATCG.Battle.Commands.Listeners
                 Debug.LogWarning($"CommandListenerState: Timeout reached for follow through after {time} seconds");
         }
 
-        public void CompleteWindUp(ICommandListener listener)
+        public void CompleteWindUp(ICommandDirector director)
         {
-            windUps[listener] = true;
+            windUps[director] = true;
             bool isDone = true;
             foreach (var value in windUps.Values)
                 isDone &= value;
@@ -70,9 +70,9 @@ namespace ATCG.Battle.Commands.Listeners
             }
         }
 
-        public void CompleteFollowThrough(ICommandListener listener)
+        public void CompleteFollowThrough(ICommandDirector director)
         {
-            followThrough[listener] = true;
+            followThrough[director] = true;
 
             bool isDone = true;
             foreach (var value in followThrough.Values)
@@ -84,18 +84,18 @@ namespace ATCG.Battle.Commands.Listeners
                 //Debug.Log("All players have completed follow through");
             }
         }
-        public void CompleteAll(ICommandListener listener)
+        public void CompleteAll(ICommandDirector director)
         {
-            CompleteWindUp(listener);
-            CompleteFollowThrough(listener);
+            CompleteWindUp(director);
+            CompleteFollowThrough(director);
         }
 
         void IDisposable.Dispose()
         {
             if (windUps != null)
-                DictionaryPool<ICommandListener, bool>.Release(windUps);
+                DictionaryPool<ICommandDirector, bool>.Release(windUps);
             if (followThrough != null)
-                DictionaryPool<ICommandListener, bool>.Release(followThrough);
+                DictionaryPool<ICommandDirector, bool>.Release(followThrough);
         }
 
     }

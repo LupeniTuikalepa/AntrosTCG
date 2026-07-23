@@ -1,9 +1,9 @@
 using System.Linq;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Capacities.Data.Status;
@@ -15,22 +15,22 @@ using UnityEngine;
 namespace ATCG.Battle.Entities.Runtime
 {
 	public abstract partial class RuntimeEntity<T> :
-		IEntityCommandListener<DeathCommand>,
-		IEntityCommandListener<DamageCommand>,
-		IEntityCommandListener<MoveCommand>,
-		IEntityCommandListener<FallCommand>,
-		IEntityCommandListener<BasicAttackCommand>,
-		IEntityCommandListener<StatusApplyCommand>,
-		IEntityCommandListener<StatusTickCommand>,
-		IEntityCommandListener<StatusRemoveCommand>,
-		IEntityCommandListener<PushbackCommand>
+		IEntityCommandDirector<DeathCommand>,
+		IEntityCommandDirector<DamageCommand>,
+		IEntityCommandDirector<MoveCommand>,
+		IEntityCommandDirector<FallCommand>,
+		IEntityCommandDirector<BasicAttackCommand>,
+		IEntityCommandDirector<StatusApplyCommand>,
+		IEntityCommandDirector<StatusTickCommand>,
+		IEntityCommandDirector<StatusRemoveCommand>,
+		IEntityCommandDirector<PushbackCommand>
 
 	{
 		public Entity Entity => Address.entity;
 		public RuntimeBattleGrid RuntimeBattleGrid => Manager.RuntimeBattleGrid;
 
 
-		async Awaitable ICommandListener<DeathCommand>.Play(CommandListenerState state, CommandContext context,
+		async Awaitable ICommandDirector<DeathCommand>.Play(CommandDirectorState state, CommandContext context,
 			DeathCommand command)
 		{
 			state.CompleteWindUp(this);
@@ -47,13 +47,13 @@ namespace ATCG.Battle.Entities.Runtime
 
 		}
 
-		void ICommandListener<DeathCommand>.OnEnd(in CommandListenerState state, CommandContext context,
+		void ICommandDirector<DeathCommand>.OnEnd(in CommandDirectorState state, CommandContext context,
 			DeathCommand command)
 		{
 			Destroy(gameObject);
 		}
 
-		async Awaitable ICommandListener<DamageCommand>.Play(CommandListenerState state, CommandContext context,
+		async Awaitable ICommandDirector<DamageCommand>.Play(CommandDirectorState state, CommandContext context,
 			DamageCommand command)
 		{
 			state.CompleteWindUp(this);
@@ -66,7 +66,7 @@ namespace ATCG.Battle.Entities.Runtime
 			state.CompleteFollowThrough(this);
 		}
 
-		async Awaitable ICommandListener<BasicAttackCommand>.Play(CommandListenerState state, CommandContext context,
+		async Awaitable ICommandDirector<BasicAttackCommand>.Play(CommandDirectorState state, CommandContext context,
 			BasicAttackCommand command)
 		{
 			state.CompleteWindUp(this);
@@ -95,15 +95,15 @@ namespace ATCG.Battle.Entities.Runtime
 		}
 
 
-		protected virtual async Awaitable OnDeath(CommandListenerState state, CommandContext context,
+		protected virtual async Awaitable OnDeath(CommandDirectorState state, CommandContext context,
 			DeathCommand command)
 			=> await Awaitable.MainThreadAsync();
 
-		protected virtual async Awaitable OnTakeDamage(CommandListenerState state, CommandContext context,
+		protected virtual async Awaitable OnTakeDamage(CommandDirectorState state, CommandContext context,
 			DamageCommand command)
 			=> await Awaitable.MainThreadAsync();
 
-		async Awaitable ICommandListener<MoveCommand>.Play(CommandListenerState state, CommandContext context,
+		async Awaitable ICommandDirector<MoveCommand>.Play(CommandDirectorState state, CommandContext context,
 			MoveCommand command)
 		{
 			state.CompleteWindUp(this);
@@ -125,9 +125,7 @@ namespace ATCG.Battle.Entities.Runtime
 
 			state.CompleteFollowThrough(this);
 		}
-
-		async Awaitable ICommandListener<PushbackCommand>.Play(CommandListenerState state, CommandContext context,
-			PushbackCommand command)
+		async Awaitable ICommandDirector<PushbackCommand>.Play(CommandDirectorState state, CommandContext context, PushbackCommand command)
 		{
 			state.CompleteWindUp(this);
 
@@ -139,7 +137,7 @@ namespace ATCG.Battle.Entities.Runtime
 			state.CompleteFollowThrough(this);
 		}
 
-		async Awaitable ICommandListener<FallCommand>.Play(CommandListenerState state, CommandContext context,
+		async Awaitable ICommandDirector<FallCommand>.Play(CommandDirectorState state, CommandContext context,
 			FallCommand command)
 		{
 			float targetY = transform.position.y - 10f;
@@ -151,8 +149,7 @@ namespace ATCG.Battle.Entities.Runtime
 
 		}
 
-		async Awaitable ICommandListener<StatusApplyCommand>.Play(CommandListenerState state, CommandContext context,
-			StatusApplyCommand command)
+		async Awaitable ICommandDirector<StatusApplyCommand>.Play(CommandDirectorState state, CommandContext context, StatusApplyCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
@@ -178,8 +175,7 @@ namespace ATCG.Battle.Entities.Runtime
 			runtimeStatus.Apply(runtimeContext);
 		}
 
-		async Awaitable ICommandListener<StatusTickCommand>.Play(CommandListenerState state, CommandContext context,
-			StatusTickCommand command)
+		async Awaitable ICommandDirector<StatusTickCommand>.Play(CommandDirectorState state, CommandContext context, StatusTickCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
@@ -191,8 +187,7 @@ namespace ATCG.Battle.Entities.Runtime
 				tickStatus.Tick(runtimeContext);
 		}
 
-		async Awaitable ICommandListener<StatusRemoveCommand>.Play(CommandListenerState state, CommandContext context,
-			StatusRemoveCommand command)
+		async Awaitable ICommandDirector<StatusRemoveCommand>.Play(CommandDirectorState state, CommandContext context, StatusRemoveCommand command)
 		{
 			// Temporary diagnostics — please leave these in for the next test so we get
 			// a real read on what's happening (the previous pair got removed before the

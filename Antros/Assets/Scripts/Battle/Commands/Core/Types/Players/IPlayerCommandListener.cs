@@ -7,6 +7,6 @@ namespace ATCG.Battle.Commands.Players
     {
         IBattlePlayer BattlePlayer { get; }
 
-        bool ICommandListener<T>.CanPlay(T command) => BattlePlayer != null && command.PlayerID == BattlePlayer.GetBattleID();
+        bool ICommandListener<T>.Accepts(CommandContext context, T command) => BattlePlayer != null && command.PlayerID == BattlePlayer.GetBattleID();
     }
 }

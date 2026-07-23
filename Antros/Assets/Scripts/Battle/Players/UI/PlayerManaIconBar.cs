@@ -1,8 +1,8 @@
 ﻿using System;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
@@ -14,7 +14,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Players.UI
 {
     [AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerManaIconBar")]
-    public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI, ICommandListener<ModifyPlayerManaCommand>
+    public class PlayerManaIconBar : MonoBehaviour, IPlayerStatUI, ICommandDirector<ModifyPlayerManaCommand>
     {
         [SerializeField]
         private TMP_Text valueText;
@@ -114,7 +114,7 @@ namespace ATCG.Battle.Players.UI
             valueText.text = $"{current}/{max}";
         }
 
-        public async Awaitable Play(CommandListenerState state, CommandContext context, ModifyPlayerManaCommand command)
+        public async Awaitable Play(CommandDirectorState state, CommandContext context, ModifyPlayerManaCommand command)
         {
             state.CompleteWindUp(this);
             var infos = command.GetInfos();

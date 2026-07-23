@@ -1,8 +1,8 @@
 ﻿using System;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Commands.Infos;
-using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
@@ -13,7 +13,7 @@ using UnityEngine;
 namespace ATCG.Battle.Players.UI
 {
 	[AddComponentMenu("ATCG/Gameplay/Player/UI/PlayerHealthBar")]
-	public class PlayerHealthBar : BarUI, IPlayerStatUI, ICommandListener<ModifyPlayerHealthCommand>
+	public class PlayerHealthBar : BarUI, IPlayerStatUI, ICommandDirector<ModifyPlayerHealthCommand>
 	{
 		public IBattlePlayer BattlePlayer { get; private set; }
 
@@ -44,7 +44,7 @@ namespace ATCG.Battle.Players.UI
 		}
 
 
-		public async Awaitable Play(CommandListenerState state, CommandContext context, ModifyPlayerHealthCommand command)
+		public async Awaitable Play(CommandDirectorState state, CommandContext context, ModifyPlayerHealthCommand command)
 		{
 			state.CompleteWindUp(this);
 
