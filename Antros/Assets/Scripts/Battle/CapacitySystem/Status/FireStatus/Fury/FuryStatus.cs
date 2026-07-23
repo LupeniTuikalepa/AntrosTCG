@@ -1,15 +1,11 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.CapacitySystem.Status.Iterations;
-using ATCG.Battle.Commands;
-using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Entities;
+using ATCG.Battle.CapacitySystem.Status.Controllers;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Status.FireStatus;
 using Helteix.ChanneledProperties;
 using UnityEngine;
 
-namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fury
+namespace ATCG.Battle.CapacitySystem.Status.Fury
 {
 	public partial class FuryStatus : Status<PyroFuryData, FuryComponent, StatusDurationController>
 	{

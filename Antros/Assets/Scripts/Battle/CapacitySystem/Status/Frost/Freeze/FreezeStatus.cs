@@ -1,9 +1,8 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.Entities;
-using ATCG.Battle.Entities.Components.Status;
+using ATCG.Battle.CapacitySystem.Status.Controllers;
 using ATCG.Capacities.Data.Status;
 
-namespace ATCG.Battle.CapacitySystem.Status.Forst
+namespace ATCG.Battle.CapacitySystem.Status.Frost
 {
     public partial class FreezeStatus : Status<FreezeStatusData, StatusDurationController>
     {

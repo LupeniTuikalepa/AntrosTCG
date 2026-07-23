@@ -1,7 +1,8 @@
 ﻿using System;
+using ATCG.Battle.CapacitySystem.Status.Status.Components;
 using UnityEngine;
 
-namespace ATCG.Battle.Entities.Runtime.Status
+namespace ATCG.Battle.CapacitySystem.Status.Status
 {
     public class RuntimeStatus : MonoBehaviour
     {

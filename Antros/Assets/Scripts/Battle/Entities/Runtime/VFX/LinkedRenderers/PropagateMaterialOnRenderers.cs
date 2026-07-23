@@ -2,7 +2,8 @@
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
 using ATCG.Battle.CapacitySystem.Core.Properties;
-using ATCG.Battle.Entities.Runtime.Status;
+using ATCG.Battle.CapacitySystem.Status.Status;
+using ATCG.Battle.CapacitySystem.Status.Status.Components;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;

@@ -1,10 +1,10 @@
 using System.Linq;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
+using ATCG.Battle.CapacitySystem.Status.Status;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Entities.Runtime.Status;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids.Utility;

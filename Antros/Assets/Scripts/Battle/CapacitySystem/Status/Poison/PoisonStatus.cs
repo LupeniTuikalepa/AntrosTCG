@@ -1,11 +1,10 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.Controllers;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Entities.Components.Status;
 using ATCG.Capacities.Data.Status;
-using UnityEngine;
 
-namespace ATCG.Battle.Entities.Components.Implementations
+namespace ATCG.Battle.CapacitySystem.Status.Poison
 {
     public partial class PoisonStatus: Status<PoisonStatusData, StatusDurationController>
     {

@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Threading;
-using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.CapacitySystem.Status;
-using ATCG.Battle.CapacitySystem.Status.Berserk;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Commands.GameCommands.Players;
-using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Entities.Components.Implementations;
-using ATCG.Battle.Entities.Components.Status;
-using ATCG.Battle.GameModes;
-using ATCG.Battle.Players.Local.Runtime;
-using ATCG.Battle.Players.Runtime;
 using ATCG.Battle.Turns;
 using ATCG.Metrics;
 using Helteix.ChanneledProperties;

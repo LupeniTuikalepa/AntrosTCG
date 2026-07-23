@@ -22,7 +22,7 @@ MonoBehaviour:
     - rid: 579207565952942204
   <CutsceneDirector>k__BackingField: {fileID: 100585977581967798, guid: f074f7f61e97d3942a9aa9df46af13a3, type: 3}
   <PropertyDefinitions>k__BackingField: []
-  <Status>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}
+  <Status>k__BackingField: {fileID: 11400000, guid: 79cb516b4510263479c61dfbf5d04b1f, type: 2}
   <Range>k__BackingField: 5
   <Damage>k__BackingField: 1
   <TridentPatternData>k__BackingField:
