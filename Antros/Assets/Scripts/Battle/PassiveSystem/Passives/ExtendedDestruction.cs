@@ -1,70 +1,72 @@
-﻿using ATCG.Battle.Commands;
+﻿using System.Collections.Generic;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
-using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
-using ATCG.Battle.Grids;
 using ATCG.Battle.PassiveSystem.Core;
-using ATCG.Battle.Players;
 using ATCG.Capacities.Frost;
-using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using ATCG.Passives.Datas.Datas;
 
 namespace ATCG.Battle.PassiveSystem.Passives
 {
-    public class ExtendedDestruction : Passive<DamageCommand>
+    public partial struct ExtendedDestruction : IPassive<ExtendedDestructionData>
     {
-        private EntityAddress targetEntityAddress;
-        private DeltaInRangeInfos<int> commandInfos;
-        
-        /*
-            var battleGrid = context.Grid;
-            
-            if(!targetEntityAddress.TryGetComponentRO<GridMemberComponent>(out var gridMember))
-                return;
-                
-            if(!battleGrid.TryGetBattleCell(gridMember.coordinates, out var cell))
-                return;
-            
-            DestroyNearbyWall(context, battleGrid, cell.Coordinate);
-        */
-
-        private void DestroyNearbyWall(CommandContext context, BattleGrid battleGrid, HexCoordinates from)
+        public const string DEAD_ENTITY = "deadIceWall";
+        public IEnumerable<IPassiveCommandListener> GetListeners(ExtendedDestructionData data, EntityAddress target)
         {
-            foreach (var direction in HexOperations.Directions)
+            yield return new PassiveCommandListener<DeathCommand>(data, target)
             {
-                var coord = from + direction;
-                if(!battleGrid.TryGetBattleCell(coord, out var neighbor))
-                    continue;
-
-                foreach (var member in neighbor.GetMembers())
+                accepts = IsIceWall,
+                setupContext = (context, commandContext, command) =>
                 {
-                    var memberEntityAddress = member.EntityAddress;
-                    if (memberEntityAddress.Is<DeployableAspect>(out var deployable))
+                    context.AddProperty(DEAD_ENTITY, command.TargetEntityAddress(commandContext.World));
+                }
+            };
+        }
+
+        public void Tick(ExtendedDestructionData data, PassiveContext ctx)
+        {
+            if (!ctx.TryGet(DEAD_ENTITY, out EntityAddress target))
+                return;
+            
+            if (target.TryGetComponentRO(out GridMemberComponent gridMember))
+            {
+                var from = gridMember.coordinates;
+                var battleGrid = gridMember.grid;
+                var battlePhase = battleGrid.battlePhase;
+
+                foreach (var direction in HexOperations.Directions)
+                {
+                    var coord = from + direction;
+                    if (!battleGrid.TryGetBattleCell(coord, out var neighbor)) 
+                        continue;
+
+                    foreach (var member in neighbor.GetMembers())
                     {
-                        var deployableData = deployable.DeployableEntityTag.data;
-                        
-                        if (deployableData is not IceWallData)
-                            continue;
-                        
-                        var damageCommand = new DamageCommand(99, memberEntityAddress);
-                        damageCommand.Run(context.battlePhase);
-                        DestroyNearbyWall(context, battleGrid, coord);
+                        var memberEntityAddress = member.EntityAddress;
+                        if (memberEntityAddress.Is<DeployableAspect>(out var deployable))
+                        {
+                            var deployableData = deployable.DeployableEntityTag.data;
+
+                            if (deployableData is not IceWallData) 
+                                continue;
+
+                            var deathCommand = new DeathCommand(memberEntityAddress);
+                            deathCommand.Run(battlePhase);
+                        }
                     }
                 }
             }
         }
 
-        public override bool Accepts(CommandContext context, DamageCommand command)
+        private static bool IsIceWall(CommandContext ctx, DeathCommand command)
         {
-            targetEntityAddress = command.TargetEntityAddress(context.World);
-            commandInfos = command.GetInfos();
-
-            if (!targetEntityAddress.Is<DeployableAspect>(out var deployable)) 
+            if (!command.TargetEntityAddress(ctx.World).Is<DeployableAspect>(out var deployable)) 
                 return false;
 
-            if (deployable.DeployableEntityTag.data is not IceWallData) 
+            if (deployable.DeployableEntityTag.data is not IceWallData iceWallData) 
                 return false;
 
             return true;

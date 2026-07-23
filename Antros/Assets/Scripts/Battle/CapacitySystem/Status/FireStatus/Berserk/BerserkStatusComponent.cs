@@ -49,14 +49,14 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
 
         public void Watch(EntityAddress target, ComponentRef<StatusVolatileController> volatileControllerRef)
         {
-            Listener?.UnregisterWatcher();
+            Listener?.Unregister();
             Listener = new BerserkListener(target, volatileControllerRef);
-            Listener.RegisterWatcher();
+            Listener.Register();
         }
 
         void IEntityComponent.Dispose()
         {
-            Listener?.UnregisterWatcher();
+            Listener?.Unregister();
         }
     }
 }

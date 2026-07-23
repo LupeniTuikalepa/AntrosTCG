@@ -10,5 +10,11 @@ namespace ATCG.Battle.Commands
         BattleID Parent { get; }
         BattleID ID { get; }
         void SetParent(ICommand parent);
+
+        public void Inject<TCommand>(in CommandContext context)
+            where TCommand : ICommand, new();
+
+        public void Inject<TCommand>(in CommandContext context, TCommand command)
+            where TCommand : ICommand;
     }
 }
