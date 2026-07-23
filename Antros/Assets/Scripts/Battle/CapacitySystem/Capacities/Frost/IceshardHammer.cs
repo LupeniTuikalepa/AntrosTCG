@@ -47,7 +47,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                         if (deployableData is not IceWallData)
                             continue;
                         
-                        var damageCommand = new DamageCommand(99, memberEntityAddress);
+                        var damageCommand = new DeathCommand(memberEntityAddress);
                         damageCommand.Run(ctx.BattlePhase);
 
                         battleGrid.TryGetBattleCell(shardDestination, out var cell);

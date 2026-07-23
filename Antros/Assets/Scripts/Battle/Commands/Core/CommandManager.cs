@@ -100,12 +100,12 @@ namespace ATCG.Battle.Commands
         }
 
 
-        public static void RegisterWatcher(this ICommandListener listener)
+        public static void Register(this ICommandListener listener)
         {
             CommandsWatcher.Add(listener);
         }
 
-        public static void UnregisterWatcher(this ICommandListener listener)
+        public static void Unregister(this ICommandListener listener)
         {
             CommandsWatcher.Remove(listener);
         }
