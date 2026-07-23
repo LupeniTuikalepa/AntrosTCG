@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -55,35 +55,23 @@ namespace Michsky.MUIP
                 {
                     if (Selection.activeGameObject == null)
                     {
-#if UNITY_2023_2_OR_NEWER
-                        var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
-#else
-                        var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
-#endif
+                        var canvas = FindObjectsByType<Canvas>()[0];
                         clone.transform.SetParent(canvas.transform, false);
                     }
 
                     else { clone.transform.SetParent(Selection.activeGameObject.transform, false); }
 
                     clone.name = clone.name.Replace("(Clone)", "").Trim();
-#if !UNITY_2021_3_OR_NEWER || UNITY_2022_1_OR_NEWER
                     MakeSceneDirty(clone, clone.name);
-#endif
                 }
 
                 catch
                 {
                     CreateCanvas();
-#if UNITY_2023_2_OR_NEWER
-                    var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
-#else
-                    var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
-#endif
+                    var canvas = FindObjectsByType<Canvas>()[0];
                     clone.transform.SetParent(canvas.transform, false);
                     clone.name = clone.name.Replace("(Clone)", "").Trim();
-#if !UNITY_2021_3_OR_NEWER || UNITY_2022_1_OR_NEWER
                     MakeSceneDirty(clone, clone.name);
-#endif
                 }
 
                 Selection.activeObject = clone;
@@ -104,11 +92,7 @@ namespace Michsky.MUIP
                 {
                     if (Selection.activeGameObject == null)
                     {
-#if UNITY_2023_2_OR_NEWER
-                        var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
-#else
-                        var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
-#endif
+                        var canvas = FindObjectsByType<Canvas>()[0];
                         clone.transform.SetParent(canvas.transform, false);
                     }
 
@@ -116,24 +100,16 @@ namespace Michsky.MUIP
 
                     clone.name = "Button";
                     LayoutRebuilder.ForceRebuildLayoutImmediate(clone.GetComponent<RectTransform>());
-#if !UNITY_2021_3_OR_NEWER || UNITY_2022_1_OR_NEWER
                     MakeSceneDirty(clone, clone.name);
-#endif
                 }
 
                 catch
                 {
                     CreateCanvas();
-#if UNITY_2023_2_OR_NEWER
-                    var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
-#else
-                    var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
-#endif
+                    var canvas = FindObjectsByType<Canvas>()[0];
                     clone.transform.SetParent(canvas.transform, false);
                     clone.name = "Button";
-#if !UNITY_2021_3_OR_NEWER || UNITY_2022_1_OR_NEWER
                     MakeSceneDirty(clone, clone.name);
-#endif
                 }
 
                 Selection.activeObject = clone;
