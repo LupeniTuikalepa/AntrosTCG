@@ -21,11 +21,7 @@ namespace Michsky.MUIP
             {
                 try
                 {
-#if UNITY_2023_2_OR_NEWER
-                    var canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)[0];
-#else
-                    var canvas = (Canvas)FindObjectsOfType(typeof(Canvas))[0];
-#endif
+                    var canvas = FindObjectsByType<Canvas>()[0];
                     dragArea = canvas.GetComponent<RectTransform>();
                 }
 

@@ -63,11 +63,7 @@ namespace Michsky.MUIP
             {
                 try
                 {
-#if UNITY_2023_2_OR_NEWER
-                    contextManager = FindObjectsByType<ContextMenuManager>(FindObjectsSortMode.None)[0];
-#else
-                    contextManager = (ContextMenuManager)FindObjectsOfType(typeof(ContextMenuManager))[0];
-#endif
+                    contextManager = FindObjectsByType<ContextMenuManager>()[0];
                     itemParent = contextManager.transform.Find("Content/Item List").transform;
                 }
 
