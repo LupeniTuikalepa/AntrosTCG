@@ -2,6 +2,8 @@ using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Status.Iterations;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Commands.GameCommands.Players;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
 using UnityEngine;
@@ -32,11 +34,27 @@ namespace ATCG.Battle
 		    base.OnTick(data, in statusInfos, context);
 		    int damage = data.Damage * statusInfos.StatusController.RemainingTicks;
 
-		    Debug.Log(damage + " damage sur " + statusInfos.targetAddress);
 		    if (statusInfos.targetAddress.HasComponent<HealthComponent>())
 		    {
+			    Debug.Log(damage + " damage sur " + statusInfos.targetAddress);
 			    DamageCommand damageCommand = new DamageCommand(damage, statusInfos.targetAddress);
 			    damageCommand.Run(context.battlePhase);
+		    }
+		    
+		    if (!statusInfos.targetAddress.TryGetComponentRO<BattleCellComponent>(out _))
+			    return;
+
+		    BattleCellAspect cellAspect = new BattleCellAspect(statusInfos.targetAddress);
+          
+		    foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())
+		    {
+			    if (!member.EntityAddress.HasComponent<HealthComponent>())
+				    continue;
+              
+			    DamageCommand damageCommand = new DamageCommand(damage, member.EntityAddress);
+			    damageCommand.Run(context.battlePhase);
+
+			    Debug.Log($"[BurnStatus] {damage} dégâts de zone infligés à l'entité {member.EntityAddress} sur la case !");
 		    }
 	    }
     }

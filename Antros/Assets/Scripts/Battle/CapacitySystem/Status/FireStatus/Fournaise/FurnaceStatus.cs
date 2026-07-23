@@ -1,15 +1,15 @@
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.CapacitySystem.Status.FireStatus.Fournaise;
 using ATCG.Battle.CapacitySystem.Status.Iterations;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Status;
-
 using ATCG.Capacities.Status.FireStatus;
 using UnityEngine;
 
-namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fournaise
+namespace ATCG.Battle.CapacitySystem.Status.Fournaise
 {
     public partial class FurnaceStatus : Status<FurnaceData, FurnaceComponent, StatusDurationController>, ITickOnTurnEnd
     {
@@ -24,40 +24,32 @@ namespace ATCG.Battle.CapacitySystem.Status.FireStatus.Fournaise
        }
        protected override void OnApply(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
        {
-           base.OnApply(data, in statusInfos, in context);
-           Debug.Log("[Fournaise] OnApply déclenché !");
-           DrainManaFromCellMembers(data, statusInfos, context);
+           
        }
        
        protected override void OnTick(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
        {
            base.OnTick(data, in statusInfos, in context);
-           Debug.Log("[Fournaise] OnTick déclenché !");
-           DrainManaFromCellMembers(data, statusInfos, context);
-       }
-       
-       private void DrainManaFromCellMembers(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
-       {
            if (!statusInfos.targetAddress.TryGetComponentRO<BattleCellComponent>(out _))
-              return;
+	           return;
 
            BattleCellAspect cellAspect = new BattleCellAspect(statusInfos.targetAddress);
           
            foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())
            {
-              if (!member.EntityAddress.HasComponent<HealthComponent>())
+	           if (!member.EntityAddress.HasComponent<HealthComponent>())
 				  
-                 continue;
+		           continue;
               
-              if (member.EntityAddress.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent))
-              {
-                 var player = belongsToPlayerComponent.GetPlayer(context.battlePhase);
+	           if (member.EntityAddress.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent))
+	           {
+		           var player = belongsToPlayerComponent.GetPlayer(context.battlePhase);
                 
-                 ModifyPlayerManaCommand manaCommand = new ModifyPlayerManaCommand(player, -data.ManaRemove);
-                 manaCommand.Run(context.battlePhase);
+		           ModifyPlayerManaCommand manaCommand = new ModifyPlayerManaCommand(player, -data.ManaRemove);
+		           manaCommand.Run(context.battlePhase);
 
-                 Debug.Log($"[Fournaise] {data.ManaRemove} mana retiré au joueur {player} !");
-              }
+		           Debug.Log($"[Fournaise] {data.ManaRemove} mana retiré au joueur {player} !");
+	           }
            }
        }
 
