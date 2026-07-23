@@ -43,7 +43,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
 			
 			foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())
 			{
-				var commandForMember = TickForEntity(data, member.EntityAddress, in context);
+				ModifyPlayerManaCommand commandForMember = TickForEntity(data, member.EntityAddress, in context);
 				commandForMember?.Run(context.battlePhase);
 			}
 		}
