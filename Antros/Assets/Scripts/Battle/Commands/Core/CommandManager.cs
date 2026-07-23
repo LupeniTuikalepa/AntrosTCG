@@ -16,7 +16,7 @@ namespace ATCG.Battle.Commands
         public static IReadOnlyCollection<ICommandDirector> Listeners => CommandsListeners;
 
         private static readonly HashSet<ICommandDirector> CommandsListeners = new();
-        private static readonly HashSet<ICommandWatcher> CommandsWatcher = new();
+        private static readonly HashSet<ICommandListener> CommandsWatcher = new();
 
         private static readonly Stack<CommandGroup> GroupsQueue = new Stack<CommandGroup>();
 
@@ -100,14 +100,14 @@ namespace ATCG.Battle.Commands
         }
 
 
-        public static void RegisterWatcher(this ICommandWatcher watcher)
+        public static void RegisterWatcher(this ICommandListener listener)
         {
-            CommandsWatcher.Add(watcher);
+            CommandsWatcher.Add(listener);
         }
 
-        public static void UnregisterWatcher(this ICommandWatcher watcher)
+        public static void UnregisterWatcher(this ICommandListener listener)
         {
-            CommandsWatcher.Remove(watcher);
+            CommandsWatcher.Remove(listener);
         }
 
         public static void TriggerWatchers<T>(CommandContext context,T command)
