@@ -50,14 +50,14 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 		
 		public void Watch(EntityAddress target)
 		{
-			Listener?.UnregisterWatcher();
+			Listener?.Unregister();
 			Listener = new ExplosionListener(target);
-			Listener.RegisterWatcher();
+			Listener.Register();
 		}
 
 		void IEntityComponent.Dispose()
 		{
-			Listener?.UnregisterWatcher();
+			Listener?.Unregister();
 		}
 	}
 }

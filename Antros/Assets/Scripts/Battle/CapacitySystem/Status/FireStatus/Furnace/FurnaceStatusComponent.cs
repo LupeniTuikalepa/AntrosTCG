@@ -55,12 +55,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
         {
 	        if (target.TryGetComponentRO<GridMemberComponent>(out var gridMember))
 	        {
-		        Listener?.UnregisterWatcher();
+		        Listener?.Unregister();
 		        Listener = new FurnaceListener(gridMember.coordinates, FurnaceData);
-		        Listener.RegisterWatcher();
+		        Listener.Register();
 	        }
         }
 
-        void IEntityComponent.Dispose() => Listener?.UnregisterWatcher();
+        void IEntityComponent.Dispose() => Listener?.Unregister();
     }
 }

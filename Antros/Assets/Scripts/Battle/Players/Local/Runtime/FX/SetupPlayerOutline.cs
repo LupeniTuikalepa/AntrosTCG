@@ -45,6 +45,9 @@ namespace ATCG.Battle
 
         private void OnValidate()
         {
+            if(settings == null)
+                return;
+            
             if (settings.Fills.Contains(fill) && Player != null)
                 Refresh(Player);
         }

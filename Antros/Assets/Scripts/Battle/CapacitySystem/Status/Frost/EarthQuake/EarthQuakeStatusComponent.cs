@@ -51,12 +51,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 		{
 			if (target.TryGetComponentRO<GridMemberComponent>(out var gridMember))
 			{
-				Listener?.UnregisterWatcher();
+				Listener?.Unregister();
 				Listener = new EarthQuakeListener(gridMember.coordinates, EarthQuakeData);
-				Listener.RegisterWatcher();
+				Listener.Register();
 			}
 		}
 
-		void IEntityComponent.Dispose() => Listener?.UnregisterWatcher();
+		void IEntityComponent.Dispose() => Listener?.Unregister();
 	}
 }
