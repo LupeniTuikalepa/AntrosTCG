@@ -31,7 +31,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
 
         public StatusApplyCommand(EntityAddress address, StatusData data) : base(address)
         {
-            this.Data = data;
+            Data = data;
         }
 
         protected override void Process(in CommandContext context)

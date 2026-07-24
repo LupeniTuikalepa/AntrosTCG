@@ -5,14 +5,20 @@ using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
 {
     public class DeathCommand : EntityCommand<NoInfos>
     {
-        public DeathCommand(EntityAddress address) : base(address)
+        public const string NATURAL_DEATH = "NATURAL_DEATH";
+        
+        [field: SerializeField]
+        public string Source { get; private set; }
+        
+        public DeathCommand(EntityAddress address, string source = NATURAL_DEATH) : base(address)
         {
-
+            Source = source;
         }
 
         protected override void Process(in CommandContext context)

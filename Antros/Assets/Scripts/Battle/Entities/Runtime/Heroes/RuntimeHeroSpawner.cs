@@ -3,7 +3,9 @@ using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Metrics;
+using ATCG.Passives.Datas;
 using Helteix.Tools;
 using UnityEngine;
 
@@ -36,6 +38,13 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
                     if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
                         await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
+
+                    //TODO ajout des passifs a surement changer de place
+                    foreach (var passiveData in entityAspect.Card.CardData.Passives)
+                    {
+                        var passiveContext = new PassiveContext(entityAddress, context.battlePhase, passiveData);
+                        entityAspect.PassiveContainerComponent.AddPassive(passiveData, passiveContext);
+                    }
                 }
             }
 

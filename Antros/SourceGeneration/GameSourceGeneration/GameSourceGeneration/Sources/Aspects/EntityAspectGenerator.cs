@@ -226,7 +226,7 @@ namespace GameSourceGeneration.Sources.Aspects
                 string factoryInfosVariableName = FirstLetterLowerCase(split[split.Length - 1]);
                 sb.AppendLine();
 
-                sb.AppendLine($"        private static partial void CreateComponents(ref {ComponentsFactoryClassName} {componentsFactoryVariableName}, {info.factoryInfosTypes} {factoryInfosVariableName});");
+                sb.AppendLine($"        private static partial void CreateComponents(ref {ComponentsFactoryClassName} {componentsFactoryVariableName}, {info.factoryInfosTypes} {factoryInfosVariableName}, EntityAddress address);");
 
                 sb.AppendLine();
                 sb.AppendLine($"        public static bool {TryGetAspectMethodName}(EntityAddress entityAddress, out {info.structName} {structVariableName})");
@@ -245,7 +245,7 @@ namespace GameSourceGeneration.Sources.Aspects
                 sb.AppendLine($"            Entity entity = world.CreateEntity();");
                 sb.AppendLine($"            EntityAddress address = new EntityAddress(world, entity);");
                 sb.AppendLine($"            var factory = new {ComponentsFactoryClassName}(address);");
-                sb.AppendLine($"            CreateComponents(ref factory, {factoryInfosVariableName});");
+                sb.AppendLine($"            CreateComponents(ref factory, {factoryInfosVariableName}, address);");
 
                 sb.AppendLine();
 

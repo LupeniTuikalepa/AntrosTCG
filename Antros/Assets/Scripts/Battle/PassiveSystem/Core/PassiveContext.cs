@@ -22,13 +22,13 @@ namespace ATCG.Battle.PassiveSystem.Core
         private readonly Dictionary<string, IPassiveProperty> bag;
 
         public readonly BattlePhase battlePhase;
-        public readonly EntityAddress target;
+        public readonly EntityAddress owner;
         public readonly PassiveData data;
 
 
-        public PassiveContext(EntityAddress target, BattlePhase battlePhase, PassiveData data)
+        public PassiveContext(EntityAddress owner, BattlePhase battlePhase, PassiveData data)
         {
-            this.target = target;
+            this.owner = owner;
             this.battlePhase = battlePhase;
             this.data = data;
             bag = new Dictionary<string, IPassiveProperty>();

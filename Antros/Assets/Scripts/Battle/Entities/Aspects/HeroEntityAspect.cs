@@ -3,6 +3,7 @@ using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Grids;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
 
@@ -11,6 +12,7 @@ namespace ATCG.Battle.Entities.Aspects
     public readonly partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
         IEntityAspect<BattleCardComponent,
             StatusReceiver,
+            PassiveContainerComponent,
             BelongsToPlayerComponent,
             HealthComponent,
             MovementComponent,
@@ -54,6 +56,15 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
             componentsFactory.StatusReceiver = new StatusReceiver(64);
+            var passiveContainerComponent = new PassiveContainerComponent(8);
+            foreach (var passiveData in setup.card.Data.Passives)
+            {
+                var passiveContext = new PassiveContext()
+                passiveContainerComponent.AddPassive(passiveData);
+            }
+            componentsFactory.PassiveContainerComponent = passiveContainerComponent;
+            
+            
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
