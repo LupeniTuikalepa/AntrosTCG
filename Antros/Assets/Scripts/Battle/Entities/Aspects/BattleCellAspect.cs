@@ -60,6 +60,8 @@ namespace ATCG.Battle.Entities.Aspects
 
         public HexCoordinates Coordinate => GridMemberComponent.coordinates;
 
+        public BattleGrid BattleGrid => GridMemberComponent.grid;
+
         public bool HasMembers => GetMembers().Any();
 
         public ComponentQuery<GridMemberComponent, IsCellMemberFilter> GetMembers()
