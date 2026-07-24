@@ -16,5 +16,8 @@ namespace ATCG.Passives.Datas
 
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
+        
+        [field: SerializeField, BoxGroup("Base")]
+        public bool ActiveOnSpawn { get; private set; } = true;
     }
 }

@@ -3,14 +3,17 @@ using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Grids;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
     public readonly partial struct HeroEntityAspect : ICreateEntityAspect<HeroEntityAspect.Setup>,
         IEntityAspect<BattleCardComponent,
             StatusReceiver,
+            PassiveContainerComponent,
             BelongsToPlayerComponent,
             HealthComponent,
             MovementComponent,
@@ -37,7 +40,7 @@ namespace ATCG.Battle.Entities.Aspects
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
 
-        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
             IBattlePlayer battlePlayer = setup.card.Player;
 
@@ -54,6 +57,16 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
             componentsFactory.StatusReceiver = new StatusReceiver(64);
+            
+            var passiveContainerComponent = new PassiveContainerComponent(8);
+            foreach (var passiveData in setup.card.Data.Passives)
+            {
+                var passiveContext = new PassiveContext(address, setup.grid.battlePhase, passiveData);
+                passiveContainerComponent.AddPassive(passiveData, passiveContext);
+            }
+            componentsFactory.PassiveContainerComponent = passiveContainerComponent;
+
+
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();

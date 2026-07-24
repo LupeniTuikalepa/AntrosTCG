@@ -109,6 +109,7 @@ namespace GameSourceGeneration.Sources.Status
             bool hasNamespace = model.Namespace != null;
             string indent = hasNamespace ? "    " : "";
 
+
             if (hasNamespace)
             {
                 sb.AppendLine($"namespace {model.Namespace}");

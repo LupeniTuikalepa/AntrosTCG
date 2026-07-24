@@ -1,6 +1,8 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Capacities.Data.Status;
+using ATCG.Passives.Datas;
 using Sirenix.OdinInspector;
 
 namespace ATCG.Battle.Entities.Runtime

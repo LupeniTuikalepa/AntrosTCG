@@ -3,6 +3,7 @@ using ATCG.Battle.Cards;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Grids;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
 using UnityEngine;
@@ -12,7 +13,8 @@ namespace ATCG.Battle.Entities.Aspects
     public readonly partial struct ConstructionAspect : ICreateEntityAspect<ConstructionAspect.Setup>,
         IEntityAspect<
         BattleCardComponent,
-        StatusReceiver, 
+        StatusReceiver,
+        PassiveContainerComponent,
         BelongsToPlayerComponent,
         GridMemberComponent,
         ConstructionTag,
@@ -38,7 +40,7 @@ namespace ATCG.Battle.Entities.Aspects
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
 
-        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
             IBattlePlayer battlePlayer = setup.card.Player;
 
@@ -52,6 +54,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
             componentsFactory.StatusReceiver = new StatusReceiver(64);
+            componentsFactory.PassiveContainerComponent = new PassiveContainerComponent();
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();

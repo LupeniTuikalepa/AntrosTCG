@@ -27,7 +27,7 @@ namespace ATCG.Battle.Entities.Aspects
         
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         
-        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.DeployableEntityTag = new DeployableEntityTag(setup.caster, setup.data);

@@ -21,6 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ec964813dcb4f15499aa4565a677ba13, type: 2}
   - {fileID: 11400000, guid: 919632c7a55407441b3006d91b1466a2, type: 2}
   - {fileID: 11400000, guid: 583ccc11dd39a2f4a8d896c574612bad, type: 2}
+  <Passives>k__BackingField: []
   <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Strength>k__BackingField: 5

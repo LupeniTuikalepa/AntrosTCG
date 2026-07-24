@@ -10,7 +10,7 @@ namespace ATCG.Battle.PassiveSystem.Core
     public interface IPassive<in TData> : IBehaviour<TData> where TData : PassiveData
     {
         [AddToContainer]
-        public IEnumerable<IPassiveCommandListener> GetListeners(TData data, EntityAddress target);
+        public IEnumerable<IPassiveCommandListener> GetListeners(TData data, PassiveContext context);
         
         [AddToContainer]
         public void Tick(TData data, PassiveContext ctx);
