@@ -16,12 +16,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 		public class EarthQuakeListener : ICommandListener<MoveCommand>
 		{
 			public readonly HexCoordinates destination;
-			public readonly EarthQuakeData data;
+			public readonly EarthQuakeStatusData statusData;
 	        
-			public EarthQuakeListener(HexCoordinates destination, EarthQuakeData data)
+			public EarthQuakeListener(HexCoordinates destination, EarthQuakeStatusData statusData)
 			{
 				this.destination = destination;
-				this.data = data;
+				this.statusData = statusData;
 			}
 
 			public bool Accepts(CommandContext context, MoveCommand command)
@@ -31,20 +31,20 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 
 			public void Trigger(CommandContext context, MoveCommand command)
 			{
-				if(data.TryGet(out IStatusContainer statusContainer))
+				if(statusData.TryGet(out IStatusContainer statusContainer))
 				{
 					StatusContext statusContext = new StatusContext(context.battlePhase);
-					statusContainer.Tick(data, command.TargetEntityAddress(context.World), statusContext);
+					statusContainer.Tick(statusData, command.TargetEntityAddress(context.World), statusContext);
 				}
 			}
 		}
-		StatusData IStatusComponent.StatusData => EarthQuakeData;
-		public EarthQuakeData EarthQuakeData { get; }
+		StatusData IStatusComponent.StatusData => EarthQuakeStatusData;
+		public EarthQuakeStatusData EarthQuakeStatusData { get; }
 		public EarthQuakeListener Listener { get; private set; }
 
-		public EarthQuakeStatusComponent(EarthQuakeData data)
+		public EarthQuakeStatusComponent(EarthQuakeStatusData statusData)
 		{
-			EarthQuakeData = data;
+			EarthQuakeStatusData = statusData;
 			Listener = null;
 		}
 		public void Watch(EntityAddress target)
@@ -52,7 +52,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 			if (target.TryGetComponentRO<GridMemberComponent>(out var gridMember))
 			{
 				Listener?.Unregister();
-				Listener = new EarthQuakeListener(gridMember.coordinates, EarthQuakeData);
+				Listener = new EarthQuakeListener(gridMember.coordinates, EarthQuakeStatusData);
 				Listener.Register();
 			}
 		}

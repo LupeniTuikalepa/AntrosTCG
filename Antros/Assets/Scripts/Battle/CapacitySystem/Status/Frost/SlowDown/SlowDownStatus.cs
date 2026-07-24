@@ -17,6 +17,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.SlowDown
 
 	    }
 
+
+	    protected override bool Accepts(ComponentRef<StatusReceiver> componentRef)
+	    {
+		    return componentRef.EntityAddress.HasComponents<MovementComponent>();
+	    }
+
 	    protected override void OnStack(SlowDownData data, in EntityStatusInfos statusInfos, in StatusContext context)
 	    {
 		    base.OnStack(data, in statusInfos, in context);

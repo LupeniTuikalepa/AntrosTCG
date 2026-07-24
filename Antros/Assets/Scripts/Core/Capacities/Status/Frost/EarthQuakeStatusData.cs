@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Data.Status
 {
-	public class EarthQuakeData : StatusData
+	public class EarthQuakeStatusData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]
 		public int DamagePercentage{ get; private set; }

@@ -33,6 +33,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
             public ComponentRef<TController> statusControllerRef;
         }
 
+
+        protected virtual bool Accepts(ComponentRef<StatusReceiver> componentRef) => true;
+		
         void IStatus<TData>.Apply(TData data, EntityAddress target, StatusContext context)
         {
             if (!target.TryGetComponent<StatusReceiver>(out var statusReceiverRef))
@@ -40,7 +43,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 Debug.LogWarning("Trying to apply status on entity without StatusReceiver component");
                 return;
             }
-
+            
+            if(!Accepts(statusReceiverRef))
+	            return;
+            
             ref StatusReceiver statusReceiver = ref statusReceiverRef.GetValue();
 
             if (statusReceiver.Has<TData>(out var statusTagRef))
