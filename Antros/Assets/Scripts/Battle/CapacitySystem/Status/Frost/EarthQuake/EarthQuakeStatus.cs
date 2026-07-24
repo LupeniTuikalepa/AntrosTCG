@@ -12,31 +12,31 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 {
-	public partial class EarthQuakeStatus : Status<EarthQuakeData,EarthQuakeStatusComponent, StatusDurationController>,ITickOnTurnBegin
+	public partial class EarthQuakeStatus : Status<EarthQuakeStatusData,EarthQuakeStatusComponent, StatusDurationController>,ITickOnTurnBegin
 	{
-		protected override EarthQuakeStatusComponent CreateStatusComponent(EarthQuakeData data, in StatusContext context)
+		protected override EarthQuakeStatusComponent CreateStatusComponent(EarthQuakeStatusData statusData, in StatusContext context)
 		{
-			return new EarthQuakeStatusComponent(data);
+			return new EarthQuakeStatusComponent(statusData);
 		}
 
-		protected override StatusDurationController CreateStatusController(EarthQuakeData data, in StatusContext context)
+		protected override StatusDurationController CreateStatusController(EarthQuakeStatusData statusData, in StatusContext context)
 		{
-			return new StatusDurationController(data.Duration);
+			return new StatusDurationController(statusData.Duration);
 		}
 		
-		protected override void OnStack(EarthQuakeData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnStack(EarthQuakeStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnStack(data, in statusInfos, in context);
+			base.OnStack(statusData, in statusInfos, in context);
 			ref StatusDurationController controller = ref statusInfos.statusControllerRef.GetValue();
-			if (controller.RemainingTicks < data.Duration)
+			if (controller.RemainingTicks < statusData.Duration)
 			{
-				controller.SetTicks(data.Duration);
+				controller.SetTicks(statusData.Duration);
 			}
 		}
 
-		protected override void OnTick(EarthQuakeData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnTick(EarthQuakeStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnTick(data, in statusInfos, in context);
+			base.OnTick(statusData, in statusInfos, in context);
 			
 			if (!statusInfos.targetAddress.Is(out BattleCellAspect cellAspect))
 				return;
@@ -45,7 +45,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 			{
 				if (member.EntityAddress.TryGetComponentRO(out HealthComponent memberHealth))
 				{
-					int damage = (memberHealth.CurrentHealth * data.DamagePercentage) / 100; 
+					int damage = (memberHealth.CurrentHealth * statusData.DamagePercentage) / 100; 
                 
 					DamageCommand damageCommand = new DamageCommand(damage, member.EntityAddress);
 					damageCommand.Run(context.battlePhase);
