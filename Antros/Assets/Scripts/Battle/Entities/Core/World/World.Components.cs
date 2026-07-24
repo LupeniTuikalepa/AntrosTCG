@@ -14,7 +14,7 @@ namespace ATCG.Battle.Entities
 
         public bool TryGetStore<T>(out ComponentStore<T> store) where T : struct, IEntityComponent
         {
-            int id = ComponentID<T>.ID;
+            int id = EnsureStore<T>();
             if (stores[id] is ComponentStore<T> s)
             {
                 store = s;
@@ -34,7 +34,7 @@ namespace ATCG.Battle.Entities
 
         public bool TryGetROComponent<T>(Entity e, out T component) where T : struct, IEntityComponent
         {
-            int id = ComponentID<T>.ID;
+            int id  = EnsureStore<T>();
             if (stores[id] is ComponentStore<T> store)
             {
                 int idx = store.EntityIDToIndex(e);
@@ -51,7 +51,7 @@ namespace ATCG.Battle.Entities
 
         public bool TryGetComponent<T>(Entity e, out ComponentRef<T> componentRef) where T : struct, IEntityComponent
         {
-            int id = ComponentID<T>.ID;
+            int id = EnsureStore<T>();
             if (stores[id] is ComponentStore<T> store)
             {
                 int idx = store.EntityIDToIndex(e);
@@ -68,7 +68,7 @@ namespace ATCG.Battle.Entities
 
         public ref T GetComponent<T>(Entity e) where T : struct, IEntityComponent
         {
-            int id = ComponentID<T>.ID;
+            int id = EnsureStore<T>();
             if (stores[id] is ComponentStore<T> store && store.Has(e.id))
                 return ref store.GetRef(e.id);
 
@@ -77,7 +77,7 @@ namespace ATCG.Battle.Entities
 
         public ComponentRef<T> GetComponentRef<T>(Entity e) where T : struct, IEntityComponent
         {
-            int id = ComponentID<T>.ID;
+            int id = EnsureStore<T>();
 
             if (stores[id] is ComponentStore<T> store && store.Has(e.id))
                 return new ComponentRef<T>(this, store, e.id);
@@ -155,7 +155,7 @@ namespace ATCG.Battle.Entities
             if (!meta.HasComponent<T>())
                 return false;
 
-            int id = ComponentID<T>.ID;
+            int id = EnsureStore<T>();
             if (stores[id] is ComponentStore<T> store && store.Has(e.id))
             {
                 store.Remove(e.id);

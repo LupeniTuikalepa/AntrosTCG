@@ -4,8 +4,10 @@ using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Grids;
 using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Capacities.Frost;
+using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
 using ATCG.Passives.Datas.Datas;
 using UnityEngine;
@@ -43,31 +45,40 @@ namespace ATCG.Battle.PassiveSystem.Passives
                     var battleGrid = gridMember.grid;
                     var battlePhase = battleGrid.battlePhase;
 
-                    foreach (var direction in HexOperations.Directions)
-                    {
-                        var coord = from + direction;
-                        if (!battleGrid.TryGetBattleCell(coord, out var neighbor)) 
-                            continue;
-
-                        foreach (var member in neighbor.GetMembers())
-                        {
-                            var memberEntityAddress = member.EntityAddress;
-                            if (memberEntityAddress.Is<DeployableAspect>(out var deployable))
-                            {
-                                var deployableData = deployable.DeployableEntityTag.data;
-
-                                if (deployableData is not IceWallData) 
-                                    continue;
-
-                                if (deadDeployables.Add(memberEntityAddress)) ;
-                            }
-                        }
-                    }
+                    PropagateDeath(from, from, battleGrid, deadDeployables);
 
                     foreach (var deployable in deadDeployables)
                     {
                         var deathCommand = new DeathCommand(deployable, DEATH_CAUSE);
                         deathCommand.Run(battlePhase);
+                    }
+                }
+            }
+        }
+
+        private static void PropagateDeath(HexCoordinates from, HexCoordinates source,BattleGrid battleGrid, HashSet<EntityAddress> deadDeployables)
+        {
+            foreach (var direction in HexOperations.Directions)
+            {
+                var coord = from + direction; 
+                if(coord == source) 
+                    continue;
+                
+                if (!battleGrid.TryGetBattleCell(coord, out var neighbor)) 
+                    continue;
+
+                foreach (var member in neighbor.GetMembers())
+                {
+                    var memberEntityAddress = member.EntityAddress;
+                    if (memberEntityAddress.Is<DeployableAspect>(out var deployable))
+                    {
+                        var deployableData = deployable.DeployableEntityTag.data;
+
+                        if (deployableData is not IceWallData) 
+                            continue;
+
+                        if (deadDeployables.Add(memberEntityAddress))
+                            PropagateDeath(neighbor.Coordinate, from,battleGrid, deadDeployables);
                     }
                 }
             }
@@ -83,7 +94,6 @@ namespace ATCG.Battle.PassiveSystem.Passives
 
         private static bool IsIceWall(CommandContext ctx, DeathCommand command)
         {
-            Debug.Log($"Checking Ice Wall");
             if(command.Source == DEATH_CAUSE)
                 return false;
             

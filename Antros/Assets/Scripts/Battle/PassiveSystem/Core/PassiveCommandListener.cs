@@ -32,7 +32,6 @@ namespace ATCG.Battle.PassiveSystem.Core
 
         public virtual bool Accepts(CommandContext context, T command)
         {
-            Debug.Log($"AAAAAAA");
             return accepts(context, command);
         }
 

@@ -110,7 +110,7 @@ namespace ATCG.Battle.Entities.Aspects
             return true;
         }
 
-        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
             try
             {

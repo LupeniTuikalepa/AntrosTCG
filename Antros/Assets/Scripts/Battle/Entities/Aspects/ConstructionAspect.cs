@@ -40,7 +40,7 @@ namespace ATCG.Battle.Entities.Aspects
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
 
-        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
             IBattlePlayer battlePlayer = setup.card.Player;
 

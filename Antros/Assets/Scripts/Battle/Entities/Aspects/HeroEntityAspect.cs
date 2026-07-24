@@ -6,6 +6,7 @@ using ATCG.Battle.Grids;
 using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Battle.Players;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Aspects
 {
@@ -56,11 +57,12 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
 
             componentsFactory.StatusReceiver = new StatusReceiver(64);
+            
             var passiveContainerComponent = new PassiveContainerComponent(8);
             foreach (var passiveData in setup.card.Data.Passives)
             {
-                var passiveContext = new PassiveContext()
-                passiveContainerComponent.AddPassive(passiveData);
+                var passiveContext = new PassiveContext(address, setup.grid.battlePhase, passiveData);
+                passiveContainerComponent.AddPassive(passiveData, passiveContext);
             }
             componentsFactory.PassiveContainerComponent = passiveContainerComponent;
 

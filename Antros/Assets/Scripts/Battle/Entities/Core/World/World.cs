@@ -120,8 +120,8 @@ namespace ATCG.Battle.Entities
 
         public void DestroyEntity(in Entity e)
         {
-            int id = ComponentID<ChildOfComponent>.ID;
-
+            int id = EnsureStore<ChildOfComponent>();
+            
             if (stores[id] is not ComponentStore<ChildOfComponent> store)
                 return;
 
