@@ -39,7 +39,7 @@ namespace ATCG.Battle.Entities.Aspects
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
 
-        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup)
+        private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
             IBattlePlayer battlePlayer = setup.card.Player;
 
@@ -63,8 +63,8 @@ namespace ATCG.Battle.Entities.Aspects
                 passiveContainerComponent.AddPassive(passiveData);
             }
             componentsFactory.PassiveContainerComponent = passiveContainerComponent;
-            
-            
+
+
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
