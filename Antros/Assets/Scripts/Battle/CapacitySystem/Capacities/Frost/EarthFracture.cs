@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core;
+using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
@@ -12,8 +15,7 @@ using ATCG.HexGrids.Patterns.Building;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
-	public partial struct EarthFracture :ICapacity<EarthFractureData>
-
+	public partial struct EarthFracture :ICapacity<EarthFractureData> 
 	{
 		public HexPatternBuilder GetHitPattern(EarthFractureData data, BattleGrid battleGrid, HexCoordinates castPoint,
 			HexCoordinates casterOrigin)
@@ -32,7 +34,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			
 			foreach (var cellAspect in patternBuilder.GetBattleCells(battleGrid))
 			{
-				if (!cellAspect.EntityAddress.HasComponent<EarthQuakeStatusComponent>())
+				if (!cellAspect.EntityAddress.HasStatus<EarthQuakeStatus>())
 				{
 					var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
 					statusCommand.Run(ctx.BattlePhase);

@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
@@ -35,12 +38,9 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 			foreach (var cellAspect in patternBuilder.GetBattleCells(battleGrid))
 			{
-				if (data.Status.TryGet(out IStatusContainer groundStatusContainer))
-				{
-					var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
-					statusCommand.Run(ctx.BattlePhase);
-				}
-
+				var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
+				statusCommand.Run(ctx.BattlePhase);
+				
 				foreach (var member in cellAspect.GetMembers())
 				{
 					if (!member.EntityAddress.HasComponent<HealthComponent>())
