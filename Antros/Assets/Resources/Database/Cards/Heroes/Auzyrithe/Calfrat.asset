@@ -26,9 +26,6 @@ MonoBehaviour:
   <Strength>k__BackingField: 5
   <Defense>k__BackingField: 2
   <Speed>k__BackingField: 3
-  <MovementPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 2899897500470608012
   <MovementType>k__BackingField: 0
   <DeployPatterns>k__BackingField:
     <Data>k__BackingField:
@@ -36,15 +33,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 2899897500470608012
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 2
     - rid: 2899897500470608022
       type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:

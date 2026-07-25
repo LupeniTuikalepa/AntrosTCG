@@ -17,6 +17,7 @@ namespace ATCG.Battle.Entities.Aspects
             BelongsToPlayerComponent,
             HealthComponent,
             MovementComponent,
+            PathfindingAgentComponent,
             CapacityCasterComponent,
             BasicAttackerComponent,
             GridMemberComponent,
@@ -49,15 +50,19 @@ namespace ATCG.Battle.Entities.Aspects
 
             componentsFactory.HealthComponent = new HealthComponent(setup.card.MaxHealth);
             componentsFactory.DefenseComponent = new DefenseComponent(setup.card.Defense);
-            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementPatterns, setup.card.MovementType);
+            componentsFactory.MovementComponent = new MovementComponent(setup.card.Speed, setup.card.MovementType);
+            // Traversability is fully defined by the rules passed here — CellOccupancyRule
+            // blocks tiles held by other units (and lets the unit pass back through its own).
+            componentsFactory.PathfindingAgentComponent = new PathfindingAgentComponent(
+                setup.card.MovementType.ToAgentMovementType(),
+                new CellOccupancyRule());
 
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
-
             componentsFactory.StatusReceiver = new StatusReceiver(64);
-            
+
             var passiveContainerComponent = new PassiveContainerComponent(8);
             foreach (var passiveData in setup.card.Data.Passives)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids;
@@ -10,110 +11,30 @@ using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
 {
-    public readonly struct HexPathfinder : IDisposable
+    public struct HexPathfinder
     {
-        private readonly struct DefaultPathfinderController : IPathfinderController
+        public PathfindingTraversableRule[] customTraversableRules;
+
+        public bool TryFindPath(PathfindingAgentAspect agentAspect, HexCoordinates start, HexCoordinates goal, List<HexCoordinates> path, int maxSteps = 128)
         {
-            private readonly HexCoordinates heroCoordinates;
+            using PathfindingContext context = new PathfindingContext(maxSteps);
+            BattleGrid battleGrid = agentAspect.GridMemberComponent.grid;
 
-            public DefaultPathfinderController(HexCoordinates heroCoordinates)
-            {
-                this.heroCoordinates = heroCoordinates;
-            }
-
-            bool IPathfinderController.CanTraverse(BattleCellAspect cell)
-            {
-                return cell.CanBeMovedOn() || cell.Coordinate == heroCoordinates;
-            }
-
-            int IPathfinderController.GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell) => 1;
-            public bool TryRedirect(HexCoordinates from, HexCoordinates to, BattleGrid battleGrid, out HexCoordinates newCoordinates)
-            {
-                if (!battleGrid.TryGetBattleCell(to, out var toCellAspect))
-                {
-                    newCoordinates = HexCoordinates.None;
-                    return false;
-                }
-
-                //TODO check good component
-                if (toCellAspect.EntityAddress.HasStatusWithData<FreezeStatusData>())
-                {
-                    var direction = from.GetNormalizedDirection(to).NearestCardinal();
-
-                    if (direction.X == 0 && direction.Y == 0)
-                    {
-                        newCoordinates = HexCoordinates.None;
-                        return false;
-                    }
-
-                    var redirectedCoord = to + direction;
-                    
-                    if (battleGrid.TryGetBattleCell(redirectedCoord, out _) 
-                        && TryRedirect(to, redirectedCoord, battleGrid, out var coord))
-                    {
-                        newCoordinates = coord;
-                        return true;
-                    }
-
-                    newCoordinates = redirectedCoord;
-                    return true;
-                }
-                newCoordinates = to;
-                return false;
-            }
-        }
-
-        private readonly int maxSteps;
-        private readonly Dictionary<HexCoordinates, int> costSoFar;
-        private readonly Dictionary<HexCoordinates, HexCoordinates> cameFrom;
-        private readonly List<PriorityHexCoordinates> frontier;
-
-        public HexPathfinder(int maxSteps = int.MaxValue)
-        {
-            this.maxSteps = maxSteps;
-            costSoFar = DictionaryPool<HexCoordinates, int>.Get();
-            cameFrom = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
-            frontier = ListPool<PriorityHexCoordinates>.Get();
-
-        }
-
-        public bool TryFindPath(
-            HexCoordinates start,
-            HexCoordinates goal,
-            HexCoordinates heroCoordinates,
-            List<HexCoordinates> path,
-            BattleGrid battleGrid) 
-                => TryFindPath(start, goal, path, battleGrid, new DefaultPathfinderController(heroCoordinates));
-
-
-        public bool TryFindPath<TController>(
-            HexCoordinates start,
-            HexCoordinates goal,
-            List<HexCoordinates> path,
-            BattleGrid battleGrid,
-            TController controller) where TController : IPathfinderController
-        {
-            costSoFar.Clear();
-            cameFrom.Clear();
-            frontier.Clear();
-            
             if (!battleGrid.TryGetBattleCell(start, out BattleCellAspect startCell))
                 return false;
 
             if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell))
                 return false;
 
-            bool goalIsFrozen = goalCell.EntityAddress.HasStatusWithData<FreezeStatusData>() ;
+            context.frontier.Add(new PriorityHexCoordinates(start, 0));
+            context.cameFrom[start] = start;
+            context.costSoFar[start] = 0;
 
-            frontier.Add(new PriorityHexCoordinates(start, 0));
-            cameFrom[start] = start;
-            costSoFar[start] = 0;
-
-            while (frontier.Count > 0)
+            while (context.frontier.Count > 0)
             {
-                frontier.Sort();
-                var current = frontier[0].coordinates;
-                frontier.RemoveAt(0);
+                context.frontier.Sort();
+                var current = context.frontier[0].coordinates;
+                context.frontier.RemoveAt(0);
 
                 if (current == goal)
                     break;
@@ -123,57 +44,66 @@ namespace ATCG.Battle.Grids
 
                 foreach (HexCoordinates next in GetNeighbors(current, battleGrid))
                 {
+                    AgentMovementType movementType = agentAspect.MovementType;
                     if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
                         continue;
 
-                    if (!controller.CanTraverse(nextCell))
+                    if (!CanTraverse(agentAspect, nextCell))
                         continue;
 
-                    
+                    if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect currentCell))
+                        continue;
+
+                    bool nextIsGoal = next == goal;
                     HexCoordinates actual = next;
 
-                    bool nextIsGoal = next == goal && goalIsFrozen;
-
-                    if (controller.TryRedirect(current, next, battleGrid, out HexCoordinates redirected)
-                        && !nextIsGoal)
+                    using (HashSetPool<HexCoordinates>.Get(out var redirectedCoord))
                     {
-                        costSoFar[next] = int.MaxValue;
-                        cameFrom[next] = current;
+                        while (TryRedirect(agentAspect, currentCell, ref actual, ref movementType) && !nextIsGoal)
+                        {
+                            if (redirectedCoord.Add(actual))
+                            {
+                                context.costSoFar[next] = int.MaxValue;
+                                context.cameFrom[next] = current;
+                            }
 
-                        if (!battleGrid.TryGetBattleCell(redirected, out BattleCellAspect redirectedCell))
-                            continue;
-
-                        actual = redirected;
-                        nextCell = redirectedCell;
+                            //Redirected out of bound
+                            if (!battleGrid.TryGetBattleCell(actual, out nextCell))
+                                break;
+                        }
                     }
-                    int newCost = costSoFar[current] + controller.GetCost(current, actual, nextCell);
+
+                    int newCost = context.costSoFar[current] + GetCost(current, actual, nextCell);
 
                     if (newCost > maxSteps)
                         continue;
 
-                    if (!costSoFar.ContainsKey(actual) || newCost < costSoFar[actual])
+                    if (!context.costSoFar.ContainsKey(actual) || newCost < context.costSoFar[actual])
                     {
-                        Debug.Log($"Actual is start {actual == start}, Start {start}");
-                        costSoFar[actual] = newCost;
+                        //Debug.Log($"Actual is start {actual == start}, Start {start}");
+                        context.costSoFar[actual] = newCost;
                         int priority = newCost + actual.Distance(goal);
-                        frontier.Add(new PriorityHexCoordinates(actual, priority));
-                        cameFrom[actual] = current;
+                        context.frontier.Add(new PriorityHexCoordinates(actual, priority));
+                        context.cameFrom[actual] = current;
                     }
                 }
             }
 
-            if (!cameFrom.TryGetValue(goal, out var entryCase))
+            if (!context.cameFrom.TryGetValue(goal, out HexCoordinates entryCase))
                 return false;
-            if (!goalIsFrozen)
-                return ReconstructPath(start, goal, path);
 
-            if (!controller.TryRedirect(entryCase, goal, battleGrid, out HexCoordinates actualGoal))
-                return ReconstructPath(start, goal, path);
+            if (battleGrid.TryGetBattleCell(entryCase, out var beforeGoalCell))
+            {
+                AgentMovementType finalMovementType = agentAspect.MovementType;
 
-            if (!ReconstructPath(start, goal, path)) 
-                return false;
-            
-            path.Add(actualGoal);
+                if (!TryRedirect(agentAspect, beforeGoalCell, ref goal, ref finalMovementType))
+                    return ReconstructPath(start, goal, path, context);
+
+                if (!ReconstructPath(start, goal, path, context))
+                    return false;
+
+                path.Add(goal);
+            }
             return true;
         }
 
@@ -188,34 +118,70 @@ namespace ATCG.Battle.Grids
                     yield return neighbor;
             }
         }
-        
+
         private bool ReconstructPath(
             HexCoordinates start,
             HexCoordinates goal,
-            List<HexCoordinates> path)
+            List<HexCoordinates> path, PathfindingContext context)
         {
-            if (!cameFrom.ContainsKey(goal))
+            if (!context.cameFrom.ContainsKey(goal))
                 return false;
-            if(!cameFrom.ContainsKey(start))
+            if(!context.cameFrom.ContainsKey(start))
                 return false;
 
-            Debug.Log($"Reconstruct path from {start} to {goal}");
+            //Debug.Log($"Reconstruct path from {start} to {goal}");
             HexCoordinates current = goal;
             while (current != start)
             {
                 path.Add(current);
-                current = cameFrom[current];
+                current = context.cameFrom[current];
             }
 
             path.Reverse();
             return path.Count > 0;
         }
-
-        void IDisposable.Dispose()
+        public bool CanTraverse(PathfindingAgentAspect agent, BattleCellAspect cell)
         {
-            DictionaryPool<HexCoordinates, int>.Release(costSoFar);
-            DictionaryPool<HexCoordinates, HexCoordinates>.Release(cameFrom);
-            ListPool<PriorityHexCoordinates>.Release(frontier);
+            if (!cell.CanBeMovedOn())
+                return false;
+
+            for (int i = 0; i < agent.AgentRules.Length; i++)
+            {
+
+                if (!agent.AgentRules[i].CanTraverse(agent, cell))
+                    return false;
+            }
+
+
+            if (customTraversableRules != null)
+            {
+                for (int i = 0; i < customTraversableRules.Length; i++)
+                {
+                    if (!customTraversableRules[i].CanTraverse(agent, cell))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        //TODO
+        private int GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell) => 1;
+
+        private bool TryRedirect(PathfindingAgentAspect agentAspect, BattleCellAspect from, ref HexCoordinates to, ref AgentMovementType segmentType)
+        {
+            if (!from.IsValid())
+                return false;
+
+            PathfindingRedirectionIterator iterator = new PathfindingRedirectionIterator(from, to, agentAspect);
+            iterator.ForeachRedirectStatusComponent();
+
+            if (!iterator.WasRedirected)
+                return false;
+
+            to = iterator.To;
+            segmentType = iterator.SegmentType;
+            return true;
         }
     }
 }

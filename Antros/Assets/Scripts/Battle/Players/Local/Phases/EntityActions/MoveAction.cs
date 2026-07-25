@@ -6,9 +6,7 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
-using ATCG.Enums;
 using ATCG.HexGrids;
-using ATCG.HexGrids.Patterns.Building;
 using ATCG.Metrics;
 using Helteix.Tools.Phases;
 using UnityEngine;
@@ -30,41 +28,16 @@ namespace ATCG.Battle
             if (!address.TryGetComponentRO(out GridMemberComponent gridMemberComponent))
                 return;
 
-            if(!address.TryGetComponentRO(out MovementComponent movementComponent))
+            if(!address.HasComponent<MovementComponent>())
                 return;
 
             HexCoordinates center = gridMemberComponent.coordinates;
-            PatternGroup movementPatternData = movementComponent.pattern;
 
-
-            Awaitable<PhaseResult<HexCoordinates[]>> awaitable;
-
-            switch (movementComponent.movementType)
-            {
-                case MovementType.Walk:
-                    WalkingPathGenerator walkingPathGenerator = new WalkingPathGenerator();
-                    CreatePathPhase<WalkingPathGenerator> walkPhase =  new CreatePathPhase<WalkingPathGenerator>(fromPlayer, center, speed, movementPatternData, walkingPathGenerator);
-                    awaitable = walkPhase.Run();
-                    break;
-                case MovementType.Flight:
-                    FlightPathGenerator flightPathGenerator = new FlightPathGenerator();
-                    CreatePathPhase<FlightPathGenerator> flightPhase =  new CreatePathPhase<FlightPathGenerator>(fromPlayer, center, speed, movementPatternData, flightPathGenerator);
-                    awaitable = flightPhase.Run();
-                    break;
-                case MovementType.Teleportation:
-                    TeleportationPathGenerator teleportationPathGenerator = new TeleportationPathGenerator();
-                    CreatePathPhase<TeleportationPathGenerator> teleportationPhase =  new CreatePathPhase<TeleportationPathGenerator>(fromPlayer, center, speed, movementPatternData, teleportationPathGenerator);
-                    awaitable = teleportationPhase.Run();
-                    break;
-                default:
-                    awaitable = null;
-                    break;
-            }
-
-            if(awaitable == null)
-                return;
-
-            HexCoordinates[] result = await awaitable;
+            // The game imposes a ring-1 pattern; movement behaviour comes from the entity's
+            // PathfindingAgentComponent (resolved inside the phase from `address`). Speed is the
+            // number of tiles the unit can cross.
+            CreatePathPhase phase = new CreatePathPhase(fromPlayer, address, center, speed);
+            HexCoordinates[] result = await phase.Run();
             if (result.Length == 0)
                 return;
 

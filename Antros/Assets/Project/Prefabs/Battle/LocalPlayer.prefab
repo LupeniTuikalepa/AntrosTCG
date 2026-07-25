@@ -26,12 +26,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1386075209942345357}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5248774451827890201}
+  m_Father: {fileID: 6612123569802486352}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &5095133246281938980
 LineRenderer:
@@ -778,6 +778,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5248774451827890201}
+  - component: {fileID: 7603145527401307697}
+  - component: {fileID: 1595695567910448856}
   m_Layer: 0
   m_Name: FX
   m_TagString: Untagged
@@ -799,8 +801,78 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9056488319712664472}
-  - {fileID: 5234256578484910697}
+  - {fileID: 6612123569802486352}
   m_Father: {fileID: 3863691666134329178}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7603145527401307697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5971198617121921557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d372e2b227e94f4c9f8ac21a67e7814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.Runtime.FX.WideOutlineHighlightController
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  settings: {fileID: 11400000, guid: 8f24a163156ccf4488d4dd5b458b74bb, type: 2}
+--- !u!114 &1595695567910448856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5971198617121921557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359aa0afffeb1134fb4c8add5fd647e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Players.Local.Runtime.FX.SurfaceFillHighlightController
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  settings: {fileID: 11400000, guid: 85cfe92a4bda3984a8d5720639eed8a2, type: 2}
+--- !u!1 &6296837993207655123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6612123569802486352}
+  m_Layer: 0
+  m_Name: MovementSetup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6612123569802486352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6296837993207655123}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5234256578484910697}
+  m_Father: {fileID: 5248774451827890201}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6628898253298594642
 GameObject:
@@ -2172,7 +2244,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 602626987912461229, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000365213
+      value: 0.0009862098
       objectReference: {fileID: 0}
     - target: {fileID: 972060252572710618, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: m_Pivot.x
@@ -2324,7 +2396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6380262740302964630, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 8572318821369926677, guid: 11a9e78404d4a6c4c833175419886065, type: 3}
       propertyPath: player

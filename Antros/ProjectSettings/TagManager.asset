@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Hero
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -52,12 +53,14 @@ TagManager:
   - Default
   - SelectedEntity
   - HoveredEntity
-  - PhaseSelectableEntity
-  - PhaseNonSelectableEntity
-  - PhaseRelatedEntity
   - Player1
   - Player2
   - Player3
   - Player4
-  - Preview
+  - Preview_1
+  - Preview_2
+  - Preview_3
+  - Preview_4
+  - Preview_5
+  - Preview_6
   m_MigratedRenderPipelines: []

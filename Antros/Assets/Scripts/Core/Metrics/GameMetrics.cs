@@ -83,16 +83,13 @@ namespace ATCG.Metrics
         public RenderingLayerMask HoverRenderingLayer { get; private set; }
         [field: SerializeField, BoxGroup("FXs")]
         public RenderingLayerMask SelectedRenderingLayer { get; private set; }
-        [field: SerializeField, BoxGroup("FXs")]
-        public RenderingLayerMask PhaseSelectableRenderingLayer { get; private set; }
 
-        [field: SerializeField, BoxGroup("FXs")]
-        public RenderingLayerMask PhaseUnselectableRenderingLayer { get; private set; }
-        [field: SerializeField, BoxGroup("FXs")]
-        public RenderingLayerMask PhaseRelatedRenderingLayer { get; private set; }
+        // Highlight system config (state -> layer map + per-phase colour themes).
+        [field: SerializeField, BoxGroup("FXs/Highlighting")]
+        public HighlightSettings HighlightSettings { get; private set; }
 
-        [field: SerializeField, BoxGroup("FXs")]
-        public RenderingLayerMask PhasePreviewRenderingLayer { get; private set; }
+        public RenderingLayerMask GetHighlightLayer(HighlightState state)
+            => HighlightSettings != null ? HighlightSettings.GetLayer(state) : default;
 
 
         [field: SerializeField, BoxGroup("UI")]

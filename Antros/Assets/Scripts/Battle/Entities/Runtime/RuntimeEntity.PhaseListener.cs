@@ -1,8 +1,9 @@
-﻿using ATCG.Battle.Entities.Runtime.VFX;
+using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Metrics;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
+using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime
 {
@@ -10,78 +11,46 @@ namespace ATCG.Battle.Entities.Runtime
     {
         public ISelectEntityPhase CurrentSelectEntityPhase { get; private set; }
 
+        // Category slots this listener drives. The active phase decides which one applies (via
+        // GetHighlightState); the mask for each comes from GameMetrics.GetHighlightLayer.
+        private static readonly HighlightState[] CategoryStates =
+        {
+            HighlightState.Preview1,
+            HighlightState.Preview2,
+            HighlightState.Preview3,
+            HighlightState.Preview4,
+            HighlightState.Preview5,
+            HighlightState.Preview6,
+        };
+
         void IPhaseListener<ISelectEntityPhase>.OnPhaseBegin(ISelectEntityPhase phase)
         {
-            //Debug.Log(((IPhaseListener<ISelectEntityPhase>)this).Accepts(phase));
             CurrentSelectEntityPhase = phase;
-            phase.OnPreviewChanged += UpdatePreviewState;
-
-            GameMetrics gameMetrics = GameMetrics.Current;
-            if (phase.IsInPattern(Address))
-            {
-                IsInteractable.AddCondition(phase.ChannelKey, true);
-
-                bool isRelated = phase.IsRelated(Address);
-                bool accepts = phase.Accepts(Address);
-
-                if (accepts || isRelated)
-                {
-                    foreach (LinkedRenderer model in Models.GetAll())
-                    {
-                        model.Renderer.EnableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                        model.Renderer.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                        model.Renderer.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
-                    }
-                }
-                else
-                {
-                    foreach (var model in Models)
-                    {
-                        model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                        model.EnableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                        model.DisableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
-                    }
-                }
-            }
-            else
-            {
-                IsInteractable.AddCondition(phase.ChannelKey, false);
-                foreach (var model in Models)
-                {
-                    model.DisableRenderingLayer(gameMetrics.PhaseSelectableRenderingLayer);
-                    model.DisableRenderingLayer(gameMetrics.PhaseRelatedRenderingLayer);
-                    model.EnableRenderingLayer(gameMetrics.PhaseUnselectableRenderingLayer);
-                }
-            }
+            IsInteractable.AddCondition(phase.ChannelKey, phase.IsInPattern(Address));
+            ApplyHighlightState(phase.GetHighlightState(Address));
         }
 
-        private void UpdatePreviewState(ISelectEntityPhase phase)
+        private void ApplyHighlightState(HighlightState state)
         {
-            bool isInPreview = phase.IsInPreview(Address);
-            foreach (var model in Models)
+            GameMetrics gameMetrics = GameMetrics.Current;
+            foreach (Renderer renderer in Models)
             {
-                if(isInPreview)
-                    model.EnableRenderingLayer(GameMetrics.Current.PhasePreviewRenderingLayer);
-                else
-                    model.DisableRenderingLayer(GameMetrics.Current.PhasePreviewRenderingLayer);
+                for (int i = 0; i < CategoryStates.Length; i++)
+                {
+                    RenderingLayerMask mask = gameMetrics.GetHighlightLayer(CategoryStates[i]);
+                    if (CategoryStates[i] == state)
+                        renderer.EnableRenderingLayer(mask);
+                    else
+                        renderer.DisableRenderingLayer(mask);
+                }
             }
         }
-
 
         void IPhaseListener<ISelectEntityPhase>.OnPhaseEnd(ISelectEntityPhase phase)
         {
             IsInteractable.RemoveCondition(phase.ChannelKey);
-
-            phase.OnPreviewChanged -= UpdatePreviewState;
             CurrentSelectEntityPhase = null;
-
-            foreach (var model in Models)
-            {
-                model.DisableRenderingLayer(GameMetrics.Current.PhaseSelectableRenderingLayer);
-                model.DisableRenderingLayer(GameMetrics.Current.PhaseUnselectableRenderingLayer);
-                model.DisableRenderingLayer(GameMetrics.Current.PhaseRelatedRenderingLayer);
-                model.DisableRenderingLayer(GameMetrics.Current.PhasePreviewRenderingLayer);
-            }
+            ApplyHighlightState(HighlightState.None);
         }
     }
 }

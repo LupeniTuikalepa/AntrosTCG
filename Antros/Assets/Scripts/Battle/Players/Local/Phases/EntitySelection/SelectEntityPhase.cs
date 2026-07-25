@@ -15,6 +15,7 @@ using ATCG.Battle.Players.Local.UI;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
+using ATCG.Metrics;
 using Helteix.Cards.UI.Physical.Drag;
 using Helteix.ChanneledProperties;
 using Helteix.Tools.Phases;
@@ -226,6 +227,28 @@ namespace ATCG.Battle.Players.Local.Phases
         }
 
         public bool IsInPreview(EntityAddress address) => currentPreview.Contains(address);
+
+        private HighlightClassifier highlightClassifier;
+
+        // Lets the owner phase (e.g. CreatePathPhase) refine the base state into Preview1/2/3…
+        public void SetHighlightClassifier(HighlightClassifier classifier) => highlightClassifier = classifier;
+
+        public HighlightState GetHighlightState(EntityAddress address)
+        {
+            HighlightState baseState = ComputeBaseHighlightState(address);
+            return highlightClassifier != null ? highlightClassifier(address, baseState) : baseState;
+        }
+
+        private HighlightState ComputeBaseHighlightState(EntityAddress address)
+        {
+            if (!IsInPattern(address))
+                return HighlightState.Preview5;   // inaccessible / non-selectable
+            if (Accepts(address))
+                return HighlightState.Preview3;   // selectable
+            if (IsRelated(address))
+                return HighlightState.Preview4;   // related
+            return HighlightState.Preview5;
+        }
 
 
         private bool AcceptsWithRelated(ref EntityAddress address)
