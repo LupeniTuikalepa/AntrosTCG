@@ -14,11 +14,11 @@ namespace ATCG.Battle.Cards
     {
         public int DeathCost => Data.DeathCost;
         public int MaxHealth => Data.Health;
-        public int Speed => Data.Speed;
         public int Strength => Data.Strength;
         public int Defense => Data.Defense;
-        public PatternGroup MovementPatterns => Data.MovementPatterns;
         public PatternGroup DeployPatterns => Data.DeployPatterns;
+
+        public int Speed => Data.Speed;
         public MovementType MovementType => Data.MovementType;
 
         public HeroBattleCard(HeroCardData data, IBattlePlayer player) : base(data, player)

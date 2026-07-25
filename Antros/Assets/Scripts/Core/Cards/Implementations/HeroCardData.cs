@@ -25,8 +25,6 @@ namespace ATCG.Cards.Implementations
 		public int Speed { get; private set; } = 1;
 
 		[field: SerializeField, BoxGroup("Movement")]
-		public PatternGroup MovementPatterns { get; private set; }
-		[field: SerializeField, BoxGroup("Movement")]
 		public MovementType MovementType { get; private set; }
 		[field: SerializeField, BoxGroup("Deploy")]
 		public PatternGroup DeployPatterns { get; private set; }

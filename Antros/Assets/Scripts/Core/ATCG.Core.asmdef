@@ -16,7 +16,8 @@
         "PrimeTween.Runtime",
         "Eflatun.SceneReference",
         "Unity.Cinemachine",
-        "Unity.Timeline"
+        "Unity.Timeline",
+        "GUID:fc5a59800d2c4a23a8d08a15c3daa2cb"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

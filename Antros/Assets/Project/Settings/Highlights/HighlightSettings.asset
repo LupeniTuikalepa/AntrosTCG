@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6bb606852366e04ebf51b39afa03421, type: 3}
+  m_Name: HighlightSettings
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Metrics.HighlightSettings
+  layers:
+  - state: 3
+    layer:
+      serializedVersion: 0
+      m_Bits: 128
+  - state: 4
+    layer:
+      serializedVersion: 0
+      m_Bits: 256
+  - state: 5
+    layer:
+      serializedVersion: 0
+      m_Bits: 512
+  - state: 6
+    layer:
+      serializedVersion: 0
+      m_Bits: 1024
+  - state: 7
+    layer:
+      serializedVersion: 0
+      m_Bits: 2048
+  - state: 8
+    layer:
+      serializedVersion: 0
+      m_Bits: 4096
+  <MovementTheme>k__BackingField: {fileID: 11400000, guid: 6a9dee7214d078c4688f9d7ef7c9c72d, type: 2}
+  <CastTheme>k__BackingField: {fileID: 11400000, guid: d8e4cad4fc2398f4481800da6b85d68e, type: 2}
+  <DeployTheme>k__BackingField: {fileID: 11400000, guid: b8256053d288da14f96632f20d173545, type: 2}

@@ -21,5 +21,9 @@ namespace ATCG.Battle.Players.Local.Phases
         bool Accepts(EntityAddress address);
         bool IsRelated(EntityAddress address);
         bool IsInPreview(EntityAddress address);
+
+        // The highlight category for this entity right now (drives the rendering layer it gets).
+        // Preview is handled additively via IsInPreview, on top of this category.
+        ATCG.Metrics.HighlightState GetHighlightState(EntityAddress address);
     }
 }

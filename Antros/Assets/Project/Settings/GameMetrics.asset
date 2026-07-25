@@ -105,6 +105,7 @@ MonoBehaviour:
   <PhasePreviewRenderingLayer>k__BackingField:
     serializedVersion: 0
     m_Bits: 1024
+  <HighlightSettings>k__BackingField: {fileID: 11400000, guid: ac6e3e29de86cd543ac6a251312300d3, type: 2}
   <ElementInfos>k__BackingField:
     pairings:
     - <Key>k__BackingField: 0
