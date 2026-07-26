@@ -1,4 +1,5 @@
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Battle.Players.Runtime;
 using ATCG.Metrics;
 using Helteix.ChanneledProperties.Priorities;
 
@@ -44,6 +45,16 @@ namespace ATCG.Battle.Players.Local.Runtime.FX
             ActiveTheme.RemovePriority(phase.HighlightChannel);
             ApplyIfChanged();
             base.OnPhaseEnd(phase);
+        }
+
+        // End of game / player teardown: force-remove everything the controller added to the shared
+        // Linework settings, even if a phase was still active.
+        public override void Disconnect(IRuntimeBattlePlayer<LocalBattlePlayer> runtimeBattlePlayer)
+        {
+            ApplyTheme(null);
+            hasApplied = false;
+            lastApplied = null;
+            base.Disconnect(runtimeBattlePlayer);
         }
 
         // Every selection phase now flows through here; only re-apply (re-clone) when the winning theme
