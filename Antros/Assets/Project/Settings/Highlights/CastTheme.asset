@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9202640018927505639
+--- !u!114 &-7622054984929896316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
-  m_Name: Preview2 Fill
+  m_Name: Preview6 Fill
   m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
   material: {fileID: 0}
   isActive: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4096
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -33,8 +33,8 @@ MonoBehaviour:
   vertexAnimation: 0
   materialType: 0
   customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
+  pattern: 0
+  primaryColor: {r: 1, g: 0.1948227, b: 0, a: 0.5019608}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0
@@ -49,105 +49,7 @@ MonoBehaviour:
   width: 0.3
   softness: 0
   power: 0.8
---- !u!114 &-8010316304746881815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
-  m_Name: Preview5 Fill
-  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
-  material: {fileID: 0}
-  isActive: 1
-  RenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  renderQueue: 0
-  occlusion: 0
-  occludedBy: 0
-  OccludersRenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  blendMode: 0
-  alphaCutout: 0
-  alphaCutoutTexture: {fileID: 0}
-  alphaCutoutThreshold: 0.5
-  vertexAnimation: 0
-  materialType: 0
-  customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
-  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
-  texture: {fileID: 0}
-  channel: 0
-  frequencyX: 40
-  frequencyY: 2
-  density: 0.5
-  rotation: 0
-  direction: 0
-  offset: 0
-  speed: 0.02
-  scale: 1
-  width: 0.3
-  softness: 0
-  power: 0.8
---- !u!114 &-7159417796978417420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
-  m_Name: Preview4 Fill
-  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
-  material: {fileID: 0}
-  isActive: 1
-  RenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  renderQueue: 0
-  occlusion: 0
-  occludedBy: 0
-  OccludersRenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  blendMode: 0
-  alphaCutout: 0
-  alphaCutoutTexture: {fileID: 0}
-  alphaCutoutThreshold: 0.5
-  vertexAnimation: 0
-  materialType: 0
-  customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
-  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
-  texture: {fileID: 0}
-  channel: 0
-  frequencyX: 40
-  frequencyY: 2
-  density: 0.5
-  rotation: 0
-  direction: 0
-  offset: 0
-  speed: 0.02
-  scale: 1
-  width: 0.3
-  softness: 0
-  power: 0.8
---- !u!114 &-6928910464865671940
+--- !u!114 &-5165075715403906015
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,12 +65,12 @@ MonoBehaviour:
   isActive: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 512
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   renderQueue: 0
-  occlusion: 0
+  occlusion: 2
   occludedBy: 0
   OccludersRenderingLayer:
     serializedVersion: 0
@@ -181,7 +83,56 @@ MonoBehaviour:
   materialType: 0
   customMaterial: {fileID: 0}
   pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
+  primaryColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0.6}
+  secondaryColor: {r: 0, g: 0, b: 0, a: 0.8}
+  texture: {fileID: 0}
+  channel: 0
+  frequencyX: 40
+  frequencyY: 2
+  density: 0.5
+  rotation: 0
+  direction: 0
+  offset: 0
+  speed: 0.02
+  scale: 1
+  width: 0.3
+  softness: 0
+  power: 0.8
+--- !u!114 &-1656307968182484887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
+  m_Name: Preview1 Fill
+  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 128
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 2
+  occludedBy: 0
+  OccludersRenderingLayer:
+    serializedVersion: 0
+    m_Bits: 1
+  blendMode: 0
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  vertexAnimation: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+  pattern: 0
+  primaryColor: {r: 0.3973834, g: 0.8867924, b: 0.40482002, a: 0.6}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0
@@ -196,7 +147,7 @@ MonoBehaviour:
   width: 0.3
   softness: 0
   power: 0.8
---- !u!114 &-3213029589707634895
+--- !u!114 &-468879498998378171
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,35 +156,90 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8345be34a994929ba7ca6c0b1a5c5c7, type: 3}
-  m_Name: Preview2 Outline
-  m_EditorClassIdentifier: Linework::Linework.WideOutline.Outline
-  silhouetteMaterial: {fileID: 0}
-  silhouetteMaterialInstanced: {fileID: 0}
-  informationMaterial: {fileID: 0}
-  informationMaterialInstanced: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
+  m_Name: Preview5 Fill
+  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
+  material: {fileID: 0}
   isActive: 1
-  customDepthEnabled: 1
-  disableWidthControl: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 2048
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   renderQueue: 0
-  occlusion: 0
-  cullingMode: 0
-  closedLoop: 0
+  occlusion: 2
+  occludedBy: 0
+  OccludersRenderingLayer:
+    serializedVersion: 0
+    m_Bits: 1
+  blendMode: 0
   alphaCutout: 0
   alphaCutoutTexture: {fileID: 0}
   alphaCutoutThreshold: 0.5
-  alphaCutoutUVTransform: {x: 0, y: 0, z: 0, w: 0}
-  gpuInstancing: 0
   vertexAnimation: 0
-  color: {r: 0, g: 1, b: 0, a: 1}
-  width: 20
---- !u!114 &-3030404196288601413
+  materialType: 0
+  customMaterial: {fileID: 0}
+  pattern: 0
+  primaryColor: {r: 0.5823837, g: 0.8862745, b: 0.3960784, a: 0.5019608}
+  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
+  texture: {fileID: 0}
+  channel: 0
+  frequencyX: 40
+  frequencyY: 2
+  density: 0.5
+  rotation: 0
+  direction: 0
+  offset: 0
+  speed: 0.02
+  scale: 1
+  width: 0.3
+  softness: 0
+  power: 0.8
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056f5ae078f127e498d57fe5681b48f6, type: 3}
+  m_Name: CastTheme
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Metrics.HighlightTheme
+  slots:
+  - state: 3
+    outlineActive: 0
+    outline: {fileID: 4097743485910178653}
+    fillActive: 1
+    fill: {fileID: -1656307968182484887}
+  - state: 4
+    outlineActive: 0
+    outline: {fileID: 4952111745255090607}
+    fillActive: 1
+    fill: {fileID: 7665592365080390759}
+  - state: 5
+    outlineActive: 0
+    outline: {fileID: 3822751957138948443}
+    fillActive: 1
+    fill: {fileID: -5165075715403906015}
+  - state: 6
+    outlineActive: 0
+    outline: {fileID: 1335477772789327310}
+    fillActive: 1
+    fill: {fileID: 1126114607498842354}
+  - state: 7
+    outlineActive: 1
+    outline: {fileID: 7081227013230823562}
+    fillActive: 0
+    fill: {fileID: -468879498998378171}
+  - state: 8
+    outlineActive: 1
+    outline: {fileID: 132676394345460378}
+    fillActive: 1
+    fill: {fileID: -7622054984929896316}
+--- !u!114 &132676394345460378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,7 +260,7 @@ MonoBehaviour:
   disableWidthControl: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4096
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -268,9 +274,58 @@ MonoBehaviour:
   alphaCutoutUVTransform: {x: 0, y: 0, z: 0, w: 0}
   gpuInstancing: 0
   vertexAnimation: 0
-  color: {r: 0, g: 1, b: 0, a: 1}
-  width: 20
---- !u!114 &-2265649753074642496
+  color: {r: 1, g: 0.018101247, b: 0, a: 1}
+  width: 5
+--- !u!114 &1126114607498842354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
+  m_Name: Preview4 Fill
+  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 1024
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 2
+  occludedBy: 0
+  OccludersRenderingLayer:
+    serializedVersion: 0
+    m_Bits: 1
+  blendMode: 0
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  vertexAnimation: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+  pattern: 0
+  primaryColor: {r: 0.9811321, g: 0.17123532, b: 0.19185433, a: 0.6}
+  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
+  texture: {fileID: 0}
+  channel: 0
+  frequencyX: 40
+  frequencyY: 2
+  density: 0.5
+  rotation: 0
+  direction: 0
+  offset: 0
+  speed: 0.02
+  scale: 1
+  width: 0.3
+  softness: 0
+  power: 0.8
+--- !u!114 &1335477772789327310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -291,7 +346,7 @@ MonoBehaviour:
   disableWidthControl: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 1024
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -307,50 +362,7 @@ MonoBehaviour:
   vertexAnimation: 0
   color: {r: 0, g: 1, b: 0, a: 1}
   width: 20
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 056f5ae078f127e498d57fe5681b48f6, type: 3}
-  m_Name: CastTheme
-  m_EditorClassIdentifier: ATCG.Core::ATCG.Metrics.HighlightTheme
-  slots:
-  - state: 3
-    outlineActive: 0
-    outline: {fileID: 6566723356193012404}
-    fillActive: 0
-    fill: {fileID: 1106524836302929412}
-  - state: 4
-    outlineActive: 0
-    outline: {fileID: -3213029589707634895}
-    fillActive: 0
-    fill: {fileID: -9202640018927505639}
-  - state: 5
-    outlineActive: 0
-    outline: {fileID: 1062541620869676805}
-    fillActive: 0
-    fill: {fileID: -6928910464865671940}
-  - state: 6
-    outlineActive: 0
-    outline: {fileID: -2265649753074642496}
-    fillActive: 0
-    fill: {fileID: -7159417796978417420}
-  - state: 7
-    outlineActive: 0
-    outline: {fileID: 3550160080851988314}
-    fillActive: 0
-    fill: {fileID: -8010316304746881815}
-  - state: 8
-    outlineActive: 0
-    outline: {fileID: -3030404196288601413}
-    fillActive: 0
-    fill: {fileID: 4429825637021737875}
---- !u!114 &1062541620869676805
+--- !u!114 &3822751957138948443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -371,7 +383,7 @@ MonoBehaviour:
   disableWidthControl: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 512
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -387,142 +399,7 @@ MonoBehaviour:
   vertexAnimation: 0
   color: {r: 0, g: 1, b: 0, a: 1}
   width: 20
---- !u!114 &1106524836302929412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
-  m_Name: Preview1 Fill
-  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
-  material: {fileID: 0}
-  isActive: 1
-  RenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  renderQueue: 0
-  occlusion: 0
-  occludedBy: 0
-  OccludersRenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  blendMode: 0
-  alphaCutout: 0
-  alphaCutoutTexture: {fileID: 0}
-  alphaCutoutThreshold: 0.5
-  vertexAnimation: 0
-  materialType: 0
-  customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
-  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
-  texture: {fileID: 0}
-  channel: 0
-  frequencyX: 40
-  frequencyY: 2
-  density: 0.5
-  rotation: 0
-  direction: 0
-  offset: 0
-  speed: 0.02
-  scale: 1
-  width: 0.3
-  softness: 0
-  power: 0.8
---- !u!114 &3550160080851988314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8345be34a994929ba7ca6c0b1a5c5c7, type: 3}
-  m_Name: Preview5 Outline
-  m_EditorClassIdentifier: Linework::Linework.WideOutline.Outline
-  silhouetteMaterial: {fileID: 0}
-  silhouetteMaterialInstanced: {fileID: 0}
-  informationMaterial: {fileID: 0}
-  informationMaterialInstanced: {fileID: 0}
-  isActive: 1
-  customDepthEnabled: 1
-  disableWidthControl: 1
-  RenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  renderQueue: 0
-  occlusion: 0
-  cullingMode: 0
-  closedLoop: 0
-  alphaCutout: 0
-  alphaCutoutTexture: {fileID: 0}
-  alphaCutoutThreshold: 0.5
-  alphaCutoutUVTransform: {x: 0, y: 0, z: 0, w: 0}
-  gpuInstancing: 0
-  vertexAnimation: 0
-  color: {r: 0, g: 1, b: 0, a: 1}
-  width: 20
---- !u!114 &4429825637021737875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
-  m_Name: Preview6 Fill
-  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
-  material: {fileID: 0}
-  isActive: 1
-  RenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  renderQueue: 0
-  occlusion: 0
-  occludedBy: 0
-  OccludersRenderingLayer:
-    serializedVersion: 0
-    m_Bits: 1
-  blendMode: 0
-  alphaCutout: 0
-  alphaCutoutTexture: {fileID: 0}
-  alphaCutoutThreshold: 0.5
-  vertexAnimation: 0
-  materialType: 0
-  customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
-  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
-  texture: {fileID: 0}
-  channel: 0
-  frequencyX: 40
-  frequencyY: 2
-  density: 0.5
-  rotation: 0
-  direction: 0
-  offset: 0
-  speed: 0.02
-  scale: 1
-  width: 0.3
-  softness: 0
-  power: 0.8
---- !u!114 &6566723356193012404
+--- !u!114 &4097743485910178653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -543,7 +420,7 @@ MonoBehaviour:
   disableWidthControl: 1
   RenderingLayer:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 128
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -559,3 +436,126 @@ MonoBehaviour:
   vertexAnimation: 0
   color: {r: 0, g: 1, b: 0, a: 1}
   width: 20
+--- !u!114 &4952111745255090607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8345be34a994929ba7ca6c0b1a5c5c7, type: 3}
+  m_Name: Preview2 Outline
+  m_EditorClassIdentifier: Linework::Linework.WideOutline.Outline
+  silhouetteMaterial: {fileID: 0}
+  silhouetteMaterialInstanced: {fileID: 0}
+  informationMaterial: {fileID: 0}
+  informationMaterialInstanced: {fileID: 0}
+  isActive: 1
+  customDepthEnabled: 1
+  disableWidthControl: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 256
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 0
+  cullingMode: 0
+  closedLoop: 0
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  alphaCutoutUVTransform: {x: 0, y: 0, z: 0, w: 0}
+  gpuInstancing: 0
+  vertexAnimation: 0
+  color: {r: 0, g: 1, b: 0, a: 1}
+  width: 20
+--- !u!114 &7081227013230823562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8345be34a994929ba7ca6c0b1a5c5c7, type: 3}
+  m_Name: Preview5 Outline
+  m_EditorClassIdentifier: Linework::Linework.WideOutline.Outline
+  silhouetteMaterial: {fileID: 0}
+  silhouetteMaterialInstanced: {fileID: 0}
+  informationMaterial: {fileID: 0}
+  informationMaterialInstanced: {fileID: 0}
+  isActive: 1
+  customDepthEnabled: 1
+  disableWidthControl: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 2048
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 0
+  cullingMode: 0
+  closedLoop: 0
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  alphaCutoutUVTransform: {x: 0, y: 0, z: 0, w: 0}
+  gpuInstancing: 0
+  vertexAnimation: 0
+  color: {r: 0.58431375, g: 0.8862745, b: 0.39607844, a: 0.5019608}
+  width: 20
+--- !u!114 &7665592365080390759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0a7dc71beb4da8aba332c635284136, type: 3}
+  m_Name: Preview2 Fill
+  m_EditorClassIdentifier: Linework::Linework.SurfaceFill.Fill
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 256
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 2
+  occludedBy: 0
+  OccludersRenderingLayer:
+    serializedVersion: 0
+    m_Bits: 1
+  blendMode: 0
+  alphaCutout: 0
+  alphaCutoutTexture: {fileID: 0}
+  alphaCutoutThreshold: 0.5
+  vertexAnimation: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+  pattern: 0
+  primaryColor: {r: 0.3960784, g: 0.8862745, b: 0.69097227, a: 0.6}
+  secondaryColor: {r: 1, g: 0, b: 0, a: 1}
+  texture: {fileID: 0}
+  channel: 0
+  frequencyX: 40
+  frequencyY: 2
+  density: 0.5
+  rotation: 0
+  direction: 0
+  offset: 0
+  speed: 0.02
+  scale: 1
+  width: 0.3
+  softness: 0
+  power: 0.8

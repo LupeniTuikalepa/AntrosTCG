@@ -69,7 +69,20 @@ namespace ATCG.Metrics
                 Slot slot = slots.Find(s => s != null && s.state == state);
                 if (slot == null)
                 {
-                    slot = CreateSlot(state);
+                    slot = new Slot { state = state, outlineActive = false, fillActive = false };
+                    changed = true;
+                }
+
+                // Regenerate any embedded sub-asset that went missing (e.g. lost on reimport).
+                if (slot.outline == null)
+                {
+                    slot.outline = CreateOutline(state);
+                    changed = true;
+                }
+
+                if (slot.fill == null)
+                {
+                    slot.fill = CreateFill(state);
                     changed = true;
                 }
 
@@ -117,17 +130,20 @@ namespace ATCG.Metrics
             return changed;
         }
 
-        private Slot CreateSlot(HighlightState state)
+        private Outline CreateOutline(HighlightState state)
         {
             Outline outline = CreateInstance<Outline>();
             outline.name = state + " Outline";
             UnityEditor.AssetDatabase.AddObjectToAsset(outline, this);
+            return outline;
+        }
 
+        private Fill CreateFill(HighlightState state)
+        {
             Fill fill = CreateInstance<Fill>();
             fill.name = state + " Fill";
             UnityEditor.AssetDatabase.AddObjectToAsset(fill, this);
-
-            return new Slot { state = state, outlineActive = false, outline = outline, fillActive = false, fill = fill };
+            return fill;
         }
 
         private void SaveChange()

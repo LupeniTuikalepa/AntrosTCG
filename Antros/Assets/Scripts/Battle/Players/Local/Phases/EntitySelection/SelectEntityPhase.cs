@@ -25,7 +25,7 @@ using UnityEngine.Pool;
 namespace ATCG.Battle.Players.Local.Phases
 {
     public sealed class SelectEntityPhase<T> : LocalPlayerPhase<EntityAddress[]>,
-        ISelectEntityPhase, ILocalHUDPhase<ISelectEntityPhase> where T : IEntityFilter
+        ISelectEntityPhase, ILocalHUDPhase<ISelectEntityPhase>, IHighlightingPhase where T : IEntityFilter
     {
 
         public event Action<ISelectEntityPhase> OnPreviewChanged;
@@ -38,6 +38,11 @@ namespace ATCG.Battle.Players.Local.Phases
         public int MaxSelectableEntities { get; }
 
         public ChannelKey ChannelKey { get; private set; }
+
+        // IHighlightingPhase: the caller sets HighlightTheme (cast/deploy) to push a colour theme while
+        // this selection is active; left null (e.g. movement's inner selects) it contributes nothing.
+        public ChannelKey HighlightChannel { get; private set; }
+        public HighlightTheme HighlightTheme { get; set; }
 
         public bool IsWaiting { get; private set; }
 
@@ -119,6 +124,7 @@ namespace ATCG.Battle.Players.Local.Phases
             ListPool<EntityAddress>.Get(out currentPreview);
 
             ChannelKey = ChannelKey.GetUniqueChannelKey();
+            HighlightChannel = ChannelKey.GetUniqueChannelKey();
             IsWaiting = false;
 
             return base.Initialize(token);
@@ -242,12 +248,12 @@ namespace ATCG.Battle.Players.Local.Phases
         private HighlightState ComputeBaseHighlightState(EntityAddress address)
         {
             if (!IsInPattern(address))
-                return HighlightState.Preview5;   // inaccessible / non-selectable
+                return HighlightState.Preview3;   // outside the selection
             if (Accepts(address))
-                return HighlightState.Preview3;   // selectable
+                return HighlightState.Preview1;   // inside selection, valid
             if (IsRelated(address))
-                return HighlightState.Preview4;   // related
-            return HighlightState.Preview5;
+                return HighlightState.Preview5;   // inside selection, related
+            return HighlightState.Preview4;        // inside selection, invalid
         }
 
 

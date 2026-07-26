@@ -26,8 +26,21 @@ namespace ATCG.Battle.Entities.Runtime
         void IPhaseListener<ISelectEntityPhase>.OnPhaseBegin(ISelectEntityPhase phase)
         {
             CurrentSelectEntityPhase = phase;
+            phase.OnPreviewChanged += UpdatePreviewState;
             IsInteractable.AddCondition(phase.ChannelKey, phase.IsInPattern(Address));
-            ApplyHighlightState(phase.GetHighlightState(Address));
+            RefreshState(phase);
+        }
+
+        // Potential targets under the hovered cell (the phase's preview, e.g. a capacity's hit pattern)
+        // get Preview6; otherwise the base state from GetHighlightState applies.
+        private void UpdatePreviewState(ISelectEntityPhase phase) => RefreshState(phase);
+
+        private void RefreshState(ISelectEntityPhase phase)
+        {
+            HighlightState state = phase.IsInPreview(Address)
+                ? HighlightState.Preview6
+                : phase.GetHighlightState(Address);
+            ApplyHighlightState(state);
         }
 
         private void ApplyHighlightState(HighlightState state)
@@ -48,6 +61,7 @@ namespace ATCG.Battle.Entities.Runtime
 
         void IPhaseListener<ISelectEntityPhase>.OnPhaseEnd(ISelectEntityPhase phase)
         {
+            phase.OnPreviewChanged -= UpdatePreviewState;
             IsInteractable.RemoveCondition(phase.ChannelKey);
             CurrentSelectEntityPhase = null;
             ApplyHighlightState(HighlightState.None);
