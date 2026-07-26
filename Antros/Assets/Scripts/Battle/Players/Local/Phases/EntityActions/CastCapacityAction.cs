@@ -11,6 +11,7 @@ using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Phases.Preview;
 using ATCG.Capacities;
+using ATCG.Metrics;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.DataMapping;
@@ -94,6 +95,9 @@ namespace ATCG.Battle
                     new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder)
                     {
                         previewController = new CapacityHitPreview(capacityData, BattleGrid, from),
+                        HighlightTheme = GameMetrics.Current.HighlightSettings != null
+                            ? GameMetrics.Current.HighlightSettings.CastTheme
+                            : null,
                     };
 
                 EntityAddress[] result = await phase;

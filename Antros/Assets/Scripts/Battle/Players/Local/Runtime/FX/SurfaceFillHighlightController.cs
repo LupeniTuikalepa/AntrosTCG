@@ -6,9 +6,9 @@ using UnityEngine;
 namespace ATCG.Battle.Players.Local.Runtime.FX
 {
     /// <summary>
-    /// Same as WideOutlineHighlightController but for Linework SurfaceFill: the theme's Fill SOs are
-    /// added to the settings on phase begin and removed when the theme changes / no phase is active.
-    /// Each Fill carries its own RenderingLayer, so it drives whichever preview slot it targets.
+    /// Same as WideOutlineHighlightController but for Linework SurfaceFill. Adds runtime CLONES of the
+    /// theme's active fills (never the shared sub-assets, so nothing gets baked into the settings asset
+    /// in Play Mode) and destroys them when the theme changes. Stale null entries are purged on the way in.
     /// </summary>
     public class SurfaceFillHighlightController : HighlightThemeController
     {
@@ -22,24 +22,39 @@ namespace ATCG.Battle.Players.Local.Runtime.FX
             if (settings == null || settings.Fills == null)
                 return;
 
-            // Remove what the previous theme added (leave everything else, e.g. per-player fills).
-            for (int i = 0; i < applied.Count; i++)
-                settings.Fills.Remove(applied[i]);
-            applied.Clear();
+            settings.Fills.RemoveAll(f => f == null); // purge stale clones from a prior session
+            ClearApplied();
 
             GameMetrics metrics = GameMetrics.Current;
             if (theme != null && metrics != null)
             {
                 foreach ((Fill fill, HighlightState state) in theme.ActiveFills)
                 {
-                    fill.RenderingLayer = metrics.GetHighlightLayer(state);
-                    fill.SetActive(true);
-                    settings.Fills.Add(fill);
-                    applied.Add(fill);
+                    if (fill == null)
+                        continue;
+
+                    Fill clone = Instantiate(fill);
+                    clone.Cleanup(); // drop the shared material ref so Linework assigns a fresh unique one
+                    clone.RenderingLayer = metrics.GetHighlightLayer(state);
+                    clone.SetActive(true);
+                    settings.Fills.Add(clone);
+                    applied.Add(clone);
                 }
             }
 
             settings.Changed();
+        }
+
+        private void ClearApplied()
+        {
+            for (int i = 0; i < applied.Count; i++)
+            {
+                settings.Fills.Remove(applied[i]);
+                if (applied[i] != null)
+                    Destroy(applied[i]);
+            }
+
+            applied.Clear();
         }
     }
 }

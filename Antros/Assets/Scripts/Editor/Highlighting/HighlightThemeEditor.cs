@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ATCG.Metrics;
 using Linework.SurfaceFill;
 using Linework.WideOutline;
@@ -14,8 +15,8 @@ namespace ATCG.Editor.Highlighting
     /// UIToolkit editor for HighlightTheme: an outer TabView with one tab per Preview{N} state; inside
     /// each, a darker panel holding a second TabView with an "Outline" and a "Fill" tab. The active
     /// toggle sits as a checkbox in each tab's header; the content is the embedded native Linework
-    /// inspector (read-only when unchecked), plus Copy/Paste buttons to duplicate a whole parameter set
-    /// onto another Outline (or Fill). Slots and their embedded sub-assets exist for every preview state.
+    /// inspector (read-only when unchecked), plus Copy/Paste buttons. The Outline/Fill selection is kept
+    /// in sync across preview tabs, and a state tab is dimmed when neither of its sides is active.
     /// </summary>
     [CustomEditor(typeof(HighlightTheme))]
     public class HighlightThemeEditor : UnityEditor.Editor
@@ -23,9 +24,13 @@ namespace ATCG.Editor.Highlighting
         private const string TabHeaderClass = "unity-tab__header";
         private static readonly Color PanelColor = new Color(0f, 0f, 0f, 0.18f);
 
-        // Parameter clipboards (shared across all theme inspectors).
+        // Parameter clipboards + shared side selection (persist across inspector rebuilds).
         private static Outline outlineClipboard;
         private static Fill fillClipboard;
+        private static int selectedSide;
+
+        private readonly List<TabView> sideTabViews = new();
+        private bool syncingSides;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -33,6 +38,7 @@ namespace ATCG.Editor.Highlighting
             theme.EditorEnsureSlots();
             serializedObject.Update();
 
+            sideTabViews.Clear();
             TabView stateTabs = new TabView();
 
             SerializedProperty slotsProp = serializedObject.FindProperty("slots");
@@ -40,23 +46,71 @@ namespace ATCG.Editor.Highlighting
             {
                 HighlightTheme.Slot slot = theme.EditorSlots[i];
                 SerializedProperty slotProp = slotsProp.GetArrayElementAtIndex(i);
-
-                Tab stateTab = new Tab(slot.state.ToString());
-
-                VisualElement panel = Panel();
-                TabView sideTabs = new TabView();
-                sideTabs.Add(MakeSideTab("Outline", slotProp.FindPropertyRelative("outlineActive"), slot.outline, isOutline: true));
-                sideTabs.Add(MakeSideTab("Fill", slotProp.FindPropertyRelative("fillActive"), slot.fill, isOutline: false));
-                panel.Add(sideTabs);
-                stateTab.Add(panel);
-
-                stateTabs.Add(stateTab);
+                stateTabs.Add(BuildStateTab(slot, slotProp));
             }
 
             return stateTabs;
         }
 
-        private static Tab MakeSideTab(string label, SerializedProperty activeProp, Object embedded, bool isOutline)
+        private Tab BuildStateTab(HighlightTheme.Slot slot, SerializedProperty slotProp)
+        {
+            Tab stateTab = new Tab(slot.state.ToString());
+
+            SerializedProperty outlineActive = slotProp.FindPropertyRelative("outlineActive");
+            SerializedProperty fillActive = slotProp.FindPropertyRelative("fillActive");
+
+            bool outlineOn = outlineActive.boolValue;
+            bool fillOn = fillActive.boolValue;
+
+            VisualElement stateHeader = null;
+            void UpdateDim()
+            {
+                if (stateHeader != null)
+                    stateHeader.style.opacity = (outlineOn || fillOn) ? 1f : 0.4f;
+            }
+
+            VisualElement panel = Panel();
+            TabView sideTabs = new TabView();
+            sideTabs.Add(MakeSideTab("Outline", outlineActive, slot.outline, isOutline: true,
+                v => { outlineOn = v; UpdateDim(); }));
+            sideTabs.Add(MakeSideTab("Fill", fillActive, slot.fill, isOutline: false,
+                v => { fillOn = v; UpdateDim(); }));
+
+            RegisterSideTabView(sideTabs);
+            panel.Add(sideTabs);
+            stateTab.Add(panel);
+
+            // Resolve the state tab's own header once attached, then apply the dim.
+            stateTab.RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                stateHeader = stateTab.Q(className: TabHeaderClass);
+                UpdateDim();
+            });
+
+            return stateTab;
+        }
+
+        // Keeps every state's Outline/Fill sub-tabview on the same side, so switching preview keeps
+        // Fill (or Outline) selected.
+        private void RegisterSideTabView(TabView sideTabs)
+        {
+            sideTabViews.Add(sideTabs);
+            sideTabs.selectedTabIndex = Mathf.Clamp(selectedSide, 0, 1);
+
+            sideTabs.activeTabChanged += (_, __) =>
+            {
+                if (syncingSides)
+                    return;
+
+                selectedSide = sideTabs.selectedTabIndex;
+                syncingSides = true;
+                foreach (TabView other in sideTabViews)
+                    other.selectedTabIndex = selectedSide;
+                syncingSides = false;
+            };
+        }
+
+        private static Tab MakeSideTab(string label, SerializedProperty activeProp, Object embedded, bool isOutline, Action<bool> onActiveChanged)
         {
             Tab tab = new Tab(label);
             tab.style.paddingTop = 6;
@@ -81,7 +135,11 @@ namespace ATCG.Editor.Highlighting
             check.style.marginRight = 4;
             check.style.marginLeft = 2;
             check.BindProperty(activeProp);
-            check.RegisterValueChangedCallback(evt => wrap.SetEnabled(evt.newValue));
+            check.RegisterValueChangedCallback(evt =>
+            {
+                wrap.SetEnabled(evt.newValue);
+                onActiveChanged?.Invoke(evt.newValue);
+            });
             check.RegisterCallback<PointerDownEvent>(e => e.StopPropagation());
             check.RegisterCallback<ClickEvent>(e => e.StopPropagation());
 

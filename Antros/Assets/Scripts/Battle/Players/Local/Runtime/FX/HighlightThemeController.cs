@@ -10,14 +10,16 @@ namespace ATCG.Battle.Players.Local.Runtime.FX
     /// channel; the highest-priority (most recently opened) theme wins, and closing a phase pops
     /// its contribution so the parent's theme resurfaces.
     ///
-    /// The Linework-specific application (writing colours onto the outline settings) is done in
-    /// <see cref="ApplyTheme"/>. Override it in a subclass bound to your outline type — see the
-    /// completion notes for the exact WideOutlineSettings pattern.
+    /// The Linework-specific application is done in <see cref="ApplyTheme"/>, overridden per settings
+    /// type (WideOutlineHighlightController / SurfaceFillHighlightController) to add clones of the
+    /// theme's active entries to the settings and remove the previous ones.
     /// </summary>
     public class HighlightThemeController : LocalPlayerMonoPhaseListener<IHighlightingPhase>
     {
         private Priority<HighlightTheme> activeTheme;
         private int depthCounter;
+        private HighlightTheme lastApplied;
+        private bool hasApplied;
 
         // Lazy: build the Priority on first use (in play mode) rather than in a field initializer,
         // which runs at MonoBehaviour construction — too early, ChanneledPropertiesSettings.Current
@@ -34,22 +36,33 @@ namespace ATCG.Battle.Players.Local.Runtime.FX
                 // close makes the previous one resurface (or null → previews off).
                 ActiveTheme.AddPriority(phase.HighlightChannel, ++depthCounter, phase.HighlightTheme);
 
-            ApplyTheme(ActiveTheme.Value);
+            ApplyIfChanged();
         }
 
         protected override void OnPhaseEnd(IHighlightingPhase phase)
         {
             ActiveTheme.RemovePriority(phase.HighlightChannel);
-            ApplyTheme(ActiveTheme.Value);
+            ApplyIfChanged();
             base.OnPhaseEnd(phase);
         }
 
+        // Every selection phase now flows through here; only re-apply (re-clone) when the winning theme
+        // actually changes, to avoid churn during phases that don't contribute a theme.
+        private void ApplyIfChanged()
+        {
+            HighlightTheme value = ActiveTheme.Value;
+            if (hasApplied && value == lastApplied)
+                return;
+
+            lastApplied = value;
+            hasApplied = true;
+            ApplyTheme(value);
+        }
+
         /// <summary>
-        /// Apply the winning theme to the PREVIEW outline entries only — every other state keeps the
-        /// Linework default look, so only touch outlines mapped to a preview state
-        /// (GameMetrics.Current.GetHighlightLayer(Preview1..4)): set color + SetActive from the theme
-        /// entry, then settings.Changed(). A null <paramref name="theme"/> means no phase is active
-        /// → turn the preview outlines off, leave the rest untouched.
+        /// Apply the winning theme to the Linework settings. Overridden per Linework type (WideOutline /
+        /// SurfaceFill) to add clones of the theme's active entries and remove the previous ones. A null
+        /// <paramref name="theme"/> means no phase is active → remove everything the controller added.
         /// </summary>
         protected virtual void ApplyTheme(HighlightTheme theme)
         {

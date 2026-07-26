@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Linework::Linework.SurfaceFill.SurfaceFillSettings
   injectionPoint: 550
   showInSceneView: 1
-  fills: []
+  fills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

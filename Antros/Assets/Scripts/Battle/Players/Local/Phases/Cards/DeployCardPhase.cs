@@ -63,7 +63,12 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
                 LocalBattlePlayer,
                 cellFilter,
                 patternBuilder,
-                dragPhase);
+                dragPhase)
+            {
+                HighlightTheme = GameMetrics.Current.HighlightSettings != null
+                    ? GameMetrics.Current.HighlightSettings.DeployTheme
+                    : null,
+            };
 
             PhaseResult<EntityAddress[]> result = await selectEntityPhase;
 
