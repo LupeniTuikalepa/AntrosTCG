@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Data.Status
 {
+	[CreateAssetMenu(menuName = "ATCG/Status/Frost/HardeningData")]
 	public class HardeningData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]

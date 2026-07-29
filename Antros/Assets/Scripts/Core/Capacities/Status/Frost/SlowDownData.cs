@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Data.Status
 {
+	[CreateAssetMenu(menuName = "ATCG/Status/Frost/SlowDownData")]
 	public class SlowDownData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]

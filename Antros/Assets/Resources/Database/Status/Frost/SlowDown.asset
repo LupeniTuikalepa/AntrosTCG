@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c679e3ab855426192edc2a901342b69, type: 3}
+  m_Name: SlowDown
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Status.SlowDownData
+  guidText: 2135180b-76da-445d-a14a-0cf94d9a0f05
+  <Name>k__BackingField: SlowDown
+  <Color>k__BackingField: {r: 0.16509432, g: 0.6322803, b: 1, a: 1}
+  <Element>k__BackingField: 7
+  <RuntimeStatus>k__BackingField: {fileID: 4870117505868571047, guid: 769fc59bdd5567f4d87faab4679400a0, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 2db3abe3d916cdc448e8d975eaaff5df, type: 3}
+  <Slow>k__BackingField: 1
+  <NormalDuration>k__BackingField: 2
+  <MaxStack>k__BackingField: 4
