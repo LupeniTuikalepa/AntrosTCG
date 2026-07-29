@@ -25,10 +25,8 @@ namespace ATCG.Battle.PassiveSystem.Passives
             yield return new PassiveCommandListener<DeathCommand>(data, ctx.owner)
             {
                 accepts = IsIceWall,
-                setupContext = (context, commandContext, command) =>
-                {
-                    context.AddProperty(DEAD_ENTITY, command.TargetEntityAddress(commandContext.World));
-                }
+                setupContext = (context, commandContext, command) => 
+                    context.AddProperty(DEAD_ENTITY, command.TargetEntityAddress(commandContext.World))
             };
         }
 
@@ -78,7 +76,7 @@ namespace ATCG.Battle.PassiveSystem.Passives
                             continue;
 
                         if (deadDeployables.Add(memberEntityAddress))
-                            PropagateDeath(neighbor.Coordinate, from,battleGrid, deadDeployables);
+                            PropagateDeath(neighbor.Coordinate, source,battleGrid, deadDeployables);
                     }
                 }
             }
