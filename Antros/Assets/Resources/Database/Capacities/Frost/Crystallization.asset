@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Frost.CrystallizationData
   guidText: c1cf450c-839b-4b67-aca5-57a1c17108a9
   <Cost>k__BackingField: 0
-  <Name>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Name>k__BackingField: Crystallization
+  <Element>k__BackingField: 7
   <Description>k__BackingField: 
   <CastPatterns>k__BackingField:
     <Data>k__BackingField: []
