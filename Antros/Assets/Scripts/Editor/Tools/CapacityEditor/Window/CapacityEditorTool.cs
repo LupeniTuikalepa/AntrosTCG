@@ -105,6 +105,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
             scroll.style.minHeight = 0;
             tab.Add(scroll);
 
+            Button newCapacityButton = new Button(NewCapacityModal.Open) { text = "＋ New Capacity" };
+            newCapacityButton.style.marginBottom = 6;
+            scroll.Add(newCapacityButton);
+
             VisualElement pickerRow = new();
             pickerRow.AddToClassList("ce-row");
             capacityDropdown = new DropdownField("Capacity");

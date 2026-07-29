@@ -39,6 +39,7 @@ namespace ATCG.Editor.Tools.CardManager
 
         public VisualElement BuildUI()
         {
+            EnsureDeckAsset();
             LoadCards();
 
             VisualElement root = new VisualElement { style = { flexGrow = 1, minHeight = 0 } };
@@ -59,8 +60,38 @@ namespace ATCG.Editor.Tools.CardManager
 
         public void OnActivated()
         {
+            EnsureDeckAsset();
             LoadCards();
             Refresh();
+        }
+
+        // GameSettings.Current only returns a throwaway (non-persistent) instance when no asset exists,
+        // which breaks Undo/SetDirty and never saves. Make sure a real asset exists and is preloaded so
+        // DebugStartingDeck.Current resolves to it.
+        private static void EnsureDeckAsset()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:DebugStartingDeck");
+            DebugStartingDeck asset = guids.Length > 0
+                ? AssetDatabase.LoadAssetAtPath<DebugStartingDeck>(AssetDatabase.GUIDToAssetPath(guids[0]))
+                : null;
+
+            if (asset == null)
+            {
+                const string folder = "Assets/Project/Settings";
+                if (!AssetDatabase.IsValidFolder(folder))
+                    AssetDatabase.CreateFolder("Assets/Project", "Settings");
+
+                asset = ScriptableObject.CreateInstance<DebugStartingDeck>();
+                AssetDatabase.CreateAsset(asset, folder + "/DebugStartingDeck.asset");
+                AssetDatabase.SaveAssets();
+            }
+
+            List<UnityEngine.Object> preloaded = PlayerSettings.GetPreloadedAssets().ToList();
+            if (!preloaded.Contains(asset))
+            {
+                preloaded.Add(asset);
+                PlayerSettings.SetPreloadedAssets(preloaded.ToArray());
+            }
         }
 
         public void OnDeactivated()

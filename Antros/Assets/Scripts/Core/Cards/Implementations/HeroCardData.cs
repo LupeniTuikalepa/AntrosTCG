@@ -1,7 +1,5 @@
 ﻿using ATCG.Capacities.Data;
 using ATCG.Enums;
-using ATCG.HexGrids.Patterns;
-using ATCG.HexGrids.Patterns.Building;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,8 +24,8 @@ namespace ATCG.Cards.Implementations
 		[field: SerializeField, BoxGroup("Movement")]
 		public MovementType MovementType { get; private set; }
 
-		[field: SerializeField, BoxGroup("Deploy")]
-		public PatternGroup DeployPatterns { get; private set; }
+		[field: SerializeField, Range(0, 10), BoxGroup("Deploy")]
+		public int DeployRange { get; private set; } = 1;
 
 		protected override void Reset()
 		{
@@ -36,8 +34,7 @@ namespace ATCG.Cards.Implementations
 			Strength = 1;
 			Defense = 1;
 			Speed = 1;
-
-			DeployPatterns = new PatternGroup(new FloodFillPatternData(1));
+			DeployRange = 1;
 		}
 	}
 }

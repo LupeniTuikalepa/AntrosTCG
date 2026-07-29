@@ -15,15 +15,15 @@ MonoBehaviour:
   guidText: 27532d1c-c26f-4d58-86aa-905fb599cd3a
   <Title>k__BackingField: 
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
-    rid: 6882996213709799453
+    rid: 6882996230390284303
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 1
-  <Strength>k__BackingField: 1
-  <Defense>k__BackingField: 1
-  <Speed>k__BackingField: 1
+  <Health>k__BackingField: 15
+  <Strength>k__BackingField: 3
+  <Defense>k__BackingField: 3
+  <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployPatterns>k__BackingField:
     <Data>k__BackingField:
@@ -31,10 +31,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799453
-      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
-      data:
-        <Capacities>k__BackingField: []
     - rid: 6882996213709799454
       type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:
@@ -44,3 +40,7 @@ MonoBehaviour:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
         <Distance>k__BackingField: 1
+    - rid: 6882996230390284303
+      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
+      data:
+        <Capacities>k__BackingField: []

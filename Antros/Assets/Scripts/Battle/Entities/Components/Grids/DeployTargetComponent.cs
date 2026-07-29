@@ -1,15 +1,12 @@
-using System.ComponentModel;
-using ATCG.HexGrids.Patterns.Building;
-
 namespace ATCG.Battle.Entities.Components
 {
 	public struct DeployTargetComponent : IEntityComponent
 	{
-		public readonly PatternGroup deployPattern;
+		public readonly int deployRange;
 
-		public DeployTargetComponent(PatternGroup deployPattern)
+		public DeployTargetComponent(int deployRange)
 		{
-			this.deployPattern = deployPattern;
+			this.deployRange = deployRange;
 		}
 	}
 }

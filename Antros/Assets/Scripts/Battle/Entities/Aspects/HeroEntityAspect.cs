@@ -60,7 +60,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.Capacities.ToArray());
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
-            componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);
+            componentsFactory.DeployTargetComponent = new DeployTargetComponent(setup.card.DeployRange);
             componentsFactory.StatusReceiver = new StatusReceiver(64);
 
             var passiveContainerComponent = new PassiveContainerComponent(8);

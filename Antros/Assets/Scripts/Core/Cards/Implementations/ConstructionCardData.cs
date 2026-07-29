@@ -1,5 +1,4 @@
-﻿using ATCG.HexGrids.Patterns.Building;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ATCG.Cards.Implementations
@@ -16,9 +15,9 @@ namespace ATCG.Cards.Implementations
         [field: SerializeField, Range(1, 10), BoxGroup("Construction")]
         public int Defense { get; private set; } = 1;
         
-        [field: SerializeField, BoxGroup("Deploy")]
-        public PatternGroup DeployPatterns { get; private set; }
-        
+        [field: SerializeField, Range(0, 10), BoxGroup("Deploy")]
+        public int DeployRange { get; private set; } = 1;
+
         [field: SerializeField, BoxGroup("Deploy")]
         public GameObject Prefab { get; private set; }
     }

@@ -12,7 +12,7 @@ namespace ATCG.Battle.Cards
         public int MaxHealth => Data.Health;
         public int DeathCost => Data.DeathCost;
         public int Defense => Data.Defense;
-        public PatternGroup DeployPatterns => Data.DeployPatterns;
+        public int DeployRange => Data.DeployRange;
         public GameObject Prefab => Data.Prefab;
 
         public ConstructionBattleCard(ConstructionCardData data, IBattlePlayer player) : base(data, player)

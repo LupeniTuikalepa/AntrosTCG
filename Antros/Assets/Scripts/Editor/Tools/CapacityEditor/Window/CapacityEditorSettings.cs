@@ -15,6 +15,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
         [Tooltip("Prefab template new cutscene stages are created from (as prefab variants).")]
         public GameObject directorTemplate;
 
+        [Tooltip("UMotion template asset. When a new capacity is created, this is copied into the " +
+                 "capacity's folder as {Name}Motion so each capacity starts from the same UMotion setup.")]
+        public Object umotionTemplate;
+
         [Tooltip("Test environment instantiated inside the cutscene edit stage: hero prefab " +
                  "(for animations), camera with CinemachineBrain, and the DebugCutsceneRig for " +
                  "edit-mode binding. Acts as the reusable 'scene' the cutscene is authored against.")]
