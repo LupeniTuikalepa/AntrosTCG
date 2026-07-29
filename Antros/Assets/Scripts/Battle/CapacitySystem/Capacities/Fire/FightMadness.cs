@@ -29,14 +29,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
 		{
-			Debug.Log($"DeployRage,{data.BerserkData}", data);
-
-			// Must go through StatusApplyCommand (not IStatusContainer.Apply directly):
-			// running it is what dispatches to RuntimeEntity's StatusApplyCommand listener,
-			// which instantiates the status's RuntimeStatus prefab and fires
-			// IRuntimeStatusComponent.OnApplyStatus — i.e. the VFX. Calling container.Apply
-			// straight away only does the ECS-side status/controller/signature bookkeeping,
-			// with nothing spawning the visual side.
 			var statusCommand = new StatusApplyCommand(ctx.Caster, data.BerserkData);
 			statusCommand.Run(ctx.BattlePhase);
 		}

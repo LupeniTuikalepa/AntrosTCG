@@ -26,6 +26,9 @@ namespace ATCG.Metrics
             [SerializeField, TableList(AlwaysExpanded = true)]
             private Kvp[] pairings;
 
+            public TValue this[TKey key] => TryGetValueForKey(key, out var value) ? value : default;
+
+            public TValue GetValueForKey(TKey key) => this[key];
             public bool TryGetValueForKey(TKey key, out TValue value)
             {
                 using (DictionaryPool<TKey, TValue>.Get(out var dic))
@@ -53,8 +56,6 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("Game"), PropertyRange(0, nameof(GridRadius))]
         public int BasicAttackRange { get; private set; } = 1;
-        [field: SerializeField, BoxGroup("Game")]
-        public DualPairing<CardRarity, int> CardRarityDeathCost { get; private set; }
         [field: SerializeField, BoxGroup("Game"), Range(0, 1)]
         public float QTESuccessRange { get; private set; } = 0.25f;
 
@@ -65,7 +66,8 @@ namespace ATCG.Metrics
 
         [field: SerializeField, BoxGroup("Game/Costs")]
         public DualPairing<CardRarity, int> CardRarityInvocationCost { get; private set; }
-
+        [field: SerializeField, BoxGroup("Game/Costs")]
+        public DualPairing<CardRarity, int> CardRarityDeathCost { get; private set; }
 
         [field: SerializeField, BoxGroup("RuntimeBattleGrid")]
         public DualPairing<int, int> PlayerBorder { get; private set; }
