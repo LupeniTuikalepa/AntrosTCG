@@ -19,14 +19,7 @@ namespace ATCG.Cards
             value :
             0;
 
-        public IEnumerable<CapacityData> CapacitiesData
-        {
-            get
-            {
-                foreach (var capacity in Data.Capacities)
-                    yield return capacity;
-            }
-        }
+        public IEnumerable<CapacityData> Capacities => Data.Capacities.GetCapacities();
 
         public T Data { get; }
 

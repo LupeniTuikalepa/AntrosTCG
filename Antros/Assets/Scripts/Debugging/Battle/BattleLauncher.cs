@@ -24,7 +24,9 @@ namespace ATCG.Debugging.Debugging.Gameplay
                     new() { name = "Player 2" }
                 };
 
-                GameCardData[] allCards = GameController.GameDatabase.GetAll<GameCardData>().ToArray();
+                GameCardData[] allCards = DebugStartingDeck.Current
+                    .Filter(GameController.GameDatabase.GetAll<GameCardData>())
+                    .ToArray();
                 IBattlePlayerProfile[] localPlayerProfiles = new IBattlePlayerProfile[players.Length];
 
                 for (int i = 0; i < players.Length; i++)

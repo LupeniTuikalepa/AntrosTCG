@@ -11,7 +11,7 @@ namespace ATCG.Cards
     public interface IGameCard : ICard
     {
         GameCardData CardData { get; }
-        IEnumerable<CapacityData> CapacitiesData { get; }
+        IEnumerable<CapacityData> Capacities { get; }
 
         string Title { get; }
         string Description { get; }

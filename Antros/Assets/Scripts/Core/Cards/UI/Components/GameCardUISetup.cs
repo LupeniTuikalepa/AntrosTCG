@@ -19,7 +19,7 @@ namespace ATCG.Cards.UI.Components
             base.Connect(current);
             title.text = Current.Title;
 
-            capacities.Connect(current.CapacitiesData);
+            capacities.Connect(current.Capacities);
         }
 
         public override void Disconnect(IGameCard current)

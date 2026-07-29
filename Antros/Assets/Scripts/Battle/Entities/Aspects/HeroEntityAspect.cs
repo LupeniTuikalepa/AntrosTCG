@@ -57,7 +57,7 @@ namespace ATCG.Battle.Entities.Aspects
                 setup.card.MovementType.ToAgentMovementType(),
                 new CellOccupancyRule());
 
-            componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.CapacitiesData.ToArray());
+            componentsFactory.CapacityCasterComponent = new CapacityCasterComponent(setup.card.Capacities.ToArray());
             componentsFactory.BasicAttackerComponent = new BasicAttackerComponent(setup.card.Strength);
             componentsFactory.GridMemberComponent = new GridMemberComponent(setup.grid, setup.coordinates);
             componentsFactory.DeployTargetComponent = new DeployTargetComponent( setup.card.DeployPatterns);

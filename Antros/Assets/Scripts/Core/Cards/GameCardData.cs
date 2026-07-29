@@ -23,10 +23,21 @@ namespace ATCG.Cards
         [field: SerializeField, BoxGroup("Common")]
         public CardRarity Rarity { get; private set; }
 
-        [field: SerializeReference, BoxGroup("Common")]
-        public CapacityData[] Capacities { get; private set; }
+        [field: SerializeReference, BoxGroup("Common"), InlineProperty, HideLabel]
+        public ICapacityDataProvider Capacities { get; private set; }
 
-        [field: SerializeReference, BoxGroup("Common")]
+        [field: SerializeReference, BoxGroup("Common"), ListDrawerSettings(DefaultExpandedState = true, ShowFoldout = false)]
         public PassiveData[] Passives { get; private set; }
+
+        protected override void Reset()
+        {
+            base.Reset();
+            Capacities = new DefaultCapacityProvider();
+        }
+
+#if UNITY_EDITOR
+        public void EditorSetRarity(CardRarity value) => Rarity = value;
+        public void EditorSetElement(Element value) => Element = value;
+#endif
     }
 }
