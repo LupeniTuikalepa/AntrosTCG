@@ -103,7 +103,7 @@ namespace ATCG.Battle.Players.Local.Phases.Cards
                     continue;
 
                 DeployTargetComponent component = componentRef.GetValue();
-                patternBuilder.With(component.deployPattern, gridMember.coordinates);
+                patternBuilder.With(new SpreadPattern(component.deployRange), gridMember.coordinates);
             }
         }
     }

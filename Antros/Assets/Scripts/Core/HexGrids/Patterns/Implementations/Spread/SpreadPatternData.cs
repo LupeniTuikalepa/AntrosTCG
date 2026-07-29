@@ -9,5 +9,10 @@ namespace ATCG.HexGrids.Patterns
     {
         [field: SerializeField, BoxGroup("Specific"), Min(0)]
         public int Distance { get; private set; }
+
+        public SpreadPatternData(int distance)
+        {
+            Distance = distance;
+        }
     }
 }

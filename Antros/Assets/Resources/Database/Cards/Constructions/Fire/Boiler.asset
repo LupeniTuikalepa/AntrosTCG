@@ -17,7 +17,8 @@ MonoBehaviour:
   <Description>k__BackingField: 
   <Element>k__BackingField: 1
   <Rarity>k__BackingField: 0
-  <Capacities>k__BackingField: []
+  <Capacities>k__BackingField:
+    rid: 6882996230390284334
   <Passives>k__BackingField: []
   <Health>k__BackingField: 5
   <DeathCost>k__BackingField: 1
@@ -29,6 +30,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 6882996230390284334
+      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
+      data:
+        <Capacities>k__BackingField: []
     - rid: 7630468266232643740
       type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:

@@ -15,23 +15,22 @@ MonoBehaviour:
   guidText: 0e9a6c40-63ff-4353-8d39-0c251b11918b
   <Title>k__BackingField: 
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
-  <Rarity>k__BackingField: 0
+  <Element>k__BackingField: 9
+  <Rarity>k__BackingField: 3
   <Capacities>k__BackingField:
-    rid: 6882996212461993992
+    rid: 6882996230390284295
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 3
-  <DeathCost>k__BackingField: 1
-  <Strength>k__BackingField: 1
-  <Defense>k__BackingField: 1
-  <Speed>k__BackingField: 1
+  <Health>k__BackingField: 15
+  <Strength>k__BackingField: 3
+  <Defense>k__BackingField: 3
+  <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployPatterns>k__BackingField:
     <Data>k__BackingField: []
   references:
     version: 2
     RefIds:
-    - rid: 6882996212461993992
-      type: {class: ElementCapacityProvider, ns: ATCG, asm: ATCG.Core}
+    - rid: 6882996230390284295
+      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Elements>k__BackingField: 0100000002000000030000000400000005000000060000000700000008000000
+        <Capacities>k__BackingField: []
