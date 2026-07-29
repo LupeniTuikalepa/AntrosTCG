@@ -13,20 +13,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Status
         {
             components = GetComponentsInChildren<IRuntimeStatusComponent>();
         }
-
-        private void OnEnable()
-        {
-
-        }
-
-        private void OnDisable()
-        {
-            for (int i = 0; i < components.Length; i++)
-            {
-                var component = components[i];
-            }
-        }
-
+        
         public void Apply(RuntimeStatusContext context)
         {
             for (int i = 0; i < components.Length; i++)

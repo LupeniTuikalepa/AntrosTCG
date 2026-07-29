@@ -1,4 +1,5 @@
-﻿using ATCG.Databases;
+﻿using ATCG.Capacities;
+using ATCG.Databases;
 using ATCG.Enums;
 using Helteix.Tools.DataMapping;
 using Sirenix.OdinInspector;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace ATCG.Passives.Datas
 {
-    public abstract class PassiveData : GameDatabaseObject, IData
+    public abstract class PassiveData : GameDatabaseObject, IData, IAbility
     {
         [field: SerializeField, BoxGroup("Base")]
         public string Name { get; private set; }

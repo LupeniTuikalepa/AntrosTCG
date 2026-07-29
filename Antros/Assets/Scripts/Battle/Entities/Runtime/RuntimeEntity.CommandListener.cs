@@ -6,6 +6,7 @@ using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Grids.Runtime;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids.Utility;
 using ATCG.HexGrids;
@@ -19,11 +20,14 @@ namespace ATCG.Battle.Entities.Runtime
 		IEntityCommandDirector<DamageCommand>,
 		IEntityCommandDirector<MoveCommand>,
 		IEntityCommandDirector<FallCommand>,
+		IEntityCommandDirector<PushbackCommand>,
 		IEntityCommandDirector<BasicAttackCommand>,
 		IEntityCommandDirector<StatusApplyCommand>,
 		IEntityCommandDirector<StatusTickCommand>,
 		IEntityCommandDirector<StatusRemoveCommand>,
-		IEntityCommandDirector<PushbackCommand>
+		IEntityCommandDirector<ApplyPassiveCommand>,
+		IEntityCommandDirector<TickPassiveCommand>,
+		IEntityCommandDirector<RemovePassiveCommand>
 
 	{
 		public Entity Entity => Address.entity;
@@ -213,6 +217,21 @@ namespace ATCG.Battle.Entities.Runtime
 			removeStatus.Remove(runtimeContext);
 			Destroy(removeStatus.gameObject);
 			statusDatas.Remove(statusData);
+		}
+
+		async Awaitable ICommandDirector<ApplyPassiveCommand>.Play(CommandDirectorState state, CommandContext context, ApplyPassiveCommand command)
+		{
+			
+		}
+
+		async Awaitable ICommandDirector<TickPassiveCommand>.Play(CommandDirectorState state, CommandContext context, TickPassiveCommand command)
+		{
+			
+		}
+
+		async Awaitable ICommandDirector<RemovePassiveCommand>.Play(CommandDirectorState state, CommandContext context, RemovePassiveCommand command)
+		{
+			
 		}
 
 		public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)

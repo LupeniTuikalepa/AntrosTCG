@@ -12,7 +12,7 @@ using UnityEngine.Timeline;
 
 namespace ATCG.Capacities
 {
-    public abstract class CapacityData : GameDatabaseObject, IData
+    public abstract class CapacityData : GameDatabaseObject, IData, IAbility
     {
         [field: SerializeField, PropertyRange(0, 10), BoxGroup("Base")]
         public int Cost { get; private set; }
