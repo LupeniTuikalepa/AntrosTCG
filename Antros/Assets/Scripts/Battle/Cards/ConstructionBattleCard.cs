@@ -14,6 +14,7 @@ namespace ATCG.Battle.Cards
         public int Defense => Data.Defense;
         public int DeployRange => Data.DeployRange;
         public GameObject Prefab => Data.Prefab;
+        public int PassiveRange => Data.PassiveRange;
 
         public ConstructionBattleCard(ConstructionCardData data, IBattlePlayer player) : base(data, player)
         {

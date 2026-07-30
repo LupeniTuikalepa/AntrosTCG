@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 258da64f506c42f4a5aaf2a68b3b3a85, type: 3}
-  m_Name: Boiler
-  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Fire.BoilerData
-  guidText: fa6a73f9-bf0d-4b6f-b1f3-86e6aea261c0
-  <Title>k__BackingField: "Chaudi\xE8re"
+  m_Name: IceCrusher
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.ConstructionCardData
+  guidText: a727f7f2-17cb-4d7c-8290-438faec92188
+  <Title>k__BackingField: "Broyeur \xE0 glace"
   <Description>k__BackingField: 
-  <Element>k__BackingField: 1
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
-    rid: 7630468447055905057
+    rid: 7630468447055905059
   <Passives>k__BackingField: []
   <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <Defense>k__BackingField: 1
   <PassiveRange>k__BackingField: 3
   <DeployRange>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 6370457201449410584, guid: 6d77134fbe1f975439fe2ee5e11a066c, type: 3}
+  <Prefab>k__BackingField: {fileID: 1079307176317039666, guid: 41e9d01dee02c914b81c70cec682e18e, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 7630468447055905057
+    - rid: 7630468447055905059
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
         <Capacities>k__BackingField: []

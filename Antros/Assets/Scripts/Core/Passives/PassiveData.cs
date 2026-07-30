@@ -23,6 +23,5 @@ namespace ATCG.Passives.Datas
         
         [field: SerializeField, BoxGroup("Runtime")]
         public GameObject RuntimePassive { get; private set; }
-
     }
 }
