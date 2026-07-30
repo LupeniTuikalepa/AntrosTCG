@@ -45,8 +45,41 @@
 }
 
 .ce-status {
-    margin-bottom: 6px;
+    margin-bottom: 2px;
     color: var(--atcg-text-muted);
+    white-space: normal;
+}
+
+.ce-header {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 8px;
+}
+
+.ce-header-bar {
+    margin-bottom: 4px;
+}
+
+.ce-halfrow {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ce-col {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+}
+
+/* Both panels fill their column so, with the row stretching, Steps and Target Tags
+   share the height of the taller one. */
+.ce-col .ce-steps-panel {
+    flex-grow: 1;
+}
+
+.ce-col--left {
+    margin-right: 8px;
 }
 
 .ce-steps-panel, .ce-tracks-panel {

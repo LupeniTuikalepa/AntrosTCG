@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using ATCG.Capacities;
+using ATCG.Editor.Tools.DatabaseBrowser;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -38,17 +39,23 @@ namespace ATCG.Editor.Tools.CapacityEditor
             private set => currentlyEdited = value;
         }
 
-        public string DisplayName => "Capacity Editor";
+        public string DisplayName => "Capacities";
         public string Icon => "⏱";
         public int Order => 50;
 
         private CapacityData selected;
 
         // Tabs
-        private VisualElement authorTab;
+        private enum Tab { Edition, Assets, Settings }
+
+        private VisualElement editionTab;
+        private VisualElement assetsTab;
         private VisualElement settingsTab;
-        private Button authorTabButton;
+        private Button editionTabButton;
+        private Button assetsTabButton;
         private Button settingsTabButton;
+
+        private DatabaseBrowserView<CapacityData> assetsView;
 
         // Author widgets
         private DropdownField capacityDropdown;
@@ -77,20 +84,25 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             VisualElement tabBar = new();
             tabBar.AddToClassList("ce-tabbar");
-            authorTabButton = new Button(() => ShowTab(true)) { text = "Author" };
-            settingsTabButton = new Button(() => ShowTab(false)) { text = "Settings" };
-            authorTabButton.AddToClassList("ce-tab-btn");
+            editionTabButton = new Button(() => ShowTab(Tab.Edition)) { text = "Edition" };
+            assetsTabButton = new Button(() => ShowTab(Tab.Assets)) { text = "Assets" };
+            settingsTabButton = new Button(() => ShowTab(Tab.Settings)) { text = "Settings" };
+            editionTabButton.AddToClassList("ce-tab-btn");
+            assetsTabButton.AddToClassList("ce-tab-btn");
             settingsTabButton.AddToClassList("ce-tab-btn");
-            tabBar.Add(authorTabButton);
+            tabBar.Add(editionTabButton);
+            tabBar.Add(assetsTabButton);
             tabBar.Add(settingsTabButton);
             root.Add(tabBar);
 
-            authorTab = BuildAuthorTab();
+            editionTab = BuildAuthorTab();
+            assetsTab = BuildAssetsTab();
             settingsTab = BuildSettingsTab();
-            root.Add(authorTab);
+            root.Add(editionTab);
+            root.Add(assetsTab);
             root.Add(settingsTab);
 
-            ShowTab(true);
+            ShowTab(Tab.Edition);
             return root;
         }
 
@@ -116,51 +128,69 @@ namespace ATCG.Editor.Tools.CapacityEditor
             scroll.style.minHeight = 0;
             tab.Add(scroll);
 
-            Button newCapacityButton = new Button(NewCapacityModal.Open) { text = "＋ New Capacity" };
-            newCapacityButton.style.marginBottom = 6;
-            scroll.Add(newCapacityButton);
+            // --- Header: selection + grouped quick actions -------------------
+            VisualElement header = new();
+            header.AddToClassList("ce-header");
 
-            VisualElement pickerRow = new();
-            pickerRow.AddToClassList("ce-row");
-            capacityDropdown = new DropdownField("Capacity");
+            Toolbar selectionBar = new();
+            selectionBar.AddToClassList("ce-header-bar");
+            capacityDropdown = new DropdownField();
             capacityDropdown.style.flexGrow = 1;
             capacityDropdown.RegisterValueChangedCallback(OnCapacityDropdownChanged);
-            pickerRow.Add(capacityDropdown);
-            pickerRow.Add(new Button(RefreshCatalog) { text = "↻" });
-            pickerRow.Add(new Button(PingSelected) { text = "Ping" });
-            scroll.Add(pickerRow);
+            selectionBar.Add(capacityDropdown);
+            selectionBar.Add(new ToolbarButton(RefreshCatalog) { text = "↻", tooltip = "Refresh catalog" });
+            selectionBar.Add(new ToolbarButton(PingSelected) { text = "Ping", tooltip = "Ping the selected asset" });
+            selectionBar.Add(new ToolbarButton(NewCapacityModal.Open) { text = "＋ New", tooltip = "Create a new capacity" });
+            header.Add(selectionBar);
+
+            Toolbar actionsBar = new();
+            actionsBar.AddToClassList("ce-header-bar");
+            actionsBar.Add(new ToolbarButton(OpenDataScript) { text = "Open Data Script", tooltip = "Open the Data script" });
+            actionsBar.Add(new ToolbarButton(OpenLogicScript) { text = "Open Battle Script", tooltip = "Open the runtime battle/logic script" });
+            actionsBar.Add(new ToolbarSpacer());
+            buildStageButton = new ToolbarButton(BuildStage) { text = "Create Stage", tooltip = "Create the cutscene stage" };
+            buildStageButton.style.display = DisplayStyle.None;
+            actionsBar.Add(buildStageButton);
+            actionsBar.Add(new ToolbarButton(EditCutscene) { text = "Edit Cutscene", tooltip = "Open the cutscene stage" });
+            actionsBar.Add(new ToolbarButton(RunScan) { text = "Rescan", tooltip = "Rescan the timeline for step/QTE markers" });
+            header.Add(actionsBar);
 
             directorStateLabel = new Label();
             directorStateLabel.AddToClassList("ce-status");
-            scroll.Add(directorStateLabel);
-
-            buildStageButton = new Button(BuildStage) { text = "Create Cutscene Stage" };
-            buildStageButton.style.display = DisplayStyle.None;
-            scroll.Add(buildStageButton);
-
-            VisualElement sceneRow = new();
-            sceneRow.AddToClassList("ce-row");
-            sceneRow.Add(new Button(EditCutscene) { text = "Edit Cutscene" });
-            sceneRow.Add(new Button(RunScan) { text = "Rescan" });
-            scroll.Add(sceneRow);
+            header.Add(directorStateLabel);
 
             statusLabel = new Label();
             statusLabel.AddToClassList("ce-status");
-            scroll.Add(statusLabel);
+            header.Add(statusLabel);
 
+            scroll.Add(header);
+
+            // --- Steps + Target Tags side by side (half width each) ----------
+            VisualElement halfRow = new();
+            halfRow.AddToClassList("ce-halfrow");
+
+            VisualElement stepsCol = new();
+            stepsCol.AddToClassList("ce-col");
+            stepsCol.AddToClassList("ce-col--left");
             Label stepsTitle = new("Steps");
             stepsTitle.AddToClassList("ce-section-title");
-            scroll.Add(stepsTitle);
+            stepsCol.Add(stepsTitle);
             stepsPanel = new VisualElement();
             stepsPanel.AddToClassList("ce-steps-panel");
-            scroll.Add(stepsPanel);
+            stepsCol.Add(stepsPanel);
+            halfRow.Add(stepsCol);
 
+            VisualElement tagsCol = new();
+            tagsCol.AddToClassList("ce-col");
             Label tagsTitle = new("Target Tags");
             tagsTitle.AddToClassList("ce-section-title");
-            scroll.Add(tagsTitle);
+            tagsCol.Add(tagsTitle);
             tagsPanel = new VisualElement();
             tagsPanel.AddToClassList("ce-steps-panel");
-            scroll.Add(tagsPanel);
+            tagsCol.Add(tagsPanel);
+            halfRow.Add(tagsCol);
+
+            scroll.Add(halfRow);
 
             Label tracksTitle = new("Auto-bindable Tracks");
             tracksTitle.AddToClassList("ce-section-title");
@@ -182,6 +212,59 @@ namespace ATCG.Editor.Tools.CapacityEditor
             scroll.Add(warningsBox);
 
             return tab;
+        }
+
+        // ---- Assets tab ------------------------------------------------------
+
+        private VisualElement BuildAssetsTab()
+        {
+            VisualElement tab = new();
+            tab.AddToClassList("ce-tab");
+            tab.style.flexGrow = 1;
+            tab.style.minHeight = 0;
+
+            assetsView = new DatabaseBrowserView<CapacityData>(
+                "Assets/Resources/Database/Capacities", "Capacities", SelectCapacity);
+
+            VisualElement view = assetsView.Build();
+            view.style.flexGrow = 1;
+            view.style.minHeight = 0;
+            tab.Add(view);
+            return tab;
+        }
+
+        // Called by the Assets tab's Edit button: select the capacity and jump to Edition.
+        private void SelectCapacity(CapacityData capacity)
+        {
+            if (capacity == null)
+                return;
+
+            string label = null;
+            foreach (KeyValuePair<string, CapacityData> kv in capacitiesByLabel)
+            {
+                if (kv.Value == capacity)
+                {
+                    label = kv.Key;
+                    break;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(label))
+            {
+                // Setting the value fires OnCapacityDropdownChanged, which selects, persists
+                // and rebuilds the Edition panels.
+                capacityDropdown.value = label;
+            }
+            else
+            {
+                // Not in the catalog yet (e.g. just created): select it directly.
+                selected = capacity;
+                CurrentlyEdited = capacity;
+                PersistSelected();
+                OnSelectionChanged();
+            }
+
+            ShowTab(Tab.Edition);
         }
 
         private VisualElement BuildSettingsTab()
@@ -261,12 +344,18 @@ namespace ATCG.Editor.Tools.CapacityEditor
             return tab;
         }
 
-        private void ShowTab(bool author)
+        private void ShowTab(Tab tab)
         {
-            authorTab.style.display = author ? DisplayStyle.Flex : DisplayStyle.None;
-            settingsTab.style.display = author ? DisplayStyle.None : DisplayStyle.Flex;
-            authorTabButton.EnableInClassList("ce-tab-btn--active", author);
-            settingsTabButton.EnableInClassList("ce-tab-btn--active", !author);
+            editionTab.style.display = tab == Tab.Edition ? DisplayStyle.Flex : DisplayStyle.None;
+            assetsTab.style.display = tab == Tab.Assets ? DisplayStyle.Flex : DisplayStyle.None;
+            settingsTab.style.display = tab == Tab.Settings ? DisplayStyle.Flex : DisplayStyle.None;
+            editionTabButton.EnableInClassList("ce-tab-btn--active", tab == Tab.Edition);
+            assetsTabButton.EnableInClassList("ce-tab-btn--active", tab == Tab.Assets);
+            settingsTabButton.EnableInClassList("ce-tab-btn--active", tab == Tab.Settings);
+
+            // Refresh the asset list when its tab is shown, so newly created capacities appear.
+            if (tab == Tab.Assets)
+                assetsView?.Reload();
         }
 
         // ---- lifecycle -------------------------------------------------------
@@ -426,6 +515,43 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             CapacityCutsceneStage.Open(selected);
             statusLabel.text = $"Editing '{selected.name}' cutscene in an isolated stage.";
+        }
+
+        // ---- open scripts ----------------------------------------------------
+
+        private void OpenDataScript()
+        {
+            if (selected == null)
+            {
+                statusLabel.text = "Select a capacity first.";
+                return;
+            }
+            OpenScriptAt(CapacityStepEditor.LocateDataScript(selected), "Data");
+        }
+
+        private void OpenLogicScript()
+        {
+            if (selected == null)
+            {
+                statusLabel.text = "Select a capacity first.";
+                return;
+            }
+            OpenScriptAt(CapacityStepEditor.LocateLogicScript(selected), "runtime logic");
+        }
+
+        private void OpenScriptAt(string path, string label)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                statusLabel.text = $"Couldn't locate the {label} script.";
+                return;
+            }
+
+            MonoScript script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+            if (script != null)
+                AssetDatabase.OpenAsset(script);
+            else
+                statusLabel.text = $"Couldn't open the {label} script at {path}.";
         }
 
         // ---- steps / QTE counts ---------------------------------------------

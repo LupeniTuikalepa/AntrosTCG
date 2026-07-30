@@ -48,3 +48,11 @@
     --atcg-text-soft: rgb(190, 190, 200);
     --atcg-text-muted: rgb(138, 138, 146);
 }
+
+/* Shared list surface. Every ATCG tool hosting a MultiColumnListView / ListView adds
+   this class so the rows sit on a panel colour (never the raw window background) and
+   all the tool windows stay visually consistent with each other. */
+.atcg-list {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 4px;
+}

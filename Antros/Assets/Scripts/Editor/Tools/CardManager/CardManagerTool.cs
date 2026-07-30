@@ -111,6 +111,8 @@ namespace ATCG.Editor.Tools.CardManager
             toolbar.Add(searchField);
 
             toolbar.Add(new ToolbarButton(() => { LoadCards(); Refresh(); }) { text = "Refresh" });
+            toolbar.Add(new ToolbarButton(() => SetAll(true)) { text = "Enable all" });
+            toolbar.Add(new ToolbarButton(() => SetAll(false)) { text = "Disable all" });
             return toolbar;
         }
 
@@ -123,8 +125,6 @@ namespace ATCG.Editor.Tools.CardManager
 
             countLabel = new Label { style = { flexGrow = 1 } };
             actions.Add(countLabel);
-            actions.Add(new Button(() => SetAll(true)) { text = "Enable filtered" });
-            actions.Add(new Button(() => SetAll(false)) { text = "Disable filtered" });
             return actions;
         }
 
@@ -138,6 +138,7 @@ namespace ATCG.Editor.Tools.CardManager
                 sortingMode = ColumnSortingMode.Custom,
                 style = { flexGrow = 1, minHeight = 0 },
             };
+            list.AddToClassList("atcg-list");
 
             list.columns.Add(new Column
             {
