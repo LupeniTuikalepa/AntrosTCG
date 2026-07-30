@@ -25,7 +25,7 @@ MonoBehaviour:
   <Range>k__BackingField: 4
   <Damage>k__BackingField: 3
   <EarthQuakeStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: EarthQuake
     <QTEsCount>k__BackingField: 0
   references:
     version: 2

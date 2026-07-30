@@ -24,7 +24,7 @@ MonoBehaviour:
   <Status>k__BackingField: {fileID: 11400000, guid: fd07d35f17fbe52438b25bb92ec68abd, type: 2}
   <Range>k__BackingField: 1
   <ShellStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Shell
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
