@@ -9,18 +9,21 @@ using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
-    [CheatGroup("Entities")]
-    public class KillEntityCheat : ICheat
+    [CheatGroup("Health")]
+    public class DamageCheat : ICheat
     {
-        public string Name => "Kill Entity";
-        public string Description => "Kill the picked entity.";
+        public string Name => "Damage";
+        public string Description => "Deal damage to the picked entity.";
+
+        [CheatParam("Amount", Min = 0, Max = 100)]
+        public int amount = 10;
 
         [CheatTarget(nameof(Targets), Label = "Target")]
         public EntityAddress target;
 
         private readonly LocalBattlePlayer player;
 
-        public KillEntityCheat(LocalBattlePlayer player) => this.player = player;
+        public DamageCheat(LocalBattlePlayer player) => this.player = player;
 
         private IEnumerable<CheatTargetOption> Targets()
             => CheatUtilities.EnumerateTargets<HealthComponent>(player);
@@ -31,7 +34,7 @@ namespace ATCG.Debugging.Debugging.Battle
             if (!target.IsValid)
                 return;
 
-            new DeathCommand(target).Run(player.BattlePhase);
+            new DamageCommand(amount, target).Run(player.BattlePhase);
         }
     }
 }

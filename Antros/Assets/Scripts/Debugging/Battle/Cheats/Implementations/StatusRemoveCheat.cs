@@ -1,52 +1,46 @@
-using System.Linq;
+using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local;
 using ATCG.Capacities.Data.Status;
-using ATCG.Debugging.Debugging.Battle.ChoicePhase;
-using Cheats.Core;
-using Helteix.Tools.Phases;
+using ATCG.Debugging.Cheats;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Debugging.Debugging.Battle.Cheats.Implementations
 {
-	public class StatusRemoveCheat : ICheat
-	{
-		public string Name { get; }
-		public string Description { get; }
+    [CheatGroup("Status")]
+    public class StatusRemoveCheat : ICheat
+    {
+        public string Name => "Remove Status";
+        public string Description => "Remove a status from the picked entity (all statuses if none is set).";
 
-		private readonly LocalBattlePlayer player;
+        [CheatTarget(nameof(Targets), Label = "Target")]
+        public EntityAddress target;
 
-		public StatusRemoveCheat(LocalBattlePlayer player)
-		{
-			Name = " Remove Status ";
-			Description = " Bless the infected ";
-			this.player = player;
-		}
+        [CheatParam("Status (optional)")]
+        public StatusData status;
 
-		public async Awaitable Execute(CheatContext context)
-		{
-			using (DictionaryPool<string, EntityAddress>.Get(out var bucket))
-			{
-				CheatUtilities.FillBucket<HealthComponent>(bucket, player);
+        private readonly LocalBattlePlayer player;
 
-				CheatsChoicePhase cheatsChoicePhase = new CheatsChoicePhase(player, bucket.Keys.ToList());
-				string result = await cheatsChoicePhase.Run();
+        public StatusRemoveCheat(LocalBattlePlayer player) => this.player = player;
 
-				if (bucket.TryGetValue(result, out EntityAddress entity))
-				{
-					StatusData[] datas = Resources.LoadAll<StatusData>("Database/Status");
-					foreach (StatusData data in datas)
-					{
-						StatusRemoveCommand command = new StatusRemoveCommand(entity, data);
-						command.Run(player.BattlePhase);
-						Debug.Log($"{entity.entity.id} take a {command}");
-					}
-				}
-			}
-		}
-	}
+        private IEnumerable<CheatTargetOption> Targets()
+            => CheatUtilities.EnumerateTargets<HealthComponent>(player);
+
+        public async Awaitable Execute(CheatContext context)
+        {
+            await Awaitable.MainThreadAsync();
+            if (!target.IsValid)
+                return;
+
+            StatusData[] datas = status != null
+                ? new[] { status }
+                : Resources.LoadAll<StatusData>("Database/Status");
+
+            foreach (StatusData data in datas)
+                new StatusRemoveCommand(target, data).Run(player.BattlePhase);
+        }
+    }
 }

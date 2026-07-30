@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using ATCG.Capacities;
 using ATCG.Editor.Tools.DatabaseBrowser;
@@ -60,12 +62,14 @@ namespace ATCG.Editor.Tools.CapacityEditor
         // Author widgets
         private DropdownField capacityDropdown;
         private Label statusLabel;
-        private Label directorStateLabel;
+        private VisualElement liveDot;
+        private Label statusCaption;
+        private Label statusNameLabel;
+        private VisualElement validityPanel;
         private VisualElement stepsPanel;
         private VisualElement tagsPanel;
         private VisualElement tracksPanel;
         private VisualElement propertiesPanel;
-        private HelpBox warningsBox;
         private Button buildStageButton;
 
         // Flat lookup: dropdown label -> capacity (labels are "Element/Name").
@@ -128,7 +132,11 @@ namespace ATCG.Editor.Tools.CapacityEditor
             scroll.style.minHeight = 0;
             tab.Add(scroll);
 
-            // --- Header: selection + grouped quick actions -------------------
+            Label capacityTitle = new("Capacity");
+            capacityTitle.AddToClassList("ce-section-title");
+            scroll.Add(capacityTitle);
+
+            // --- Header: selection, live status box, grouped actions ---------
             VisualElement header = new();
             header.AddToClassList("ce-header");
 
@@ -139,31 +147,64 @@ namespace ATCG.Editor.Tools.CapacityEditor
             capacityDropdown.RegisterValueChangedCallback(OnCapacityDropdownChanged);
             selectionBar.Add(capacityDropdown);
             selectionBar.Add(new ToolbarButton(RefreshCatalog) { text = "↻", tooltip = "Refresh catalog" });
-            selectionBar.Add(new ToolbarButton(PingSelected) { text = "Ping", tooltip = "Ping the selected asset" });
             selectionBar.Add(new ToolbarButton(NewCapacityModal.Open) { text = "＋ New", tooltip = "Create a new capacity" });
             header.Add(selectionBar);
 
-            Toolbar actionsBar = new();
-            actionsBar.AddToClassList("ce-header-bar");
-            actionsBar.Add(new ToolbarButton(OpenDataScript) { text = "Open Data Script", tooltip = "Open the Data script" });
-            actionsBar.Add(new ToolbarButton(OpenLogicScript) { text = "Open Battle Script", tooltip = "Open the runtime battle/logic script" });
-            actionsBar.Add(new ToolbarSpacer());
-            buildStageButton = new ToolbarButton(BuildStage) { text = "Create Stage", tooltip = "Create the cutscene stage" };
-            buildStageButton.style.display = DisplayStyle.None;
-            actionsBar.Add(buildStageButton);
-            actionsBar.Add(new ToolbarButton(EditCutscene) { text = "Edit Cutscene", tooltip = "Open the cutscene stage" });
-            actionsBar.Add(new ToolbarButton(RunScan) { text = "Rescan", tooltip = "Rescan the timeline for step/QTE markers" });
-            header.Add(actionsBar);
+            // Live status box: a "live" dot + the capacity currently edited.
+            VisualElement statusBox = new();
+            statusBox.AddToClassList("ce-statusbox");
+            liveDot = new VisualElement();
+            liveDot.AddToClassList("ce-live-dot");
+            statusCaption = new Label("EDITING");
+            statusCaption.AddToClassList("ce-status-editing");
+            statusNameLabel = new Label();
+            statusNameLabel.AddToClassList("ce-status-name");
+            statusBox.Add(liveDot);
+            statusBox.Add(statusCaption);
+            statusBox.Add(statusNameLabel);
+            header.Add(statusBox);
 
-            directorStateLabel = new Label();
-            directorStateLabel.AddToClassList("ce-status");
-            header.Add(directorStateLabel);
+            // Grouped action grid (wraps on narrow windows).
+            VisualElement grid = new();
+            grid.AddToClassList("ce-actions-grid");
+
+            grid.Add(ActionGroup("Assets",
+                Btn("Ping asset", PingSelected, "Ping the capacity asset in the Project window"),
+                Btn("Ping folder", PingFolder, "Ping the capacity's asset + cutscene folder")));
+
+            grid.Add(ActionGroup("Scripts",
+                Btn("Data", OpenDataScript, "Open the Data script"),
+                Btn("Battle", OpenLogicScript, "Open the runtime battle/logic script")));
+
+            buildStageButton = Btn("Create Stage", BuildStage, "Create the cutscene stage");
+            buildStageButton.style.display = DisplayStyle.None;
+            grid.Add(ActionGroup("Cutscene",
+                buildStageButton,
+                Btn("Edit Cutscene", EditCutscene, "Open the cutscene stage"),
+                Btn("Rescan", RunScan, "Rescan the timeline for step/QTE markers")));
+
+            header.Add(grid);
 
             statusLabel = new Label();
             statusLabel.AddToClassList("ce-status");
             header.Add(statusLabel);
 
             scroll.Add(header);
+
+            // --- Validity ----------------------------------------------------
+            Label validityTitle = new("Validity");
+            validityTitle.AddToClassList("ce-section-title");
+            scroll.Add(validityTitle);
+            ScrollView validityScroll = new(ScrollViewMode.Vertical);
+            validityScroll.AddToClassList("ce-validity");
+            // Lay the checks out in responsive columns; the ScrollView caps the height.
+            validityScroll.contentContainer.style.flexDirection = FlexDirection.Row;
+            validityScroll.contentContainer.style.flexWrap = Wrap.Wrap;
+            validityPanel = validityScroll;
+            scroll.Add(validityPanel);
+
+            RefreshStatus();
+            RefreshValidity();
 
             // --- Steps + Target Tags side by side (half width each) ----------
             VisualElement halfRow = new();
@@ -192,24 +233,34 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             scroll.Add(halfRow);
 
+            // Auto-bindable Tracks (narrower) + Properties side by side.
+            VisualElement lowerRow = new();
+            lowerRow.AddToClassList("ce-halfrow");
+
+            VisualElement tracksCol = new();
+            tracksCol.AddToClassList("ce-col");
+            tracksCol.AddToClassList("ce-col--left");
+            tracksCol.AddToClassList("ce-col--narrow");
             Label tracksTitle = new("Auto-bindable Tracks");
             tracksTitle.AddToClassList("ce-section-title");
-            scroll.Add(tracksTitle);
+            tracksCol.Add(tracksTitle);
             tracksPanel = new VisualElement();
             tracksPanel.AddToClassList("ce-tracks-panel");
-            scroll.Add(tracksPanel);
+            tracksCol.Add(tracksPanel);
+            lowerRow.Add(tracksCol);
 
+            VisualElement propsCol = new();
+            propsCol.AddToClassList("ce-col");
+            propsCol.AddToClassList("ce-col--wide");
             Label propsTitle = new("Properties");
             propsTitle.AddToClassList("ce-section-title");
-            scroll.Add(propsTitle);
+            propsCol.Add(propsTitle);
             propertiesPanel = new VisualElement();
             propertiesPanel.AddToClassList("ce-props-panel");
-            scroll.Add(propertiesPanel);
+            propsCol.Add(propertiesPanel);
+            lowerRow.Add(propsCol);
 
-            warningsBox = new HelpBox(string.Empty, HelpBoxMessageType.Warning);
-            warningsBox.AddToClassList("ce-warnings");
-            warningsBox.style.display = DisplayStyle.None;
-            scroll.Add(warningsBox);
+            scroll.Add(lowerRow);
 
             return tab;
         }
@@ -453,9 +504,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         private void OnSelectionChanged()
         {
-            statusLabel.text = selected != null ? $"Editing: {selected.name}" : string.Empty;
+            statusLabel.text = string.Empty;
+            RefreshStatus();
+            RefreshValidity();
             RefreshBuildButton();
-            RefreshDirectorState();
             RebuildStepsPanel();
             RebuildTagsPanel();
             RebuildTracksPanel();
@@ -470,18 +522,233 @@ namespace ATCG.Editor.Tools.CapacityEditor
             propertiesPanel.Add(new CapacityPropertyEditor(selected).Build());
         }
 
-        private void RefreshDirectorState()
+        // Live status box: the dot is "live" (green) only while the cutscene stage is
+        // actually open for the selection; otherwise it's idle and reads "SELECTED".
+        private void RefreshStatus()
         {
+            bool has = selected != null;
+            bool live = has && IsStageOpenFor(selected);
+
+            liveDot.EnableInClassList("ce-live-dot--idle", !live);
+            statusCaption.text = has ? (live ? "EDITING" : "SELECTED") : "—";
+            statusNameLabel.text = has ? selected.name : "No capacity selected";
+            statusNameLabel.EnableInClassList("ce-status-name--idle", !has);
+        }
+
+        private static bool IsStageOpenFor(CapacityData capacity)
+        {
+            CapacityCutsceneStage stage = CapacityCutsceneStage.Current;
+            return stage != null && stage.Capacity == capacity;
+        }
+
+        // ---- validity checks -------------------------------------------------
+
+        private enum Severity { Ok, Warning, Critical }
+
+        // Rebuilds the Validity list. Only FAILING checks are shown (passing ones are
+        // hidden); blocking issues — those that would stop the capacity from being played
+        // — render red, the rest orange. When everything passes, a single "ready" line
+        // is shown. Called on selection change and after scans.
+        private void RefreshValidity()
+        {
+            validityPanel.Clear();
+
             if (selected == null)
             {
-                directorStateLabel.text = string.Empty;
+                validityPanel.Add(new Label("No capacity selected.") { style = { opacity = 0.6f } });
                 return;
             }
 
-            bool hasDirector = selected.CutsceneDirector != null;
-            bool hasTimeline = selected.CutsceneTimeline != null;
-            directorStateLabel.text =
-                $"Director: {(hasDirector ? "✓" : "✗")}   Timeline: {(hasTimeline ? "✓" : "✗")}";
+            string dataPath = CapacityStepEditor.LocateDataScript(selected);
+            string logicPath = CapacityStepEditor.LocateLogicScript(selected);
+            string[] steps = GetDeclaredSteps(selected);
+            TimelineAsset timeline = ResolveTimeline();
+
+            List<(string label, bool critical)> failing = new();
+            void Check(string label, bool ok, bool critical)
+            {
+                if (!ok)
+                    failing.Add((label, critical));
+            }
+
+            // Non-blocking (nice to fix, but the capacity can still run).
+            Check("Display name missing", !string.IsNullOrEmpty(selected.Name), false);
+            Check("Description missing", !string.IsNullOrEmpty(selected.Description), false);
+            Check("No cast pattern defined", !selected.CastPatterns.IsEmpty, false);
+            Check("Asset folder missing", AssetDatabase.IsValidFolder(CapacityAssetLayout.CapacityFolder(selected)), false);
+            Check("Director prefab missing from folder", System.IO.File.Exists(CapacityAssetLayout.DirectorPrefabPath(selected)), false);
+            Check("Timeline asset missing from folder", System.IO.File.Exists(CapacityAssetLayout.TimelinePath(selected)), false);
+
+            // Blocking (would prevent the capacity from being played).
+            Check("Null property definition(s)",
+                selected.PropertyDefinitions == null || selected.PropertyDefinitions.All(p => p != null), true);
+            Check("Data script not found", !string.IsNullOrEmpty(dataPath), true);
+            Check("Battle script not found", !string.IsNullOrEmpty(logicPath), true);
+            Check("No step declared", steps.Length > 0, true);
+            Check("No cutscene director assigned", selected.CutsceneDirector != null, true);
+            Check("No cutscene timeline assigned", selected.CutsceneTimeline != null, true);
+
+            // Timeline markers — only meaningful once a timeline exists.
+            if (timeline != null)
+            {
+                (HashSet<string> markerNames, bool hasUnnamed) = CollectMarkers(timeline);
+                (bool ok, string label) markers = CheckStepMarkers(timeline, steps, markerNames);
+                Check(markers.label, markers.ok, true);
+                Check("Unnamed step marker(s) on the timeline", !hasUnnamed, false);
+                Check("Step marker(s) reference an unknown step", markerNames.All(n => Array.IndexOf(steps, n) >= 0), false);
+            }
+
+            if (failing.Count == 0)
+            {
+                validityPanel.Add(CheckRow("The asset is ready to be used.", Severity.Ok));
+                return;
+            }
+
+            // Blocking issues first, then warnings.
+            foreach ((string label, bool critical) in failing.OrderByDescending(c => c.critical))
+                validityPanel.Add(CheckRow(label, critical ? Severity.Critical : Severity.Warning));
+        }
+
+        private static VisualElement CheckRow(string label, Severity severity)
+        {
+            VisualElement row = new();
+            row.AddToClassList("ce-check-row");
+            row.Add(ValidityIcon(severity));
+            Label text = new(label) { style = { unityTextAlign = TextAnchor.MiddleLeft } };
+            text.EnableInClassList("ce-check--critical", severity == Severity.Critical);
+            row.Add(text);
+            return row;
+        }
+
+        // Round, filled Unity status light: green (ok) / orange (warning) / red (critical).
+        // Falls back to a coloured dot if the built-in icon can't be resolved.
+        private static VisualElement ValidityIcon(Severity severity)
+        {
+            string iconName = severity switch
+            {
+                Severity.Ok => "lightMeter/greenLight",
+                Severity.Critical => "lightMeter/redLight",
+                _ => "lightMeter/orangeLight",
+            };
+
+            Texture tex = EditorGUIUtility.IconContent(iconName)?.image;
+            if (tex != null)
+            {
+                Image image = new Image { image = tex };
+                image.style.width = 14;
+                image.style.height = 14;
+                image.style.marginRight = 6;
+                image.style.flexShrink = 0;
+                return image;
+            }
+
+            Color color = severity switch
+            {
+                Severity.Ok => new Color(0.46f, 0.78f, 0.51f),
+                Severity.Critical => new Color(0.86f, 0.35f, 0.35f),
+                _ => new Color(0.95f, 0.7f, 0.3f),
+            };
+
+            VisualElement dot = new();
+            dot.style.width = 9;
+            dot.style.height = 9;
+            dot.style.marginRight = 6;
+            dot.style.flexShrink = 0;
+            dot.style.borderTopLeftRadius = dot.style.borderTopRightRadius = 9;
+            dot.style.borderBottomLeftRadius = dot.style.borderBottomRightRadius = 9;
+            dot.style.backgroundColor = color;
+            return dot;
+        }
+
+        // Every declared step must have a matching, named StepMarker on the timeline.
+        // Returns the problem statement (with the offending steps) when some are missing.
+        private static (bool ok, string label) CheckStepMarkers(TimelineAsset timeline, string[] steps, HashSet<string> markerNames)
+        {
+            if (steps.Length == 0)
+                return (true, string.Empty);
+
+            List<string> missing = steps.Where(s => !markerNames.Contains(s)).ToList();
+            return missing.Count == 0
+                ? (true, string.Empty)
+                : (false, $"Missing step marker(s): {string.Join(", ", missing)}");
+        }
+
+        // Collects the named StepMarkers on the timeline and whether any are unnamed.
+        private static (HashSet<string> names, bool hasUnnamed) CollectMarkers(TimelineAsset timeline)
+        {
+            HashSet<string> names = new();
+            bool hasUnnamed = false;
+
+            if (timeline == null)
+                return (names, false);
+
+            void Process(TrackAsset track)
+            {
+                foreach (IMarker marker in track.GetMarkers())
+                {
+                    if (marker is not StepMarker stepMarker)
+                        continue;
+                    if (string.IsNullOrEmpty(stepMarker.StepName))
+                        hasUnnamed = true;
+                    else
+                        names.Add(stepMarker.StepName);
+                }
+            }
+
+            if (timeline.markerTrack != null)
+                Process(timeline.markerTrack);
+            foreach (TrackAsset track in timeline.GetOutputTracks())
+                Process(track);
+
+            return (names, hasUnnamed);
+        }
+
+        // Pings the capacity's asset + cutscene folder (Project/Capacities/{Element}/{name}).
+        private void PingFolder()
+        {
+            if (selected == null)
+            {
+                statusLabel.text = "Select a capacity first.";
+                return;
+            }
+
+            string folder = CapacityAssetLayout.CapacityFolder(selected);
+            UnityEngine.Object folderObj = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(folder);
+            if (folderObj == null)
+            {
+                statusLabel.text = $"No asset folder yet for '{selected.name}'.";
+                return;
+            }
+
+            Selection.activeObject = folderObj;
+            EditorGUIUtility.PingObject(folderObj);
+        }
+
+        // ---- action grid helpers ---------------------------------------------
+
+        private static Button Btn(string text, System.Action onClick, string tooltip)
+        {
+            Button button = new Button(onClick) { text = text, tooltip = tooltip };
+            button.AddToClassList("ce-gbtn");
+            return button;
+        }
+
+        private static VisualElement ActionGroup(string title, params VisualElement[] buttons)
+        {
+            VisualElement group = new();
+            group.AddToClassList("ce-actiongroup");
+
+            Label caption = new(title);
+            caption.AddToClassList("ce-actiongroup__title");
+            group.Add(caption);
+
+            VisualElement row = new();
+            row.AddToClassList("ce-actiongroup__row");
+            foreach (VisualElement button in buttons)
+                row.Add(button);
+            group.Add(row);
+
+            return group;
         }
 
         // Stage build is offered until both a director and its timeline exist.
@@ -571,7 +838,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             }
 
             Button editSteps = new Button(() => EditStepsModal.Open(selected)) { text = "Edit steps" };
-            editSteps.style.marginTop = 4;
+            editSteps.style.marginTop = StyleKeyword.Auto; // pin to the bottom of the panel
             stepsPanel.Add(editSteps);
         }
 
@@ -593,7 +860,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             }
 
             Button editTags = new Button(() => EditTagsModal.Open(selected)) { text = "Edit tags" };
-            editTags.style.marginTop = 4;
+            editTags.style.marginTop = StyleKeyword.Auto; // pin to the bottom of the panel
             tagsPanel.Add(editTags);
         }
 
@@ -639,8 +906,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
                     stage.AutoSaveIfEnabled();
             }
 
-            warningsBox.text = string.Join("\n", result.Warnings);
-            warningsBox.style.display = result.Warnings.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            RefreshValidity();
         }
 
         private void OnEditorUpdate()
@@ -651,6 +917,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 return;
 
             lastScanTime = EditorApplication.timeSinceStartup;
+            RefreshStatus(); // reflect the cutscene stage being opened/closed
             RunScan();
         }
 

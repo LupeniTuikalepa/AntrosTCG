@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Debugging.Debugging.Battle.Cheats.Implementations;
-using Cheats.Core;
+using ATCG.Debugging.Cheats;
 using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
@@ -16,6 +16,7 @@ namespace ATCG.Debugging.Debugging.Battle
 			yield return new StatusApplyCheat(player.BattlePlayer);
 			yield return new StatusRemoveCheat(player.BattlePlayer);
 			yield return new KillEntityCheat(player.BattlePlayer);
+			yield return new DamageCheat(player.BattlePlayer);
 			yield return new TeleportEntityCheat(player.BattlePlayer);
 			yield return new AddHealthCheat(player);
 			yield return new RemoveHealthCheat(player);

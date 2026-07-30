@@ -31,7 +31,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             return EnsureSubfolder(elementFolder, CapacityName(capacity));
         }
 
-        private static string CapacityFolder(CapacityData capacity)
+        public static string CapacityFolder(CapacityData capacity)
             => $"{CapacitiesRoot}/{ReadElement(capacity)}/{CapacityName(capacity)}";
 
         // Creates 'parent/child' if absent, creating 'parent' chain up from Assets first.

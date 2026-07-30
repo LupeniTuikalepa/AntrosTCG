@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Collections.Generic;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
@@ -6,67 +6,47 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
-using ATCG.Debugging.Debugging.Battle.ChoicePhase;
+using ATCG.Debugging.Cheats;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
-using Cheats.Core;
 using Helteix.Tools.Phases;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
-	public class TeleportEntityCheat : ICheat
-	{
-		public string Name { get; }
-		public string Description { get; }
-		private readonly LocalBattlePlayer player;
+    [CheatGroup("Entities")]
+    public class TeleportEntityCheat : ICheat
+    {
+        public string Name => "Teleport";
+        public string Description => "Pick an entity, then click a cell in-game to move it there.";
 
-		public TeleportEntityCheat(LocalBattlePlayer player)
-		{
-			Name = "Teleport";
-			Description = "Teleport to an entity";
-			this.player = player;
-		}
+        [CheatTarget(nameof(Targets), Label = "Entity")]
+        public EntityAddress target;
 
-		public async Awaitable Execute(CheatContext context)
-		{
-			using (DictionaryPool<string , EntityAddress>.Get(out var bucket))
-			{
-				CheatUtilities.FillBucket<MovementComponent>(bucket,player);
-				
-				CheatsChoicePhase choicePhase = new CheatsChoicePhase(player, bucket.Keys.ToList());
-				string result = await choicePhase.Run();
+        private readonly LocalBattlePlayer player;
 
-				if (bucket.TryGetValue(result, out EntityAddress address))
-				{
-					var battlePatternController = new BattlePatternController(player.BattlePhase.BattleGrid);
-					
-					using HexPatternBuilder allCell = new HexPatternBuilder(HexCoordinates.Zero,
-						battlePatternController).With(new EverythingPattern());
+        public TeleportEntityCheat(LocalBattlePlayer player) => this.player = player;
 
-					var filter = new AspectFilter<BattleCellAspect>();
-					
-					var phase = new SelectEntityPhase<AspectFilter<BattleCellAspect>>(player,filter,allCell);
-					EntityAddress[] resultCoordinate = await phase.Run();
-					if (resultCoordinate.Length > 0)
-					{
-						EntityAddress first = resultCoordinate[0];
-						if (first.TryGetComponentRO(out GridMemberComponent gridMember))
-						{
-							MoveCommand moveCommand = new MoveCommand(address, gridMember.coordinates);
-					
-							if(address.TryGetComponentRO(out GridMemberComponent component))
-								Debug.Log($"{address.entity.id} : is teleported to {component.coordinates}");
-					
-							moveCommand.Run(player.BattlePhase);
-						}
-					}
-					
-				}
-			}
-		}
-		
-	}
+        private IEnumerable<CheatTargetOption> Targets()
+            => CheatUtilities.EnumerateTargets<MovementComponent>(player);
+
+        public async Awaitable Execute(CheatContext context)
+        {
+            if (!target.IsValid)
+                return;
+
+            BattlePatternController controller = new BattlePatternController(player.BattlePhase.BattleGrid);
+            using HexPatternBuilder allCells = new HexPatternBuilder(HexCoordinates.Zero, controller)
+                .With(new EverythingPattern());
+
+            AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();
+            SelectEntityPhase<AspectFilter<BattleCellAspect>> phase =
+                new SelectEntityPhase<AspectFilter<BattleCellAspect>>(player, filter, allCells);
+
+            EntityAddress[] picked = await phase.Run();
+            if (picked.Length > 0 && picked[0].TryGetComponentRO(out GridMemberComponent gridMember))
+                new MoveCommand(target, gridMember.coordinates).Run(player.BattlePhase);
+        }
+    }
 }
