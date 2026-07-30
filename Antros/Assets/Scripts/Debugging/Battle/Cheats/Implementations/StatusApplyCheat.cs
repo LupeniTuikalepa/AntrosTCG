@@ -1,54 +1,47 @@
-using System.Linq;
+using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local;
 using ATCG.Capacities.Data.Status;
+using ATCG.Debugging.Cheats;
 using ATCG.Debugging.Debugging.Battle;
-using ATCG.Debugging.Debugging.Battle.ChoicePhase;
-using Cheats.Core;
-using Helteix.Tools.Phases;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace ATCG.Debugging
 {
-    public class StatusApplyCheat :ICheat
+    [CheatGroup("Status")]
+    public class StatusApplyCheat : ICheat
     {
-	    public string Name { get; }
-	    public string Description { get; }
-	    
-	    private readonly LocalBattlePlayer player;
-	    
-	    public StatusApplyCheat(LocalBattlePlayer player)
-	    {
-		    Name = " Apply Status ";
-		    Description = " Infect whomever you want. ";
-		    this.player = player;
-	    }
+        public string Name => "Apply Status";
+        public string Description => "Apply a status to the picked entity (all statuses if none is set).";
 
-	    public async Awaitable Execute(CheatContext context)
-	    {
-		    using (DictionaryPool<string, EntityAddress>.Get(out var bucket))
-		    {
-			    CheatUtilities.FillBucket<HealthComponent>(bucket,player);
-			    
-			    CheatsChoicePhase cheatsChoicePhase = new CheatsChoicePhase(player, bucket.Keys.ToList());
-			    string result = await cheatsChoicePhase.Run();
+        [CheatTarget(nameof(Targets), Label = "Target")]
+        public EntityAddress target;
 
-			    if (bucket.TryGetValue(result, out EntityAddress entity))
-			    {
-				   StatusData[] datas = Resources.LoadAll<StatusData>("Database/Status");
-				   foreach (StatusData data in datas)
-				   {
-					   StatusApplyCommand  command = new StatusApplyCommand(entity, data);
-					   command.Run(player.BattlePhase);
-					   Debug.Log($"{entity.entity.id} take a {command}");
-				   }
-			    }
-		    }
-	    }
-	    
+        [CheatParam("Status (optional)")]
+        public StatusData status;
+
+        private readonly LocalBattlePlayer player;
+
+        public StatusApplyCheat(LocalBattlePlayer player) => this.player = player;
+
+        private IEnumerable<CheatTargetOption> Targets()
+            => CheatUtilities.EnumerateTargets<HealthComponent>(player);
+
+        public async Awaitable Execute(CheatContext context)
+        {
+            await Awaitable.MainThreadAsync();
+            if (!target.IsValid)
+                return;
+
+            StatusData[] datas = status != null
+                ? new[] { status }
+                : Resources.LoadAll<StatusData>("Database/Status");
+
+            foreach (StatusData data in datas)
+                new StatusApplyCommand(target, data).Run(player.BattlePhase);
+        }
     }
 }

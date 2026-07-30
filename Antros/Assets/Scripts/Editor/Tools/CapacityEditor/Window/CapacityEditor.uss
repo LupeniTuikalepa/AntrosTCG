@@ -45,8 +45,158 @@
 }
 
 .ce-status {
-    margin-bottom: 6px;
+    margin-bottom: 2px;
     color: var(--atcg-text-muted);
+    white-space: normal;
+}
+
+.ce-header {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 8px;
+}
+
+.ce-header-bar {
+    margin-bottom: 8px;
+}
+
+.ce-halfrow {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ce-col {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+}
+
+/* Panels fill their column so, with the row stretching, the two side-by-side sections
+   share the height of the taller one. */
+.ce-col .ce-steps-panel,
+.ce-col .ce-tracks-panel,
+.ce-col .ce-props-panel {
+    flex-grow: 1;
+}
+
+/* Auto-bindable Tracks is less important: its column shrink-wraps to its content
+   width, and Properties grows to fill whatever space is left. */
+.ce-col--narrow {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    min-width: auto;
+}
+
+.ce-col--wide {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+/* ---- live status box ---- */
+.ce-statusbox {
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--atcg-panel);
+    border-radius: 6px;
+    padding: 5px 10px;
+    margin-bottom: 8px;
+}
+
+.ce-live-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 9px;
+    background-color: var(--atcg-ic-green);
+    margin-right: 8px;
+}
+
+.ce-live-dot--idle {
+    background-color: var(--atcg-text-muted);
+}
+
+.ce-status-editing {
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: var(--atcg-text-muted);
+    margin-right: 8px;
+}
+
+.ce-status-name {
+    flex-grow: 1;
+    -unity-font-style: bold;
+    color: var(--atcg-text-strong);
+}
+
+.ce-status-name--idle {
+    -unity-font-style: normal;
+    color: var(--atcg-text-muted);
+}
+
+/* ---- validity checklist ---- */
+.ce-validity {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 4px;
+    padding: 6px;
+    margin-bottom: 4px;
+    max-height: 150px;
+    min-height: 46px;
+    flex-shrink: 1;
+}
+
+/* Each check is a responsive column: at least ~210px wide, growing to fill the row,
+   wrapping into as many columns as the window allows. */
+.ce-check-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 12px 2px 0;
+    flex-basis: 210px;
+    flex-grow: 1;
+    color: var(--atcg-text-soft);
+}
+
+.ce-check--critical {
+    color: rgb(230, 120, 120);
+}
+
+/* ---- grouped action grid ---- */
+.ce-actions-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.ce-actiongroup {
+    background-color: var(--atcg-panel);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.ce-actiongroup__title {
+    font-size: 9px;
+    -unity-font-style: bold;
+    color: var(--atcg-text-muted);
+    margin-bottom: 5px;
+}
+
+.ce-actiongroup__row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ce-gbtn {
+    margin: 0 4px 0 0;
+    padding: 3px 10px;
+}
+
+.ce-gbtn:last-child {
+    margin-right: 0;
+}
+
+.ce-col--left {
+    margin-right: 8px;
 }
 
 .ce-steps-panel, .ce-tracks-panel {

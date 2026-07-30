@@ -1,8 +1,9 @@
-using Cheats.Core;
+using ATCG.Debugging.Cheats;
 using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
+	[CheatGroup("Debug")]
 	public class BreakCheat : ICheat
 	{
 		public string Name => "Break Cheat";

@@ -1,0 +1,4 @@
+/* Intentionally empty.
+   The shared list surface style now lives in EditorTheme.uss as `.atcg-list`, so
+   every ATCG tool (Cards, Status, Passives, Deployables, ...) stays consistent from
+   a single source. This file is kept only to avoid a dangling .meta reference. */

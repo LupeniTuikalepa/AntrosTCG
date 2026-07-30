@@ -1,32 +1,29 @@
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Players.Local.Runtime;
-using Cheats.Core;
+using ATCG.Debugging.Cheats;
 using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
-	public class RemoveHealthCheat : ICheat
-	{
-		public string Name { get; }
-		public string Description { get; }
-		public readonly RuntimeLocalBattlePlayer players;
+    [CheatGroup("Health")]
+    public class RemoveHealthCheat : ICheat
+    {
+        public string Name => "Remove Health";
+        public string Description => "Remove health from the player.";
 
-		public RemoveHealthCheat(RuntimeLocalBattlePlayer player)
-		{
-			Name = "Remove Health";
-			Description = "SomeBody remove your health";
-			this.players = player;
-		}
+        [CheatParam("Amount", Min = 0, Max = 200)]
+        public int amount = 5;
 
-		public async Awaitable Execute(CheatContext context)
-		{
-			await Awaitable.MainThreadAsync();
-			players.BattlePlayer.AddOrRemoveHealth(-5);
-			Debug.Log(players);
-			ModifyPlayerHealthCommand command = new ModifyPlayerHealthCommand(players.BattlePlayer, -5);
-			command.Run(players.BattlePlayer.BattlePhase);
-			Debug.Log($"[AddHealthCheat] SomeBody remove your health... now you have : {players.BattlePlayer.CurrentHealth} HP ");
-		}
-	}
+        private readonly RuntimeLocalBattlePlayer player;
+
+        public RemoveHealthCheat(RuntimeLocalBattlePlayer player) => this.player = player;
+
+        public async Awaitable Execute(CheatContext context)
+        {
+            await Awaitable.MainThreadAsync();
+            player.BattlePlayer.AddOrRemoveHealth(-amount);
+            new ModifyPlayerHealthCommand(player.BattlePlayer, -amount).Run(player.BattlePlayer.BattlePhase);
+        }
+    }
 }
