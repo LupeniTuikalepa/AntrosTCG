@@ -16,3 +16,5 @@ MonoBehaviour:
   <Name>k__BackingField: "Destruction \xE9tendue"
   <Element>k__BackingField: 0
   <Description>k__BackingField: 
+  <ActiveOnSpawn>k__BackingField: 1
+  <RuntimePassive>k__BackingField: {fileID: 2542661488303874884, guid: 6a3d6e51a5358f54d8f00cb5c354a8ba, type: 3}

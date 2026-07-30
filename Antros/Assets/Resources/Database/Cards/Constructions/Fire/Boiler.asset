@@ -19,13 +19,12 @@ MonoBehaviour:
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284334
-  <Passives>k__BackingField: []
+  <Passives>k__BackingField:
+  - {fileID: 11400000, guid: efb53f76d86ac04488ca9bcf4560cc99, type: 2}
   <Health>k__BackingField: 5
   <DeathCost>k__BackingField: 1
   <Defense>k__BackingField: 1
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 7630468266232643740
+  <DeployRange>k__BackingField: 1
   <Prefab>k__BackingField: {fileID: 6370457201449410584, guid: 6d77134fbe1f975439fe2ee5e11a066c, type: 3}
   references:
     version: 2
@@ -34,12 +33,3 @@ MonoBehaviour:
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
         <Capacities>k__BackingField: []
-    - rid: 7630468266232643740
-      type: {class: SpreadPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 2

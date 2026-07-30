@@ -6,7 +6,7 @@ using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.PassiveSystem.Core
 {
-    public class TickPassiveCommand : EntityCommand<NoInfos>
+    public class TickPassiveCommand : EntityCommand<PassiveInfos>
     {
         private readonly PassiveContext passiveContext;
 
@@ -18,6 +18,9 @@ namespace ATCG.Battle.PassiveSystem.Core
         protected override void Process(in CommandContext context)
         {
             var data = passiveContext.data;
+            
+            infos = new PassiveInfos(data);
+
             if(data.TryGet(out IPassiveContainer container))
                 container.Tick(data, passiveContext);
         }

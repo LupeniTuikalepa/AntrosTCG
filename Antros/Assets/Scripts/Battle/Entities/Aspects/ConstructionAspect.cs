@@ -54,7 +54,14 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployTargetComponent = new DeployTargetComponent(setup.card.DeployRange);
 
             componentsFactory.StatusReceiver = new StatusReceiver(64);
-            componentsFactory.PassiveContainerComponent = new PassiveContainerComponent();
+            var passiveContainerComponent = new PassiveContainerComponent(8, setup.grid.battlePhase);
+            foreach (var passiveData in setup.card.Data.Passives)
+            {
+                var passiveContext = new PassiveContext(address, setup.grid.battlePhase, passiveData);
+                passiveContainerComponent.AddPassive(passiveData, passiveContext);
+            }
+            componentsFactory.PassiveContainerComponent = passiveContainerComponent;
+            
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();

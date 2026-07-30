@@ -81,14 +81,7 @@ namespace ATCG.Battle.PassiveSystem.Passives
                 }
             }
         }
-
-        public void Apply(ExtendedDestructionData data, PassiveContext ctx)
-        {
-        }
-
-        public void Remove(ExtendedDestructionData data, PassiveContext ctx)
-        {
-        }
+        
 
         private static bool IsIceWall(CommandContext ctx, DeathCommand command)
         {

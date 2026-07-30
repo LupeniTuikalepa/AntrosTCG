@@ -4,11 +4,13 @@ using ATCG.Battle.CapacitySystem.Status.Status;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Battle.GameModes;
+using ATCG.Battle.PassiveSystem.Runtimes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Runtime;
 using ATCG.Capacities.Data.Status;
 using ATCG.Metrics;
+using ATCG.Passives.Datas;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
@@ -53,16 +55,22 @@ namespace ATCG.Battle.Entities.Runtime
 
         [field: SerializeField, BoxGroup("UI")]
         public Transform statusRoot { get; private set; }
+        
+        [field: SerializeField, BoxGroup("UI")]
+        public Transform PassiveRoot { get; private set; }
+        
         [field: SerializeField, BoxGroup("UI")]
         public Transform HoveredRoot { get; private set; }
 
         private Dictionary<StatusData, RuntimeStatus> statusDatas;
+        private Dictionary<PassiveData, RuntimePassive> passives;
 
         protected virtual void Awake()
         {
             Models = new LinkedRendererGroup(GetComponentsInChildren<LinkedRenderer>());
             IsInteractable = new Condition();
             statusDatas = new();
+            passives = new();
         }
 
         protected virtual void OnEnable()

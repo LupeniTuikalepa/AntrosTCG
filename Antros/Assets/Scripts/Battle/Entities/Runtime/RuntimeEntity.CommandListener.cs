@@ -7,6 +7,7 @@ using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.PassiveSystem.Core;
+using ATCG.Battle.PassiveSystem.Runtimes;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids.Utility;
 using ATCG.HexGrids;
@@ -170,7 +171,7 @@ namespace ATCG.Battle.Entities.Runtime
 				return;
 			}
 
-			RuntimeStatus runtimeStatus = Instantiate(prefabStatus, statusRoot);
+			var runtimeStatus = Instantiate(prefabStatus, statusRoot);
 			runtimeStatus.transform.localScale = Vector3.one;
 			runtimeStatus.transform.localPosition = Vector3.zero;
 			runtimeStatus.transform.localRotation = Quaternion.identity;
@@ -221,17 +222,60 @@ namespace ATCG.Battle.Entities.Runtime
 
 		async Awaitable ICommandDirector<ApplyPassiveCommand>.Play(CommandDirectorState state, CommandContext context, ApplyPassiveCommand command)
 		{
+			await Awaitable.MainThreadAsync(); 
+			state.CompleteAll(this);
+
+			var infos = command.GetInfos();
+			var passiveData = infos.data;
 			
+			var passiveContext = new RuntimePassiveContext(passiveData);
+			if (passives.ContainsKey(passiveData))
+				return;
+
+			if (!passiveData.RuntimePassive.TryGetComponent(out RuntimePassive passive))
+			{
+				Debug.LogWarning($"[RuntimeEntity] No RuntimeStatus found");
+				return;
+			}
+
+			var runtimePassive = Instantiate(passive, PassiveRoot);
+			runtimePassive.transform.localScale = Vector3.one;
+			runtimePassive.transform.localPosition = Vector3.zero;
+			runtimePassive.transform.localRotation = Quaternion.identity;
+
+			passives.Add(passiveData, runtimePassive);
+			runtimePassive.Apply(passiveContext);
 		}
 
 		async Awaitable ICommandDirector<TickPassiveCommand>.Play(CommandDirectorState state, CommandContext context, TickPassiveCommand command)
 		{
+			await Awaitable.MainThreadAsync(); 
+			state.CompleteAll(this);
+			
+			var infos = command.GetInfos();
+			var passiveData = infos.data;
+			
+			var passiveContext = new RuntimePassiveContext(infos.data);
+			if(passives.TryGetValue(passiveData, out var passive))
+				passive.Tick(passiveContext);
 			
 		}
 
 		async Awaitable ICommandDirector<RemovePassiveCommand>.Play(CommandDirectorState state, CommandContext context, RemovePassiveCommand command)
 		{
+			await Awaitable.MainThreadAsync(); 
+			state.CompleteAll(this);
 			
+			var infos = command.GetInfos();
+			var passiveData = infos.data;
+
+
+			var passiveContext = new RuntimePassiveContext(infos.data);
+			if (passives.TryGetValue(passiveData, out var passive))
+			{
+				passive.Remove(passiveContext);
+				passives.Remove(passiveData);
+			}
 		}
 
 		public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration = 0.3f)

@@ -63,7 +63,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployTargetComponent = new DeployTargetComponent(setup.card.DeployRange);
             componentsFactory.StatusReceiver = new StatusReceiver(64);
 
-            var passiveContainerComponent = new PassiveContainerComponent(8);
+            var passiveContainerComponent = new PassiveContainerComponent(8, setup.grid.battlePhase);
             foreach (var passiveData in setup.card.Data.Passives)
             {
                 var passiveContext = new PassiveContext(address, setup.grid.battlePhase, passiveData);
