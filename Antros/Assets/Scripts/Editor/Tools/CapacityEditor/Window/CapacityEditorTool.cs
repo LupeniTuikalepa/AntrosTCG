@@ -26,7 +26,16 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private const string ThemeUss = "EditorTheme.uss";
         private const string ToolUss = "CapacityEditor.uss";
 
-        public static CapacityData CurrentlyEdited { get; private set; }
+        private static CapacityData currentlyEdited;
+
+        // Backed by the tool's selection, but falls back to the open cutscene stage's capacity: the
+        // static field resets on a domain reload (recompile) while the stage survives, so anything
+        // reading this (e.g. StepMarkerEditor's step dropdown) keeps working after a recompile.
+        public static CapacityData CurrentlyEdited
+        {
+            get => currentlyEdited != null ? currentlyEdited : CapacityCutsceneStage.Current?.Capacity;
+            private set => currentlyEdited = value;
+        }
 
         public string DisplayName => "Capacity Editor";
         public string Icon => "⏱";

@@ -7,6 +7,8 @@ using ATCG.Enums;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace ATCG.Editor.Tools.CapacityEditor
 {
@@ -149,8 +151,80 @@ namespace ATCG.Editor.Tools.CapacityEditor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            EditorGUIUtility.PingObject(data);
+            // Robustly (re)wire the director prefab + timeline onto the freshly reloaded data.
+            // TryBuild's own assignment doesn't reliably persist through this generation flow.
+            WireDirectorAndTimeline(assetPath);
+
+            EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<CapacityData>(assetPath));
             Debug.Log($"[CapacityGenerator] Created capacity '{name}' ({elementName}).");
+        }
+
+        // Fully self-contained wiring: finds the director prefab + timeline in the capacity folder,
+        // assigns the timeline to the prefab's PlayableDirector, and assigns that director back onto
+        // the CapacityData. Reloads everything from disk so nothing depends on stale in-memory state.
+        private static void WireDirectorAndTimeline(string assetPath)
+        {
+            CapacityData data = AssetDatabase.LoadAssetAtPath<CapacityData>(assetPath);
+            if (data == null)
+                return;
+
+            string folder = CapacityAssetLayout.EnsureCapacityFolder(data);
+
+            GameObject prefab = FindFirst<GameObject>(folder, go => go.GetComponentInChildren<PlayableDirector>() != null);
+            if (prefab == null)
+                return;
+
+            TimelineAsset timeline = FindFirst<TimelineAsset>(folder, _ => true);
+            string prefabPath = AssetDatabase.GetAssetPath(prefab);
+
+            // Assign the timeline onto the prefab's director (edit prefab contents so it persists).
+            if (timeline != null)
+            {
+                GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+                try
+                {
+                    PlayableDirector director = root.GetComponentInChildren<PlayableDirector>();
+                    if (director != null && director.playableAsset != timeline)
+                    {
+                        director.playableAsset = timeline;
+                        PrefabUtility.SavePrefabAsset(root);
+                    }
+                }
+                finally
+                {
+                    PrefabUtility.UnloadPrefabContents(root);
+                }
+
+                AssetDatabase.SaveAssets();
+            }
+
+            // Assign the (reloaded) director back onto the data.
+            prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            PlayableDirector assetDirector = prefab != null ? prefab.GetComponentInChildren<PlayableDirector>() : null;
+            if (assetDirector == null)
+                return;
+
+            SerializedObject so = new(data);
+            SerializedProperty prop = so.FindProperty("<CutsceneDirector>k__BackingField");
+            if (prop != null)
+            {
+                prop.objectReferenceValue = assetDirector;
+                so.ApplyModifiedProperties();
+            }
+
+            EditorUtility.SetDirty(data);
+            AssetDatabase.SaveAssets();
+        }
+
+        private static T FindFirst<T>(string folder, System.Func<T, bool> match) where T : UnityEngine.Object
+        {
+            foreach (string guid in AssetDatabase.FindAssets($"t:{typeof(T).Name}", new[] { folder }))
+            {
+                T asset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid));
+                if (asset != null && match(asset))
+                    return asset;
+            }
+            return null;
         }
 
         private static void CopyUmotionTemplate(CapacityData data, string name)
