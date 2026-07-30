@@ -24,7 +24,7 @@ MonoBehaviour:
   <Status>k__BackingField: {fileID: 11400000, guid: 0176709e6d0db8f408fa33cdd1f6b890, type: 2}
   <Range>k__BackingField: 0
   <StalemateStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Stalemate
     <QTEsCount>k__BackingField: 0
   references:
     version: 2

@@ -25,7 +25,7 @@ MonoBehaviour:
   <Range>k__BackingField: 1
   <Damage>k__BackingField: 2
   <QuicksandStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Quicksand
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
