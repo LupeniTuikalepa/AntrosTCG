@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace ATCG.Editor
     public sealed class AntrosEditorWindow : EditorWindow
     {
         private const string ThemeUss = "AntrosEditor.uss";
+        private const string ActiveToolKey = "ATCG.AntrosEditor.ActiveTool";
 
         private readonly List<IEditorTool> tools = new();
         private readonly Dictionary<IEditorTool, VisualElement> builtUI = new();
@@ -61,9 +63,16 @@ namespace ATCG.Editor
             BuildRail();
 
             if (tools.Count > 0)
-                Activate(tools[0]);
+            {
+                // Restore the tool that was active before the last domain reload / window close.
+                string wanted = SessionState.GetString(ActiveToolKey, null);
+                IEditorTool restore = tools.FirstOrDefault(t => t.GetType().FullName == wanted) ?? tools[0];
+                Activate(restore);
+            }
             else
+            {
                 ShowEmpty();
+            }
         }
 
         private void OnDisable()
@@ -158,6 +167,7 @@ namespace ATCG.Editor
             active?.OnDeactivated();
 
             active = tool;
+            SessionState.SetString(ActiveToolKey, tool.GetType().FullName);
             contentContainer.Clear();
 
             // Header strip with the active tool's icon + name.

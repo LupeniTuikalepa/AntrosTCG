@@ -25,6 +25,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private const double ScanIntervalSeconds = 0.5;
         private const string ThemeUss = "EditorTheme.uss";
         private const string ToolUss = "CapacityEditor.uss";
+        private const string SelectedGuidKey = "ATCG.CapacityEditor.SelectedGuid";
 
         private static CapacityData currentlyEdited;
 
@@ -219,6 +220,19 @@ namespace ATCG.Editor.Tools.CapacityEditor
             });
             scroll.Add(envField);
 
+            ObjectField umotionField = new("UMotion Template")
+            {
+                objectType = typeof(UnityEngine.Object),
+                allowSceneObjects = false,
+                value = settings.umotionTemplate
+            };
+            umotionField.RegisterValueChangedCallback(evt =>
+            {
+                settings.umotionTemplate = evt.newValue;
+                settings.Save();
+            });
+            scroll.Add(umotionField);
+
             VisualElement row = new();
             row.AddToClassList("ce-row");
             row.Add(new Button(() =>
@@ -288,13 +302,14 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             capacityDropdown.choices = choices;
 
-            // After a domain reload our own 'selected' is null, but the cutscene stage
-            // survives and knows its capacity — adopt it so the window doesn't fall back
-            // to an empty picker while a stage is still open.
-            if (selected == null && CapacityCutsceneStage.Current != null)
+            // After a domain reload our own 'selected' is null. Restore it from the persisted
+            // selection first, then fall back to the open cutscene stage's capacity, so the picker
+            // keeps its selection across recompiles.
+            if (selected == null)
             {
-                selected = CapacityCutsceneStage.Current.Capacity;
-                CurrentlyEdited = selected;
+                selected = RestoreSelected() ?? CapacityCutsceneStage.Current?.Capacity;
+                if (selected != null)
+                    CurrentlyEdited = selected;
             }
 
             if (selected != null)
@@ -309,7 +324,28 @@ namespace ATCG.Editor.Tools.CapacityEditor
         {
             capacitiesByLabel.TryGetValue(evt.newValue ?? string.Empty, out selected);
             CurrentlyEdited = selected;
+            PersistSelected();
             OnSelectionChanged();
+        }
+
+        private void PersistSelected()
+        {
+            string guid = selected != null
+                ? AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(selected))
+                : null;
+
+            if (string.IsNullOrEmpty(guid))
+                SessionState.EraseString(SelectedGuidKey);
+            else
+                SessionState.SetString(SelectedGuidKey, guid);
+        }
+
+        private static CapacityData RestoreSelected()
+        {
+            string guid = SessionState.GetString(SelectedGuidKey, null);
+            if (string.IsNullOrEmpty(guid))
+                return null;
+            return AssetDatabase.LoadAssetAtPath<CapacityData>(AssetDatabase.GUIDToAssetPath(guid));
         }
 
         private void PingSelected()
@@ -398,6 +434,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 row.AddToClassList("ce-step-row");
                 stepsPanel.Add(row);
             }
+
+            Button editSteps = new Button(() => EditStepsModal.Open(selected)) { text = "Edit steps" };
+            editSteps.style.marginTop = 4;
+            stepsPanel.Add(editSteps);
         }
 
         // When the cutscene stage is open for this capacity, read the timeline from the
