@@ -9,7 +9,7 @@ namespace ATCG.Metrics
     /// - Layers: HighlightState -> URP rendering layer (shared by outline and fill).
     /// - Themes: the colours per state for each phase type (movement, cast, deploy…).
     /// </summary>
-    [CreateAssetMenu(fileName = "HighlightSettings", menuName = "Antros/Highlighting/Highlight Settings")]
+    [CreateAssetMenu(fileName = "HighlightSettings", menuName = "ATCG/Highlighting/Highlight Settings")]
     public class HighlightSettings : ScriptableObject
     {
         [Serializable]

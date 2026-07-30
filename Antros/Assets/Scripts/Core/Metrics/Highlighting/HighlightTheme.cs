@@ -13,7 +13,7 @@ namespace ATCG.Metrics
     /// entry is editable and pushed onto the Linework settings by the controllers; the controllers also
     /// set each entry's RenderingLayer from the slot's state, so mapping is automatic.
     /// </summary>
-    [CreateAssetMenu(fileName = "HighlightTheme", menuName = "Antros/Highlighting/Highlight Theme")]
+    [CreateAssetMenu(fileName = "HighlightTheme", menuName = "ATCG/Highlighting/Highlight Theme")]
     public class HighlightTheme : ScriptableObject
     {
         [Serializable]
@@ -41,7 +41,7 @@ namespace ATCG.Metrics
 
         public IEnumerable<(Fill fill, HighlightState state)> ActiveFills
         {
-            get
+            get 
             {
                 foreach (Slot slot in slots)
                     if (slot != null && slot.fillActive && slot.fill != null)
