@@ -1,9 +1,12 @@
 ﻿using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.Capacities.Frost;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Arc;
@@ -13,31 +16,33 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 {
     public partial struct NorthWall : ICapacity<NorthWallData>
     {
-        public HexPatternBuilder GetHitPattern(NorthWallData data, BattleGrid battleGrid, HexCoordinates castPoint,
-            HexCoordinates casterOrigin)
+        public void GetHitPattern(NorthWallData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
         {
-            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
-            HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
+            builder
                 .With(new ArcPattern(casterOrigin ,castPoint, data.Size))
                 .Without(casterOrigin);
+        }
 
-            return builder;
+        public void GetTargets(NorthWallData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+        {
+            output.Add(battleCell.EntityAddress, CapacityTags.CELL);
+            foreach (var member in battleCell.GetMembers())
+                output.Add(member.EntityAddress, CapacityTags.MEMBER);
         }
 
         private partial void ExecuteConstruction(NorthWallData data, CapacityStepContext ctx)
         {
-            BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-
-            using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-
-            foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))
+            foreach (var cellAddress in ctx.Targets.WithTags(CapacityTags.CELL))
             {
-                var spawnDeployable = new SpawnDeployableCommand(
-                    ctx.BattlePhase.CurrentPlayer,
-                    data.DeployableData,
-                    cellAspect,
-                    ctx.Caster);
-                spawnDeployable.Run(ctx.BattlePhase);
+                if (cellAddress.Is(out BattleCellAspect cellAspect))
+                {
+                    var spawnDeployable = new SpawnDeployableCommand(
+                        ctx.BattlePhase.CurrentPlayer,
+                        data.DeployableData,
+                        cellAspect,
+                        ctx.Caster);
+                    spawnDeployable.Run(ctx.BattlePhase);
+                }
             }
         }
     }

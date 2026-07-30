@@ -6,8 +6,12 @@ using ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
+using ATCG.Capacities.Attributs;
 using ATCG.Capacities.Data.Frost;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
@@ -15,43 +19,32 @@ using ATCG.HexGrids.Patterns.Building;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
-	public partial struct EarthFracture :ICapacity<EarthFractureData> 
+	public partial struct EarthFracture :ICapacity<EarthFractureData>
 	{
-		public HexPatternBuilder GetHitPattern(EarthFractureData data, BattleGrid battleGrid, HexCoordinates castPoint,
-			HexCoordinates casterOrigin)
-		{
-			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
-			HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
-				.With(new PointsPattern(castPoint));
+		[CapacityTargetTag]
+		public const string APPLY_STATUS = nameof(APPLY_STATUS);
 
-			return builder;
+		public void GetHitPattern(EarthFractureData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
+		{
+			builder.With(new PointsPattern(castPoint));
+			if (battleGrid.TryGetBattleCell(castPoint, out var cell))
+			{
+				if (cell.EntityAddress.HasStatus<EarthQuakeStatus>())
+					builder.With(new SpiralPattern(data.EarthQuakePropagationRange));
+			}
+		}
+
+		public void GetTargets(EarthFractureData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+		{
+			output.Add(battleCell.EntityAddress, APPLY_STATUS);
 		}
 
 		private partial void ExecuteEarthFracture(EarthFractureData data, CapacityStepContext ctx)
 		{
-			BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-			using HexPatternBuilder patternBuilder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-			
-			foreach (var cellAspect in patternBuilder.GetBattleCells(battleGrid))
+			foreach (EntityAddress target in ctx.Targets.WithTags(APPLY_STATUS))
 			{
-				if (!cellAspect.EntityAddress.HasStatus<EarthQuakeStatus>())
-				{
-					var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
-					statusCommand.Run(ctx.BattlePhase);
-				}
-				else
-				{
-					HexCoordinates cellCenter = cellAspect.Coordinate;
-					BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, cellCenter);
-					HexPatternBuilder pattern = new HexPatternBuilder(cellCenter,hexPatternController).With(new SpiralPattern(1))
-						.Without(cellCenter);
-
-					foreach (var friend in pattern.GetBattleCells(battleGrid))
-					{
-						var statusCommand = new StatusApplyCommand(friend.EntityAddress, data.Status);
-						statusCommand.Run(ctx.BattlePhase);
-					}
-				}
+				var statusCommand = new StatusApplyCommand(target, data.Status);
+				statusCommand.Run(ctx.BattlePhase);
 			}
 		}
 	}

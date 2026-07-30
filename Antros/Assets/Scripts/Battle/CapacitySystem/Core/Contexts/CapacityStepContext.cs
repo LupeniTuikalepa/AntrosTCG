@@ -11,7 +11,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 {
     public readonly struct CapacityStepContext
     {
-        public IReadOnlyList<CapacityTarget> Targets => targets;
+        public CapacityTargets Targets => targets;
         public bool HasCaster => Caster.IsValid;
         public BattlePhase BattlePhase => capacityPhase.battlePhase;
         public CapacityData Data => capacityPhase.data;
@@ -27,11 +27,11 @@ namespace ATCG.Battle.CapacitySystem.Core
         public readonly float effectiveness;
         public readonly HexPatternBuilder patternBuilder;
 
-        private readonly List<CapacityTarget> targets;
+        private readonly CapacityTargets targets;
 
 
         public CapacityStepContext(CastCapacityPhase capacityPhase, float effectiveness, CapacityStepData stepData,
-            List<CapacityTarget> targets, HexPatternBuilder patternBuilder)
+            CapacityTargets targets, HexPatternBuilder patternBuilder)
         {
             this.capacityPhase = capacityPhase;
             this.effectiveness = effectiveness;

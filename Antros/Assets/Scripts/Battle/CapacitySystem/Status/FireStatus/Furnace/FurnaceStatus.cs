@@ -12,30 +12,30 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Furnace
 {
-	public partial class FurnaceStatus : Status<FurnaceData, FurnaceStatusComponent, StatusDurationController>, ITickOnTurnBegin
+	public partial class FurnaceStatus : Status<FurnaceStatusData, FurnaceStatusComponent, StatusDurationController>, ITickOnTurnBegin
 	{
-		protected override FurnaceStatusComponent CreateStatusComponent(FurnaceData data, in StatusContext context)
+		protected override FurnaceStatusComponent CreateStatusComponent(FurnaceStatusData statusData, in StatusContext context)
 		{
-			return new FurnaceStatusComponent(data);
+			return new FurnaceStatusComponent(statusData);
 		}
 
-		protected override StatusDurationController CreateStatusController(FurnaceData data, in StatusContext context)
+		protected override StatusDurationController CreateStatusController(FurnaceStatusData statusData, in StatusContext context)
 		{
-			return new StatusDurationController(data.Duration);
+			return new StatusDurationController(statusData.Duration);
 		}
 
-		protected override void OnApply(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnApply(FurnaceStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
 			ref var statusComponent = ref statusInfos.statusComponentRef.GetValue();
 			statusComponent.Watch(statusInfos.targetAddress);
 
 		}
 
-		protected override void OnTick(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnTick(FurnaceStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnTick(data, in statusInfos, in context);
+			base.OnTick(statusData, in statusInfos, in context);
 			
-			var command = TickForEntity(data, statusInfos.targetAddress, in context);
+			var command = TickForEntity(statusData, statusInfos.targetAddress, in context);
 			command?.Run(context.battlePhase);
 			
 			if (!statusInfos.targetAddress.Is(out BattleCellAspect cellAspect))
@@ -43,22 +43,22 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
 			
 			foreach (ComponentRef<GridMemberComponent> member in cellAspect.GetMembers())
 			{
-				ModifyPlayerManaCommand commandForMember = TickForEntity(data, member.EntityAddress, in context);
+				ModifyPlayerManaCommand commandForMember = TickForEntity(statusData, member.EntityAddress, in context);
 				commandForMember?.Run(context.battlePhase);
 			}
 		}
 
-		protected override void OnStack(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnStack(FurnaceStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnStack(data, in statusInfos, in context);
+			base.OnStack(statusData, in statusInfos, in context);
 			ref StatusDurationController controller = ref statusInfos.statusControllerRef.GetValue();
-			if (controller.RemainingTicks < data.Duration)
+			if (controller.RemainingTicks < statusData.Duration)
 			{
-				controller.SetTicks(data.Duration);
+				controller.SetTicks(statusData.Duration);
 			}
 		}
 
-		private static ModifyPlayerManaCommand TickForEntity(FurnaceData data, EntityAddress address,
+		private static ModifyPlayerManaCommand TickForEntity(FurnaceStatusData statusData, EntityAddress address,
 			in StatusContext context)
 		{
 			if (!address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent)) 
@@ -68,13 +68,13 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
 			if (player != context.battlePhase.CurrentPlayer)
 				return null;
 
-			return new ModifyPlayerManaCommand(player, -data.ManaRemove);
+			return new ModifyPlayerManaCommand(player, -statusData.ManaRemove);
 
 		}
 
-		protected override void OnRemove(FurnaceData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnRemove(FurnaceStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnRemove(data, in statusInfos, in context);
+			base.OnRemove(statusData, in statusInfos, in context);
 		}
 	}
 }

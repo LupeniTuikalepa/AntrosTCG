@@ -5,11 +5,11 @@ using UnityEngine;
 namespace ATCG.Capacities.Status.FireStatus
 {
 	[CreateAssetMenu(menuName = "ATCG/Status/Incandescence")]
-	public class IncandescenceData : StatusData
+	public class IncandescenceStatusData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]
 		public int Duration { get; private set; }
-		
+
 		[field: SerializeField, BoxGroup("Specific")]
 		public BurnStatusData Status { get; private set; }
 	}

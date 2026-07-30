@@ -55,6 +55,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private Label statusLabel;
         private Label directorStateLabel;
         private VisualElement stepsPanel;
+        private VisualElement tagsPanel;
         private VisualElement tracksPanel;
         private VisualElement propertiesPanel;
         private HelpBox warningsBox;
@@ -153,6 +154,13 @@ namespace ATCG.Editor.Tools.CapacityEditor
             stepsPanel = new VisualElement();
             stepsPanel.AddToClassList("ce-steps-panel");
             scroll.Add(stepsPanel);
+
+            Label tagsTitle = new("Target Tags");
+            tagsTitle.AddToClassList("ce-section-title");
+            scroll.Add(tagsTitle);
+            tagsPanel = new VisualElement();
+            tagsPanel.AddToClassList("ce-steps-panel");
+            scroll.Add(tagsPanel);
 
             Label tracksTitle = new("Auto-bindable Tracks");
             tracksTitle.AddToClassList("ce-section-title");
@@ -360,6 +368,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             RefreshBuildButton();
             RefreshDirectorState();
             RebuildStepsPanel();
+            RebuildTagsPanel();
             RebuildTracksPanel();
             RebuildPropertiesPanel();
         }
@@ -438,6 +447,28 @@ namespace ATCG.Editor.Tools.CapacityEditor
             Button editSteps = new Button(() => EditStepsModal.Open(selected)) { text = "Edit steps" };
             editSteps.style.marginTop = 4;
             stepsPanel.Add(editSteps);
+        }
+
+        private void RebuildTagsPanel()
+        {
+            tagsPanel.Clear();
+            if (selected == null)
+                return;
+
+            List<string> tags = CapacityTagEditor.ReadTags(selected);
+            if (tags.Count == 0)
+                tagsPanel.Add(new Label("Base tags only (CELL, MEMBER).") { style = { opacity = 0.6f } });
+
+            foreach (string tag in tags)
+            {
+                Label row = new(tag);
+                row.AddToClassList("ce-step-row");
+                tagsPanel.Add(row);
+            }
+
+            Button editTags = new Button(() => EditTagsModal.Open(selected)) { text = "Edit tags" };
+            editTags.style.marginTop = 4;
+            tagsPanel.Add(editTags);
         }
 
         // When the cutscene stage is open for this capacity, read the timeline from the

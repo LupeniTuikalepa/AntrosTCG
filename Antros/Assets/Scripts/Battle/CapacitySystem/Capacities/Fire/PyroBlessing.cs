@@ -1,9 +1,13 @@
+using System;
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.Capacities.Data.Fire;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
@@ -14,28 +18,28 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
 	public partial struct PyroBlessing : ICapacity<PyroBlessingData>
 	{
-		public HexPatternBuilder GetHitPattern(PyroBlessingData data, BattleGrid battleGrid, HexCoordinates castPoint,
-			HexCoordinates casterOrigin)
+		public void GetHitPattern(PyroBlessingData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
 		{
-			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
-			HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
+			builder = builder
 				.With(new PointsPattern(castPoint));
 
-			return builder;
+		}
+
+		public void GetTargets(PyroBlessingData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+		{
+			foreach (var member in battleCell.GetMembers())
+			{
+				if(member.EntityAddress.IsAlly(castingPlayer) && member.EntityAddress.HasComponent<StatusReceiver>())
+					output.Add(member.EntityAddress, CapacityTags.MEMBER);
+			}
 		}
 
 		private partial void ExecutePyroBlessing(PyroBlessingData data, CapacityStepContext ctx)
 		{
-			BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-			using HexPatternBuilder patternBuilder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-			
-			foreach (BattleCellAspect cellAspect in patternBuilder.GetBattleCells(battleGrid))
+			foreach (var target in ctx.Targets.WithTags(CapacityTags.MEMBER))
 			{
-				foreach (var member in cellAspect.GetMembers())
-				{
-					var statusCommand = new StatusApplyCommand(member.EntityAddress, data.Status);
-					statusCommand.Run(ctx.BattlePhase);
-				}
+				var statusCommand = new StatusApplyCommand(target, data.Status);
+				statusCommand.Run(ctx.BattlePhase);
 			}
 		}
 	}

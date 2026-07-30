@@ -1,10 +1,14 @@
+using System;
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.Capacities.Data.Frost;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
@@ -14,30 +18,33 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
 	public partial struct Stalemate : ICapacity<StalemateData>
 	{
-		public HexPatternBuilder GetHitPattern(StalemateData data, BattleGrid battleGrid, HexCoordinates castPoint,
-			HexCoordinates casterOrigin)
+		public void GetHitPattern(StalemateData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
 		{
-			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
-			HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
+			builder = builder
 				.With(new PointsPattern(castPoint));
 
-			return builder;
+		}
+
+		public void GetTargets(StalemateData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+		{
+			foreach (var member in battleCell.GetMembers())
+			{
+				if(member.EntityAddress.HasComponent<HealthComponent>())
+					output.Add(member.EntityAddress, CapacityTags.MEMBER);
+			}
 		}
 
 		private partial void ExecuteStalemate(StalemateData data, CapacityStepContext ctx)
 		{
-			if (ctx.BattleGrid.TryGetBattleCell(ctx.CastPoint, out var cell))
+			foreach (var member in ctx.Targets)
 			{
-				foreach (var member in cell.GetMembers())
+				if (member.HasComponent<HealthComponent>())
 				{
-					if (member.EntityAddress.HasComponent<HealthComponent>())
-					{
-						var statusFirstCommand = new StatusApplyCommand(member.EntityAddress, data.Status);
-						statusFirstCommand.Run(ctx.BattlePhase);
-						
-						var statusSecondCommand = new StatusApplyCommand(member.EntityAddress, data.Status);
-						statusSecondCommand.Run(ctx.BattlePhase);
-					}
+					var statusFirstCommand = new StatusApplyCommand(member, data.Status);
+					statusFirstCommand.Run(ctx.BattlePhase);
+
+					var statusSecondCommand = new StatusApplyCommand(member, data.Status);
+					statusSecondCommand.Run(ctx.BattlePhase);
 				}
 			}
 		}

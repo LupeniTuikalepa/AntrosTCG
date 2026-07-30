@@ -37,12 +37,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Berserk
         }
 
         public readonly ChannelKey channelKey;
-        public StatusData StatusData { get; }
+        public StatusData StatusStatusData { get; }
         public BerserkListener Listener { get; private set; }
 
-        public BerserkStatusComponent(BerserkStatusData data, ChannelKey channelKey)
+        public BerserkStatusComponent(BerserkStatusData statusData, ChannelKey channelKey)
         {
-            StatusData = data;
+            StatusStatusData = statusData;
             this.channelKey = channelKey;
             Listener = null;
         }

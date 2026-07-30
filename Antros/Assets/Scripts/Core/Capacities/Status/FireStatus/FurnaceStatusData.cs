@@ -5,12 +5,12 @@ using UnityEngine;
 namespace ATCG.Capacities.Status.FireStatus
 {
 	[CreateAssetMenu(menuName = "ATCG/Status/Fournaise")]
-	
-	public class FurnaceData : StatusData
+
+	public class FurnaceStatusData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]
 		public int ManaRemove { get; private set; }
-		
+
 		[field: SerializeField, BoxGroup("Specific")]
 		public int Duration { get; private set; }
 	}

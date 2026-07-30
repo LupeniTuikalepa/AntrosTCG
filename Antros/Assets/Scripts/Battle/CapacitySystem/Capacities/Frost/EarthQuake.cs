@@ -9,6 +9,8 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.Capacities.Data.Fire;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
@@ -19,39 +21,37 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
 	public partial struct EarthQuake : ICapacity<EarthQuakeData>
 	{
-		public HexPatternBuilder GetHitPattern(EarthQuakeData data, BattleGrid battleGrid, HexCoordinates castPoint,
-			HexCoordinates casterOrigin)
+		public void GetTargets(EarthQuakeData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
 		{
-			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
+			output.Add(battleCell.EntityAddress, CapacityTags.CELL);
+			foreach (var member in battleCell.GetMembers())
+				if(member.EntityAddress.HasComponent<HealthComponent>())
+				output.Add(member.EntityAddress, CapacityTags.MEMBER);
+		}
 
-			HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
+		public void GetHitPattern(EarthQuakeData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
+		{
+			builder
 				.With(new SpiralPattern(data.Range))
 				.Without(casterOrigin);
-			
-			return builder;
 		}
 
 		private partial void ExecuteEarthQuake(EarthQuakeData data, CapacityStepContext ctx)
 		{
-			BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-			using HexPatternBuilder patternBuilder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-
-			foreach (var cellAspect in patternBuilder.GetBattleCells(battleGrid))
+			foreach (var member in ctx.Targets.WithTags(CapacityTags.MEMBER))
 			{
-				var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
-				statusCommand.Run(ctx.BattlePhase);
-				
-				foreach (var member in cellAspect.GetMembers())
+				if (!ctx.IsAlly(member))
 				{
-					if (!member.EntityAddress.HasComponent<HealthComponent>())
-						continue;
-
-					if (!ctx.IsAlly(member.EntityAddress))
-					{
-						DamageCommand damageCommand = new DamageCommand(data.Damage, member.EntityAddress);
-						damageCommand.Run(ctx.BattlePhase);
-					}
+					DamageCommand damageCommand = new DamageCommand(data.Damage, member);
+					damageCommand.Run(ctx.BattlePhase);
 				}
+			}
+
+			foreach (var cell in  ctx.Targets.WithTags(CapacityTags.CELL))
+			{
+				var statusCommand = new StatusApplyCommand(cell, data.Status);
+				statusCommand.Run(ctx.BattlePhase);
+
 			}
 		}
 	}

@@ -38,13 +38,13 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 				}
 			}
 		}
-		StatusData IStatusComponent.StatusData => Explosion;
-		public ExplosionData Explosion { get; }
+		StatusData IStatusComponent.StatusStatusData => ExplosionStatus;
+		public ExplosionStatusData ExplosionStatus { get; }
 		public ExplosionListener Listener { get; private set; }
 		
-		public ExplosionComponent(ExplosionData explosion, ExplosionListener listener)
+		public ExplosionComponent(ExplosionStatusData explosionStatus, ExplosionListener listener)
 		{
-			Explosion = explosion;
+			ExplosionStatus = explosionStatus;
 			Listener = listener;
 		}
 		

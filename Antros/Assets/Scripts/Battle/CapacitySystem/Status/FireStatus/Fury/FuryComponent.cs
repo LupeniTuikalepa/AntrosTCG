@@ -7,13 +7,13 @@ namespace ATCG.Battle.CapacitySystem.Status.Fury
 {
 	public readonly struct FuryComponent : IStatusComponent
 	{
-		public readonly PyroFuryData data;
-		public StatusData StatusData => data;
+		public readonly PyroFuryData statusData;
+		public StatusData StatusStatusData => statusData;
 		public readonly ChannelKey channelKey;
 
-		public FuryComponent(PyroFuryData data, ChannelKey channelKey)
+		public FuryComponent(PyroFuryData statusData, ChannelKey channelKey)
 		{
-			this.data = data;
+			this.statusData = statusData;
 			this.channelKey = channelKey;
 		}
 	}

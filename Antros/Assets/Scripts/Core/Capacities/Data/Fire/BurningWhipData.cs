@@ -12,14 +12,16 @@ namespace ATCG.Capacities.Data.Fire
 	public partial class BurningWhipData : CapacityData
 	{
 		[field:SerializeField,BoxGroup("Specific")]
-		public BurnStatusData Status { get;private set; }
-		
+		public BurnStatusData BurningStatus { get;private set; }
+		[field:SerializeField,BoxGroup("Specific")]
+		public IncandescenceStatusData IncandescenceStatus { get;private set; }
+
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Range { get; private set; }
 
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Damage { get; private set; }
-		
+
 		[field: SerializeField, BoxGroup("Custom")]
 		public TridentPatternData TridentPatternData { get; private set; }
 	}

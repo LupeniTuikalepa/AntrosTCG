@@ -38,7 +38,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.EarthQuake
 				}
 			}
 		}
-		StatusData IStatusComponent.StatusData => EarthQuakeStatusData;
+		StatusData IStatusComponent.StatusStatusData => EarthQuakeStatusData;
 		public EarthQuakeStatusData EarthQuakeStatusData { get; }
 		public EarthQuakeListener Listener { get; private set; }
 
