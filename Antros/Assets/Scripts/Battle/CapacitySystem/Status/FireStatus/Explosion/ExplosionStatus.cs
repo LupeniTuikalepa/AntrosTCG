@@ -13,27 +13,27 @@ using ATCG.HexGrids.Patterns.Building;
 
 namespace ATCG.Battle.CapacitySystem.Status.Explosion
 {
-	public partial class ExplosionStatus : Status<ExplosionData,StatusDurationController>
+	public partial class ExplosionStatus : Status<ExplosionStatusData,StatusDurationController>
 	{
-		protected override StatusDurationController CreateStatusController(ExplosionData data, in StatusContext context)
+		protected override StatusDurationController CreateStatusController(ExplosionStatusData statusData, in StatusContext context)
 		{
-			return new StatusDurationController(data.Duration);
+			return new StatusDurationController(statusData.Duration);
 		}
 
-		protected override void OnStack(ExplosionData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnStack(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnStack(data, in statusInfos, in context);
+			base.OnStack(statusData, in statusInfos, in context);
 			ref StatusDurationController controller = ref statusInfos.statusControllerRef.GetValue();
-			if (controller.RemainingTicks < data.Duration)
+			if (controller.RemainingTicks < statusData.Duration)
 			{
-				controller.SetTicks(data.Duration);
+				controller.SetTicks(statusData.Duration);
 			}
 		}
 
-		protected override void OnTick(ExplosionData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnTick(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnTick(data, in statusInfos, in context);
-			DamageCommand selfDamage = new DamageCommand(data.MainDamage, statusInfos.targetAddress);
+			base.OnTick(statusData, in statusInfos, in context);
+			DamageCommand selfDamage = new DamageCommand(statusData.MainDamage, statusInfos.targetAddress);
 			selfDamage.Run(context.battlePhase);
 
 			if (!statusInfos.targetAddress.TryGetComponentRO(out GridMemberComponent gridMember))
@@ -46,24 +46,24 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 			BattleIgnoreOriginPatternController hexPatternController = new(context.Grid, center);
 				
 			HexPatternBuilder builder = new HexPatternBuilder(center, hexPatternController) 
-				.With(new SpiralPattern(data.Range))
+				.With(new SpiralPattern(statusData.Range))
 				.Without(center);
 
 			foreach (var friend in builder.GetBattleCells(battleGrid))
 			{
-				DamageCommand friendDamage = new DamageCommand(data.SecondeDamage, friend.EntityAddress);
+				DamageCommand friendDamage = new DamageCommand(statusData.SecondeDamage, friend.EntityAddress);
 				friendDamage.Run(context.battlePhase);
 			}
 		}
 
-		protected override void OnApply(ExplosionData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnApply(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnApply(data, in statusInfos, in context);
+			base.OnApply(statusData, in statusInfos, in context);
 		}
 
-		protected override void OnRemove(ExplosionData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnRemove(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnRemove(data, in statusInfos, in context);
+			base.OnRemove(statusData, in statusInfos, in context);
 		}
 	}
 }

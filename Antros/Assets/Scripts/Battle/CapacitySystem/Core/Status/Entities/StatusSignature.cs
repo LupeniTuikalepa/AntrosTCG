@@ -4,11 +4,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public readonly struct StatusSignature<T> : IStatusComponent where T : IStatus
     {
-        public StatusData StatusData { get; }
+        public StatusData StatusStatusData { get; }
 
-        public StatusSignature(StatusData statusData)
+        public StatusSignature(StatusData statusStatusData)
         {
-            StatusData = statusData;
+            StatusStatusData = statusStatusData;
         }
     }
 }

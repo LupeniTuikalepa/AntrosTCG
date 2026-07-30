@@ -7,6 +7,7 @@ using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Phases.Preview;
@@ -33,24 +34,25 @@ namespace ATCG.Battle
             private readonly CapacityData data;
             private readonly BattleGrid battleGrid;
             private readonly HexCoordinates from;
+            private readonly IBattlePlayer castingPlayer;
 
             private HexPatternBuilder hexPatternBuilder;
 
-            public CapacityHitPreview(CapacityData data, BattleGrid battleGrid, HexCoordinates from)
+            public CapacityHitPreview(CapacityData data, BattleGrid battleGrid, HexCoordinates from, IBattlePlayer castingPlayer)
             {
                 this.data = data;
                 this.battleGrid = battleGrid;
                 this.from = from;
+                this.castingPlayer = castingPlayer;
             }
 
             public HexPatternBuilder GetPreview(HexCoordinates coordinates)
             {
+                HexPatternBuilder builder = new HexPatternBuilder(coordinates, new BattleIgnoreOriginPatternController(battleGrid, coordinates));
                 if (data.TryGet(out ICapacityContainer container))
-                {
-                    container.GetHitPattern(data, battleGrid, coordinates, from);
-                }
+                    container.GetHitPattern(data, ref builder, battleGrid, coordinates, from);
 
-                return new HexPatternBuilder(coordinates, new BattlePatternController(battleGrid));
+                return builder;
             }
 
             public void FillPreview(ISelectEntityPhase phase, EntityAddress entityAddress, List<EntityAddress> previews)
@@ -59,10 +61,16 @@ namespace ATCG.Battle
                 {
                     if (data.TryGet(out ICapacityContainer container))
                     {
-                        using HexPatternBuilder builder = container.GetHitPattern(data, battleGrid, memberComponent.coordinates, from);
+                        HexPatternBuilder builder = new HexPatternBuilder(memberComponent.coordinates, new BattleIgnoreOriginPatternController(battleGrid, memberComponent.coordinates));
+                        container.GetHitPattern(data, ref builder, battleGrid, memberComponent.coordinates, from);
+                        using HexPatternBuilder _hp = builder;
 
+                        CapacityTargets targets = new CapacityTargets();
                         foreach (var battleCellAspect in builder.GetBattleCells(battleGrid))
-                            container.GetTargets(data, battleCellAspect, previews);
+                            container.GetTargets(data, battleCellAspect, targets, castingPlayer);
+
+                        foreach (EntityAddress target in targets)
+                            previews.Add(target);
                     }
                 }
             }
@@ -94,7 +102,7 @@ namespace ATCG.Battle
                 SelectEntityPhase<AspectFilter<BattleCellAspect>> phase =
                     new SelectEntityPhase<AspectFilter<BattleCellAspect>>(fromPlayer, filter, patternBuilder)
                     {
-                        previewController = new CapacityHitPreview(capacityData, BattleGrid, from),
+                        previewController = new CapacityHitPreview(capacityData, BattleGrid, from, fromPlayer),
                         HighlightTheme = GameMetrics.Current.HighlightSettings != null
                             ? GameMetrics.Current.HighlightSettings.CastTheme
                             : null,

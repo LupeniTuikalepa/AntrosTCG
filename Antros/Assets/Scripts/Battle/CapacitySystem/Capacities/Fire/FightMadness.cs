@@ -1,12 +1,17 @@
+using System;
 using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.CapacitySystem.Status.Berserk;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
@@ -17,14 +22,21 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 {
 	public partial struct FightMadness : ICapacity<FightMadnessData>
 	{
-		public HexPatternBuilder GetHitPattern(FightMadnessData data, BattleGrid battleGrid, HexCoordinates castPoint,
-			HexCoordinates casterOrigin)
+		public void GetHitPattern(FightMadnessData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
 		{
-			BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
-			HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
+			builder = builder
 				.With(new PointsPattern(castPoint));
 
-			return builder;
+		}
+
+		public void GetTargets(FightMadnessData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+		{
+			foreach (var member in battleCell.GetMembers())
+			{
+				EntityAddress address = member.EntityAddress;
+				if(!address.IsAlly(castingPlayer) && address.HasComponent<HealthComponent>())
+					output.Add(address, CapacityTags.MEMBER);
+			}
 		}
 
 		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
@@ -33,18 +45,13 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			statusCommand.Run(ctx.BattlePhase);
 		}
 
+
 		private partial void ExecutePunch(FightMadnessData data, CapacityStepContext ctx)
 		{
-			if (ctx.BattleGrid.TryGetBattleCell(ctx.CastPoint, out var cell))
+			foreach (var member in ctx.Targets.WithTags(CapacityTags.MEMBER))
 			{
-				foreach (var componentRef in cell.GetMembers())
-				{
-					if (componentRef.EntityAddress.HasComponent<HealthComponent>())
-					{
-						var damage = new DamageCommand( data.PunchDamage, componentRef.EntityAddress);
-						damage.Run(ctx.BattlePhase);
-					}
-				}
+				var damage = new DamageCommand( data.PunchDamage, member);
+				damage.Run(ctx.BattlePhase);
 			}
 		}
 	}

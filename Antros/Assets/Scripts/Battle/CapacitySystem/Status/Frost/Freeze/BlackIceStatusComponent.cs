@@ -8,11 +8,11 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost
 {
     public struct BlackIceStatusComponent : IRedirectStatusComponent
     {
-        public StatusData StatusData { get; }
+        public StatusData StatusStatusData { get; }
 
-        public BlackIceStatusComponent(StatusData statusData)
+        public BlackIceStatusComponent(StatusData statusStatusData)
         {
-            StatusData = statusData;
+            StatusStatusData = statusStatusData;
         }
 
 

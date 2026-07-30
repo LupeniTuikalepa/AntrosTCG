@@ -256,6 +256,7 @@ using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
+using ATCG.Capacities;
 using ATCG.Capacities.Data.{element};
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Building;
@@ -264,15 +265,15 @@ namespace ATCG.Battle.CapacitySystem.Capacities.{element}
 {{
     public partial struct {name} : ICapacity<{name}Data>
     {{
-        // Valid default: targets the cell and every member on it.
-        public void GetTargets({name}Data data, BattleCellAspect battleCell, List<EntityAddress> output)
+        // Valid default: tags the cell as Cell and every member on it as Member.
+        public void GetTargets({name}Data data, BattleCellAspect battleCell, CapacityTargets output)
         {{
-            output.Add(battleCell.EntityAddress);
+            output.Add(battleCell.EntityAddress, CapacityTags.CELL);
             foreach (var member in battleCell.GetMembers())
-                output.Add(member.EntityAddress);
+                output.Add(member.EntityAddress, CapacityTags.MEMBER);
         }}
 
-        public HexPatternBuilder GetHitPattern({name}Data data, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
+        public void GetHitPattern({name}Data data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
             => throw new NotImplementedException();
 
 {stepMethods}

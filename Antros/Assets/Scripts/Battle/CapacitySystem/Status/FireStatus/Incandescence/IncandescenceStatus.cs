@@ -11,21 +11,21 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status
 {
-	public partial class IncandescenceStatus : Status<IncandescenceData, IncandescenceComponent, StatusDurationController>, ITickOnTurnEnd
+	public partial class IncandescenceStatus : Status<IncandescenceStatusData, IncandescenceComponent, StatusDurationController>, ITickOnTurnEnd
 	{
-		protected override IncandescenceComponent CreateStatusComponent(IncandescenceData data, in StatusContext context)
+		protected override IncandescenceComponent CreateStatusComponent(IncandescenceStatusData statusData, in StatusContext context)
 		{
-			return new IncandescenceComponent(data);
+			return new IncandescenceComponent(statusData);
 		}
 
-		protected override StatusDurationController CreateStatusController(IncandescenceData data, in StatusContext context)
+		protected override StatusDurationController CreateStatusController(IncandescenceStatusData statusData, in StatusContext context)
 		{
-			return new StatusDurationController(data.Duration);
+			return new StatusDurationController(statusData.Duration);
 		}
 
-		protected override void OnTick(IncandescenceData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnTick(IncandescenceStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnTick(data, in statusInfos, in context);
+			base.OnTick(statusData, in statusInfos, in context);
 			if (!statusInfos.targetAddress.TryGetComponentRO<BattleCellComponent>(out _))
 				return;
 
@@ -40,19 +40,19 @@ namespace ATCG.Battle.CapacitySystem.Status
 				{
 					var player = belongsToPlayerComponent.GetPlayer(context.battlePhase);
                 
-					var statusCommand = new StatusApplyCommand(member.EntityAddress, data.Status);
+					var statusCommand = new StatusApplyCommand(member.EntityAddress, statusData.Status);
 					statusCommand.Run(player.BattlePhase);
 				}
 			}
 		}
 
-		protected override void OnStack(IncandescenceData data, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnStack(IncandescenceStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnStack(data, in statusInfos, in context);
+			base.OnStack(statusData, in statusInfos, in context);
 			ref StatusDurationController controller = ref statusInfos.statusControllerRef.GetValue();
-			if (controller.RemainingTicks < data.Duration)
+			if (controller.RemainingTicks < statusData.Duration)
 			{
-				controller.SetTicks(data.Duration);
+				controller.SetTicks(statusData.Duration);
 			}
 		}
 	}

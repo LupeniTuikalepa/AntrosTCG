@@ -4,11 +4,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 {
     public struct DefaultStatusComponent<TData> : IStatusComponent where TData : StatusData
     {
-        public StatusData StatusData { get; }
+        public StatusData StatusStatusData { get; }
 
-        public DefaultStatusComponent(TData statusData)
+        public DefaultStatusComponent(TData statusStatusData)
         {
-            StatusData = statusData;
+            StatusStatusData = statusStatusData;
         }
 
     }

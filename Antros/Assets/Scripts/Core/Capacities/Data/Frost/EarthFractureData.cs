@@ -11,8 +11,11 @@ namespace ATCG.Capacities.Data.Frost
 	{
 		[field:SerializeField,BoxGroup("Specific")]
 		public EarthQuakeStatusData Status { get;private set; }
-		
-		[field: SerializeField, BoxGroup("Custom")]
+
+		[field: SerializeField, BoxGroup("Specific")]
 		public int Range { get; private set; }
+
+		[field: SerializeField, BoxGroup("Specific"), Min(1)]
+		public int EarthQuakePropagationRange { get; private set; } = 1;
 	}
 }

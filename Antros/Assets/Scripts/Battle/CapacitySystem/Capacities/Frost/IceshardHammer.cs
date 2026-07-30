@@ -6,10 +6,11 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Controllers;
+using ATCG.Battle.Players;
+using ATCG.Capacities;
 using ATCG.Capacities.Frost;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
-using ATCG.HexGrids.Patterns.Arc;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.HexGrids.Utility;
 
@@ -17,55 +18,49 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 {
     public partial struct IceshardHammer : ICapacity<IceshardHammerData>
     {
-        public HexPatternBuilder GetHitPattern(IceshardHammerData data, BattleGrid battleGrid, HexCoordinates castPoint,
-            HexCoordinates casterOrigin)
+        public void GetHitPattern(IceshardHammerData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
         {
-            BattleIgnoreOriginPatternController hexPatternController = new(battleGrid, castPoint);
-            HexPatternBuilder builder = new HexPatternBuilder(castPoint, hexPatternController)
-                .With(new PointsPattern(castPoint));
+            builder.With(new PointsPattern(castPoint));
+        }
 
-            return builder;
+        public void GetTargets(IceshardHammerData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+        {
+            output.Add(battleCell.EntityAddress, CapacityTags.CELL);
         }
 
         private partial void ExecuteDestruction(IceshardHammerData data, CapacityStepContext ctx)
         {
-            BattleGrid battleGrid = ctx.BattlePhase.BattleGrid;
-
-            using HexPatternBuilder builder = GetHitPattern(data, battleGrid, ctx.CastPoint, ctx.capacityPhase.CasterOrigin);
-
-            foreach (BattleCellAspect cellAspect in builder.GetBattleCells(battleGrid))
+            foreach (EntityAddress memberEntityAddress in ctx.Targets.WithTags(CapacityTags.MEMBER))
             {
-                foreach (var member in cellAspect.GetPhysicalMembers())
-                {
-                    var memberEntityAddress = member.EntityAddress;
-                    if (memberEntityAddress.Is<DeployableAspect>(out var deployable))
-                    {
-                        var deployableData = deployable.DeployableEntityTag.data;
-                        var direction = ctx.CasterOrigin.GetNormalizedDirection(ctx.CastPoint);
-                        var shardDestination = member.GetValue().coordinates + direction;
-                        
-                        if (deployableData is not IceWallData)
-                            continue;
-                        
-                        var damageCommand = new DeathCommand(memberEntityAddress);
-                        damageCommand.Run(ctx.BattlePhase);
+                if(!memberEntityAddress.Is<GridMemberAspect>(out var gridMemberAspect))
+                    continue;
 
-                        battleGrid.TryGetBattleCell(shardDestination, out var cell);
-                        foreach (var physicalMember in cell.GetPhysicalMembers())
-                        {
-                            var propagationDamageCommand = new DamageCommand(data.Damage, physicalMember.EntityAddress);
-                            propagationDamageCommand.Run(ctx.BattlePhase);
-                        }
-                        
-                    }
-                    else if (memberEntityAddress.TryGetComponentRO<MovementComponent>(out _))
+                if (memberEntityAddress.Is<DeployableAspect>(out var deployable))
+                {
+                    var deployableData = deployable.DeployableEntityTag.data;
+                    var direction = ctx.CasterOrigin.GetNormalizedDirection(ctx.CastPoint);
+                    var shardDestination = deployable.Coordinates + direction;
+
+                    if (deployableData is not IceWallData)
+                        continue;
+
+                    var damageCommand = new DeathCommand(memberEntityAddress);
+                    damageCommand.Run(ctx.BattlePhase);
+
+                    ctx.BattleGrid.TryGetBattleCell(shardDestination, out var cell);
+                    foreach (var physicalMember in cell.GetPhysicalMembers())
                     {
-                        var direction = ctx.CasterOrigin.GetNormalizedDirection(cellAspect.Coordinate);
-                        var destination = cellAspect.Coordinate + direction * data.PushbackMultiplier;
-                        
-                        var pushbackCommand = new PushbackCommand(memberEntityAddress, destination);
-                        pushbackCommand.Run(ctx.BattlePhase);
+                        var propagationDamageCommand = new DamageCommand(data.Damage, physicalMember.EntityAddress);
+                        propagationDamageCommand.Run(ctx.BattlePhase);
                     }
+                }
+                else if (memberEntityAddress.HasComponent<MovementComponent>())
+                {
+                    var direction = ctx.CasterOrigin.GetNormalizedDirection(gridMemberAspect.Coordinates);
+                    var destination = gridMemberAspect.Coordinates + direction * data.PushbackMultiplier;
+
+                    var pushbackCommand = new PushbackCommand(memberEntityAddress, destination);
+                    pushbackCommand.Run(ctx.BattlePhase);
                 }
             }
         }

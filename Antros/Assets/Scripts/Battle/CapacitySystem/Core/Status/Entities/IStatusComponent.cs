@@ -7,6 +7,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
     [GenerateComponentIterator]
     public interface IStatusComponent : IEntityComponent
     {
-        public StatusData StatusData { get; }
+        public StatusData StatusStatusData { get; }
     }
 }

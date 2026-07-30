@@ -14,6 +14,7 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
@@ -182,27 +183,24 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         private void RunStepNow(ICapacityStep step)
         {
-            using (ListPool<CapacityTarget>.Get(out List<CapacityTarget> targets))
-            {
-                float effectiveness = ReadQtes();
+            float effectiveness = ReadQtes();
 
-                if (!data.TryGet(out ICapacityContainer capacityContainer))
-                    return;
+            if (!data.TryGet(out ICapacityContainer capacityContainer))
+                return;
 
-                using HexPatternBuilder patternBuilder = capacityContainer.GetHitPattern(data, battlePhase.BattleGrid, castPoint, CasterOrigin);
-                foreach (BattleCellAspect battleCell in patternBuilder.GetBattleCells(battlePhase.BattleGrid))
-                {
-                    using (ListPool<EntityAddress>.Get(out var cellTargets))
-                    {
-                        capacityContainer.GetTargets(data, battleCell, cellTargets);
-                        foreach (EntityAddress target in cellTargets)
-                            targets.Add(new CapacityTarget(battleCell.Coordinate, target));
-                    }
-                }
+            HexPatternBuilder patternBuilder = new HexPatternBuilder(castPoint, new BattleIgnoreOriginPatternController(battlePhase.BattleGrid, castPoint));
+            capacityContainer.GetHitPattern(data, ref patternBuilder, battlePhase.BattleGrid, castPoint, CasterOrigin);
+            using HexPatternBuilder _hp = patternBuilder;
 
-                CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName), targets, patternBuilder);
-                step.RunStep(ctx);
-            }
+            // Resolve the hit cells once, then let the capacity register its tagged
+            // targets (default: cell -> Cell, members -> Member). Steps query them back
+            // by tag via ctx.Targets.WithTags(...).
+            CapacityTargets targets = new CapacityTargets();
+            foreach (BattleCellAspect battleCell in patternBuilder.GetBattleCells(battlePhase.BattleGrid))
+                capacityContainer.GetTargets(data, battleCell, targets, CasterPlayer);
+
+            CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName), targets, patternBuilder);
+            step.RunStep(ctx);
         }
 
         private CapacityStepData ResolveStepData(string stepName)

@@ -6,12 +6,12 @@ namespace ATCG.Battle.CapacitySystem.Status
 {
 	public readonly struct IncandescenceComponent : IStatusComponent
 	{
-		public readonly IncandescenceData data;
-		public StatusData StatusData => data;
+		public readonly IncandescenceStatusData statusData;
+		public StatusData StatusStatusData => statusData;
 
-		public IncandescenceComponent(IncandescenceData data)
+		public IncandescenceComponent(IncandescenceStatusData statusData)
 		{
-			this.data = data;
+			this.statusData = statusData;
 		}
 
 	}

@@ -17,12 +17,12 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
         public class FurnaceListener : ICommandListener<MoveCommand>
         {
 	        public readonly HexCoordinates destination;
-	        public readonly FurnaceData data;
+	        public readonly FurnaceStatusData statusData;
 	        
-	        public FurnaceListener(HexCoordinates destination, FurnaceData data)
+	        public FurnaceListener(HexCoordinates destination, FurnaceStatusData statusData)
 	        {
 		        this.destination = destination;
-		        this.data = data;
+		        this.statusData = statusData;
 	        }
 
 	        public bool Accepts(CommandContext context, MoveCommand command)
@@ -32,22 +32,22 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
 
 	        public void Trigger(CommandContext context, MoveCommand command)
 	        {
-		        if(data.TryGet(out IStatusContainer statusContainer))
+		        if(statusData.TryGet(out IStatusContainer statusContainer))
 		        {
 			        StatusContext statusContext = new StatusContext(context.battlePhase);
-			        statusContainer.Tick(data, command.TargetEntityAddress(context.World), statusContext);
+			        statusContainer.Tick(statusData, command.TargetEntityAddress(context.World), statusContext);
 		        }
 	        }
         }
 
-        StatusData IStatusComponent.StatusData => FurnaceData;
+        StatusData IStatusComponent.StatusStatusData => FurnaceStatusData;
         
-        public FurnaceData FurnaceData { get; }
+        public FurnaceStatusData FurnaceStatusData { get; }
         public FurnaceListener Listener { get; private set; }
 
-        public FurnaceStatusComponent(FurnaceData data)
+        public FurnaceStatusComponent(FurnaceStatusData statusData)
         {
-	        FurnaceData = data;
+	        FurnaceStatusData = statusData;
             Listener = null;
         }
 
@@ -56,7 +56,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
 	        if (target.TryGetComponentRO<GridMemberComponent>(out var gridMember))
 	        {
 		        Listener?.Unregister();
-		        Listener = new FurnaceListener(gridMember.coordinates, FurnaceData);
+		        Listener = new FurnaceListener(gridMember.coordinates, FurnaceStatusData);
 		        Listener.Register();
 	        }
         }
