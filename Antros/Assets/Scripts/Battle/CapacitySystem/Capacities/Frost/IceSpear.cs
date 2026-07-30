@@ -20,11 +20,13 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                 output.Add(member.EntityAddress);
         }
 
-        public HexPatternBuilder GetHitPattern(IceSpearData data, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
+        public HexPatternBuilder GetHitPattern(IceSpearData data, BattleGrid battleGrid, HexCoordinates castPoint,
+            HexCoordinates casterOrigin)
             => throw new NotImplementedException();
 
         // Step wired by [WithStep("Hit")] on IceSpearData.
         private partial void ExecuteHit(IceSpearData data, CapacityStepContext ctx)
             => throw new NotImplementedException();
+
     }
 }
