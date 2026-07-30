@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Passives.Datas.Datas.ExtendedDestructionData
   guidText: fe4ed674-71d1-435b-8630-0051dab54c7f
   <Name>k__BackingField: "Destruction \xE9tendue"
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 7
   <Description>k__BackingField: 
   <ActiveOnSpawn>k__BackingField: 1
   <RuntimePassive>k__BackingField: {fileID: 2542661488303874884, guid: 6a3d6e51a5358f54d8f00cb5c354a8ba, type: 3}

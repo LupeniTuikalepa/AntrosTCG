@@ -27,7 +27,7 @@ namespace ATCG.Battle.Commands.Entities
             sourceEntityId = address.entity;
             sourceEntityGeneration = address.entity.generation;
         }
-
+        
         public EntityAddress TargetEntityAddress(World world) => new EntityAddress(world, Target);
 
     }

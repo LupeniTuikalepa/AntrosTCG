@@ -39,6 +39,7 @@ namespace ATCG.Battle.Entities.Aspects
         public ConstructionBattleCard ConstructionCard => BattleCardComponent.battleCard as ConstructionBattleCard;
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public IBattleCard Card => BattleCardComponent.battleCard;
+        public int PassiveRange => ConstructionCard.PassiveRange;
 
         private static partial void CreateComponents(ref ComponentsFactory componentsFactory, Setup setup, EntityAddress address)
         {
