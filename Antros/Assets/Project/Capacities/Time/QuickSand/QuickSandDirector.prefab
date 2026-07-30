@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1824371010324150615}
   - component: {fileID: 6594263420162540190}
   - component: {fileID: 1754621862573115284}
+  - component: {fileID: 5097491322518175331}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -125,6 +126,25 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &5097491322518175331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2290536808019818944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 1824371010324150615}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 1
+  lookAtBindToBone: 0
+  lookAtBone: 0
 --- !u!1 &7365367459314783236
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +157,7 @@ GameObject:
   - component: {fileID: 1613532180767281604}
   - component: {fileID: 8401993506089020516}
   - component: {fileID: 5374389491848497123}
+  - component: {fileID: 8033880723933197749}
   m_Layer: 0
   m_Name: CinemachineCamera_1
   m_TagString: Untagged
@@ -250,6 +271,25 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &8033880723933197749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7365367459314783236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 1613532180767281604}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 1
+  lookAtBindToBone: 0
+  lookAtBone: 0
 --- !u!1001 &2203012153643543943
 PrefabInstance:
   m_ObjectHideFlags: 0

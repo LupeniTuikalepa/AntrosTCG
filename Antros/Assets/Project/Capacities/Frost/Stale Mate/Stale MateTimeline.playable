@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Name: Step Marker
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
   m_Time: 3.15
-  stepName: Quicksand
+  stepName: Stalemate
   id: 84178d63-c42d-4f91-9d78-2d57b35b438b
 --- !u!114 &-1226258883088543947
 MonoBehaviour:

@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 8794559941064159898}
   - component: {fileID: 2497732158448855470}
   - component: {fileID: 6887025827512936457}
+  - component: {fileID: 2967703562158325556}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4691349197585691972
 Transform:
   m_ObjectHideFlags: 0
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600863226597562335}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.01744751, y: 0.8923134, z: -0.03461631, w: 0.44974896}
+  m_LocalRotation: {x: 0.017386189, y: 0.9311207, z: -0.044777617, w: 0.36153418}
   m_LocalPosition: {x: -2.03, y: 0.29000002, z: 2.22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -124,6 +125,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
   LookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &2967703562158325556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600863226597562335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 8794559941064159898}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 1
+  lookAtBindToBone: 0
+  lookAtBone: 9
 --- !u!1 &5837866446314662051
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +161,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7759881785137411482
 Transform:
   m_ObjectHideFlags: 0

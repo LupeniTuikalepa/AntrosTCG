@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381decf373754a04db44d8b0ea1aba1b, type: 3}
   m_Name: DebugStartingDeck
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.DebugStartingDeck
-  activeCardGuids: []
+  activeCardGuids:
+  - 0e9a6c40-63ff-4353-8d39-0c251b11918b
