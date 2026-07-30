@@ -4,6 +4,7 @@ using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Battle.Players;
 using UnityEngine;
 
@@ -36,6 +37,9 @@ namespace ATCG.Battle.Commands.EntityCommands
             if (address.Is(out HeroEntityAspect aspect))
                 aspect.Player.DeadCards.TryAddCard(aspect.HeroCard);
 
+            if(address.TryGetComponentRO<PassiveContainerComponent>(out var passiveContainer))
+                passiveContainer.RemoveAllPassive(address);
+            
             address.Destroy();
             //Break("Entity death.");
         }

@@ -18,24 +18,30 @@ namespace ATCG.Battle.Commands.GameCommands
         public struct Infos : ICommandInfos
         {
             public readonly GameObject prefab;
+            public readonly BattleID spawnID;
             public readonly HexCoordinates destination;
             public readonly ConstructionAspect construction;
             public readonly BattleGrid grid;
 
-            public Infos(GameObject prefab, HexCoordinates destination, ConstructionAspect construction, BattleGrid grid)
+            public Infos(GameObject prefab, BattleID spawnID, HexCoordinates destination, ConstructionAspect construction, BattleGrid grid)
             {
                 this.prefab = prefab;
+                this.spawnID = spawnID;
                 this.destination = destination;
                 this.construction = construction;
                 this.grid = grid;
             }
         }
+
+        private readonly BattleID spawnID;
+
         
         public SpawnConstructionCommand(IBattlePlayer battlePlayer, ConstructionBattleCard constructionBattleCard, HexCoordinates destination) : base(battlePlayer)
         {
             this.constructionBattleCard = constructionBattleCard;
             prefab = constructionBattleCard.Prefab;
             this.destination = destination;
+            spawnID = BattleID.CreateNew();
         }
 
         protected override void Process(in CommandContext context)
@@ -50,7 +56,7 @@ namespace ATCG.Battle.Commands.GameCommands
                     battleID = constructionBattleCard.ID
                 });
 
-            infos = new Infos(prefab, destination, construction, context.Grid);
+            infos = new Infos(prefab, spawnID, destination, construction, context.Grid);
         }
     }
 }

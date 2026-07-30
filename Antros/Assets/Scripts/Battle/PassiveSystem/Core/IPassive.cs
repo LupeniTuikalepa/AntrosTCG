@@ -17,7 +17,7 @@ namespace ATCG.Battle.PassiveSystem.Core
 
         [AddToContainer]
         public void Apply(TData data, PassiveContext ctx){}
-        
+
         [AddToContainer]
         public void Remove(TData data, PassiveContext ctx){}
     }

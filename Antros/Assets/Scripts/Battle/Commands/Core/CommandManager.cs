@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Exceptions;
 using ATCG.Battle.Commands.Groups;
@@ -30,6 +31,17 @@ namespace ATCG.Battle.Commands
         public static void Run<T>(this T command, BattlePhase battlePhase) where T : ICommand
         {
             RunAsync(command, battlePhase).ListenForExceptions();
+        }
+
+        public static void Schedule<T>(this T command, BattlePhase battlePhase, CancellationToken token = default) where T : ICommand
+        {
+            ScheduleAsync(command, battlePhase, token).ListenForExceptions();
+        }
+
+        public static async Awaitable ScheduleAsync<T>(this T command, BattlePhase battlePhase, CancellationToken token = default) where T : ICommand
+        {
+            await Awaitable.EndOfFrameAsync(token);
+            await RunAsync(command, battlePhase);
         }
 
         public static CommandGroupHandle BeginGroup(string label)

@@ -2,7 +2,10 @@
 using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Runtime.Deployables;
+using ATCG.Battle.PassiveSystem.Core;
 using Helteix.Tools;
 using UnityEngine;
 
@@ -31,9 +34,9 @@ namespace ATCG.Battle.Entities.Runtime.Constructions
 
             GameObject instance = infos.prefab.InstantiatePrefab(transform);
 
+            var constructionAspect = infos.construction;
             if (instance.TryGetComponent(out RuntimeConstruction runtimeConstruction))
-                await runtimeConstruction.Spawn(runtimeEntityManager, infos.construction);
-
+                await runtimeConstruction.Spawn(runtimeEntityManager, constructionAspect);
 
             state.CompleteFollowThrough(this);
         }

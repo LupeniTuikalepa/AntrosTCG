@@ -38,13 +38,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
                     if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
                         await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
-
-                    //TODO ajout des passifs a surement changer de place
-                    foreach (var passiveData in entityAspect.Card.CardData.Passives)
-                    {
-                        var passiveContext = new PassiveContext(entityAddress, context.battlePhase, passiveData);
-                        entityAspect.PassiveContainerComponent.AddPassive(passiveData, passiveContext);
-                    }
                 }
             }
 

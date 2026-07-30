@@ -20,5 +20,9 @@ namespace ATCG.Passives.Datas
         
         [field: SerializeField, BoxGroup("Base")]
         public bool ActiveOnSpawn { get; private set; } = true;
+        
+        [field: SerializeField, BoxGroup("Runtime")]
+        public GameObject RuntimePassive { get; private set; }
+
     }
 }
