@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993bac2f562b4911b31878d31500d7c1, type: 3}
+  m_Name: ChargeExplosion
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.ExplosionData.ChargeExplosionData
+  guidText: 35251e9f-8464-4c64-8551-25c3a5c4e656
+  <Cost>k__BackingField: 1
+  <Name>k__BackingField: Charge Explosion
+  <Element>k__BackingField: 1
+  <Description>k__BackingField: "Ajoute l'etat explosif au hero s\xE9l\xE9ction\xE9.
+    Si le Hero qui \xE0 l'\xE9tat explosion ce voit prendre des domages l'explosion
+    s'active infligeant -5 Pv \xE0u hero et -3Pv aux alli\xE9s proche de lui"
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 579208045788397568
+  <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: 793c1bbed0e141e409a2ca082bc10490, type: 3}
+  <PropertyDefinitions>k__BackingField: []
+  <Status>k__BackingField: {fileID: 11400000, guid: f9ef9dcaaae739b418e39c75f4adc980, type: 2}
+  <Range>k__BackingField: 1
+  <ChargingStepData>k__BackingField:
+    <StepName>k__BackingField: Charging
+    <QTEsCount>k__BackingField: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 579208045788397568
+      type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 1

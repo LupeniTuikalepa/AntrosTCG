@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Data.Frost
 {
-	[CreateAssetMenu(menuName = "ATCG/Capacities/Frost/QuicknessData")]
+	[CreateAssetMenu(menuName = "ATCG/Capacities/Thunder/QuicknessData")]
 	[WithStep("Quickness")]
 	public partial class QuicknessData : CapacityData
 	{

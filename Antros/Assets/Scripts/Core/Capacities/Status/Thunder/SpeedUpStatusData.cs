@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Status
 {
-	[CreateAssetMenu(menuName = "ATCG/Status/Frost/SpeedUpData")]
+	[CreateAssetMenu(menuName = "ATCG/Status/Thunder/SpeedUpData")]
 	public class SpeedUpStatusData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]

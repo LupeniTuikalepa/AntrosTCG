@@ -1,5 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2211262476810455819
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2986292b8ecdd4d9b57c8cbefde1f4, type: 3}
+  m_Name: Step Marker
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
+  m_Time: 1.0666666666666667
+  stepName: PyroBlessing
+  id: 8a1f7baa-60c3-4151-8b42-62395223e37f
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10,7 +25,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
-  m_Name: PyroBlessingTimeline
+  m_Name: QuickenessTimiline
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
   m_Version: 0
   m_Tracks:
@@ -109,4 +124,5 @@ MonoBehaviour:
   m_Children: []
   m_Clips: []
   m_Markers:
-    m_Objects: []
+    m_Objects:
+    - {fileID: -2211262476810455819}
