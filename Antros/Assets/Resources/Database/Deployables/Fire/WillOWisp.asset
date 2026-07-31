@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b8dba4653bc4fd1b7531fb5c4f80143, type: 3}
+  m_Name: WillOWisp
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Fire.WillOWispData
+  guidText: 1a4fd9b8-88a3-476b-8636-81aef04f3ffb
+  <Prefab>k__BackingField: {fileID: 5852559615668259795, guid: 24430e69f16e3704197d87df052ea95e, type: 3}
+  <Health>k__BackingField: 5
+  <AttackRange>k__BackingField: 1
+  <MoveSpeed>k__BackingField: 1
+  <Status>k__BackingField: {fileID: 11400000, guid: 0179b49d4e8f40c44b6d54e29240bf52, type: 2}

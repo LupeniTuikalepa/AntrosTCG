@@ -1,6 +1,7 @@
 ﻿using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Commands.GameCommands.Players;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
@@ -13,6 +14,7 @@ using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.HexGrids.Utility;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 {
@@ -26,6 +28,8 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
         public void GetTargets(IceshardHammerData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
         {
             output.Add(battleCell.EntityAddress, CapacityTags.CELL);
+            foreach (var member in battleCell.GetMembers())
+                output.Add(member.EntityAddress, CapacityTags.MEMBER);
         }
 
         private partial void ExecuteDestruction(IceshardHammerData data, CapacityStepContext ctx)
@@ -44,14 +48,14 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                     if (deployableData is not IceWallData)
                         continue;
 
-                    var damageCommand = new DeathCommand(memberEntityAddress);
-                    damageCommand.Run(ctx.BattlePhase);
+                    var deathCommand = new DeathCommand(memberEntityAddress);
+                    deathCommand.Run(ctx.BattlePhase);
 
                     ctx.BattleGrid.TryGetBattleCell(shardDestination, out var cell);
                     foreach (var physicalMember in cell.GetPhysicalMembers())
                     {
-                        var propagationDamageCommand = new DamageCommand(data.Damage, physicalMember.EntityAddress);
-                        propagationDamageCommand.Run(ctx.BattlePhase);
+                        var shardDamageCommand = new DamageCommand(data.Damage, physicalMember.EntityAddress);
+                        shardDamageCommand.Run(ctx.BattlePhase);
                     }
                 }
                 else if (memberEntityAddress.HasComponent<MovementComponent>())

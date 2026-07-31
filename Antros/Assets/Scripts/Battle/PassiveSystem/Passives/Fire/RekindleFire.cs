@@ -24,6 +24,8 @@ namespace ATCG.Battle.PassiveSystem.Passives.Fire
         {
             yield return new PassiveCommandListener<EndTurnCommand>(data, ctx.owner)
             {
+                accepts = (context, command) =>
+                    !ctx.owner.IsAlly(command.GetPlayer(context)), 
                 setupContext = SetupContext
             };
         }
