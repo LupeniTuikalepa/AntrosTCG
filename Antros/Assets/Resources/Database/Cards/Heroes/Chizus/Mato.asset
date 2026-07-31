@@ -14,23 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: be3599b3-c422-4b5d-bccc-a2398416a5c6
   <Title>k__BackingField: Mato
-  <Description>k__BackingField: 
+  <Description>k__BackingField: "H\xE9riti\xE9 du Feu, ag\xE9 de plus de 100 ans,
+    Mato est l'atout principale des forces d'Antros contre Masina. Lui et Tebbe,
+    amis depuis leur plus tendre enfance, constituent l'ultime d\xE9fense face au
+    machinations de Geniza."
   <Element>k__BackingField: 1
   <Rarity>k__BackingField: 2
   <Capacities>k__BackingField:
-    rid: 6882996230390284312
+    rid: 6882996275448119604
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField: []
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996230390284312
-      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
+    - rid: 6882996275448119604
+      type: {class: ElementCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Elements>k__BackingField: 01000000

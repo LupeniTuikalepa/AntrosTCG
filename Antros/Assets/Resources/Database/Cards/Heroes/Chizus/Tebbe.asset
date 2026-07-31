@@ -14,23 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 3ff70ef9-1461-4e96-ac1a-26d14d5ad231
   <Title>k__BackingField: Tebbe
-  <Description>k__BackingField: 
+  <Description>k__BackingField: "H\xE9riti\xE9 de l'Obscurit\xE9, ag\xE9 de plus
+    de 100 ans, Tebbe s'impose comme un force de la nature et le seul mortel \xE0
+    pouvoir rivaliser avec Mato. Rong\xE9 par les deuils de son pass\xE9, il essaye
+    tant bien que mal de ramener l'\xE9quilibre dans ce monde chamboul\xE9."
   <Element>k__BackingField: 2
   <Rarity>k__BackingField: 2
   <Capacities>k__BackingField:
-    rid: 6882996230390284326
+    rid: 6882996275448119603
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField: []
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996230390284326
-      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
+    - rid: 6882996275448119603
+      type: {class: ElementCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Elements>k__BackingField: 02000000

@@ -1,0 +1,82 @@
+.cheat-content {
+    padding: 8px;
+}
+
+/* A provider section (e.g. "Player 1") — a rounded panel holding its cheats. */
+.cheat-section {
+    background-color: var(--atcg-panel);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+}
+
+.cheat-section__title {
+    -unity-font-style: bold;
+    font-size: 13px;
+    color: var(--atcg-text-strong);
+    margin-bottom: 4px;
+}
+
+/* A [CheatGroup] sub-header inside a section. */
+.cheat-group__label {
+    -unity-font-style: bold;
+    font-size: 9px;
+    color: var(--atcg-text-muted);
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+/* Each cheat is its own rounded card. */
+.cheat-card {
+    background-color: var(--atcg-panel-nested);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+}
+
+.cheat-card__head {
+    flex-direction: row;
+    align-items: center;
+}
+
+.cheat-card__title {
+    -unity-font-style: bold;
+    flex-grow: 1;
+    color: var(--atcg-text-strong);
+}
+
+.cheat-card__run {
+    min-width: 56px;
+    margin: 0;
+}
+
+.cheat-card__desc {
+    color: var(--atcg-text-muted);
+    font-size: 11px;
+    white-space: normal;
+    margin-top: 2px;
+}
+
+.cheat-card__params {
+    margin-top: 6px;
+}
+
+/* Section tabs (one per section, e.g. Player 1 / Player 2). */
+.cheat-tabs {
+    margin-top: 2px;
+}
+
+.cheat-tabs .unity-tab-view__content-container {
+    padding-top: 6px;
+}
+
+/* Align every parameter control's label to a fixed width so the value fields line up. */
+.cheat-card__params .unity-base-field__label {
+    min-width: 96px;
+    max-width: 96px;
+}
+
+.cheat-card__params .unity-base-field {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}

@@ -1,5 +1,6 @@
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Debugging.Cheats;
 using UnityEngine;
@@ -7,22 +8,20 @@ using UnityEngine;
 namespace ATCG.Debugging.Debugging.Battle
 {
     [CheatGroup("Mana")]
-    public class RemoveManaCheat : ICheat
+    public class FullManaCheat : ICheat
     {
-        public string Name => "Remove Mana";
-        public string Description => "Remove mana from the player.";
-
-        [CheatParam("Amount", Min = 0, Max = 20)]
-        public int amount = 1;
+        public string Name => "Full Mana";
+        public string Description => "Refill the player's mana.";
 
         private readonly RuntimeLocalBattlePlayer player;
 
-        public RemoveManaCheat(RuntimeLocalBattlePlayer player) => this.player = player;
+        public FullManaCheat(RuntimeLocalBattlePlayer player) => this.player = player;
 
         public async Awaitable Execute(CheatContext context)
         {
             await Awaitable.MainThreadAsync();
-            new ModifyPlayerManaCommand(player.BattlePlayer, -amount).Run(player.BattlePlayer.BattlePhase);
+            LocalBattlePlayer p = player.BattlePlayer;
+            new ModifyPlayerManaCommand(p, p.MaxMana - p.CurrentMana).Run(p.BattlePhase);
         }
     }
 }

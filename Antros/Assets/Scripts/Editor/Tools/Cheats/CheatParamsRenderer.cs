@@ -110,35 +110,57 @@ namespace ATCG.Editor.Tools.Cheats
             if (field.FieldType != typeof(EntityAddress))
                 return Unsupported($"{label}: [CheatTarget] requires an EntityAddress field");
 
-            List<CheatTargetOption> options = ResolveTargets(cheat, t.CandidatesMethod);
-            if (options.Count == 0)
-            {
-                DropdownField empty = new DropdownField(label, new List<string> { "— no targets —" }, 0);
-                empty.SetEnabled(false);
-                if (!string.IsNullOrEmpty(t.Tooltip))
-                    empty.tooltip = t.Tooltip;
-                return empty;
-            }
-
-            List<string> labels = options.Select(o => o.Label).ToList();
-            EntityAddress current = (EntityAddress)field.GetValue(cheat);
-            int idx = options.FindIndex(o => o.Address.Equals(current));
-            if (idx < 0)
-            {
-                idx = 0;
-                field.SetValue(cheat, options[0].Address);
-            }
-
-            DropdownField dropdown = new DropdownField(label, labels, idx);
-            dropdown.RegisterValueChangedCallback(e =>
-            {
-                int i = labels.IndexOf(e.newValue);
-                if (i >= 0)
-                    field.SetValue(cheat, options[i].Address);
-            });
+            // A "label + button" row. The button opens a FRESH menu each click, so the candidate
+            // list is always live — entities that spawn after the panel was built show up as soon
+            // as you open the menu (no stale dropdown).
+            VisualElement row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
             if (!string.IsNullOrEmpty(t.Tooltip))
-                dropdown.tooltip = t.Tooltip;
-            return dropdown;
+                row.tooltip = t.Tooltip;
+
+            Label caption = new Label(label);
+            caption.AddToClassList("unity-base-field__label");
+            row.Add(caption);
+
+            Button button = new Button { style = { flexGrow = 1, unityTextAlign = TextAnchor.MiddleLeft } };
+
+            // Preselect the first candidate so a target is set without opening the menu.
+            List<CheatTargetOption> initial = ResolveTargets(cheat, t.CandidatesMethod);
+            EntityAddress current = (EntityAddress)field.GetValue(cheat);
+            int idx = initial.FindIndex(o => o.Address.Equals(current));
+            if (idx < 0 && initial.Count > 0)
+            {
+                field.SetValue(cheat, initial[0].Address);
+                idx = 0;
+            }
+            button.text = idx >= 0 ? initial[idx].Label : (initial.Count == 0 ? "— no targets —" : "Select…");
+
+            button.clicked += () =>
+            {
+                List<CheatTargetOption> options = ResolveTargets(cheat, t.CandidatesMethod);
+                GenericMenu menu = new GenericMenu();
+
+                if (options.Count == 0)
+                {
+                    menu.AddDisabledItem(new GUIContent("No targets"));
+                }
+                else
+                {
+                    foreach (CheatTargetOption option in options)
+                    {
+                        CheatTargetOption captured = option;
+                        menu.AddItem(new GUIContent(option.Label), false, () =>
+                        {
+                            field.SetValue(cheat, captured.Address);
+                            button.text = captured.Label;
+                        });
+                    }
+                }
+
+                menu.ShowAsContext();
+            };
+
+            row.Add(button);
+            return row;
         }
 
         private static List<CheatTargetOption> ResolveTargets(ICheat cheat, string method)

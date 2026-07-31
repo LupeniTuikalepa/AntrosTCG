@@ -34,12 +34,21 @@ namespace ATCG.Debugging.Debugging.Battle
 		{
 			List<CheatTargetOption> list = new List<CheatTargetOption>();
 
+			// Guard the no-context case (e.g. a preview cheat built with no live player): no targets.
+			if (player?.BattlePhase == null)
+				return list;
+
 			foreach (ComponentRef<T> componentRef in player.BattlePhase.world.Query<T>())
 			{
 				EntityAddress address = componentRef.EntityAddress;
-				string label = address.TryGetComponentRO(out BattleCardComponent battleCardComponent)
-					? battleCardComponent.battleCard.Title
-					: componentRef.entityID.ToString();
+				string title = address.TryGetComponentRO(out BattleCardComponent battleCardComponent)
+					? battleCardComponent.battleCard?.Title
+					: null;
+				// Always suffix the entity id so labels are unique (distinct heroes/constructions
+				// never collapse into one another) and never blank.
+				string label = string.IsNullOrEmpty(title)
+					? $"Missing Title #{componentRef.entityID}"
+					: $"{title} #{componentRef.entityID}";
 
 				list.Add(new CheatTargetOption(label, address));
 			}

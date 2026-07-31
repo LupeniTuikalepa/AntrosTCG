@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
-    [CheatGroup("Entities")]
+    [CheatGroup("Combat")]
     public class KillEntityCheat : ICheat
     {
         public string Name => "Kill Entity";
