@@ -1,4 +1,5 @@
 using ATCG.Battle.CapacitySystem.Core.Properties;
+using ATCG.Core.Cutscenes;
 using ATCG.HexGrids;
 using UnityEngine;
 
@@ -11,9 +12,15 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
     /// transform in Configure/Dispose, so rotating it here is safe — it snaps back once
     /// the cutscene ends).
     ///
-    /// Currently just LookAtCastPoint; more common setup toggles will land here over time.
+    /// Also exposes the injected caster's Animator through ICutsceneCasterAnimatorSource so
+    /// Core-assembly Timeline clips (e.g. FollowBoneClip) can follow a caster bone through
+    /// the same injection path, with no per-clip reference and no extra component to add —
+    /// this one is already on every rig.
+    ///
+    /// Currently LookAtCastPoint + the caster Animator seam; more common setup toggles will
+    /// land here over time.
     /// </summary>
-    public class DefaultCapacitySetup : MonoBehaviour, ICapacityCutsceneElement
+    public class DefaultCapacitySetup : MonoBehaviour, ICapacityCutsceneElement, ICutsceneCasterAnimatorSource
     {
         [SerializeField]
         private Transform directorTransform;
@@ -21,6 +28,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
         [Space]
         [SerializeField]
         private bool lookAtCastPoint;
+
+        public Animator CasterAnimator { get; private set; }
 
         private void Reset() => directorTransform = transform;
 
@@ -30,10 +39,15 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
         // resolve, so both simply face Vector3.forward for a stable, predictable preview.
         public void Connect(ICapacityContext context)
         {
+            // Resolved unconditionally (independent of lookAtCastPoint) so the Animator seam
+            // is always populated for FollowBoneClip and friends.
+            bool hasCaster = context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) && caster != null;
+            CasterAnimator = hasCaster ? caster.Animator : null;
+
             if (!lookAtCastPoint)
                 return;
 
-            if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
+            if (!hasCaster)
                 return;
 
             if (!context.TryGetProperty(CapacityContextKeys.CAST_POINT, out HexCoordinates castPoint) ||
@@ -54,7 +68,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
 
         public void Disconnect()
         {
-
+            CasterAnimator = null;
         }
     }
 }

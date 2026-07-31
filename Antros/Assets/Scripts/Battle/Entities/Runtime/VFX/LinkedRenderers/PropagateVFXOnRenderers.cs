@@ -82,6 +82,13 @@ namespace ATCG.Battle.Entities.Runtime.VFX
                 {
                     p.Simulate(delta, true, false, false);
                 }
+
+                // Simulate implicitly resumes the system; left running, Unity's editor
+                // preview then advances it in wall-clock on every repaint even with the
+                // playhead stationary (why the propagate VFX didn't scrub in the Capacity
+                // Editor). Pausing right after freezes it exactly on the driven frame until
+                // the next SetTime — same trick as ParticleSystemBehaviour.
+                p.Pause(true);
             }
         }
 
@@ -90,6 +97,17 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             if (source != null && Current != null)
             {
                 Generate();
+
+                // Seed every spawned instance at t=0 and freeze; SetTime drives them from
+                // here. Without reseting lastTime the first delta would be the whole
+                // pre-roll instead of one frame.
+                lastTime = 0d;
+                foreach (var p in particleSystems)
+                {
+                    if (p == null) continue;
+                    p.Simulate(0f, true, true, false);
+                    p.Pause(true);
+                }
             }
         }
 
@@ -175,29 +193,17 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             }
         }
 
-        private static async Awaitable StopParticleSystems(ParticleSystem particleSystem)
-        {
-            if (particleSystem == null)
-                return;
-
-            // Sort du mode "paused" laissé par Simulate : réactive la simulation autonome.
-            particleSystem.Play(true);
-            particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-            while (particleSystem != null && particleSystem.particleCount > 0)
-            {
-                await Awaitable.NextFrameAsync();
-            }
-
-            if (particleSystem)
-                particleSystem.DestroyGameObject();
-        }
-
         private void Clear()
         {
             if (Application.isPlaying)
             {
+                // Hand each instance to the persistent reaper instead of fading it on this
+                // component: the cutscene GameObject (and this component) is destroyed the
+                // moment the cutscene ends, so a fade owned here either got cut short or
+                // orphaned instances in the scene. The reaper outlives the cutscene and
+                // guarantees the fade completes and the instance is destroyed.
                 foreach (var p in particleSystems)
-                    StopParticleSystems(p).ListenForExceptions();
+                    VFXReaper.Reap(p);
             }
             else
             {
