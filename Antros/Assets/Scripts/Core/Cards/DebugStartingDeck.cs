@@ -33,27 +33,5 @@ namespace ATCG.Cards
 
             return result;
         }
-
-#if UNITY_EDITOR
-        public void EditorSetActive(GameCardData card, bool active)
-        {
-            if (card == null)
-                return;
-
-            string id = card.ID.ToString();
-            if (active)
-            {
-                if (activeCardGuids.Contains(id))
-                    return;
-                activeCardGuids.Add(id);
-            }
-            else if (!activeCardGuids.Remove(id))
-            {
-                return;
-            }
-
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-#endif
     }
 }

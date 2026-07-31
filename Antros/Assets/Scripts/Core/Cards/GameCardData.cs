@@ -34,10 +34,5 @@ namespace ATCG.Cards
             base.Reset();
             Capacities = new DefaultCapacityProvider();
         }
-
-#if UNITY_EDITOR
-        public void EditorSetRarity(CardRarity value) => Rarity = value;
-        public void EditorSetElement(Element value) => Element = value;
-#endif
     }
 }
