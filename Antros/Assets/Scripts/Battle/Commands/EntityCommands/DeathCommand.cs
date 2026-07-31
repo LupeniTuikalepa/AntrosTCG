@@ -14,12 +14,9 @@ namespace ATCG.Battle.Commands.EntityCommands
     {
         public const string NATURAL_DEATH = "NATURAL_DEATH";
         
-        [field: SerializeField]
-        public string Source { get; private set; }
         
-        public DeathCommand(EntityAddress address, string source = NATURAL_DEATH) : base(address)
+        public DeathCommand(EntityAddress address, string source = NATURAL_DEATH) : base(address, source)
         {
-            Source = source;
         }
 
         protected override void Process(in CommandContext context)

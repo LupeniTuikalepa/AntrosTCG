@@ -41,7 +41,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
 		{
-			var statusCommand = new StatusApplyCommand(ctx.Caster, data.BerserkData);
+			var statusCommand = new ApplyStatusCommand(ctx.Caster, data.BerserkData);
 			statusCommand.Run(ctx.BattlePhase);
 		}
 

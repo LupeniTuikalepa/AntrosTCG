@@ -41,7 +41,7 @@ namespace ATCG.Debugging
                 : Resources.LoadAll<StatusData>("Database/Status");
 
             foreach (StatusData data in datas)
-                new StatusApplyCommand(target, data).Run(player.BattlePhase);
+                new ApplyStatusCommand(target, data).Run(player.BattlePhase);
         }
     }
 }

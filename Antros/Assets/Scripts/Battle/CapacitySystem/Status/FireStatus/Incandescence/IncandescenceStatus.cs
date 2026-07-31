@@ -40,7 +40,7 @@ namespace ATCG.Battle.CapacitySystem.Status
 				{
 					var player = belongsToPlayerComponent.GetPlayer(context.battlePhase);
                 
-					var statusCommand = new StatusApplyCommand(member.EntityAddress, statusData.Status);
+					var statusCommand = new ApplyStatusCommand(member.EntityAddress, statusData.Status);
 					statusCommand.Run(player.BattlePhase);
 				}
 			}

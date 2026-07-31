@@ -91,7 +91,7 @@ namespace ATCG.Battle.PassiveSystem.Passives
             if (!command.TargetEntityAddress(ctx.World).Is<DeployableAspect>(out var deployable)) 
                 return false;
 
-            if (deployable.DeployableEntityTag.data is not IceWallData iceWallData) 
+            if (deployable.DeployableEntityTag.data is not IceWallData) 
                 return false;
 
             return true;

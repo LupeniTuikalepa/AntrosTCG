@@ -40,7 +40,7 @@ namespace ATCG.Debugging.Debugging.Battle.Cheats.Implementations
                 : Resources.LoadAll<StatusData>("Database/Status");
 
             foreach (StatusData data in datas)
-                new StatusRemoveCommand(target, data).Run(player.BattlePhase);
+                new RemoveStatusCommand(target, data).Run(player.BattlePhase);
         }
     }
 }

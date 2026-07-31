@@ -17,6 +17,8 @@ namespace ATCG.Battle.Commands
 
         [field: SerializeField]
         public BattleID ID { get; private set; }
+        [field: SerializeField]
+        public string Source { get; private set; }
         [SerializeField]
         private List<BattleID> embeds;
         [SerializeField]
@@ -24,11 +26,12 @@ namespace ATCG.Battle.Commands
         [SerializeField]
         protected TInfos infos;
 
-        protected Command()
+        protected Command(string source)
         {
             embeds = ListPool<BattleID>.Get();
             infos = new TInfos();
             ID = BattleID.CreateNew();
+            Source = source;
         }
 
         void ICommand.Process(in CommandContext context)

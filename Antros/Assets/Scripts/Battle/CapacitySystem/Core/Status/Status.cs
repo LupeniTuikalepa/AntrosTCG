@@ -36,7 +36,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
         protected virtual bool Accepts(ComponentRef<StatusReceiver> componentRef) => true;
 		
-        void IStatus<TData>.Apply(TData data, EntityAddress target, StatusContext context)
+        void IStatus<TData>.Apply(TData data, EntityAddress target, StatusContext context, int stack)
         {
             if (!target.TryGetComponent<StatusReceiver>(out var statusReceiverRef))
             {
@@ -95,6 +95,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
 
                 OnApply(data, in statusInfos, in context);
             }
+            
+            if(stack > 0)
+                ((IStatus<TData>)this).Apply(data, target, context, stack - 1);
         }
 
         void IStatus<TData>.Remove(TData data, EntityAddress target, StatusContext context)

@@ -54,12 +54,12 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			foreach (var target in ctx.Targets.WithTags(APPLY_BURNING_STATUS))
 			{
-				var statusCommand = new StatusApplyCommand(target, data.BurningStatus);
+				var statusCommand = new ApplyStatusCommand(target, data.BurningStatus);
 				statusCommand.Run(ctx.BattlePhase);
 			}
 			foreach (var target in ctx.Targets.WithTags(APPLY_INCANDESCENCE_STATUS))
 			{
-				var statusCommand = new StatusApplyCommand(target, data.IncandescenceStatusStatus);
+				var statusCommand = new ApplyStatusCommand(target, data.IncandescenceStatus);
 				statusCommand.Run(ctx.BattlePhase);
 			}
 			foreach (var target in ctx.Targets.WithTags(DAMAGE))

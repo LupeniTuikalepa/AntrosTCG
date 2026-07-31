@@ -40,10 +40,10 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			{
 				if (member.HasComponent<HealthComponent>())
 				{
-					var statusFirstCommand = new StatusApplyCommand(member, data.Status);
+					var statusFirstCommand = new ApplyStatusCommand(member, data.Status);
 					statusFirstCommand.Run(ctx.BattlePhase);
 
-					var statusSecondCommand = new StatusApplyCommand(member, data.Status);
+					var statusSecondCommand = new ApplyStatusCommand(member, data.Status);
 					statusSecondCommand.Run(ctx.BattlePhase);
 				}
 			}

@@ -49,7 +49,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 
 			foreach (var cell in  ctx.Targets.WithTags(CapacityTags.CELL))
 			{
-				var statusCommand = new StatusApplyCommand(cell, data.Status);
+				var statusCommand = new ApplyStatusCommand(cell, data.Status);
 				statusCommand.Run(ctx.BattlePhase);
 
 			}

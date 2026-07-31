@@ -43,7 +43,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			foreach (EntityAddress target in ctx.Targets.WithTags(APPLY_STATUS))
 			{
-				var statusCommand = new StatusApplyCommand(target, data.Status);
+				var statusCommand = new ApplyStatusCommand(target, data.Status);
 				statusCommand.Run(ctx.BattlePhase);
 			}
 		}
