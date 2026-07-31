@@ -14,9 +14,9 @@ namespace ATCG.Battle.CapacitySystem.Status.Furnace
 {
 	public partial class FurnaceStatus : Status<FurnaceStatusData, FurnaceStatusComponent, StatusDurationController>, ITickOnTurnBegin
 	{
-		protected override FurnaceStatusComponent CreateStatusComponent(FurnaceStatusData statusData, in StatusContext context)
+		protected override FurnaceStatusComponent CreateStatusComponent(FurnaceStatusData statusStatusData, in StatusContext context)
 		{
-			return new FurnaceStatusComponent(statusData);
+			return new FurnaceStatusComponent(statusStatusData);
 		}
 
 		protected override StatusDurationController CreateStatusController(FurnaceStatusData statusData, in StatusContext context)

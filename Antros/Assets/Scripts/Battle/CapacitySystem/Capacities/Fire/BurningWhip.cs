@@ -59,7 +59,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			}
 			foreach (var target in ctx.Targets.WithTags(APPLY_INCANDESCENCE_STATUS))
 			{
-				var statusCommand = new StatusApplyCommand(target, data.IncandescenceStatus);
+				var statusCommand = new StatusApplyCommand(target, data.IncandescenceStatusStatus);
 				statusCommand.Run(ctx.BattlePhase);
 			}
 			foreach (var target in ctx.Targets.WithTags(DAMAGE))

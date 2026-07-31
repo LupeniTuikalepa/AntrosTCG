@@ -14,7 +14,7 @@ namespace ATCG.Capacities.Data.Fire
 		[field:SerializeField,BoxGroup("Specific")]
 		public BurnStatusData BurningStatus { get;private set; }
 		[field:SerializeField,BoxGroup("Specific")]
-		public IncandescenceStatusData IncandescenceStatus { get;private set; }
+		public IncandescenceStatusData IncandescenceStatusStatus { get;private set; }
 
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Range { get; private set; }
