@@ -25,22 +25,13 @@ MonoBehaviour:
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996212461994177
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996212461994177
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284299
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: 519321724c76a5f4887b7ee92973dba4, type: 2}
+        - {fileID: 11400000, guid: b45965372722ba841bc1b1685fce5279, type: 2}

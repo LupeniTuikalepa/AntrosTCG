@@ -93,6 +93,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3247305176290128974}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4137169996613469796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613848190841663107}
+  m_Layer: 0
+  m_Name: PassiveRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &613848190841663107
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4137169996613469796}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3247305176290128974}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5924305010780731623
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +327,7 @@ Transform:
   - {fileID: 5725676773518146224}
   - {fileID: 7231110480999047036}
   - {fileID: 8030276982718759539}
+  - {fileID: 613848190841663107}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4673224370539530003
@@ -312,5 +344,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Deployables.RuntimeDeployable
   <actionUIRoot>k__BackingField: {fileID: 1451502193692133727}
   <statusRoot>k__BackingField: {fileID: 7231110480999047036}
+  <PassiveRoot>k__BackingField: {fileID: 613848190841663107}
   <HoveredRoot>k__BackingField: {fileID: 8030276982718759539}
   <Animator>k__BackingField: {fileID: 0}

@@ -19,7 +19,8 @@ MonoBehaviour:
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284334
-  <Passives>k__BackingField: []
+  <Passives>k__BackingField:
+  - {fileID: 11400000, guid: 845cb9ca759874f47a4789ba14cf967a, type: 2}
   <Health>k__BackingField: 5
   <DeathCost>k__BackingField: 1
   <Defense>k__BackingField: 1
