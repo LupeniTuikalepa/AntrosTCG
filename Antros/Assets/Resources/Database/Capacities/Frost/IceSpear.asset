@@ -16,14 +16,34 @@ MonoBehaviour:
   <Cost>k__BackingField: 0
   <Name>k__BackingField: IceSpear
   <Element>k__BackingField: 7
-  <Description>k__BackingField: 
+  <Description>k__BackingField: "Inflige une grande quantit\xE9e de d\xE9gats \xE0
+    la premi\xE8re cible visible en ligne droite. Plus elle est loin plus les d\xE9gats
+    sont important."
   <CastPatterns>k__BackingField:
-    <Data>k__BackingField: []
+    <Data>k__BackingField:
+    - rid: 6882996279235313844
   <CutsceneDirector>k__BackingField: {fileID: 5965771515152154153, guid: 5b33ed854e27eb14fb5eb841ce799346, type: 3}
-  <PropertyDefinitions>k__BackingField: []
+  <PropertyDefinitions>k__BackingField:
+  - rid: 6882996279235313843
+  <DamageRange>k__BackingField: {x: 2, y: 12}
+  <DistanceEfficiencyRange>k__BackingField: {x: 2, y: 12}
   <HitStepData>k__BackingField:
     <StepName>k__BackingField: Hit
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6882996279235313843
+      type: {class: HexCoordinatesPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
+      data:
+        name: HIT_POINT
+        isArray: 0
+    - rid: 6882996279235313844
+      type: {class: RingPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 1

@@ -8,11 +8,10 @@ namespace ATCG.Capacities.Data.Frost
     [WithStep("Hit")]
     public partial class IceSpearData : CapacityData
     {
-        [field: SerializeField, MinMaxSlider(1, 20)]
-        public Vector2Int DamageRange { get; private set; }
-        [field: SerializeField, MinMaxSlider(1, 20)]
-        public Vector2Int DistanceEfficiencyRange { get; private set; }
-
+        [field: SerializeField, MinMaxSlider(1, 20), BoxGroup("Specific")]
+        public Vector2Int DamageRange { get; private set; } = Vector2Int.one;
+        [field: SerializeField, MinMaxSlider(1, 20), BoxGroup("Specific")]
+        public Vector2Int DistanceEfficiencyRange { get; private set; } = Vector2Int.one;
 
         public int MinDamage => DamageRange.x;
         public int MaxDamage => DamageRange.y;
