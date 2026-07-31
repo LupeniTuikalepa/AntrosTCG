@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Bul-Ho
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: bf831621-d17b-4230-afbc-c9bbd7de8827
-  <Title>k__BackingField: 
-  <Description>k__BackingField: 
+  <Title>k__BackingField: Bul-Ho
+  <Description>k__BackingField: "Erudite de Rohodite, Bul-Ho dirige les forces de
+    sa ville depuis son plus jeune age. Pr\xEAte \xE0 tout pour prot\xE9ger Auzyrithe
+    de l'attaque de Masina, elle combat en premi\xE8re ligne pour proteger ses hommes. "
   <Element>k__BackingField: 4
   <Rarity>k__BackingField: 2
   <Capacities>k__BackingField:
@@ -25,21 +27,10 @@ MonoBehaviour:
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799474
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799474
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284297
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:

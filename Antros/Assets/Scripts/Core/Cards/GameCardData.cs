@@ -14,7 +14,7 @@ namespace ATCG.Cards
         [field: SerializeField, BoxGroup("Common")]
         public string Title { get; private set; }
 
-        [field: SerializeField, TextArea, BoxGroup("Common")]
+        [field: SerializeField, TextArea(5, 10), BoxGroup("Common")]
         public string Description { get; private set; }
 
         [field: SerializeField, BoxGroup("Common")]

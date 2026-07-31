@@ -1,5 +1,6 @@
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands.Players;
+using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Debugging.Cheats;
 using UnityEngine;
@@ -7,22 +8,20 @@ using UnityEngine;
 namespace ATCG.Debugging.Debugging.Battle
 {
     [CheatGroup("Health")]
-    public class AddHealthCheat : ICheat
+    public class FullHealPlayerCheat : ICheat
     {
-        public string Name => "Heal";
-        public string Description => "Give the player health.";
-
-        [CheatParam("Amount", Min = 0, Max = 200)]
-        public int amount = 20;
+        public string Name => "Full Heal";
+        public string Description => "Restore the player to full health.";
 
         private readonly RuntimeLocalBattlePlayer player;
 
-        public AddHealthCheat(RuntimeLocalBattlePlayer player) => this.player = player;
+        public FullHealPlayerCheat(RuntimeLocalBattlePlayer player) => this.player = player;
 
         public async Awaitable Execute(CheatContext context)
         {
             await Awaitable.MainThreadAsync();
-            new ModifyPlayerHealthCommand(player.BattlePlayer, amount).Run(player.BattlePlayer.BattlePhase);
+            LocalBattlePlayer p = player.BattlePlayer;
+            new ModifyPlayerHealthCommand(p, p.MaxHealth - p.CurrentHealth).Run(p.BattlePhase);
         }
     }
 }

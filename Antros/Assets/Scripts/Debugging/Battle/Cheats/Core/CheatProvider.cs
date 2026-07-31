@@ -4,18 +4,19 @@ using UnityEngine;
 namespace ATCG.Debugging.Cheats
 {
     /// <summary>
-    /// Scene-side source of cheats. Drop a subclass on a GameObject; the editor's Cheats tool
-    /// asks every CheatProvider present in the loaded scene(s) for its cheats, so the tool never
-    /// needs to know which scene it is in — it just queries "who has cheats?" and shows them.
-    /// In the UI, cheats are grouped by their provider (see <see cref="DisplayName"/>) and then
-    /// by their <see cref="CheatGroupAttribute"/>.
+    /// A source of cheats, discovered by reflection — NOT a scene component, so nothing pollutes
+    /// the prefabs/build. A provider inspects the live runtime itself (e.g. the active battle) to
+    /// decide whether it can contribute (<see cref="IsAvailable"/>) and what it exposes
+    /// (<see cref="GetSections"/>). Each <see cref="CheatSection"/> becomes a top-level group in
+    /// the editor Cheats tool; within a section, cheats are further grouped by their
+    /// <see cref="CheatGroupAttribute"/>. Subclasses need a public parameterless constructor.
     /// </summary>
-    public abstract class CheatProvider : MonoBehaviour
+    public abstract class CheatProvider
     {
-        /// <summary>Label used as the provider's group header. Defaults to the GameObject name.</summary>
-        public virtual string DisplayName => name;
+        /// <summary>Cheap gate: can this provider contribute right now? Defaults to "only in play mode".</summary>
+        public virtual bool IsAvailable => Application.isPlaying;
 
-        /// <summary>The cheats this provider supplies (rebuilt on demand, so live refs stay fresh).</summary>
-        public abstract IEnumerable<ICheat> GetCheats();
+        /// <summary>The sections this provider contributes given the current runtime state.</summary>
+        public abstract IEnumerable<CheatSection> GetSections();
     }
 }

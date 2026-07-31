@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Antros
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 0e9a6c40-63ff-4353-8d39-0c251b11918b
-  <Title>k__BackingField: God
-  <Description>k__BackingField: 
+  <Title>k__BackingField: Antros
+  <Description>k__BackingField: "Fils de la lumi\xE8re, exterminateur des dieux.\nDepuis
+    son annihilation des Atuas et la fin de leur r\xE8gne, Antros vie recul\xE9,
+    persuad\xE9 que les mortels peuvent trouver un \xE9quilibre maintenant qu'ils
+    ont acc\xE8s \xE0 la Source.\n\nLa bataille d'Auzyrithe repr\xE9sente la premi\xE8re
+    fois depuis des siecles qu'il d\xE9cide d'intervenir."
   <Element>k__BackingField: 9
   <Rarity>k__BackingField: 3
   <Capacities>k__BackingField:
-    rid: 6882996230390284295
+    rid: 6882996275448119605
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
@@ -29,11 +33,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6882996230390284295
-      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
+    - rid: 6882996275448119605
+      type: {class: ElementCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField:
-        - {fileID: 11400000, guid: ab6c316dae66e4f418116cd839fd4003, type: 2}
-        - {fileID: 11400000, guid: 4dce0ca0c716da84e8c5aa91ca4942ed, type: 2}
-        - {fileID: 11400000, guid: f09a6dd680b3fbe488ccad54e1f99a90, type: 2}
-        - {fileID: 11400000, guid: a7c714facc18f32478fad3fab45b8a36, type: 2}
+        <Elements>k__BackingField: 01000000020000000300000004000000050000000600000007000000

@@ -13,24 +13,26 @@ MonoBehaviour:
   m_Name: Maeno
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 9512f2ea-ff9f-41cf-8ed7-e85513fdc0f7
-  <Title>k__BackingField: 
-  <Description>k__BackingField: 
+  <Title>k__BackingField: Maeno
+  <Description>k__BackingField: "Une femme mysterieuse \xE0 la chevelure argent\xE9e
+    venant d'un pass\xE9 lointain. On raconte qu'elle poss\xE8de la moiti\xE9e de
+    l'Atua du Temps, faisant d'elle la seule d\xE9tentrice de ses pouvoirs en dehors
+    de Geniza. "
   <Element>k__BackingField: 0
   <Rarity>k__BackingField: 1
   <Capacities>k__BackingField:
-    rid: 6882996230390284310
+    rid: 6882996275448119574
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField: []
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996230390284310
-      type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
+    - rid: 6882996275448119574
+      type: {class: ElementCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Elements>k__BackingField: 00000000

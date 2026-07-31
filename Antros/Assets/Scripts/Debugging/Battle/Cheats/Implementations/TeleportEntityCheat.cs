@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace ATCG.Debugging.Debugging.Battle
 {
-    [CheatGroup("Entities")]
+    [CheatGroup("Movement")]
     public class TeleportEntityCheat : ICheat
     {
         public string Name => "Teleport";

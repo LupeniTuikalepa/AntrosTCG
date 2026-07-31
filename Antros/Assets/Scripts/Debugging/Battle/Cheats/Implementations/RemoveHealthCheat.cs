@@ -22,7 +22,6 @@ namespace ATCG.Debugging.Debugging.Battle
         public async Awaitable Execute(CheatContext context)
         {
             await Awaitable.MainThreadAsync();
-            player.BattlePlayer.AddOrRemoveHealth(-amount);
             new ModifyPlayerHealthCommand(player.BattlePlayer, -amount).Run(player.BattlePlayer.BattlePhase);
         }
     }

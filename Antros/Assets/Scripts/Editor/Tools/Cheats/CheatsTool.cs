@@ -1,21 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using ATCG.Debugging.Cheats;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace ATCG.Editor.Tools.Cheats
 {
     /// <summary>
-    /// Editor tool that runs the game's cheats from the ATCG window (Play mode only). It doesn't
-    /// depend on any particular scene: it just asks the loaded scene(s) "who has cheats?" by
-    /// finding every <see cref="CheatProvider"/>, then lists their cheats grouped by provider and
-    /// by the cheat's <see cref="CheatGroupAttribute"/>. Running a cheat hands it a
-    /// <see cref="CheatContext"/> whose picker is an editor popup (no in-game UI).
+    /// Editor tool that runs the game's cheats from the ATCG window. Providers are plain classes
+    /// discovered by reflection (no scene components); each self-checks the runtime and exposes
+    /// <see cref="CheatSection"/>s. The cheats are ALWAYS shown for discoverability — sections that
+    /// can't run right now (not in Play mode, or no live context) are greyed out and non-interactive.
+    /// Sections are the top-level boxes (e.g. "Player 1", "Player 2", "System"); inside, cheats are
+    /// grouped by their <see cref="CheatGroupAttribute"/> and each cheat is its own card.
     /// </summary>
     public sealed class CheatsTool : IEditorTool
     {
@@ -23,21 +25,27 @@ namespace ATCG.Editor.Tools.Cheats
         public string Icon => "⚡";
         public int Order => 70;
 
+        private const double PollInterval = 0.5;
+
         private VisualElement content;
+        private List<CheatProvider> providers;
+        private double lastPoll;
+        private string lastSignature;
 
         public VisualElement BuildUI()
         {
             VisualElement root = new VisualElement { style = { flexGrow = 1, minHeight = 0 } };
             EditorStyleLoader.Load(root, "EditorTheme.uss");
+            EditorStyleLoader.Load(root, "Cheats.uss");
 
             Toolbar bar = new Toolbar();
-            Label title = new Label("Cheats") { style = { unityFontStyleAndWeight = FontStyle.Bold, flexGrow = 1, unityTextAlign = TextAnchor.MiddleLeft, marginLeft = 4 } };
-            bar.Add(title);
+            bar.Add(new Label("Cheats") { style = { unityFontStyleAndWeight = FontStyle.Bold, flexGrow = 1, unityTextAlign = TextAnchor.MiddleLeft, marginLeft = 4 } });
             bar.Add(new ToolbarButton(Rebuild) { text = "Refresh" });
             root.Add(bar);
 
             ScrollView scroll = new ScrollView(ScrollViewMode.Vertical) { style = { flexGrow = 1, minHeight = 0 } };
-            content = new VisualElement { style = { paddingTop = 4, paddingLeft = 4, paddingRight = 4, paddingBottom = 4 } };
+            content = new VisualElement();
+            content.AddToClassList("cheat-content");
             scroll.Add(content);
             root.Add(scroll);
 
@@ -48,15 +56,46 @@ namespace ATCG.Editor.Tools.Cheats
         public void OnActivated()
         {
             EditorApplication.playModeStateChanged += OnPlayModeChanged;
+            EditorApplication.update += OnUpdate;
             Rebuild();
         }
 
         public void OnDeactivated()
         {
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
+            EditorApplication.update -= OnUpdate;
         }
 
         private void OnPlayModeChanged(PlayModeStateChange _) => Rebuild();
+
+        // The battle/players usually aren't ready the instant Play starts, so a play-mode change
+        // alone leaves the tool showing the disabled preview. Poll cheaply and rebuild only when the
+        // availability actually changes (players connect/leave) — this keeps typed parameter values
+        // while the context is stable, but activates the cheats as soon as the battle is live.
+        private void OnUpdate()
+        {
+            if (EditorApplication.timeSinceStartup - lastPoll < PollInterval)
+                return;
+            lastPoll = EditorApplication.timeSinceStartup;
+
+            if (ComputeSignature() != lastSignature)
+                Rebuild();
+        }
+
+        private string ComputeSignature()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Application.isPlaying ? '1' : '0');
+
+            foreach (CheatProvider provider in EnsureProviders())
+            {
+                sb.Append('|').Append(provider.GetType().Name).Append(':').Append(provider.IsAvailable ? '1' : '0');
+                foreach (CheatSection section in provider.GetSections())
+                    sb.Append('/').Append(section.Name).Append(section.Enabled ? '+' : '-');
+            }
+
+            return sb.ToString();
+        }
 
         private void Rebuild()
         {
@@ -65,30 +104,76 @@ namespace ATCG.Editor.Tools.Cheats
 
             content.Clear();
 
-            if (!Application.isPlaying)
+            bool playing = Application.isPlaying;
+            if (!playing)
+                content.Add(new HelpBox("Play mode is required to run cheats — shown disabled below.", HelpBoxMessageType.Info));
+
+            bool anySection = false;
+            foreach (CheatProvider provider in EnsureProviders())
             {
-                content.Add(new HelpBox("Enter Play mode to discover and run cheats.", HelpBoxMessageType.Info));
-                return;
+                bool providerOk = playing && provider.IsAvailable;
+                List<CheatSection> sections = provider.GetSections()?.ToList() ?? new List<CheatSection>();
+                if (sections.Count == 0)
+                    continue;
+
+                anySection = true;
+                content.Add(sections.Count == 1
+                    ? BuildSingleSection(sections[0], providerOk)
+                    : BuildSectionTabs(sections, providerOk));
             }
 
-            CheatProvider[] providers = Object.FindObjectsByType<CheatProvider>(FindObjectsSortMode.None);
-            if (providers.Length == 0)
-            {
-                content.Add(new HelpBox("No cheat providers found in the loaded scene(s).", HelpBoxMessageType.Warning));
-                return;
-            }
+            if (!anySection)
+                content.Add(new HelpBox("No cheat providers found.", HelpBoxMessageType.Warning));
 
-            foreach (CheatProvider provider in providers.OrderBy(p => p.DisplayName))
-                content.Add(BuildProvider(provider));
+            lastPoll = EditorApplication.timeSinceStartup;
+            lastSignature = ComputeSignature();
         }
 
-        private VisualElement BuildProvider(CheatProvider provider)
+        // One section → a titled rounded box.
+        private VisualElement BuildSingleSection(CheatSection section, bool providerOk)
         {
-            Foldout providerFold = new Foldout { text = provider.DisplayName, value = true };
-            providerFold.style.marginBottom = 6;
-            providerFold.Q<Toggle>()?.AddToClassList("cheat-provider-toggle");
+            VisualElement box = new VisualElement();
+            box.AddToClassList("cheat-section");
 
-            var groups = provider.GetCheats()
+            Label title = new Label(section.Name);
+            title.AddToClassList("cheat-section__title");
+            box.Add(title);
+
+            VisualElement body = BuildSectionBody(section);
+            body.SetEnabled(providerOk && section.Enabled);
+            box.Add(body);
+            return box;
+        }
+
+        // Several sections from one provider → a rounded box holding a TabView (one tab per section,
+        // e.g. "Player 1", "Player 2").
+        private VisualElement BuildSectionTabs(List<CheatSection> sections, bool providerOk)
+        {
+            VisualElement box = new VisualElement();
+            box.AddToClassList("cheat-section");
+
+            TabView tabs = new TabView();
+            tabs.AddToClassList("cheat-tabs");
+
+            foreach (CheatSection section in sections)
+            {
+                Tab tab = new Tab(section.Name);
+                VisualElement body = BuildSectionBody(section);
+                body.SetEnabled(providerOk && section.Enabled);
+                tab.Add(body);
+                tabs.Add(tab);
+            }
+
+            box.Add(tabs);
+            return box;
+        }
+
+        // The cheats of a section (grouped by [CheatGroup]), without the section chrome.
+        private VisualElement BuildSectionBody(CheatSection section)
+        {
+            VisualElement body = new VisualElement();
+
+            var groups = (section.Cheats ?? Enumerable.Empty<ICheat>())
                 .Where(c => c != null)
                 .GroupBy(GroupOf)
                 .OrderBy(g => g.Key);
@@ -97,40 +182,56 @@ namespace ATCG.Editor.Tools.Cheats
             foreach (var group in groups)
             {
                 any = true;
-                Foldout groupFold = new Foldout { text = group.Key, value = true };
-                groupFold.style.marginLeft = 6;
+
+                Label groupLabel = new Label(group.Key);
+                groupLabel.AddToClassList("cheat-group__label");
+                body.Add(groupLabel);
 
                 foreach (ICheat cheat in group.OrderBy(c => c.Name))
-                    groupFold.Add(BuildCheatCard(cheat));
-
-                providerFold.Add(groupFold);
+                    body.Add(BuildCheatCard(cheat));
             }
 
             if (!any)
-                providerFold.Add(new Label("No cheats.") { style = { opacity = 0.6f, marginLeft = 6 } });
+                body.Add(new Label("No cheats.") { style = { opacity = 0.6f } });
 
-            return providerFold;
+            return body;
         }
 
-        // A cheat row: name + Run on top, its parameter controls (if any) underneath. The param
-        // controls bind to this very instance, so the values the user sets persist until Execute.
+        // A cheat card: rounded box with name + Run on top, description, then aligned parameter
+        // controls bound to this very instance (so the values the user sets persist until Execute).
         private VisualElement BuildCheatCard(ICheat cheat)
         {
             ICheat captured = cheat;
 
-            VisualElement card = new VisualElement { tooltip = cheat.Description, style = { marginTop = 2, marginBottom = 4 } };
+            VisualElement card = new VisualElement();
+            card.AddToClassList("cheat-card");
 
-            VisualElement head = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
-            head.Add(new Label(cheat.Name)
-            {
-                style = { unityFontStyleAndWeight = FontStyle.Bold, flexGrow = 1, unityTextAlign = TextAnchor.MiddleLeft },
-            });
-            head.Add(new Button(() => RunCheat(captured)) { text = "Run" });
+            VisualElement head = new VisualElement();
+            head.AddToClassList("cheat-card__head");
+
+            Label name = new Label(cheat.Name);
+            name.AddToClassList("cheat-card__title");
+            head.Add(name);
+
+            Button run = new Button(() => RunCheat(captured)) { text = "Run" };
+            run.AddToClassList("cheat-card__run");
+            head.Add(run);
+
             card.Add(head);
+
+            if (!string.IsNullOrEmpty(cheat.Description))
+            {
+                Label desc = new Label(cheat.Description);
+                desc.AddToClassList("cheat-card__desc");
+                card.Add(desc);
+            }
 
             VisualElement parameters = CheatParamsRenderer.Build(cheat);
             if (parameters != null)
+            {
+                parameters.AddToClassList("cheat-card__params");
                 card.Add(parameters);
+            }
 
             return card;
         }
@@ -152,6 +253,36 @@ namespace ATCG.Editor.Tools.Cheats
             {
                 Debug.LogException(e);
             }
+        }
+
+        // Providers are stateless and don't change at runtime, so discover them once and reuse.
+        private List<CheatProvider> EnsureProviders()
+            => providers ??= DiscoverProviders().ToList();
+
+        // All concrete CheatProviders with a public parameterless constructor, across loaded assemblies.
+        private static IEnumerable<CheatProvider> DiscoverProviders()
+        {
+            List<CheatProvider> providers = new();
+
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] types;
+                try { types = assembly.GetTypes(); }
+                catch { continue; }
+
+                foreach (Type type in types)
+                {
+                    if (type.IsAbstract || !typeof(CheatProvider).IsAssignableFrom(type))
+                        continue;
+                    if (type.GetConstructor(Type.EmptyTypes) == null)
+                        continue;
+
+                    try { providers.Add((CheatProvider)Activator.CreateInstance(type)); }
+                    catch (Exception e) { Debug.LogWarning($"[Cheats] Couldn't create provider {type.Name}: {e.Message}"); }
+                }
+            }
+
+            return providers;
         }
     }
 }
