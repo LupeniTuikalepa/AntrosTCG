@@ -11,7 +11,7 @@ namespace ATCG.Capacities.Data
 	public partial class QuicksandData : CapacityData
 	{
 		[field:SerializeField,BoxGroup("Specific")]
-		public SlowDownData Status { get;private set; }
+		public SlowDownStatusData Status { get;private set; }
 
 		[field: SerializeField, BoxGroup("Custom")]
 		public int Range { get; private set; } = 1;
