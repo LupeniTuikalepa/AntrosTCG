@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Data.Status
 {
+	[CreateAssetMenu(menuName = "ATCG/Status/Frost/EarthQuakeStatusData")]
 	public class EarthQuakeStatusData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]

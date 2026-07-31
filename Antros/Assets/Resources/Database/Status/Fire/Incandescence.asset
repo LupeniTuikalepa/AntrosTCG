@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f419f10c02d74a21b2f8da9f008d3a09, type: 3}
+  m_Name: Incandescence
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Status.FireStatus.IncandescenceData
+  guidText: 59b0e489-579f-43b9-8cfd-b5e0cb0a5367
+  <Name>k__BackingField: Incandescence
+  <Color>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
+  <Element>k__BackingField: 1
+  <RuntimeStatus>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 0}
+  <Duration>k__BackingField: 1
+  <Status>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}

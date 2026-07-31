@@ -56,9 +56,9 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 			}
 		}
 
-		protected override void OnApply(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
+		protected override void OnApply(ExplosionStatusData statusStatusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
-			base.OnApply(statusData, in statusInfos, in context);
+			base.OnApply(statusStatusData, in statusInfos, in context);
 		}
 
 		protected override void OnRemove(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)

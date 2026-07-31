@@ -6,6 +6,7 @@ using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Capacities.Status.FireStatus;
 using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Burn

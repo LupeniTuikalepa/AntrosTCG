@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ATCG.Capacities.Status.FireStatus
 {
-	[CreateAssetMenu(menuName = "ATCG/Status/Fournaise")]
-
+	[CreateAssetMenu(menuName = "ATCG/Status/Fire/Fournaise")]
+	
 	public class FurnaceStatusData : StatusData
 	{
 		[field: SerializeField, BoxGroup("Specific")]
