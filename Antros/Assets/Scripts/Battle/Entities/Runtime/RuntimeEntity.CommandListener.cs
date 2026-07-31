@@ -23,9 +23,9 @@ namespace ATCG.Battle.Entities.Runtime
 		IEntityCommandDirector<FallCommand>,
 		IEntityCommandDirector<PushbackCommand>,
 		IEntityCommandDirector<BasicAttackCommand>,
-		IEntityCommandDirector<StatusApplyCommand>,
-		IEntityCommandDirector<StatusTickCommand>,
-		IEntityCommandDirector<StatusRemoveCommand>,
+		IEntityCommandDirector<ApplyStatusCommand>,
+		IEntityCommandDirector<TickStatusCommand>,
+		IEntityCommandDirector<RemoveStatusCommand>,
 		IEntityCommandDirector<ApplyPassiveCommand>,
 		IEntityCommandDirector<TickPassiveCommand>,
 		IEntityCommandDirector<RemovePassiveCommand>
@@ -154,7 +154,7 @@ namespace ATCG.Battle.Entities.Runtime
 
 		}
 
-		async Awaitable ICommandDirector<StatusApplyCommand>.Play(CommandDirectorState state, CommandContext context, StatusApplyCommand command)
+		async Awaitable ICommandDirector<ApplyStatusCommand>.Play(CommandDirectorState state, CommandContext context, ApplyStatusCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
@@ -180,7 +180,7 @@ namespace ATCG.Battle.Entities.Runtime
 			runtimeStatus.Apply(runtimeContext);
 		}
 
-		async Awaitable ICommandDirector<StatusTickCommand>.Play(CommandDirectorState state, CommandContext context, StatusTickCommand command)
+		async Awaitable ICommandDirector<TickStatusCommand>.Play(CommandDirectorState state, CommandContext context, TickStatusCommand command)
 		{
 			await Awaitable.MainThreadAsync();
 			state.CompleteAll(this);
@@ -192,7 +192,7 @@ namespace ATCG.Battle.Entities.Runtime
 				tickStatus.Tick(runtimeContext);
 		}
 
-		async Awaitable ICommandDirector<StatusRemoveCommand>.Play(CommandDirectorState state, CommandContext context, StatusRemoveCommand command)
+		async Awaitable ICommandDirector<RemoveStatusCommand>.Play(CommandDirectorState state, CommandContext context, RemoveStatusCommand command)
 		{
 			// Temporary diagnostics — please leave these in for the next test so we get
 			// a real read on what's happening (the previous pair got removed before the

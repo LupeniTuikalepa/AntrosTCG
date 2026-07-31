@@ -111,8 +111,8 @@ namespace ATCG.Battle.Commands.GameCommands.Players
                     // status entity has no StatusReceiver, so passing its address made that
                     // check fail and OnTick never ran — the status never ticked.
                     EntityAddress target = new EntityAddress(statusContext.World, statusTag.targetEntity);
-                    StatusTickCommand statusTickCommand = new StatusTickCommand(target, statusTag.data);
-                    Inject(in context, statusTickCommand);
+                    TickStatusCommand tickStatusCommand = new TickStatusCommand(target, statusTag.data);
+                    Inject(in context, tickStatusCommand);
                 }
             }
 
@@ -124,8 +124,8 @@ namespace ATCG.Battle.Commands.GameCommands.Players
                     StatusTag statusTag = statusRef.GetValue();
 
                     EntityAddress target = new EntityAddress(statusContext.World, statusTag.targetEntity);
-                    StatusRemoveCommand statusRemoveCommand = new StatusRemoveCommand(target, statusTag.data);
-                    Inject(in context, statusRemoveCommand);
+                    RemoveStatusCommand removeStatusCommand = new RemoveStatusCommand(target, statusTag.data);
+                    Inject(in context, removeStatusCommand);
                 }
             }
 

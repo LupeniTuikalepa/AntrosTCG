@@ -7,7 +7,11 @@ using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
 using ATCG.HexGrids.Utility;
 using ATCG.Passives.Datas;
 using Helteix.Tools.DataMapping;
@@ -35,10 +39,8 @@ namespace ATCG.Battle.PassiveSystem.Core
             this.data = data;
             this.owner = owner;
 
-            if (owner.Is<ConstructionAspect>(out var constructionAspect))
-                range = constructionAspect.PassiveRange;
-            else
-                range = -1;
+            range = owner.Is<ConstructionAspect>(out var constructionAspect) ?
+                constructionAspect.PassiveRange : -1;
         }
 
         public virtual bool Accepts(CommandContext context, T command)

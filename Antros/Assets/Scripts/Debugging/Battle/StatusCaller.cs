@@ -41,7 +41,7 @@ namespace ATCG.Debugging.Debugging.Gameplay
             {
                 RuntimeHero runtimeHero = targetHeroes[i];
                 EntityAddress adresse = Address(runtimeHero);
-                var statusApplyCommand = new StatusApplyCommand(adresse, data);
+                var statusApplyCommand = new ApplyStatusCommand(adresse, data);
                 statusApplyCommand.Run(battlePhase);
             }
         }
@@ -53,7 +53,7 @@ namespace ATCG.Debugging.Debugging.Gameplay
             {
                 RuntimeHero runtimeHero = targetHeroes[i];
                 EntityAddress address = Address(runtimeHero);
-                var statusApplyCommand = new StatusRemoveCommand(address, data);
+                var statusApplyCommand = new RemoveStatusCommand(address, data);
                 statusApplyCommand.Run(battlePhase);
             }
         }
@@ -65,7 +65,7 @@ namespace ATCG.Debugging.Debugging.Gameplay
             {
                 RuntimeHero runtimeHero = targetHeroes[i];
                 EntityAddress adresse = Address(runtimeHero);
-                var statusApplyCommand = new StatusTickCommand(adresse, data);
+                var statusApplyCommand = new TickStatusCommand(adresse, data);
                 statusApplyCommand.Run(battlePhase);
             }
         }

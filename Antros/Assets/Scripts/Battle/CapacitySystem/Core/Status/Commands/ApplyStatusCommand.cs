@@ -22,15 +22,19 @@ namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
     }
 
     [Serializable]
-    public class StatusApplyCommand : EntityCommand<StatusCommandInfos>
+    public class ApplyStatusCommand : EntityCommand<StatusCommandInfos>
     {
+        [field: SerializeField]
+        public int Stack { get; private set; }
+
         [field: SerializeField]
         public StatusData Data { get; private set; }
 
         private readonly bool tickResult;
 
-        public StatusApplyCommand(EntityAddress address, StatusData data) : base(address)
+        public ApplyStatusCommand(EntityAddress address, StatusData data, int stack = 1) : base(address)
         {
+            Stack = stack;
             Data = data;
         }
 
@@ -40,7 +44,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
             if (Mapper.TryGet(Data, out IStatusContainer container))
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
-                container.Apply(Data, Target.ToAddress(context.World), statusContext);
+                container.Apply(Data, Target.ToAddress(context.World), statusContext, Stack);
             }
         }
     }

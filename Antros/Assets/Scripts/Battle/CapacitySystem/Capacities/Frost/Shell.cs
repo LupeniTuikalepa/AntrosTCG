@@ -43,7 +43,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			{
 				if (ctx.IsAlly(member))
 				{
-					var statusCommand = new StatusApplyCommand(member, data.Status);
+					var statusCommand = new ApplyStatusCommand(member, data.Status);
 					statusCommand.Run(ctx.BattlePhase);
 				}
 			}

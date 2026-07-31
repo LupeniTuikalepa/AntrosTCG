@@ -12,7 +12,7 @@ namespace ATCG.Battle.Commands.Players
         [field: SerializeField]
         public BattleID PlayerID { get; private set; }
 
-        protected PlayerCommand(IBattlePlayer battlePlayer) : base()
+        protected PlayerCommand(IBattlePlayer battlePlayer, string source = "None") : base(source)
         {
             this.PlayerID = battlePlayer.GetBattleID();
         }

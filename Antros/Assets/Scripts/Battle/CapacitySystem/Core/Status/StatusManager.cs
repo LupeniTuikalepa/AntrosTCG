@@ -115,8 +115,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
                 foreach (var statusRef in statusToRemove)
                 {
                     StatusTag statusTag = statusRef.GetValue();
-                    StatusRemoveCommand statusRemoveCommand = new StatusRemoveCommand(target, statusTag.data);
-                    statusRemoveCommand.Run(statusContext.battlePhase);
+                    RemoveStatusCommand removeStatusCommand = new RemoveStatusCommand(target, statusTag.data);
+                    removeStatusCommand.Run(statusContext.battlePhase);
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Commands;
+﻿using System;
+using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Entities;
 using ATCG.Capacities.Data.Status;
@@ -7,12 +8,13 @@ using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
 {
-    public class StatusTickCommand : EntityCommand<StatusCommandInfos>
+    [Serializable]
+    public class RemoveStatusCommand : EntityCommand<StatusCommandInfos>
     {
         [field: SerializeField]
         public StatusData Data { get; private set; }
 
-        public StatusTickCommand(EntityAddress address, StatusData data) : base(address)
+        public RemoveStatusCommand(EntityAddress address, StatusData data) : base(address)
         {
             this.Data = data;
         }
@@ -23,9 +25,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status.Commands
             if (Mapper.TryGet(Data, out IStatusContainer container))
             {
                 StatusContext statusContext = new StatusContext(context.battlePhase);
-                EntityAddress target = Target.ToAddress(context.World);
-
-                container.Tick(Data, target, statusContext);
+                container.Remove(Data, Target.ToAddress(context.World), statusContext);
             }
         }
     }

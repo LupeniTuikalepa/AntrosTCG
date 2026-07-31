@@ -48,8 +48,8 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Flux
 		{
 			foreach (var target in ctx.Targets.WithTags(APPLY_STATUS))
 			{
-				StatusApplyCommand statusCommand = new StatusApplyCommand(target, data.Status);
-				statusCommand.Run(ctx.BattlePhase);
+				ApplyStatusCommand applyStatusCommand = new ApplyStatusCommand(target, data.Status);
+				applyStatusCommand.Run(ctx.BattlePhase);
 			}
 
 			foreach (var target in ctx.Targets.WithTags(DAMAGE))

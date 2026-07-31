@@ -18,7 +18,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Status
         bool Is(TData data, Type type) => this.GetType() == type;
 
         [AddToContainer]
-        void Apply(TData data, EntityAddress target, StatusContext context);
+        void Apply(TData data, EntityAddress target, StatusContext context, int stack = 1);
 
         [AddToContainer]
         void Remove(TData data, EntityAddress target, StatusContext context);

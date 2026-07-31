@@ -14,7 +14,7 @@ namespace ATCG.Battle.Entities.Runtime
         [Button, DisableInEditorMode]
         private void ApplyStatus(StatusData data)
         {
-            var statusApplyCommand = new StatusApplyCommand(Address, data);
+            var statusApplyCommand = new ApplyStatusCommand(Address, data);
             statusApplyCommand.Run(BattlePhase);
         }
     }

@@ -35,7 +35,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
             {
                 if (cell.Is<BattleCellAspect>(out var cellAspect))
                 {
-                    var statusCommand = new StatusApplyCommand(cellAspect.EntityAddress, data.Status);
+                    var statusCommand = new ApplyStatusCommand(cellAspect.EntityAddress, data.Status);
                     statusCommand.Run(ctx.BattlePhase);
                 }
             }
