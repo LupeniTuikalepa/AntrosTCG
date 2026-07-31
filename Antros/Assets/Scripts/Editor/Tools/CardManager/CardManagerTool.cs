@@ -255,11 +255,7 @@ namespace ATCG.Editor.Tools.CardManager
             field.RegisterValueChangedCallback(evt =>
             {
                 if (field.userData is GameCardData card && evt.newValue is CardRarity rarity)
-                {
-                    Undo.RecordObject(card, "Change card rarity");
-                    card.EditorSetRarity(rarity);
-                    EditorUtility.SetDirty(card);
-                }
+                    SetEnumField(card, "<Rarity>k__BackingField", rarity);
             });
             return field;
         }
@@ -277,11 +273,7 @@ namespace ATCG.Editor.Tools.CardManager
             field.RegisterValueChangedCallback(evt =>
             {
                 if (field.userData is GameCardData card && evt.newValue is Element element)
-                {
-                    Undo.RecordObject(card, "Change card element");
-                    card.EditorSetElement(element);
-                    EditorUtility.SetDirty(card);
-                }
+                    SetEnumField(card, "<Element>k__BackingField", element);
             });
             return field;
         }
@@ -385,20 +377,77 @@ namespace ATCG.Editor.Tools.CardManager
 
         private void SetAll(bool value)
         {
-            DebugStartingDeck deck = DebugStartingDeck.Current;
-            Undo.RecordObject(deck, "Toggle cards in starting deck");
-            foreach (GameCardData card in filtered)
-                deck.EditorSetActive(card, value);
-
+            SetDeckActive(filtered, value);
             list?.RefreshItems();
             UpdateCount();
         }
 
         private static void SetActive(GameCardData card, bool value)
+            => SetDeckActive(new[] { card }, value);
+
+        // ---- serialized writes (no editor-only setters on the data classes) --
+
+        // Writes an enum onto a serialized auto-property backing field via SerializedObject, so the
+        // data classes keep private setters and we don't add editor-only mutators to them.
+        private static void SetEnumField(UnityEngine.Object target, string backingField, System.Enum value)
+        {
+            SerializedObject so = new SerializedObject(target);
+            SerializedProperty prop = so.FindProperty(backingField);
+            if (prop == null)
+                return;
+
+            int index = System.Array.IndexOf(prop.enumNames, value.ToString());
+            if (index < 0)
+                return;
+
+            prop.enumValueIndex = index;
+            so.ApplyModifiedProperties();
+        }
+
+        // Toggles the given cards in the DebugStartingDeck's serialized guid list in one edit.
+        private static void SetDeckActive(IEnumerable<GameCardData> cards, bool active)
         {
             DebugStartingDeck deck = DebugStartingDeck.Current;
-            Undo.RecordObject(deck, "Toggle card in starting deck");
-            deck.EditorSetActive(card, value);
+            if (deck == null)
+                return;
+
+            SerializedObject so = new SerializedObject(deck);
+            SerializedProperty guids = so.FindProperty("activeCardGuids");
+            if (guids == null)
+                return;
+
+            foreach (GameCardData card in cards)
+            {
+                if (card == null)
+                    continue;
+                ToggleGuid(guids, card.ID.ToString(), active);
+            }
+
+            so.ApplyModifiedProperties();
+        }
+
+        private static void ToggleGuid(SerializedProperty list, string id, bool active)
+        {
+            int found = -1;
+            for (int i = 0; i < list.arraySize; i++)
+            {
+                if (list.GetArrayElementAtIndex(i).stringValue == id)
+                {
+                    found = i;
+                    break;
+                }
+            }
+
+            if (active && found < 0)
+            {
+                int index = list.arraySize;
+                list.arraySize = index + 1;
+                list.GetArrayElementAtIndex(index).stringValue = id;
+            }
+            else if (!active && found >= 0)
+            {
+                list.DeleteArrayElementAtIndex(found);
+            }
         }
 
         private static string CardTitle(GameCardData card) => string.IsNullOrEmpty(card.Title) ? card.name : card.Title;
