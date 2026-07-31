@@ -23,17 +23,19 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 		protected override void OnStack(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
 			base.OnStack(statusData, in statusInfos, in context);
-			ref StatusDurationController controller = ref statusInfos.statusControllerRef.GetValue();
-			if (controller.RemainingTicks < statusData.Duration)
-			{
-				controller.SetTicks(statusData.Duration);
-			}
+			statusInfos.StatusController.AddOrRemoveTicks(statusData.AddStack);
+			base.OnStack(statusData, in statusInfos, in context);
 		}
 
 		protected override void OnTick(ExplosionStatusData statusData, in EntityStatusInfos statusInfos, in StatusContext context)
 		{
 			base.OnTick(statusData, in statusInfos, in context);
-			DamageCommand selfDamage = new DamageCommand(statusData.MainDamage, statusInfos.targetAddress);
+			var mainDamage = statusData.MainDamage;
+			var totalDamage = mainDamage + statusInfos.StatusController.RemainingTicks;
+			var secondDamage = statusData.SecondeDamage;
+			var totalSecondeDamage = secondDamage + statusInfos.StatusController.RemainingTicks;
+			
+			DamageCommand selfDamage = new DamageCommand(totalDamage, statusInfos.targetAddress);
 			selfDamage.Run(context.battlePhase);
 
 			if (!statusInfos.targetAddress.TryGetComponentRO(out GridMemberComponent gridMember))
@@ -51,7 +53,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 
 			foreach (var friend in builder.GetBattleCells(battleGrid))
 			{
-				DamageCommand friendDamage = new DamageCommand(statusData.SecondeDamage, friend.EntityAddress);
+				DamageCommand friendDamage = new DamageCommand(totalSecondeDamage, friend.EntityAddress);
 				friendDamage.Run(context.battlePhase);
 			}
 		}

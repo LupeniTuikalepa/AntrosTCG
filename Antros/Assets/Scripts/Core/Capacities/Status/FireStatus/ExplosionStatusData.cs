@@ -15,6 +15,9 @@ namespace ATCG.Capacities.Status.FireStatus
 
 		[field: SerializeField, BoxGroup("Specific")]
 		public int Duration { get; private set; } = 2;
+		
+		[field: SerializeField, BoxGroup("Specific")]
+		public int AddStack { get; set; } = 1;
 
 		[field: SerializeField, BoxGroup("Specific")]
 		public int Range { get; set; } = 1;
