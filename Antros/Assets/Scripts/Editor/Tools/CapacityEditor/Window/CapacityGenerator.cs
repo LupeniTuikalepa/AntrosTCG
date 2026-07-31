@@ -256,6 +256,7 @@ using ATCG.Battle.CapacitySystem.Core;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Players;
 using ATCG.Capacities;
 using ATCG.Capacities.Data.{element};
 using ATCG.HexGrids;
@@ -265,8 +266,8 @@ namespace ATCG.Battle.CapacitySystem.Capacities.{element}
 {{
     public partial struct {name} : ICapacity<{name}Data>
     {{
-        // Valid default: tags the cell as Cell and every member on it as Member.
-        public void GetTargets({name}Data data, BattleCellAspect battleCell, CapacityTargets output)
+        // Valid default: tags the cell as CELL and every member on it as MEMBER.
+        public void GetTargets({name}Data data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
         {{
             output.Add(battleCell.EntityAddress, CapacityTags.CELL);
             foreach (var member in battleCell.GetMembers())
