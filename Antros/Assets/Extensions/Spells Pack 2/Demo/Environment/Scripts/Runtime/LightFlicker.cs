@@ -5,13 +5,13 @@ namespace ZakhanSpellsPack2 {
 public class LightFlicker : MonoBehaviour
 {
     [SerializeField] public float m_PositionJitterScale;
-    
+
     [SerializeField] public float m_RotationJitterScale;
 
     [SerializeField] public float m_IntensityJitterScale;
 
     [SerializeField] public float m_Timescale;
-    
+
     private Vector3 m_InitialPosition;
     private float m_InitialIntensity;
     private Quaternion m_InitialRotation;
@@ -29,7 +29,6 @@ public class LightFlicker : MonoBehaviour
 
     void Start()
     {
-        Random.InitState(gameObject.GetInstanceID());
         m_XSeed = Random.value*248;
         m_YSeed = Random.value*248;
         m_ZSeed = Random.value*248;
@@ -63,7 +62,7 @@ public class LightFlicker : MonoBehaviour
             output.x += Mathf.PerlinNoise1D(uv.x * freq * (i + 1));
             output.y += Mathf.PerlinNoise1D(uv.y * freq * (i + 1));
             output.z += Mathf.PerlinNoise1D(uv.z * freq * (i + 1));
-            
+
         }
 
         return output;
