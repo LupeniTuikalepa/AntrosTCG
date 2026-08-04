@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b7f5e31d80f4d484ca1c81c00c5ce6e0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 310670
+  packageName: Spells Pack 2
+  packageVersion: 2.4.0
+  assetPath: Assets/Spells Pack 2/Particles/Materials/Astral/Spells/Spell_Astral_5_Hit.mat
+  uploadId: 916590

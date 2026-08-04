@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Spell_Sand_5_SwirlDecal
+  m_Shader: {fileID: -6465566751694194690, guid: e78ba7914cafa5c428044867e27f5461, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _DITHER
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Alpha: 1
+    - _Blend_Opacity: 0.78
+    - _Color_Range: 1.7
+    - _DITHER: 1
+    - _DecalMeshBiasType: 0
+    - _DecalMeshDepthBias: 0
+    - _DecalMeshViewBias: 0
+    - _Details_Contrast: 7.5
+    - _Details_Mix: 0.61
+    - _Details_Range_Mix: -0.39
+    - _Details_Scale: 100
+    - _Details_Speed: 1
+    - _Dither_Mask_Scale: 15
+    - _Dither_Speed: 5
+    - _DrawOrder: 0
+    - _Noise_1_Scale: 15
+    - _Noise_2_Scale: 5
+    - _Normal_Strength: 2
+    - _Rotation_Speed: -4.2
+    - _Smoothness: 0.2
+    - _Twirl_Strength: -17
+    m_Colors:
+    - _Alpha_Normal_Remap: {r: 0, g: 2, b: 0, a: 0}
+    - _Alpha_Remap: {r: 0.02, g: 0.39, b: 0, a: 0}
+    - _Color_A: {r: 0.24528301, g: 0.13581984, b: 0, a: 1}
+    - _Color_B: {r: 0.995855, g: 0.5889989, b: 0.20198946, a: 1}
+    - _Depth_Remap: {r: -0.05, g: 0.56, b: 0, a: 0}
+    - _Dither_Color: {r: 11.984313, g: 7.146706, b: 3.3352578, a: 1}
+    - _Dither_Mask_Remap: {r: 0.29, g: 1, b: 0, a: 0}
+    - _Dither_Mask_Speed: {r: -0.2, g: 0.2, b: 0, a: 0}
+    - _Dither_Mask_Tiling: {r: 2, g: 2, b: 0, a: 0}
+    - _Dither_Remap: {r: 0.9, g: 1, b: 0, a: 0}
+    - _Dither_Tiling: {r: 8, g: 8, b: 0, a: 0}
+    - _Noise_1_Remap: {r: 0.01, g: 1, b: 0, a: 0}
+    - _Noise_2_Remap: {r: 0.47, g: 0.87, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &5137176800655672064
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 10

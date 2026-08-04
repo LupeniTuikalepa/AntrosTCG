@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 52ea11f215aa7f0438d0274836db6b9f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 310670
+  packageName: Spells Pack 2
+  packageVersion: 2.4.0
+  assetPath: Assets/Spells Pack 2/Particles/Materials/Sand/Spells/Spell_Sand_10_Wall.mat
+  uploadId: 916590
