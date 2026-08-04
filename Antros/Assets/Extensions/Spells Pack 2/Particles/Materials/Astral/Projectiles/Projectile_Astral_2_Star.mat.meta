@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: abc9b01a4ea3cfa48870be574bc383db
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 310670
+  packageName: Spells Pack 2
+  packageVersion: 2.4.0
+  assetPath: Assets/Spells Pack 2/Particles/Materials/Astral/Projectiles/Projectile_Astral_2_Star.mat
+  uploadId: 916590

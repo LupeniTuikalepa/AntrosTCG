@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 790dfbddd72ef0c41898583806179700
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 310670
+  packageName: Spells Pack 2
+  packageVersion: 2.4.0
+  assetPath: Assets/Spells Pack 2/Particles/Materials/Sand/Spells/Spell_Sand_1_Hit.mat
+  uploadId: 916590
