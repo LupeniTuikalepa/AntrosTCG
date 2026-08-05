@@ -37,7 +37,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			{
 				if (member.HasComponent<HealthComponent>())
 				{
-					var statusFirstCommand = new StatusApplyCommand(member, data.Status);
+					var statusFirstCommand = new ApplyStatusCommand(member, data.Status);
 					statusFirstCommand.Run(ctx.BattlePhase);
 				}
 

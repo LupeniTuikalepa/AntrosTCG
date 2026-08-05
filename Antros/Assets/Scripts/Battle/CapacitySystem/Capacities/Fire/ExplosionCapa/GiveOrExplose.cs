@@ -46,7 +46,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.ExplosionCapa
 
 		private partial void ExecuteGiveOrExplose(GiveOrExploseData data, CapacityStepContext ctx)
 		{
-			var statusCommand = new StatusApplyCommand(ctx.Caster, data.Status);
+			var statusCommand = new ApplyStatusCommand(ctx.Caster, data.Status);
 			statusCommand.Run(ctx.BattlePhase);
 		}
 	}
