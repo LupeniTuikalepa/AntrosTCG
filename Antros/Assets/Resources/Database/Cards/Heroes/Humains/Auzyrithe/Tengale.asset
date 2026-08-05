@@ -14,33 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: b377c5fb-613b-4fb9-b09e-b7330d42dbe8
   <Title>k__BackingField: Tengale
-  <Description>k__BackingField: 
-  <Element>k__BackingField: 0
-  <Rarity>k__BackingField: 0
+  <Description>k__BackingField: "C'est un chasseur de panthere noir, il revent ses
+    peaux au prix fort aux march\xE9s de diff\xE9rente Capitale. Connu part la plus
+    part des marchands de peaux et de fabriquant de v\xEAtement et d'armure tout
+    le monde est d'accord pour dire qu'il est plus f\xE9roce que les b\xEAte qu'il
+    attrape. Le Feu est son \xE9l\xE9ments. "
+  <Element>k__BackingField: 1
+  <Rarity>k__BackingField: 1
   <Capacities>k__BackingField:
-    rid: 6882996230390284327
+    rid: 3278269905965154547
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 15
-  <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Health>k__BackingField: 10
+  <Strength>k__BackingField: 4
+  <Defense>k__BackingField: 2
+  <Speed>k__BackingField: 4
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996212461994165
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996212461994165
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
-    - rid: 6882996230390284327
+    - rid: 3278269905965154547
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: df1ba3d09f941c64fb38c3f6bee55fb7, type: 2}

@@ -13,34 +13,24 @@ MonoBehaviour:
   m_Name: Sram
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: f9def07b-7b40-42f4-82de-37755091a165
-  <Title>k__BackingField: 
+  <Title>k__BackingField: Scram
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284324
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
-  <Strength>k__BackingField: 3
+  <Strength>k__BackingField: 5
   <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Speed>k__BackingField: 4
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799444
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799444
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284324
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: ab6c316dae66e4f418116cd839fd4003, type: 2}

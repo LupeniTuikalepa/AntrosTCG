@@ -14,33 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 6c793032-cff0-4470-9ddd-109a2cc82de5
   <Title>k__BackingField: Pheres
-  <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Description>k__BackingField: "Ancien membre d'une dynastie d'artistes nomades,
+    rare son les personnes qui quitte le cirque pour prendre place \xE0 une plus
+    grande scene o\xF9 le combat, l'honeur et la mort sont en jeu.  "
+  <Element>k__BackingField: 1
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284318
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
-  <Strength>k__BackingField: 3
+  <Strength>k__BackingField: 5
   <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Speed>k__BackingField: 4
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996212461994167
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996212461994167
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284318
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: 919632c7a55407441b3006d91b1466a2, type: 2}

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Jupp
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: d6873b02-e5b2-44da-a81d-029183cdba22
-  <Title>k__BackingField: 
+  <Title>k__BackingField: Jupp
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
-  <Rarity>k__BackingField: 0
+  <Element>k__BackingField: 6
+  <Rarity>k__BackingField: 1
   <Capacities>k__BackingField:
     rid: 6882996230390284308
   <Passives>k__BackingField: []
@@ -25,22 +25,12 @@ MonoBehaviour:
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799440
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799440
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284308
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: c0d50c479ff2e7949940fffd4ffb99ad, type: 2}

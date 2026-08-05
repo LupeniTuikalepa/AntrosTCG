@@ -10,37 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1803131ed50f4deda696f2ef1722e15d, type: 3}
-  m_Name: Saug
+  m_Name: Cortese
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
-  guidText: 6a61f6f7-aa1a-47f7-9ae9-55ecb919b2cb
-  <Title>k__BackingField: Saug
+  guidText: 81478655-c1fc-46f4-823f-8317fec2b53a
+  <Title>k__BackingField: Cortese
   <Description>k__BackingField: 
-  <Element>k__BackingField: 1
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
-    rid: 6882996230390284320
+    rid: 3278269905965154548
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Defense>k__BackingField: 1
+  <Speed>k__BackingField: 1
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996212461994171
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996212461994171
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
-    - rid: 6882996230390284320
+    - rid: 3278269905965154548
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: b246044781c3ef44e8810ae47036731d, type: 2}

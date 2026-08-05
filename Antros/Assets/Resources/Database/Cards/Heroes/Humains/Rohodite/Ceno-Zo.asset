@@ -13,34 +13,28 @@ MonoBehaviour:
   m_Name: Ceno-Zo
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: a439beb0-f3c3-425b-bf20-4ec7a0ee8a95
-  <Title>k__BackingField: 
-  <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Title>k__BackingField: Ceno-Zo
+  <Description>k__BackingField: "Moine guerrier c'est la derni\xE8re rampare qui
+    s\xE9pare les mortels aux immortels. Ceno-Zo est le principale d\xE9fenseur de
+    son Wat, connue pour sa sagesse pour sa foie il n'h\xE9siterait pas une seconde
+    pour mener son r\xF4le \xE0 bien pour ses dieux. "
+  <Element>k__BackingField: 1
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284298
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 15
-  <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Health>k__BackingField: 40
+  <Strength>k__BackingField: 2
+  <Defense>k__BackingField: 5
+  <Speed>k__BackingField: 2
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799438
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799438
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284298
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: d8961fea34d3b9549b518ad44727a181, type: 2}
+        - {fileID: 11400000, guid: 26e26562cc6030641b77d06531b44a8d, type: 2}

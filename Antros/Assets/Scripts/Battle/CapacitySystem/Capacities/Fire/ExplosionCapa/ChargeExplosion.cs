@@ -35,7 +35,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.ExplosionCapa
 		}
 		private partial void ExecuteCharging(ChargeExplosionData data, CapacityStepContext ctx)
 		{
-			var applyExplo = new StatusApplyCommand(ctx.Caster, data.Status);
+			var applyExplo = new ApplyStatusCommand(ctx.Caster, data.Status);
 			applyExplo.Run(ctx.BattlePhase);
 		}
 	}

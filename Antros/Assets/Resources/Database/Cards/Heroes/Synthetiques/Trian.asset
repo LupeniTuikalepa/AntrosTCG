@@ -25,12 +25,12 @@ MonoBehaviour:
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField: []
+  <DeployRange>k__BackingField: 1
   references:
     version: 2
     RefIds:
     - rid: 6882996230390284331
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 0}
