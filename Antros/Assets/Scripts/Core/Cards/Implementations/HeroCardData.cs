@@ -16,8 +16,7 @@ namespace ATCG.Cards.Implementations
 
 		[field: SerializeField, Range(1, 10), BoxGroup("Heroes")]
 		public int Defense { get; private set; } = 1;
-
-
+		
 		[field: SerializeField, Range(1, 5), BoxGroup("Movement")]
 		public int Speed { get; private set; } = 1;
 
@@ -26,6 +25,9 @@ namespace ATCG.Cards.Implementations
 
 		[field: SerializeField, Range(0, 10), BoxGroup("Deploy")]
 		public int DeployRange { get; private set; } = 1;
+		
+		[field: SerializeField, BoxGroup("Prefabs")]
+		public GameObject HeroPawnPrefab { get; private set; }
 
 		protected override void Reset()
 		{

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Harce-En
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: c6f64257-1f36-4915-b6f7-19317aba45db
-  <Title>k__BackingField: 
+  <Title>k__BackingField: Harce-En
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284305
@@ -25,22 +25,13 @@ MonoBehaviour:
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799432
+  <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 3122727940595369399, guid: 93b7f2b7ce1ccfb438b720e73b4e3d7b, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799432
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284305
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: a7c714facc18f32478fad3fab45b8a36, type: 2}

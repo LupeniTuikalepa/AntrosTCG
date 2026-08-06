@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Status.Status;
 using ATCG.Battle.Commands;
+using ATCG.Battle.Entities.Runtime.Components;
 using ATCG.Battle.Entities.Runtime.VFX;
 using ATCG.Battle.GameModes;
 using ATCG.Battle.PassiveSystem.Runtimes;
@@ -14,6 +15,7 @@ using ATCG.Passives.Datas;
 using Helteix.ChanneledProperties.Conditions;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
+using NUnit.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -64,13 +66,20 @@ namespace ATCG.Battle.Entities.Runtime
 
         private Dictionary<StatusData, RuntimeStatus> statusDatas;
         private Dictionary<PassiveData, RuntimePassive> passives;
+        private List<IRuntimeEntityComponent<T>> components;
 
         protected virtual void Awake()
         {
-            Models = new LinkedRendererGroup(GetComponentsInChildren<LinkedRenderer>());
+	        components = new List<IRuntimeEntityComponent<T>>(GetComponentsInChildren<IRuntimeEntityComponent<T>>());
+	        Models = new LinkedRendererGroup(GetComponentsInChildren<LinkedRenderer>());
             IsInteractable = new Condition();
             statusDatas = new();
             passives = new();
+        }
+
+        protected virtual void CollectComponents()
+        {
+	        Models = new LinkedRendererGroup(GetComponentsInChildren<LinkedRenderer>());
         }
 
         protected virtual void OnEnable()
@@ -94,10 +103,19 @@ namespace ATCG.Battle.Entities.Runtime
 
             await Awaitable.MainThreadAsync();
             OnEntityConnected?.Invoke(aspect);
+            
+            foreach (var entityComponent in components)
+            {
+	            entityComponent.Connect(aspect,this);
+            }
         }
 
         public virtual async Awaitable Despawn()
         {
+	        foreach (var entityComponent in components)
+	        {
+		        entityComponent.Disconnect(Aspect,this);
+	        }
             await Awaitable.MainThreadAsync();
 
             T last = Aspect;
@@ -106,6 +124,8 @@ namespace ATCG.Battle.Entities.Runtime
             Manager = null;
 
             OnEntityDisconnected?.Invoke(last);
+            
+            
         }
 
 

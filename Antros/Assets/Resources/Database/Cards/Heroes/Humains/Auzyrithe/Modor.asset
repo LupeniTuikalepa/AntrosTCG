@@ -10,37 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1803131ed50f4deda696f2ef1722e15d, type: 3}
-  m_Name: Saug
+  m_Name: Modor
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 6a61f6f7-aa1a-47f7-9ae9-55ecb919b2cb
-  <Title>k__BackingField: Saug
-  <Description>k__BackingField: 
-  <Element>k__BackingField: 1
+  <Title>k__BackingField: Modor
+  <Description>k__BackingField: "Soldat Imp\xE9riale donnerait sa vie pour sa patrie.
+    Toujours en premiere ligne lors des conflits tout le monde ce sent en s\xE9curit\xE9
+    quand on est autour de lui. "
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284320
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 15
-  <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Health>k__BackingField: 30
+  <Strength>k__BackingField: 2
+  <Defense>k__BackingField: 6
+  <Speed>k__BackingField: 2
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996212461994171
+  <DeployRange>k__BackingField: 2
+  <HeroPawnPrefab>k__BackingField: {fileID: 1274713321925212258, guid: ba8b0fe58cdd2594a8483a69c4a74a65, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 6882996212461994171
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284320
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: 4dce0ca0c716da84e8c5aa91ca4942ed, type: 2}

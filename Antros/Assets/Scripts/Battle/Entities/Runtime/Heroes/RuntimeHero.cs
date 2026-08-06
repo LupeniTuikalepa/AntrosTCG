@@ -5,12 +5,15 @@ using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Cards.Implementations;
+using ATCG.Metrics;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
 using Unity.Cinemachine;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace ATCG.Battle.Entities.Runtime.Heroes
@@ -20,13 +23,14 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         [SerializeField, BoxGroup("UI")]
         private TMP_Text heroName;
 
-        [field: SerializeField, BoxGroup("GameFeel"),]
+        [field: SerializeField, BoxGroup("GameFeel"), ReadOnly]
         public Animator Animator { get; private set; }
+        
         [SerializeField, BoxGroup("GameFeel"), Range(0, 30)]
         private float movementDuration;
 
         [SerializeField, BoxGroup("GameFeel")] private CinemachineCamera cinemachineCamera;
-
+        
         private SelectEntityActionPhase selectPhase;
 
         protected override void OnEnable()
@@ -52,8 +56,12 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         public override async Awaitable Spawn(RuntimeEntityManager manager, HeroEntityAspect aspect)
         {
             await base.Spawn(manager, aspect);
-            heroName.text = aspect.Name;
 
+            
+            var herodata = aspect.HeroCard.Data;
+            heroName.text = herodata.name;
+            
+            CollectComponents();
             manager.RegisterRuntimeEntity(this);
 
             if (RuntimeBattleGrid.TryGetBattleCellAt(aspect.GridMemberComponent.coordinates, out RuntimeBattleCell cell))
@@ -76,6 +84,12 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             if (LocalBattlePlayer.TryGetRuntime(out RuntimeLocalBattlePlayer runtimeLocalBattlePlayer))
                 cinemachineCamera.OutputChannel = runtimeLocalBattlePlayer.Camera.Component.GetOutputChannel();
+        }
+
+        protected override void CollectComponents()
+        {
+	        base.CollectComponents();
+	        Animator = GetComponentInChildren<Animator>();
         }
 
         public void Despawn(RuntimeEntityManager manager)

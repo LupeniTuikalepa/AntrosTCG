@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 76ba45f0-d50b-4063-b96b-36c22e6dd9a9
   <Title>k__BackingField: Balert
-  <Description>k__BackingField: 
-  <Element>k__BackingField: 0
-  <Rarity>k__BackingField: 0
+  <Description>k__BackingField: "Pour les mortelles c'est un mirage, pour les animaux
+    c'est une menace, pour les Dieux c'est un simple humain. Balert, assassin de
+    renom, sa sp\xE9cialit\xE9 ? Voir ses ennemies se fatigu\xE9s pour sortir de
+    ses sables mouvants avant des les faire disparaitre \xE0 jamais. "
+  <Element>k__BackingField: 4
+  <Rarity>k__BackingField: 1
   <Capacities>k__BackingField:
     rid: 6882996230390284296
   <Passives>k__BackingField: []
@@ -26,6 +29,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 2088971587089964194, guid: 81c965162166b154bb8e7feda1c06969, type: 3}
   references:
     version: 2
     RefIds:
@@ -33,4 +37,4 @@ MonoBehaviour:
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
         <Capacities>k__BackingField:
-        - {fileID: 11400000, guid: a004c1d87c7a9d74d83d1584d9bac06b, type: 2}
+        - {fileID: 11400000, guid: f09a6dd680b3fbe488ccad54e1f99a90, type: 2}

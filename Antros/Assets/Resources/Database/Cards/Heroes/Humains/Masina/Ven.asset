@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Ven
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: b36454c1-7a1d-4e92-88c9-dbac20f8b573
-  <Title>k__BackingField: 
+  <Title>k__BackingField: Ven
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284333
@@ -25,22 +25,13 @@ MonoBehaviour:
   <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799442
+  <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 3068984782385116716, guid: bbe70e2047b5c8d43babe44095f78138, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799442
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284333
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 11400000, guid: e3e5490c0eb061a45891d2aae8b36c48, type: 2}

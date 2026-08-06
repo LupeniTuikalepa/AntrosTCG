@@ -15,7 +15,7 @@ MonoBehaviour:
   guidText: d5d2e1cd-ad0a-4968-97fb-6bd17bd23636
   <Title>k__BackingField: Clyde
   <Description>k__BackingField: 
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 7
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284299
@@ -26,6 +26,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 1862685889969944383, guid: ae64263b696679040b2af75cb431b378, type: 3}
   references:
     version: 2
     RefIds:

@@ -34,4 +34,5 @@ MonoBehaviour:
     - rid: 6882996230390284297
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
-        <Capacities>k__BackingField: []
+        <Capacities>k__BackingField:
+        - {fileID: 0}
