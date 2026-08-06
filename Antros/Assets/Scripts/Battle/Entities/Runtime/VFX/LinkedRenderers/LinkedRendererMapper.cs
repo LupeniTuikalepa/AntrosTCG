@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ATCG.Battle.Entities.Runtime.Heroes;
 using ATCG.Battle.Entities.Runtime.VFX;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -33,8 +34,14 @@ namespace ATCG.Battle
 
         private void Reset()
         {
-            if (animator != null)
+            if (animator == null)
                 animator = GetComponentInChildren<Animator>();
+        }
+
+        public void SetAnimator(Animator a)
+        {
+	        this.animator = a;
+	        Map();
         }
 
         // Only the humanoid bones with a meaningful LinkedRendererKey equivalent are
@@ -68,6 +75,9 @@ namespace ATCG.Battle
 
         private void Map()
         {
+	        if (animator == null)
+		        return;
+	        
             using (DictionaryPool<Transform, LinkedRendererKey>.Get(out var boneKeys))
             {
                 BuildBoneKeyTable(boneKeys);

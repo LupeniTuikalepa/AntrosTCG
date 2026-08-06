@@ -1,4 +1,5 @@
 ﻿using System;
+using ATCG.Cards.Implementations;
 using Helteix.Tools.Settings;
 using Helteix.Tools.TypeMapping;
 using Sirenix.OdinInspector;

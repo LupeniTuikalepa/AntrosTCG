@@ -191,6 +191,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1173186091470948849}
   - component: {fileID: 7693259140358200842}
+  - component: {fileID: 6356839868774708120}
   m_Layer: 3
   m_Name: HeroTemplate
   m_TagString: Hero
@@ -207,7 +208,7 @@ Transform:
   m_GameObject: {fileID: 2771192464520882885}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.15, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -237,9 +238,23 @@ MonoBehaviour:
   <PassiveRoot>k__BackingField: {fileID: 1590186330477743555}
   <HoveredRoot>k__BackingField: {fileID: 8620006178935296126}
   heroName: {fileID: 895034403804600685}
-  <Animator>k__BackingField: {fileID: 1584673418553577359}
+  <Animator>k__BackingField: {fileID: 0}
   movementDuration: 0
   cinemachineCamera: {fileID: 985806925998146216}
+--- !u!114 &6356839868774708120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2771192464520882885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfdab6066d464556ae5c2732fab68d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Heroes.SetHeroModel
+  modelRoot: {fileID: 6901710294249636606}
+  animation: {fileID: 4105055546686716808}
 --- !u!1 &3627302078991207085
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,11 +500,10 @@ Transform:
   m_GameObject: {fileID: 8538332283395208465}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1840272347676656826}
+  m_Children: []
   m_Father: {fileID: 1173186091470948849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &8553951080654308950
@@ -527,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d29cde3b7f75b246b20d6427ad7b4b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.LinkedRendererMapper
-  animator: {fileID: 1584673418553577359}
+  animator: {fileID: 0}
 --- !u!1 &8818436735654899738
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,70 +689,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5895a31db072ecc4f95bd4747bc89bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.LookAtCamera
---- !u!1001 &3359121768631106932
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 6901710294249636606}
-    m_Modifications:
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4713551860188301930, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-      propertyPath: m_Name
-      value: Character_20260624_181159
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
---- !u!95 &1584673418553577359 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4278449777435882235, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-  m_PrefabInstance: {fileID: 3359121768631106932}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1840272347676656826 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3968808719540828622, guid: 137a7545969c2954e950d69473f7ebf6, type: 3}
-  m_PrefabInstance: {fileID: 3359121768631106932}
-  m_PrefabAsset: {fileID: 0}

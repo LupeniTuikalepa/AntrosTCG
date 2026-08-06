@@ -4,6 +4,7 @@ using ATCG.Battle.Commands.GameCommands;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.PassiveSystem.Core;
+using ATCG.Cards.Implementations;
 using ATCG.Metrics;
 using ATCG.Passives.Datas;
 using Helteix.Tools;
@@ -34,10 +35,10 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             {
                 if (HeroEntityAspect.TryGetAspect(entityAddress, out HeroEntityAspect entityAspect))
                 {
-                    GameObject instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(transform);
+	                var instance = GameAssets.Current.HeroPawnPrefab.InstantiatePrefab(transform);
 
-                    if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
-                        await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
+	                 if (instance.TryGetComponent(out RuntimeHero runtimeHeroBattleCard))
+	                     await runtimeHeroBattleCard.Spawn(runtimeEntityManager, entityAspect);
                 }
             }
 
