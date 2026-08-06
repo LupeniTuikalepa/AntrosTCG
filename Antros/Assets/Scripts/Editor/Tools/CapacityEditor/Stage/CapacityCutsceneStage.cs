@@ -209,6 +209,12 @@ namespace ATCG.Editor.Tools.CapacityEditor
                     heroRoot = heroAnimator.GetComponentInParent<IRuntimeEntity>().transform;
             }
 
+            // Body-part LinkedRenderer keys are auto-assigned by LinkedRendererMapper.Awake at
+            // runtime; Awake never fires in the edit-mode preview, so map here — otherwise
+            // key-based VFX (PropagateVFX) find no renderers and spawn nothing.
+            if (heroAnimator != null)
+                heroAnimator.GetComponentInParent<ATCG.Battle.LinkedRendererMapper>()?.Map();
+
             previewContext = new DebugCapacityContext(capacity, heroRoot, heroAnimator);
             ReconnectElements();
         }
@@ -222,7 +228,12 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             ICapacityCutsceneElement[] elements = stageInstance.GetComponentsInChildren<ICapacityCutsceneElement>(true);
             for (int i = 0; i < elements.Length; i++)
+            {
+                // Disconnect first so elements drop any stale bindings before re-pulling the
+                // (now-updated) injected values from the preview context.
+                elements[i].Disconnect();
                 elements[i].Connect(previewContext);
+            }
         }
 
         // Loads the stage director into the Timeline window and locks it, so editing

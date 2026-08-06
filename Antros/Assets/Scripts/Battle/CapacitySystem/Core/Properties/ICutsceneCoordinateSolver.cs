@@ -12,5 +12,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
     public interface ICutsceneCoordinateSolver
     {
         Vector3 ToWorld(HexCoordinates coordinates);
+
+        float ToWorldDistance(int hexDistance);
     }
 }

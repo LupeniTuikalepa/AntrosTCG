@@ -124,13 +124,29 @@ namespace ATCG.Battle.Entities.Runtime.VFX
         private void Generate()
         {
             if(Current == null)
+            {
+                // Editor-only probe: the caster comes from the injected CASTER; if it never
+                // arrived, Generate silently produced nothing, which reads as "doesn't work
+                // in the editor". Check the test environment's HeroAnimator binding.
+                if (!Application.isPlaying)
+                    Debug.LogWarning("[PropagateVFX] No caster connected (CASTER not injected) — nothing generated.", this);
                 return;
+            }
 
             if(source == null)
                 return;
 
+            // Instances are parented to 'container'. If it's null they spawn in the active
+            // scene instead of the preview stage scene, so the preview camera never renders
+            // them — invisible in the editor, fine at runtime (no scene isolation).
+            if (!Application.isPlaying && container == null)
+                Debug.LogWarning("[PropagateVFX] 'container' is unassigned — spawned VFX land outside the " +
+                                 "preview scene and won't render in the Capacity Editor.", this);
+
             LinkedRendererGroup models = Current.Models;
             IEnumerable<LinkedRenderer> renderers = keys != LinkedRendererKey.None ? models.GetAllFor(keys) : models.GetAll();
+
+            int spawnedBefore = particleSystems.Count;
 
             foreach (LinkedRenderer model in renderers)
             {
@@ -174,6 +190,10 @@ namespace ATCG.Battle.Entities.Runtime.VFX
                     }
                 }
             }
+
+            // Caster resolved but no renderer matched the key → nothing spawned.
+            if (!Application.isPlaying && particleSystems.Count == spawnedBefore)
+                Debug.LogWarning($"[PropagateVFX] Caster has no LinkedRenderer matching key '{keys}' — no VFX spawned.", this);
         }
 
         // Toggles new emission on every instance this component currently manages, without

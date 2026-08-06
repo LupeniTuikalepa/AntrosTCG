@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ATCG.Battle.Entities.Runtime.Heroes;
 using ATCG.Battle.Entities.Runtime.VFX;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -26,7 +27,7 @@ namespace ATCG.Battle
 
         private void Awake()
         {
-            if (animator != null)
+            if (animator == null)
                 animator = GetComponentInChildren<Animator>();
 
             Map();
@@ -73,11 +74,16 @@ namespace ATCG.Battle
             _ => LinkedRendererKey.None,
         };
 
-        private void Map()
+        // Public so the Capacity Editor preview can run the mapping in edit mode (Awake,
+        // which normally triggers it, never fires there).
+        [Button]
+        public void Map()
         {
-	        if (animator == null)
-		        return;
-	        
+            if (animator == null)
+                animator = GetComponentInChildren<Animator>();
+            if (animator == null)
+                return;
+
             using (DictionaryPool<Transform, LinkedRendererKey>.Get(out var boneKeys))
             {
                 BuildBoneKeyTable(boneKeys);
@@ -134,19 +140,48 @@ namespace ATCG.Battle
             return LinkedRendererKey.None;
         }
 
-        // Skinned meshes (body, or a skinned clothing piece) aren't parented under a
-        // single bone — they're driven by their own bones[] array via bindposes — so this
-        // unions the keys of every bone that actually influences the mesh instead.
+        // Below this, a bone's influence on the mesh is treated as noise and ignored. Raise it
+        // to localise a piece more tightly, lower it to fold in lighter influences.
+        private const float MIN_BONE_WEIGHT = 0.01f;
+
+        // Skinned meshes (body, or a skinned clothing piece) aren't parented under a single
+        // bone — they're driven by their bones[] array via bindposes. That array lists the
+        // WHOLE bindpose skeleton though, most of it with zero weight for this mesh, so
+        // unioning all of it tags a localized piece (a hand mesh) with the entire body's keys.
+        // Only fold in bones that actually influence the mesh (weight above the threshold).
         private static LinkedRendererKey KeyFromSkinning(SkinnedMeshRenderer renderer, Dictionary<Transform, LinkedRendererKey> boneKeys)
         {
-            LinkedRendererKey combined = LinkedRendererKey.None;
             Transform[] bones = renderer.bones;
-            for (int i = 0; i < bones.Length; i++)
+            Mesh mesh = renderer.sharedMesh;
+            if (bones == null || mesh == null)
+                return LinkedRendererKey.None;
+
+            using (HashSetPool<int>.Get(out HashSet<int> used))
             {
-                if (bones[i] != null && boneKeys.TryGetValue(bones[i], out LinkedRendererKey key))
-                    combined |= key;
+                var bonesPerVertex = mesh.GetBonesPerVertex();
+                var weights = mesh.GetAllBoneWeights();
+
+                int w = 0;
+                for (int v = 0; v < bonesPerVertex.Length; v++)
+                {
+                    int influences = bonesPerVertex[v];
+                    for (int k = 0; k < influences; k++, w++)
+                    {
+                        if (weights[w].weight > MIN_BONE_WEIGHT)
+                            used.Add(weights[w].boneIndex);
+                    }
+                }
+
+                LinkedRendererKey combined = LinkedRendererKey.None;
+                foreach (int index in used)
+                {
+                    if (index >= 0 && index < bones.Length && bones[index] != null
+                        && boneKeys.TryGetValue(bones[index], out LinkedRendererKey key))
+                        combined |= key;
+                }
+
+                return combined;
             }
-            return combined;
         }
     }
 }

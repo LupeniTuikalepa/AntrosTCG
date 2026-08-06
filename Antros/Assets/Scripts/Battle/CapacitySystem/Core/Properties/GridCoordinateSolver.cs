@@ -22,5 +22,10 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
         {
             return screenPlayer.RuntimeBattleGrid.RuntimeHexGrid.GetPositionAt(coordinates);
         }
+
+        public float ToWorldDistance(int hexDistance)
+        {
+            return screenPlayer.RuntimeBattleGrid.RuntimeHexGrid.Current.OuterCellRadius * hexDistance;
+        }
     }
 }

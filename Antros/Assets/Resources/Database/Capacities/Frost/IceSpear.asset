@@ -24,7 +24,7 @@ MonoBehaviour:
     - rid: 6882996279235313844
   <CutsceneDirector>k__BackingField: {fileID: 5965771515152154153, guid: 5b33ed854e27eb14fb5eb841ce799346, type: 3}
   <PropertyDefinitions>k__BackingField:
-  - rid: 6882996279235313843
+  - rid: 6758713513029403029
   <DamageRange>k__BackingField: {x: 2, y: 12}
   <DistanceEfficiencyRange>k__BackingField: {x: 2, y: 12}
   <HitStepData>k__BackingField:
@@ -33,10 +33,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6882996279235313843
-      type: {class: HexCoordinatesPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
+    - rid: 6758713513029403029
+      type: {class: IntPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
       data:
-        name: HIT_POINT
+        name: HIT_DISTANCE
         isArray: 0
     - rid: 6882996279235313844
       type: {class: RingPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}

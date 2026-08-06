@@ -46,10 +46,30 @@ namespace Helteix.Tools
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                T originalSource = PrefabUtility.GetCorrespondingObjectFromOriginalSource(obj);
-                if (originalSource)
+                // Keep the prefab connection (so edits to the source show live) ONLY when 'obj' is
+                // the ROOT of a prefab: InstantiatePrefab always spawns the whole prefab, so for a
+                // nested object it would spawn the container instead of the selected object. A
+                // nested object or a plain scene object gets a plain copy of exactly itself.
+                GameObject go = obj as GameObject ?? (obj as Component)?.gameObject;
+                Object assetRoot = null;
+                if (go != null)
                 {
-                    return PrefabUtility.InstantiatePrefab(obj, parent) as T;
+                    if (PrefabUtility.IsPartOfPrefabAsset(go) && go.transform.parent == null)
+                        assetRoot = go;                                              // prefab asset root
+                    else if (PrefabUtility.IsAnyPrefabInstanceRoot(go))
+                        assetRoot = PrefabUtility.GetCorrespondingObjectFromSource(go); // scene instance root
+                }
+
+                if (assetRoot != null)
+                {
+                    // InstantiatePrefab returns the root GameObject, so 'as T' is null when T is a
+                    // component — resolve the matching component off the root in that case.
+                    Object instance = PrefabUtility.InstantiatePrefab(assetRoot, parent);
+                    if (instance is T typed)
+                        return typed;
+                    if (instance is GameObject root && obj is Component component)
+                        return root.GetComponent(component.GetType()) as T;
+                    return instance as T;
                 }
             }
 #endif
