@@ -127,7 +127,7 @@ namespace ATCG.Battle.Players.Local.Phases
                 Dictionary<HexCoordinates, MovementStep> cameFrom = DictionaryPool<HexCoordinates, MovementStep>.Get();
                 try
                 {
-                    MovementReachability.GetReachable(agent, BattleGrid, center, remaining, costSoFar, cameFrom);
+                    HexPathfinder.GetReachable(agent, BattleGrid, center, remaining, costSoFar, cameFrom);
 
                     // Nowhere to go from here.
                     if (cameFrom.Count == 0)
@@ -161,7 +161,7 @@ namespace ATCG.Battle.Players.Local.Phases
                     if (!costSoFar.TryGetValue(goal, out int goalCost) || goalCost <= 0)
                         continue;
 
-                    MovementReachability.TryBuildPath(center, goal, cameFrom, CurrentPath);
+                    HexPathfinder.TryBuildPath(center, goal, cameFrom, CurrentPath);
                     remaining -= goalCost;
                     center = goal;
 
@@ -234,7 +234,7 @@ namespace ATCG.Battle.Players.Local.Phases
                 return;
 
             TemporaryPath.Clear();
-            MovementReachability.TryBuildPath(currentCenter, gridMember.coordinates, currentCameFrom, TemporaryPath);
+            HexPathfinder.TryBuildPath(currentCenter, gridMember.coordinates, currentCameFrom, TemporaryPath);
             OnPathChanged?.Invoke(this);
         }
 

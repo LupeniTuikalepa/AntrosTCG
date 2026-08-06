@@ -12,28 +12,28 @@ using ATCG.Capacities.Data.Fire;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities.Fire
 {
     public partial struct HuntOfTheSoul : ICapacity<HuntOfTheSoulData>
     {
-        public void GetHitPattern(HuntOfTheSoulData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
-        {
-            builder.With(new PointsPattern(castPoint))
-                .Without(casterOrigin);
-        }
-
-        // Valid default: tags the cell as Cell and every member on it as Member.
-        public void GetTargets(HuntOfTheSoulData data, BattleCellAspect battleCell, CapacityTargets output,
-            IBattlePlayer castingPlayer)
+        // Valid default: tags the cell as CELL and every member on it as MEMBER.
+        public void GetTargets(HuntOfTheSoulData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
         {
             output.Add(battleCell.EntityAddress, CapacityTags.CELL);
             foreach (var member in battleCell.GetMembers())
                 output.Add(member.EntityAddress, CapacityTags.MEMBER);
         }
 
-        // Step wired by [WithStep("Summon")] on HuntOfTheDamned1Data.
-        private partial void ExecuteSummon(HuntOfTheSoulData data, CapacityStepContext ctx)
+        public void GetHitPattern(HuntOfTheSoulData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
+        {
+            builder.With(new PointsPattern(castPoint))
+                .Without(casterOrigin);
+        }
+
+        // Step wired by [WithStep("Spawn")] on HuntOfTheSoulData.
+        private partial void ExecuteSpawn(HuntOfTheSoulData data, CapacityStepContext ctx)
         {
             foreach (var cellAddress in ctx.Targets.WithTags(CapacityTags.CELL))
             {

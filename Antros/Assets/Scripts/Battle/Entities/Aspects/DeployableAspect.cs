@@ -14,6 +14,7 @@ namespace ATCG.Battle.Entities.Aspects
         GridMemberComponent,
         PhysicalCellMemberTag,
         DeployableEntityTag,
+        BelongsToPlayerComponent,
         BattleIDOwner>
     {
         public struct Setup
@@ -23,6 +24,7 @@ namespace ATCG.Battle.Entities.Aspects
             public HexCoordinates coordinates;
             public BattleGrid grid;
             public BattleID battleID;
+            public IBattlePlayer battlePlayer;
         }
         
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
@@ -34,6 +36,9 @@ namespace ATCG.Battle.Entities.Aspects
             
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
+
+            var player = setup.battlePlayer;
+            componentsFactory.BelongsToPlayerComponent = new BelongsToPlayerComponent(player.GetBattleID(), player.GetPlayerNumber());
         }
     }
 }
