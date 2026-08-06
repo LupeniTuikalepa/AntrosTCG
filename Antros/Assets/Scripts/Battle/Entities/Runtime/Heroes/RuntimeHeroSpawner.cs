@@ -30,7 +30,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         public async Awaitable Play(CommandDirectorState state, CommandContext context, SpawnHeroCommand command)
         {
             state.CompleteWindUp(this);
-
             if (command.SpawnID.TryGetEntityWithBattleID(context.World, out EntityAddress entityAddress))
             {
                 if (HeroEntityAspect.TryGetAspect(entityAddress, out HeroEntityAspect entityAspect))

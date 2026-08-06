@@ -23,7 +23,7 @@ MonoBehaviour:
   <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: 35080703c82d3f944b9db2ae6df05071, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 5888c04cf99f8d84dad150cb1301cbe5, type: 2}
-  <Range>k__BackingField: 0
+  <Range>k__BackingField: 1
   <QuicknessStepData>k__BackingField:
     <StepName>k__BackingField: Quickness
     <QTEsCount>k__BackingField: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8849417233133358724}
   - component: {fileID: 223091357232057562}
   - component: {fileID: 5555287472994675151}
+  - component: {fileID: 5554564784874899051}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -125,6 +126,25 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &5554564784874899051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452881753239475765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 8849417233133358724}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 0
+  lookAtBindToBone: 0
+  lookAtBone: 0
 --- !u!1 &4790148660058923610
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +157,7 @@ GameObject:
   - component: {fileID: 1392470920405765678}
   - component: {fileID: 75897932311397307}
   - component: {fileID: 7288186391226342876}
+  - component: {fileID: 3888024750407585824}
   m_Layer: 0
   m_Name: CinemachineCamera_2
   m_TagString: Untagged
@@ -250,6 +271,25 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &3888024750407585824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4790148660058923610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 1392470920405765678}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 0
+  lookAtBindToBone: 0
+  lookAtBone: 0
 --- !u!1 &7324651384279835380
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,6 +302,7 @@ GameObject:
   - component: {fileID: 4983047904783550713}
   - component: {fileID: 452624959931267917}
   - component: {fileID: 4487897279540107004}
+  - component: {fileID: 5636130234591504037}
   m_Layer: 0
   m_Name: CinemachineCamera_3
   m_TagString: Untagged
@@ -375,6 +416,25 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &5636130234591504037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7324651384279835380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 4983047904783550713}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 0
+  lookAtBindToBone: 0
+  lookAtBone: 0
 --- !u!1 &8755056075718987443
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,6 +447,7 @@ GameObject:
   - component: {fileID: 2097691894841562156}
   - component: {fileID: 8069980516495240631}
   - component: {fileID: 1196408230929942265}
+  - component: {fileID: 2417758553803417369}
   m_Layer: 0
   m_Name: CinemachineCamera_1
   m_TagString: Untagged
@@ -500,6 +561,25 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &2417758553803417369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8755056075718987443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9365df154b84f43bcd77ff09f0b68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements.BindCasterToCinemachineCamera
+  cinemachineCamera: {fileID: 2097691894841562156}
+  bindFollow: 1
+  followBindToBone: 0
+  followBone: 0
+  bindLookAt: 0
+  lookAtBindToBone: 0
+  lookAtBone: 0
 --- !u!1001 &5175662577666715587
 PrefabInstance:
   m_ObjectHideFlags: 0

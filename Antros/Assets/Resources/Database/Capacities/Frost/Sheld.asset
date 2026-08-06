@@ -18,7 +18,8 @@ MonoBehaviour:
   <Element>k__BackingField: 7
   <Description>k__BackingField: Applique un bouclier
   <CastPatterns>k__BackingField:
-    <Data>k__BackingField: []
+    <Data>k__BackingField:
+    - rid: 3278269927783137750
   <CutsceneDirector>k__BackingField: {fileID: 8879251779125524121, guid: 600d5877f24b8834c838214e6450f3e8, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: fd07d35f17fbe52438b25bb92ec68abd, type: 2}
@@ -28,4 +29,13 @@ MonoBehaviour:
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3278269927783137750
+      type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 2

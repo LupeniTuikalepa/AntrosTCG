@@ -13,19 +13,6 @@ MonoBehaviour:
   m_Name: DebugStartingDeck
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.DebugStartingDeck
   activeCardGuids:
-  - 76ba45f0-d50b-4063-b96b-36c22e6dd9a9
-  - d5d2e1cd-ad0a-4968-97fb-6bd17bd23636
-  - 59e08980-3081-474d-8338-30be6fa2db29
   - a439beb0-f3c3-425b-bf20-4ec7a0ee8a95
-  - 81478655-c1fc-46f4-823f-8317fec2b53a
-  - c6f64257-1f36-4915-b6f7-19317aba45db
-  - d6873b02-e5b2-44da-a81d-029183cdba22
-  - ded7dde8-cb55-418e-90af-20e34748cf3d
-  - 6a61f6f7-aa1a-47f7-9ae9-55ecb919b2cb
-  - 68ed41dc-0764-4c6a-8da5-1d614a2658ef
-  - 6c793032-cff0-4470-9ddd-109a2cc82de5
-  - 11ac4dc7-020f-42d9-ad56-184987409d96
-  - f9def07b-7b40-42f4-82de-37755091a165
   - b377c5fb-613b-4fb9-b09e-b7330d42dbe8
   - b36454c1-7a1d-4e92-88c9-dbac20f8b573
-  - 0e9a6c40-63ff-4353-8d39-0c251b11918b

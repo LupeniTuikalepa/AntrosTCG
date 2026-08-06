@@ -1,6 +1,7 @@
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Runtime.Components;
 using ATCG.Metrics;
+using Helteix.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             
 			if(herodata!=null)
 			{
+				modelRoot.ClearChildren();
+				
 				spawnedModelInstance = Instantiate(herodata.HeroPawnPrefab, modelRoot);
 				spawnedModelInstance.transform.localPosition = Vector3.zero;
 				spawnedModelInstance.transform.localRotation = Quaternion.identity;
