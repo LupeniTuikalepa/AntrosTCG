@@ -68,6 +68,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private VisualElement validityPanel;
         private VisualElement stepsPanel;
         private VisualElement tagsPanel;
+        private VisualElement keysPanel;
         private VisualElement tracksPanel;
         private VisualElement propertiesPanel;
         private Button buildStageButton;
@@ -223,6 +224,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             VisualElement tagsCol = new();
             tagsCol.AddToClassList("ce-col");
+            tagsCol.AddToClassList("ce-col--left");
             Label tagsTitle = new("Target Tags");
             tagsTitle.AddToClassList("ce-section-title");
             tagsCol.Add(tagsTitle);
@@ -230,6 +232,16 @@ namespace ATCG.Editor.Tools.CapacityEditor
             tagsPanel.AddToClassList("ce-steps-panel");
             tagsCol.Add(tagsPanel);
             halfRow.Add(tagsCol);
+
+            VisualElement keysCol = new();
+            keysCol.AddToClassList("ce-col");
+            Label keysTitle = new("Property Keys");
+            keysTitle.AddToClassList("ce-section-title");
+            keysCol.Add(keysTitle);
+            keysPanel = new VisualElement();
+            keysPanel.AddToClassList("ce-steps-panel");
+            keysCol.Add(keysPanel);
+            halfRow.Add(keysCol);
 
             scroll.Add(halfRow);
 
@@ -510,6 +522,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             RefreshBuildButton();
             RebuildStepsPanel();
             RebuildTagsPanel();
+            RebuildKeysPanel();
             RebuildTracksPanel();
             RebuildPropertiesPanel();
         }
@@ -862,6 +875,28 @@ namespace ATCG.Editor.Tools.CapacityEditor
             Button editTags = new Button(() => EditTagsModal.Open(selected)) { text = "Edit tags" };
             editTags.style.marginTop = StyleKeyword.Auto; // pin to the bottom of the panel
             tagsPanel.Add(editTags);
+        }
+
+        private void RebuildKeysPanel()
+        {
+            keysPanel.Clear();
+            if (selected == null)
+                return;
+
+            List<string> keys = CapacityPropertyKeyEditor.ReadKeys(selected);
+            if (keys.Count == 0)
+                keysPanel.Add(new Label("No property keys.") { style = { opacity = 0.6f } });
+
+            foreach (string key in keys)
+            {
+                Label row = new(key);
+                row.AddToClassList("ce-step-row");
+                keysPanel.Add(row);
+            }
+
+            Button editKeys = new Button(() => EditPropertyKeysModal.Open(selected)) { text = "Edit keys" };
+            editKeys.style.marginTop = StyleKeyword.Auto; // pin to the bottom of the panel
+            keysPanel.Add(editKeys);
         }
 
         // When the cutscene stage is open for this capacity, read the timeline from the

@@ -26,5 +26,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
             return new Vector3(x, 0f, z);
         }
+
+        public float ToWorldDistance(int hexDistance) => hexDistance * GameMetrics.Current.CellRadius * 1.5f;
     }
 }

@@ -38,7 +38,6 @@ namespace ATCG.HexGrids.Grids
             Vector2 position = new()
             {
                 x =  (x + y * 0.5f) * (InnerRadius * 2f),
-                //y = (x + y * 0.5f) * (InnerRadius * 2f)
                 y = y * (OuterCellRadius * 1.5f)
             };
 

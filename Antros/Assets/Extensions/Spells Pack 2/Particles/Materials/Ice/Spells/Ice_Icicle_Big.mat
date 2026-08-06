@@ -104,6 +104,7 @@ Material:
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
     - _DstBlend2: 0
+    - _DstBlendAlpha: 10
     - _EMISSION: 1
     - _Emission: 1
     - _EnableBlendModePreserveSpecularLighting: 1
@@ -129,6 +130,7 @@ Material:
     - _RequireSplitLighting: 0
     - _Smothness: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _StencilRefDepth: 8
     - _StencilRefDistortionVec: 4

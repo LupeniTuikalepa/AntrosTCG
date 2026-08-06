@@ -68,11 +68,13 @@ Material:
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
     - _DstBlend2: 10
+    - _DstBlendAlpha: 10
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
     - _Noise_1_Scale: 25
     - _Noise_2_Scale: 25
+    - _Normal_Vector_UV: 1
     - _Opacity: 2.7
     - _OpaqueCullMode: 2
     - _PerPixelSorting: 0
@@ -82,6 +84,7 @@ Material:
     - _QueueOffset: 0
     - _RenderQueueType: 3
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _StencilRefDepth: 1
     - _StencilRefDistortionVec: 4
