@@ -56,8 +56,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         public override async Awaitable Spawn(RuntimeEntityManager manager, HeroEntityAspect aspect)
         {
             await base.Spawn(manager, aspect);
-
-            
             var herodata = aspect.HeroCard.Data;
             heroName.text = herodata.name;
             
