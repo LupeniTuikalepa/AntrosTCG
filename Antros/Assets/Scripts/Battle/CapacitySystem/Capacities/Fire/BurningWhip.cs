@@ -45,7 +45,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 					if (member.EntityAddress.HasComponent<HealthComponent>())
 						output.Add(member.EntityAddress, DAMAGE);
 
-					output.Add(member.EntityAddress, APPLY_BURNING_STATUS);
+					output.Add(member.EntityAddress, APPLY_INCANDESCENCE_STATUS);
 				}
 			}
 		}

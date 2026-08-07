@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;
@@ -52,7 +53,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Directors
             cutscene.StepReached += OnStepReached;
             try
             {
-                await cutscene.Play(token);
+	            await cutscene.Play(token);
+            }
+            catch(Exception e)
+            {
+	            Debug.LogException(e);
             }
             finally
             {

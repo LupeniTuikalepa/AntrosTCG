@@ -14,7 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.DebugStartingDeck
   activeCardGuids:
   - a439beb0-f3c3-425b-bf20-4ec7a0ee8a95
-  - b377c5fb-613b-4fb9-b09e-b7330d42dbe8
-  - b36454c1-7a1d-4e92-88c9-dbac20f8b573
-  - 81478655-c1fc-46f4-823f-8317fec2b53a
   - 59e08980-3081-474d-8338-30be6fa2db29
+  - b377c5fb-613b-4fb9-b09e-b7330d42dbe8

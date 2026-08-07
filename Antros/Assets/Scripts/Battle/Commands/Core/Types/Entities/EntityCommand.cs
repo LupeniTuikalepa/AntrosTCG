@@ -22,7 +22,7 @@ namespace ATCG.Battle.Commands.Entities
         // occupies the same id.
         public Entity Target => new Entity(sourceEntityId, sourceEntityGeneration);
 
-        protected EntityCommand(EntityAddress address, string source = "None") : base(source)
+        protected EntityCommand(EntityAddress address, string source = DEFAULT_SOURCE) : base(source)
         {
             sourceEntityId = address.entity;
             sourceEntityGeneration = address.entity.generation;

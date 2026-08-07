@@ -102,6 +102,7 @@ Material:
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
     - _DstBlend2: 10
+    - _DstBlendAlpha: 10
     - _Edge_Range: 0.382
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
@@ -119,6 +120,7 @@ Material:
     - _Shape_Remap: 0.83
     - _Shape_Scale: 70
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _StencilRefDepth: 1
     - _StencilRefDistortionVec: 4

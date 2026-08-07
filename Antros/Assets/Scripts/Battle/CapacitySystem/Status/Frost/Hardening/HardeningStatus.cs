@@ -4,6 +4,7 @@ using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Capacities.Data.Status;
 using Helteix.ChanneledProperties;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Frost.Hardening
 {
@@ -21,7 +22,9 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost.Hardening
 		    base.OnApply(data, in statusInfos, in context);
 		    EntityAddress target = statusInfos.targetAddress;
 		    if (target.TryGetComponentRO(out DefenseComponent defenseComponent))
-			    defenseComponent.defense.Multiply(channelKey, data.DefenseBuff);
+			    defenseComponent.defense.Add(channelKey, data.DefenseBuff);
+		    
+		    Debug.Log($"{statusInfos.statusAddress.entity.id} voit sa defense augmenter de {defenseComponent.defense}");
 	    }
 
 	    protected override void OnRemove(HardeningData data, in EntityStatusInfos statusInfos, in StatusContext context)

@@ -13,13 +13,14 @@ using ATCG.Capacities.Data.Frost;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
 	public partial struct Shell : ICapacity<ShellData>
 	{
 		[CapacityTargetTag]
-		public const string STATUS_TARGET = nameof(STATUS_TARGET);
+		public const string StatusTarget = nameof(StatusTarget);
 
 		public void GetHitPattern(ShellData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
 		{
@@ -31,20 +32,21 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			foreach (var member in battleCell.GetMembers())
 			{
-				if (member.EntityAddress.HasComponent<StatusReceiver>())
-					output.Add(member.EntityAddress, STATUS_TARGET, CapacityTags.MEMBER);
+				if (member.EntityAddress.HasComponent<DefenseComponent>())
+					output.Add(member.EntityAddress, CapacityTags.MEMBER);
 			}
 		}
 
 
 		private partial void ExecuteShell(ShellData data, CapacityStepContext ctx)
 		{
-			foreach (var member in ctx.Targets.WithTags(STATUS_TARGET))
+			foreach (var member in ctx.Targets)
 			{
 				if (ctx.IsAlly(member))
 				{
 					var statusCommand = new ApplyStatusCommand(member, data.Status);
 					statusCommand.Run(ctx.BattlePhase);
+					Debug.Log(member.entity);
 				}
 			}
 		}

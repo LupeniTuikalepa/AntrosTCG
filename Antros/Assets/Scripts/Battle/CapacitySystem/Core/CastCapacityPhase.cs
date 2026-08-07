@@ -143,10 +143,14 @@ namespace ATCG.Battle.CapacitySystem.Core
         private async Awaitable PlayDirector(CapacityDirector director,
             RuntimeLocalBattlePlayer screenPlayer, CancellationToken token, Action onDone)
         {
-            try
-            {
-                await director.Play(this, screenPlayer, token);
-            }
+	        try
+	        {
+		        await director.Play(this, screenPlayer, token);
+	        }
+	        catch (Exception e)
+	        {
+		        Debug.LogException(e);
+	        }
             finally
             {
                 onDone();

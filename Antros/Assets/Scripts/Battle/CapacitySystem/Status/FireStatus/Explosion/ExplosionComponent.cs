@@ -13,6 +13,7 @@ using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.Tools.DataMapping;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Explosion
 {
@@ -20,21 +21,29 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 	{
 		public class ExplosionListener :ICommandListener<DamageCommand>
 		{
-			public Entity Target { get; }
-			public StatusData data;
+			public EntityAddress Target { get; }
+			private StatusData data;
 			
-			public ExplosionListener(Entity target)
+			public ExplosionListener(EntityAddress target)
 			{
 				Target = target;
 			}
 			void ICommandListener<DamageCommand>.Trigger(CommandContext context, DamageCommand command)
 			{
+				if(command.Source == Explosion.ExplosionStatus.EXPLOSION_SOURCE)
+					return;
+				
 				var targetEntityAddress = command.TargetEntityAddress(context.World);
 				var battlePhase = context.battlePhase;
 				
-				if (data.TryGet(out IStatusContainer statusContainer))
+				if (Target.HasStatus<ExplosionStatus>(out var statusTag))
 				{
-					statusContainer.Tick(data,targetEntityAddress,new StatusContext(battlePhase));
+					var jsp = statusTag.GetValue().data;
+					data = jsp;
+					if (data.TryGet(out IStatusContainer component))
+					{
+						component.Tick(data,targetEntityAddress, new StatusContext(battlePhase));
+					}
 				}
 			}
 		}

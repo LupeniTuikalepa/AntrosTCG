@@ -19,18 +19,18 @@ MonoBehaviour:
   <Description>k__BackingField: +1 de vitesse
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
-    - rid: 579208045788397571
+    - rid: 3278269950898733228
   <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: 35080703c82d3f944b9db2ae6df05071, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 5888c04cf99f8d84dad150cb1301cbe5, type: 2}
-  <Range>k__BackingField: 1
+  <Range>k__BackingField: 0
   <QuicknessStepData>k__BackingField:
     <StepName>k__BackingField: Quickness
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
     RefIds:
-    - rid: 579208045788397571
+    - rid: 3278269950898733228
       type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
       data:
         <IsAdditive>k__BackingField: 1

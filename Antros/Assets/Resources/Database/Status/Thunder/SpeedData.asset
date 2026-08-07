@@ -19,5 +19,5 @@ MonoBehaviour:
   <RuntimeStatus>k__BackingField: {fileID: 8578298289923643533, guid: d7ea4d6322d538d45aaaf59f4819656b, type: 3}
   <Icon>k__BackingField: {fileID: 21300000, guid: c23baa0f8fe44884c9b976aa0eb77a73, type: 3}
   <SpeedUp>k__BackingField: 1
-  <NormalDuration>k__BackingField: 2
-  <MaxStack>k__BackingField: 4
+  <NormalDuration>k__BackingField: 1
+  <MaxStack>k__BackingField: 6

@@ -392,7 +392,7 @@ PrefabInstance:
       objectReference: {fileID: 4578766199358199314}
     - target: {fileID: 5343690089734063637, guid: 45665e4c0377a534cb02031be05b7f6e, type: 3}
       propertyPath: m_Name
-      value: SheldDirector
+      value: ShellDirector
       objectReference: {fileID: 0}
     - target: {fileID: 8794552388588278017, guid: 45665e4c0377a534cb02031be05b7f6e, type: 3}
       propertyPath: m_LocalPosition.x

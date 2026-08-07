@@ -10,12 +10,10 @@ namespace ATCG.Battle.Commands.EntityCommands
     public class DamageCommand : EntityCommand<DeltaInRangeInfos<int>>
     {
         public readonly int quantity;
-        public readonly bool triggerDealDamageReactions;
 
-        public DamageCommand(int quantity, EntityAddress address, bool triggerDealDamageReactions = true) : base(address)
+        public DamageCommand(int quantity, EntityAddress address, string source = DEFAULT_SOURCE) : base(address, source)
         {
             this.quantity = quantity;
-            this.triggerDealDamageReactions = triggerDealDamageReactions;
         }
 
         protected override void Process(in CommandContext context)

@@ -17,6 +17,6 @@ MonoBehaviour:
   <Color>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
   <Element>k__BackingField: 1
   <RuntimeStatus>k__BackingField: {fileID: 186006078588992034, guid: 64dae67fde1ab2c408f007709a12c3dc, type: 3}
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 63b3af87f01396b40868b4a3affdce77, type: 3}
   <Duration>k__BackingField: 1
   <Status>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}
