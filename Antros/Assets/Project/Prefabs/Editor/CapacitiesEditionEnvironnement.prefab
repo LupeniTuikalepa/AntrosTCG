@@ -343,7 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks.DebugCutsceneRig
   bindings:
   - channelName: HeroAnimator
-    reference: {fileID: 0}
+    reference: {fileID: 918811817387294180}
   - channelName: MainCamera
     reference: {fileID: 4748611249530984911}
 --- !u!1 &8335668089525267343
@@ -508,6 +508,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f5d9cf25ff21124b98aec61079fe5ed, type: 3}
+--- !u!95 &918811817387294180 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5076456786371480466, guid: 5f5d9cf25ff21124b98aec61079fe5ed, type: 3}
+  m_PrefabInstance: {fileID: 5382774587526739574}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8929138929631763234 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3556111406150970708, guid: 5f5d9cf25ff21124b98aec61079fe5ed, type: 3}

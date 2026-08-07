@@ -17,10 +17,10 @@ namespace ATCG.Battle.Cards
 
         public int MaxHealth => Data.Health;
         public int Strength => Data.Strength;
-        public int Defense => Data.Defense;
         public int DeployRange => Data.DeployRange;
-
         public int Speed => Data.Speed;
+
+        public int Defense => 1;
         public MovementType MovementType => Data.MovementType;
 
         public HeroBattleCard(HeroCardData data, IBattlePlayer player) : base(data, player)

@@ -29,6 +29,10 @@ namespace ATCG.Battle.Players.Local.Runtime
         public Camera OutputCamera => renderCamera.OutputCamera;
         public CinemachineBrain CinemachineBrain => renderCamera;
 
+        // This screen's pure output channel (no Default), resolved on Connect. Cutscene vcams
+        // are re-tagged with it so a cutscene only shows on this player's brain.
+        public OutputChannels OutputChannel { get; private set; }
+
         private InputUser PlayerInputUser => RuntimeLocalBattlePlayer.Controls.Component.PlayerInputUser;
         private Transform TrackingTarget => cinemachineCamera.Target.TrackingTarget;
 
@@ -67,6 +71,7 @@ namespace ATCG.Battle.Players.Local.Runtime
         protected override void Connect(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer)
         {
             OutputChannels outputChannels = GetOutputChannel();
+            OutputChannel = outputChannels;
 
             renderCamera.ChannelMask = outputChannels | OutputChannels.Default;
             renderCamera.OutputCamera.targetDisplay = RuntimeLocalBattlePlayer.LocalID;
