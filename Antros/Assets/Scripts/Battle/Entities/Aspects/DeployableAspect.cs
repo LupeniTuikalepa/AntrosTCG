@@ -14,6 +14,7 @@ namespace ATCG.Battle.Entities.Aspects
         GridMemberComponent,
         PhysicalCellMemberTag,
         DeployableEntityTag,
+        InspectableTag,
         BelongsToPlayerComponent,
         BattleIDOwner>
     {
@@ -35,6 +36,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeployableEntityTag = new DeployableEntityTag(setup.caster, setup.data);
             
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
+            componentsFactory.InspectableTag = new InspectableTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
 
             var player = setup.battlePlayer;

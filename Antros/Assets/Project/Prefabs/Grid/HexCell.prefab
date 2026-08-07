@@ -33,6 +33,8 @@ Transform:
   m_Children:
   - {fileID: 1791732855425409985}
   - {fileID: 509815304326274329}
+  - {fileID: 185917806531892729}
+  - {fileID: 1730884136546664193}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5349602367803762874
@@ -61,8 +63,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.HexGrids.Runtime.RuntimeBattleCell
   <actionUIRoot>k__BackingField: {fileID: 0}
   <statusRoot>k__BackingField: {fileID: 509815304326274329}
-  <HoveredRoot>k__BackingField: {fileID: 0}
+  <PassiveRoot>k__BackingField: {fileID: 1730884136546664193}
+  <HoveredRoot>k__BackingField: {fileID: 185917806531892729}
   outline: {fileID: 3373603311366002022}
+--- !u!1 &2632535135186567234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1730884136546664193}
+  m_Layer: 0
+  m_Name: PassiveRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1730884136546664193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2632535135186567234}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.009380102, y: 0.02, z: -0.043110013}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7427957135683718355}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4614930035509437258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 185917806531892729}
+  m_Layer: 6
+  m_Name: HoveredRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &185917806531892729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614930035509437258}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7427957135683718355}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6859732281508050682
 GameObject:
   m_ObjectHideFlags: 0

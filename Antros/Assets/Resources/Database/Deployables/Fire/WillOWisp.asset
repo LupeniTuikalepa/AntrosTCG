@@ -16,5 +16,5 @@ MonoBehaviour:
   <Prefab>k__BackingField: {fileID: 5852559615668259795, guid: 24430e69f16e3704197d87df052ea95e, type: 3}
   <Health>k__BackingField: 5
   <AttackRange>k__BackingField: 1
-  <MoveSpeed>k__BackingField: 1
+  <MoveSpeed>k__BackingField: 3
   <Status>k__BackingField: {fileID: 11400000, guid: 0179b49d4e8f40c44b6d54e29240bf52, type: 2}

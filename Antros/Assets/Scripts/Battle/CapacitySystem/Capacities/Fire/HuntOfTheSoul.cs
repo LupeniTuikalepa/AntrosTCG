@@ -6,6 +6,7 @@ using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.Battle.Players;
 using ATCG.Capacities;
 using ATCG.Capacities.Data.Fire;
@@ -18,6 +19,11 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Fire
 {
     public partial struct HuntOfTheSoul : ICapacity<HuntOfTheSoulData>
     {
+        public void ModifyCastPattern(HuntOfTheSoulData data, ref HexPatternBuilder builder, BattleGrid grid)
+        {
+            //enlever les cases invalides
+        }
+
         // Valid default: tags the cell as CELL and every member on it as MEMBER.
         public void GetTargets(HuntOfTheSoulData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
         {

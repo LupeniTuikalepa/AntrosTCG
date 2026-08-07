@@ -39,8 +39,6 @@ namespace ATCG.Battle.Players.Local.Phases
 			while (isActive)
 			{
 				await Awaitable.EndOfFrameAsync(token);
-				if (!isActive)
-					await Awaitable.WaitForSecondsAsync(.2f, token);
 			}
 		}
 

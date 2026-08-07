@@ -129,9 +129,9 @@ namespace ATCG.Battle.Grids
         public static bool TryBuildPath(
             HexCoordinates origin, 
             HexCoordinates goal, 
-            PathfindingAgentAspect agent , 
+            PathfindingAgentAspect agent, 
             List<HexCoordinates> path, 
-            int maxSteps = int.MaxValue)
+            int maxSteps)
         {
             using (DictionaryPool<HexCoordinates, int>.Get(out var costSoFar))
             using (DictionaryPool<HexCoordinates, MovementStep>.Get(out var cameFrom))
@@ -139,19 +139,33 @@ namespace ATCG.Battle.Grids
                 path.Add(origin);
                 GetReachable(agent, agent.GridMemberComponent.grid, origin, maxSteps, costSoFar, cameFrom);
 
-                // Nowhere to go from here.
                 if (cameFrom.Count == 0)
                     return false;
-                
-                
-                if (!costSoFar.TryGetValue(goal, out int goalCost) || goalCost <= 0)
+
+                if (costSoFar.ContainsKey(goal))
+                    return TryBuildPath(origin, goal, cameFrom, path);
+
+                HexCoordinates bestTile = HexCoordinates.None;
+                int bestDistance = int.MaxValue;
+
+                foreach (var (hexCoordinates, _) in costSoFar)
+                {
+                    if (hexCoordinates == origin)
+                        continue;
+
+                    int distanceToGoal = hexCoordinates.Distance(goal);
+                    if (distanceToGoal < bestDistance)
+                    {
+                        bestDistance = distanceToGoal;
+                        bestTile = hexCoordinates;
+                    }
+                }
+
+                if (!bestTile.IsValid)
                     return false;
 
-                return TryBuildPath(origin, goal, cameFrom, path);
+                return TryBuildPath(origin, bestTile, cameFrom, path);
             }
-
-               
-                
         }
         
         /// <summary>

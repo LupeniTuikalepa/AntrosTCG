@@ -25,7 +25,8 @@ namespace ATCG.Battle.Entities.Aspects
             BattleIDOwner,
 			DeployTargetComponent,
             PhysicalCellMemberTag,
-			DefenseComponent>
+			DefenseComponent,
+            InspectableTag>
     {
         public struct Setup
         {
@@ -75,6 +76,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.DeathCostComponent = new DeathCostComponent(setup.card.DeathCost);
             //Heroes block pathfinding, Ray Casting and such
             componentsFactory.PhysicalCellMemberTag = new PhysicalCellMemberTag();
+            componentsFactory.InspectableTag = new InspectableTag();
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
         }
     }

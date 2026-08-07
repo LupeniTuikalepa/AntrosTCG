@@ -14,6 +14,7 @@ namespace ATCG.Battle.Entities.Aspects
             StatusReceiver,
             GridMemberComponent,
             BattleCellComponent,
+            InspectableTag,
             BattleIDOwner>
     {
         public readonly struct IsCellMemberFilter : IFilter<GridMemberComponent>
@@ -120,6 +121,7 @@ namespace ATCG.Battle.Entities.Aspects
                 componentsFactory.BattleCellComponent = new BattleCellComponent();
                 componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
                 componentsFactory.StatusReceiver = new StatusReceiver(64);
+                componentsFactory.InspectableTag = new InspectableTag();
             }
             catch (Exception e)
             {

@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: Liava
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 2c644e86-501a-4f70-badc-52913e095f1b
-  <Title>k__BackingField: 
+  <Title>k__BackingField: Liava
   <Description>k__BackingField: 
   <Element>k__BackingField: 1
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
     rid: 6882996230390284309
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 15
-  <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
-  <Speed>k__BackingField: 3
+  <Health>k__BackingField: 10
+  <Strength>k__BackingField: 1
+  <Speed>k__BackingField: 2
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 7719843594641147957, guid: 4146bd1e783155d4fbff7ea0d695bea5, type: 3}
   references:
     version: 2
     RefIds:

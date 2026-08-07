@@ -27,18 +27,23 @@ namespace ATCG.Battle.Entities.Deployables.Fire
             aspect.EntityAddress.ListenForEntityCommand<MoveCommand>(
                 (in CommandContext context, in MoveCommand command) =>
                     DropFlame(context, command, data));
-            aspect.EntityAddress.ListenForPlayerCommand<EndTurnCommand>((
+            
+            aspect.EntityAddress.ListenForPlayerCommand<EndTurnCommand>(
                 (in CommandContext context, in EndTurnCommand command) => 
-                    MoveToEnemy(context, command, aspect)
-                    ));
+                    MoveToEnemy(context, command, aspect, data));
         }
 
-        private static void MoveToEnemy(CommandContext context, EndTurnCommand command, DeployableAspect aspect)
+        private static void MoveToEnemy(
+            CommandContext context,
+            EndTurnCommand command,
+            DeployableAspect aspect,
+            WillOWispData data)
         {
             var builder = new EntityQueryBuilder()
                 .WithAllComponents<HealthComponent>()
                 .WithAllComponents<BelongsToPlayerComponent>()
-                .Where(address => !address.IsAlly(command.GetPlayer(context.battlePhase)));
+                .Where(address => 
+                    !address.IsAlly(aspect.BelongsToPlayerComponent.GetPlayer(context.battlePhase)));
 
             var minDistance = int.MaxValue;
             var destination = aspect.GridMemberComponent.coordinates;
@@ -47,9 +52,6 @@ namespace ATCG.Battle.Entities.Deployables.Fire
             {
                 foreach (var address in context.World.Query(builder))
                 {
-                    if(address.IsAlly(aspect.BelongsToPlayerComponent.GetPlayer(context.battlePhase)))
-                        continue;
-                    
                     if (!address.TryGetComponentRO<GridMemberComponent>(out var gridMember)) 
                         continue;
                     
@@ -60,7 +62,8 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                            aspect.GridMemberComponent.coordinates,
                            gridMember.coordinates,
                            agent, 
-                           path))
+                           path,
+                           data.MoveSpeed))
                         continue;
 
                     if (minDistance < path.Count) 
@@ -74,14 +77,13 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                     return;
                 
                 path.Remove(destination);
-                var moveAlongPathCommand = new MoveAlongPathCommand(aspect.EntityAddress, path.ToArray());
+                var moveAlongPathCommand = new MoveAlongPathCommand(aspect.EntityAddress, path.ToArray(), data.MoveSpeed);
                 command.Inject(context, moveAlongPathCommand);
             }
         }
 
         private static void DropFlame(in CommandContext context, in MoveCommand command, WillOWispData data)
         {
-            Debug.Log("[WillOWisp] DropDlame");
             var infos = command.GetInfos();
             
             if (!context.Grid.TryGetBattleCell(infos.from, out var cell)) 
