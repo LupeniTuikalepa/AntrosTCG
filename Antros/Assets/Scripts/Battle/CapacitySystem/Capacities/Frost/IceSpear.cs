@@ -27,6 +27,8 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 
         public void GetTargets(IceSpearData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
         {
+            output.Add(battleCell.EntityAddress, CapacityTags.CELL);
+
             foreach (var member in battleCell.GetMembers())
                 output.Add(member.EntityAddress, CapacityTags.MEMBER);
         }
@@ -35,22 +37,17 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
         {
             int distance = data.MaxDistance;
             HexCoordinates direction = casterOrigin.GetNormalizedDirection(castPoint);
-            HexCoordinates hit = casterOrigin + direction * distance;
 
-            for (int i = 1; i < distance; i++)
+            for (int i = 1; i <= distance; i++)
             {
                 HexCoordinates current = casterOrigin + direction * i;
                 if (battleGrid.TryGetBattleCell(current, out var cell))
                 {
+                    builder.With(current);
                     if (cell.HasPhysicalMember())
-                    {
-                        hit = current;
                         break;
-                    }
                 }
             }
-
-            builder = builder.With(hit);
 
         }
         // Step wired by [WithStep("Hit")] on IceSpearData.
@@ -61,7 +58,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
 
             int hitDistance = int.MinValue;
 
-            foreach (var target in ctx.Targets)
+            foreach (var target in ctx.Targets.WithTags(CapacityTags.MEMBER))
             {
                 if (target.TryGetComponentRO(out GridMemberComponent gridMemberComponent))
                 {

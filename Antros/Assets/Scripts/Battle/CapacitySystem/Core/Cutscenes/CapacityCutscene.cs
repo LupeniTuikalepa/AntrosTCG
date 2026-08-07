@@ -9,6 +9,7 @@ using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Metrics;
 using Helteix.Tools;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
@@ -87,6 +88,22 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes
             CutsceneCapacityContext context = new(capacityPhase, screenPlayer);
             for (int i = 0; i < elements.Length; i++)
                 elements[i].Connect(context);
+
+            ApplyScreenChannel();
+        }
+
+        // The cutscene prefab's vcams default to the Default output channel, which every
+        // player's brain listens to — so a per-screen cutscene leaks onto the other screens
+        // (all of them ended up on the second player's camera). Re-tag them with THIS screen's
+        // pure channel so only its brain shows the cutscene.
+        private void ApplyScreenChannel()
+        {
+            if (ScreenPlayer == null)
+                return;
+
+            OutputChannels channel = ScreenPlayer.Camera.Component.OutputChannel;
+            foreach (CinemachineCamera vcam in GetComponentsInChildren<CinemachineCamera>(true))
+                vcam.OutputChannel = channel;
         }
 
         public async Awaitable Play(CancellationToken token)

@@ -2,6 +2,7 @@
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
+using ATCG.Utilities;
 using UnityEngine;
 
 namespace ATCG.Battle.Commands.EntityCommands
@@ -28,14 +29,16 @@ namespace ATCG.Battle.Commands.EntityCommands
             if (address.TryGetComponentRO(out DefenseComponent defenseComponent))
             {
 	            int defenseValue = Mathf.Max(1, defenseComponent.Defense);
-	            finalDamage = Mathf.Max(1, finalDamage * (100 / (100 + defenseValue)));
+                float mult = (100f / (100f + defenseValue));
+                finalDamage = GameMaths.Round(Mathf.Max(1, finalDamage * mult));
+
+                Debug.Log($"Damage: from {quantity} to {finalDamage} for a defense of {defenseValue}");
             }
 
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
 
             infos.from = componentHealth.CurrentHealth;
             componentHealth.AddOrRemoveHealth(-finalDamage);
-            Debug.Log($"[Damage Command] Current Damage: {finalDamage}");
 
             infos.to = componentHealth.CurrentHealth;
             infos.max = componentHealth.MaxHealth;

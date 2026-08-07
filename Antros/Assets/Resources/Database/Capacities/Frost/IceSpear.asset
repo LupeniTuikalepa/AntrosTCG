@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IceSpear
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Frost.IceSpearData
   guidText: 234e74e9-9172-4b55-a95d-d5d77a375ec2
-  <Cost>k__BackingField: 0
+  <Cost>k__BackingField: 3
   <Name>k__BackingField: IceSpear
   <Element>k__BackingField: 7
   <Description>k__BackingField: "Inflige une grande quantit\xE9e de d\xE9gats \xE0
@@ -25,8 +25,8 @@ MonoBehaviour:
   <CutsceneDirector>k__BackingField: {fileID: 5965771515152154153, guid: 5b33ed854e27eb14fb5eb841ce799346, type: 3}
   <PropertyDefinitions>k__BackingField:
   - rid: 6758713513029403029
-  <DamageRange>k__BackingField: {x: 2, y: 12}
-  <DistanceEfficiencyRange>k__BackingField: {x: 2, y: 12}
+  <DamageRange>k__BackingField: {x: 1, y: 10}
+  <DistanceEfficiencyRange>k__BackingField: {x: 2, y: 6}
   <HitStepData>k__BackingField:
     <StepName>k__BackingField: Hit
     <QTEsCount>k__BackingField: 0

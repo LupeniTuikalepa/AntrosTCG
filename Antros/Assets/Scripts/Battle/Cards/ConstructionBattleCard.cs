@@ -11,10 +11,10 @@ namespace ATCG.Battle.Cards
     {
         public int MaxHealth => Data.Health;
         public int DeathCost => Data.DeathCost;
-        public int Defense => Data.Defense;
         public int DeployRange => Data.DeployRange;
         public GameObject Prefab => Data.Prefab;
         public int PassiveRange => Data.PassiveRange;
+        public int Defense => 1;
 
         public ConstructionBattleCard(ConstructionCardData data, IBattlePlayer player) : base(data, player)
         {

@@ -106,9 +106,9 @@ MonoBehaviour:
         z: 6.232977
       Rotation:
         value:
-          x: 0.14826967
-          y: 0.95965517
-          z: -0.14978403
+          x: 0.14826964
+          y: 0.9596551
+          z: -0.14978401
           w: 0.18612592
     - Position:
         x: 4.68
@@ -9968,7 +9968,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6172214138979387100
 Transform:
   m_ObjectHideFlags: 0
@@ -10115,7 +10115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4195525879493598544
 Transform:
   m_ObjectHideFlags: 0
@@ -10124,8 +10124,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3267145952288538524}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.071394324, y: 0.92843807, z: -0.24846783, w: -0.26677582}
-  m_LocalPosition: {x: 3.13, y: 4.42, z: 7.38}
+  m_LocalRotation: {x: 0.052662175, y: 0.08333696, z: -0.004410231, w: 0.9951192}
+  m_LocalPosition: {x: -0.991497, y: 1.2395587, z: -2.4553137}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10188,7 +10188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineSplineDolly
   m_SplineSettings:
     Spline: {fileID: 2263890221833292555}
-    Position: 0
+    Position: 0.98352337
     Units: 1
   SplineOffset: {x: 0, y: 0, z: 0}
   CameraRotation: 0
@@ -10328,8 +10328,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3576966199079465360}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.22832605, y: 0.69318354, z: -0.652399, w: 0.20430224}
-  m_LocalPosition: {x: 0.33718362, y: 0.59793234, z: -0.04017877}
+  m_LocalRotation: {x: 0.58664596, y: -0.50221926, z: 0.6105476, w: -0.17565285}
+  m_LocalPosition: {x: 0.35209787, y: 0.60556054, z: -0.35574278}
   m_LocalScale: {x: 1, y: 1, z: 22.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10412,7 +10412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5916165404925706468
 Transform:
   m_ObjectHideFlags: 0
@@ -21089,7 +21089,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1550935392352029206, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1629267061999244297, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: moveWithTransform
@@ -21097,11 +21097,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1629267061999244297, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2492418016047489979, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2605455057021012603, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: m_Name
@@ -21117,7 +21117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2850184441636461950, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3025882483450664522, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: moveWithTransform
@@ -21125,15 +21125,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3025882483450664522, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6395435889377344882, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6625931549066537641, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: EmissionModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7873135206704498903, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: m_LocalScale.x
@@ -21149,15 +21149,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7873135206704498903, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.43016875
+      value: -0.20253383
       objectReference: {fileID: 0}
     - target: {fileID: 7873135206704498903, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4681452
+      value: 0.87277395
       objectReference: {fileID: 0}
     - target: {fileID: 7873135206704498903, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.050622344
+      value: -0.8815961
       objectReference: {fileID: 0}
     - target: {fileID: 7873135206704498903, guid: b02814da655c7a045a7e95b4c6c63588, type: 3}
       propertyPath: m_LocalRotation.w
