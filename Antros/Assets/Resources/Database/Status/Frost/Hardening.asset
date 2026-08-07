@@ -18,5 +18,5 @@ MonoBehaviour:
   <Element>k__BackingField: 7
   <RuntimeStatus>k__BackingField: {fileID: 4870117505868571047, guid: 769fc59bdd5567f4d87faab4679400a0, type: 3}
   <Icon>k__BackingField: {fileID: 21300000, guid: 4545e1cc6206e4e4394955132883dced, type: 3}
-  <DefenseBuff>k__BackingField: 2
+  <DefenseBuff>k__BackingField: 5
   <Duration>k__BackingField: 2

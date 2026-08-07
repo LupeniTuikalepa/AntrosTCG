@@ -11,7 +11,7 @@ namespace ATCG.Capacities.Status
 		public int SpeedUp { get; private set; }
 
 		[field: SerializeField, BoxGroup("Specific")]
-		public int NormalDuration { get; private set; } = 2;
+		public int NormalDuration { get; private set; } = 0;
 		
 		[field: SerializeField, BoxGroup("Specific")]
 		public int MaxStack { get; private set; }

@@ -82,6 +82,7 @@ Material:
     - _Distortion_Remap: 0.08
     - _Distortion_Scale: 25
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Edge_Range: 0.472
     - _Flame_Contrast: 0.85
     - _Flame_MIx: 0.57
@@ -94,6 +95,7 @@ Material:
     - _Shape_Remap: 1.9
     - _Shape_Scale: 25
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0

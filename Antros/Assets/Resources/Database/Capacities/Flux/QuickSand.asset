@@ -16,7 +16,7 @@ MonoBehaviour:
   <Cost>k__BackingField: 0
   <Name>k__BackingField: QuickSand
   <Element>k__BackingField: 5
-  <Description>k__BackingField: 
+  <Description>k__BackingField: "Ralentit les personnes sur les cases que t'as s\xE9l\xE9ctionn\xE9."
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269927783137747

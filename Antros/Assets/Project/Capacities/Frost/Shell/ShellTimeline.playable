@@ -118,6 +118,30 @@ MonoBehaviour:
   m_Markers:
     m_Objects: []
   TrackPriority: 0
+--- !u!114 &-5683792785735280775
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a16748d9461eae46a725db9776d5390, type: 3}
+  m_Name: Markers
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.MarkerTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects:
+    - {fileID: 7579612137654809313}
 --- !u!114 &-4813631042362939563
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -182,7 +206,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
-  m_Name: SheldTimeline
+  m_Name: ShellTimeline
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
   m_Version: 0
   m_Tracks:
@@ -194,7 +218,7 @@ MonoBehaviour:
     m_Framerate: 60
     m_ScenePreview: 1
   m_DurationMode: 0
-  m_MarkerTrack: {fileID: 0}
+  m_MarkerTrack: {fileID: -5683792785735280775}
 --- !u!114 &314578048732455327
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -379,21 +403,6 @@ MonoBehaviour:
     m_DisplayName: SB_Impact_Blue
   m_Markers:
     m_Objects: []
---- !u!114 &4024901156516794388
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c2986292b8ecdd4d9b57c8cbefde1f4, type: 3}
-  m_Name: Step Marker
-  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
-  m_Time: 1.3833333333333333
-  stepName: Shell
-  id: 0d92a6fa-cd08-4355-bc4c-4fdb57311d39
 --- !u!114 &4884063445018076825
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -474,6 +483,21 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &7579612137654809313
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2986292b8ecdd4d9b57c8cbefde1f4, type: 3}
+  m_Name: Step Marker
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
+  m_Time: 1.0833333333333333
+  stepName: Shell
+  id: 87fe2bf3-a8c8-4222-bae9-3b5f7cceaf72
 --- !u!114 &7851049178494708714
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -657,8 +681,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Sheld
   m_Markers:
-    m_Objects:
-    - {fileID: 4024901156516794388}
+    m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
   m_InfiniteClipPostExtrapolation: 0
   m_InfiniteClipOffsetPosition: {x: 0, y: 0, z: 0}
