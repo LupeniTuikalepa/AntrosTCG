@@ -1,187 +1,223 @@
 using System;
 using System.Collections.Generic;
-using ATCG.Battle.CapacitySystem.Core.Status;
-using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
-using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
-using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
 {
-    public struct HexPathfinder
+    /// <summary>
+    /// A single accepted move: where it started from and every tile physically traversed
+    /// (the chosen neighbour, plus any tiles a redirect slid the unit across, in forward
+    /// order). Used to rebuild the full path including redirect slides.
+    /// </summary>
+    public readonly struct MovementStep
     {
-        public PathfindingTraversableRule[] customTraversableRules;
+        public readonly HexCoordinates previous;
+        public readonly HexCoordinates[] traversed;
 
-        public bool TryFindPath(PathfindingAgentAspect agentAspect, HexCoordinates start, HexCoordinates goal, List<HexCoordinates> path, int maxSteps = 128)
+        public MovementStep(HexCoordinates previous, HexCoordinates[] traversed)
         {
-            using PathfindingContext context = new PathfindingContext(maxSteps);
-            BattleGrid battleGrid = agentAspect.GridMemberComponent.grid;
+            this.previous = previous;
+            this.traversed = traversed;
+        }
+    }
 
-            if (!battleGrid.TryGetBattleCell(start, out BattleCellAspect startCell))
-                return false;
+    /// <summary>
+    /// Tile-by-tile movement planning on the hex grid for a <see cref="PathfindingAgentAspect"/>.
+    ///
+    /// Model: the game imposes a ring-1 pattern around the unit. Each chosen neighbour costs
+    /// exactly 1 step (= 1 speed). A redirect status on the tile you step ONTO slides you
+    /// further in your entry direction (previous -> chosen), recursively, for FREE — the slide
+    /// does not cost extra speed. A single unit-cost BFS therefore yields both the reachable
+    /// set (for the two highlight rings) and, via parent links, the path to any reachable tile
+    /// (for "fast travel"): step-by-step and fast travel are the same computation.
+    /// </summary>
+    public static class HexPathfinder
+    {
+        /// <summary>
+        /// Resolves the redirect chain from stepping off <paramref name="from"/> onto
+        /// <paramref name="chosen"/>. Appends every traversed tile (chosen first) to
+        /// <paramref name="traversed"/> and returns the final landing tile. Stops on a cycle
+        /// or when a redirect would push off-grid (staying on the last valid tile).
+        /// </summary>
+        public static HexCoordinates ResolveRedirect(
+            PathfindingAgentAspect agent, BattleGrid grid,
+            HexCoordinates from, HexCoordinates chosen, List<HexCoordinates> traversed)
+        {
+            HexCoordinates previous = from;
+            HexCoordinates current = chosen;
+            traversed.Add(current);
 
-            if (!battleGrid.TryGetBattleCell(goal, out BattleCellAspect goalCell))
-                return false;
-
-            context.frontier.Add(new PriorityHexCoordinates(start, 0));
-            context.cameFrom[start] = start;
-            context.costSoFar[start] = 0;
-
-            while (context.frontier.Count > 0)
+            using (HashSetPool<HexCoordinates>.Get(out var visited))
             {
-                context.frontier.Sort();
-                var current = context.frontier[0].coordinates;
-                context.frontier.RemoveAt(0);
+                visited.Add(current);
 
-                if (current == goal)
-                    break;
-
-                if (!battleGrid.TryGetBattleCell(current, out _))
-                    continue;
-
-                foreach (HexCoordinates next in GetNeighbors(current, battleGrid))
+                while (grid.TryGetBattleCell(current, out BattleCellAspect cell)
+                       && TryRedirectOnce(agent, cell, previous, current, out HexCoordinates next))
                 {
-                    AgentMovementType movementType = agentAspect.MovementType;
-                    if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect nextCell))
-                        continue;
+                    if (!visited.Add(next))
+                        break; // redirect cycle
+                    if (!grid.TryGetBattleCell(next, out _))
+                        break; // pushed off-grid: stop on the last valid tile
 
-                    if (!CanTraverse(agentAspect, nextCell))
-                        continue;
-
-                    if (!battleGrid.TryGetBattleCell(next, out BattleCellAspect currentCell))
-                        continue;
-
-                    bool nextIsGoal = next == goal;
-                    HexCoordinates actual = next;
-
-                    using (HashSetPool<HexCoordinates>.Get(out var redirectedCoord))
-                    {
-                        while (TryRedirect(agentAspect, currentCell, ref actual, ref movementType) && !nextIsGoal)
-                        {
-                            if (redirectedCoord.Add(actual))
-                            {
-                                context.costSoFar[next] = int.MaxValue;
-                                context.cameFrom[next] = current;
-                            }
-
-                            //Redirected out of bound
-                            if (!battleGrid.TryGetBattleCell(actual, out nextCell))
-                                break;
-                        }
-                    }
-
-                    int newCost = context.costSoFar[current] + GetCost(current, actual, nextCell);
-
-                    if (newCost > maxSteps)
-                        continue;
-
-                    if (!context.costSoFar.ContainsKey(actual) || newCost < context.costSoFar[actual])
-                    {
-                        //Debug.Log($"Actual is start {actual == start}, Start {start}");
-                        context.costSoFar[actual] = newCost;
-                        int priority = newCost + actual.Distance(goal);
-                        context.frontier.Add(new PriorityHexCoordinates(actual, priority));
-                        context.cameFrom[actual] = current;
-                    }
+                    traversed.Add(next);
+                    previous = current;
+                    current = next;
                 }
             }
 
-            if (!context.cameFrom.TryGetValue(goal, out HexCoordinates entryCase))
-                return false;
+            return current;
+        }
 
-            if (battleGrid.TryGetBattleCell(entryCase, out var beforeGoalCell))
+        /// <summary>
+        /// Floods every tile reachable within <paramref name="maxSteps"/> steps from
+        /// <paramref name="origin"/>. Fills <paramref name="costSoFar"/> (step cost to each
+        /// tile, origin = 0) and <paramref name="cameFrom"/> (parent link per tile).
+        /// </summary>
+        public static void GetReachable(
+            PathfindingAgentAspect agent, BattleGrid grid, HexCoordinates origin, int maxSteps,
+            Dictionary<HexCoordinates, int> costSoFar,
+            Dictionary<HexCoordinates, MovementStep> cameFrom)
+        {
+            costSoFar[origin] = 0;
+            if (maxSteps <= 0)
+                return;
+
+            using (ListPool<HexCoordinates>.Get(out var frontier))
+            using (ListPool<HexCoordinates>.Get(out var traversed))
             {
-                AgentMovementType finalMovementType = agentAspect.MovementType;
+                frontier.Add(origin);
+                int head = 0;
 
-                if (!TryRedirect(agentAspect, beforeGoalCell, ref goal, ref finalMovementType))
-                    return ReconstructPath(start, goal, path, context);
+                while (head < frontier.Count)
+                {
+                    HexCoordinates current = frontier[head++];
+                    int cost = costSoFar[current];
+                    if (cost >= maxSteps)
+                        continue;
 
-                if (!ReconstructPath(start, goal, path, context))
+                    ReadOnlySpan<HexCoordinates> directions = HexOperations.Directions;
+                    for (int i = 0; i < directions.Length; i++)
+                    {
+                        HexCoordinates neighbour = current + directions[i];
+                        if (!grid.TryGetBattleCell(neighbour, out BattleCellAspect neighbourCell))
+                            continue;
+                        if (!IsTraversable(agent, neighbourCell))
+                            continue;
+
+                        traversed.Clear();
+                        HexCoordinates landing = ResolveRedirect(agent, grid, current, neighbour, traversed);
+
+                        // The tile the unit actually ends up on must itself be standable.
+                        if (!grid.TryGetBattleCell(landing, out BattleCellAspect landingCell) || !IsTraversable(agent, landingCell))
+                            continue;
+
+                        int newCost = cost + 1;
+                        if (costSoFar.TryGetValue(landing, out int existing) && existing <= newCost)
+                            continue;
+
+                        costSoFar[landing] = newCost;
+                        cameFrom[landing] = new MovementStep(current, traversed.ToArray());
+                        frontier.Add(landing);
+                    }
+                }
+            }
+        }
+
+        public static bool TryBuildPath(
+            HexCoordinates origin, 
+            HexCoordinates goal, 
+            PathfindingAgentAspect agent, 
+            List<HexCoordinates> path, 
+            int maxSteps)
+        {
+            using (DictionaryPool<HexCoordinates, int>.Get(out var costSoFar))
+            using (DictionaryPool<HexCoordinates, MovementStep>.Get(out var cameFrom))
+            {
+                path.Add(origin);
+                GetReachable(agent, agent.GridMemberComponent.grid, origin, maxSteps, costSoFar, cameFrom);
+
+                if (cameFrom.Count == 0)
                     return false;
 
-                path.Add(goal);
+                if (costSoFar.ContainsKey(goal))
+                    return TryBuildPath(origin, goal, cameFrom, path);
+
+                HexCoordinates bestTile = HexCoordinates.None;
+                int bestDistance = int.MaxValue;
+
+                foreach (var (hexCoordinates, _) in costSoFar)
+                {
+                    if (hexCoordinates == origin)
+                        continue;
+
+                    int distanceToGoal = hexCoordinates.Distance(goal);
+                    if (distanceToGoal < bestDistance)
+                    {
+                        bestDistance = distanceToGoal;
+                        bestTile = hexCoordinates;
+                    }
+                }
+
+                if (!bestTile.IsValid)
+                    return false;
+
+                return TryBuildPath(origin, bestTile, cameFrom, path);
             }
-            return true;
         }
-
-        private IEnumerable<HexCoordinates> GetNeighbors(
-            HexCoordinates from,
-            BattleGrid battleGrid)
+        
+        /// <summary>
+        /// Reconstructs the tiles from <paramref name="origin"/> (exclusive) to
+        /// <paramref name="goal"/> (inclusive) using BFS parent links, redirect slides
+        /// included. Appends to <paramref name="path"/> (does not clear it) and returns
+        /// whether a complete chain back to origin was found.
+        /// </summary>
+        public static bool TryBuildPath(
+            HexCoordinates origin, HexCoordinates goal,
+            Dictionary<HexCoordinates, MovementStep> cameFrom, List<HexCoordinates> path)
         {
-            for (var i = 0; i < HexOperations.Directions.Length; i++)
-            {
-                HexCoordinates neighbor = from + HexOperations.Directions[i];
-                if (battleGrid.TryGetBattleCell(neighbor, out _))
-                    yield return neighbor;
-            }
-        }
-
-        private bool ReconstructPath(
-            HexCoordinates start,
-            HexCoordinates goal,
-            List<HexCoordinates> path, PathfindingContext context)
-        {
-            if (!context.cameFrom.ContainsKey(goal))
-                return false;
-            if(!context.cameFrom.ContainsKey(start))
+            if (goal == origin)
+                return true;
+            if (!cameFrom.ContainsKey(goal))
                 return false;
 
-            //Debug.Log($"Reconstruct path from {start} to {goal}");
+            int startCount = path.Count;
             HexCoordinates current = goal;
-            while (current != start)
+            while (current != origin && cameFrom.TryGetValue(current, out MovementStep step))
             {
-                path.Add(current);
-                current = context.cameFrom[current];
+                HexCoordinates[] tiles = step.traversed;
+                for (int i = tiles.Length - 1; i >= 0; i--)
+                    path.Add(tiles[i]);
+                current = step.previous;
             }
 
-            path.Reverse();
-            return path.Count > 0;
+            path.Reverse(startCount, path.Count - startCount);
+            return current == origin;
         }
-        public bool CanTraverse(PathfindingAgentAspect agent, BattleCellAspect cell)
+
+        public static bool IsTraversable(PathfindingAgentAspect agent, BattleCellAspect cell)
         {
-            if (!cell.CanBeMovedOn())
-                return false;
-
-            for (int i = 0; i < agent.AgentRules.Length; i++)
-            {
-
-                if (!agent.AgentRules[i].CanTraverse(agent, cell))
+            // Traversability is defined ENTIRELY by the agent's rules — no built-in gate. An
+            // agent with no rules can cross anything; add a CellOccupancyRule to block tiles
+            // held by other units (it also lets the agent pass back through its own tile).
+            ReadOnlySpan<PathfindingTraversableRule> rules = agent.AgentRules;
+            for (int i = 0; i < rules.Length; i++)
+                if (rules[i] != null && !rules[i].CanTraverse(agent, cell))
                     return false;
-            }
-
-
-            if (customTraversableRules != null)
-            {
-                for (int i = 0; i < customTraversableRules.Length; i++)
-                {
-                    if (!customTraversableRules[i].CanTraverse(agent, cell))
-                        return false;
-                }
-            }
 
             return true;
         }
 
-        //TODO
-        private int GetCost(HexCoordinates from, HexCoordinates to, BattleCellAspect cell) => 1;
-
-        private bool TryRedirect(PathfindingAgentAspect agentAspect, BattleCellAspect from, ref HexCoordinates to, ref AgentMovementType segmentType)
+        private static bool TryRedirectOnce(
+            PathfindingAgentAspect agent, BattleCellAspect redirectCell,
+            HexCoordinates directionOrigin, HexCoordinates to, out HexCoordinates redirected)
         {
-            if (!from.IsValid())
-                return false;
-
-            PathfindingRedirectionIterator iterator = new PathfindingRedirectionIterator(from, to, agentAspect);
+            var iterator = new PathfindingRedirectionIterator(redirectCell, directionOrigin, to, agent);
             iterator.ForeachRedirectStatusComponent();
-
-            if (!iterator.WasRedirected)
-                return false;
-
-            to = iterator.To;
-            segmentType = iterator.SegmentType;
-            return true;
+            redirected = iterator.To;
+            return iterator.WasRedirected && iterator.To != to;
         }
     }
 }

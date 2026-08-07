@@ -94,9 +94,16 @@ namespace ATCG.Battle
             }
             else
             {
-                BattleIgnoreOriginPatternController patternController = new BattleIgnoreOriginPatternController(BattleGrid, from);
-                using var patternBuilder = new HexPatternBuilder(from, patternController)
+                if(!capacityData.TryGet(out ICapacityContainer container))
+                    return;
+
+                var patternController =
+                    container.GetController(capacityData, BattleGrid, from);
+                
+                var patternBuilder = new HexPatternBuilder(from, patternController)
                     .With(capacityData.CastPatterns);
+                
+                container.ModifyCastPattern(capacityData, ref patternBuilder, BattleGrid);
 
                 AspectFilter<BattleCellAspect> filter = new AspectFilter<BattleCellAspect>();
                 SelectEntityPhase<AspectFilter<BattleCellAspect>> phase =
@@ -116,6 +123,8 @@ namespace ATCG.Battle
                     if (target.TryGetComponentRO(out GridMemberComponent component))
                         await ExecuteCommand(battlePhase, component.coordinates, address);
                 }
+                
+                patternBuilder.Dispose();
             }
         }
 

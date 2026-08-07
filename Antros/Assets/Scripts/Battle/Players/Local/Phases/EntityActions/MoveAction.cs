@@ -46,7 +46,7 @@ namespace ATCG.Battle
                 ModifyPlayerManaCommand manaCommand = new ModifyPlayerManaCommand(fromPlayer, -ManaCost);
                 manaCommand.Run(battlePhase);
 
-                MoveAlongPathCommand pathCommand = new MoveAlongPathCommand(address, result);
+                MoveAlongPathCommand pathCommand = new MoveAlongPathCommand(address, result, speed);
                 await pathCommand.RunAsync(battlePhase);
             }
         }

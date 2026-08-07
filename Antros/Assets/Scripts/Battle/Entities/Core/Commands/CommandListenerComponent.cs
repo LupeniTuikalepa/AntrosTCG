@@ -2,16 +2,18 @@
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.Entities.Components;
+using Unity.Scripting.LifecycleManagement;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Entities.Commands
 {
-    public readonly struct CommandListenerComponent<T> : 
+    [AutoStaticsCleanup]
+    public readonly partial struct CommandListenerComponent<T> : 
         IEntityComponent where T : ICommand
     {
         public delegate void Callback(in CommandContext context, in T command);
         public delegate bool Accept(in CommandContext context, in T command);
-        
         
         private class Listener : ICommandListener<T>
         {

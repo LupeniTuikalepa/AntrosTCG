@@ -53,7 +53,8 @@ namespace ATCG.Battle.Commands.EntityCommands
                     data = data,
                     coordinates = Destination,
                     grid = context.Grid,
-                    battleID = BattleID.CreateNew()
+                    battleID = BattleID.CreateNew(),
+                    battlePlayer = player
                 });
 
             infos = new Infos(data, cell, deployableAspect, context.Grid);

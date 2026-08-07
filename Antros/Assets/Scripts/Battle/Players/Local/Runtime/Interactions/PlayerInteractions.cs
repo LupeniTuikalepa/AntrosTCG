@@ -1,5 +1,6 @@
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
+using ATCG.Battle.Entities.Components.Tags;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
@@ -70,7 +71,7 @@ namespace ATCG.Battle
 
         void IEntitySelectionController.OnHoverBegin(IRuntimeEntity runtimeEntity, ref EntityAddress selectedEntity)
         {
-	        if (selectedEntity.TryGetComponentRO(out BattleCardComponent battleCardComponent) && inspectEntityPhase == null)
+	        if (selectedEntity.TryGetComponentRO(out InspectableTag _) && inspectEntityPhase == null)
 	        {
 		        inspectEntityPhase =  new InspectEntityPhase(Player, selectedEntity);
                 inspectEntityPhase.isActive.AddPriority(this, PriorityTags.Small, true);

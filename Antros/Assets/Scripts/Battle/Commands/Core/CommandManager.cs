@@ -128,7 +128,7 @@ namespace ATCG.Battle.Commands
             {
                 if (watcher is not ICommandListener<T> w)
                     continue;
-
+                
                 if (w.Accepts(context, command))
                     w.Trigger(context, command);
             }

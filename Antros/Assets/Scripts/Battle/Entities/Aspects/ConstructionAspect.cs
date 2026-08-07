@@ -21,6 +21,7 @@ namespace ATCG.Battle.Entities.Aspects
         HealthComponent,
         DeathCostComponent,
         PhysicalCellMemberTag,
+        InspectableTag,
         DefenseComponent,
         DeployTargetComponent,
         BattleIDOwner>
@@ -69,6 +70,7 @@ namespace ATCG.Battle.Entities.Aspects
             componentsFactory.BattleIDOwner = new BattleIDOwner(setup.battleID);
             
             componentsFactory.ConstructionTag = new ConstructionTag();
+            componentsFactory.InspectableTag = new InspectableTag();
         }
     }
 }

@@ -58,11 +58,10 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
 
         private void Update()
         {
-            if (current != null)
+            if (current != null && current.isActive)
             {
                 Vector3 pos = current.RuntimeEntity.HoveredRoot.position;
                 Vector2 position = OutputCamera.WorldToScreenPoint(pos);
-                canvasGroup.Show(.2f);
                 transform.position = Vector3.Lerp(transform.position, position + ScaledOffset, Time.deltaTime * 25f);
             }
         }
@@ -71,6 +70,8 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
         {
             base.OnPhaseBegin(phase);
 
+            Tween.CompleteAll(transform);
+            
             activeTabs.Clear();
             current = phase;
             bool hasContent = false;
@@ -98,6 +99,10 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector
                 Vector2 position = OutputCamera.WorldToScreenPoint(pos);
                 transform.position = position;
                 canvasGroup.Show(.2f);
+            }
+            else
+            {
+                canvasGroup.Hide(0f);
             }
 
             OpenTab(0);
