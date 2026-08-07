@@ -6,6 +6,8 @@ namespace ATCG.Databases
 {
     public class GameDatabase
     {
+        public static GameDatabase Global => GameController.GameDatabase;
+
         private readonly Dictionary<Guid, GameDatabaseObject> objects;
         private readonly Dictionary<string, Guid> guidCache;
 

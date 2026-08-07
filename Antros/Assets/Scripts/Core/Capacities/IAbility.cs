@@ -1,4 +1,5 @@
-﻿using ATCG.Enums;
+﻿using ATCG.Elements;
+using ATCG.Enums;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using ATCG.Cards;
+using ATCG.Elements;
 using ATCG.Enums;
 using Helteix.Tools.Settings;
 using Sirenix.OdinInspector;
@@ -92,10 +93,6 @@ namespace ATCG.Metrics
 
         public RenderingLayerMask GetHighlightLayer(HighlightState state)
             => HighlightSettings != null ? HighlightSettings.GetLayer(state) : default;
-
-
-        [field: SerializeField, BoxGroup("UI")]
-        public DualPairing<Element, ElementInfos> ElementInfos { get; private set; }
 
         [field: SerializeField, BoxGroup("Layers")]
         public LayerMask CellLayer { get; private set; }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Frost
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: 7b102a98-6fd4-43f8-b27c-cc483f13c620
+  <Element>k__BackingField: 7
+  <Name>k__BackingField: Gel
+  <Description>k__BackingField: "El\xE9ment secondaire constituant les r\xE8gles
+    d'immobilisme et de stabilit\xE9. Principalement d\xE9fensif, le Gel peut se
+    r\xE9v\xE9ler redoutable par sa capacit\xE9 a couper le monde de la Source et
+    de couper ainsi tout acc\xE8s \xE0 des pouvoirs. On raconte qu'Auzyrithe aurait
+    \xE9t\xE9 autre fois completement gel\xE9 par Tilo, l'atua du Gel,"
+  <Icon>k__BackingField: {fileID: 6666182957783948391, guid: 64655a38b8d139e4085fb7877fb2528d, type: 3}
+  <Color>k__BackingField: {r: 0.6265969, g: 0.91823894, b: 0.915103, a: 1}

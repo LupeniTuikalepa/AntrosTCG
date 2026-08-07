@@ -1,4 +1,5 @@
-﻿using Helteix.Tools.UI;
+﻿using ATCG.Cards.UI.Components;
+using Helteix.Tools.UI;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace ATCG.Capacities.UI
         [SerializeField]
         private TMP_Text title;
         [SerializeField]
-        private TMP_Text cost;
+        private ManaCostUI cost;
 
         [SerializeField]
         private CanvasGroup group;
@@ -19,7 +20,7 @@ namespace ATCG.Capacities.UI
         protected override void SyncUI(CapacityData current)
         {
             title.text = current.Name;
-            cost.text = current.Cost.ToString();
+            cost.SetCost(current.Cost);
 
             group.interactable = true;
         }
@@ -27,7 +28,6 @@ namespace ATCG.Capacities.UI
         protected override void ClearUI()
         {
             title.text = NULL;
-            cost.text = NULL;
 
             group.interactable = false;
         }

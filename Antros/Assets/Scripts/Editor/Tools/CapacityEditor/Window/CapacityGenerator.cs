@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ATCG.Capacities;
+using ATCG.Elements;
 using ATCG.Enums;
 using UnityEditor;
 using UnityEditor.Callbacks;

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Fire
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: ed958c2c-8d11-4a00-afea-252deae09c6e
+  <Element>k__BackingField: 1
+  <Name>k__BackingField: Feu
+  <Description>k__BackingField: "Tant un \xE9l\xE9ment de destruction que de cr\xE9ation,
+    le feu est l'\xE9l\xE9ment le plus puissant de la cr\xE9ation. Il est aussi l'un
+    des trois \xE9l\xE9ments primaire, celui principalement r\xE9sponsable de la
+    cr\xE9ation de l'univers.\nOn raconte que Afi, l'atua du Feu, \xE9tait le plus
+    redout\xE9 des Atuas et le seul qui aurait tenu t\xEAte \xE0 Antros."
+  <Icon>k__BackingField: {fileID: 8334651344603559088, guid: 761619111c68dab4bb4346e4ebfcabb8, type: 3}
+  <Color>k__BackingField: {r: 1, g: 0.5405872, b: 0.26666665, a: 1}

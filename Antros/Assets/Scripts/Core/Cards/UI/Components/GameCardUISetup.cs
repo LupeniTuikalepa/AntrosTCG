@@ -11,21 +11,10 @@ namespace ATCG.Cards.UI.Components
     {
         [SerializeField]
         private TMP_Text title;
-        [SerializeField]
-        private CapacityUIList capacities;
-
         public override void Connect(IGameCard current)
         {
             base.Connect(current);
             title.text = Current.Title;
-
-            capacities.Connect(current.Capacities);
-        }
-
-        public override void Disconnect(IGameCard current)
-        {
-            base.Disconnect(current);
-            capacities.Disconnect();
         }
     }
 }

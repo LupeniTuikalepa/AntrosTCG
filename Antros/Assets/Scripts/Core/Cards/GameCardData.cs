@@ -1,6 +1,7 @@
 using System;
 using ATCG.Capacities;
 using ATCG.Databases;
+using ATCG.Elements;
 using ATCG.Enums;
 using ATCG.Passives.Datas;
 using Sirenix.OdinInspector;

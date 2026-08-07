@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Unknown
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: b3f0ddab-bf26-428d-89df-d40ea77ca4fc
+  <Element>k__BackingField: 9
+  <Name>k__BackingField: Inconnu
+  <Description>k__BackingField: 83 111 109 101 116 104 105 110 103 32 116 104 97
+    116 32 115 104 111 117 108 100 110 39 116 32 98 101 32 116 111 117 99 104 101
+    100 44 32 110 111 114 32 98 101 32 108 111 111 107 101 100 32 97 116 46 32 83
+    111 109 101 116 104 105 110 103 32 116 104 97 116 32 119 97 115 32 115 101 97
+    108 101 100 44 32 98 114 111 107 101 110 44 32 115 112 114 101 97 100 32 97 99
+    114 111 115 115 32 116 104 101 32 119 111 114 108 100 32 97 32 32 108 111 110
+    103 32 116 105 109 101 32 97 103 111 46 10 83 111 109 101 111 110 101 32 99 104
+    111 115 101 32 97 98 111 118 101 32 116 111 32 114 117 108 101 32 116 104 101
+    32 117 110 105 118 101 114 115 101 46
+  <Icon>k__BackingField: {fileID: -2358543685353357393, guid: f334a68f9d2d5be408fc3b07886632a9, type: 3}
+  <Color>k__BackingField: {r: 1, g: 0, b: 0.74003255, a: 1}

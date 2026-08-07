@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Databases;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.Capacities.Properties;
+using ATCG.Elements;
 using ATCG.Enums;
 using Helteix.Tools.DataMapping;
 using Sirenix.OdinInspector;
@@ -25,6 +26,9 @@ namespace ATCG.Capacities
 
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
+
+        [field: SerializeField, TextArea, BoxGroup("Base")]
+        public Sprite Icon { get; private set; }
 
         [field: BoxGroup("Base")]
         [field: SerializeField, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]

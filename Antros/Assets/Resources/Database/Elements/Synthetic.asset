@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Synthetic
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: 6feded10-d2d2-45fc-9342-34937604d6ae
+  <Element>k__BackingField: 8
+  <Name>k__BackingField: Inconnu
+  <Description>k__BackingField: "Les \xEAtres synth\xE9tiques sont les seuls de la
+    cr\xE9ation \xE0 ne pas \xEAtre naturellement connect\xE9s \xE0 la source et
+    donc, \xE0 ne pas avoir d'\xE9l\xE9ment assign\xE9 \xE0 la naissance. Construits
+    \xE0 partir des recherches effectu\xE9es sur les semi-Atuas de l'ancien temps,
+    certains peuvent assimiler les pouvoirs d'autrui, d'autres peuvent en cumuler
+    plusieurs, m\xEAme provenant d'\xE9l\xE9ments diff\xE9rents."
+  <Icon>k__BackingField: {fileID: 1242405792045360393, guid: 79968e886e804fa43b0e8d1b87a4365c, type: 3}
+  <Color>k__BackingField: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}

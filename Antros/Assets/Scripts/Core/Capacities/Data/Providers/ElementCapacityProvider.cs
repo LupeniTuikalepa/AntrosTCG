@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ATCG.Capacities;
 using ATCG.Databases;
+using ATCG.Elements;
 using ATCG.Enums;
 using UnityEngine;
 
