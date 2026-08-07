@@ -34,7 +34,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			foreach (var member in battleCell.GetMembers())
 			{
 				EntityAddress address = member.EntityAddress;
-				if(!address.IsAlly(castingPlayer) && address.HasComponent<HealthComponent>())
+				if(address.HasComponent<HealthComponent>())
 					output.Add(address, CapacityTags.MEMBER);
 			}
 		}

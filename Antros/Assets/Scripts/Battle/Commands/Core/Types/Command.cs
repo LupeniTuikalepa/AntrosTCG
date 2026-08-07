@@ -11,6 +11,7 @@ namespace ATCG.Battle.Commands
     public abstract partial class Command<TInfos> : IDisposable, ICommand
         where TInfos : struct, ICommandInfos
     {
+	    public const string DEFAULT_SOURCE = "None";
         BattleID ICommand.Parent => parent;
         IReadOnlyList<BattleID> ICommand.Embeds => embeds;
         public int ResultHash => infos.GetHashCode();
@@ -26,7 +27,7 @@ namespace ATCG.Battle.Commands
         [SerializeField]
         protected TInfos infos;
 
-        protected Command(string source)
+        protected Command(string source = DEFAULT_SOURCE)
         {
             embeds = ListPool<BattleID>.Get();
             infos = new TInfos();

@@ -20,6 +20,9 @@ namespace ATCG.Capacities.Status.FireStatus
 		public int AddStack { get; set; } = 1;
 
 		[field: SerializeField, BoxGroup("Specific")]
-		public int Range { get; set; } = 1;
+		public int Range { get; set; } = 2;
+		
+		/*[field: SerializeField, BoxGroup("Specific")]
+		public ParticleSystem Explosion { get; set;}*/
 	}
 }
