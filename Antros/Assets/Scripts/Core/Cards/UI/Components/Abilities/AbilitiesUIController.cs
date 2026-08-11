@@ -77,7 +77,6 @@ namespace ATCG
             }
 
             bool manyTabs = activeTabs.Count > 1;
-            Debug.Log($"{current.Title} => {manyTabs}", gameObject);
             buttonContainer.gameObject.SetActive(manyTabs);
         }
 
