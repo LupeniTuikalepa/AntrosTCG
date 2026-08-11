@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Time
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: 7c95eb2f-f07a-4577-9921-5588ecc2c9c6
+  <Element>k__BackingField: 0
+  <Name>k__BackingField: Temps
+  <Description>k__BackingField: "Le seul \xE9l\xE9ment permanent. Il est le seul
+    dont on ne peut pas h\xE9riter les r\xE8gles. Bas\xE9 sur la manipulation du
+    temps et de l'espace, il est, avec la Vie et le Feu, l'\xE9l\xE9ment le plus
+    craint car l'\xE9tendu de ses pouvoirs d\xE9passe l'imaginable. On raconte que,
+    malgr\xE9 son statut particulier, l'ancienne civilisation aurait r\xE9ussi \xE0
+    mettre la main sur Tilo, l'Atua du Temps, pour en extraire une partie de ses
+    pouvoirs. "
+  <Icon>k__BackingField: {fileID: -6824308478246912681, guid: d16d10d575c7ddc4ebb4e8790e4662f5, type: 3}
+  <Color>k__BackingField: {r: 0.42767292, g: 0.28646013, b: 0.36046794, a: 1}

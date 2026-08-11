@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Life
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: c82e5b8d-a6e5-4287-adb5-c3dc75817504
+  <Element>k__BackingField: 3
+  <Name>k__BackingField: Vie
+  <Description>k__BackingField: "El\xE9ment primaire consituant l'ensemble des r\xE9gles
+    permettant la cr\xE9ation d'\xEAtre vivant mais aussi celle garantissant une
+    certaine stabilit\xE9e \xE0 la mati\xE8re. Extr\xE9mement mysterieux de par son
+    statut particulier, m\xEAme parmis les \xE9l\xE9ments primaires, il est encore
+    aujourd'hui l'\xE9l\xE9ment le plus convoit\xE9.\nOn raconte que Haga, l'atua
+    de la Vie, \xE9tait le seul dont la principale mission n'\xE9tait pas de cr\xE9er
+    de nouvelles r\xE8gles. Celle-ci reste encore aujourd'hui inconnue."
+  <Icon>k__BackingField: {fileID: 7318292808894516236, guid: ad466e7a6aa49574dba8f100981ba00e, type: 3}
+  <Color>k__BackingField: {r: 0.38319916, g: 0.6855345, b: 0.36432487, a: 1}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Light
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: b5e85ff1-1f6d-42fe-a0bf-be3f60048155
+  <Element>k__BackingField: 6
+  <Name>k__BackingField: "Lumi\xE8re"
+  <Description>k__BackingField: "El\xE9ment secondaire responsable du comportement
+    de l'\xE9nergie et des radiations dans l'univers. La puissance d\xE9vastatrice
+    de cet \xE9l\xE9ment est comparable au Feu, \xE9l\xE9ment primaire dont il est
+    originaire. On raconte que Laha, l'Atua de la Lumi\xE8re, \xE9tait la m\xE8re
+    et de Antros et qu'il sagit dont de son \xE9l\xE9ment de naissance."
+  <Icon>k__BackingField: {fileID: 9212275650587600386, guid: 1ff7464bd21a86f44a5991abb6a2c643, type: 3}
+  <Color>k__BackingField: {r: 0.911248, g: 0.91823894, b: 0.85182536, a: 1}

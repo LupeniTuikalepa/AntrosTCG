@@ -25,6 +25,8 @@ namespace ATCG.Battle.Players.Local.Runtime
         public InputAction Pointer { get; private set; }
         public InputAction QTE { get; private set; }
 
+        public InputAction Next { get; private set; }
+
         public InputUser PlayerInputUser => PlayerInput.user;
 
         public InputSystemUIInputModule InputModule => PlayerInput.uiInputModule;

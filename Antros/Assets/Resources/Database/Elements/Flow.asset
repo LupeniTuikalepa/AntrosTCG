@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d70d0ec0951743bef5d745fe6074e, type: 3}
+  m_Name: Flow
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Elements.ElementData
+  guidText: d3a1492a-707e-4d08-b48e-13fb4202bfea
+  <Element>k__BackingField: 4
+  <Name>k__BackingField: Flux
+  <Description>k__BackingField: "El\xE9ment secondaire dont les r\xE8gles d\xE9finissent
+    les comportement de la mati\xE8re lorsque celle-ci n'est pas strictement gel\xE9e.
+    Concid\xE9r\xE9 comme strategique et d\xE9fensif, il peut se r\xE9veler d\xE9vastateur
+    tant son champ d'application est large.\nOn raconte que la Glace aurait \xE9t\xE9
+    invent\xE9e par Tilo et Va\xEF, l'Atua du Flux, pour corriger un d\xE9r\xE9glement
+    climatique il y a des milliers d'ann\xE9es. "
+  <Icon>k__BackingField: {fileID: 6049605792901559095, guid: 0a789831218c8b842ae0179e3b284248, type: 3}
+  <Color>k__BackingField: {r: 0.15442412, g: 0.45612457, b: 0.8050314, a: 1}

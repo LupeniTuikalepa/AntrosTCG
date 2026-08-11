@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ATCG.Cards;
 using ATCG.Cards.Implementations;
+using ATCG.Elements;
 using ATCG.Enums;
 using UnityEditor;
 using UnityEditor.UIElements;

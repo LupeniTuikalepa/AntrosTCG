@@ -9,13 +9,11 @@ using UnityEngine.UI;
 
 namespace Helteix.Cards.UI.Physical
 {
+    // The card itself (CardUI) is now the Unity EventSystem surface. The holder no longer
+    // receives raycasts / pointer events directly: it stays a pure layout anchor whose virtual
+    // hooks below are invoked by the collection when the matching card event is routed.
     [RequireComponent(typeof(LayoutElement)), RequireComponent(typeof(CanvasGroup))]
-    public class CardHolderUI : MonoBehaviour,
-        ISelectHandler, IDeselectHandler, IMoveHandler,
-        ISubmitHandler, ICancelHandler,
-        IPointerClickHandler,
-        IPointerEnterHandler, IPointerMoveHandler, IPointerExitHandler,
-        IInitializePotentialDragHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+    public class CardHolderUI : MonoBehaviour
     {
         public IPhysicalCardCollectionUI CollectionUI { get; private set; }
         public ICardUI CardUI { get; private set; }
@@ -119,35 +117,5 @@ namespace Helteix.Cards.UI.Physical
 
         protected internal virtual void OnCardDrop<TCard>(Vector3 position, ICardDropTarget<TCard> resultTarget) where TCard : ICard
         { }
-        void ISelectHandler.OnSelect(BaseEventData eventData) => CollectionUI.SelectCard(this);
-
-        void IDeselectHandler.OnDeselect(BaseEventData eventData) => CollectionUI.DeselectCard(this);
-
-        void IMoveHandler.OnMove(AxisEventData eventData) => CollectionUI.MoveCardSelection(this, eventData.moveVector);
-
-        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData) => CollectionUI.BeginCardHover(this, eventData.position);
-
-        void IPointerExitHandler.OnPointerExit(PointerEventData eventData) => CollectionUI.EndCardHover(this, eventData.position);
-
-        void IPointerMoveHandler.OnPointerMove(PointerEventData eventData) =>CollectionUI.MoveCardHover(this, eventData.position, eventData.delta);
-
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData) => CollectionUI.ClickCard(this, eventData.button);
-
-        void ISubmitHandler.OnSubmit(BaseEventData eventData) => CollectionUI.SubmitCard(this);
-
-        void ICancelHandler.OnCancel(BaseEventData eventData) => CollectionUI.CancelCard(this);
-
-
-        void IInitializePotentialDragHandler.OnInitializePotentialDrag(PointerEventData eventData)
-            => CollectionUI.InitializePotentialCardDrag(this);
-
-        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
-            => CollectionUI.BeginCardDrag(this);
-
-        void IDragHandler.OnDrag(PointerEventData eventData) => CollectionUI.UpdateCardDrag(this, eventData.position, eventData.delta);
-
-        void IEndDragHandler.OnEndDrag(PointerEventData eventData)=> CollectionUI.EndCardDrag(this);
-
-
     }
 }

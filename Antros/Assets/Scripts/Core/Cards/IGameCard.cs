@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ATCG.Capacities;
+using ATCG.Passives.Datas;
 using Helteix.Cards;
 using Helteix.Tools.UI;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace ATCG.Cards
     {
         GameCardData CardData { get; }
         IEnumerable<CapacityData> Capacities { get; }
+        IEnumerable<PassiveData> Passives { get; }
 
         string Title { get; }
         string Description { get; }

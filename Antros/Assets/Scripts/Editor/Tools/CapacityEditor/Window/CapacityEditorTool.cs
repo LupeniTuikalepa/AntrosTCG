@@ -6,6 +6,7 @@ using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
 using ATCG.Capacities;
 using ATCG.Editor.Tools.DatabaseBrowser;
+using Unity.Scripting.LifecycleManagement;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -23,7 +24,8 @@ namespace ATCG.Editor.Tools.CapacityEditor
     ///              CapacityEditorSettings asset).
     /// Holds the "currently edited" context StepMarkerEditor's dropdown reads (option A).
     /// </summary>
-    public sealed class CapacityEditorTool : IEditorTool
+    [AutoStaticsCleanup]
+    public sealed partial class CapacityEditorTool : IEditorTool
     {
         private const double ScanIntervalSeconds = 0.5;
         private const string ThemeUss = "EditorTheme.uss";

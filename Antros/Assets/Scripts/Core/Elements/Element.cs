@@ -1,4 +1,4 @@
-﻿namespace ATCG.Enums
+﻿namespace ATCG.Elements
 {
     public enum Element
     {

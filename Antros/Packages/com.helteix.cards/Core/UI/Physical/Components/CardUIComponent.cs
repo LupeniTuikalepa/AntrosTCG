@@ -10,7 +10,9 @@ namespace Helteix.Cards.UI.Physical.Components
 
         protected override void Awake()
         {
-            UI = GetComponent<ICardUI<TCard>>();
+            // GetComponentInParent so a component can live on a sub-element of the card,
+            // not only on the CardUI root object.
+            UI = GetComponentInParent<ICardUI<TCard>>(true);
             base.Awake();
         }
         public virtual void Connect(TCard current)
@@ -43,7 +45,9 @@ namespace Helteix.Cards.UI.Physical.Components
 
         protected virtual void Awake()
         {
-            CardUI = GetComponent<ICardUI>();
+            // GetComponentInParent so a component can live on a sub-element of the card,
+            // not only on the CardUI root object.
+            CardUI = GetComponentInParent<ICardUI>(true);
         }
 
         private void OnEnable()
