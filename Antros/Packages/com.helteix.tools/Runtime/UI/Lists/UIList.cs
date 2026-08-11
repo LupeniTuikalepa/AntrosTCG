@@ -24,6 +24,9 @@ namespace Helteix.Tools.UI
         [SerializeField]
         private Transform root;
 
+        [SerializeField]
+        private Transform[] ignore;
+
         protected IUIListSource<T> CurrentSource { get; private set; }
 
         private Dictionary<T, TUI> items;
@@ -147,7 +150,7 @@ namespace Helteix.Tools.UI
                     CurrentSourceOnItemRemoved(key);
             }
 
-            (root ? root : transform).ClearChildren();
+            (root ? root : transform).ClearChildren(ignore: ignore);
             items.Clear();
         }
 

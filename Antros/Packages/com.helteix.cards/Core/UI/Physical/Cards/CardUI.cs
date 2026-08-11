@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Helteix.Cards.UI.Physical
 {
     [RequireComponent(typeof(CanvasGroup), typeof(Canvas))]
-    public abstract class CardUI<TCard> : MonoBehaviour, ICardUI<TCard>
+    public abstract partial class CardUI<TCard> : MonoBehaviour, ICardUI<TCard>
         where TCard : ICard
     {
         IPhysicalCardCollectionUI ICardUI.CollectionUI => CollectionUI;
@@ -58,6 +58,20 @@ namespace Helteix.Cards.UI.Physical
 
         private void Awake()
         {
+            RegisterChildComponents();
+        }
+
+        private void OnEnable()
+        {
+            // Re-scan on every activation so all components are deterministically (re)registered,
+            // independent of each child's own OnEnable/OnDisable timing. The factory toggles the
+            // card's active state during pooling, which would otherwise drop child components that
+            // now unregister themselves on disable.
+            RegisterChildComponents();
+        }
+
+        private void RegisterChildComponents()
+        {
             ICardUIComponent[] found = GetComponentsInChildren<ICardUIComponent>(true);
             for (int i = 0; i < found.Length; i++)
                 RegisterComponent(found[i]);
@@ -107,6 +121,10 @@ namespace Helteix.Cards.UI.Physical
 
         public void RegisterComponent(ICardUIComponent cardUIComponent)
         {
+            // Authoritative back-reference: works for components on sub-objects discovered by the
+            // scan, not only for those that resolve it themselves in Awake.
+            cardUIComponent.CardUI = this;
+
             if (!allComponents.Add(cardUIComponent))
                 return;
 

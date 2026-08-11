@@ -60,10 +60,6 @@ MonoBehaviour:
     rotationDampingMultiplier: 1
     scaleDampingMultiplier: 1
     sizeDampingMultiplier: 1
-  dragMover:
-    damping: 25
-    scalingFactor: 0.6
-    speedRotationStrength: 35
 --- !u!114 &6325962320828079784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,5 +90,5 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

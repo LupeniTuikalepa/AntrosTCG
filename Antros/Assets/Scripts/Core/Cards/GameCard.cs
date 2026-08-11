@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ATCG.Capacities;
 using ATCG.Metrics;
+using ATCG.Passives.Datas;
 using Helteix.Cards;
 using Helteix.Tools.UI;
 
@@ -20,7 +21,7 @@ namespace ATCG.Cards
             0;
 
         public IEnumerable<CapacityData> Capacities => Data.Capacities.GetCapacities();
-
+        public IEnumerable<PassiveData> Passives => Data.Passives;
         public T Data { get; }
 
         protected GameCard(T data)

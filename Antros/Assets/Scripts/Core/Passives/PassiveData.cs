@@ -22,6 +22,9 @@ namespace ATCG.Passives.Datas
         [field: SerializeField, BoxGroup("Base")]
         public Sprite Icon { get; private set; }
 
+        [field: SerializeField, BoxGroup("Base"), ColorUsage(showAlpha: false)]
+        public Color Color { get; private set; } = Color.white;
+
         [field: SerializeField, BoxGroup("Base")]
         public bool ActiveOnSpawn { get; private set; } = true;
 

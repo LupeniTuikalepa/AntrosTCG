@@ -173,6 +173,10 @@ namespace Helteix.Cards.UI.Physical
             drags.Add(holderUI, phase);
             phase.RunAndForget();
 
+            // The card is now a raycast target and flies under the pointer while dragged; disable
+            // its raycast blocking so drop-target detection can see UI behind it. Restored in OnCardDrop.
+            cardUI.CanvasGroup.blocksRaycasts = false;
+
             foreach (var handler in holderUI.CardUI.GetCardComponents<ICardPointerDragHandler>())
                 handler.OnBeginCardDrag();
 
@@ -224,6 +228,9 @@ namespace Helteix.Cards.UI.Physical
 
             if (!drags.Remove(holderUI))
                 return false;
+
+            // Restore raycast blocking now that the card is no longer being dragged.
+            holderUI.CardUI.CanvasGroup.blocksRaycasts = true;
 
             foreach (var handler in holderUI.CardUI.GetCardComponents<ICardPointerDragHandler>())
                 handler.OnCardDrop(result.ScreenPosition, result.Target);

@@ -3,25 +3,27 @@ using UnityEngine;
 
 namespace ATCG.Cards.UI.Components
 {
-    public class CardCapacitiesUI : CardUIComponent<IGameCard>
+    public class CardCapacitiesUI : AbilitiesUITab
     {
         [SerializeField]
         private BaseCapacityProviderUI[] providerUis;
 
 
-        public override void Connect(IGameCard current)
+        public override bool Build(IGameCard gameCard)
         {
+            bool any = false;
             for (int i = 0; i < providerUis.Length; i++)
             {
                 var provider = providerUis[i];
-                bool active = provider.Build(current.CardData.Capacities);
-                provider.gameObject.SetActive(active);
+                bool isActive = provider.Build(gameCard.CardData.Capacities);
+                provider.gameObject.SetActive(isActive);
+
+                any |= isActive;
             }
 
-            base.Connect(current);
+            return any;
         }
-
-        public override void Disconnect(IGameCard current)
+        public override void Clear()
         {
             for (int i = 0; i < providerUis.Length; i++)
             {
@@ -29,8 +31,6 @@ namespace ATCG.Cards.UI.Components
                 provider.Clear();
                 provider.gameObject.SetActive(false);
             }
-
-            base.Disconnect(current);
         }
     }
 }
