@@ -26,7 +26,6 @@ MonoBehaviour:
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1

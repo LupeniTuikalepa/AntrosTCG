@@ -7,7 +7,8 @@ namespace Helteix.Tools.UI
     {
         public TItem Current { get; internal set; }
 
-        internal void Connect(TItem item)
+        //Todo Saverio à mis Connect en public pour ses tests et oublira de le remettre en internal
+        public void Connect(TItem item)
         {
             Disconnect();
             Current = item;
