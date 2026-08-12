@@ -3,6 +3,7 @@ using ATCG.Core.Cutscenes;
 using ATCG.HexGrids;
 using UnityEngine;
 
+using ATCG.Cutscenes;
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
 {
     /// <summary>
@@ -37,11 +38,11 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
         // this resolves through CAST_POINT/COORDINATE_SOLVER (flattened to a pure yaw —
         // no pitch); in the Capacity Editor preview there's no meaningful cast point to
         // resolve, so both simply face Vector3.forward for a stable, predictable preview.
-        public void Connect(ICapacityContext context)
+        public void Connect(ICutsceneContext context)
         {
             // Resolved unconditionally (independent of lookAtCastPoint) so the Animator seam
             // is always populated for FollowBoneClip and friends.
-            bool hasCaster = context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) && caster != null;
+            bool hasCaster = context.TryGetProperty(CutsceneContextKeys.CASTER, out ICutsceneActor caster) && caster != null;
             CasterAnimator = hasCaster ? caster.Animator : null;
 
             if (!lookAtCastPoint)
@@ -50,8 +51,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
             if (!hasCaster)
                 return;
 
-            if (!context.TryGetProperty(CapacityContextKeys.CAST_POINT, out HexCoordinates castPoint) ||
-                !context.TryGetProperty(CapacityContextKeys.COORDINATE_SOLVER, out ICutsceneCoordinateSolver solver) ||
+            if (!context.TryGetProperty(CutsceneContextKeys.CAST_POINT, out HexCoordinates castPoint) ||
+                !context.TryGetProperty(CutsceneContextKeys.COORDINATE_SOLVER, out ICutsceneCoordinateSolver solver) ||
                 solver == null)
             {
                 return;

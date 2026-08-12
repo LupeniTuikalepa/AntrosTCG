@@ -17,10 +17,11 @@ MonoBehaviour:
   <Name>k__BackingField: Crystallization
   <Element>k__BackingField: 7
   <Description>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269927783137748
-  <CutsceneDirector>k__BackingField: {fileID: 0}
+  <CutsceneDirector>k__BackingField: {fileID: 2443261415861081152, guid: 1a9a2864db071614c86e74566c40d394, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <CrystallizeStepData>k__BackingField:
     <StepName>k__BackingField: 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ATCG.Cutscenes;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;

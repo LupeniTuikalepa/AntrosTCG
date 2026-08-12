@@ -3,6 +3,7 @@ using ATCG.Battle.CapacitySystem.Core.Properties;
 using UnityEngine;
 using UnityEngine.Playables;
 
+using ATCG.Cutscenes;
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops
 {
     /// <summary>
@@ -21,18 +22,18 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops
 
         // The driving context (game phase or editor preview). Subclasses read their
         // deterministic data (injected arrays, refs) from it via TryGetProperty.
-        protected ICapacityContext context;
+        protected ICutsceneContext context;
 
         private double segmentStart;
 
         // Element hook: cache the context. Count is resolved per turn.
-        void ICapacityCutsceneElement.Connect(ICapacityContext capacityContext)
+        void ICutsceneElement.Connect(ICutsceneContext capacityContext)
         {
             context = capacityContext;
             OnConnect();
         }
 
-        void ICapacityCutsceneElement.Disconnect()
+        void ICutsceneElement.Disconnect()
         {
 
         }

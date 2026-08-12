@@ -1,4 +1,5 @@
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Cutscenes;
 using ATCG.Capacities;
 using UnityEditor;
 using UnityEditor.SceneManagement;

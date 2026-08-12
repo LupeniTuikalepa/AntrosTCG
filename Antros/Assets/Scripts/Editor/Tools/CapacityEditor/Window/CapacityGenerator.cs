@@ -1,3 +1,4 @@
+using ATCG.Editor.Tools.CutsceneEditor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -230,7 +231,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         private static void CopyUmotionTemplate(CapacityData data, string name)
         {
-            CapacityEditorSettings settings = CapacityEditorSettings.GetOrCreate();
+            CutsceneEditorSettings settings = CutsceneEditorSettings.GetOrCreate();
             if (settings.umotionTemplate == null)
                 return;
 

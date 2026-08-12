@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.Entities;
+using ATCG.Cutscenes;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.HexGrids;
@@ -25,19 +26,19 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
             this.phase = phase;
 
             // Declare + fill the screen-local built-ins.
-            local.Allow<RuntimeLocalBattlePlayer>(CapacityContextKeys.SCREEN_PLAYER);
-            local.Allow<EntityAddress>(CapacityContextKeys.CASTER_ADDRESS);
-            local.Allow<HexCoordinates>(CapacityContextKeys.CAST_POINT);
-            local.Allow<ICutsceneCoordinateSolver>(CapacityContextKeys.COORDINATE_SOLVER);
-            local.Allow<ICutsceneActor>(CapacityContextKeys.CASTER);
+            local.Allow<RuntimeLocalBattlePlayer>(CutsceneContextKeys.SCREEN_PLAYER);
+            local.Allow<EntityAddress>(CutsceneContextKeys.CASTER_ADDRESS);
+            local.Allow<HexCoordinates>(CutsceneContextKeys.CAST_POINT);
+            local.Allow<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER);
+            local.Allow<ICutsceneActor>(CutsceneContextKeys.CASTER);
 
-            local.Set(CapacityContextKeys.SCREEN_PLAYER, screenPlayer);
-            local.Set(CapacityContextKeys.CASTER_ADDRESS, phase.caster);
-            local.Set(CapacityContextKeys.CAST_POINT, phase.castPoint);
-            local.Set<ICutsceneCoordinateSolver>(CapacityContextKeys.COORDINATE_SOLVER, new GridCoordinateSolver(screenPlayer));
+            local.Set(CutsceneContextKeys.SCREEN_PLAYER, screenPlayer);
+            local.Set(CutsceneContextKeys.CASTER_ADDRESS, phase.caster);
+            local.Set(CutsceneContextKeys.CAST_POINT, phase.castPoint);
+            local.Set<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER, new GridCoordinateSolver(screenPlayer));
 
             if (phase.TryGetRuntimeCaster(screenPlayer, out IRuntimeEntity caster) && caster is ICutsceneActor actor)
-                local.Set(CapacityContextKeys.CASTER, actor);
+                local.Set(CutsceneContextKeys.CASTER, actor);
         }
 
         // Local (screen) first, then live-delegate to the phase (global) so values the

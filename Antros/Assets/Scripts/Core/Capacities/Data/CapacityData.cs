@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ATCG.Cutscenes;
 using ATCG.Databases;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.Capacities.Properties;
@@ -13,7 +14,7 @@ using UnityEngine.Timeline;
 
 namespace ATCG.Capacities
 {
-    public abstract class CapacityData : GameDatabaseObject, IData, IAbility
+    public abstract class CapacityData : CutsceneDefinition, IData, IAbility
     {
         [field: SerializeField, PropertyRange(0, 10), BoxGroup("Base")]
         public int Cost { get; private set; }
@@ -27,7 +28,7 @@ namespace ATCG.Capacities
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
 
-        [field: SerializeField, TextArea, BoxGroup("Base")]
+        [field: SerializeField, BoxGroup("Base")]
         public Sprite Icon { get; private set; }
 
         [field: BoxGroup("Base")]
@@ -40,6 +41,11 @@ namespace ATCG.Capacities
         [field: BoxGroup("Base")]
         [field: SerializeField, BoxGroup("Base")]
         public PlayableDirector CutsceneDirector { get; private set; }
+
+        // Satisfies the CutsceneDefinition contract by exposing the legacy CutsceneDirector field,
+        // so existing capacity assets and their editor tooling keep working unchanged while the
+        // generic system sees a uniform Director.
+        public override PlayableDirector Director => CutsceneDirector;
 
         // Declared, tweakable capacity properties. [SerializeReference] + Odin's
         // dropdown lets each entry be any ICapacityPropertyDefinition implementation
@@ -76,6 +82,18 @@ namespace ATCG.Capacities
         {
             mappedSteps ??= new Dictionary<string, CapacityStepData>();
             return mappedSteps.TryGetValue(stepName, out step);
+        }
+
+        // The steps are source-generated per capacity (via MapSteps), so DeclaredSteps just exposes
+        // the mapped keys — keeping the CutsceneDefinition contract in sync with the runtime struct.
+        public override IReadOnlyList<string> DeclaredSteps
+        {
+            get
+            {
+                if (mappedSteps == null)
+                    RebuildStepMap();
+                return new List<string>(mappedSteps.Keys);
+            }
         }
     }
 }

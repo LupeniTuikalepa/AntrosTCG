@@ -1,4 +1,5 @@
 ﻿using ATCG.Capacities.Data;
+using ATCG.Cutscenes;
 using ATCG.Enums;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -25,6 +26,9 @@ namespace ATCG.Cards.Implementations
 
 		[field: SerializeField, BoxGroup("Prefabs")]
 		public GameObject HeroPawnPrefab { get; private set; }
+
+		[field: SerializeField, BoxGroup("Cutscenes"), Tooltip("Played when this hero performs a basic attack; the Hit marker deals the damage. Optional — no cutscene means instant damage.")]
+		public AttackCutscene AttackCutscene { get; private set; }
 
 		protected override void Reset()
 		{

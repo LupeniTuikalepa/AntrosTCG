@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using ATCG.Editor.Tools.CutsceneEditor;
 using UnityEditor.Overlays;
 using UnityEditor.UIElements;
 using UnityEditor.SceneManagement;
@@ -8,7 +9,7 @@ using UnityEngine.UIElements;
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Scene-view overlay shown while a CapacityCutsceneStage is open: an Auto Save
+    /// Scene-view overlay shown while a CutsceneStage is open: an Auto Save
     /// toggle (on by default), a Save Now button, and a live camera preview. The
     /// preview renders the stage's Cinemachine-driven camera (a PreviewSceneStage
     /// camera isn't drawn by the normal pipeline), updating as the Timeline window
@@ -25,20 +26,20 @@ namespace ATCG.Editor.Tools.CapacityEditor
         private ToolbarToggle autoSaveToggle;
         private Image previewImage;
         private CapacityCameraPreview preview;
-        private CapacityCutsceneStage boundStage;
+        private CutsceneStage boundStage;
 
         public override VisualElement CreatePanelContent()
         {
             VisualElement root = new();
 
             VisualElement toolbar = new() { style = { flexDirection = FlexDirection.Row } };
-            autoSaveToggle = new ToolbarToggle { text = "Auto Save", value = CapacityCutsceneStage.AutoSave };
-            autoSaveToggle.RegisterValueChangedCallback(evt => CapacityCutsceneStage.AutoSave = evt.newValue);
+            autoSaveToggle = new ToolbarToggle { text = "Auto Save", value = CutsceneStage.AutoSave };
+            autoSaveToggle.RegisterValueChangedCallback(evt => CutsceneStage.AutoSave = evt.newValue);
             toolbar.Add(autoSaveToggle);
 
             toolbar.Add(new ToolbarButton(() =>
             {
-                CapacityCutsceneStage stage = CapacityCutsceneStage.Current;
+                CutsceneStage stage = CutsceneStage.Current;
                 if (stage != null)
                     stage.Save();
             }) { text = "Save Now" });
@@ -79,7 +80,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             // NOTE: never drive `displayed` here — forcing it every frame overrides the
             // user toggling the overlay on/off. Visibility stays user-controlled; only
             // the preview content reacts to whether a stage is open.
-            CapacityCutsceneStage stage = CapacityCutsceneStage.Current;
+            CutsceneStage stage = CutsceneStage.Current;
 
             if (stage == null)
             {
@@ -95,7 +96,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             }
 
             if (autoSaveToggle != null)
-                autoSaveToggle.SetValueWithoutNotify(CapacityCutsceneStage.AutoSave);
+                autoSaveToggle.SetValueWithoutNotify(CutsceneStage.AutoSave);
 
             try
             {

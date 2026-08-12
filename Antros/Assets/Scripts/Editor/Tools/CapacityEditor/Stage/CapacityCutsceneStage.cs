@@ -1,75 +1,29 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
-using ATCG.Battle.Entities.Runtime;
 using ATCG.Capacities;
-using Unity.Cinemachine;
-using UnityEditor;
+using ATCG.Cutscenes;
+using ATCG.Editor.Tools.CutsceneEditor;
 using UnityEditor.SceneManagement;
-using UnityEditor.Timeline;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.SceneManagement;
 
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// An isolated editing stage for a capacity's cutscene, in the spirit of Prefab
-    /// Mode: it opens its own in-memory scene (no .unity file) and shows a breadcrumb.
-    /// The stage is populated with the reusable test environment (hero + camera +
-    /// CinemachineBrain + DebugCutsceneRig) plus the capacity's own director prefab on
-    /// top. Saving applies edits to the director prefab and flushes its timeline; the
-    /// environment is scenery and is never persisted.
-    ///
-    /// PreviewSceneStage has no OnSaveOpenedStage hook (that's PrefabStage-only), so
-    /// saving is driven from the stage overlay: an "Auto Save" toggle (on by default)
-    /// plus a "Save Now" button, and an auto-save on close.
+    /// The capacity flavour of the shared <see cref="CutsceneStage"/>: it reuses the entire
+    /// scene/timeline/save machinery and only swaps in a property-aware preview context
+    /// (<see cref="DebugCapacityContext"/>) so authored capacity properties carry their tweaked test
+    /// values into the VFX preview. Everything else — opening the isolated scene, locking the
+    /// Timeline, rebinding to the rig, saving back to the director prefab, surviving domain reloads —
+    /// lives in the base and is shared with every other cutscene kind.
     /// </summary>
-    public sealed class CapacityCutsceneStage : PreviewSceneStage
+    public sealed class CapacityCutsceneStage : CutsceneStage
     {
-        private const string AutoSavePrefKey = "ATCG.CapacityEditor.AutoSave";
+        /// <summary>The open capacity stage, or null when none / when a non-capacity stage is open.</summary>
+        public static new CapacityCutsceneStage Current => CutsceneStage.Current as CapacityCutsceneStage;
 
-        public static CapacityCutsceneStage Current { get; private set; }
+        /// <summary>The capacity being edited (the definition, typed).</summary>
+        public CapacityData Capacity => definition as CapacityData;
 
-        public static bool AutoSave
-        {
-            get => EditorPrefs.GetBool(AutoSavePrefKey, true);
-            set => EditorPrefs.SetBool(AutoSavePrefKey, value);
-        }
-
-        [SerializeField] private CapacityData capacity;
-        [SerializeField] private GameObject stageInstance;   // survives domain reload
-        private DebugCutsceneRig rig;
-        private DebugCapacityContext previewContext;
-
-        public CapacityData Capacity => capacity;
-
-        public PlayableDirector Director => stageInstance != null
-            ? stageInstance.GetComponentInChildren<PlayableDirector>(true)
-            : null;
-
-        // Resolve the CinemachineBrain from the STAGE SCENE, not the rig table: a rig
-        // reference points at the environment PREFAB ASSET (scene invalid), and a camera
-        // with no valid scene culls nothing and renders black in the preview. Searching
-        // the stage scene returns the live instance whose scene is valid.
-        public CinemachineBrain Brain
-        {
-            get
-            {
-                if (!scene.IsValid())
-                    return null;
-                foreach (GameObject root in scene.GetRootGameObjects())
-                {
-                    CinemachineBrain found = root.GetComponentInChildren<CinemachineBrain>(true);
-                    if (found != null)
-                        return found;
-                }
-                return null;
-            }
-        }
-        public DebugCutsceneRig Rig => rig;
-        public UnityEngine.SceneManagement.Scene StageScene => scene;
-        public DebugCapacityContext PreviewContext => previewContext;
-
+        /// <summary>The preview context, typed so the tweak panel can push edited property values.</summary>
+        public new DebugCapacityContext PreviewContext => base.PreviewContext as DebugCapacityContext;
 
         public static void Open(CapacityData capacity)
         {
@@ -80,287 +34,13 @@ namespace ATCG.Editor.Tools.CapacityEditor
             }
 
             CapacityCutsceneStage stage = CreateInstance<CapacityCutsceneStage>();
-            stage.capacity = capacity;
+            stage.definition = capacity;
             StageUtility.GoToStage(stage, true);
         }
 
-        // Safety net for "quitting Unity while the stage is still open": OnCloseStage is
-        // the normal save point (back button, switching capacity/stage), but it isn't
-        // guaranteed to fire on an outright Editor quit. Hooking quitting directly means
-        // unsaved edits still land even if the stage never gets a clean close.
-        private void HookQuitSave()
-        {
-            EditorApplication.quitting -= OnEditorQuitting;
-            EditorApplication.quitting += OnEditorQuitting;
-        }
-
-        private void UnhookQuitSave() => EditorApplication.quitting -= OnEditorQuitting;
-
-        private void OnEditorQuitting()
-        {
-            if (AutoSave)
-                Save();
-        }
-
-        // After a domain reload (recompile) the stage SO is reserialized: the
-        // [SerializeField] fields survive, but Current and the non-serialized derived
-        // state (rig, context, timeline lock) are lost while the visual stage remains —
-        // which is why the window thinks we left edit mode. Rebuild the derived state.
-        private void OnEnable()
-        {
-            if (stageInstance == null || !scene.IsValid())
-                return;
-
-            Current = this;
-
-            if (rig == null)
-                rig = FindRigInScene();
-
-            ConnectElements();
-            CapacityAutoBinder.RebindAll(Director, rig);
-            OpenAndLockTimeline();
-            HookQuitSave();
-        }
-
-        private DebugCutsceneRig FindRigInScene()
-        {
-            foreach (GameObject root in scene.GetRootGameObjects())
-            {
-                DebugCutsceneRig found = root.GetComponentInChildren<DebugCutsceneRig>(true);
-                if (found != null)
-                    return found;
-            }
-            return null;
-        }
-
-        protected override bool OnOpenStage()
-        {
-            base.OnOpenStage();
-
-            Scene stageScene = scene;
-            CapacityEditorSettings settings = CapacityEditorSettings.GetOrCreate();
-
-            // 1. Test environment (hero, camera + CinemachineBrain, rig). Scenery only.
-            if (settings.testEnvironmentPrefab != null)
-            {
-                GameObject env = (GameObject)PrefabUtility.InstantiatePrefab(
-                    settings.testEnvironmentPrefab, stageScene);
-                rig = env.GetComponentInChildren<DebugCutsceneRig>(true);
-                if (rig == null)
-                    Debug.LogWarning("[CapacityTimelineEditor] Test environment has no DebugCutsceneRig — " +
-                                     "auto-bindable tracks won't bind.");
-            }
-            else
-            {
-                Debug.LogWarning("[CapacityTimelineEditor] No test environment prefab set (Settings tab). " +
-                                 "Bindings won't preview correctly.");
-            }
-
-            // 2. The capacity's director prefab — this is what the user actually edits.
-            GameObject prefabRoot = ResolvePrefabRoot(capacity.CutsceneDirector);
-            if (prefabRoot == null)
-            {
-                Debug.LogWarning($"[CapacityTimelineEditor] Couldn't resolve the director prefab for '{capacity.name}'.");
-                return false;
-            }
-
-            stageInstance = (GameObject)PrefabUtility.InstantiatePrefab(prefabRoot, stageScene);
-
-            // The prefab's serialized bindings point at objects outside this stage;
-            // reconnect every auto-bindable track to the rig present here.
-            CapacityAutoBinder.RebindAll(Director, rig);
-            ConnectElements();
-
-            OpenAndLockTimeline();
-
-            Current = this;
-            HookQuitSave();
-            return true;
-        }
-
-        protected override void OnCloseStage()
-        {
-            if (AutoSave)
-                Save();
-
-            UnhookQuitSave();
-            UnlockTimeline();
-
-            if (Current == this)
-                Current = null;
-
-            base.OnCloseStage();
-        }
-
-        // Wires the cutscene elements to a preview context so VFX (particles, etc.)
-        // resolve their caster from the test hero instead of a running game. The hero
-        // is the object bound to the HeroAnimator channel on the rig.
-        private void ConnectElements()
-        {
-            if (stageInstance == null)
-                return;
-
-            Transform heroRoot = null;
-            Animator heroAnimator = null;
-            if (rig != null && rig.TryGet(CutsceneChannels.HeroAnimator.trackName, out Object heroRef))
-            {
-                heroAnimator = heroRef as Animator;
-                if(heroAnimator)
-                    heroRoot = heroAnimator.GetComponentInParent<IRuntimeEntity>().transform;
-            }
-
-            // Body-part LinkedRenderer keys are auto-assigned by LinkedRendererMapper.Awake at
-            // runtime; Awake never fires in the edit-mode preview, so map here — otherwise
-            // key-based VFX (PropagateVFX) find no renderers and spawn nothing.
-            if (heroAnimator != null)
-                heroAnimator.GetComponentInParent<ATCG.Battle.LinkedRendererMapper>()?.Map();
-
-            previewContext = new DebugCapacityContext(capacity, heroRoot, heroAnimator);
-            ReconnectElements();
-        }
-
-        // Re-runs Connect on every element with the current preview context. Called on
-        // open and again whenever the tweak panel changes a property value.
-        public void ReconnectElements()
-        {
-            if (stageInstance == null || previewContext == null)
-                return;
-
-            ICapacityCutsceneElement[] elements = stageInstance.GetComponentsInChildren<ICapacityCutsceneElement>(true);
-            for (int i = 0; i < elements.Length; i++)
-            {
-                // Disconnect first so elements drop any stale bindings before re-pulling the
-                // (now-updated) injected values from the preview context.
-                elements[i].Disconnect();
-                elements[i].Connect(previewContext);
-            }
-        }
-
-        // Loads the stage director into the Timeline window and locks it, so editing
-        // stays pinned to this cutscene even when selection changes elsewhere.
-        //
-        // Deferred one editor tick: right as the stage first opens (or is restored after
-        // a domain reload), TimelineEditor.GetOrCreateWindow() can hand back a window
-        // that hasn't finished its own init yet — setting locked before it's ready got
-        // silently dropped, which is why the timeline wasn't locking on scene open.
-        // Showing the window before binding it, then locking last, avoids that race.
-        private void OpenAndLockTimeline()
-        {
-            EditorApplication.delayCall += TryLockTimeline;
-        }
-
-        private void TryLockTimeline()
-        {
-            if (Current != this)
-                return;
-
-            PlayableDirector director = Director;
-            if (director == null)
-                return;
-
-            TimelineEditorWindow window = TimelineEditor.GetOrCreateWindow();
-            window.Show();
-            window.SetTimeline(director);
-            window.locked = true;
-        }
-
-        private static void UnlockTimeline()
-        {
-            TimelineEditorWindow window = TimelineEditor.GetWindow();
-            if (window != null)
-                window.locked = false;
-        }
-
-        /// <summary>
-        /// Applies the stage instance's edits back to the director prefab and flushes
-        /// its timeline + the capacity data. Called by the overlay button, on close
-        /// when auto-save is on, and after scan writes when auto-save is on.
-        /// </summary>
-        public bool Save()
-        {
-            // Logged rather than silent: "does this actually save?" is hard to tell from
-            // the overlay alone, and a stale/destroyed stageInstance reference (e.g. if
-            // the stage's scene has already started tearing down by the time this runs)
-            // would otherwise return true here and look like a successful no-op save.
-            if (stageInstance == null)
-            {
-                Debug.LogWarning("[CapacityTimelineEditor] Save skipped: stageInstance is null " +
-                                 "(stage already torn down?).");
-                return true;
-            }
-
-            string prefabPath = AssetDatabase.GetAssetPath(capacity.CutsceneDirector);
-            if (string.IsNullOrEmpty(prefabPath))
-            {
-                Debug.LogWarning("[CapacityTimelineEditor] Director isn't a prefab asset — can't save.");
-                return false;
-            }
-
-            // ApplyPrefabInstance can throw (e.g. stageInstance no longer recognized as an
-            // outermost prefab instance root by the time this runs). If it did and nothing
-            // guarded it, the exception used to abort Save() right there — skipping the
-            // SetDirty/SaveAssets below entirely, so NEITHER the GameObject overrides NOR
-            // the timeline got flushed, with nothing but a maybe-swallowed exception to
-            // show for it (Stage close callbacks aren't guaranteed to surface exceptions
-            // loudly). Catching it here means clip/timeline data still saves even if the
-            // prefab-instance side fails, and the failure is now impossible to miss.
-            bool prefabApplied = true;
-            try
-            {
-                PrefabUtility.ApplyPrefabInstance(stageInstance, InteractionMode.AutomatedAction);
-            }
-            catch (System.Exception e)
-            {
-                prefabApplied = false;
-                Debug.LogError($"[CapacityTimelineEditor] ApplyPrefabInstance failed for " +
-                                $"'{capacity.name}': {e}");
-            }
-
-            if (capacity.CutsceneTimeline != null)
-                EditorUtility.SetDirty(capacity.CutsceneTimeline);
-            EditorUtility.SetDirty(capacity);
-
-            AssetDatabase.SaveAssets();
-
-            if (prefabApplied)
-                Debug.Log($"[CapacityTimelineEditor] Saved '{capacity.name}' to '{prefabPath}'.");
-
-            return prefabApplied;
-        }
-
-        /// <summary>Saves only when auto-save is enabled (used by the periodic scan).</summary>
-        public void AutoSaveIfEnabled()
-        {
-            if (AutoSave)
-                Save();
-        }
-
-        protected override GUIContent CreateHeaderContent()
-        {
-            return new GUIContent(
-                capacity != null ? $"Cutscene: {capacity.name}" : "Cutscene",
-                EditorGUIUtility.IconContent("d_UnityEditor.Timeline.TimelineWindow").image);
-        }
-
-        // Resolve the prefab asset root that the capacity references, WITHOUT walking up
-        // the variant chain. GetCorrespondingObjectFromSource climbs one step toward the
-        // base prefab, so for a VARIANT it returns the template — which would make the
-        // stage instantiate the template instead of the variant. Loading the asset at
-        // the referenced object's own path returns the correct root, variant included.
-        private static GameObject ResolvePrefabRoot(PlayableDirector director)
-        {
-            if (director == null)
-                return null;
-
-            // Path of the asset the reference actually lives in (the variant itself).
-            string path = AssetDatabase.GetAssetPath(director);
-            if (string.IsNullOrEmpty(path))
-                path = AssetDatabase.GetAssetPath(director.gameObject);
-
-            if (string.IsNullOrEmpty(path))
-                return null;
-
-            return AssetDatabase.LoadAssetAtPath<GameObject>(path);
-        }
+        // Capacity preview needs the authored property schema seeded with saved debug values, so it
+        // uses the richer DebugCapacityContext instead of the generic one.
+        protected override ICutsceneContext BuildPreviewContext(Transform sourceRoot, Animator sourceAnimator)
+            => new DebugCapacityContext(Capacity, sourceRoot, sourceAnimator);
     }
 }

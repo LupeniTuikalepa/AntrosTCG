@@ -4,9 +4,10 @@ using UnityEngine;
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Versioned settings for the Capacity Editor tool. Stored as an asset (not
-    /// EditorPrefs) so it survives recompiles, is a real asset reference that follows
-    /// renames, and is shared across the team via VCS.
+    /// LEGACY — superseded by <c>CutsceneEditorSettings</c>, which is now the single source of truth
+    /// for the editor templates. Kept only so the new settings can migrate this asset's values on
+    /// first launch. Once every project has migrated, this class and its asset
+    /// (Assets/Editor Default Resources/CapacityEditorSettings.asset) can be deleted.
     /// </summary>
     public sealed class CapacityEditorSettings : ScriptableObject
     {

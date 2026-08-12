@@ -17,6 +17,7 @@ MonoBehaviour:
   <Name>k__BackingField: "Br\xFBme Hivernal"
   <Element>k__BackingField: 7
   <Description>k__BackingField: "Applique l'etat Gel\xE9e a une ligne de case"
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 7630467839202951329

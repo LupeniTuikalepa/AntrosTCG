@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks;
+using ATCG.Cutscenes;
 using UnityEditor;
 using UnityEngine;
 

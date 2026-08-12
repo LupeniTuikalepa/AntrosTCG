@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Pool;
 
+using ATCG.Cutscenes;
 namespace ATCG.Battle.Entities.Runtime.VFX
 {
     public class PropagateMaterialOnRenderers : MonoBehaviour, ICapacityCutsceneElement, IRuntimeStatusComponent
@@ -51,16 +52,16 @@ namespace ATCG.Battle.Entities.Runtime.VFX
         {
         }
 
-        void ICapacityCutsceneElement.Connect(ICapacityContext context)
+        void ICutsceneElement.Connect(ICutsceneContext context)
         {
-            if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
+            if (!context.TryGetProperty(CutsceneContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
                 return;
 
             current = caster;
             Apply();
         }
 
-        void ICapacityCutsceneElement.Disconnect()
+        void ICutsceneElement.Disconnect()
         {
             Clear();
         }

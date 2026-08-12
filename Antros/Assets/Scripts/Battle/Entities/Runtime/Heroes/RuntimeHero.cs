@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.Entities.Aspects;
+using ATCG.Cutscenes;
 using ATCG.Battle.Entities.Runtime.Animations;
 using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Players.Local;

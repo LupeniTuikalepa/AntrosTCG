@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using ATCG.Cutscenes;
 using System.Linq;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
-using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs.Timeline;
 using UnityEngine.Timeline;
 
 namespace ATCG.Editor.Tools.CapacityEditor

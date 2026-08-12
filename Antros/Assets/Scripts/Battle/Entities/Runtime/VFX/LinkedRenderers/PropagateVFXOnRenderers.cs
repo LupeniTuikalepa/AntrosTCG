@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Timeline;
 
+using ATCG.Cutscenes;
 namespace ATCG.Battle.Entities.Runtime.VFX
 {
     public class PropagateVFXOnRenderers : MonoBehaviour,
@@ -36,16 +37,16 @@ namespace ATCG.Battle.Entities.Runtime.VFX
         // Pulls the caster actor from the context (game phase or editor preview) and
         // caches its skinned renderers. No runtime/World coupling, no editor-only path:
         // the context abstracts where the actor comes from.
-        void ICapacityCutsceneElement.Connect(ICapacityContext context)
+        void ICutsceneElement.Connect(ICutsceneContext context)
         {
-            if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
+            if (!context.TryGetProperty(CutsceneContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
                 return;
 
             Current = caster;
 
         }
 
-        void ICapacityCutsceneElement.Disconnect()
+        void ICutsceneElement.Disconnect()
         {
             Clear();
         }

@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using Unity.Cinemachine;
 using UnityEngine;
 
+using ATCG.Cutscenes;
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
 {
     /// <summary>
@@ -38,12 +39,12 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
 
         // Resolves the caster actor from the context (game or preview) and wires whichever
         // of Follow/LookAt is enabled onto its root transform or the requested bone.
-        public void Connect(ICapacityContext context)
+        public void Connect(ICutsceneContext context)
         {
             if (cinemachineCamera == null)
                 return;
 
-            if (!context.TryGetProperty(CapacityContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
+            if (!context.TryGetProperty(CutsceneContextKeys.CASTER, out ICutsceneActor caster) || caster == null)
                 return;
 
             if (bindFollow)

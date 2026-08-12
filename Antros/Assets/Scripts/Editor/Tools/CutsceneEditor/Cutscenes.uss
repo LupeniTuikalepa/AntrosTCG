@@ -1,0 +1,138 @@
+.cutscene-tool {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 8px;
+}
+
+.cutscene-title {
+    flex-grow: 1;
+    margin-left: 4px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    color: var(--atcg-text-strong);
+}
+
+.cutscene-tab {
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.cutscene-tab-button {
+    background-color: transparent;
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+    padding: 6px 14px;
+    color: var(--atcg-text-soft);
+}
+
+.cutscene-tab-button--active {
+    color: var(--atcg-text-strong);
+    border-bottom-color: var(--atcg-accent);
+}
+
+.cutscene-search {
+    flex-grow: 1;
+    margin-left: 6px;
+}
+
+.cutscene-settings-note {
+    color: var(--atcg-text-muted);
+    white-space: normal;
+    margin: 6px 2px;
+}
+
+.cutscene-tracks-panel {
+    background-color: var(--atcg-panel);
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-top: 8px;
+}
+
+.cutscene-list {
+    flex-grow: 1;
+    min-height: 0;
+    margin-top: 6px;
+}
+
+.cutscene-empty {
+    color: var(--atcg-text-muted);
+    padding: 12px;
+    -unity-text-align: middle-center;
+}
+
+.cutscene-group-header {
+    -unity-font-style: bold;
+    color: var(--atcg-text-soft);
+    background-color: var(--atcg-panel-nested);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+
+.cutscene-row {
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--atcg-panel);
+    border-radius: 6px;
+    padding: 5px 10px;
+    margin-top: 2px;
+}
+
+.cutscene-row-name {
+    flex-grow: 1;
+    color: var(--atcg-text-strong);
+}
+
+.cutscene-row-state {
+    color: var(--atcg-accent-warm-text);
+    margin-right: 8px;
+    -unity-font-style: italic;
+}
+
+.cutscene-row-edit {
+    min-width: 56px;
+}
+
+.cutscene-row-fix {
+    min-width: 44px;
+    margin-left: 4px;
+    color: var(--atcg-accent-warm-text);
+}
+
+.cutscene-row-ping {
+    min-width: 44px;
+    margin-left: 4px;
+}
+
+.cutscene-edit-button {
+    margin-top: 8px;
+    padding: 6px 14px;
+}
+
+.cutscene-modal {
+    padding: 10px;
+}
+
+.cutscene-modal-title {
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+    color: var(--atcg-text-strong);
+}
+
+.cutscene-modal-buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.cutscene-modal-error {
+    color: var(--atcg-accent-warm-text);
+    white-space: normal;
+    margin-top: 4px;
+}
+
+.hidden {
+    display: none;
+}

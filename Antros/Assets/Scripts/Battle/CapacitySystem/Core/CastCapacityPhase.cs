@@ -1,4 +1,5 @@
 using System;
+using ATCG.Cutscenes;
 using System.Collections.Generic;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
@@ -64,7 +65,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         // Barrier for steps across all screens. Built once directors are known.
         private StepBarrier stepBarrier;
         private readonly HashSet<string> stepsRun = new HashSet<string>();
-        private List<float> qtes = new List<float>();
+        private readonly QteResultAccumulator qteResults = new();
 
         public CastCapacityPhase(
             BattlePhase battlePhase,
@@ -83,7 +84,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         protected override Awaitable Initialize(CancellationToken token)
         {
-            qtes = ListPool<float>.Get();
+            qteResults.Clear();
             directors = DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Get();
             stepsByName = DictionaryPool<string, ICapacityStep>.Get();
             properties.Declare(data.PropertyDefinitions);
@@ -222,7 +223,6 @@ namespace ATCG.Battle.CapacitySystem.Core
                 director.Dispose();
 
             DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Release(directors);
-            ListPool<float>.Release(qtes);
             DictionaryPool<string, ICapacityStep>.Release(stepsByName);
             properties.Clear();
 
@@ -249,31 +249,9 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         // ---- QTE stack ------------------------------------------------------
 
-        private bool consumedSinceLastFill;
+        public void AddQteResult(float qte) => qteResults.Add(qte);
 
-        public void AddQteResult(float qte)
-        {
-            if (consumedSinceLastFill)
-            {
-                qtes.Clear();
-                consumedSinceLastFill = false;
-            }
-
-            qtes.Add(qte);
-        }
-
-        private float ReadQtes()
-        {
-            consumedSinceLastFill = true;
-
-            if (qtes.Count == 0)
-                return 1f;
-
-            float sum = 0f;
-            for (int i = 0; i < qtes.Count; i++)
-                sum += qtes[i];
-            return sum / qtes.Count;
-        }
+        private float ReadQtes() => qteResults.Read();
 
 
         // ---- director collection -------------------------------------------
