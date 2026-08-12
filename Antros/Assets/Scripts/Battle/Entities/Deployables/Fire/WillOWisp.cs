@@ -12,6 +12,7 @@ using ATCG.Capacities.Fire;
 using ATCG.Enums;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -26,9 +27,10 @@ namespace ATCG.Battle.Entities.Deployables.Fire
             
             aspect.EntityAddress.ListenForEntityCommand<MoveCommand>(
                 (in CommandContext context, in MoveCommand command) =>
-                    DropFlame(context, command, data));
+                    DropFlame(context, command, aspect, data));
             
             aspect.EntityAddress.ListenForPlayerCommand<EndTurnCommand>(
+                false,
                 (in CommandContext context, in EndTurnCommand command) => 
                     MoveToEnemy(context, command, aspect, data));
         }
@@ -42,8 +44,8 @@ namespace ATCG.Battle.Entities.Deployables.Fire
             var builder = new EntityQueryBuilder()
                 .WithAllComponents<HealthComponent>()
                 .WithAllComponents<BelongsToPlayerComponent>()
-                .Where(address => 
-                    !address.IsAlly(aspect.BelongsToPlayerComponent.GetPlayer(context.battlePhase)));
+                    .Where(address => 
+                        !address.IsAlly(aspect.BelongsToPlayerComponent.GetPlayer(context.battlePhase)));
 
             var minDistance = int.MaxValue;
             var destination = aspect.GridMemberComponent.coordinates;
@@ -82,11 +84,15 @@ namespace ATCG.Battle.Entities.Deployables.Fire
             }
         }
 
-        private static void DropFlame(in CommandContext context, in MoveCommand command, WillOWispData data)
+        private static void DropFlame(
+            in CommandContext context, 
+            in MoveCommand command, 
+            DeployableAspect aspect,
+            WillOWispData data)
         {
-            var infos = command.GetInfos();
+            var coord = aspect.GridMemberComponent.coordinates;
             
-            if (!context.Grid.TryGetBattleCell(infos.from, out var cell)) 
+            if (!context.Grid.TryGetBattleCell(coord, out var cell)) 
                 return;
             
             var applyStatusCommand = new ApplyStatusCommand(cell.EntityAddress, data.Status);
