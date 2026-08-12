@@ -35,17 +35,9 @@ namespace ATCG.Capacities
         [field: SerializeField, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public PatternGroup CastPatterns { get; private set; }
 
-        // The cutscene stage as a prefab. Its PlayableDirector already owns the
-        // authored TimelineAsset (via playableAsset), so we reference the director
-        // directly rather than storing a second, redundant timeline reference.
-        [field: BoxGroup("Base")]
-        [field: SerializeField, BoxGroup("Base")]
-        public PlayableDirector CutsceneDirector { get; private set; }
-
-        // Satisfies the CutsceneDefinition contract by exposing the legacy CutsceneDirector field,
-        // so existing capacity assets and their editor tooling keep working unchanged while the
-        // generic system sees a uniform Director.
-        public override PlayableDirector Director => CutsceneDirector;
+        // The cutscene stage's PlayableDirector (and its timeline) now live on the base
+        // CutsceneDefinition as Director / Timeline; existing assets that stored it under the legacy
+        // CutsceneDirector field are migrated automatically via FormerlySerializedAs on the base.
 
         // Declared, tweakable capacity properties. [SerializeReference] + Odin's
         // dropdown lets each entry be any ICapacityPropertyDefinition implementation
@@ -53,11 +45,6 @@ namespace ATCG.Capacities
         // these; only declared properties can be written at runtime.
         [field: SerializeReference, BoxGroup("Properties")]
         public List<ICapacityPropertyDefinition> PropertyDefinitions { get; private set; } = new();
-
-                // Convenience accessor: the timeline the director plays, if any.
-        public TimelineAsset CutsceneTimeline => CutsceneDirector != null
-            ? CutsceneDirector.playableAsset as TimelineAsset
-            : null;
 
         private Dictionary<string, CapacityStepData> mappedSteps;
 

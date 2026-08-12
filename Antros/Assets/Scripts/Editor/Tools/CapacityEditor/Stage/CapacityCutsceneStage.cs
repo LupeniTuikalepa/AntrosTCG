@@ -27,7 +27,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         public static void Open(CapacityData capacity)
         {
-            if (capacity == null || capacity.CutsceneDirector == null)
+            if (capacity == null || capacity.Director == null)
             {
                 Debug.LogWarning("[CapacityTimelineEditor] Capacity has no cutscene director to edit.");
                 return;

@@ -143,7 +143,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
             }
 
             // 2. Director prefab variant + timeline (reuses the existing builder, also wires
-            //    CutsceneDirector back onto the data).
+            //    Director back onto the data).
             if (!CapacityStageBuilder.TryBuild(data, out string message))
                 Debug.LogWarning($"[CapacityGenerator] Cutscene stage not built: {message}");
 
@@ -207,7 +207,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 return;
 
             SerializedObject so = new(data);
-            SerializedProperty prop = so.FindProperty("<CutsceneDirector>k__BackingField");
+            SerializedProperty prop = so.FindProperty("<Director>k__BackingField");
             if (prop != null)
             {
                 prop.objectReferenceValue = assetDirector;

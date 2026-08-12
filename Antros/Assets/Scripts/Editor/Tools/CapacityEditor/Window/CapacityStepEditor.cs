@@ -95,7 +95,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         private static void UpdateTimelineMarkers(CapacityData capacity, IReadOnlyList<Edit> edits)
         {
-            TimelineAsset timeline = capacity.CutsceneTimeline;
+            TimelineAsset timeline = capacity.Timeline;
             if (timeline == null)
                 return;
 
