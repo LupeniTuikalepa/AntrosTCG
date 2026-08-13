@@ -1,0 +1,9 @@
+{
+    "name": "ClaudeTools.Editor",
+    "rootNamespace": "ClaudeTools",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": false
+}

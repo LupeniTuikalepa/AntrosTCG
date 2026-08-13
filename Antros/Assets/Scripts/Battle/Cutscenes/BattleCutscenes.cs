@@ -11,6 +11,7 @@ using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Cutscenes;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ATCG.Battle.Cutscenes
 {
@@ -27,12 +28,22 @@ namespace ATCG.Battle.Cutscenes
         /// Plays <paramref name="definition"/> for the given source entity across every screen and
         /// completes when all screens' cutscenes have finished. A null definition is a no-op.
         /// </summary>
+        public static Awaitable Play(
+            CutsceneDefinition definition,
+            BattlePhase battlePhase,
+            EntityAddress source,
+            params (string, Action)[] steps) => Play(definition, battlePhase, source, null, steps);
+
+        /// <summary>
+        /// Plays <paramref name="definition"/> for the given source entity across every screen and
+        /// completes when all screens' cutscenes have finished. A null definition is a no-op.
+        /// </summary>
         public static async Awaitable Play(
             CutsceneDefinition definition,
             BattlePhase battlePhase,
             EntityAddress source,
-            IReadOnlyDictionary<string, Action> steps,
-            QteResultAccumulator qteResults = null)
+            QteResultAccumulator qteResults = null,
+            params (string, Action)[] steps)
         {
             // The QTE owner is the player that owns the acting entity (e.g. the attacker); only that
             // screen turns a QTE press into a networked result.
@@ -52,11 +63,18 @@ namespace ATCG.Battle.Cutscenes
 
             try
             {
-                await new CutscenePlayer().PlayAsync(
-                    definition,
-                    Screens(battlePhase),
-                    screen => BuildContext(screen, source, ownerPlayerId),
-                    steps);
+                using (DictionaryPool<string, Action>.Get(out var stepsDic))
+                {
+                    for (int i = 0; i < steps.Length; i++)
+                    {
+                        stepsDic.TryAdd(steps[i].Item1, steps[i].Item2);
+                    }
+                    await new CutscenePlayer().PlayAsync(
+                        definition,
+                        Screens(battlePhase),
+                        screen => BuildContext(screen, source, ownerPlayerId),
+                        stepsDic);
+                }
             }
             finally
             {

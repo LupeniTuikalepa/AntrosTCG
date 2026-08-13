@@ -61,4 +61,7 @@ namespace ATCG.Editor.Tools.CutsceneEditor
 
     [CustomEditor(typeof(AttackCutscene))]
     public sealed class AttackCutsceneEditor : CutsceneDefinitionEditor { }
+
+    [CustomEditor(typeof(DeployCutscene))]
+    public sealed class DeployCutsceneEditor : CutsceneDefinitionEditor { }
 }
