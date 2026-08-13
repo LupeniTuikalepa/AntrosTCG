@@ -17,6 +17,7 @@ MonoBehaviour:
   <Name>k__BackingField: Devastation
   <Element>k__BackingField: 1
   <Description>k__BackingField: Boom
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 2899897746609406451

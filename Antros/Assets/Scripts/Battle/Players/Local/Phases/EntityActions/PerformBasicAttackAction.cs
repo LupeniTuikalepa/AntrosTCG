@@ -1,7 +1,11 @@
-﻿using ATCG.Battle.CapacitySystem.Status.Berserk;
+﻿using System;
+using System.Collections.Generic;
+using ATCG.Battle.CapacitySystem.Status.Berserk;
+using ATCG.Battle.Cards;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Commands.GameCommands.Players;
+using ATCG.Battle.Cutscenes;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
@@ -9,6 +13,7 @@ using ATCG.Battle.GameModes;
 using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
+using ATCG.Cutscenes;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
@@ -80,11 +85,36 @@ namespace ATCG.Battle
 			        new ModifyPlayerManaCommand(fromPlayer, -GameMetrics.Current.BasicAttackCost);
 		        await manaCost.RunAsync(battlePhase);
 
-		        for (int i = 0; i < result.Length; i++)
+		        // If the attacker is a hero with an attack cutscene, play it and land the damage on
+		        // the "Hit" marker. Otherwise keep the instant-damage behaviour (no cutscene).
+		        AttackCutscene attackCutscene =
+			        address.TryGetComponentRO(out BattleCardComponent cardComponent)
+			        && cardComponent.battleCard is HeroBattleCard heroCard
+				        ? heroCard.Data.AttackCutscene
+				        : null;
+
+		        EntityAddress[] targets = result;
+
+		        if (attackCutscene != null)
 		        {
-			        EntityAddress target = result[i];
-			        BasicAttackCommand command = new BasicAttackCommand(address, target, strength);
-			        await command.RunAsync(battlePhase);
+			        // QTE effectiveness [0,1] scales the hit; a cutscene with no QTE clips reads back
+			        // 1 (full damage), so non-QTE attacks are unchanged. Tune the mapping as needed.
+			        QteResultAccumulator qteResults = new();
+			        await BattleCutscenes.Play(attackCutscene, battlePhase, address,
+				        new Dictionary<string, Action>
+				        {
+					        [AttackCutscene.HIT] = () =>
+					        {
+						        int scaled = Mathf.Max(0, Mathf.RoundToInt(strength * qteResults.Read()));
+						        for (int i = 0; i < targets.Length; i++)
+							        new BasicAttackCommand(address, targets[i], scaled).Run(battlePhase);
+					        }
+				        }, qteResults);
+		        }
+		        else
+		        {
+			        for (int i = 0; i < targets.Length; i++)
+				        await new BasicAttackCommand(address, targets[i], strength).RunAsync(battlePhase);
 		        }
 	        }
         }

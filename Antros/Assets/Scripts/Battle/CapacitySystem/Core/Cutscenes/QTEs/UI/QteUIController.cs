@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core.Directors;
+using ATCG.Cutscenes;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Players.Local.Runtime;
 using Helteix.Tools;

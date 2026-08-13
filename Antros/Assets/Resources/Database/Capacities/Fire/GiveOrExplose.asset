@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff2eb493b7b4a379b1c094529f710a9, type: 3}
+  m_Name: GiveOrExplose
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.ExplosionData.GiveOrExploseData
+  guidText: 4bb84663-0cc7-46ac-a4ae-75d40b0cca5c
+  <Director>k__BackingField: {fileID: 3772132870402132684, guid: 45a409f89cd2b234c8d034f44e4555c5, type: 3}
+  <Cost>k__BackingField: 0
+  <Name>k__BackingField: ExploPunch
+  <Element>k__BackingField: 1
+  <Description>k__BackingField: "Envoie une patate qui inflige des d\xE9gats. Le
+    h\xE9ro qui ce prend la patate ce verra \xEAtre affecter de l'\xE9tat EXPLOSION
+    ou s'il a d\xE9j\xE0 il EXPLOSERA\n"
+  <Icon>k__BackingField: {fileID: 0}
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 579208045788397570
+  <PropertyDefinitions>k__BackingField: []
+  <PunchDamage>k__BackingField: 1
+  <Status>k__BackingField: {fileID: 11400000, guid: f9ef9dcaaae739b418e39c75f4adc980, type: 2}
+  <Range>k__BackingField: 1
+  <HitStepData>k__BackingField:
+    <StepName>k__BackingField: 
+    <QTEsCount>k__BackingField: 0
+  <GiveOrExploseStepData>k__BackingField:
+    <StepName>k__BackingField: 
+    <QTEsCount>k__BackingField: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 579208045788397570
+      type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 1

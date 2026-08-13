@@ -1,14 +1,13 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Properties;
+using ATCG.Cutscenes;
 
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Elements
 {
-    public interface ICapacityCutsceneElement
+    /// <summary>
+    /// Kept as the capacity-facing name for a cutscene element; it carries no extra members over
+    /// the generic <see cref="ICutsceneElement"/>. New elements can implement either — they are the
+    /// same contract (Connect on an <see cref="ICutsceneContext"/> + Disconnect).
+    /// </summary>
+    public interface ICapacityCutsceneElement : ICutsceneElement
     {
-        // Connect binds the element to its driving context (game phase or editor
-        // preview). Elements pull whatever refs/properties they need from it — caster,
-        // screen player, capacity data — instead of depending on the concrete phase.
-        void Connect(ICapacityContext context);
-
-        void Disconnect();
     }
 }

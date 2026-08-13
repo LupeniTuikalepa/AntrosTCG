@@ -1,4 +1,5 @@
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Cutscenes;
 using ATCG.Capacities;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,15 +18,15 @@ namespace ATCG.Editor.Tools.CapacityEditor
     {
         public static CapacityCutscene LoadStage(CapacityData capacity)
         {
-            if (capacity == null || capacity.CutsceneDirector == null)
+            if (capacity == null || capacity.Director == null)
                 return null;
 
-            GameObject prefabRoot = ResolvePrefabRoot(capacity.CutsceneDirector);
+            GameObject prefabRoot = ResolvePrefabRoot(capacity.Director);
             if (prefabRoot == null)
             {
                 Debug.LogWarning(
                     $"[CapacityTimelineEditor] Couldn't resolve the prefab for '{capacity.name}'. " +
-                    $"CutsceneDirector must reference a PlayableDirector that lives inside a prefab asset.");
+                    $"Director must reference a PlayableDirector that lives inside a prefab asset.");
                 return null;
             }
 

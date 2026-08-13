@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.Entities.Runtime;
 using ATCG.Battle.Entities.Runtime.Animations;
+using ATCG.Cutscenes;
 using ATCG.Metrics;
 using PrimeTween;
 using UnityEngine;

@@ -1,4 +1,5 @@
 using System;
+using ATCG.Cutscenes;
 using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes.QTEs;

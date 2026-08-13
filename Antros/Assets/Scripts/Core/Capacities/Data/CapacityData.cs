@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ATCG.Cutscenes;
 using ATCG.Databases;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.Capacities.Properties;
@@ -13,7 +14,7 @@ using UnityEngine.Timeline;
 
 namespace ATCG.Capacities
 {
-    public abstract class CapacityData : GameDatabaseObject, IData, IAbility
+    public abstract class CapacityData : CutsceneDefinition, IData, IAbility
     {
         [field: SerializeField, PropertyRange(0, 10), BoxGroup("Base")]
         public int Cost { get; private set; }
@@ -27,19 +28,16 @@ namespace ATCG.Capacities
         [field: SerializeField, TextArea, BoxGroup("Base")]
         public string Description { get; private set; }
 
-        [field: SerializeField, TextArea, BoxGroup("Base")]
+        [field: SerializeField, BoxGroup("Base")]
         public Sprite Icon { get; private set; }
 
         [field: BoxGroup("Base")]
         [field: SerializeField, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public PatternGroup CastPatterns { get; private set; }
 
-        // The cutscene stage as a prefab. Its PlayableDirector already owns the
-        // authored TimelineAsset (via playableAsset), so we reference the director
-        // directly rather than storing a second, redundant timeline reference.
-        [field: BoxGroup("Base")]
-        [field: SerializeField, BoxGroup("Base")]
-        public PlayableDirector CutsceneDirector { get; private set; }
+        // The cutscene stage's PlayableDirector (and its timeline) now live on the base
+        // CutsceneDefinition as Director / Timeline; existing assets that stored it under the legacy
+        // CutsceneDirector field are migrated automatically via FormerlySerializedAs on the base.
 
         // Declared, tweakable capacity properties. [SerializeReference] + Odin's
         // dropdown lets each entry be any ICapacityPropertyDefinition implementation
@@ -47,11 +45,6 @@ namespace ATCG.Capacities
         // these; only declared properties can be written at runtime.
         [field: SerializeReference, BoxGroup("Properties")]
         public List<ICapacityPropertyDefinition> PropertyDefinitions { get; private set; } = new();
-
-                // Convenience accessor: the timeline the director plays, if any.
-        public TimelineAsset CutsceneTimeline => CutsceneDirector != null
-            ? CutsceneDirector.playableAsset as TimelineAsset
-            : null;
 
         private Dictionary<string, CapacityStepData> mappedSteps;
 
@@ -76,6 +69,18 @@ namespace ATCG.Capacities
         {
             mappedSteps ??= new Dictionary<string, CapacityStepData>();
             return mappedSteps.TryGetValue(stepName, out step);
+        }
+
+        // The steps are source-generated per capacity (via MapSteps), so DeclaredSteps just exposes
+        // the mapped keys — keeping the CutsceneDefinition contract in sync with the runtime struct.
+        public override IReadOnlyList<string> DeclaredSteps
+        {
+            get
+            {
+                if (mappedSteps == null)
+                    RebuildStepMap();
+                return new List<string>(mappedSteps.Keys);
+            }
         }
     }
 }

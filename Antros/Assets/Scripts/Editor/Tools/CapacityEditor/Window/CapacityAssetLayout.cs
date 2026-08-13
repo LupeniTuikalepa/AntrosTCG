@@ -5,14 +5,15 @@ using UnityEditor;
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Resolves and creates the canonical folder layout for a capacity's cutscene
-    /// assets: Assets/Project/Capacities/{Element}/{CapacityName}/ — with the prefab
-    /// variant and its timeline living side by side. Element is read by reflection so
-    /// no hard dependency on the enum type; capacity name is the CapacityData asset name.
+    /// Resolves and creates the canonical folder layout for a capacity's cutscene stage
+    /// assets: Assets/Project/Cutscenes/Capacities/{Element}/{CapacityName}/ — with the prefab
+    /// variant and its timeline living side by side, grouped under the shared Cutscenes root by
+    /// kind. Element is read by reflection so no hard dependency on the enum type; capacity name is
+    /// the CapacityData asset name.
     /// </summary>
     public static class CapacityAssetLayout
     {
-        private const string CapacitiesRoot = "Assets/Project/Capacities";
+        private const string CapacitiesRoot = "Assets/Project/Cutscenes/Capacities";
 
         public static string CapacityName(CapacityData capacity) => capacity.name;
 

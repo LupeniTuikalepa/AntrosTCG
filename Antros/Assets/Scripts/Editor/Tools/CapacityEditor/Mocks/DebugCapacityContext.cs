@@ -1,5 +1,7 @@
 ﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Editor.Tools.CutsceneEditor;
 using ATCG.Battle.CapacitySystem.Core.Properties;
+using ATCG.Cutscenes;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Capacities;
 using ATCG.HexGrids;
@@ -23,16 +25,16 @@ namespace ATCG.Editor.Tools.CapacityEditor
             if (capacity != null)
                 bag.Declare(capacity.PropertyDefinitions);
 
-            bag.Allow<ICutsceneActor>(CapacityContextKeys.CASTER);
-            bag.Allow<ICutsceneCoordinateSolver>(CapacityContextKeys.COORDINATE_SOLVER);
-            bag.Allow<HexCoordinates>(CapacityContextKeys.CAST_POINT);
+            bag.Allow<ICutsceneActor>(CutsceneContextKeys.CASTER);
+            bag.Allow<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER);
+            bag.Allow<HexCoordinates>(CutsceneContextKeys.CAST_POINT);
 
             if (heroRoot != null)
-                InjectProperty<ICutsceneActor>(CapacityContextKeys.CASTER, new DebugCutsceneActor(heroRoot, heroAnimator));
+                InjectProperty<ICutsceneActor>(CutsceneContextKeys.CASTER, new DebugCutsceneActor(heroRoot, heroAnimator));
 
             InjectProperty<ICutsceneCoordinateSolver>(
-                CapacityContextKeys.COORDINATE_SOLVER, new PreviewCoordinateSolver());
-            InjectProperty(CapacityContextKeys.CAST_POINT, default(HexCoordinates));
+                CutsceneContextKeys.COORDINATE_SOLVER, new PreviewCoordinateSolver());
+            InjectProperty(CutsceneContextKeys.CAST_POINT, default(HexCoordinates));
 
             // Seed authored properties with their saved editor debug values (EditorPrefs),
             // so the preview starts from the last-tweaked state.

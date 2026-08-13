@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ATCG.Cutscenes;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -94,7 +95,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         private static void UpdateTimelineMarkers(CapacityData capacity, IReadOnlyList<Edit> edits)
         {
-            TimelineAsset timeline = capacity.CutsceneTimeline;
+            TimelineAsset timeline = capacity.Timeline;
             if (timeline == null)
                 return;
 

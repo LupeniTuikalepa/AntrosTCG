@@ -12,9 +12,7 @@ namespace ATCG
 {
     public class AbilitiesUIController : CardUIComponent<IGameCard>
     {
-        [ShowInInspector]
         public int ActiveTabIndex => activeTabs[CurrentActiveTabIndex];
-        [ShowInInspector]
         public AbilitiesUITab CurrentTab => tabs[ActiveTabIndex];
 
         [SerializeField]
@@ -28,17 +26,16 @@ namespace ATCG
         private Transform buttonContainer;
 
 
-        [ShowInInspector]
-        private List<int> activeTabs = new List<int>();
-
-        [ShowInInspector, ReadOnly]
+        private List<AbilitiesTabButton> buttons;
+        private List<int> activeTabs;
         public int CurrentActiveTabIndex { get; private set; }
 
-        private List<AbilitiesTabButton> buttons;
 
         protected override void Awake()
         {
+            activeTabs = new List<int>();
             buttons = new List<AbilitiesTabButton>();
+
             for (int i = 0; i < tabs.Length; i++)
             {
                 tabs[i].gameObject.SetActive(true);

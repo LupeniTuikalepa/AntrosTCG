@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: BurningWhip
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.BurningWhipData
   guidText: 66797bfa-deed-4950-a0ea-94da9809b021
+  <Director>k__BackingField: {fileID: 100585977581967798, guid: f074f7f61e97d3942a9aa9df46af13a3, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: BurningWhip
   <Element>k__BackingField: 1
   <Description>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579207565952942204
-  <CutsceneDirector>k__BackingField: {fileID: 100585977581967798, guid: f074f7f61e97d3942a9aa9df46af13a3, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <BurningStatus>k__BackingField: {fileID: 11400000, guid: 08f670709f9eb6f41a3db5a5289a3803, type: 2}
-  <IncandescenceStatus>k__BackingField: {fileID: 0}
+  <IncandescenceStatus>k__BackingField: {fileID: 11400000, guid: 0179b49d4e8f40c44b6d54e29240bf52, type: 2}
   <Range>k__BackingField: 5
   <Damage>k__BackingField: 1
   <TridentPatternData>k__BackingField:
