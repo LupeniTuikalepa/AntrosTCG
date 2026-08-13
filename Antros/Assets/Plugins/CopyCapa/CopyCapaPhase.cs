@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Threading;
+using ATCG;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
 using StealCapa;
+using StealCapa.UI;
 using UnityEngine;
 
 namespace CopyCapa
@@ -13,9 +16,9 @@ namespace CopyCapa
 	{
 		private readonly GetAllCapa panelUI;
 		private readonly EntityAddress address;
+		private readonly List<CapacityData> capacities;
 
-		public CopyCapaPhase(LocalBattlePlayer localBattlePlayer,EntityAddress address,GetAllCapa panelUI) 
-			: base(localBattlePlayer)
+		public CopyCapaPhase(LocalBattlePlayer localBattlePlayer,EntityAddress address,GetAllCapa panelUI) : base(localBattlePlayer)
 		{
 			this.address = address;
 			this.panelUI = panelUI;
@@ -23,6 +26,11 @@ namespace CopyCapa
 		protected override async Awaitable Initialize(CancellationToken token)
 		{
 			await base.Initialize(token);
+			
+			foreach (CapacityData capacityData in GameController.GameDatabase.GetAll<CapacityData>())
+			{
+				capacities.Add(capacityData);
+			}
 			
 			panelUI.gameObject.SetActive(true);
 			panelUI.PopulatePanel(this);
@@ -34,8 +42,11 @@ namespace CopyCapa
 			{
 				if(!address.TryGetComponentRO(out CapacityCasterComponent caster))
 					return;
+				
 				caster.capacities [2] = capacity;
+				address.AddOrSetComponent(caster);
 			}
+			
 			base.SetResult(capacity);
 		}
 

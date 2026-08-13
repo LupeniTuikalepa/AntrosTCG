@@ -26,6 +26,7 @@ namespace StealCapa.UI
 
 		public void Click()
 		{
+			
 			CapacityData selectedData = SelectedCapa.Current;
 
 			if (selectedData != null && phase != null)
