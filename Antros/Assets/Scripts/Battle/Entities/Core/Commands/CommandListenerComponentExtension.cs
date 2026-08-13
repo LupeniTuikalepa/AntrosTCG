@@ -37,7 +37,7 @@ namespace ATCG.Battle.Entities.Commands
                         var wrapper = new CLCWrapper<T>(callback, accept);
                         wrappers.Add(wrapper);
                     }
-                    var component = new CommandListenerComponent<T>(wrappers);
+                    var component = new CommandListenerComponent<T>(wrappers, address.world);
                     address.AddOrSetComponent(component);
                 }
             }

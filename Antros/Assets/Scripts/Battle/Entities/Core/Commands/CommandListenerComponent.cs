@@ -17,14 +17,18 @@ namespace ATCG.Battle.Entities.Commands
         
         private class Listener : ICommandListener<T>
         {
+            private readonly World world;
+
+            public Listener(World world)
+            {
+                this.world = world;
+            }
+            
             public void Trigger(CommandContext context, T command)
             {
-                foreach (var world in World.ActiveWorlds)
+                foreach (var componentRef in world.Query<CommandListenerComponent<T>>())
                 {
-                    foreach (var componentRef in world.Query<CommandListenerComponent<T>>())
-                    {
-                        componentRef.GetValue().Trigger(context, command);
-                    }
+                    componentRef.GetValue().Trigger(context, command);
                 }
             }
         }
@@ -41,7 +45,7 @@ namespace ATCG.Battle.Entities.Commands
         
         public int Count => wrappers.Count;
 
-        public CommandListenerComponent(IEnumerable<CLCWrapper<T>> wrappers)
+        public CommandListenerComponent(IEnumerable<CLCWrapper<T>> wrappers, World world)
         {
             this.wrappers = ListPool<CLCWrapper<T>>.Get();
             this.wrappers.AddRange(wrappers);
@@ -49,7 +53,7 @@ namespace ATCG.Battle.Entities.Commands
             increment++;
             if (listener == null)
             {
-                listener = new Listener();
+                listener = new Listener(world);
                 listener.Register();
             }
         }
