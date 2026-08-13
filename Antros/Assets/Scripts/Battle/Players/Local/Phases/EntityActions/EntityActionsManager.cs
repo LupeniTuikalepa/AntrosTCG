@@ -19,9 +19,11 @@ namespace ATCG.Battle
 
             if (address.Is<CapacityCasterAspect>(out var aspect))
             {
-                CapacityData[] capacities = aspect.CapacityCasterComponent.capacities;
-                for (int i = 0; i < capacities.Length; i++)
-                    actions.Add(new CastCapacityAction(player, capacities[i], aspect.GridMemberComponent.coordinates));
+	            HashSet<CapacityData> capacities = aspect.CapacityCasterComponent.capacities;
+	            foreach (var capacityData in capacities)
+	            {
+                    actions.Add(new CastCapacityAction(player, capacityData, aspect.GridMemberComponent.coordinates));
+	            }
             }
         }
     }

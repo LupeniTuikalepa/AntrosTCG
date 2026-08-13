@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Entities.Components;
+﻿using System.Collections.Generic;
+using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Capacities;
 using ATCG.HexGrids;
@@ -7,7 +8,7 @@ namespace ATCG.Battle.Entities.Aspects
 {
     public readonly partial struct CapacityCasterAspect : IEntityAspect<GridMemberComponent, CapacityCasterComponent, BattleIDOwner>
     {
-        public CapacityData[] Capacities => CapacityCasterComponent.capacities;
+        public HashSet<CapacityData> Capacities => CapacityCasterComponent.capacities;
         public HexCoordinates Coordinates => GridMemberComponent.coordinates;
         public BattleGrid BattleGrid => GridMemberComponent.grid;
     }

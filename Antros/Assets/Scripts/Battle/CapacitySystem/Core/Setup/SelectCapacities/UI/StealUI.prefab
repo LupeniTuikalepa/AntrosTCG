@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3418032878229746670}
   - component: {fileID: 1412427840151394443}
   - component: {fileID: 547005165448998724}
+  - component: {fileID: -2918490361605150104}
   m_Layer: 5
   m_Name: StealUI
   m_TagString: Untagged
@@ -116,9 +117,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47bdf8b0b6691eb43ab9f19c3a3b5bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::GetAllCapa
-  panelUI: {fileID: 3313010875516313538}
-  capaUIPrefab: {fileID: 2038528552244825562, guid: cb783a749676082408572df641bb3445, type: 3}
+  <OnPhaseBeginUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  <OnPhaseEndUnityEvent>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
+  capaUIPrefab: {fileID: -3116157418198675440, guid: cb783a749676082408572df641bb3445, type: 3}
   container: {fileID: 8745779781084055222}
+  canvasGroup: {fileID: -2918490361605150104}
+--- !u!225 &-2918490361605150104
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313010875516313538}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6304347600315302635
 GameObject:
   m_ObjectHideFlags: 0

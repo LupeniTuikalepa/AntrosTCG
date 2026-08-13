@@ -1,22 +1,17 @@
-using System.Threading.Tasks;
+using ATCG.Battle.CapacitySystem.Capacities.Setup;
 using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.Entities;
+using ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa;
+using ATCG.Battle.CapacitySystem.Core.Setup.SelectCapacities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
-using ATCG.Battle.Players.Local;
-using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Capacities;
 using ATCG.Capacities.None;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
-using CopyCapa;
-using Helteix.Tools;
-using Helteix.Tools.Phases;
-using StealCapa;
-using UnityEngine;
+using Helteix.Tools.DataMapping;
 
 namespace ATCG.Battle.CapacitySystem.Capacities.None
 {
@@ -32,31 +27,21 @@ namespace ATCG.Battle.CapacitySystem.Capacities.None
 		public void GetTargets(AssimilationData data, BattleCellAspect battleCell, CapacityTargets output,
 			IBattlePlayer castingPlayer)
 		{
-			
+			foreach (var componentRef in battleCell.GetMembers())
+			{
+				output.Add(componentRef.EntityAddress, CapacityTags.MEMBER);
+			}
 		}
-
+		
 		private partial void ExecuteAssimilation(AssimilationData data, CapacityStepContext ctx)
 		{
-			ExecuteAssimilationAsync(ctx).ListenForExceptions();
-		}
-
-		private async Awaitable ExecuteAssimilationAsync( CapacityStepContext ctx)
-		{
-			
-			if (ctx.capacityPhase.CasterPlayer is not LocalBattlePlayer localBattlePlayer)
-				return;
-
-			if (!RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(localBattlePlayer, out RuntimeLocalBattlePlayer runtimePlayer))
-				return;
-			
-			GetAllCapa panelUI = runtimePlayer.HUD.Component.CopyCapaPanel;
-			if (panelUI == null)
-				return;
-
-			CopyCapaPhase copyPhase = new CopyCapaPhase(localBattlePlayer, ctx.Caster, panelUI);
-			await copyPhase;
+			if (ctx.capacityPhase.TryGetProperty(CopyCapacitySetup.COPIED_CAPACITY, out CapacityData capacityData))
+			{
+				if (ctx.Caster.TryGetComponentRO(out CapacityCasterComponent capacityCasterComponent))
+				{
+					capacityCasterComponent.AddCapacity(capacityData);
+				}
+			}
 		}
 	}
-
-	
 }
