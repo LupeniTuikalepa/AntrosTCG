@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.Players.Local.Runtime;
 using Sirenix.OdinInspector;
+using StealCapa;
 using UnityEngine;
 
 namespace ATCG.Battle.Players.Local.UI
@@ -9,6 +10,9 @@ namespace ATCG.Battle.Players.Local.UI
     {
         [field: SerializeField]
         public Canvas Canvas { get; private set; }
+	
+        [field: SerializeField]
+        public GetAllCapa CopyCapaPanel { get;private set; }
 
         [ShowInInspector, HideInEditorMode]
         private PlayerHUDElement[] elements;

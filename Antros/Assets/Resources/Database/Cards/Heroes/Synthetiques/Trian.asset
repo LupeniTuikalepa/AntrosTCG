@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Trian
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.HeroCardData
   guidText: 2270a431-f53c-46c8-aa38-9306383610bb
-  <Title>k__BackingField: 
+  <Title>k__BackingField: Trian " Le Truan"
   <Description>k__BackingField: 
   <Element>k__BackingField: 8
   <Rarity>k__BackingField: 1
@@ -22,10 +22,10 @@ MonoBehaviour:
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 919132149155446097, guid: 00641594f76a9e047908a19455fcdfff, type: 3}
   references:
     version: 2
     RefIds:
@@ -33,4 +33,4 @@ MonoBehaviour:
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
         <Capacities>k__BackingField:
-        - {fileID: 0}
+        - {fileID: 11400000, guid: a88bdd460b7a1c849b669aa473eb6118, type: 2}

@@ -9,8 +9,6 @@ namespace StealCapa.UI
 	public class CapaSelected : MonoBehaviour
 	{
 		[field: SerializeField] public CapacityUI SelectedCapa { get; private set; }
-		
-
 		private CopyCapaPhase phase;
 
 		private void Awake()
@@ -26,7 +24,6 @@ namespace StealCapa.UI
 
 		public void Click()
 		{
-			
 			CapacityData selectedData = SelectedCapa.Current;
 
 			if (selectedData != null && phase != null)

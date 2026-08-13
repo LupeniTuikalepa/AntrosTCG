@@ -116,9 +116,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47bdf8b0b6691eb43ab9f19c3a3b5bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::GetAllCapa
+  panelUI: {fileID: 3313010875516313538}
   capaUIPrefab: {fileID: 2038528552244825562, guid: cb783a749676082408572df641bb3445, type: 3}
   container: {fileID: 8745779781084055222}
-  <Elements>k__BackingField: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
 --- !u!1 &6304347600315302635
 GameObject:
   m_ObjectHideFlags: 0

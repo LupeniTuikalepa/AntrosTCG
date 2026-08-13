@@ -13,9 +13,15 @@ namespace StealCapa
 {
 	public class GetAllCapa : MonoBehaviour
 	{
+		[SerializeField] private GameObject panelUI;
 		[SerializeField] private CapacityUI capaUIPrefab;
 		[SerializeField] private Transform container;
-		[field:SerializeField] public List<Element> Elements { get; private set; }
+
+		private void Start()
+		{
+			panelUI.SetActive(false);
+			container.ClearChildren();
+		}
 
 		public void PopulatePanel(CopyCapaPhase phase)
 		{
@@ -23,9 +29,6 @@ namespace StealCapa
           
 			foreach (CapacityData capacityData in GameController.GameDatabase.GetAll<CapacityData>())
 			{
-				if (!Elements.Contains(capacityData.Element))
-					continue;
-
 				var clone = Instantiate(capaUIPrefab, container);
 				clone.Connect(capacityData);
 				

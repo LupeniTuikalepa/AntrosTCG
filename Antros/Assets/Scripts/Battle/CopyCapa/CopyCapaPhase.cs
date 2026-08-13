@@ -16,9 +16,8 @@ namespace CopyCapa
 	{
 		private readonly GetAllCapa panelUI;
 		private readonly EntityAddress address;
-		private readonly List<CapacityData> capacities;
 
-		public CopyCapaPhase(LocalBattlePlayer localBattlePlayer,EntityAddress address,GetAllCapa panelUI) : base(localBattlePlayer)
+		public CopyCapaPhase(LocalBattlePlayer localBattlePlayer, EntityAddress address, GetAllCapa panelUI) : base(localBattlePlayer)
 		{
 			this.address = address;
 			this.panelUI = panelUI;
@@ -26,12 +25,6 @@ namespace CopyCapa
 		protected override async Awaitable Initialize(CancellationToken token)
 		{
 			await base.Initialize(token);
-			
-			foreach (CapacityData capacityData in GameController.GameDatabase.GetAll<CapacityData>())
-			{
-				capacities.Add(capacityData);
-			}
-			
 			panelUI.gameObject.SetActive(true);
 			panelUI.PopulatePanel(this);
 		}
@@ -43,8 +36,7 @@ namespace CopyCapa
 				if(!address.TryGetComponentRO(out CapacityCasterComponent caster))
 					return;
 				
-				caster.capacities [2] = capacity;
-				address.AddOrSetComponent(caster);
+				caster.capacities [1] = capacity;
 			}
 			
 			base.SetResult(capacity);
