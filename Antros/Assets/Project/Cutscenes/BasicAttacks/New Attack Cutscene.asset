@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: New Attack Cutscene
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cutscenes.AttackCutscene
   guidText: ea5235a1-1270-416a-a628-5e595e373e9e
+  <Director>k__BackingField: {fileID: 7156487838412134003, guid: 2f01c13a09a26bb43bab6bb4dd66f667, type: 3}

@@ -82,7 +82,7 @@ namespace ATCG.Editor.Tools.CutsceneEditor
             {
                 onCreated?.Invoke();
                 Close();
-                // Defer opening the stage until after this modal has fully closed, so the stage
+                // Defer only the stage opening until after this modal has fully closed, so the stage
                 // doesn't try to take over the scene view mid-teardown.
                 if (created != null && created.Director != null)
                     EditorApplication.delayCall += () => CutsceneAuthoring.Open(created);

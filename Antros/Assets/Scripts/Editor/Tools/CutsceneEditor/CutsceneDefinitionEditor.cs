@@ -23,7 +23,23 @@ namespace ATCG.Editor.Tools.CutsceneEditor
             EditorStyleLoader.Load(root, "EditorTheme.uss");
             EditorStyleLoader.Load(root, "Cutscenes.uss");
 
-            InspectorElement.FillDefaultInspector(root, serializedObject, this);
+            // Draw the serialized fields ourselves so the inherited GameDatabaseObject guid stays
+            // READ-ONLY like on every other database object — its Odin [ReadOnly] isn't honored by the
+            // UI Toolkit default inspector, which would otherwise render it as an editable field.
+            SerializedProperty it = serializedObject.GetIterator();
+            bool enter = true;
+            while (it.NextVisible(enter))
+            {
+                enter = false;
+                if (it.propertyPath == "m_Script")
+                    continue;
+
+                PropertyField field = new(it.Copy());
+                if (it.name == "guidText")
+                    field.SetEnabled(false);
+                root.Add(field);
+            }
+            root.Bind(serializedObject);
 
             CutsceneDefinition definition = (CutsceneDefinition)target;
 

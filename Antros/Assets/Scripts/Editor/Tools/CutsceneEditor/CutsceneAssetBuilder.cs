@@ -1,22 +1,41 @@
+using System;
 using System.IO;
 using ATCG.Cutscenes;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 
 namespace ATCG.Editor.Tools.CutsceneEditor
 {
     /// <summary>
-    /// One-shot builder that scaffolds a cutscene's stage next to its definition asset: a fresh
-    /// TimelineAsset and a PREFAB VARIANT of the shared director template, wired together and assigned
-    /// back onto the definition. A variant (not a copy) keeps template changes flowing to every
-    /// cutscene's stage. This is the generic counterpart of the capacity stage builder — it locates
-    /// the definition's director field by type, so it works for any cutscene kind regardless of how
-    /// that field is named.
+    /// Scaffolds and repairs a cutscene's stage assets next to its definition: the director prefab
+    /// (a VARIANT of the shared template) and a TimelineAsset wired into it, then assigns the director
+    /// onto the definition.
+    ///
+    /// Wiring the timeline is always done ASSET-SIDE (SerializedObject on the prefab's PlayableDirector
+    /// component + AssetDatabase.SaveAssets) — never via LoadPrefabContents/SavePrefabAsset, because a
+    /// variant's loaded contents are seen as a prefab instance and SavePrefabAsset then throws
+    /// "Can't save a Prefab instance". The only step that needs a prefab INSTANCE is creating a brand
+    /// new variant (SaveAsPrefabAsset only produces a variant from an instance, and instances only live
+    /// in scenes) — that instance is placed in a throwaway regular scene and torn down immediately.
+    /// Partial results are cleaned up on failure so nothing piles up.
     /// </summary>
     public static class CutsceneAssetBuilder
     {
+        /// <summary>
+        /// Optional per-type override for where a definition's stage assets (director prefab + timeline)
+        /// belong, for kinds whose definition asset lives apart from its stage — e.g. capacities, whose
+        /// data sits in Resources/Database but whose stage must live under Project/Cutscenes. Registered
+        /// by that kind's editor code so this generic builder needs no dependency back onto it; a
+        /// null/empty result falls back to the definition's own folder.
+        /// </summary>
+        public static Func<CutsceneDefinition, string> StageFolderResolver;
+
+        /// <summary>Builds the director prefab variant + timeline for a definition that has none, in
+        /// the given folder, and assigns the director back onto it.</summary>
         public static bool TryBuild(CutsceneDefinition definition, string folder, string baseName, out string message)
         {
             if (definition == null)
@@ -25,8 +44,7 @@ namespace ATCG.Editor.Tools.CutsceneEditor
                 return false;
             }
 
-            CutsceneEditorSettings settings = CutsceneEditorSettings.GetOrCreate();
-            GameObject template = settings.directorTemplate;
+            GameObject template = CutsceneEditorSettings.GetOrCreate().directorTemplate;
             if (template == null)
             {
                 message = "No director template set (Cutscenes → Settings tab).";
@@ -34,89 +52,43 @@ namespace ATCG.Editor.Tools.CutsceneEditor
             }
 
             string prefabPath = AssetDatabase.GenerateUniqueAssetPath($"{folder}/{baseName}Director.prefab");
-            string timelinePath = AssetDatabase.GenerateUniqueAssetPath($"{folder}/{baseName}Timeline.playable");
 
-            // 1. Timeline asset.
-            TimelineAsset timeline = ScriptableObject.CreateInstance<TimelineAsset>();
-            AssetDatabase.CreateAsset(timeline, timelinePath);
-
-            // 2. Prefab variant of the shared template. SaveAsPrefabAssetAndConnect is the API that
-            // accepts a prefab INSTANCE (SaveAsPrefabAsset throws "Can't save a Prefab instance"); it
-            // creates a variant of the template and returns it.
-            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(template);
             try
             {
-                GameObject variant = PrefabUtility.SaveAsPrefabAssetAndConnect(
-                    instance, prefabPath, InteractionMode.AutomatedAction);
-                if (variant == null)
+                // 1. Create the director prefab VARIANT of the template.
+                if (!TryCreateVariant(template, prefabPath, out PlayableDirector director, out message))
                 {
-                    message = "Failed to save the prefab variant.";
-                    return false;
-                }
-            }
-            finally
-            {
-                Object.DestroyImmediate(instance);
-            }
-
-            // 3. Wire the timeline into the variant's director (edit prefab contents so it persists on
-            //    the asset, not on a throwaway instance).
-            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
-            bool saved;
-            try
-            {
-                PlayableDirector director = root.GetComponentInChildren<PlayableDirector>();
-                if (director == null)
-                {
-                    message = "Template has no PlayableDirector — fix the template and retry.";
+                    AssetDatabase.DeleteAsset(prefabPath);
                     return false;
                 }
 
-                director.playableAsset = timeline;
-                saved = PrefabUtility.SavePrefabAsset(root);
-            }
-            finally
-            {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
+                // 2. Timeline (next to the director) wired in asset-side (no scene, no instance).
+                TryCreateTimelineNextTo(director, baseName, out TimelineAsset timeline);
+                SetTimelineOnDirectorAsset(director, timeline);
 
-            if (!saved)
+                // 3. Assign the director onto the definition.
+                if (!AssignDirector(definition, director))
+                {
+                    message = "Couldn't find a PlayableDirector field on the definition to assign the stage to.";
+                    return false;
+                }
+
+                AssetDatabase.SaveAssets();
+                message = $"Built cutscene stage for '{definition.name}' under {folder}.";
+                return true;
+            }
+            catch (Exception e)
             {
-                message = "Failed to save the timeline onto the prefab's PlayableDirector.";
+                AssetDatabase.DeleteAsset(prefabPath);
+                message = $"Build failed: {e.Message}";
                 return false;
             }
-
-            // Reload from disk before reading back — the earlier `variant` handle predates this save.
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            GameObject savedVariant = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-            PlayableDirector assetDirector = savedVariant != null
-                ? savedVariant.GetComponentInChildren<PlayableDirector>()
-                : null;
-
-            if (assetDirector == null)
-            {
-                message = "Prefab was saved but its PlayableDirector couldn't be reloaded — director left unassigned.";
-                return false;
-            }
-
-            // 4. Assign the variant's director back onto the definition.
-            if (!AssignDirector(definition, assetDirector))
-            {
-                message = "Couldn't find a PlayableDirector field on the definition to assign the stage to.";
-                return false;
-            }
-
-            message = $"Built cutscene stage for '{definition.name}' under {folder}.";
-            return true;
         }
 
         /// <summary>
-        /// Repairs a definition that's missing its stage references, in place (next to the asset):
-        /// a missing Director is fully rebuilt (director prefab variant + timeline), and a Director
-        /// that lost its Timeline gets a fresh one assigned. A definition that's already complete is
-        /// left untouched.
+        /// Repairs a definition missing its stage references, next to the asset: a missing Director is
+        /// fully rebuilt; a Director that lost its Timeline gets a fresh one wired into its existing
+        /// prefab. A complete definition is left untouched.
         /// </summary>
         public static bool TryFix(CutsceneDefinition definition, out string message)
         {
@@ -133,62 +105,120 @@ namespace ATCG.Editor.Tools.CutsceneEditor
                 return false;
             }
 
-            string folder = Path.GetDirectoryName(assetPath).Replace('\\', '/');
             string baseName = definition.name;
 
+            // A missing director is rebuilt into the definition's canonical STAGE folder (under
+            // Project/Cutscenes) — never the definition's own folder, which for some kinds (capacities)
+            // is Resources/Database. A missing timeline keys off the existing director instead.
             if (definition.Director == null)
-                return TryBuild(definition, folder, baseName, out message);
+                return TryBuild(definition, ResolveStageFolder(definition, assetPath), baseName, out message);
 
             if (definition.Timeline == null)
-                return TryAssignTimeline(definition, folder, baseName, out message);
+                return TryWireTimelineIntoExistingDirector(definition, baseName, out message);
 
             message = "Nothing to fix — the director and timeline are already set.";
             return false;
         }
 
-        // Creates a fresh timeline and wires it into the definition's EXISTING director prefab (used
-        // when the director is present but its timeline reference was lost).
-        private static bool TryAssignTimeline(CutsceneDefinition definition, string folder, string baseName, out string message)
+        // Where a definition's stage assets belong: the registered resolver (e.g. capacities →
+        // Project/Cutscenes/Capacities/...) if it answers, else the definition's own folder (correct
+        // for kinds whose definition already lives beside its stage, like attack cutscenes).
+        private static string ResolveStageFolder(CutsceneDefinition definition, string assetPath)
         {
-            string prefabPath = AssetDatabase.GetAssetPath(definition.Director);
-            if (string.IsNullOrEmpty(prefabPath))
+            string resolved = StageFolderResolver?.Invoke(definition);
+            return string.IsNullOrEmpty(resolved)
+                ? Path.GetDirectoryName(assetPath).Replace('\\', '/')
+                : resolved.Replace('\\', '/');
+        }
+
+        // Director present but timeline missing: create a timeline NEXT TO THE DIRECTOR PREFAB (not the
+        // definition — they can live in different folders) and wire it in asset-side (no scene, no
+        // instance — this preserves the variant).
+        private static bool TryWireTimelineIntoExistingDirector(
+            CutsceneDefinition definition, string baseName, out string message)
+        {
+            PlayableDirector director = definition.Director;
+            if (!TryCreateTimelineNextTo(director, baseName, out TimelineAsset timeline))
             {
                 message = "Director isn't a prefab asset — can't assign a timeline.";
                 return false;
             }
 
-            string timelinePath = AssetDatabase.GenerateUniqueAssetPath($"{folder}/{baseName}Timeline.playable");
-            TimelineAsset timeline = ScriptableObject.CreateInstance<TimelineAsset>();
-            AssetDatabase.CreateAsset(timeline, timelinePath);
+            SetTimelineOnDirectorAsset(director, timeline);
+            AssetDatabase.SaveAssets();
 
-            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
-            bool saved;
+            message = $"Assigned a fresh timeline to '{definition.name}'.";
+            return true;
+        }
+
+        // Creates a fresh TimelineAsset in the same folder as the director prefab, so a director and
+        // its timeline always sit together regardless of where the definition asset lives.
+        private static bool TryCreateTimelineNextTo(PlayableDirector director, string baseName, out TimelineAsset timeline)
+        {
+            timeline = null;
+            string directorPath = AssetDatabase.GetAssetPath(director);
+            if (string.IsNullOrEmpty(directorPath))
+                return false;
+
+            string folder = Path.GetDirectoryName(directorPath).Replace('\\', '/');
+            string timelinePath = AssetDatabase.GenerateUniqueAssetPath($"{folder}/{baseName}Timeline.playable");
+            timeline = ScriptableObject.CreateInstance<TimelineAsset>();
+            AssetDatabase.CreateAsset(timeline, timelinePath);
+            return true;
+        }
+
+        // Creates a prefab VARIANT of the template. A variant can only be produced from a prefab
+        // instance (SaveAsPrefabAsset), and instances only exist in scenes — so we use a throwaway
+        // regular scene (never a preview scene, which would make the save throw "Can't save a Prefab
+        // instance") and tear it down immediately. Returns the reloaded director from the saved asset.
+        private static bool TryCreateVariant(GameObject template, string prefabPath, out PlayableDirector director, out string message)
+        {
+            director = null;
+
+            Scene temp = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
+            GameObject variant;
+            bool success;
             try
             {
-                PlayableDirector director = root.GetComponentInChildren<PlayableDirector>();
-                if (director == null)
-                {
-                    message = "The director prefab has no PlayableDirector.";
-                    return false;
-                }
-
-                director.playableAsset = timeline;
-                saved = PrefabUtility.SavePrefabAsset(root);
+                GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(template, temp);
+                variant = PrefabUtility.SaveAsPrefabAsset(instance, prefabPath, out success);
+                UnityEngine.Object.DestroyImmediate(instance);
             }
             finally
             {
-                PrefabUtility.UnloadPrefabContents(root);
+                EditorSceneManager.CloseScene(temp, removeScene: true);
             }
 
-            AssetDatabase.SaveAssets();
-            message = saved
-                ? $"Assigned a fresh timeline to '{definition.name}'."
-                : "Failed to save the timeline onto the director prefab.";
-            return saved;
+            if (!success || variant == null)
+            {
+                message = "Failed to save the director prefab variant.";
+                return false;
+            }
+
+            director = variant.GetComponentInChildren<PlayableDirector>();
+            if (director == null)
+            {
+                message = "The saved director prefab has no PlayableDirector.";
+                return false;
+            }
+
+            message = null;
+            return true;
+        }
+
+        // Sets a director prefab's timeline directly on the ASSET component — no scene, no instance,
+        // no PrefabUtility.SavePrefabAsset (which rejects a variant's contents as an instance). On a
+        // variant this simply records a property override. Caller flushes with AssetDatabase.SaveAssets.
+        private static void SetTimelineOnDirectorAsset(PlayableDirector director, TimelineAsset timeline)
+        {
+            SerializedObject so = new(director);
+            so.FindProperty("m_PlayableAsset").objectReferenceValue = timeline;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(director);
         }
 
         // Finds the first serialized PlayableDirector reference on the definition (whatever its field
-        // is named) and assigns the built director to it.
+        // is named) and assigns the director to it.
         private static bool AssignDirector(CutsceneDefinition definition, PlayableDirector director)
         {
             SerializedObject so = new(definition);

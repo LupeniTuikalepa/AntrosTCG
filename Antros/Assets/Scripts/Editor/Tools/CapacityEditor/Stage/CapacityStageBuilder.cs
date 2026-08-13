@@ -1,5 +1,6 @@
 using ATCG.Capacities;
 using ATCG.Editor.Tools.CutsceneEditor;
+using UnityEditor;
 
 namespace ATCG.Editor.Tools.CapacityEditor
 {
@@ -11,6 +12,15 @@ namespace ATCG.Editor.Tools.CapacityEditor
     /// </summary>
     public static class CapacityStageBuilder
     {
+        // Teach the generic builder where a capacity's stage assets belong. A capacity's DATA lives in
+        // Resources/Database, but its stage (director prefab + timeline) must sit under
+        // Project/Cutscenes — so a generic Fix that rebuilds a missing director still lands correctly
+        // instead of dropping assets into Resources.
+        [InitializeOnLoadMethod]
+        private static void RegisterStageFolderResolver()
+            => CutsceneAssetBuilder.StageFolderResolver = definition =>
+                definition is CapacityData capacity ? CapacityAssetLayout.EnsureCapacityFolder(capacity) : null;
+
         public static bool TryBuild(CapacityData capacity, out string message)
         {
             if (capacity == null)
