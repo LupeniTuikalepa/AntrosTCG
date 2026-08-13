@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HuntOfTheSoul
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.HuntOfTheSoulData
   guidText: dc981553-794f-496a-bc96-248912b0c484
+  <Director>k__BackingField: {fileID: 8283667927984006336, guid: 56eee91ec6f0c814496718d8903ece12, type: 3}
   <Cost>k__BackingField: 0
   <Name>k__BackingField: HuntOfTheSoul
   <Element>k__BackingField: 1
@@ -21,7 +22,6 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 1442866185874964802
-  <CutsceneDirector>k__BackingField: {fileID: 8283667927984006336, guid: 56eee91ec6f0c814496718d8903ece12, type: 3}
   <PropertyDefinitions>k__BackingField: []
   <Deployable>k__BackingField: {fileID: 11400000, guid: a8190556a421feb44a91f69eb4f8e457, type: 2}
   <SpawnStepData>k__BackingField:
