@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using Unity.Scripting.LifecycleManagement;
 
 namespace ATCG.Battle.Entities
 {
     public partial class World
     {
         // ReSharper disable once InconsistentNaming
+        [AutoStaticsCleanup]
         private static readonly List<World> activeWorlds = new();
 
         /// <summary>

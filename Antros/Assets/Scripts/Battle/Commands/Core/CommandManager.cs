@@ -7,12 +7,14 @@ using ATCG.Battle.Commands.Listeners;
 using ATCG.Battle.GameModes;
 using Helteix.Singletons.MonoSingletons.Attributes;
 using Helteix.Tools;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace ATCG.Battle.Commands
 {
     [DontDestroyOnLoad]
-    public static class CommandManager
+    [AutoStaticsCleanup]
+    public static partial class CommandManager
     {
         public static IReadOnlyCollection<ICommandDirector> Listeners => CommandsListeners;
 
@@ -26,6 +28,7 @@ namespace ATCG.Battle.Commands
         {
             CommandsListeners.Clear();
             GroupsQueue.Clear();
+            CommandsWatcher.Clear();
         }
 
         public static void Run<T>(this T command, BattlePhase battlePhase) where T : ICommand
