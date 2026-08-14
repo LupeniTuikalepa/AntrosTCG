@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 258da64f506c42f4a5aaf2a68b3b3a85, type: 3}
-  m_Name: Boiler
+  m_Name: Furnace
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cards.Implementations.ConstructionCardData
-  guidText: 66564ae3-7b82-444a-993b-fe526dbd1ab9
-  <Title>k__BackingField: Boiler
+  guidText: c4036357-6598-43fb-8cf9-2906ec8cac96
+  <Title>k__BackingField: Fournaise
   <Description>k__BackingField: 
   <Element>k__BackingField: 1
   <Rarity>k__BackingField: 0
   <Capacities>k__BackingField:
-    rid: 6882996230390284334
+    rid: 1442866345543204864
   <Passives>k__BackingField:
-  - {fileID: 11400000, guid: 9ee96419ea241564a9ee62563c536a68, type: 2}
-  <Health>k__BackingField: 5
+  - {fileID: 11400000, guid: 845cb9ca759874f47a4789ba14cf967a, type: 2}
+  <Health>k__BackingField: 3
   <DeathCost>k__BackingField: 1
   <PassiveRange>k__BackingField: 3
   <DeployRange>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 6370457201449410584, guid: 6d77134fbe1f975439fe2ee5e11a066c, type: 3}
+  <Prefab>k__BackingField: {fileID: 5141903560001735719, guid: eef307fbcc078924fa762feee2d466fc, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 6882996230390284334
+    - rid: 1442866345543204864
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:
         <Capacities>k__BackingField: []

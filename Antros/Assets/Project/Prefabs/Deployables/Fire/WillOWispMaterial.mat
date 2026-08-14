@@ -137,7 +137,7 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Alpha_Clip: 0
-    - _Blend: 0
+    - _Blend: 1
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _CastShadows: 0
@@ -172,7 +172,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _Soft_Particle: 1
     - _SpecularHighlights: 1
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 1
     - _Time_Mode: 1
