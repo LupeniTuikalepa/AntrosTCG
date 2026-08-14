@@ -10,7 +10,9 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
         public override bool Build()
         {
-            return panel.Build();
+	        var build = panel.Build();
+	        gameObject.SetActive(build);
+	        return build;
         }
 
         protected override void OnClick(BaseEventData baseEventData)

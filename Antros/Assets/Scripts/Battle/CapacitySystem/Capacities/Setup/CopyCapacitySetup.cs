@@ -26,9 +26,12 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Setup
 						list.Add(capacityData);
 					}
 				}
+				
 				var result = await new SelectCapacitiesPhase(context.player,list);
+				
 				if (result.value == null)
 					return false;
+				
 				context.castCapacityPhase.InjectProperty(COPIED_CAPACITY,  result.value);
 				
 				return true;

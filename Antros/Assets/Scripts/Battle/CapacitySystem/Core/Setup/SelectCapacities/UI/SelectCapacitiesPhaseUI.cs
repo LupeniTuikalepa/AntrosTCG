@@ -14,6 +14,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa
 		[SerializeField] private Transform container;
 		[SerializeField] private CanvasGroup canvasGroup;
 
+		private SelectCapacitiesPhase current;
+		
 		private void Start()
 		{
 			canvasGroup.Hide(0f);
@@ -23,6 +25,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa
 		protected override void OnPhaseBegin(SelectCapacitiesPhase phase)
 		{
 			base.OnPhaseBegin(phase);
+			current =  phase;
 
 			canvasGroup.Show(.2f);
 			container.ClearChildren();
@@ -40,5 +43,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa
 			canvasGroup.Hide(.2f);
 			container.ClearChildren();
 		}
+
+		public void Close() => current?.SetResult(null);
 	}
 }

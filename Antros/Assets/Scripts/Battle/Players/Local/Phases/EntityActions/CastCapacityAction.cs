@@ -24,7 +24,6 @@ namespace ATCG.Battle
     public class CastCapacityAction : EntityAction
     {
         public override int ManaCost => capacityData.Cost;
-
         public readonly CapacityData capacityData;
         private readonly HexCoordinates from;
 
@@ -63,7 +62,7 @@ namespace ATCG.Battle
                     {
                         HexPatternBuilder builder = new HexPatternBuilder(memberComponent.coordinates, new BattleIgnoreOriginPatternController(battleGrid, memberComponent.coordinates));
                         container.GetHitPattern(data, ref builder, battleGrid, memberComponent.coordinates, from);
-                        using HexPatternBuilder _hp = builder;
+                        using HexPatternBuilder hp = builder;
 
                         CapacityTargets targets = new CapacityTargets();
                         foreach (var battleCellAspect in builder.GetBattleCells(battleGrid))
