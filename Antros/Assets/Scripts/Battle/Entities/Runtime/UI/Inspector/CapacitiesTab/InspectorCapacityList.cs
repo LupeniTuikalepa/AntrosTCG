@@ -23,14 +23,13 @@ namespace ATCG.Battle.Entities.Runtime.UI.Inspector.CapacitiesTab
         {
             if (phase.EntityAddress.TryGetComponentRO(out CapacityCasterComponent capacityCasterComponent))
             {
-                for (int i = 0; i <  capacityCasterComponent.capacities.Length; i++)
-                {
-                    CapacityData capacity = capacityCasterComponent.capacities[i];
-                    InspectorCapacityElement instance = capacityElementPrefab.InstantiatePrefab(container);
-                    instance.Connect(capacity);
-                }
+	            foreach (var capacity in capacityCasterComponent.capacities)
+	            {
+		            InspectorCapacityElement instance = capacityElementPrefab.InstantiatePrefab(container);
+		            instance.Connect(capacity);
+	            }
 
-                return true;
+	            return true;
             }
 
             return false;

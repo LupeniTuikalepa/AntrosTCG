@@ -1,22 +1,16 @@
-using System;
 using ATCG.Battle.CapacitySystem.Core;
-using ATCG.Battle.CapacitySystem.Core.Status;
 using ATCG.Battle.CapacitySystem.Core.Status.Commands;
-using ATCG.Battle.CapacitySystem.Status.Berserk;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.EntityCommands;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
-using ATCG.Battle.Grids.Controllers;
 using ATCG.Battle.Players;
 using ATCG.Capacities;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
-using Helteix.Tools.DataMapping;
-using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {

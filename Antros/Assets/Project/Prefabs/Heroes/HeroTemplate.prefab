@@ -503,7 +503,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2305837235066585268}
   m_Father: {fileID: 1173186091470948849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &8553951080654308950
@@ -541,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d29cde3b7f75b246b20d6427ad7b4b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.LinkedRendererMapper
-  animator: {fileID: 0}
+  animator: {fileID: 719021972812562814}
 --- !u!1 &8818436735654899738
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,3 +690,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5895a31db072ecc4f95bd4747bc89bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.LookAtCamera
+--- !u!1001 &1663982488886293288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6901710294249636606}
+    m_Modifications:
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5874912494961190400, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_Name
+      value: AnimBoy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+--- !u!95 &719021972812562814 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2228681401966277206, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+  m_PrefabInstance: {fileID: 1663982488886293288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2305837235066585268 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 641866294291526556, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+  m_PrefabInstance: {fileID: 1663982488886293288}
+  m_PrefabAsset: {fileID: 0}

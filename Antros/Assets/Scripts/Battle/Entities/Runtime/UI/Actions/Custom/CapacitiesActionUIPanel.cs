@@ -26,6 +26,7 @@ namespace ATCG.Battle.Entities.Runtime.UI.Custom
                 button.SetCapacity(capacityData);
 
             }
+            
 
             CollectButtons();
             return base.Build();

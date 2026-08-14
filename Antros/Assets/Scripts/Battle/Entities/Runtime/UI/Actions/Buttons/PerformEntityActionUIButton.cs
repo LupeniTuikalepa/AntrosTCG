@@ -16,18 +16,19 @@ namespace ATCG.Battle.Entities.Runtime.UI
         public override bool Build()
         {
             ConnectedAction = GetActionFromPhase();
-            if (ConnectedAction != null)
+            bool hasAction = ConnectedAction != null;
+            
+            gameObject.SetActive(hasAction);
+            if (hasAction)
             {
                 cost.SetCost(ConnectedAction.ManaCost);
-
-                gameObject.SetActive(true);
                 button.Interactable = RuntimeEntity.TryGetOwner(out IBattlePlayer owner) ?
                     owner.CurrentMana >= ConnectedAction.ManaCost:
                     base.IsButtonInteractable();
 
                 return true;
             }
-
+            
             return false;
         }
 

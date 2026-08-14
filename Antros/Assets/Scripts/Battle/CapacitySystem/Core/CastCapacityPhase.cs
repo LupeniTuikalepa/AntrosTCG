@@ -5,6 +5,7 @@ using System.Threading;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Directors;
 using ATCG.Battle.CapacitySystem.Core.Properties;
+using ATCG.Battle.CapacitySystem.Core.Setup;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.GameCommands.Capacities;
@@ -22,6 +23,7 @@ using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Battle.Players.Local.UI;
 using ATCG.Capacities;
+using ATCG.Capacities.Setup;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns.Building;
 using Helteix.ChanneledProperties;
@@ -98,10 +100,46 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         protected override async Awaitable ExecuteNoResult(CancellationToken token)
         {
-            using (CommandManager.BeginGroup($"[Cast Capacity] {data.Name}"))
+	       
+	        using (CommandManager.BeginGroup($"[Cast Capacity] {data.Name}"))
             {
                 if (!data.TryGet(out ICapacityContainer capacityContainer))
                     return;
+                
+                //TODO Fix setup 
+                if (CasterPlayer is LocalBattlePlayer localBattlePlayer)
+                {
+		        
+	                HexPatternBuilder patternBuilder = new HexPatternBuilder(castPoint, new BattleIgnoreOriginPatternController(battlePhase.BattleGrid, castPoint));
+	                capacityContainer.GetHitPattern(data, ref patternBuilder, battlePhase.BattleGrid, castPoint, CasterOrigin);
+	                using HexPatternBuilder _hp = patternBuilder;
+
+	                CapacityTargets targets = new CapacityTargets();
+	                foreach (BattleCellAspect battleCell in patternBuilder.GetBattleCells(battlePhase.BattleGrid))
+		                capacityContainer.GetTargets(data, battleCell, targets, CasterPlayer);
+		        
+	                for (int i = 0; i < data.Setups.Length; i++)
+	                {
+		                var setup = data.Setups[i];
+		                if (setup != null && setup.TryGet(out ICapacitySetupContainer container))
+		                {
+			                bool success = await container.Execute(setup, new CapacitySetupContext()
+			                {
+				                data = data,
+				                caster = caster,
+				                player = localBattlePlayer,
+				                battlePhase = battlePhase,
+				                castPoints = castPoint,
+				                targets = targets,
+				                castCapacityPhase = this,
+			                });
+			                
+			                if(!success)
+				                return;
+		                }
+
+	                }
+                }
 
                 // Map the capacity's steps by name. Timeline markers will pick
                 // which to run; a missing/duplicate name is a detectable error.
@@ -168,7 +206,13 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         public bool TryGetProperty<T>(string name, out T value) => properties.TryGet(name, out value);
 
-        public void InjectProperty<T>(string name, T value) => properties.Set(name, value);
+        public void InjectProperty<T>(string name, T value)
+        {
+	        if(!properties.IsDeclared(name))
+		        properties.Allow<T>(name);
+	        
+	        properties.Set(name, value);
+        }
 
         private async Awaitable OnStepReportedAsync(string stepName)
         {
@@ -231,10 +275,6 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         // ---- QteCommand listener --------------------------------------------
 
-        public async Awaitable Play(CommandDirectorState state, CommandContext context, QteCommand command)
-        {
-            throw new NotImplementedException();
-        }
 
         void ICommandDirector<QteCommand>.OnBegin(in CommandDirectorState state, CommandContext context,
             QteCommand command)

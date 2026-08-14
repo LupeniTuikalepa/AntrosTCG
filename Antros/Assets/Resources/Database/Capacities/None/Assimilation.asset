@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bd90865543649b58054593ddf24780b, type: 3}
+  m_Name: Assimilation
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.None.AssimilationData
+  guidText: c4c3317a-709f-4b4e-8edf-f498a536d9ec
+  <Director>k__BackingField: {fileID: 7309704213302244387, guid: 4c5d9a2694aa8014f94251dd7e7a52b4, type: 3}
+  <Cost>k__BackingField: 0
+  <Name>k__BackingField: Assimilation
+  <Element>k__BackingField: 9
+  <Description>k__BackingField: "Copie n'importe qu'elle capacit\xE9 du jeu"
+  <Icon>k__BackingField: {fileID: 0}
+  <CastPatterns>k__BackingField:
+    <Data>k__BackingField:
+    - rid: 3278270087064715459
+  <Setups>k__BackingField:
+  - rid: 3278270090326573264
+  <PropertyDefinitions>k__BackingField: []
+  <AssimilationStepData>k__BackingField:
+    <StepName>k__BackingField: Assimilation
+    <QTEsCount>k__BackingField: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3278270087064715459
+      type: {class: SpiralPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
+      data:
+        <IsAdditive>k__BackingField: 1
+        <OverridePatternOrigin>k__BackingField: 0
+        <Offset>k__BackingField:
+          <X>k__BackingField: 0
+          <Y>k__BackingField: 0
+        <Distance>k__BackingField: 42
+    - rid: 3278270090326573264
+      type: {class: CopyCapacitySetupData, ns: ATCG.Capacities.Setup, asm: ATCG.Core}
+      data: 

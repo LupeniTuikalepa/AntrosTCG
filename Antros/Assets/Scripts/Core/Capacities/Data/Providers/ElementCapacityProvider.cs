@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ATCG.Capacities;
+using ATCG.Capacities.Setup;
 using ATCG.Databases;
 using ATCG.Elements;
 using ATCG.Enums;
+using Helteix.Tools.DataMapping;
 using UnityEngine;
 
 namespace ATCG
@@ -15,7 +17,7 @@ namespace ATCG
         public List<Element> Elements { get; private set; }
         public IEnumerable<CapacityData> GetCapacities()
         {
-            foreach (var capacityData in GameController.GameDatabase.GetAll<CapacityData>())
+           foreach (var capacityData in GameController.GameDatabase.GetAll<CapacityData>())
             {
                 if (Elements.Contains(capacityData.Element))
                 {

@@ -1,4 +1,5 @@
-﻿using Helteix.Tools.Phases;
+﻿using ATCG.Capacities;
+using Helteix.Tools.Phases;
 
 namespace ATCG.Battle.Players.Local.Phases
 {
@@ -6,9 +7,10 @@ namespace ATCG.Battle.Players.Local.Phases
     {
         public LocalBattlePlayer LocalBattlePlayer { get; }
 
-        public LocalPlayerPhaseCompletionSource(LocalBattlePlayer localBattlePlayer)
+        public LocalPlayerPhaseCompletionSource(LocalBattlePlayer localBattlePlayer )
         {
-            LocalBattlePlayer = localBattlePlayer;
+	        LocalBattlePlayer = localBattlePlayer;
         }
+        
     }
 }

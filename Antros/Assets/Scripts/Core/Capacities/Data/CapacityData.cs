@@ -4,6 +4,7 @@ using ATCG.Cutscenes;
 using ATCG.Databases;
 using ATCG.HexGrids.Patterns.Building;
 using ATCG.Capacities.Properties;
+using ATCG.Capacities.Setup;
 using ATCG.Elements;
 using ATCG.Enums;
 using Helteix.Tools.DataMapping;
@@ -34,7 +35,11 @@ namespace ATCG.Capacities
         [field: BoxGroup("Base")]
         [field: SerializeField, Tooltip("Patterns of cells that can be selected by the player."), InlineProperty, ListDrawerSettings(ShowFoldout = false)]
         public PatternGroup CastPatterns { get; private set; }
-
+        
+        [field: BoxGroup("Base")]
+        [field: SerializeReference]
+        public CapacitySetupData[] Setups { get; private set; }
+        
         // The cutscene stage's PlayableDirector (and its timeline) now live on the base
         // CutsceneDefinition as Director / Timeline; existing assets that stored it under the legacy
         // CutsceneDirector field are migrated automatically via FormerlySerializedAs on the base.

@@ -28,8 +28,8 @@ namespace ATCG.Debugging.Debugging.Battle
 
         public TeleportEntityCheat(LocalBattlePlayer player) => this.player = player;
 
-        private IEnumerable<CheatTargetOption> Targets()
-            => CheatUtilities.EnumerateTargets<MovementComponent>(player);
+        private IEnumerable<CheatTargetOption> Targets() 
+	        => CheatUtilities.EnumerateTargets<MovementComponent>(player);
 
         public async Awaitable Execute(CheatContext context)
         {

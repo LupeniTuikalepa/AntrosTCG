@@ -18,17 +18,8 @@ MonoBehaviour:
   <MinPlayerHandSize>k__BackingField: 6
   <PlayerDeployedHeroCount>k__BackingField: 5
   <BasicAttackRange>k__BackingField: 1
-  <CardRarityDeathCost>k__BackingField:
-    pairings:
-    - <Key>k__BackingField: 0
-      <Value>k__BackingField: 1
-    - <Key>k__BackingField: 1
-      <Value>k__BackingField: 3
-    - <Key>k__BackingField: 2
-      <Value>k__BackingField: 5
-    - <Key>k__BackingField: 3
-      <Value>k__BackingField: 10
   <QTESuccessRange>k__BackingField: 0.25
+  <MaxCapacityCountBeforeChooseModal>k__BackingField: 3
   <BasicAttackCost>k__BackingField: 1
   <MovementCost>k__BackingField: 1
   <CardRarityInvocationCost>k__BackingField:
@@ -41,6 +32,16 @@ MonoBehaviour:
       <Value>k__BackingField: 5
     - <Key>k__BackingField: 3
       <Value>k__BackingField: 7
+  <CardRarityDeathCost>k__BackingField:
+    pairings:
+    - <Key>k__BackingField: 0
+      <Value>k__BackingField: 1
+    - <Key>k__BackingField: 1
+      <Value>k__BackingField: 3
+    - <Key>k__BackingField: 2
+      <Value>k__BackingField: 5
+    - <Key>k__BackingField: 3
+      <Value>k__BackingField: 10
   <PlayerBorder>k__BackingField:
     pairings:
     - <Key>k__BackingField: 0
@@ -93,71 +94,7 @@ MonoBehaviour:
   <SelectedRenderingLayer>k__BackingField:
     serializedVersion: 0
     m_Bits: 2
-  <PhaseSelectableRenderingLayer>k__BackingField:
-    serializedVersion: 0
-    m_Bits: 8
-  <PhaseUnselectableRenderingLayer>k__BackingField:
-    serializedVersion: 0
-    m_Bits: 16
-  <PhaseRelatedRenderingLayer>k__BackingField:
-    serializedVersion: 0
-    m_Bits: 32
-  <PhasePreviewRenderingLayer>k__BackingField:
-    serializedVersion: 0
-    m_Bits: 1024
   <HighlightSettings>k__BackingField: {fileID: 11400000, guid: ac6e3e29de86cd543ac6a251312300d3, type: 2}
-  <ElementInfos>k__BackingField:
-    pairings:
-    - <Key>k__BackingField: 0
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.5294118, g: 0.12156863, b: 0.14901961, a: 0}
-        <Name>k__BackingField: Time
-        <Icon>k__BackingField: {fileID: -6824308478246912681, guid: d16d10d575c7ddc4ebb4e8790e4662f5, type: 3}
-    - <Key>k__BackingField: 1
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 1, g: 0.3882353, b: 0.2784314, a: 0}
-        <Name>k__BackingField: Fire
-        <Icon>k__BackingField: {fileID: 8334651344603559088, guid: 761619111c68dab4bb4346e4ebfcabb8, type: 3}
-    - <Key>k__BackingField: 4
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.043137256, g: 0.24313726, b: 0.5176471, a: 0}
-        <Name>k__BackingField: Flow
-        <Icon>k__BackingField: {fileID: 6049605792901559095, guid: 0a789831218c8b842ae0179e3b284248, type: 3}
-    - <Key>k__BackingField: 3
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.21960784, g: 0.48235294, b: 0.3137255, a: 0}
-        <Name>k__BackingField: Life
-        <Icon>k__BackingField: {fileID: 7318292808894516236, guid: ad466e7a6aa49574dba8f100981ba00e, type: 3}
-    - <Key>k__BackingField: 5
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 1, g: 0.88235295, b: 0.44705883, a: 0}
-        <Name>k__BackingField: Thunder
-        <Icon>k__BackingField: {fileID: 6605283560793580422, guid: 2d7541f47afe30247a19a922d19f21bd, type: 3}
-    - <Key>k__BackingField: 8
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.50980395, g: 0.94509804, b: 0.8156863, a: 0}
-        <Name>k__BackingField: Construct
-        <Icon>k__BackingField: {fileID: 1242405792045360393, guid: 79968e886e804fa43b0e8d1b87a4365c, type: 3}
-    - <Key>k__BackingField: 9
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.27450982, g: 0, b: 0.15686275, a: 0}
-        <Name>k__BackingField: Unknown
-        <Icon>k__BackingField: {fileID: -2358543685353357393, guid: f334a68f9d2d5be408fc3b07886632a9, type: 3}
-    - <Key>k__BackingField: 6
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 1, g: 1, b: 0.95686275, a: 0}
-        <Name>k__BackingField: Light
-        <Icon>k__BackingField: {fileID: 9212275650587600386, guid: 1ff7464bd21a86f44a5991abb6a2c643, type: 3}
-    - <Key>k__BackingField: 2
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.4, g: 0.11372549, b: 0.7372549, a: 0}
-        <Name>k__BackingField: Darkness
-        <Icon>k__BackingField: {fileID: -741907476314299590, guid: 76bb104df0da9ac4bb481290ff443ce8, type: 3}
-    - <Key>k__BackingField: 7
-      <Value>k__BackingField:
-        <Color>k__BackingField: {r: 0.654902, g: 0.9843137, b: 1, a: 0}
-        <Name>k__BackingField: Frost
-        <Icon>k__BackingField: {fileID: 6666182957783948391, guid: 64655a38b8d139e4085fb7877fb2528d, type: 3}
   <CellLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
