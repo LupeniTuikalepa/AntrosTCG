@@ -1,4 +1,9 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+﻿using System;
+using System.Collections.Generic;
+using ATCG.Battle.CapacitySystem.Core.Cutscenes;
+using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Cutscenes;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Cutscenes;
 using ATCG.Battle.Entities.Runtime.Animations;
@@ -6,6 +11,7 @@ using ATCG.Battle.Entities.Runtime.Grid;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Battle.Players.Local.Runtime;
+using ATCG.Cards.Implementations;
 using Helteix.Tools;
 using Helteix.Tools.Phases;
 using PrimeTween;
@@ -54,8 +60,8 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
         public override async Awaitable Spawn(RuntimeEntityManager manager, HeroEntityAspect aspect)
         {
             await base.Spawn(manager, aspect);
-            var herodata = aspect.HeroCard.Data;
-            heroName.text = herodata.name;
+            HeroCardData heroData = aspect.HeroCard.Data;
+            heroName.text = heroData.name;
 
             CollectComponents();
             manager.RegisterRuntimeEntity(this);
@@ -65,7 +71,6 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
                 transform.position = cell.transform.position;
 
                 Tween.StopAll(transform);
-                await Tween.PunchScale(transform, Vector3.one * -2, .25f);
             }
 
             int playerID = BattlePhase.GetPlayerNumber(aspect.Player);
@@ -80,6 +85,25 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             if (LocalBattlePlayer.TryGetRuntime(out RuntimeLocalBattlePlayer runtimeLocalBattlePlayer))
                 cinemachineCamera.OutputChannel = runtimeLocalBattlePlayer.Camera.Component.GetOutputChannel();
+
+            DeployCutscene deployCutscene = heroData.DeployCutscene;
+
+            DeployCardSignal deployCardSignal = new DeployCardSignal(aspect.Card.ID, aspect.Coordinates, BattlePlayer);
+
+            if (deployCutscene != null)
+            {
+                await BattleCutscenes.Play(deployCutscene, BattlePhase, aspect.EntityAddress,
+                    (DeployCutscene.DEPLOYED, () =>
+                    {
+                        deployCardSignal.Run(BattlePhase);
+                    }));
+            }
+            else
+            {
+                Tween.StopAll(transform);
+                await Tween.PunchScale(transform, Vector3.one * -2, .25f);
+                deployCardSignal.Run(BattlePhase);
+            }
         }
 
         protected override void CollectComponents()

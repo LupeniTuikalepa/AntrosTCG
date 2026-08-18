@@ -103,22 +103,6 @@ MonoBehaviour:
     max: Infinity
     enumValues: []
     descendantCount: 0
-  - name: Glow Scale
-    path: Glow Scale
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector3f
-    realType: Vector3
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":12.0,"y":12.0,"z":1.0}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
   - name: Glow Fade Factor
     path: Glow Fade Factor
     tooltip: 
@@ -133,22 +117,6 @@ MonoBehaviour:
       m_SerializableObject: 1
     min: 0
     max: 1
-    enumValues: []
-    descendantCount: 0
-  - name: Glow Angle Fade
-    path: Glow Angle Fade
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector2f
-    realType: Vector2
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.0,"y":30.0}'
-    min: -Infinity
-    max: Infinity
     enumValues: []
     descendantCount: 0
   - name: Glow Texture
@@ -167,18 +135,34 @@ MonoBehaviour:
     max: Infinity
     enumValues: []
     descendantCount: 0
-  - name: Glow Lifetime
-    path: Glow Lifetime
+  - name: Glow Angle Fade
+    path: Glow Angle Fade
     tooltip: 
     space: -1
     spaceable: 0
-    sheetType: m_Float
-    realType: Single
+    sheetType: m_Vector2f
+    realType: Vector2
     defaultValue:
       m_Type:
-        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 5
+        m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      m_SerializableObject: '{"x":0.0,"y":30.0}'
+    min: -Infinity
+    max: Infinity
+    enumValues: []
+    descendantCount: 0
+  - name: Glow Scale
+    path: Glow Scale
+    tooltip: 
+    space: -1
+    spaceable: 0
+    sheetType: m_Vector3f
+    realType: Vector3
+    defaultValue:
+      m_Type:
+        m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      m_SerializableObject: '{"x":12.0,"y":12.0,"z":1.0}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -199,8 +183,24 @@ MonoBehaviour:
     max: Infinity
     enumValues: []
     descendantCount: 0
+  - name: Glow Lifetime
+    path: Glow Lifetime
+    tooltip: 
+    space: -1
+    spaceable: 0
+    sheetType: m_Float
+    realType: Single
+    defaultValue:
+      m_Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      m_SerializableObject: 5
+    min: -Infinity
+    max: Infinity
+    enumValues: []
+    descendantCount: 0
   m_ImportDependencies: []
-  m_GraphVersion: 18
+  m_GraphVersion: 19
   m_ResourceVersion: 1
   m_SubgraphDependencies: []
   m_CategoryPath: 
@@ -216,10 +216,6 @@ VisualEffectResource:
     m_RendererSettings:
       motionVectorGenerationMode: 0
       shadowCastingMode: 0
-      rayTracingMode: 0
-      receiveShadows: 0
-      reflectionProbeUsage: 0
-      lightProbeUsage: 0
     m_CullingFlags: 0
     m_UpdateMode: 0
     m_PreWarmDeltaTime: 0.05
@@ -629,6 +625,7 @@ MonoBehaviour:
   m_SubOutputs:
   - {fileID: 8926484042661614953}
   - {fileID: 8926484042661616888}
+  useBaseColorMap: 3
   colorMapping: 0
   uvMode: 0
   flipbookLayout: 0
@@ -657,7 +654,6 @@ MonoBehaviour:
   materialType: 0
   workflowMode: 0
   smoothnessSource: 0
-  useBaseColorMap: 3
   useOcclusionMap: 0
   useMetallicMap: 0
   useSpecularMap: 0
@@ -1626,7 +1622,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615644}
   m_ExposedName: Glow Fade Factor
   m_Exposed: 1
-  m_Order: 3
+  m_Order: 1
   m_Category: Glow Decal
   m_Min:
     m_Type:
@@ -1709,7 +1705,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615650}
   m_ExposedName: Glow Texture
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 2
   m_Category: Glow Decal
   m_Min:
     m_Type:
@@ -1793,7 +1789,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615656}
   m_ExposedName: Glow Angle Fade
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 3
   m_Category: Glow Decal
   m_Min:
     m_Type:
@@ -1942,7 +1938,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615668}
   m_ExposedName: Glow Scale
   m_Exposed: 1
-  m_Order: 2
+  m_Order: 4
   m_Category: Glow Decal
   m_Min:
     m_Type:
@@ -2125,7 +2121,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615678}
   m_ExposedName: Glow Color Over Life
   m_Exposed: 1
-  m_Order: 7
+  m_Order: 5
   m_Category: Glow Decal
   m_Min:
     m_Type:
@@ -2482,7 +2478,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616882}
   m_ExposedName: Delay
   m_Exposed: 1
-  m_Order: 1
+  m_Order: 6
   m_Category: 
   m_Min:
     m_Type:
@@ -2563,7 +2559,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616887}
   m_ExposedName: Glow Lifetime
   m_Exposed: 1
-  m_Order: 6
+  m_Order: 7
   m_Category: Glow Decal
   m_Min:
     m_Type:
@@ -2633,11 +2629,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081ffb0090424ba4cb05370a42ead6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UIIgnoredErrors: []
-  m_Parent: {fileID: 0}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  opaqueRenderQueue: 0
-  transparentRenderQueue: 1

@@ -109,7 +109,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _Distortion_Scale: 15
     - _DstBlend: 10
-    - _DstBlendAlpha: 0
+    - _DstBlendAlpha: 10
     - _EnvironmentReflections: 1
     - _Float: 0.3
     - _GlossMapScale: 0

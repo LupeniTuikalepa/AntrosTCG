@@ -20,7 +20,6 @@ namespace ATCG.Battle.Commands.GameCommands
 
         public DeployCardCommand(IBattleCard card, HexCoordinates destination, IBattlePlayer player)  : base(player)
         {
-            //TODO use something better, card could be shuffled
             CardId = card.ID;
             Destination = destination;
         }

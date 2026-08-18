@@ -100,16 +100,14 @@ namespace ATCG.Battle
 			        // QTE effectiveness [0,1] scales the hit; a cutscene with no QTE clips reads back
 			        // 1 (full damage), so non-QTE attacks are unchanged. Tune the mapping as needed.
 			        QteResultAccumulator qteResults = new();
-			        await BattleCutscenes.Play(attackCutscene, battlePhase, address,
-				        new Dictionary<string, Action>
-				        {
-					        [AttackCutscene.HIT] = () =>
+			        await BattleCutscenes.Play(attackCutscene, battlePhase, address, qteResults,
+					        (AttackCutscene.HIT, () =>
 					        {
 						        int scaled = Mathf.Max(0, Mathf.RoundToInt(strength * qteResults.Read()));
 						        for (int i = 0; i < targets.Length; i++)
 							        new BasicAttackCommand(address, targets[i], scaled).Run(battlePhase);
-					        }
-				        }, qteResults);
+					        })
+				        );
 		        }
 		        else
 		        {

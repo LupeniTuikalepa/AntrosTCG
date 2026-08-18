@@ -12,6 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHATEST_ON
   - _SOFT_PARTICLE
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
@@ -106,7 +107,7 @@ Material:
     - _ALPHA_MOVEMENT: 0
     - _AddPrecomputedVelocity: 0
     - _Add_Alpha_Texture_to_Albedo: 0
-    - _AlphaClip: 0
+    - _AlphaClip: 1
     - _AlphaToMask: 0
     - _Alpha_Clip: 0
     - _Alpha_Movement: 0
@@ -127,7 +128,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _Distortion_Alpha: 1
     - _DstBlend: 10
-    - _DstBlendAlpha: 0
+    - _DstBlendAlpha: 10
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -157,7 +158,7 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 2.9960785, g: 2.9960785, b: 2.9960785, a: 1}
+    - _Color: {r: 11.984314, g: 11.984314, b: 11.984314, a: 1}
     - _Color_A: {r: 1, g: 0.7541036, b: 0.2688679, a: 1}
     - _Color_B: {r: 1, g: 0.6084752, b: 0.2216981, a: 1}
     - _Distortion_Remap: {r: 0, g: 0, b: 0, a: 0}

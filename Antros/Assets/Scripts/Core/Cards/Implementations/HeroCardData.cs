@@ -30,6 +30,9 @@ namespace ATCG.Cards.Implementations
 		[field: SerializeField, BoxGroup("Cutscenes"), Tooltip("Played when this hero performs a basic attack; the Hit marker deals the damage. Optional — no cutscene means instant damage.")]
 		public AttackCutscene AttackCutscene { get; private set; }
 
+		[field: SerializeField, BoxGroup("Cutscenes"), Tooltip("Played when this hero is deployed; the Hit marker creates the entity. Optional — no cutscene means instant deploy.")]
+		public DeployCutscene DeployCutscene { get; private set; }
+
 		protected override void Reset()
 		{
 			base.Reset();

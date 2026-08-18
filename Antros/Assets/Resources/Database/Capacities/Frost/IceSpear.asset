@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: IceSpear
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Frost.IceSpearData
   guidText: 234e74e9-9172-4b55-a95d-d5d77a375ec2
+  <Director>k__BackingField: {fileID: 5965771515152154153, guid: 5b33ed854e27eb14fb5eb841ce799346, type: 3}
   <Cost>k__BackingField: 3
   <Name>k__BackingField: IceSpear
   <Element>k__BackingField: 7
   <Description>k__BackingField: "Inflige une grande quantit\xE9e de d\xE9gats \xE0
     la premi\xE8re cible visible en ligne droite. Plus elle est loin plus les d\xE9gats
     sont important."
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 6882996279235313844
-  <CutsceneDirector>k__BackingField: {fileID: 5965771515152154153, guid: 5b33ed854e27eb14fb5eb841ce799346, type: 3}
   <PropertyDefinitions>k__BackingField:
   - rid: 6758713513029403029
   <DamageRange>k__BackingField: {x: 1, y: 10}

@@ -12,14 +12,12 @@ namespace ATCG.Battle.Commands.Players
         [field: SerializeField]
         public BattleID PlayerID { get; private set; }
 
-        protected PlayerCommand(IBattlePlayer battlePlayer, string source = "None") : base(source)
+        protected PlayerCommand(IBattlePlayer battlePlayer, string source = DEFAULT_SOURCE) : base(source)
         {
             this.PlayerID = battlePlayer.GetBattleID();
         }
 
         public IBattlePlayer GetPlayer(in CommandContext context) => GetPlayer(context.battlePhase);
         public IBattlePlayer GetPlayer(BattlePhase battlePhase) => battlePhase.GetPlayer(PlayerID);
-
-
     }
 }

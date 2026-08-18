@@ -77,6 +77,8 @@ namespace ATCG.Editor.Tools.CutsceneEditor
         {
             if (type == typeof(AttackCutscene))
                 return "PhysicalAttacks";
+            if (type == typeof(DeployCutscene))
+                return "Deployments";
             return type.Name;
         }
 

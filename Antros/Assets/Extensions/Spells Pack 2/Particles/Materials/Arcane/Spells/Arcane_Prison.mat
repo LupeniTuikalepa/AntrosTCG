@@ -145,7 +145,7 @@ Material:
     - _Dissolve_Reverse_Direction: 0
     - _Dissolve_Scale: 25
     - _DstBlend: 10
-    - _DstBlendAlpha: 0
+    - _DstBlendAlpha: 10
     - _EMISSION: 1
     - _Emission: 1
     - _EnvironmentReflections: 1
