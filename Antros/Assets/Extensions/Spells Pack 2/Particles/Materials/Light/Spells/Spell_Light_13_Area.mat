@@ -44,18 +44,22 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _Alpha_Clip: 0.5
     - _Blend: 2
     - _CastShadows: 0
     - _Cull: 2
     - _DstBlend: 1
+    - _DstBlendAlpha: 1
     - _Noise_1_Scale: 10
     - _Noise_2_Scale: 10
+    - _Normal_Vector_UV: 1
     - _Opacity: 3.6
     - _Power_A: 0.86
     - _Power_B: 0.28
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0

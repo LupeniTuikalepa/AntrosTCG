@@ -158,7 +158,7 @@ Material:
     - _DrawOrder: 0
     - _DstBlend: 10
     - _DstBlend2: 10
-    - _DstBlendAlpha: 0
+    - _DstBlendAlpha: 10
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
     - _EnvironmentReflections: 1
