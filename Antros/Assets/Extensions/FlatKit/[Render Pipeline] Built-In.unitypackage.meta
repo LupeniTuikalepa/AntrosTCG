@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 143368
   packageName: 'Flat Kit: Toon Shading and Water'
-  packageVersion: 4.9.11
-  assetPath: Assets/FlatKit/[Render Pipeline] Built-In.unitypackage
-  uploadId: 938858
+  packageVersion: 4.9.12
+  assetPath: Assets/Extensions/FlatKit/[Render Pipeline] Built-In.unitypackage
+  uploadId: 970414
