@@ -407,7 +407,7 @@ namespace ATCG.Editor.Tools.Characters
         private static Volume FindGlobalVolume()
         {
             Volume best = null;
-            foreach (Volume v in UnityEngine.Object.FindObjectsByType<Volume>(FindObjectsSortMode.None))
+            foreach (Volume v in UnityEngine.Object.FindObjectsByType<Volume>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
                 if (!v.isGlobal || v.sharedProfile == null)
                     continue;

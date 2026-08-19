@@ -21,7 +21,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
         private readonly CastCapacityPhase phase;
         private readonly CapacityPropertyBag local = new();
 
-        public CutsceneCapacityContext(CastCapacityPhase phase, RuntimeLocalBattlePlayer screenPlayer)
+        public CutsceneCapacityContext(CastCapacityPhase phase, RuntimeLocalBattlePlayer screenPlayer, IQteResultReceiver qteReceiver = null)
         {
             this.phase = phase;
 
@@ -31,11 +31,13 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
             local.Allow<HexCoordinates>(CutsceneContextKeys.CAST_POINT);
             local.Allow<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER);
             local.Allow<ICutsceneActor>(CutsceneContextKeys.CASTER);
+            local.Allow<IQteResultReceiver>(CutsceneContextKeys.QTE_RECEIVER);
 
             local.Set(CutsceneContextKeys.SCREEN_PLAYER, screenPlayer);
             local.Set(CutsceneContextKeys.CASTER_ADDRESS, phase.caster);
             local.Set(CutsceneContextKeys.CAST_POINT, phase.castPoint);
             local.Set<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER, new GridCoordinateSolver(screenPlayer));
+            local.Set(CutsceneContextKeys.QTE_RECEIVER, qteReceiver);
 
             if (phase.TryGetRuntimeCaster(screenPlayer, out IRuntimeEntity caster) && caster is ICutsceneActor actor)
                 local.Set(CutsceneContextKeys.CASTER, actor);

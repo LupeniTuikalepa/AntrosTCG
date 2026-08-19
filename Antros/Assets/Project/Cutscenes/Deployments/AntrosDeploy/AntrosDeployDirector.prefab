@@ -52,7 +52,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -109,7 +109,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 1632249579
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -865,7 +865,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -4888,7 +4888,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -4945,7 +4945,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 2100048806
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -9755,45 +9755,63 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: -2.117
+        x: -2.367
         y: 0.57
-        z: 0.575
+        z: 0.825
       TangentIn:
         x: 0
         y: 0
-        z: -1.8227334
+        z: -1.8966401
       TangentOut:
         x: 0
         y: 0
-        z: 1.8227334
+        z: 1.8966401
       Rotation:
         value:
-          x: 0.035758216
-          y: 0.3796412
-          z: -0.010832682
-          w: 0.92437905
+          x: 0.05198212
+          y: 0.43785763
+          z: -0.014877566
+          w: 0.89741695
     - Position:
-        x: 0.786
+        x: 0.48
         y: 0.52
-        z: 2.235
+        z: 2.34
       TangentIn:
         x: 0
         y: 0
-        z: -1.0254134
+        z: -0.95274806
       TangentOut:
         x: 0
         y: 0
-        z: 1.0254134
+        z: 0.95274806
       Rotation:
         value:
-          x: -0.045024615
-          y: 0.8013885
-          z: 0.060975667
-          w: 0.59332216
+          x: -0.034108773
+          y: 0.6986051
+          z: 0.123383366
+          w: 0.70396304
     - Position:
-        x: 3.7
+        x: 2.66
         y: 1.5
-        z: -1.2
+        z: 0.68
+      TangentIn:
+        x: 0
+        y: 0
+        z: -1.059069
+      TangentOut:
+        x: 0
+        y: 0
+        z: 1.059069
+      Rotation:
+        value:
+          x: -0.17348288
+          y: 0.96433985
+          z: 0.07432583
+          w: 0.18554783
+    - Position:
+        x: 2.62
+        y: 1.5
+        z: -2.78
       TangentIn:
         x: 0
         y: 0
@@ -9804,11 +9822,13 @@ MonoBehaviour:
         z: 0
       Rotation:
         value:
-          x: 0.04725096
-          y: -4.7367993e-10
-          z: 0.17702463
-          w: 0.98307145
+          x: 0.056133207
+          y: 0
+          z: 0.2066246
+          w: 0.9768087
     m_MetaData:
+    - Mode: 2
+      Tension: 0.5
     - Mode: 2
       Tension: 0.5
     - Mode: 2
@@ -24579,7 +24599,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -24636,7 +24656,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 1924568662
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -29528,7 +29548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4468437150292991759
 Transform:
   m_ObjectHideFlags: 0
@@ -34460,7 +34480,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -34517,7 +34537,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -307034577
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -39308,7 +39328,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -39365,7 +39385,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -1441656643
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -44165,7 +44185,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -44222,7 +44242,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 1506860417
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -44978,7 +44998,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -53885,7 +53905,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6086306912264363798
 Transform:
   m_ObjectHideFlags: 0
@@ -53921,7 +53941,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -53978,7 +53998,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -700741757
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -54734,7 +54754,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -68797,7 +68817,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -68854,7 +68874,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -1305943993
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -73645,7 +73665,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -73702,7 +73722,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -1030157468
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -83419,7 +83439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8375478419195700788
 Transform:
   m_ObjectHideFlags: 0
@@ -83455,7 +83475,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -83512,7 +83532,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 680696329
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -88305,7 +88325,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -88362,7 +88382,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -513116236
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -89118,7 +89138,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -93309,7 +93329,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -93366,7 +93386,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: -198738123
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -94122,7 +94142,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -98174,8 +98194,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6151568288936203103}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07455291, y: 0.80739295, z: -0.104525134, w: 0.5758759}
-  m_LocalPosition: {x: -2.003351, y: 0.5579573, z: 0.68992686}
+  m_LocalRotation: {x: 0.19127662, y: -0.6355841, z: 0.16673382, w: 0.7291406}
+  m_LocalPosition: {x: 2.8051481, y: 1.5954524, z: -0.38642052}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -98238,7 +98258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineSplineDolly
   m_SplineSettings:
     Spline: {fileID: 5254569228563680313}
-    Position: 0.019736841
+    Position: 0.7565789
     Units: 1
   SplineOffset: {x: 0, y: 0, z: 0}
   CameraRotation: 0
@@ -98283,10 +98303,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
-  NoiseProfile: {fileID: 0}
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 1
-  FrequencyGain: 1
+  AmplitudeGain: 3
+  FrequencyGain: 4
   m_NoiseOffsets: {x: 185.19724, y: 558.77734, z: 639.6284}
 --- !u!114 &9165027703730580274
 MonoBehaviour:
@@ -98359,7 +98379,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -98416,7 +98436,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: -1609524893
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -103217,7 +103237,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -103274,7 +103294,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 908073148
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -108221,7 +108241,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -108278,7 +108298,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 902991210
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -113078,7 +113098,7 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -113135,7 +113155,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 2007873361
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -117940,9 +117960,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5545076375984052211}
     m_Modifications:
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 693321781
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1659305094094612827, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_Name
       value: Bifrost_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -1550821540
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalScale.x
@@ -117991,6 +118027,30 @@ PrefabInstance:
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -180
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -1243057075
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1330739809
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1177563806
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -118299,9 +118359,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5545076375984052211}
     m_Modifications:
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1566170483
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1659305094094612827, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_Name
       value: Bifrost_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -2142588170
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalScale.x
@@ -118351,6 +118427,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1098129428
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1648517169
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -1513070402
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -118369,9 +118469,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5545076375984052211}
     m_Modifications:
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -1852397227
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1659305094094612827, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_Name
       value: Bifrost_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -2059324048
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalScale.x
@@ -118420,6 +118536,30 @@ PrefabInstance:
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1297686262
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 993879208
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -593139203
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -118492,6 +118632,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 362367530180619067, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -1544673506
+      objectReference: {fileID: 0}
+    - target: {fileID: 362367530180619067, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 362367530180619067, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.7294118
       objectReference: {fileID: 0}
@@ -118504,6 +118652,14 @@ PrefabInstance:
       value: 0.95596856
       objectReference: {fileID: 0}
     - target: {fileID: 899796852143142905, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 789244653
+      objectReference: {fileID: 0}
+    - target: {fileID: 899796852143142905, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 899796852143142905, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.5921569
       objectReference: {fileID: 0}
@@ -118514,6 +118670,14 @@ PrefabInstance:
     - target: {fileID: 899796852143142905, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.9252161
+      objectReference: {fileID: 0}
+    - target: {fileID: 2487312436675635851, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 1697707802
+      objectReference: {fileID: 0}
+    - target: {fileID: 2487312436675635851, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2487312436675635851, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
@@ -118540,6 +118704,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3506665649516633249, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -26611133
+      objectReference: {fileID: 0}
+    - target: {fileID: 3506665649516633249, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3506665649516633249, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -118552,13 +118724,37 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3519413185776869054, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 1364821137
+      objectReference: {fileID: 0}
+    - target: {fileID: 3519413185776869054, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3519413185776869054, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: ShapeModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799258063745622799, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -1359469432
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799258063745622799, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4985469720801528007, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 16a62ee79dfbd7d41ad1b743b4d921ec, type: 2}
+    - target: {fileID: 5214826799950294593, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -327230839
+      objectReference: {fileID: 0}
+    - target: {fileID: 5214826799950294593, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5214826799950294593, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.5921569
@@ -118570,6 +118766,14 @@ PrefabInstance:
     - target: {fileID: 5214826799950294593, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.9252161
+      objectReference: {fileID: 0}
+    - target: {fileID: 6060927844844380394, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 511402747
+      objectReference: {fileID: 0}
+    - target: {fileID: 6060927844844380394, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6060927844844380394, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
@@ -118586,6 +118790,14 @@ PrefabInstance:
     - target: {fileID: 6060927844844380394, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.93920124
+      objectReference: {fileID: 0}
+    - target: {fileID: 6093294506191963167, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 1375590828
+      objectReference: {fileID: 0}
+    - target: {fileID: 6093294506191963167, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6093294506191963167, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
@@ -118660,6 +118872,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7314155788754700795, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -93525042
+      objectReference: {fileID: 0}
+    - target: {fileID: 7314155788754700795, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7314155788754700795, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.6745098
       objectReference: {fileID: 0}
@@ -118672,6 +118892,14 @@ PrefabInstance:
       value: 0.9264178
       objectReference: {fileID: 0}
     - target: {fileID: 7354406299342440763, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 927106913
+      objectReference: {fileID: 0}
+    - target: {fileID: 7354406299342440763, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7354406299342440763, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.5764706
       objectReference: {fileID: 0}
@@ -118682,6 +118910,14 @@ PrefabInstance:
     - target: {fileID: 7354406299342440763, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.83137256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7720541887546731280, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: 1689071001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7720541887546731280, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7720541887546731280, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
@@ -118701,6 +118937,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8135490585410136246, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8452720063586404356, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -291780250
+      objectReference: {fileID: 0}
+    - target: {fileID: 8452720063586404356, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8452720063586404356, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
@@ -118716,6 +118960,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8474077560660747016, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -15385720
+      objectReference: {fileID: 0}
+    - target: {fileID: 8474077560660747016, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8474077560660747016, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.43529415
       objectReference: {fileID: 0}
@@ -118728,12 +118980,28 @@ PrefabInstance:
       value: 0.91504467
       objectReference: {fileID: 0}
     - target: {fileID: 8537724459905299112, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -818843279
+      objectReference: {fileID: 0}
+    - target: {fileID: 8537724459905299112, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8537724459905299112, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: UVModule.tilesX
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8537724459905299112, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: UVModule.tilesY
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8953846243030649706, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: randomSeed
+      value: -1467503748
+      objectReference: {fileID: 0}
+    - target: {fileID: 8953846243030649706, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8953846243030649706, guid: 2d240b2316d14be438c323d6ee6bcfb6, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
@@ -118771,9 +119039,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5545076375984052211}
     m_Modifications:
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 518556827
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647352917393278667, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1659305094094612827, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_Name
       value: Bifrost
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -1064699320
+      objectReference: {fileID: 0}
+    - target: {fileID: 2888644948045373389, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalScale.x
@@ -118822,6 +119106,30 @@ PrefabInstance:
     - target: {fileID: 3188723078221577413, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -135
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1408046094
+      objectReference: {fileID: 0}
+    - target: {fileID: 3828122425883787910, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: -1284722494
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162499709859039860, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: randomSeed
+      value: 1736322349
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917830567097438313, guid: b3d7b2aa3fc7bb841bb2bb644e55c026, type: 3}
+      propertyPath: autoRandomSeed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
