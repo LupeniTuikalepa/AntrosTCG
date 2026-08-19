@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Kamikaze
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.ExplosionData.KamikazeData
   guidText: 09c2668a-67ff-4b4c-8d7b-8d6ac10e6778
+  <Director>k__BackingField: {fileID: 2261353096448047436, guid: 01d7d023234f2bc45ad20844b19f2021, type: 3}
   <Cost>k__BackingField: 0
   <Name>k__BackingField: Kamikaze
   <Element>k__BackingField: 1
   <Description>k__BackingField: Sacrifie toi pour ton Lord Comandant !
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579208045788397569
-  <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: 01d7d023234f2bc45ad20844b19f2021, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: f9ef9dcaaae739b418e39c75f4adc980, type: 2}
   <Range>k__BackingField: 1

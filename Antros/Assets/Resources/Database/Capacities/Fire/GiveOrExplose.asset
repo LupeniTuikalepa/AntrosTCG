@@ -24,15 +24,16 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579208045788397570
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <PunchDamage>k__BackingField: 1
   <Status>k__BackingField: {fileID: 11400000, guid: f9ef9dcaaae739b418e39c75f4adc980, type: 2}
   <Range>k__BackingField: 1
   <HitStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Hit
     <QTEsCount>k__BackingField: 0
   <GiveOrExploseStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: GiveOrExplose
     <QTEsCount>k__BackingField: 0
   references:
     version: 2

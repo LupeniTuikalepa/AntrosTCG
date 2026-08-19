@@ -13,16 +13,18 @@ MonoBehaviour:
   m_Name: ChargeExplosion
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.ExplosionData.ChargeExplosionData
   guidText: 35251e9f-8464-4c64-8551-25c3a5c4e656
+  <Director>k__BackingField: {fileID: 2261353096448047436, guid: 793c1bbed0e141e409a2ca082bc10490, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Charge Explosion
   <Element>k__BackingField: 1
   <Description>k__BackingField: "Ajoute l'etat explosif au hero s\xE9l\xE9ction\xE9.
     Si le Hero qui \xE0 l'\xE9tat explosion ce voit prendre des domages l'explosion
     s'active infligeant -5 Pv \xE0u hero et -3Pv aux alli\xE9s proche de lui"
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579208045788397568
-  <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: 793c1bbed0e141e409a2ca082bc10490, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: f9ef9dcaaae739b418e39c75f4adc980, type: 2}
   <Range>k__BackingField: 1

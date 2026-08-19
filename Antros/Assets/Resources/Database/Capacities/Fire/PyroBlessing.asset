@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: PyroBlessing
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.PyroBlessingData
   guidText: 4a3b74cd-4376-44b0-bcad-0030d86caaf8
+  <Director>k__BackingField: {fileID: 2261353096448047436, guid: d7d69fc76be6c82489fe4e8f3e5cb555, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Pyro Bleesing
   <Element>k__BackingField: 1
   <Description>k__BackingField: For God's sake, give one of your heroes the power
     against life.
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579207679704563712
-  <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: d7d69fc76be6c82489fe4e8f3e5cb555, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 31c6e13350ce4634888c35b2c0fcf924, type: 2}
   <PyroBlessingStepData>k__BackingField:

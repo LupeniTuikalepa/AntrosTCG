@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -1360751382, guid: 448d62fcada76fd4ab5702190add98fd, type: 3}
-  m_Name: BurningWhipUiMotionSynty
+  m_Name: KamikazeUiMotionSynty
   m_EditorClassIdentifier: UMotionEditor.dll::UMotionEditor.Model.FileFormats.Project.V01_02.UMotionProjectFileV01_02
   EditorState:
     EditMode:
@@ -30,7 +30,7 @@ MonoBehaviour:
     ConfigToolMode:
       valueInternal: 2
     OpenedClipIndex:
-      valueInternal: 2
+      valueInternal: 1
     SelectedFrame:
       valueInternal: 0
     TimelineViewMode:
@@ -38,9 +38,9 @@ MonoBehaviour:
     FramesScrollPosition:
       valueInternal: -40
     FramesZoom:
-      valueInternal: 0.13489649
+      valueInternal: 0.07244375
     PropertiesScrollPosition:
-      valueInternal: 176
+      valueInternal: 3332
     PropertiesZoom:
       valueInternal: 1
     CurveYScrollPosition:
@@ -133,7 +133,7 @@ MonoBehaviour:
     AnimationLayersVisible:
       valueInternal: 0
     MuscleAssistantTab:
-      valueInternal: 0
+      valueInternal: 2
     MuscleAssistantLeftLegKeepPos:
       valueInternal: 0
     MuscleAssistantRightLegKeepPos:
@@ -26239,7 +26239,7 @@ MonoBehaviour:
     EventList: []
   - Settings:
       Name:
-        valueInternal: BurningWhip
+        valueInternal: Kamikaze
       Framerate:
         valueInternal: 60
       Loop:
@@ -26270,52 +26270,7 @@ MonoBehaviour:
       StartFrame:
         valueInternal: 0
       EndFrame:
-        valueInternal: 253
-      Speed:
-        valueInternal: 1
-      Loop:
-        valueInternal: 0
-      RootMotion:
-        valueInternal: 1
-      PlayFromBeginning:
-        valueInternal: 0
-      StopReturnToStart:
-        valueInternal: 1
-    EventList: []
-  - Settings:
-      Name:
-        valueInternal: BurningWhip_1
-      Framerate:
-        valueInternal: 60
-      Loop:
-        valueInternal: 0
-      GenerateHumanoidMotionCurves:
-        valueInternal: 0
-      HumanoidRootRotationBake:
-        valueInternal: 0
-      HumanoidRootYBake:
-        valueInternal: 0
-      HumanoidRootXZBake:
-        valueInternal: 0
-      RootMotion:
-        Translation:
-          valueInternal: 0
-        Rotation:
-          valueInternal: 0
-        AnimatedObject:
-          valueInternal:
-            Address: 
-            Length: 0
-    LayerList: []
-    SelectedLayerIndex:
-      valueInternal: 0
-    SampledRootMotionMultiplier:
-      valueInternal: 0
-    Playback:
-      StartFrame:
-        valueInternal: 0
-      EndFrame:
-        valueInternal: 270
+        valueInternal: 305
       Speed:
         valueInternal: 1
       Loop:
