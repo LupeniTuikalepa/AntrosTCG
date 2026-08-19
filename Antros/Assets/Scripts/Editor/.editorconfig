@@ -1,0 +1,11 @@
+# Unity's domain-reload analyzers (UDR*) target RUNTIME static state to support "Enter Play Mode
+# without Domain Reload". They don't apply to editor-only tooling, where static caches and
+# tool-lifetime event subscriptions are intentional. Silence them under Assets/Scripts/Editor so real
+# warnings stay visible. Third-party code (Extensions, FlatKit, Synty, …) lives elsewhere and is
+# unaffected.
+
+[*.cs]
+# No RuntimeInitializeOnLoadMethod reset for a static field.
+dotnet_diagnostic.UDR0001.severity = none
+# Non-static method subscribed to a static event and not deregistered.
+dotnet_diagnostic.UDR0004.severity = none

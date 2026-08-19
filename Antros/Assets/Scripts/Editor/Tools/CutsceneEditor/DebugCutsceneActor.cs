@@ -27,9 +27,14 @@ namespace ATCG.Editor.Tools.CutsceneEditor
                 ? root.GetComponentsInChildren<LinkedRenderer>(true)
                 : System.Array.Empty<LinkedRenderer>());
         }
-        public async Awaitable LookAtCoord(HexCoordinates coordinates, float duration)
+        public Awaitable LookAtCoord(HexCoordinates coordinates, float duration)
         {
             transform.forward = Vector3.forward;
+
+            // No async work here, but the signature is awaitable — hand back a completed Awaitable.
+            AwaitableCompletionSource source = new();
+            source.SetResult();
+            return source.Awaitable;
         }
     }
 }

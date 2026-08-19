@@ -1,0 +1,98 @@
+.characters-root {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.characters-content {
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.characters-view {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+
+/* Sub-tab bar */
+.characters-subtabs {
+    flex-direction: row;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.35);
+}
+
+.characters-subtab {
+    min-height: 26px;
+    padding-left: 14px;
+    padding-right: 14px;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.characters-subtab--active {
+    background-color: rgba(255, 255, 255, 0.08);
+    -unity-font-style: bold;
+}
+
+/* Action bar */
+.characters-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 6px;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.characters-btn {
+    min-height: 26px;
+    margin-right: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.characters-btn--primary {
+    -unity-font-style: bold;
+}
+
+.characters-auto {
+    align-items: center;
+    margin-right: 6px;
+}
+
+/* Preview */
+.characters-preview {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 6px;
+    background-color: rgb(36, 38, 43);
+    border-radius: 4px;
+}
+
+.characters-status {
+    padding: 6px 8px;
+    white-space: normal;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Explore list */
+.characters-sk-list {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 6px;
+}
+
+.characters-sk-row {
+    padding-left: 6px;
+    -unity-text-align: middle-left;
+}
+
+/* Settings */
+.characters-settings {
+    padding: 10px;
+}
+
+.characters-settings-field {
+    margin-bottom: 8px;
+}
