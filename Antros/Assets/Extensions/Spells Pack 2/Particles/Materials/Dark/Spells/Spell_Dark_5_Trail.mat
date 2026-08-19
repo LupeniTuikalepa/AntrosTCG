@@ -88,6 +88,7 @@ Material:
     - _DISTORTION: 1
     - _Distortion_Scale: 15
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Middle_Beam_Radius: 0.04
     - _Noises_Blend: 0.5
     - _QueueControl: 0
@@ -95,6 +96,7 @@ Material:
     - _SOFT_PARTICLE: 1
     - _Soft_Particle: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _Time_Mode: 1
     - _Trail_Mode: 1

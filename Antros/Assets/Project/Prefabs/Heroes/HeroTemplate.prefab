@@ -504,6 +504,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2916507889298126128}
   - {fileID: 2305837235066585268}
   m_Father: {fileID: 1173186091470948849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -690,6 +691,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5895a31db072ecc4f95bd4747bc89bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.LookAtCamera
+--- !u!1001 &988217352833199245
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6901710294249636606}
+    m_Modifications:
+    - target: {fileID: 1209014482031769964, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_Name
+      value: Antros
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5580548102301528524, guid: 534f75a2aec155641805525b27d30508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3723306739331958730}
+  m_SourcePrefab: {fileID: 100100000, guid: 534f75a2aec155641805525b27d30508, type: 3}
+--- !u!4 &2916507889298126128 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2724499702031767997, guid: 534f75a2aec155641805525b27d30508, type: 3}
+  m_PrefabInstance: {fileID: 988217352833199245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4667080087703018817 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5580548102301528524, guid: 534f75a2aec155641805525b27d30508, type: 3}
+  m_PrefabInstance: {fileID: 988217352833199245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3723306739331958730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4667080087703018817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e2ab843c1e7e944b244838deb3d77b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.VFX.LinkedRenderer
+  <Key>k__BackingField: -1
+  <Renderer>k__BackingField: {fileID: 5472276336918374015}
+--- !u!137 &5472276336918374015 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5064214388059425522, guid: 534f75a2aec155641805525b27d30508, type: 3}
+  m_PrefabInstance: {fileID: 988217352833199245}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1663982488886293288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -741,6 +831,10 @@ PrefabInstance:
     - target: {fileID: 5874912494961190400, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
       propertyPath: m_Name
       value: AnimBoy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5874912494961190400, guid: 8e3e29e71934a5f4abb8e38495a6fec6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

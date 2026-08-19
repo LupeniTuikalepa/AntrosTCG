@@ -126,7 +126,7 @@ Material:
     - _Distortion_Range: 1
     - _Distortion_Scale: 25
     - _DstBlend: 1
-    - _DstBlendAlpha: 0
+    - _DstBlendAlpha: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
