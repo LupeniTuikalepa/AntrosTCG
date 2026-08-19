@@ -608,7 +608,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5914481224522675174}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06645875, y: -0.36698818, z: 0.02629672, w: 0.92747587}
+  m_LocalRotation: {x: 0.06645877, y: -0.36698818, z: 0.026296731, w: 0.92747587}
   m_LocalPosition: {x: 2.06, y: 1.21, z: -1.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -753,7 +753,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7045488843554462542}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07493181, y: -0.41502914, z: 0.03432293, w: 0.9060674}
+  m_LocalRotation: {x: 0.074931815, y: -0.41502908, z: 0.03432293, w: 0.9060674}
   m_LocalPosition: {x: 1.93, y: 1.21, z: -0.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1321,7 +1321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5104610119300897145, guid: b4f93321faac5f042aed0a393d5edcad, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5104610119300897147, guid: b4f93321faac5f042aed0a393d5edcad, type: 3}
       propertyPath: EmissionModule.enabled
@@ -1333,6 +1333,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5104610120041289063, guid: b4f93321faac5f042aed0a393d5edcad, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104610120462101735, guid: b4f93321faac5f042aed0a393d5edcad, type: 3}
+      propertyPath: EmissionModule.enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5104610120530750177, guid: b4f93321faac5f042aed0a393d5edcad, type: 3}

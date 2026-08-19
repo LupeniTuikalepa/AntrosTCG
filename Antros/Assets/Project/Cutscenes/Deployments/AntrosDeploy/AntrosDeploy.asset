@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6f1000b8976c945bf2554313b6db4c, type: 3}
   m_Name: AntrosDeploy
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cutscenes.DeployCutscene
-  guidText: f2966733-877f-40fc-8584-b6350e1cd34c
+  guidText: 3b15a93b-4b3a-41ed-81d4-6c6becaad4cd
   <Director>k__BackingField: {fileID: 8478171626322065912, guid: 098c071ff55adcf4b8dfc5f65101613e, type: 3}
