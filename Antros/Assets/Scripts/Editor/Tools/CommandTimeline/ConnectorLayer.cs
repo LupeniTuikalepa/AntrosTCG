@@ -26,7 +26,7 @@ namespace ATCG.Editor.Editor.Commands
             generateVisualContent += OnGenerate;
         }
 
-        public void Clear()
+        public new void Clear()
         {
             links.Clear();
             MarkDirtyRepaint();

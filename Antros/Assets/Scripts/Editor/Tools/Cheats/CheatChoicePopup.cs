@@ -56,7 +56,7 @@ namespace ATCG.Editor.Tools.Cheats
                 selectionType = SelectionType.Single,
                 style = { flexGrow = 1, minHeight = 0 },
             };
-            list.onItemsChosen += chosen => // double-click / Enter
+            list.itemsChosen += chosen => // double-click / Enter
             {
                 if (chosen.FirstOrDefault() is string s)
                     Resolve(s);

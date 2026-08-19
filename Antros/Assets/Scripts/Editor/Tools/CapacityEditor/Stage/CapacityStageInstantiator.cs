@@ -46,7 +46,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
         // present is the one just instantiated (the DebugCutsceneRig has no director).
         public static PlayableDirector FindActiveDirector()
         {
-            return Object.FindFirstObjectByType<PlayableDirector>();
+            return Object.FindAnyObjectByType<PlayableDirector>();
         }
 
         private static GameObject ResolvePrefabRoot(PlayableDirector director)

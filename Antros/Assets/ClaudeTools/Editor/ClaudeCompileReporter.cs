@@ -19,8 +19,6 @@ namespace ClaudeTools
     [InitializeOnLoad]
     public static class ClaudeCompileReporter
     {
-        // reporter self-test trigger — safe to delete
-
 
         private static readonly string LogPath =
             Path.Combine(Directory.GetParent(Application.dataPath).FullName, "Logs", "claude-compile.log");

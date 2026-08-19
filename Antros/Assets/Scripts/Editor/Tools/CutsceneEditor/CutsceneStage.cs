@@ -115,7 +115,7 @@ namespace ATCG.Editor.Tools.CutsceneEditor
         // After a domain reload (recompile) the stage SO is reserialized: the [SerializeField] fields
         // survive, but Current and the non-serialized derived state (rig, context, timeline lock) are
         // lost while the visual stage remains. Rebuild the derived state.
-        protected virtual void OnEnable()
+        protected new virtual void OnEnable()
         {
             if (stageInstance == null || !scene.IsValid())
                 return;

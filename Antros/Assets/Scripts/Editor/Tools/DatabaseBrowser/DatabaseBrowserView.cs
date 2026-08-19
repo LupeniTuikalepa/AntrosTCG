@@ -190,7 +190,7 @@ namespace ATCG.Editor.Tools.DatabaseBrowser
             if (icon != null)
             {
                 button.style.backgroundImage = new StyleBackground((Texture2D)icon);
-                button.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+                button.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
             }
             else
             {

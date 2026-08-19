@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c628701b1204fd744bc720dcdcec6a15, type: 3}
+  m_Name: CharacterToolSettings
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::ATCG.Editor.Tools.Characters.CharacterToolSettings
+  baseMaterial: {fileID: 2100000, guid: 60a6e3f6d53fc7e4f941c624bed0015f, type: 2}
+  exploreFolder: {fileID: 102900000, guid: ddb0eaa368f4e624b843eea0e7228eb1, type: 3}
