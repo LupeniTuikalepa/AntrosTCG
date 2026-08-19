@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: FightMadness
   m_EditorClassIdentifier: ATCG.Core::ATCG.FightMadnessData
   guidText: d51b458f-523d-4d4b-be66-30650b6ce5ad
+  <Director>k__BackingField: {fileID: 8403043067648630360, guid: 615108ea2a260d54abc988f86c8d28b9, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: FightMadness
   <Element>k__BackingField: 1
   <Description>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 579207543834804352
-  <CutsceneDirector>k__BackingField: {fileID: 8403043067648630360, guid: 615108ea2a260d54abc988f86c8d28b9, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <BerserkData>k__BackingField: {fileID: 11400000, guid: 1391a6f99b072594db135c22d90e8757, type: 2}
   <PunchDamage>k__BackingField: 4

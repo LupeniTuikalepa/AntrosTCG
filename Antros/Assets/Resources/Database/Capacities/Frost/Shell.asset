@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Shell
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Frost.ShellData
   guidText: cc880464-bd0b-4b74-b6b9-5f1d885fca41
+  <Director>k__BackingField: {fileID: 8879251779125524121, guid: 600d5877f24b8834c838214e6450f3e8, type: 3}
   <Cost>k__BackingField: 0
   <Name>k__BackingField: Shell
   <Element>k__BackingField: 7
   <Description>k__BackingField: Applique un bouclier
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269927783137750
-  <CutsceneDirector>k__BackingField: {fileID: 8879251779125524121, guid: 600d5877f24b8834c838214e6450f3e8, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: fd07d35f17fbe52438b25bb92ec68abd, type: 2}
   <Range>k__BackingField: 1
