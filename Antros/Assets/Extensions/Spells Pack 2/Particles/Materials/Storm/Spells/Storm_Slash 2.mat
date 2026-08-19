@@ -112,11 +112,12 @@ Material:
     - _Distortion_Range: 25
     - _Distortion_Scale: 7
     - _DstBlend: 1
-    - _DstBlendAlpha: 0
+    - _DstBlendAlpha: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _MANUAL_MODE: 0
     - _Manual_Mode: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -124,6 +125,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _SOFT_PARTICLE: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _Soft_Particle: 0
@@ -131,6 +133,7 @@ Material:
     - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
+    - _TEXTURE_MOVEMENT: 0
     - _Texture_Movement: 0
     - _WorkflowMode: 1
     - _X_Movement: 0
