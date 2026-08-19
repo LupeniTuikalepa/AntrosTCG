@@ -102,9 +102,14 @@
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Selected character row: full-width, muted blue tint */
-.characters-row--selected {
+/* Selected character row: full-width, muted blue tint. Two classes so it beats the later-loaded
+   .cutscene-row background regardless of stylesheet order. */
+.cutscene-row.characters-row--selected {
     background-color: rgba(78, 116, 162, 0.22);
+}
+
+.cutscene-row.characters-row--selected:hover {
+    background-color: rgba(78, 116, 162, 0.30);
 }
 
 .characters-light-slider {
