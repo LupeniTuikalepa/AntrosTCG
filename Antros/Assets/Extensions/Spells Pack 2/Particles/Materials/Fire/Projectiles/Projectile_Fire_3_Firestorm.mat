@@ -79,6 +79,7 @@ Material:
     - _Contrast: 0.3
     - _Cull: 2
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Float: 0.005
     - _Mix: 0.8
     - _Noise_Remap: 2.66
@@ -91,6 +92,7 @@ Material:
     - _Soft_Particle: 0
     - _Speed: 5
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Strength: 0.005
     - _Surface: 1
     - _ZTest: 4

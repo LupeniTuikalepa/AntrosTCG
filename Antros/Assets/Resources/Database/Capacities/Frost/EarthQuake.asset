@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: EarthQuake
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Fire.EarthQuakeData
   guidText: a92ab5ee-462f-4610-a204-7c0c9fef7abc
+  <Director>k__BackingField: {fileID: 7242029335621443695, guid: 57e63d6388250ad4f9674e6c751c6985, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Earth Quake
   <Element>k__BackingField: 7
   <Description>k__BackingField: "Cr\xE9er un tremblement de terre "
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269927783137749
-  <CutsceneDirector>k__BackingField: {fileID: 7242029335621443695, guid: 57e63d6388250ad4f9674e6c751c6985, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 09033a57fece91d429c9b0c51cda8b2e, type: 2}
   <Range>k__BackingField: 4

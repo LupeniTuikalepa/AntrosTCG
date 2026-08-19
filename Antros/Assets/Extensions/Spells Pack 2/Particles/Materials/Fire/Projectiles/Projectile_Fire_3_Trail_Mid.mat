@@ -86,6 +86,7 @@ Material:
     - _Custom_Data_Mode: 0
     - _Distortion_Scale: 15
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _Middle_Beam_Radius: 0.04
     - _NOISES: 1
     - _Noises: 1
@@ -94,6 +95,7 @@ Material:
     - _QueueOffset: 0
     - _Soft_Particle: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _Time_Mode: 1
     - _Trail_Mode: 1
