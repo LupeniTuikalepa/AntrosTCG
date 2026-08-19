@@ -7,10 +7,13 @@ using ATCG.Battle.Entities.Commands;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Entities.Queries;
 using ATCG.Battle.Grids;
+using ATCG.Battle.Grids.Controllers;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities.Fire;
 using ATCG.Enums;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Patterns;
+using ATCG.HexGrids.Patterns.Building;
 using ATCG.HexGrids.Utility;
 using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
@@ -32,7 +35,36 @@ namespace ATCG.Battle.Entities.Deployables.Fire
             aspect.EntityAddress.ListenForPlayerCommand<EndTurnCommand>(
                 false,
                 (in CommandContext context, in EndTurnCommand command) => 
-                    MoveToEnemy(context, command, aspect, data));
+                MoveToEnemy(context, command, aspect, data),
+                (in CommandContext context, in EndTurnCommand command) =>
+                Attack(context, command, aspect, data)
+                );
+        }
+
+        private static void Attack(
+            in CommandContext context,
+            in EndTurnCommand command,
+            DeployableAspect aspect,
+            WillOWispData data)
+        {
+            var origin = aspect.GridMemberComponent.coordinates;
+            var battleGrid = context.Grid;
+            
+            var builder = new HexPatternBuilder(
+                origin, new BattleIgnoreOriginPatternController(battleGrid, origin))
+                .With(new SpreadPatternData(data.AttackRange));
+
+            foreach (var hexCell in builder.GetCells(battleGrid))
+            {
+                if(!battleGrid.TryGetBattleCell(hexCell.coordinates, out var cell))
+                   continue;
+
+                foreach (var member in cell.GetMembers())
+                {
+                    var damageCommand = new DamageCommand(data.Strength, member.EntityAddress);
+                    command.Inject(context, damageCommand);
+                }
+            }
         }
 
         private static void MoveToEnemy(

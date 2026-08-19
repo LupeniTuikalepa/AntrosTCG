@@ -13,6 +13,9 @@ namespace ATCG.Capacities.Fire
         public int AttackRange { get; private set; }
         
         [field: SerializeField]
+        public int Strength { get; private set; }
+        
+        [field: SerializeField]
         public int MoveSpeed { get; private set; }
         
         [field: SerializeField]

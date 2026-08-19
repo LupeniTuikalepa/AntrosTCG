@@ -5,16 +5,19 @@ using ATCG.Battle.Entities;
 namespace ATCG.Battle.Commands.Entities
 {
     [Serializable]
-    public abstract class EntityCommandSignal<T> : EntityCommand<T> where T : struct, ICommandInfos
+    public sealed class EntityCommandSignal : EntityCommand<NoInfos>, ICommandSignal
     {
-        protected EntityCommandSignal(EntityAddress address, string source = DEFAULT_SOURCE) : base(address, source)
+        public Guid Channel { get; private set; }
+        
+        public EntityCommandSignal(EntityAddress address, Guid channel, string source = DEFAULT_SOURCE) : base(address, source)
+        {
+            Channel = channel;
+        }
+
+        protected override void Process(in CommandContext context)
         {
 
         }
 
-        protected sealed override void Process(in CommandContext context)
-        {
-
-        }
     }
 }
