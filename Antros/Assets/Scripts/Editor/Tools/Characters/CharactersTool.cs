@@ -9,6 +9,8 @@ using Synty.SidekickCharacters.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
 namespace ATCG.Editor.Tools.Characters
@@ -34,21 +36,26 @@ namespace ATCG.Editor.Tools.Characters
         public string Icon => "☻";
         public int Order => 60;
 
-        private enum SubTab { Explore, Edit, Settings }
+        private enum SubTab { Browse, Settings }
 
         private VisualElement content;
         private readonly Dictionary<SubTab, VisualElement> views = new();
         private readonly Dictionary<SubTab, Button> tabButtons = new();
-        private SubTab activeTab = SubTab.Edit;
+        private SubTab activeTab = SubTab.Browse;
         private bool toolActive;
 
         // ---- Edit / preview state ------------------------------------------
         private PreviewRenderUtility preview;
         private GameObject previewClone;
-        private Vector3 pivot;
+        private Vector3 framePivot;       // character center (F reset target)
+        private float framingDistance = 4f; // distance that fits the whole character
         private float distance = 4f;
-        private Vector2 orbit = new(130f, -12f); // yaw, pitch (degrees)
+        private Vector2 orbit = new(130f, -12f); // camera yaw, pitch (degrees)
+        private Vector2 pan;              // arrow-key pan offset, in camera right/up
+        private float maxPan = 2f;        // clamp so panning can't drift off the character
+        private Vector2 light = new(35f, 35f); // light yaw, pitch (degrees)
         private bool dragging;
+        private int activeButton; // 0 = left (orbit), 2 = middle (pan), 1 = right (light)
         private Vector2 lastPointer;
 
         private Image previewImage;
@@ -62,6 +69,7 @@ namespace ATCG.Editor.Tools.Characters
         private ScrollView exploreList;
         private readonly List<string> skPaths = new();
         private string exploreFilter = string.Empty;
+        private string selectedSkPath;
 
         // ====================================================================
         // Tool lifecycle
@@ -81,24 +89,23 @@ namespace ATCG.Editor.Tools.Characters
             content.AddToClassList("characters-content");
             root.Add(content);
 
-            views[SubTab.Explore] = BuildExploreView();
-            views[SubTab.Edit] = BuildEditView();
+            views[SubTab.Browse] = BuildBrowseView();
             views[SubTab.Settings] = BuildSettingsView();
             foreach (VisualElement v in views.Values)
                 content.Add(v);
 
-            // Poller lives on the preview element; the hub resumes it only while Edit is showing.
+            // Poller lives on the preview element; the hub resumes it only while Browse is showing.
             pollItem = previewImage.schedule.Execute(Poll).Every(200);
             pollItem.Pause();
 
-            ShowTab(SubTab.Edit);
+            ShowTab(SubTab.Browse);
             return root;
         }
 
         public void OnActivated()
         {
             toolActive = true;
-            if (activeTab == SubTab.Edit)
+            if (activeTab == SubTab.Browse)
             {
                 RefreshPreview();
                 pollItem?.Resume();
@@ -145,8 +152,9 @@ namespace ATCG.Editor.Tools.Characters
             foreach (KeyValuePair<SubTab, Button> kv in tabButtons)
                 kv.Value.EnableInClassList("characters-subtab--active", kv.Key == tab);
 
-            if (tab == SubTab.Edit)
+            if (tab == SubTab.Browse)
             {
+                ReloadSkList();
                 RefreshPreview();
                 if (toolActive)
                     pollItem?.Resume();
@@ -154,58 +162,59 @@ namespace ATCG.Editor.Tools.Characters
             else
             {
                 pollItem?.Pause();
-                if (tab == SubTab.Explore)
-                    ReloadSkList();
             }
         }
 
         // ====================================================================
-        // Edit sub-tab
+        // Browse sub-tab: explorer (left) + inspector (right)
         // ====================================================================
 
-        private VisualElement BuildEditView()
+        private VisualElement BuildBrowseView()
+        {
+            TwoPaneSplitView split = new(0, 300, TwoPaneSplitViewOrientation.Horizontal);
+            split.AddToClassList("characters-view");
+            split.Add(BuildExplorer());
+            split.Add(BuildInspector());
+            return split;
+        }
+
+        // Right pane: live preview + edition buttons for the currently loaded character.
+        private VisualElement BuildInspector()
         {
             VisualElement view = new();
             view.AddToClassList("characters-view");
 
-            VisualElement bar = new();
-            bar.AddToClassList("characters-bar");
-            view.Add(bar);
+            Toolbar bar = new();
+            bar.Add(new ToolbarButton(() => OpenSyntyWindow()) { text = "Open Sidekick" });
+            bar.Add(new ToolbarButton(RefreshPreview) { text = "Refresh" });
+            bar.Add(new ToolbarButton(() => InvokeSyntyAction("SaveCharacter", "sauvegarde")) { text = "Save Character" });
+            bar.Add(new ToolbarButton(ExportWithFlatKit) { text = "Export (FlatKit)" });
 
-            bar.Add(MakeButton("Open Sidekick Editor", () => OpenSyntyWindow(), false));
-            bar.Add(MakeButton("Refresh Preview", RefreshPreview, false));
-
-            Toggle auto = new("Auto") { value = autoRefresh };
-            auto.AddToClassList("characters-auto");
+            ToolbarToggle auto = new() { text = "Auto", value = autoRefresh };
             auto.RegisterValueChangedCallback(e => autoRefresh = e.newValue);
             bar.Add(auto);
+            view.Add(bar);
 
-            bar.Add(MakeButton("Save Character", () => InvokeSyntyAction("SaveCharacter", "sauvegarde"), false));
-            bar.Add(MakeButton("Export (FlatKit)", ExportWithFlatKit, true));
-
-            previewImage = new Image { scaleMode = ScaleMode.ScaleToFit };
+            previewImage = new Image { scaleMode = ScaleMode.ScaleToFit, focusable = true };
             previewImage.AddToClassList("characters-preview");
             previewImage.RegisterCallback<GeometryChangedEvent>(_ => RenderPreview());
             previewImage.RegisterCallback<PointerDownEvent>(OnPointerDown);
             previewImage.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             previewImage.RegisterCallback<PointerUpEvent>(OnPointerUp);
             previewImage.RegisterCallback<WheelEvent>(OnWheel);
+            previewImage.RegisterCallback<KeyDownEvent>(OnKeyDown);
+            previewImage.RegisterCallback<ContextClickEvent>(e => e.StopPropagation()); // no menu on right-drag
             view.Add(previewImage);
+
+            Label hint = new("Gauche : tourner • molette : zoom • clic molette : déplacer • clic droit : lumière • F : recentrer");
+            hint.AddToClassList("characters-status");
+            view.Add(hint);
 
             statusLabel = new Label();
             statusLabel.AddToClassList("characters-status");
             view.Add(statusLabel);
 
             return view;
-        }
-
-        private static Button MakeButton(string text, Action action, bool primary)
-        {
-            Button b = new(action) { text = text };
-            b.AddToClassList("characters-btn");
-            if (primary)
-                b.AddToClassList("characters-btn--primary");
-            return b;
         }
 
         // ---- Synty window plumbing -----------------------------------------
@@ -328,10 +337,16 @@ namespace ATCG.Editor.Tools.Characters
             preview.AddSingleGO(previewClone);
 
             Bounds bounds = ComputeBounds(previewClone);
-            pivot = bounds.center;
-            distance = Mathf.Max(bounds.size.magnitude * 1.4f, 1f);
+            framePivot = bounds.center;
+            float radius = Mathf.Max(bounds.extents.magnitude, 0.1f);
+            // Distance that fits the whole bounding sphere in the camera's FOV, with margin — so the
+            // initial view is wide enough to see the entire character.
+            framingDistance = radius / Mathf.Sin(Mathf.Deg2Rad * preview.camera.fieldOfView * 0.5f) * 1.15f;
+            maxPan = radius * 0.9f;
+            distance = framingDistance;
+            pan = Vector2.zero;
 
-            SetStatus($"Aperçu de « {source.name} ». Glisse pour tourner, molette pour zoomer.");
+            SetStatus($"Aperçu de « {source.name} ».");
             RenderPreview();
         }
 
@@ -341,19 +356,65 @@ namespace ATCG.Editor.Tools.Characters
                 return;
 
             preview = new PreviewRenderUtility();
-            preview.camera.clearFlags = CameraClearFlags.SolidColor;
-            preview.camera.backgroundColor = new Color(0.14f, 0.15f, 0.17f, 1f);
-            preview.camera.nearClipPlane = 0.01f;
-            preview.camera.farClipPlane = 1000f;
+            Camera cam = preview.camera;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.14f, 0.15f, 0.17f, 1f);
+            cam.nearClipPlane = 0.01f;
+            cam.farClipPlane = 1000f;
+            cam.fieldOfView = 30f;
             preview.ambientColor = new Color(0.32f, 0.33f, 0.35f, 1f);
 
-            preview.lights[0].intensity = 1.2f;
-            preview.lights[0].transform.rotation = Quaternion.Euler(35f, 35f, 0f);
+            preview.lights[0].intensity = 1.2f; // key light — rotated live by the Light slider
             if (preview.lights.Length > 1)
             {
-                preview.lights[1].intensity = 0.55f;
+                preview.lights[1].intensity = 0.55f; // fixed fill
                 preview.lights[1].transform.rotation = Quaternion.Euler(-20f, -140f, 0f);
             }
+
+            EnablePostProcessing(cam);
+            InjectGlobalVolume();
+        }
+
+        // Turns on URP post-processing on the preview camera and lets it see all volume layers, so the
+        // character previews with the game's global post FX.
+        private static void EnablePostProcessing(Camera cam)
+        {
+            UniversalAdditionalCameraData data = cam.GetUniversalAdditionalCameraData();
+            if (data == null)
+                return;
+
+            data.renderPostProcessing = true;
+            data.volumeLayerMask = ~0;
+            data.antialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
+        }
+
+        // Copies the project's highest-priority global Volume into the preview scene so its post FX
+        // apply here too. No-op if the open scenes have no global volume.
+        private void InjectGlobalVolume()
+        {
+            Volume global = FindGlobalVolume();
+            if (global == null || global.sharedProfile == null)
+                return;
+
+            GameObject go = new("PreviewGlobalVolume") { hideFlags = HideFlags.HideAndDontSave };
+            Volume v = go.AddComponent<Volume>();
+            v.isGlobal = true;
+            v.priority = global.priority;
+            v.sharedProfile = global.sharedProfile;
+            preview.AddSingleGO(go);
+        }
+
+        private static Volume FindGlobalVolume()
+        {
+            Volume best = null;
+            foreach (Volume v in UnityEngine.Object.FindObjectsByType<Volume>(FindObjectsSortMode.None))
+            {
+                if (!v.isGlobal || v.sharedProfile == null)
+                    continue;
+                if (best == null || v.priority > best.priority)
+                    best = v;
+            }
+            return best;
         }
 
         private void RenderPreview()
@@ -367,8 +428,11 @@ namespace ATCG.Editor.Tools.Characters
 
             Quaternion rotation = Quaternion.Euler(orbit.y, orbit.x, 0f);
             Vector3 direction = rotation * Vector3.forward;
-            preview.camera.transform.position = pivot - direction * distance;
+            Vector3 center = framePivot + rotation * Vector3.right * pan.x + rotation * Vector3.up * pan.y;
+
+            preview.camera.transform.position = center - direction * distance;
             preview.camera.transform.rotation = rotation;
+            preview.lights[0].transform.rotation = Quaternion.Euler(light.y, light.x, 0f);
 
             preview.BeginPreview(rect, GUIStyle.none);
             preview.Render(true);
@@ -435,8 +499,11 @@ namespace ATCG.Editor.Tools.Characters
         private void OnPointerDown(PointerDownEvent e)
         {
             dragging = true;
+            activeButton = e.button;
             lastPointer = e.localPosition;
             previewImage.CapturePointer(e.pointerId);
+            previewImage.Focus(); // grab keyboard focus so F works
+            e.StopPropagation();
         }
 
         private void OnPointerMove(PointerMoveEvent e)
@@ -447,8 +514,25 @@ namespace ATCG.Editor.Tools.Characters
             Vector2 delta = (Vector2)e.localPosition - lastPointer;
             lastPointer = e.localPosition;
 
-            orbit.x += delta.x * 0.4f;
-            orbit.y = Mathf.Clamp(orbit.y + delta.y * 0.4f, -89f, 89f);
+            switch (activeButton)
+            {
+                case 0: // left → orbit camera
+                    orbit.x += delta.x * 0.4f;
+                    orbit.y = Mathf.Clamp(orbit.y + delta.y * 0.4f, -89f, 89f);
+                    break;
+
+                case 2: // middle → pan (clamped near the character)
+                    float k = distance * 0.0018f;
+                    pan.x = Mathf.Clamp(pan.x - delta.x * k, -maxPan, maxPan);
+                    pan.y = Mathf.Clamp(pan.y + delta.y * k, -maxPan, maxPan);
+                    break;
+
+                case 1: // right → rotate the light
+                    light.x += delta.x * 0.5f;
+                    light.y = Mathf.Clamp(light.y + delta.y * 0.5f, -89f, 89f);
+                    break;
+            }
+
             RenderPreview();
         }
 
@@ -462,6 +546,18 @@ namespace ATCG.Editor.Tools.Characters
         private void OnWheel(WheelEvent e)
         {
             distance = Mathf.Clamp(distance * (1f + e.delta.y * 0.05f), 0.5f, 50f);
+            RenderPreview();
+            e.StopPropagation();
+        }
+
+        // F recenters on the character and zooms back out to the framing distance.
+        private void OnKeyDown(KeyDownEvent e)
+        {
+            if (e.keyCode != KeyCode.F)
+                return;
+
+            pan = Vector2.zero;
+            distance = framingDistance;
             RenderPreview();
             e.StopPropagation();
         }
@@ -492,10 +588,10 @@ namespace ATCG.Editor.Tools.Characters
         }
 
         // ====================================================================
-        // Explore sub-tab
+        // Explorer (left pane)
         // ====================================================================
 
-        private VisualElement BuildExploreView()
+        private VisualElement BuildExplorer()
         {
             VisualElement view = new();
             view.AddToClassList("cutscene-tab"); // same shell as the cutscenes list
@@ -521,12 +617,19 @@ namespace ATCG.Editor.Tools.Characters
             return view;
         }
 
-        // Loads a .sk into Synty and switches to Edit — as if it had been loaded from their own window.
-        // The live poll then picks up the regenerated character for the preview.
+        // Selecting a character in the list is what launches its edition: highlight it, load it into
+        // Synty, and the live poll picks up the regenerated character for the inspector preview.
+        private void SelectAndEdit(string path)
+        {
+            selectedSkPath = path;
+            RebuildSkRows();
+            EditSk(path);
+        }
+
+        // Loads a .sk into Synty — as if it had been loaded from their own window.
         private void EditSk(string path)
         {
             ModularCharacterWindow window = OpenSyntyWindow();
-            ShowTab(SubTab.Edit);
             LoadSkWhenReady(window, path, 0);
         }
 
@@ -672,17 +775,19 @@ namespace ATCG.Editor.Tools.Characters
         {
             VisualElement row = new();
             row.AddToClassList("cutscene-row");
+            row.AddToClassList("characters-row--clickable");
+            row.EnableInClassList("characters-row--selected", path == selectedSkPath);
 
             Label name = new(Path.GetFileNameWithoutExtension(path)) { tooltip = path };
             name.AddToClassList("cutscene-row-name");
             row.Add(name);
 
-            Button edit = new(() => EditSk(path)) { text = "Edit" };
-            edit.AddToClassList("cutscene-row-edit");
-            row.Add(edit);
+            // Clicking the row loads the character; a small Ping stays for locating the asset.
+            row.RegisterCallback<ClickEvent>(_ => SelectAndEdit(path));
 
             Button ping = new(() => PingSk(path)) { text = "Ping" };
             ping.AddToClassList("cutscene-row-ping");
+            ping.RegisterCallback<ClickEvent>(e => e.StopPropagation()); // don't trigger the row load
             row.Add(ping);
 
             return row;

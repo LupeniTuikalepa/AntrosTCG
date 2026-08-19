@@ -96,3 +96,19 @@
 .characters-settings-field {
     margin-bottom: 8px;
 }
+
+/* Clickable / selected rows in the explorer */
+.characters-row--clickable:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Selected character row: full-width, muted blue tint */
+.characters-row--selected {
+    background-color: rgba(78, 116, 162, 0.22);
+}
+
+.characters-light-slider {
+    width: 150px;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
