@@ -24,13 +24,14 @@ MonoBehaviour:
   <Capacities>k__BackingField:
     rid: 6882996275448119605
   <Passives>k__BackingField: []
-  <Health>k__BackingField: 15
+  <Health>k__BackingField: 100
   <Strength>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1
-  <HeroPawnPrefab>k__BackingField: {fileID: 919132149155446097, guid: 00641594f76a9e047908a19455fcdfff, type: 3}
+  <HeroPawnPrefab>k__BackingField: {fileID: 1209014482031769964, guid: 534f75a2aec155641805525b27d30508, type: 3}
   <AttackCutscene>k__BackingField: {fileID: 0}
+  <DeployCutscene>k__BackingField: {fileID: 11400000, guid: 47eee71b9cd31a846b4c3d310d78b0c4, type: 2}
   references:
     version: 2
     RefIds:

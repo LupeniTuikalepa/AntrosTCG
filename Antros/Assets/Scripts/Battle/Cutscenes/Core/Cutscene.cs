@@ -2,9 +2,12 @@ using System;
 using System.Threading;
 using ATCG.Battle;
 using ATCG.Battle.Players.Local.Runtime;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using Object = UnityEngine.Object;
 
 namespace ATCG.Cutscenes
 {
@@ -22,13 +25,15 @@ namespace ATCG.Cutscenes
         public event Action<string> StepReached;
 
         [SerializeField]
-        private PlayableDirector playableDirector;
+        protected PlayableDirector playableDirector;
 
-        private ICutsceneElement[] elements;
-        private AwaitableCompletionSource finished;
+        protected ICutsceneElement[] elements;
+        protected AwaitableCompletionSource finished;
 
-        private QteWindowArbiter arbiter;
-        private RuntimeLocalBattlePlayer screenPlayer;
+        protected QteWindowArbiter arbiter;
+        protected RuntimeLocalBattlePlayer screenPlayer;
+
+        public RuntimeLocalBattlePlayer ScreenPlayer => screenPlayer;
 
         private void Awake() => elements = GetComponentsInChildren<ICutsceneElement>(true);
 
@@ -37,19 +42,83 @@ namespace ATCG.Cutscenes
         /// <summary>Binds every element to the driving context. Call before <see cref="Play"/>.</summary>
         public void Configure(ICutsceneContext context)
         {
+            EnsureDirector();
+
             elements ??= GetComponentsInChildren<ICutsceneElement>(true);
             for (int i = 0; i < elements.Length; i++)
                 elements[i].Connect(context);
 
+            screenPlayer = context.GetScreenBattlePlayer();
+
+            // Sit the cutscene on the caster (position + rotation), like the capacity flow — otherwise
+            // it plays at the world origin instead of at the hero.
+            ICutsceneActor caster = context.GetCaster();
+            if (caster != null)
+                transform.SetPositionAndRotation(caster.transform.position, caster.transform.rotation);
+
+            // Retag the cutscene's vcams to this screen's channel so only its brain shows the cutscene.
+            ApplyScreenChannel();
+
+            // Bind the auto-bindable tracks to live objects: HeroAnimator → caster Animator,
+            // MainCamera → this screen's Cinemachine brain.
+            ResolveBindings(caster);
+
             // If the context provides a QTE receiver, host QTE windows for this screen: arbitrate
             // local presses and submit scores (the receiver decides whether to emit a networked
             // command). Cutscenes with no QTE simply never build an arbiter.
-            screenPlayer = context.GetScreenBattlePlayer();
             IQteResultReceiver receiver = context.GetQteReceiver();
             if (screenPlayer != null && receiver != null)
             {
                 arbiter = new QteWindowArbiter(screenPlayer, receiver);
-                HookInput();
+                OnArbiterBuilt(arbiter);
+                if (ShouldHookInput())
+                    HookInput();
+            }
+        }
+
+        protected virtual bool ShouldHookInput() => true;
+
+        protected virtual void OnArbiterBuilt(QteWindowArbiter windowArbiter) { }
+
+        private void EnsureDirector()
+        {
+            if (playableDirector == null)
+                playableDirector = GetComponent<PlayableDirector>();
+        }
+
+        // Point this screen's brain at the cutscene by tagging its vcams with the screen's channel.
+        private void ApplyScreenChannel()
+        {
+            if (screenPlayer == null)
+                return;
+
+            OutputChannels channel = screenPlayer.Camera.Component.OutputChannel;
+            foreach (CinemachineCamera vcam in GetComponentsInChildren<CinemachineCamera>(true))
+                vcam.OutputChannel = channel;
+        }
+
+        // Resolves the shared auto-bindable channels to live objects for this play.
+        private void ResolveBindings(ICutsceneActor caster)
+        {
+            EnsureDirector();
+            if (playableDirector.playableAsset is not TimelineAsset timeline)
+                return;
+
+            foreach (TrackAsset track in timeline.GetOutputTracks())
+            {
+                if (!CutsceneChannels.IsAutoBindableTrack(track))
+                    continue;
+
+                Object binding = null;
+                if (track.name == CutsceneChannels.HeroAnimator.trackName)
+                    binding = caster?.Animator;
+                else if (track.name == CutsceneChannels.MainCamera.trackName && screenPlayer != null)
+                    binding = screenPlayer.Camera.Component.CinemachineBrain;
+
+                if (binding != null)
+                    playableDirector.SetGenericBinding(track, binding);
+                else
+                    Debug.LogWarning($"[Cutscene] Channel '{track.name}' could not resolve a binding.");
             }
         }
 
@@ -75,6 +144,8 @@ namespace ATCG.Cutscenes
 
         public async Awaitable Play(CancellationToken token = default)
         {
+            EnsureDirector();
+
             playableDirector.playOnAwake = false;
             playableDirector.extrapolationMode = DirectorWrapMode.None;
 
@@ -88,8 +159,15 @@ namespace ATCG.Cutscenes
             finished = null;
         }
 
+        public async Awaitable Stop(CancellationToken token = default)
+        {
+            EnsureDirector();
+            playableDirector.Stop();
+            await Awaitable.MainThreadAsync();
+        }
+
         /// <summary>Disconnects the elements and destroys the instance.</summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             UnhookInput();
 

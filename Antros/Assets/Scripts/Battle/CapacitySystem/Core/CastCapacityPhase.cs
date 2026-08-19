@@ -44,30 +44,24 @@ namespace ATCG.Battle.CapacitySystem.Core
         public bool HasCaster => caster.IsValid;
 
         public HexCoordinates CasterOrigin =>
-            HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMemberComponent)
-                ? gridMemberComponent.coordinates
+            HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMember)
+                ? gridMember.coordinates
                 : castPoint;
 
         public readonly BattlePhase battlePhase;
         public readonly CapacityData data;
-
         public readonly HexCoordinates castPoint;
         public readonly EntityAddress caster;
         public readonly BattleID casterPlayerId;
 
-        private readonly CapacityPropertyBag properties = new();
-
         public Dictionary<RuntimeLocalBattlePlayer, CapacityDirector> directors;
 
-
-        // Steps mapped by name (from Run's yield). Timeline markers pick which to
-        // run; order of execution comes from the timeline, not the yield order.
-        private Dictionary<string, ICapacityStep> stepsByName;
-
-        // Barrier for steps across all screens. Built once directors are known.
-        private StepBarrier stepBarrier;
-        private readonly HashSet<string> stepsRun = new HashSet<string>();
+        private readonly CapacityPropertyBag properties = new();
+        private readonly HashSet<string> stepsRun = new();
         private readonly QteResultAccumulator qteResults = new();
+
+        private Dictionary<string, ICapacityStep> stepsByName;
+        private StepBarrier stepBarrier;
 
         public CastCapacityPhase(
             BattlePhase battlePhase,
@@ -100,127 +94,101 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         protected override async Awaitable ExecuteNoResult(CancellationToken token)
         {
-	       
-	        using (CommandManager.BeginGroup($"[Cast Capacity] {data.Name}"))
+            using (CommandManager.BeginGroup($"[Cast Capacity] {data.Name}"))
             {
-                if (!data.TryGet(out ICapacityContainer capacityContainer))
+                if (!data.TryGet(out ICapacityContainer container))
                     return;
-                
-                //TODO Fix setup 
-                if (CasterPlayer is LocalBattlePlayer localBattlePlayer)
+
+                if (CasterPlayer is LocalBattlePlayer localPlayer && !await RunSetups(container, localPlayer))
+                    return;
+
+                MapSteps(container);
+
+                if (directors.Count == 0)
                 {
-		        
-	                HexPatternBuilder patternBuilder = new HexPatternBuilder(castPoint, new BattleIgnoreOriginPatternController(battlePhase.BattleGrid, castPoint));
-	                capacityContainer.GetHitPattern(data, ref patternBuilder, battlePhase.BattleGrid, castPoint, CasterOrigin);
-	                using HexPatternBuilder _hp = patternBuilder;
-
-	                CapacityTargets targets = new CapacityTargets();
-	                foreach (BattleCellAspect battleCell in patternBuilder.GetBattleCells(battlePhase.BattleGrid))
-		                capacityContainer.GetTargets(data, battleCell, targets, CasterPlayer);
-		        
-	                for (int i = 0; i < data.Setups.Length; i++)
-	                {
-		                var setup = data.Setups[i];
-		                if (setup != null && setup.TryGet(out ICapacitySetupContainer container))
-		                {
-			                bool success = await container.Execute(setup, new CapacitySetupContext()
-			                {
-				                data = data,
-				                caster = caster,
-				                player = localBattlePlayer,
-				                battlePhase = battlePhase,
-				                castPoints = castPoint,
-				                targets = targets,
-				                castCapacityPhase = this,
-			                });
-			                
-			                if(!success)
-				                return;
-		                }
-
-	                }
-                }
-
-                // Map the capacity's steps by name. Timeline markers will pick
-                // which to run; a missing/duplicate name is a detectable error.
-                foreach (ICapacityStep step in capacityContainer.GetSteps(data, this))
-                {
-                    if (!stepsByName.TryAdd(step.StepName, step))
-                        Debug.LogError($"[{data.Name}] Duplicate step '{step.StepName}' from Run.");
-                }
-
-                // Play every screen's cutscene in parallel. Step markers reported
-                // by the directors drive ProcessStep via the barrier. We finish
-                // when all cutscenes have finished playing.
-                int playing = directors.Count;
-                if (playing == 0)
-                {
-                    // Headless / no screen: run all steps immediately, in yield order,
-                    // with neutral effectiveness (no QTE possible without a screen).
                     foreach (ICapacityStep step in stepsByName.Values)
                         RunStepNow(step);
                     return;
                 }
 
-                AwaitableCompletionSource allDone = new AwaitableCompletionSource();
-                int remaining = playing;
-
-                foreach ((RuntimeLocalBattlePlayer screenPlayer, CapacityDirector capacityDirector) in directors)
-                {
-                    PlayDirector(capacityDirector, screenPlayer, token, () =>
-                    {
-                        remaining--;
-                        if (remaining <= 0)
-                            allDone.TrySetResult();
-                    }).ListenForExceptions();
-                }
-
-                await allDone.Awaitable;
+                await PlayAllDirectors(token);
             }
         }
 
-        private async Awaitable PlayDirector(CapacityDirector director,
-            RuntimeLocalBattlePlayer screenPlayer, CancellationToken token, Action onDone)
+        private async Awaitable<bool> RunSetups(ICapacityContainer container, LocalBattlePlayer localPlayer)
         {
-	        try
-	        {
-		        await director.Play(this, screenPlayer, token);
-	        }
-	        catch (Exception e)
-	        {
-		        Debug.LogException(e);
-	        }
+            using HexPatternBuilder pattern = BuildHitPattern(container);
+            CapacityTargets targets = ResolveTargets(container, pattern);
+
+            foreach (var setup in data.Setups)
+            {
+                if (setup == null || !setup.TryGet(out ICapacitySetupContainer setupContainer))
+                    continue;
+
+                bool success = await setupContainer.Execute(setup, new CapacitySetupContext
+                {
+                    data = data,
+                    caster = caster,
+                    player = localPlayer,
+                    battlePhase = battlePhase,
+                    castPoints = castPoint,
+                    targets = targets,
+                    castCapacityPhase = this,
+                });
+
+                if (!success)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private void MapSteps(ICapacityContainer container)
+        {
+            foreach (ICapacityStep step in container.GetSteps(data, this))
+                if (!stepsByName.TryAdd(step.StepName, step))
+                    Debug.LogError($"[{data.Name}] Duplicate step '{step.StepName}' from Run.");
+        }
+
+        private async Awaitable PlayAllDirectors(CancellationToken token)
+        {
+            AwaitableCompletionSource allDone = new();
+            int remaining = directors.Count;
+
+            foreach ((RuntimeLocalBattlePlayer screenPlayer, CapacityDirector director) in directors)
+                PlayDirector(director, screenPlayer, token, () =>
+                {
+                    if (--remaining <= 0)
+                        allDone.TrySetResult();
+                }).ListenForExceptions();
+
+            await allDone.Awaitable;
+        }
+
+        private async Awaitable PlayDirector(
+            CapacityDirector director, RuntimeLocalBattlePlayer screenPlayer, CancellationToken token, Action onDone)
+        {
+            try
+            {
+                await director.Play(this, screenPlayer, token);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
             finally
             {
                 onDone();
             }
         }
 
-        /// <summary>
-        /// Called by a director when its cutscene crosses a StepMarker. Reports to
-        /// the barrier; once ALL screens have reported this step, flush + run it once.
-        /// </summary>
-        public void ReportStepReached(string stepName) =>
-            OnStepReportedAsync(stepName)
-                .ListenForExceptions();
-
-        public bool TryGetProperty<T>(string name, out T value) => properties.TryGet(name, out value);
-
-        public void InjectProperty<T>(string name, T value)
-        {
-	        if(!properties.IsDeclared(name))
-		        properties.Allow<T>(name);
-	        
-	        properties.Set(name, value);
-        }
+        public void ReportStepReached(string stepName) => OnStepReportedAsync(stepName).ListenForExceptions();
 
         private async Awaitable OnStepReportedAsync(string stepName)
         {
             stepBarrier.Report(stepName);
             await stepBarrier.Await(stepName);
 
-            // Guard: the barrier releases once per screen report, but the step must
-            // execute exactly once across all of them.
             if (!stepsRun.Add(stepName))
                 return;
 
@@ -232,24 +200,29 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         private void RunStepNow(ICapacityStep step)
         {
-            float effectiveness = ReadQtes();
-
-            if (!data.TryGet(out ICapacityContainer capacityContainer))
+            if (!data.TryGet(out ICapacityContainer container))
                 return;
 
-            HexPatternBuilder patternBuilder = new HexPatternBuilder(castPoint, new BattleIgnoreOriginPatternController(battlePhase.BattleGrid, castPoint));
-            capacityContainer.GetHitPattern(data, ref patternBuilder, battlePhase.BattleGrid, castPoint, CasterOrigin);
-            using HexPatternBuilder _hp = patternBuilder;
+            using HexPatternBuilder pattern = BuildHitPattern(container);
+            CapacityTargets targets = ResolveTargets(container, pattern);
 
-            // Resolve the hit cells once, then let the capacity register its tagged
-            // targets (default: cell -> Cell, members -> Member). Steps query them back
-            // by tag via ctx.Targets.WithTags(...).
-            CapacityTargets targets = new CapacityTargets();
-            foreach (BattleCellAspect battleCell in patternBuilder.GetBattleCells(battlePhase.BattleGrid))
-                capacityContainer.GetTargets(data, battleCell, targets, CasterPlayer);
-
-            CapacityStepContext ctx = new CapacityStepContext(this, effectiveness, ResolveStepData(step.StepName), targets, patternBuilder);
+            CapacityStepContext ctx = new(this, ReadQtes(), ResolveStepData(step.StepName), targets, pattern);
             step.RunStep(ctx);
+        }
+
+        private HexPatternBuilder BuildHitPattern(ICapacityContainer container)
+        {
+            HexPatternBuilder pattern = new(castPoint, new BattleIgnoreOriginPatternController(battlePhase.BattleGrid, castPoint));
+            container.GetHitPattern(data, ref pattern, battlePhase.BattleGrid, castPoint, CasterOrigin);
+            return pattern;
+        }
+
+        private CapacityTargets ResolveTargets(ICapacityContainer container, HexPatternBuilder pattern)
+        {
+            CapacityTargets targets = new();
+            foreach (BattleCellAspect cell in pattern.GetBattleCells(battlePhase.BattleGrid))
+                container.GetTargets(data, cell, targets, CasterPlayer);
+            return targets;
         }
 
         private CapacityStepData ResolveStepData(string stepName)
@@ -258,12 +231,21 @@ namespace ATCG.Battle.CapacitySystem.Core
             return stepData;
         }
 
+        public bool TryGetProperty<T>(string name, out T value) => properties.TryGet(name, out value);
+
+        public void InjectProperty<T>(string name, T value)
+        {
+            if (!properties.IsDeclared(name))
+                properties.Allow<T>(name);
+
+            properties.Set(name, value);
+        }
+
         protected override Awaitable Dispose(CancellationToken token)
         {
             this.UnregisterListener();
 
-
-            foreach ((var runtimeLocalBattlePlayer, CapacityDirector director) in directors)
+            foreach ((_, CapacityDirector director) in directors)
                 director.Dispose();
 
             DictionaryPool<RuntimeLocalBattlePlayer, CapacityDirector>.Release(directors);
@@ -273,46 +255,34 @@ namespace ATCG.Battle.CapacitySystem.Core
             return base.Dispose(token);
         }
 
-        // ---- QteCommand listener --------------------------------------------
-
-
-        void ICommandDirector<QteCommand>.OnBegin(in CommandDirectorState state, CommandContext context,
-            QteCommand command)
+        void ICommandDirector<QteCommand>.OnBegin(in CommandDirectorState state, CommandContext context, QteCommand command)
             => AddQteResult(command.Result);
 
-        async Awaitable ICommandDirector<QteCommand>.Play(CommandDirectorState state, CommandContext context,
-            QteCommand command)
+        async Awaitable ICommandDirector<QteCommand>.Play(CommandDirectorState state, CommandContext context, QteCommand command)
         {
             state.CompleteAll(this);
             await Awaitable.MainThreadAsync();
         }
 
-        // ---- QTE stack ------------------------------------------------------
-
         public void AddQteResult(float qte) => qteResults.Add(qte);
 
         private float ReadQtes() => qteResults.Read();
 
-
-        // ---- director collection -------------------------------------------
-
         private void CollectDirectors()
         {
-            foreach (var player in battlePhase.Players)
+            foreach (IBattlePlayer player in battlePhase.Players)
             {
-                if (player is LocalBattlePlayer localBattlePlayer &&
-                    RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(localBattlePlayer,
-                        out RuntimeLocalBattlePlayer screenPlayer))
+                if (player is LocalBattlePlayer localPlayer &&
+                    RuntimeLocalBattlePlayer.TryGetRuntimeLocalPlayerFor(localPlayer, out RuntimeLocalBattlePlayer screenPlayer))
                 {
                     CapacityCutscene cutscene = SpawnCutsceneFor(screenPlayer);
-                    CapacityDirector capacityDirector = new CapacityDirector(screenPlayer, casterPlayerId, cutscene);
-                    directors.Add(screenPlayer, capacityDirector);
+                    directors.Add(screenPlayer, new CapacityDirector(screenPlayer, casterPlayerId, cutscene));
                 }
             }
         }
 
-        public bool TryGetCapacityDirector(RuntimeLocalBattlePlayer player, out CapacityDirector capacityDirector)
-            => directors.TryGetValue(player, out capacityDirector);
+        public bool TryGetCapacityDirector(RuntimeLocalBattlePlayer player, out CapacityDirector director)
+            => directors.TryGetValue(player, out director);
 
         private CapacityCutscene SpawnCutsceneFor(RuntimeLocalBattlePlayer player)
         {
@@ -320,20 +290,13 @@ namespace ATCG.Battle.CapacitySystem.Core
                 return null;
 
             var instance = Object.Instantiate(data.Director, player.transform);
-            CapacityCutscene spawnCutsceneFor = instance.GetComponent<CapacityCutscene>();
-
-            return spawnCutsceneFor;
+            return instance.GetComponent<CapacityCutscene>();
         }
 
-        public bool TryGetRuntimeCaster(RuntimeLocalBattlePlayer runtimeLocalBattlePlayer,
-            out IRuntimeEntity runtimeEntity)
+        public bool TryGetRuntimeCaster(RuntimeLocalBattlePlayer player, out IRuntimeEntity runtimeEntity)
         {
             runtimeEntity = null;
-            if (!HasCaster)
-                return false;
-
-            return runtimeLocalBattlePlayer.RuntimeEntityManager.TryGetRuntimeEntity(caster, out runtimeEntity);
+            return HasCaster && player.RuntimeEntityManager.TryGetRuntimeEntity(caster, out runtimeEntity);
         }
-
     }
 }

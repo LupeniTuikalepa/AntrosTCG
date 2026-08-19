@@ -26,37 +26,39 @@
       }
     },
     "com.helteix.cards": {
-      "version": "file:com.helteix.cards",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.helteix.tools": "1.6.1"
-      }
-    },
-    "com.helteix.channeled-properties": {
-      "version": "2.0.11",
+      "version": "0.3.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.helteix.tools": "1.6.0",
+        "com.helteix.tools": "1.7.0"
+      },
+      "url": "https://upm.pckgs.io"
+    },
+    "com.helteix.channeled-properties": {
+      "version": "2.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.helteix.tools": "1.7.0",
         "com.unity.burst": "1.8.25"
       },
       "url": "https://upm.pckgs.io"
     },
     "com.helteix.singletons": {
-      "version": "1.3.8",
+      "version": "1.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.helteix.tools": "1.6.1"
+        "com.helteix.tools": "1.7.0"
       },
       "url": "https://upm.pckgs.io"
     },
     "com.helteix.tools": {
-      "version": "file:com.helteix.tools",
+      "version": "1.7.0",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://upm.pckgs.io"
     },
     "com.kyrylokuzyk.primetween": {
       "version": "file:../Packages/com.kyrylokuzyk.primetween.tgz",

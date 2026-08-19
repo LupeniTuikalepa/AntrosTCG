@@ -5,29 +5,16 @@ using UnityEngine.Timeline;
 namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 {
     /// <summary>
-    /// Drives one clip's referenced ParticleSystem through three phases regardless of
-    /// whatever Main.loop/Duration is authored on it — the clip is the single source of
-    /// truth for the system's lifetime.
+    /// Drives one clip's ParticleSystem the way Unity's own Control Track does — advancing via
+    /// ParticleSystem.Simulate to the clip's local time, resimulating from 0 on a backward jump,
+    /// and NEVER calling Pause. Leaving a system paused is what let Unity's Scene-view particle
+    /// preview ("Show Only Selected") hijack it and hide the other systems; re-simulating to the
+    /// exact time every frame freezes it deterministically without that side effect.
     ///
-    /// Driven via ParticleSystem.Simulate (like PropagateVFXOnRenderers.SetTime), not
-    /// Play() — Play() relies on Unity's normal per-frame update to advance the sim,
-    /// which only ticks in Play Mode. In the Timeline editor's edit-mode preview
-    /// (Capacity Editor scrubbing) there is no such update, so a Play()-driven system
-    /// just sits static. Simulate() is deterministic from the clip's own local time, so
-    /// it scrubs correctly both in Play Mode and in edit-mode preview.
-    /// Object activation (SetActive true/false on entry/exit) only happens when the clip's
-    /// HandleObjectActivation is checked — leave it off if the GameObject's active state is
-    /// owned elsewhere and this clip should only drive emission.
-    ///   1. Clip start: Clear + reset the local time accumulator.
-    ///   2. Every frame: advance the sim by the clip-local time delta (or hard re-simulate
-    ///      from 0 when scrubbing backward). Emission is only on between the clip's own
-    ///      live Ease In and (duration - Ease Out) — read straight from the TimelineClip
-    ///      every frame, so it's always exactly what the drag handles show, no copied
-    ///      value that can fall out of sync. Outside that window, no new particles, but
-    ///      everything already alive keeps simulating/dying on its own timing since
-    ///      Simulate keeps running.
-    ///   3. Clip exit (natural end, scrub-away, or an interrupted cutscene — anything that
-    ///      ends this clip's active window): Stop(StopEmittingAndClear) + deactivate.
+    /// On top of the Control Track behaviour it keeps emission ON only inside the clip's
+    /// [Ease In, duration - Ease Out] window: past the fade-out no new particles spawn and
+    /// whatever is alive dies on its own timing. A backward scrub resimulates that window in
+    /// segments so the dying tail is still correct. Object activation on entry/exit is optional.
     /// </summary>
     public sealed class ParticleSystemBehaviour : PlayableBehaviour
     {
@@ -35,14 +22,13 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
         public TimelineClip Clip;
         public bool HandleObjectActivation;
 
-        // Clear/Stop/Simulate all take a withChildren flag and cascade on their own, but
-        // EmissionModule.enabled doesn't — it's per-instance, so a child particle system
-        // (e.g. a sparks sub-emitter parented under the main burst) kept emitting straight
-        // through the ease-out window. Cached once so every child gets toggled too.
         private ParticleSystem[] allSystems;
+        private float lastTime;
+        private float emitStart;
+        private float emitEnd;
 
-        private double lastTime;
-        private bool emissionEnabled;
+        private const float Unset = float.MaxValue;
+        private const float MaxStep = 100f; // never simulate an absurd span in a single call
 
         public override void OnBehaviourPlay(Playable playable, FrameData info)
         {
@@ -51,52 +37,34 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 
             allSystems = ParticleSystem.GetComponentsInChildren<ParticleSystem>(true);
 
+            // Deterministic scrubbing: without a fixed seed every resimulation reseeds and the
+            // particles flicker differently each frame.
+            foreach (ParticleSystem system in allSystems)
+                if (system != null)
+                    system.useAutoRandomSeed = false;
+
             if (HandleObjectActivation)
                 ParticleSystem.gameObject.SetActive(true);
 
-            ParticleSystem.Clear(true);
-
-            lastTime = 0d;
-            emissionEnabled = true;
-            SetEmissionEnabled(true);
-
-            // Kicks the system into Simulate-driven mode at t=0 instead of Play()'s
-            // real-time mode — PrepareFrame takes over from here every frame.
-            ParticleSystem.Simulate(0f, true, true, false);
-            ParticleSystem.Pause(true);
+            lastTime = Unset; // force a resimulation from 0 on the first frame
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            if (ParticleSystem == null)
+            if (ParticleSystem == null || !ParticleSystem.gameObject.activeInHierarchy)
                 return;
 
-            double time = playable.GetTime();
+            float time = (float)playable.GetTime();
             double duration = Clip != null ? Clip.duration : playable.GetDuration();
-            double easeIn = Clip != null ? Clip.easeInDuration : 0d;
-            double easeOut = Clip != null ? Clip.easeOutDuration : 0d;
+            emitStart = Clip != null ? (float)Clip.easeInDuration : 0f;
+            emitEnd = (float)(duration - (Clip != null ? Clip.easeOutDuration : 0d));
 
-            bool shouldEmit = time >= easeIn && time < duration - easeOut;
-            if (shouldEmit != emissionEnabled)
-            {
-                emissionEnabled = shouldEmit;
-                SetEmissionEnabled(shouldEmit);
-            }
-
-            float delta = (float)(time - lastTime);
-            lastTime = time;
-
-            if (delta < 0f)
-                ParticleSystem.Simulate((float)time, true, true, false);
+            if (lastTime == Unset || time < lastTime)
+                SimulateFromStart(time);
             else
-                ParticleSystem.Simulate(delta, true, false, false);
+                SimulateForward(time - lastTime, time);
 
-            // Simulate() implicitly resumes the system (isPlaying = true); left alone,
-            // Unity's own editor-side particle preview then keeps advancing it in real
-            // wall-clock time on every subsequent repaint, even with the playhead
-            // stationary. Pausing right after freezes it exactly at the simulated frame
-            // until the next explicit Simulate call moves it.
-            ParticleSystem.Pause(true);
+            lastTime = time;
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
@@ -108,6 +76,48 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
 
             if (HandleObjectActivation)
                 ParticleSystem.gameObject.SetActive(false);
+
+            lastTime = Unset;
+        }
+
+        // Deterministic resimulation to 'target', emitting only inside [emitStart, emitEnd] so a
+        // backward scrub into the tail still shows the correct dying particles.
+        private void SimulateFromStart(float target)
+        {
+            ParticleSystem.Simulate(0f, true, true, false);
+
+            float t = 0f;
+            t = Segment(t, Mathf.Min(target, emitStart), false); // pre-roll (usually empty)
+            t = Segment(t, Mathf.Min(target, emitEnd), true);    // emitting window
+            Segment(t, target, false);                           // fade-out tail: no new particles
+        }
+
+        // Forward incremental advance — cheap, matches how the Control Track plays forward.
+        private void SimulateForward(float delta, float time)
+        {
+            SetEmissionEnabled(time >= emitStart && time < emitEnd);
+            Step(delta);
+        }
+
+        private float Segment(float from, float to, bool emit)
+        {
+            if (to <= from)
+                return from;
+
+            SetEmissionEnabled(emit);
+            Step(to - from);
+            return to;
+        }
+
+        private void Step(float dt)
+        {
+            while (dt > MaxStep)
+            {
+                ParticleSystem.Simulate(MaxStep, true, false, false);
+                dt -= MaxStep;
+            }
+            if (dt > 0f)
+                ParticleSystem.Simulate(dt, true, false, false);
         }
 
         private void SetEmissionEnabled(bool enabled)

@@ -19,7 +19,7 @@ namespace ATCG.Debugging.Cheats
         public override IEnumerable<CheatSection> GetSections()
         {
             RuntimeLocalBattlePlayer[] players =
-                Object.FindObjectsByType<RuntimeLocalBattlePlayer>(FindObjectsSortMode.None);
+                Object.FindObjectsByType<RuntimeLocalBattlePlayer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
             List<RuntimeLocalBattlePlayer> live = players
                 .Where(p => p != null && p.BattlePlayer != null)

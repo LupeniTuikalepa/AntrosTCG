@@ -17,7 +17,7 @@ namespace ATCG.Debugging.Cheats
         public override IEnumerable<CheatSection> GetSections()
         {
             LocalBattlePlayer player = Object
-                .FindObjectsByType<RuntimeLocalBattlePlayer>(FindObjectsSortMode.None)
+                .FindObjectsByType<RuntimeLocalBattlePlayer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                 .Where(p => p != null && p.BattlePlayer != null)
                 .OrderBy(p => p.LocalID)
                 .Select(p => p.BattlePlayer)

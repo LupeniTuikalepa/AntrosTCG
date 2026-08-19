@@ -71,25 +71,18 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             float delta = (float)(time - lastTime);
             lastTime = time;
 
+            // Same approach as ParticleSystemBehaviour / Unity's Control Track: advance by delta
+            // when playing forward, resimulate from 0 on a backward jump, and NEVER Pause. A
+            // stationary playhead gives delta 0 (no advance), so nothing drifts; leaving systems
+            // paused is what let Unity's Scene particle preview ("Show Only Selected") hijack them.
             foreach (var p in particleSystems)
             {
                 if (p == null) continue;
 
                 if (delta < 0f)
-                {
-                    p.Simulate((float)time, true, true, false);
-                }
+                    p.Simulate((float)time, true, true, false); // backward/jump: resimulate 0 -> time
                 else
-                {
-                    p.Simulate(delta, true, false, false);
-                }
-
-                // Simulate implicitly resumes the system; left running, Unity's editor
-                // preview then advances it in wall-clock on every repaint even with the
-                // playhead stationary (why the propagate VFX didn't scrub in the Capacity
-                // Editor). Pausing right after freezes it exactly on the driven frame until
-                // the next SetTime — same trick as ParticleSystemBehaviour.
-                p.Pause(true);
+                    p.Simulate(delta, true, false, false);      // forward: advance by delta
             }
         }
 
@@ -99,16 +92,12 @@ namespace ATCG.Battle.Entities.Runtime.VFX
             {
                 Generate();
 
-                // Seed every spawned instance at t=0 and freeze; SetTime drives them from
-                // here. Without reseting lastTime the first delta would be the whole
-                // pre-roll instead of one frame.
+                // Reset the clock and fix the seed so resimulations stay deterministic (no
+                // per-frame reseed flicker). SetTime drives the systems from here on.
                 lastTime = 0d;
                 foreach (var p in particleSystems)
-                {
-                    if (p == null) continue;
-                    p.Simulate(0f, true, true, false);
-                    p.Pause(true);
-                }
+                    if (p != null)
+                        p.useAutoRandomSeed = false;
             }
         }
 

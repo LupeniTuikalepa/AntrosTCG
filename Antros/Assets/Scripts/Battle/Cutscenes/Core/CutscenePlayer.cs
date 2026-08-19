@@ -41,12 +41,13 @@ namespace ATCG.Cutscenes
                     continue;
 
                 GameObject instance = Object.Instantiate(definition.Director.gameObject, screen.transform);
+
+                // Director prefabs built from the shared template ship with a CapacityCutscene rather
+                // than the generic Cutscene. Attach one on the fly so any cutscene kind plays through
+                // this generic player (RequireComponent guarantees the PlayableDirector is there).
                 Cutscene cutscene = instance.GetComponent<Cutscene>();
                 if (cutscene == null)
-                {
-                    Object.Destroy(instance);
-                    continue;
-                }
+                    cutscene = instance.AddComponent<Cutscene>();
 
                 cutscene.Configure(contextFactory != null ? contextFactory(screen) : new CutsceneContext());
                 instances.Add(cutscene);
