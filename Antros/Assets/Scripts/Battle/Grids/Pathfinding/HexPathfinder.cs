@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
-using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
@@ -31,23 +30,67 @@ namespace ATCG.Battle.Grids
     /// Model: the game imposes a ring-1 pattern around the unit. Each chosen neighbour costs
     /// exactly 1 step (= 1 speed). A redirect status on the tile you step ONTO slides you
     /// further in your entry direction (previous -> chosen), recursively, for FREE — the slide
-    /// does not cost extra speed. A single unit-cost BFS therefore yields both the reachable
-    /// set (for the two highlight rings) and, via parent links, the path to any reachable tile
-    /// (for "fast travel"): step-by-step and fast travel are the same computation.
+    /// does not cost extra speed.
+    ///
+    /// There is exactly ONE reachability computation, <see cref="ComputeReachable"/>, which folds
+    /// redirects in (through <see cref="ResolveRedirect"/>, the single place redirects are resolved)
+    /// and returns a <see cref="ReachableMap"/>. Highlight rings, hover preview, path commit and AI
+    /// all read that map, so "reachable" and "the path shown/taken" can never disagree.
     /// </summary>
     public static class HexPathfinder
     {
+        /// <summary>
+        /// Floods every tile reachable within <paramref name="maxSteps"/> steps from
+        /// <paramref name="origin"/>, folding redirect slides in, and returns a
+        /// <see cref="ReachableMap"/> with per-tile cost and precomputed full paths. This is the
+        /// ONLY entry point for reachability — dispose the returned map when done (it borrows
+        /// pooled collections).
+        /// </summary>
+        public static ReachableMap ComputeReachable(
+            PathfindingAgentAspect agent, BattleGrid grid, HexCoordinates origin, int maxSteps)
+        {
+            var map = new ReachableMap(origin);
+
+            if (maxSteps > 0)
+                Flood(agent, grid, origin, maxSteps, map);
+
+            map.BakePaths();
+            return map;
+        }
+
+        /// <summary>
+        /// Convenience wrapper for callers that only want a single path (e.g. AI). Reaches
+        /// <paramref name="goal"/> if possible, otherwise the reachable tile closest to it
+        /// (see <see cref="ReachableMap.TryGetPathToward"/>). Writes the full origin-inclusive
+        /// path into <paramref name="path"/> (cleared first). Shares the exact redirect-aware
+        /// computation used everywhere else.
+        /// </summary>
+        public static bool TryBuildPath(
+            HexCoordinates origin, HexCoordinates goal,
+            PathfindingAgentAspect agent, List<HexCoordinates> path, int maxSteps)
+        {
+            using ReachableMap map = ComputeReachable(agent, agent.GridMemberComponent.grid, origin, maxSteps);
+            return map.TryGetPathToward(goal, path);
+        }
+
         /// <summary>
         /// Resolves the redirect chain from stepping off <paramref name="from"/> onto
         /// <paramref name="chosen"/>. Appends every traversed tile (chosen first) to
         /// <paramref name="traversed"/> and returns the final landing tile. Stops on a cycle
         /// or when a redirect would push off-grid (staying on the last valid tile).
+        ///
+        /// This is the SINGLE place a redirect is ever resolved; every reachability/path query
+        /// funnels through here so the rules stay in one spot.
         /// </summary>
         public static HexCoordinates ResolveRedirect(
             PathfindingAgentAspect agent, BattleGrid grid,
             HexCoordinates from, HexCoordinates chosen, List<HexCoordinates> traversed)
         {
-            Debug.Log($"[HexPathFinding] ResolveRedirect");
+            // The entry tile must itself be on-grid and standable for this agent. If it isn't, no
+            // move happens (nothing is appended to `traversed`) and the agent stays on `from`.
+            if (!grid.TryGetBattleCell(chosen, out BattleCellAspect chosenCell) ||
+                !IsTraversable(agent, chosenCell))
+                return from;
 
             HexCoordinates previous = from;
             HexCoordinates current = chosen;
@@ -62,8 +105,14 @@ namespace ATCG.Battle.Grids
                 {
                     if (!visited.Add(next))
                         break; // redirect cycle
-                    if (!grid.TryGetBattleCell(next, out _))
-                        break; // pushed off-grid: stop on the last valid tile
+
+                    // A redirect — a slide today, a teleport tomorrow — may only place the agent on
+                    // a tile that is on-grid AND standable for it. An off-grid or occupied target
+                    // stops the chain on the last valid tile, so the agent is never left standing on
+                    // a blocked tile (and an occupied redirecting tile can never be taken).
+                    if (!grid.TryGetBattleCell(next, out BattleCellAspect nextCell) ||
+                        !IsTraversable(agent, nextCell))
+                        break;
 
                     traversed.Add(next);
                     previous = current;
@@ -74,22 +123,13 @@ namespace ATCG.Battle.Grids
             return current;
         }
 
-        /// <summary>
-        /// Floods every tile reachable within <paramref name="maxSteps"/> steps from
-        /// <paramref name="origin"/>. Fills <paramref name="costSoFar"/> (step cost to each
-        /// tile, origin = 0) and <paramref name="cameFrom"/> (parent link per tile).
-        /// </summary>
-        public static void GetReachable(
+        // Unit-cost BFS. Each dequeued tile expands its ring-1 neighbours; every accepted neighbour
+        // is resolved through the redirect chain and recorded at its LANDING tile. FIFO + uniform
+        // cost means the first time a tile is recorded it already has the minimum step count.
+        private static void Flood(
             PathfindingAgentAspect agent, BattleGrid grid, HexCoordinates origin, int maxSteps,
-            Dictionary<HexCoordinates, int> costSoFar,
-            Dictionary<HexCoordinates, MovementStep> cameFrom)
+            ReachableMap map)
         {
-            Debug.Log($"[HexPathFinding] GetReachable");
-
-            costSoFar[origin] = 0;
-            if (maxSteps <= 0)
-                return;
-
             using (ListPool<HexCoordinates>.Get(out var frontier))
             using (ListPool<HexCoordinates>.Get(out var traversed))
             {
@@ -99,7 +139,7 @@ namespace ATCG.Battle.Grids
                 while (head < frontier.Count)
                 {
                     HexCoordinates current = frontier[head++];
-                    int cost = costSoFar[current];
+                    map.TryGetRawCost(current, out int cost);
                     if (cost >= maxSteps)
                         continue;
 
@@ -115,77 +155,30 @@ namespace ATCG.Battle.Grids
                         traversed.Clear();
                         HexCoordinates landing = ResolveRedirect(agent, grid, current, neighbour, traversed);
 
-                        // The tile the unit actually ends up on must itself be standable.
-                        if (!grid.TryGetBattleCell(landing, out BattleCellAspect landingCell) ||
-                            !IsTraversable(agent, landingCell))
-                            continue;
-
+                        // ResolveRedirect only ever returns an on-grid, standable tile (it stops the
+                        // redirect chain before any blocked tile), so `landing` needs no re-check.
                         int newCost = cost + 1;
-                        if (costSoFar.TryGetValue(landing, out int existing) && existing <= newCost)
+                        if (map.TryGetRawCost(landing, out int existing) && existing <= newCost)
                             continue;
 
-                        costSoFar[landing] = newCost;
-                        cameFrom[landing] = new MovementStep(current, traversed.ToArray());
+                        map.Record(landing, newCost, new MovementStep(current, traversed.ToArray()));
                         frontier.Add(landing);
                     }
                 }
             }
         }
 
-        public static bool TryBuildPath(
-            HexCoordinates origin,
-            HexCoordinates goal,
-            PathfindingAgentAspect agent,
-            List<HexCoordinates> path,
-            int maxSteps)
-        {
-            using (DictionaryPool<HexCoordinates, int>.Get(out var costSoFar))
-            using (DictionaryPool<HexCoordinates, MovementStep>.Get(out var cameFrom))
-            {
-                path.Add(origin);
-                GetReachable(agent, agent.GridMemberComponent.grid, origin, maxSteps, costSoFar, cameFrom);
-
-                if (cameFrom.Count == 0)
-                    return false;
-
-                if (costSoFar.ContainsKey(goal))
-                    return TryBuildPath(origin, goal, cameFrom, path);
-
-                HexCoordinates bestTile = HexCoordinates.None;
-                int bestDistance = int.MaxValue;
-
-                foreach (var (hexCoordinates, _) in costSoFar)
-                {
-                    if (hexCoordinates == origin)
-                        continue;
-
-                    int distanceToGoal = hexCoordinates.Distance(goal);
-                    if (distanceToGoal < bestDistance)
-                    {
-                        bestDistance = distanceToGoal;
-                        bestTile = hexCoordinates;
-                    }
-                }
-
-                if (!bestTile.IsValid)
-                    return false;
-
-                return TryBuildPath(origin, bestTile, cameFrom, path);
-            }
-        }
-
         /// <summary>
         /// Reconstructs the tiles from <paramref name="origin"/> (exclusive) to
-        /// <paramref name="goal"/> (inclusive) using BFS parent links, redirect slides
-        /// included. Appends to <paramref name="path"/> (does not clear it) and returns
-        /// whether a complete chain back to origin was found.
+        /// <paramref name="goal"/> (inclusive) using BFS parent links, redirect slides included,
+        /// and APPENDS them to <paramref name="path"/> (does not clear it). Returns whether a
+        /// complete chain back to origin was found. Internal: consumers use
+        /// <see cref="ReachableMap.TryGetPathFor"/>, which is O(1) against baked paths.
         /// </summary>
-        public static bool TryBuildPath(
+        internal static bool AppendReconstruct(
             HexCoordinates origin, HexCoordinates goal,
             Dictionary<HexCoordinates, MovementStep> cameFrom, List<HexCoordinates> path)
         {
-            Debug.Log($"[HexPathFinding] TryBuildPath (de lupeni)");
-
             if (goal == origin)
                 return true;
             if (!cameFrom.ContainsKey(goal))
@@ -193,21 +186,18 @@ namespace ATCG.Battle.Grids
 
             int startCount = path.Count;
             HexCoordinates current = goal;
-            
+
             while (current != origin && cameFrom.TryGetValue(current, out MovementStep step))
             {
                 HexCoordinates[] tiles = step.traversed;
                 for (int i = tiles.Length - 1; i >= 0; i--)
-                {
                     path.Add(tiles[i]);
-                }
 
                 current = step.previous;
             }
 
             path.Reverse(startCount, path.Count - startCount);
             return current == origin;
-            
         }
 
         public static bool IsTraversable(PathfindingAgentAspect agent, BattleCellAspect cell)
@@ -227,11 +217,19 @@ namespace ATCG.Battle.Grids
             PathfindingAgentAspect agent, BattleCellAspect redirectCell,
             HexCoordinates directionOrigin, HexCoordinates to, out HexCoordinates redirected)
         {
-            Debug.Log($"[HexPathFinding] TryRedirectOnce");
-            var iterator = new PathfindingRedirectionIterator(redirectCell, directionOrigin, to, agent);
+            // PathfindingRedirectionIterator is a struct, and the generated
+            // ForeachRedirectStatusComponent takes the iterator as an INTERFACE — passing a struct
+            // there boxes it, and Process<T> mutates that box. We must therefore box ONCE up front
+            // (declare the local as the interface type) and read the result back from that same box.
+            // Reading a fresh struct local instead would lose every mutation (To / WasRedirected),
+            // which is exactly why redirects silently never fired.
+            IRedirectStatusComponentIterator iterator =
+                new PathfindingRedirectionIterator(redirectCell, directionOrigin, to, agent);
             iterator.ForeachRedirectStatusComponent();
-            redirected = iterator.To;
-            return iterator.WasRedirected && iterator.To != to;
+
+            var resolved = (PathfindingRedirectionIterator)iterator;
+            redirected = resolved.To;
+            return resolved.WasRedirected && resolved.To != to;
         }
     }
 }

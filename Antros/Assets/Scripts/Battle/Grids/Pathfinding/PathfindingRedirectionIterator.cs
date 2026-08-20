@@ -1,6 +1,8 @@
-﻿using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.CapacitySystem.Core.Status;
+using ATCG.Battle.Entities;
+using ATCG.Battle.Entities.Aspects;
+using ATCG.Battle.Entities.Components;
 using ATCG.HexGrids;
-using UnityEngine;
 
 namespace ATCG.Battle.Grids
 {
@@ -39,18 +41,27 @@ namespace ATCG.Battle.Grids
             WasRedirected = false;
         }
 
-
+        // NOTE: this iterator is a struct, but the generated ForeachRedirectStatusComponent takes it
+        // as an interface — so it runs on a BOXED copy. Callers must box once and read the result
+        // back from that same box (see HexPathfinder.TryRedirectOnce); a fresh struct local would
+        // lose every mutation made here.
         public void Process<T>() where T : struct, IRedirectStatusComponent
         {
-            Debug.Log($"[PathfindingIterator] Processing");
-            // Only one redirect component may fire per pass: once one has redirected, skip
-            // the rest. (Was inverted — `if(!WasRedirected) return;` — so the first component
-            // always returned early and no redirect ever happened.)
+            // Only one redirect component may fire per pass: once one has redirected, skip the rest.
             if (WasRedirected)
                 return;
 
-            if (battleCellAspect.EntityAddress.TryGetComponentRO<T>(out var redirectStatusComponent))
+            // A status (Black Ice, and later teleporters) does NOT live on the cell itself: applying
+            // it spawns a dedicated status entity that the cell tracks through its StatusReceiver.
+            // So we look for T on each of the cell's status entities, not on the cell entity.
+            if (!battleCellAspect.EntityAddress.TryGetComponentRO(out StatusReceiver statusReceiver))
+                return;
+
+            foreach (ComponentRef<StatusTag> statusTagRef in statusReceiver.AllStatus)
             {
+                if (!statusTagRef.EntityAddress.TryGetComponentRO<T>(out var redirectStatusComponent))
+                    continue;
+
                 AgentMovementType agentMovementType = SegmentType;
                 HexCoordinates hexCoordinates = To;
 
@@ -59,6 +70,7 @@ namespace ATCG.Battle.Grids
                     To = hexCoordinates;
                     SegmentType = agentMovementType;
                     WasRedirected = true;
+                    return;
                 }
             }
         }

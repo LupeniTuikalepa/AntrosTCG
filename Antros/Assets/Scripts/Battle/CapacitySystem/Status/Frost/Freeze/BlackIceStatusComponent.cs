@@ -21,7 +21,6 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost
         {
             var direction = from.GetNormalizedDirection(to).NearestCardinal();
 
-            Debug.Log($"Redirect from {from} to {to}");
             if (direction is { X: 0, Y: 0 })
                 return false;
 
