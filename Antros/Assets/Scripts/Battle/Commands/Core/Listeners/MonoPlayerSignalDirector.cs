@@ -4,9 +4,9 @@ using ATCG.Battle.Players;
 
 namespace ATCG.Battle.Commands.Listeners
 {
-    public abstract class MonoPlayerSignalListener : 
-        MonoBaseSignalListener<PlayerCommandSignal>,
-        IPlayerSignalListener
+    public abstract class MonoPlayerSignalDirector : 
+        MonoBaseSignalDirector<PlayerCommandSignal>,
+        IPlayerSignalDirector
     {
         public IBattlePlayer BattlePlayer { get; private set; }
 

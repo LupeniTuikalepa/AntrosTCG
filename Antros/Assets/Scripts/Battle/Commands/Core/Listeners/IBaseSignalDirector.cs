@@ -1,10 +1,11 @@
 ﻿using System;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Players;
 using ATCG.Databases;
 
 namespace ATCG.Battle.Commands.Listeners
 {
-    public interface IBaseSignalListener<in T> : ICommandListener<T> where T : ICommandSignal
+    public interface IBaseSignalDirector<in T> : ICommandDirector<T> where T : ICommandSignal
     {
         GameDatabaseObject[] Sources { get; }
 
@@ -20,7 +21,7 @@ namespace ATCG.Battle.Commands.Listeners
             return false;
         }
         
-        bool ICommandListener<T>.Accepts(CommandContext context, T command)
+        bool ICommandDirector<T>.CanPlay(T command)
         {
             return HasSource(command);
         }

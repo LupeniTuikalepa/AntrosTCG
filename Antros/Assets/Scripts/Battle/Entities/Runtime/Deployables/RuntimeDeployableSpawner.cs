@@ -13,12 +13,12 @@ namespace ATCG.Battle.Entities.Runtime.Deployables
 
         private void OnEnable()
         {
-            this.RegisterListener();
+            this.Register();
         }
 
         private void OnDisable()
         {
-            this.UnregisterListener();
+            this.Unregister();
         }
 
         public async Awaitable Play(CommandDirectorState state, CommandContext context, SpawnDeployableCommand command)

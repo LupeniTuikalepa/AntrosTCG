@@ -104,12 +104,12 @@ namespace ATCG.Battle.Commands
                 EndGroup();
         }
 
-        public static void RegisterListener(this ICommandDirector director)
+        public static void Register(this ICommandDirector director)
         {
             CommandsListeners.Add(director);
         }
 
-        public static void UnregisterListener(this ICommandDirector director)
+        public static void Unregister(this ICommandDirector director)
         {
             CommandsListeners.Remove(director);
         }

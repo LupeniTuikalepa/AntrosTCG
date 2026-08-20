@@ -88,7 +88,6 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                     if (destination == origin)
                         return;
 
-                    path.Remove(destination);
                     var moveAlongPathCommand = new MoveAlongPathCommand(aspect.EntityAddress, path.ToArray(), data.MoveSpeed);
                     command.Inject(context, moveAlongPathCommand);
                 }

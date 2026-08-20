@@ -130,14 +130,18 @@ namespace ATCG.Battle.Entities.Runtime
 
 			state.CompleteFollowThrough(this);
 		}
+		
 		async Awaitable ICommandDirector<PushbackCommand>.Play(CommandDirectorState state, CommandContext context, PushbackCommand command)
 		{
 			state.CompleteWindUp(this);
 
 			var infos = command.GetInfos();
-			var destination = RuntimeBattleGrid.GetPositionAt(infos.to);
-
-			await Tween.Position(transform, destination, .15f, Ease.OutCirc);
+			
+			foreach (var coord in infos.Path)
+			{
+				var destination = RuntimeBattleGrid.GetPositionAt(coord);
+				await Tween.Position(transform, destination, .15f, Ease.OutCirc);
+			}
 
 			state.CompleteFollowThrough(this);
 		}

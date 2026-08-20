@@ -29,12 +29,12 @@ namespace ATCG.Battle
 		}
 		protected override void OnConnect()
 		{
-			this.RegisterListener();
+			this.Register();
 		}
 
 		protected override void OnDisconnect()
 		{
-			this.UnregisterListener();
+			this.Unregister();
 		}
 
 		async Awaitable ICommandDirector<SpawnHeroCommand>.Play(CommandDirectorState state, CommandContext context,
