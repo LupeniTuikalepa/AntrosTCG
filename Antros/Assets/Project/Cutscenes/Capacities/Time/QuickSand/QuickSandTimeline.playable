@@ -16,7 +16,7 @@ MonoBehaviour:
     exposedName: b40a4c69a48afb94ead0e02d5e9b3a14
     defaultValue: {fileID: 0}
   handleObjectActivation: 1
---- !u!114 &-8263317791609373219
+--- !u!114 &-5476255890635742602
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28,7 +28,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationPlayableAsset
-  m_Clip: {fileID: 7400000, guid: b2784fa1214e8a54fa0d97addd744cfa, type: 2}
+  m_Clip: {fileID: 7400000, guid: 5d2c571d7cc1fec4bb73ee8ec264b065, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Children:
   - {fileID: 1524981252867357238}
   - {fileID: -648763699424216149}
+  - {fileID: 8631376535660859041}
   m_Clips: []
   m_Markers:
     m_Objects: []
@@ -95,21 +96,6 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: 62a77e6135037c14a8a3dba2d1f9afa8
     defaultValue: {fileID: 0}
---- !u!114 &-2875958328854870263
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c2986292b8ecdd4d9b57c8cbefde1f4, type: 3}
-  m_Name: Step Marker
-  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
-  m_Time: 2.0166666666666666
-  stepName: Quicksand
-  id: 965f7aed-bbe0-443f-92b7-5dd3da0afc62
 --- !u!114 &-648763699424216149
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -132,10 +118,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 0.8333333333333334
+    m_Start: 0.8666666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -8842724892692008316}
-    m_Duration: 1.5166666666666675
+    m_Duration: 0.8166666666666667
     m_TimeScale: 1
     m_ParentTrack: {fileID: -648763699424216149}
     m_EaseInDuration: 0
@@ -226,6 +212,21 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-23567842654954041
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2986292b8ecdd4d9b57c8cbefde1f4, type: 3}
+  m_Name: Step Marker
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Cutscenes.StepMarker
+  m_Time: 1.4833333333333334
+  stepName: Quicksand
+  id: 472f05df-8d09-4864-aa07-619b01a3da27
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,7 +249,31 @@ MonoBehaviour:
     m_Framerate: 60
     m_ScenePreview: 1
   m_DurationMode: 0
-  m_MarkerTrack: {fileID: 0}
+  m_MarkerTrack: {fileID: 481956178424154631}
+--- !u!114 &481956178424154631
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a16748d9461eae46a725db9776d5390, type: 3}
+  m_Name: Markers
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.MarkerTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects:
+    - {fileID: -23567842654954041}
 --- !u!114 &1524981252867357238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,10 +296,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 2.0166666666666666
+    m_Start: 1.3666666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -4489099593173928469}
-    m_Duration: 0.8833333333333333
+    m_Duration: 1.4166666666666665
     m_TimeScale: 1
     m_ParentTrack: {fileID: 1524981252867357238}
     m_EaseInDuration: 0
@@ -365,8 +390,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 0
     m_ClipIn: 0
-    m_Asset: {fileID: -8263317791609373219}
-    m_Duration: 4
+    m_Asset: {fileID: -5476255890635742602}
+    m_Duration: 3.6075471698113213
     m_TimeScale: 1
     m_ParentTrack: {fileID: 2927184931165626035}
     m_EaseInDuration: 0
@@ -432,8 +457,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: QuickSand
   m_Markers:
-    m_Objects:
-    - {fileID: -2875958328854870263}
+    m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
   m_InfiniteClipPostExtrapolation: 0
   m_InfiniteClipOffsetPosition: {x: 0, y: 0, z: 0}
@@ -452,6 +476,24 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &3390417006462296803
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8679c35e47a17284d94887ec3febf960, type: 3}
+  m_Name: FollowBoneClip
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Core.Cutscenes.FollowBoneClip
+  bone: 18
+  boneNameOverride: 
+  syncPosition: 1
+  positionOffset: {x: 0.09, y: 0.09, z: 0.16}
+  syncRotation: 0
+  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &3434189959445232488
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -477,7 +519,7 @@ MonoBehaviour:
     m_Start: 1.1333333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 7113667900098981383}
-    m_Duration: 2.8666666666666654
+    m_Duration: 1.6166666666666667
     m_TimeScale: 1
     m_ParentTrack: {fileID: 3434189959445232488}
     m_EaseInDuration: 0
@@ -612,3 +654,95 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: 19b363699d744804790406613d8b6255
     defaultValue: {fileID: 0}
+--- !u!114 &8631376535660859041
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63a74e2f62d488c9492fa732060bbec, type: 3}
+  m_Name: Tween Track
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Core.Cutscenes.TweenTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: -4988315239271291302}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0.8666666666666667
+    m_ClipIn: 0
+    m_Asset: {fileID: 3390417006462296803}
+    m_Duration: 0.8166666666666667
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 8631376535660859041}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: FollowBoneClip
+  m_Markers:
+    m_Objects: []

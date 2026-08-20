@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Quickeness
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Frost.QuicknessData
   guidText: c8229d28-3d5d-46bb-a2ec-432066a79030
+  <Director>k__BackingField: {fileID: 2261353096448047436, guid: 35080703c82d3f944b9db2ae6df05071, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Running
   <Element>k__BackingField: 5
   <Description>k__BackingField: +1 de vitesse
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269950898733228
-  <CutsceneDirector>k__BackingField: {fileID: 2261353096448047436, guid: 35080703c82d3f944b9db2ae6df05071, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 5888c04cf99f8d84dad150cb1301cbe5, type: 2}
   <Range>k__BackingField: 0

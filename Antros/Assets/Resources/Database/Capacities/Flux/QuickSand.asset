@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: QuickSand
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.QuicksandData
   guidText: a8c7ace5-390d-4f4f-9cea-7e2eb8928c1c
+  <Director>k__BackingField: {fileID: 8799550031365564962, guid: 2505cd27c0f26e9449c1f8abfbae5f98, type: 3}
   <Cost>k__BackingField: 0
   <Name>k__BackingField: QuickSand
   <Element>k__BackingField: 5
   <Description>k__BackingField: "Ralentit les personnes sur les cases que t'as s\xE9l\xE9ctionn\xE9."
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269927783137747
-  <CutsceneDirector>k__BackingField: {fileID: 8799550031365564962, guid: 2505cd27c0f26e9449c1f8abfbae5f98, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Status>k__BackingField: {fileID: 11400000, guid: 0176709e6d0db8f408fa33cdd1f6b890, type: 2}
   <Range>k__BackingField: 9
