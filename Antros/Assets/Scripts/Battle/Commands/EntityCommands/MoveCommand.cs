@@ -15,7 +15,6 @@ namespace ATCG.Battle.Commands.EntityCommands
             this.destination = destination;
         }
 
-        //TODO use correct component
         protected override void Process(in CommandContext context)
         {
             if (Target.TryGetComponent<GridMemberComponent>(context.World, out var gridEntityComponentRef))

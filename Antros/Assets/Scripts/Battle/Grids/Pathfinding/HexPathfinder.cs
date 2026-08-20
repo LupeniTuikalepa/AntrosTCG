@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
@@ -46,6 +47,8 @@ namespace ATCG.Battle.Grids
             PathfindingAgentAspect agent, BattleGrid grid,
             HexCoordinates from, HexCoordinates chosen, List<HexCoordinates> traversed)
         {
+            Debug.Log($"[HexPathFinding] ResolveRedirect");
+
             HexCoordinates previous = from;
             HexCoordinates current = chosen;
             traversed.Add(current);
@@ -81,6 +84,8 @@ namespace ATCG.Battle.Grids
             Dictionary<HexCoordinates, int> costSoFar,
             Dictionary<HexCoordinates, MovementStep> cameFrom)
         {
+            Debug.Log($"[HexPathFinding] GetReachable");
+
             costSoFar[origin] = 0;
             if (maxSteps <= 0)
                 return;
@@ -111,7 +116,8 @@ namespace ATCG.Battle.Grids
                         HexCoordinates landing = ResolveRedirect(agent, grid, current, neighbour, traversed);
 
                         // The tile the unit actually ends up on must itself be standable.
-                        if (!grid.TryGetBattleCell(landing, out BattleCellAspect landingCell) || !IsTraversable(agent, landingCell))
+                        if (!grid.TryGetBattleCell(landing, out BattleCellAspect landingCell) ||
+                            !IsTraversable(agent, landingCell))
                             continue;
 
                         int newCost = cost + 1;
@@ -127,10 +133,10 @@ namespace ATCG.Battle.Grids
         }
 
         public static bool TryBuildPath(
-            HexCoordinates origin, 
-            HexCoordinates goal, 
-            PathfindingAgentAspect agent, 
-            List<HexCoordinates> path, 
+            HexCoordinates origin,
+            HexCoordinates goal,
+            PathfindingAgentAspect agent,
+            List<HexCoordinates> path,
             int maxSteps)
         {
             using (DictionaryPool<HexCoordinates, int>.Get(out var costSoFar))
@@ -167,7 +173,7 @@ namespace ATCG.Battle.Grids
                 return TryBuildPath(origin, bestTile, cameFrom, path);
             }
         }
-        
+
         /// <summary>
         /// Reconstructs the tiles from <paramref name="origin"/> (exclusive) to
         /// <paramref name="goal"/> (inclusive) using BFS parent links, redirect slides
@@ -178,6 +184,8 @@ namespace ATCG.Battle.Grids
             HexCoordinates origin, HexCoordinates goal,
             Dictionary<HexCoordinates, MovementStep> cameFrom, List<HexCoordinates> path)
         {
+            Debug.Log($"[HexPathFinding] TryBuildPath (de lupeni)");
+
             if (goal == origin)
                 return true;
             if (!cameFrom.ContainsKey(goal))
@@ -185,16 +193,21 @@ namespace ATCG.Battle.Grids
 
             int startCount = path.Count;
             HexCoordinates current = goal;
+            
             while (current != origin && cameFrom.TryGetValue(current, out MovementStep step))
             {
                 HexCoordinates[] tiles = step.traversed;
                 for (int i = tiles.Length - 1; i >= 0; i--)
+                {
                     path.Add(tiles[i]);
+                }
+
                 current = step.previous;
             }
 
             path.Reverse(startCount, path.Count - startCount);
             return current == origin;
+            
         }
 
         public static bool IsTraversable(PathfindingAgentAspect agent, BattleCellAspect cell)
@@ -214,6 +227,7 @@ namespace ATCG.Battle.Grids
             PathfindingAgentAspect agent, BattleCellAspect redirectCell,
             HexCoordinates directionOrigin, HexCoordinates to, out HexCoordinates redirected)
         {
+            Debug.Log($"[HexPathFinding] TryRedirectOnce");
             var iterator = new PathfindingRedirectionIterator(redirectCell, directionOrigin, to, agent);
             iterator.ForeachRedirectStatusComponent();
             redirected = iterator.To;

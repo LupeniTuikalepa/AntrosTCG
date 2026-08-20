@@ -21,7 +21,6 @@ namespace ATCG.Battle.Entities.Runtime
 		IEntityCommandDirector<DamageCommand>,
 		IEntityCommandDirector<MoveCommand>,
 		IEntityCommandDirector<FallCommand>,
-		IEntityCommandDirector<PushbackCommand>,
 		IEntityCommandDirector<BasicAttackCommand>,
 		IEntityCommandDirector<ApplyStatusCommand>,
 		IEntityCommandDirector<TickStatusCommand>,
@@ -127,21 +126,6 @@ namespace ATCG.Battle.Entities.Runtime
 			await Tween.Rotation(transform, targetRotation, 0.15f, Ease.InOutQuint);
 			await Tween.Position(transform, position, .15f, Ease.OutCirc);
 
-
-			state.CompleteFollowThrough(this);
-		}
-		
-		async Awaitable ICommandDirector<PushbackCommand>.Play(CommandDirectorState state, CommandContext context, PushbackCommand command)
-		{
-			state.CompleteWindUp(this);
-
-			var infos = command.GetInfos();
-			
-			foreach (var coord in infos.Path)
-			{
-				var destination = RuntimeBattleGrid.GetPositionAt(coord);
-				await Tween.Position(transform, destination, .15f, Ease.OutCirc);
-			}
 
 			state.CompleteFollowThrough(this);
 		}
