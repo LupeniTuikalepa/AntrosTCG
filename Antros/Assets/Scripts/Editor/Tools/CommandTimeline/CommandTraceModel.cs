@@ -148,7 +148,20 @@ namespace ATCG.Editor.Editor.Commands
 
                 BattleID parentID = c.Command.Parent;
                 if (parentID != BattleID.None && commands.TryGetValue(parentID, out TracedCommand parent))
-                    parent.Children.Add(c);
+                {
+                    // Group boundary: this embed was registered inside a nested
+                    // BeginGroup (its group differs from its parent's). Surface it as a
+                    // root of its own group instead of inlining it under the parent, so
+                    // nested groups actually contain their injected commands.
+                    if (parent.GroupID != c.GroupID
+                        && groups.TryGetValue(c.GroupID, out TracedGroup ownGroup))
+                    {
+                        if (!ownGroup.Roots.Contains(c))
+                            ownGroup.Roots.Add(c);
+                    }
+                    else
+                        parent.Children.Add(c);
+                }
                 else
                 {
                     // Parent not captured (shouldn't happen): surface it as a root of

@@ -74,7 +74,7 @@ namespace ATCG.Battle.Commands
             pairings[command]= group;
             commandTree.AddCommand(command);
 
-            CommandTrace.ReportCommandRegistered(groupID, command);
+            CommandTrace.ReportCommandRegistered(CommandManager.CurrentGroupID, command);
             CommandManager.TriggerWatchers(context, command);
 
             foreach (ICommandDirector commandPlayer in CommandManager.Listeners)

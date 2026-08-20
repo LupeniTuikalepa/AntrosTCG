@@ -23,6 +23,15 @@ namespace ATCG.Battle.Commands
 
         private static readonly Stack<CommandGroup> GroupsQueue = new Stack<CommandGroup>();
 
+        /// <summary>
+        /// Id of the group currently on top of the stack (the innermost active
+        /// BeginGroup), or None. Unlike the CommandContext's frozen groupID, this
+        /// follows nested BeginGroup/EndGroup calls, so commands injected inside a
+        /// nested group are traced under that group.
+        /// </summary>
+        public static BattleID CurrentGroupID =>
+            GroupsQueue.TryPeek(out var g) ? g.GroupID : BattleID.None;
+
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
         {
