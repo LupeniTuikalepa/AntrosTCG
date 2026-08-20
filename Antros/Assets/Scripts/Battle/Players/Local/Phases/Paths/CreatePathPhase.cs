@@ -39,6 +39,10 @@ namespace ATCG.Battle.Players.Local.Phases
     /// adjacent tile (1 speed) or a farther reachable tile (fast travel: pathfinding fills the
     /// gap, consuming the corresponding speed). Redirect slides are free and folded into the
     /// reachability flood.
+    ///
+    /// Each step computes ONE <see cref="ReachableMap"/> up front (redirects included) and keeps
+    /// it for the whole step. Rings, hover preview and the committed path all read that map, so
+    /// what the editor previews is exactly what the move will do — no per-hover recompute.
     /// </summary>
     public class CreatePathPhase : LocalPlayerPhase<HexCoordinates[]>, ICreatePathPhase, IHighlightingPhase
     {
@@ -77,7 +81,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
         // Set for the duration of a step so the hover handler can preview the tentative path.
         private HexCoordinates currentCenter;
-        private Dictionary<HexCoordinates, MovementStep> currentCameFrom;
+        private ReachableMap currentReachable;
 
         public CreatePathPhase(LocalBattlePlayer localBattlePlayer, EntityAddress agentAddress, HexCoordinates startingPoint, int speed) : base(localBattlePlayer)
         {
@@ -120,26 +124,21 @@ namespace ATCG.Battle.Players.Local.Phases
 
             while (remaining > 0)
             {
-                Debug.Log($"[CreatePathPhase] Execute");
-
                 if (!BattleGrid.TryGetBattleCell(center, out _))
                     break;
 
-                Dictionary<HexCoordinates, int> costSoFar = DictionaryPool<HexCoordinates, int>.Get();
-                Dictionary<HexCoordinates, MovementStep> cameFrom = DictionaryPool<HexCoordinates, MovementStep>.Get();
+                ReachableMap map = HexPathfinder.ComputeReachable(agent, BattleGrid, center, remaining);
                 try
                 {
-                    HexPathfinder.GetReachable(agent, BattleGrid, center, remaining, costSoFar, cameFrom);
-
                     // Nowhere to go from here.
-                    if (cameFrom.Count == 0)
+                    if (!map.HasReachableTiles)
                         break;
 
-                    BuildRings(center, costSoFar);
+                    BuildRings(center, map.Costs);
                     currentCenter = center;
-                    currentCameFrom = cameFrom;
+                    currentReachable = map;
 
-                    using HexPatternBuilder builder = BuildPattern(center, costSoFar);
+                    using HexPatternBuilder builder = BuildPattern(center, map.Costs);
 
                     var selectEntityPhase = new SelectEntityPhase<GridFilter>(LocalBattlePlayer, filter, builder);
                     selectEntityPhase.SetHighlightClassifier(ClassifyMovement);
@@ -160,10 +159,10 @@ namespace ATCG.Battle.Players.Local.Phases
                         continue;
 
                     HexCoordinates goal = gridMember.coordinates;
-                    if (!costSoFar.TryGetValue(goal, out int goalCost) || goalCost <= 0)
+                    if (!map.TryGetCost(goal, out int goalCost) || goalCost <= 0)
                         continue;
 
-                    HexPathfinder.TryBuildPath(center, goal, cameFrom, CurrentPath);
+                    AppendStepPath(map, goal);
                     remaining -= goalCost;
                     center = goal;
 
@@ -171,9 +170,8 @@ namespace ATCG.Battle.Players.Local.Phases
                 }
                 finally
                 {
-                    currentCameFrom = null;
-                    DictionaryPool<HexCoordinates, int>.Release(costSoFar);
-                    DictionaryPool<HexCoordinates, MovementStep>.Release(cameFrom);
+                    currentReachable = null;
+                    map.Dispose();
                 }
             }
 
@@ -197,7 +195,7 @@ namespace ATCG.Battle.Players.Local.Phases
             return fallback;
         }
 
-        private void BuildRings(HexCoordinates center, Dictionary<HexCoordinates, int> costSoFar)
+        private void BuildRings(HexCoordinates center, IReadOnlyDictionary<HexCoordinates, int> costSoFar)
         {
             directRing.Clear();
             reachableRing.Clear();
@@ -214,7 +212,7 @@ namespace ATCG.Battle.Players.Local.Phases
             }
         }
 
-        private HexPatternBuilder BuildPattern(HexCoordinates center, Dictionary<HexCoordinates, int> costSoFar)
+        private HexPatternBuilder BuildPattern(HexCoordinates center, IReadOnlyDictionary<HexCoordinates, int> costSoFar)
         {
             using (ListPool<HexCoordinates>.Get(out var coords))
             {
@@ -228,15 +226,32 @@ namespace ATCG.Battle.Players.Local.Phases
             }
         }
 
+        // Appends this step's committed segment (center-exclusive .. goal, redirect slides
+        // included) to CurrentPath, which already ends at `center`.
+        private void AppendStepPath(ReachableMap map, HexCoordinates goal)
+        {
+            using (ListPool<HexCoordinates>.Get(out var segment))
+            {
+                if (!map.TryGetPathFor(goal, segment))
+                    return;
+
+                for (int i = 1; i < segment.Count; i++)
+                    CurrentPath.Add(segment[i]);
+            }
+        }
+
         private void UpdateTemporaryPath(EntityAddress address)
         {
-            if (currentCameFrom == null)
+            if (currentReachable == null)
                 return;
             if (!address.TryGetComponentRO(out GridMemberComponent gridMember))
                 return;
 
-            TemporaryPath.Clear();
-            HexPathfinder.TryBuildPath(currentCenter, gridMember.coordinates, currentCameFrom, TemporaryPath);
+            // Full path is center-inclusive; drop the leading center since CurrentPath already
+            // ends there and the renderer draws CurrentPath + TemporaryPath back to back.
+            if (currentReachable.TryGetPathFor(gridMember.coordinates, TemporaryPath) && TemporaryPath.Count > 0)
+                TemporaryPath.RemoveAt(0);
+
             OnPathChanged?.Invoke(this);
         }
 

@@ -1,4 +1,4 @@
-﻿using ATCG.Battle.CapacitySystem.Core.Status.Commands;
+using ATCG.Battle.CapacitySystem.Core.Status.Commands;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
@@ -51,6 +51,9 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                 var origin = aspect.GridMemberComponent.coordinates;
                 var battleGrid = context.Grid;
 
+                if (!aspect.EntityAddress.Is<PathfindingAgentAspect>(out var agent))
+                    return;
+
                 var entityQueryBuilder = new EntityQueryBuilder()
                     .WithAllComponents<HealthComponent>()
                     .WithAllComponents<BelongsToPlayerComponent>()
@@ -60,25 +63,22 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                 var minDistance = int.MaxValue;
                 var destination = origin;
 
+                // One redirect-aware flood, shared by every candidate — the same computation the
+                // player-facing movement phase uses, so the AI can't path differently than a human.
                 using (ListPool<HexCoordinates>.Get(out var path))
+                using (var reachable = HexPathfinder.ComputeReachable(agent, battleGrid, origin, data.MoveSpeed))
                 {
                     foreach (var address in context.World.Query(entityQueryBuilder))
                     {
                         if (!address.TryGetComponentRO<GridMemberComponent>(out var gridMember))
                             continue;
 
-                        if (!aspect.EntityAddress.Is<PathfindingAgentAspect>(out var agent))
+                        // Enemy tiles are occupied (not standable); TryGetPathToward yields the path
+                        // to the reachable tile closest to that enemy.
+                        if (!reachable.TryGetPathToward(gridMember.coordinates, path))
                             continue;
 
-                        if (!HexPathfinder.TryBuildPath(
-                                origin,
-                                gridMember.coordinates,
-                                agent,
-                                path,
-                                data.MoveSpeed))
-                            continue;
-
-                        if (minDistance < path.Count)
+                        if (path.Count >= minDistance)
                             continue;
 
                         minDistance = path.Count;
@@ -86,6 +86,11 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                     }
 
                     if (destination == origin)
+                        return;
+
+                    // `path` currently holds the last candidate examined — rebuild it for the
+                    // chosen destination before moving.
+                    if (!reachable.TryGetPathToward(destination, path))
                         return;
 
                     var moveAlongPathCommand = new MoveAlongPathCommand(aspect.EntityAddress, path.ToArray(), data.MoveSpeed);
@@ -109,7 +114,7 @@ namespace ATCG.Battle.Entities.Deployables.Fire
                         var memberAddress = member.EntityAddress;
                         if(memberAddress.IsAlly(aspect.BelongsToPlayerComponent.GetPlayer(context.battlePhase)))
                             continue;
-                        
+
                         var damageCommand = new DamageCommand(data.Strength, memberAddress);
                         command.Inject(context, damageCommand);
                     }
