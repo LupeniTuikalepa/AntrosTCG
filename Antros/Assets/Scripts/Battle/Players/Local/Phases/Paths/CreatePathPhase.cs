@@ -120,6 +120,8 @@ namespace ATCG.Battle.Players.Local.Phases
 
             while (remaining > 0)
             {
+                Debug.Log($"[CreatePathPhase] Execute");
+
                 if (!BattleGrid.TryGetBattleCell(center, out _))
                     break;
 

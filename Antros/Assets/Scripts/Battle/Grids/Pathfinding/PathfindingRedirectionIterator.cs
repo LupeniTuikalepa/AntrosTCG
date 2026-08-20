@@ -1,5 +1,6 @@
 ﻿using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
+using UnityEngine;
 
 namespace ATCG.Battle.Grids
 {
@@ -41,6 +42,7 @@ namespace ATCG.Battle.Grids
 
         public void Process<T>() where T : struct, IRedirectStatusComponent
         {
+            Debug.Log($"[PathfindingIterator] Processing");
             // Only one redirect component may fire per pass: once one has redirected, skip
             // the rest. (Was inverted — `if(!WasRedirected) return;` — so the first component
             // always returned early and no redirect ever happened.)

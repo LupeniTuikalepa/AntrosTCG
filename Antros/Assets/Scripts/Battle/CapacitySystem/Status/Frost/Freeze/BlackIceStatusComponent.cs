@@ -3,6 +3,7 @@ using ATCG.Battle.Grids;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Status.Frost
 {
@@ -20,6 +21,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost
         {
             var direction = from.GetNormalizedDirection(to).NearestCardinal();
 
+            Debug.Log($"Redirect from {from} to {to}");
             if (direction is { X: 0, Y: 0 })
                 return false;
 
