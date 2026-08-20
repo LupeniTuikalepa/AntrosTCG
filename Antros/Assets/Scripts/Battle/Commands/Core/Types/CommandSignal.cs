@@ -4,7 +4,7 @@ using ATCG.Databases;
 
 namespace ATCG.Battle.Commands
 {
-    public sealed class CommandSignal : Command<NoInfos>, ICommandSignal
+    public abstract class CommandSignal : Command<NoInfos>, ICommandSignal
     {
         public Guid Channel { get; private set; }
 

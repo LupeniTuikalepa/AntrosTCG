@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Commands.Entities;
+﻿using System;
+using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Entities;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Databases;
@@ -12,9 +13,8 @@ namespace ATCG.Battle.Commands.Listeners
     {
         public Entity Target { get; private set; }
 
-        protected override void Awake()
+        private void Start()
         {
-            base.Awake();
             Target = RuntimeEntity.Address.entity;
         }
 

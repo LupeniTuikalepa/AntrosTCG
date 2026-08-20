@@ -11,9 +11,18 @@ namespace ATCG.Battle.Entities.Runtime.Deployables.Fire
 {
     public class WillOWispSignalListener : MonoEntitySignalListener
     {
+        [SerializeField]
+        private Transform vfxPrefab;
+        
+        [SerializeField]
+        private Transform vfxContainer;
+        
         public override void Trigger(CommandContext context, EntityCommandSignal command)
         {
-            
+            foreach (Transform child in vfxContainer)
+                    Destroy(child.gameObject);
+
+            Instantiate(vfxPrefab, vfxContainer);
         }
     }
 }

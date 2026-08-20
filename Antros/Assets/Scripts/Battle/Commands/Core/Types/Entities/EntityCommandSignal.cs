@@ -1,6 +1,7 @@
 ﻿using System;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
+using UnityEngine;
 
 namespace ATCG.Battle.Commands.Entities
 {
@@ -16,7 +17,6 @@ namespace ATCG.Battle.Commands.Entities
 
         protected override void Process(in CommandContext context)
         {
-
         }
 
     }

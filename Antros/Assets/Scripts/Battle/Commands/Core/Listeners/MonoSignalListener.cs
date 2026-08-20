@@ -1,10 +1,6 @@
-﻿using ATCG.Battle.Commands.Players;
-
-namespace ATCG.Battle.Commands.Listeners
+﻿namespace ATCG.Battle.Commands.Listeners
 {
-    public abstract class MonoSignalListener : 
-        MonoBaseSignalListener<CommandSignal>,
-        ISignalListener
+    public abstract class MonoSignalListener : MonoBaseSignalListener<CommandSignal>
     {
         
     }

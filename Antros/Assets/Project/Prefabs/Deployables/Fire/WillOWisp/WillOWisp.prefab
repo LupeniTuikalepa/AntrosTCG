@@ -129,7 +129,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -4845,6 +4845,37 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &8269567468281717652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6423838280694042231}
+  m_Layer: 0
+  m_Name: VFXContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6423838280694042231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269567468281717652}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.00791, y: 0.69268, z: -0.46132}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1697568608611223497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4223892105336927111
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4909,14 +4940,46 @@ PrefabInstance:
     - {fileID: 7465030920204166086, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3247305176290128974, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6423838280694042231}
     - targetCorrespondingSourceObject: {fileID: 6803379714982851742, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8083385158697158348}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7756940785150015572, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6934184248816365750}
     - targetCorrespondingSourceObject: {fileID: 5924305010780731623, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1795587538267279921}
   m_SourcePrefab: {fileID: 100100000, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
+--- !u!4 &1697568608611223497 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3247305176290128974, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
+  m_PrefabInstance: {fileID: 4223892105336927111}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5852559615668259795 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7756940785150015572, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}
+  m_PrefabInstance: {fileID: 4223892105336927111}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6934184248816365750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5852559615668259795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76927d084c2047079fcbb4bd14aceb18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Deployables.Fire.WillOWispSignalListener
+  <Sources>k__BackingField:
+  - {fileID: 11400000, guid: a8190556a421feb44a91f69eb4f8e457, type: 2}
+  vfxPrefab: {fileID: 4168330033731265185, guid: 33f8c3af856480b4ba3a8d1a326d0982, type: 3}
+  vfxContainer: {fileID: 6423838280694042231}
 --- !u!4 &7274495044965992217 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6803379714982851742, guid: 70b9935d6ff21454088b79a5cba331aa, type: 3}

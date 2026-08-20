@@ -1,4 +1,5 @@
-﻿using ATCG.Battle.Commands.Players;
+﻿using System;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Players;
 
 namespace ATCG.Battle.Commands.Listeners
@@ -9,9 +10,8 @@ namespace ATCG.Battle.Commands.Listeners
     {
         public IBattlePlayer BattlePlayer { get; private set; }
 
-        protected override void Awake()
+        private void Start()
         {
-            base.Awake();
             BattlePlayer = RuntimeEntity.RuntimeBattlePlayer.BattlePlayer;
         }
     }

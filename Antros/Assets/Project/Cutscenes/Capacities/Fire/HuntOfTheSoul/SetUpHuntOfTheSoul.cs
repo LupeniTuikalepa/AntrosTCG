@@ -17,7 +17,7 @@ namespace ATCG.Cutscenes
             if (!context.TryGetProperty(CutsceneContextKeys.COORDINATE_SOLVER, out ICutsceneCoordinateSolver solver))
                 return;
             
-            to.position = solver.ToWorld(castPoint);
+            to.position = solver.ToWorld(castPoint) + new Vector3(0, .5f, 0);
         }
 
         public void Disconnect()
