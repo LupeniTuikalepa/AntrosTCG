@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 025283b5ddf945dc9f9998c397ab8dcb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Tests/Editor/LookAtTests.cs
+  uploadId: 971344

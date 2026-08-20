@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4809fc706d224d3dac5b756f32bbb401
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Runtime/HumanoidIK/HumanoidIKDigitChainCache.cs
+  uploadId: 971344

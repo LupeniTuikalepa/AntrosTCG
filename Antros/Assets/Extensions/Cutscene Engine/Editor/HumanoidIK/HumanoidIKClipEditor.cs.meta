@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 39cbfd38f1ae4a0ab040828cb6a4c7e4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/HumanoidIK/HumanoidIKClipEditor.cs
+  uploadId: 971344

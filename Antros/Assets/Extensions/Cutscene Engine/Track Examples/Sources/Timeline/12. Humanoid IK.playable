@@ -1,0 +1,1724 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9127900790466069824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
+  m_Name: AnimationPlayableAsset
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationPlayableAsset
+  m_Clip: {fileID: 7400000, guid: a1e0ad983b7add14c8c011cb4e2a4859, type: 2}
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_UseTrackMatchFields: 1
+  m_MatchTargetFields: 63
+  m_RemoveStartOffset: 1
+  m_ApplyFootIK: 1
+  m_Loop: 0
+  m_Version: 1
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &-7803854870231010392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d0dec8d1694315a518e91e686118e8, type: 3}
+  m_Name: HumanoidIKClip(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKClip
+  anchorTransform:
+    exposedName: 5c70d04cf4d990448b25cf7a11f9eaf2
+    defaultValue: {fileID: 0}
+  useDirectorTransformAsDefaultAnchor: 1
+  gizmoColor: {r: 1, g: 0.05, b: 0.04, a: 0.78431374}
+  gizmoColorInitialized: 1
+  position: {x: -0.45684564, y: 0.092510894, z: 0.14638838}
+  rotation: {x: 17.833246, y: 165.73381, z: 0.25696748}
+  rotationSpace: 1
+  footRotationFrameVersion: 1
+  bendTarget: {x: -0.44885695, y: 0.61603945, z: -0.32454446}
+  bendSpace: 1
+  positionWeight: 1
+  rotationWeight: 1
+  bendWeight: 1
+  digitWeight: 1
+  digitBends:
+    thumbOrBigToe:
+      proximal: {x: 97.60478, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    indexOrSecondToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    middleOrThirdToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    ringOrFourthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    littleOrFifthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+  toeBaseBend: 0
+  toeFan: 0
+  digitBendRanges:
+  - {x: -60, y: 0}
+  - {x: -60, y: 30}
+  - {x: -60, y: 30}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  thumbSpreadRange: {x: -60, y: 30}
+  fingerSpreadRanges:
+  - {x: -20, y: 20}
+  - {x: -1, y: 1}
+  - {x: -7.5, y: 7.5}
+  - {x: -20, y: 20}
+  toeBendRanges:
+  - {x: -25, y: 20}
+  - {x: -18, y: 8}
+  - {x: -12, y: 5}
+  toeBaseBendRange: {x: -20, y: 40}
+  digitBendRangesInitialized: 1
+  thumbSpreadRangeInitialized: 1
+  fingerSpreadRangesInitialized: 1
+  toeBendRangesInitialized: 1
+  fingerSpreadRangesVersion: 2
+--- !u!114 &-7265593357251828177
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d0dec8d1694315a518e91e686118e8, type: 3}
+  m_Name: HumanoidIKClip
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKClip
+  anchorTransform:
+    exposedName: e09bceb6bffff024594cc1814c1dda80
+    defaultValue: {fileID: 0}
+  useDirectorTransformAsDefaultAnchor: 1
+  gizmoColor: {r: 1, g: 0.05, b: 0.04, a: 0.78431374}
+  gizmoColorInitialized: 1
+  position: {x: -0.25325036, y: 0.9943699, z: 0.5042988}
+  rotation: {x: 57.448215, y: 132.9392, z: 292.28238}
+  rotationSpace: 1
+  footRotationFrameVersion: 1
+  bendTarget: {x: 0.32100204, y: -0.023795903, z: 0.08363643}
+  bendSpace: 1
+  positionWeight: 1
+  rotationWeight: 1
+  bendWeight: 0.644
+  digitWeight: 1
+  digitBends:
+    thumbOrBigToe:
+      proximal: {x: -36.9, y: -30.644089, z: 0}
+      intermediate: {x: -25.35, y: 0, z: 0}
+      distal: {x: -25.35, y: 0, z: 0}
+    indexOrSecondToe:
+      proximal: {x: -17.650002, y: 0, z: 0}
+      intermediate: {x: -17.650002, y: 0, z: 0}
+      distal: {x: -17.650002, y: 0, z: 0}
+    middleOrThirdToe:
+      proximal: {x: -17.650002, y: 0, z: 0}
+      intermediate: {x: -17.650002, y: 0, z: 0}
+      distal: {x: -17.650002, y: 0, z: 0}
+    ringOrFourthToe:
+      proximal: {x: -17.650002, y: 0, z: 0}
+      intermediate: {x: -17.650002, y: 0, z: 0}
+      distal: {x: -17.650002, y: 0, z: 0}
+    littleOrFifthToe:
+      proximal: {x: -17.650002, y: 0, z: 0}
+      intermediate: {x: -17.650002, y: 0, z: 0}
+      distal: {x: -17.650002, y: 0, z: 0}
+  toeBaseBend: 0
+  toeFan: 0
+  digitBendRanges:
+  - {x: -60, y: 0}
+  - {x: -60, y: 30}
+  - {x: -60, y: 30}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  thumbSpreadRange: {x: -60, y: 30}
+  fingerSpreadRanges:
+  - {x: -20, y: 20}
+  - {x: -1, y: 1}
+  - {x: -7.5, y: 7.5}
+  - {x: -20, y: 20}
+  toeBendRanges:
+  - {x: -25, y: 20}
+  - {x: -18, y: 8}
+  - {x: -12, y: 5}
+  toeBaseBendRange: {x: -25, y: 20}
+  digitBendRangesInitialized: 1
+  thumbSpreadRangeInitialized: 1
+  fingerSpreadRangesInitialized: 1
+  toeBendRangesInitialized: 1
+  fingerSpreadRangesVersion: 2
+--- !u!114 &-7114369239546331363
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d0dec8d1694315a518e91e686118e8, type: 3}
+  m_Name: HumanoidIKClip
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKClip
+  anchorTransform:
+    exposedName: 
+    defaultValue: {fileID: 0}
+  useDirectorTransformAsDefaultAnchor: 1
+  gizmoColor: {r: 1, g: 0.05, b: 0.04, a: 0.78431374}
+  gizmoColorInitialized: 1
+  position: {x: -0.21014604, y: 0.054914318, z: 0.18002342}
+  rotation: {x: 0.72226644, y: 137.0271, z: 0.24464074}
+  rotationSpace: 1
+  footRotationFrameVersion: 1
+  bendTarget: {x: 0, y: 0.4859687, z: 0}
+  bendSpace: 1
+  positionWeight: 1
+  rotationWeight: 1
+  bendWeight: 1
+  digitWeight: 1
+  digitBends:
+    thumbOrBigToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    indexOrSecondToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    middleOrThirdToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    ringOrFourthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    littleOrFifthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+  toeBaseBend: 0
+  toeFan: 0
+  digitBendRanges:
+  - {x: -60, y: 0}
+  - {x: -60, y: 30}
+  - {x: -60, y: 30}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  thumbSpreadRange: {x: -60, y: 30}
+  fingerSpreadRanges:
+  - {x: -20, y: 20}
+  - {x: -1, y: 1}
+  - {x: -7.5, y: 7.5}
+  - {x: -20, y: 20}
+  toeBendRanges:
+  - {x: -25, y: 20}
+  - {x: -18, y: 8}
+  - {x: -12, y: 5}
+  toeBaseBendRange: {x: -25, y: 20}
+  digitBendRangesInitialized: 1
+  thumbSpreadRangeInitialized: 1
+  fingerSpreadRangesInitialized: 1
+  toeBendRangesInitialized: 1
+  fingerSpreadRangesVersion: 2
+--- !u!114 &-5215021050187525154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e772ed2fe63947b282a81e94ed2ffd9a, type: 3}
+  m_Name: Humanoid IK Track (2)
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: 1867667406301334608}
+    m_Duration: 1.2833333333333334
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -5215021050187525154}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: 0.433333333333334
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: RightFoot
+  - m_Version: 1
+    m_Start: 0.8499999999999994
+    m_ClipIn: 0
+    m_Asset: {fileID: -7803854870231010392}
+    m_Duration: 2.0166666666666666
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -5215021050187525154}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0.433333333333334
+    m_BlendOutDuration: 0.21666666666666634
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: RightFoot
+  - m_Version: 1
+    m_Start: 2.65
+    m_ClipIn: 0
+    m_Asset: {fileID: -3349265224686432439}
+    m_Duration: 1.049999999999999
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -5215021050187525154}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0.21666666666666634
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: RightFoot
+  m_Markers:
+    m_Objects: []
+  target: 3
+  autoRenameClips: 1
+--- !u!114 &-3349265224686432439
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d0dec8d1694315a518e91e686118e8, type: 3}
+  m_Name: HumanoidIKClip(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKClip
+  anchorTransform:
+    exposedName: 597c5375a46dbd24196f42249800c594
+    defaultValue: {fileID: 0}
+  useDirectorTransformAsDefaultAnchor: 1
+  gizmoColor: {r: 1, g: 0.05, b: 0.04, a: 0.78431374}
+  gizmoColorInitialized: 1
+  position: {x: -0.45802143, y: 0.054914318, z: 0.15074472}
+  rotation: {x: 0.72226644, y: 165.65819, z: 0.24464075}
+  rotationSpace: 1
+  footRotationFrameVersion: 1
+  bendTarget: {x: -0.44885695, y: 0.61603945, z: -0.32454446}
+  bendSpace: 1
+  positionWeight: 1
+  rotationWeight: 1
+  bendWeight: 1
+  digitWeight: 1
+  digitBends:
+    thumbOrBigToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    indexOrSecondToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    middleOrThirdToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    ringOrFourthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    littleOrFifthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+  toeBaseBend: 0
+  toeFan: 0
+  digitBendRanges:
+  - {x: -60, y: 0}
+  - {x: -60, y: 30}
+  - {x: -60, y: 30}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  thumbSpreadRange: {x: -60, y: 30}
+  fingerSpreadRanges:
+  - {x: -20, y: 20}
+  - {x: -1, y: 1}
+  - {x: -7.5, y: 7.5}
+  - {x: -20, y: 20}
+  toeBendRanges:
+  - {x: -25, y: 20}
+  - {x: -18, y: 8}
+  - {x: -12, y: 5}
+  toeBaseBendRange: {x: -25, y: 20}
+  digitBendRangesInitialized: 1
+  thumbSpreadRangeInitialized: 1
+  fingerSpreadRangesInitialized: 1
+  toeBendRangesInitialized: 1
+  fingerSpreadRangesVersion: 2
+--- !u!114 &-2858259648472429568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21dcc2386d650c4597f3633c75a1f98, type: 3}
+  m_Name: Animation Track (1)
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 1.2833333333333334
+    m_ClipIn: 0
+    m_Asset: {fileID: 8924947786244319686}
+    m_Duration: 2.4166666666666665
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -2858259648472429568}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 1
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 1.2833333333333334
+    m_DisplayName: Pulled
+  m_Markers:
+    m_Objects: []
+  m_InfiniteClipPreExtrapolation: 1
+  m_InfiniteClipPostExtrapolation: 1
+  m_InfiniteClipOffsetPosition: {x: 0, y: 0, z: 0}
+  m_InfiniteClipOffsetEulerAngles: {x: 0, y: 0, z: 0}
+  m_InfiniteClipTimeOffset: 0
+  m_InfiniteClipRemoveOffset: 0
+  m_InfiniteClipApplyFootIK: 1
+  mInfiniteClipLoop: 0
+  m_MatchTargetFields: 63
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_AvatarMask: {fileID: 0}
+  m_ApplyAvatarMask: 1
+  m_TrackOffset: 0
+  m_InfiniteClip: {fileID: 0}
+  m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+  m_ApplyOffsets: 0
+--- !u!114 &-1873652719306948230
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e772ed2fe63947b282a81e94ed2ffd9a, type: 3}
+  m_Name: Humanoid IK Track (1)
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: -7114369239546331363}
+    m_Duration: 3.7
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -1873652719306948230}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: LeftFoot
+  m_Markers:
+    m_Objects: []
+  target: 2
+  autoRenameClips: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
+  m_Name: 12. Humanoid IK
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
+  m_Version: 0
+  m_Tracks:
+  - {fileID: 4242970194286890944}
+  - {fileID: 4609437284294925089}
+  - {fileID: -1873652719306948230}
+  - {fileID: -5215021050187525154}
+  - {fileID: -2858259648472429568}
+  m_FixedDuration: 0
+  m_EditorSettings:
+    m_Framerate: 60
+    m_ScenePreview: 1
+  m_DurationMode: 0
+  m_MarkerTrack: {fileID: 0}
+--- !u!74 &1462949915258601972
+AnimationClip:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Pulled
+  serializedVersion: 7
+  m_Legacy: 0
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_RotationCurves: []
+  m_CompressedRotationCurves: []
+  m_EulerCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: 0, y: 0, z: -15}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 0.4
+        value: {x: 0, y: 0, z: -15}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 17.037151}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.197644}
+      - serializedVersion: 3
+        time: 0.9
+        value: {x: 0, y: 0, z: -13.020409}
+        inSlope: {x: 0, y: 0, z: 7.8058667}
+        outSlope: {x: 0, y: 0, z: 32.75636}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.20654964}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.37433517}
+      - serializedVersion: 3
+        time: 1.25
+        value: {x: 0, y: 0, z: 20}
+        inSlope: {x: 0, y: 0, z: 70.90834}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33937705}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 1.5833334
+        value: {x: 0, y: 0, z: 20}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 2.4166667
+        value: {x: 0, y: 0, z: -15}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Handle
+  m_PositionCurves: []
+  m_ScaleCurves: []
+  m_FloatCurves: []
+  m_PPtrCurves: []
+  m_SampleRate: 60
+  m_WrapMode: 0
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_ClipBindingConstant:
+    genericBindings:
+    - serializedVersion: 2
+      path: 2519475695
+      attribute: 4
+      script: {fileID: 0}
+      typeID: 4
+      customType: 4
+      isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    pptrCurveMapping: []
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
+    m_StartTime: 0
+    m_StopTime: 2.4166667
+    m_OrientationOffsetY: 0
+    m_Level: 0
+    m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
+    m_LoopTime: 0
+    m_LoopBlend: 0
+    m_LoopBlendOrientation: 0
+    m_LoopBlendPositionY: 0
+    m_LoopBlendPositionXZ: 0
+    m_KeepOriginalOrientation: 0
+    m_KeepOriginalPositionY: 1
+    m_KeepOriginalPositionXZ: 0
+    m_HeightFromFeet: 0
+    m_Mirror: 0
+  m_EditorCurves:
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.4
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.25
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5833334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2.4166667
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.x
+    path: Handle
+    classID: 4
+    script: {fileID: 0}
+    flags: 16
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.4
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.25
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5833334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2.4166667
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.y
+    path: Handle
+    classID: 4
+    script: {fileID: 0}
+    flags: 16
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -15
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.4
+        value: -15
+        inSlope: 0
+        outSlope: 17.037151
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.197644
+      - serializedVersion: 3
+        time: 0.9
+        value: -13.020409
+        inSlope: 7.8058667
+        outSlope: 32.75636
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.20654964
+        outWeight: 0.37433517
+      - serializedVersion: 3
+        time: 1.25
+        value: 20
+        inSlope: 70.90834
+        outSlope: 0
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.33937705
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5833334
+        value: 20
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2.4166667
+        value: -15
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.z
+    path: Handle
+    classID: 4
+    script: {fileID: 0}
+    flags: 16
+  m_EulerEditorCurves:
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Handle
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Handle
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: Handle
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  m_HasGenericRootTransform: 0
+  m_HasMotionFloatCurves: 0
+  m_Events: []
+--- !u!114 &1867667406301334608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d0dec8d1694315a518e91e686118e8, type: 3}
+  m_Name: HumanoidIKClip(Clone)(Clone)
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKClip
+  anchorTransform:
+    exposedName: a3f0ee5723a7f60478433eefaeb20bc1
+    defaultValue: {fileID: 0}
+  useDirectorTransformAsDefaultAnchor: 1
+  gizmoColor: {r: 1, g: 0.05, b: 0.04, a: 0.78431374}
+  gizmoColorInitialized: 1
+  position: {x: -0.45802143, y: 0.054914318, z: 0.15074472}
+  rotation: {x: 0.72226644, y: 165.65819, z: 0.24464075}
+  rotationSpace: 1
+  footRotationFrameVersion: 1
+  bendTarget: {x: -0.44885695, y: 0.61603945, z: -0.32454446}
+  bendSpace: 1
+  positionWeight: 1
+  rotationWeight: 1
+  bendWeight: 1
+  digitWeight: 1
+  digitBends:
+    thumbOrBigToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    indexOrSecondToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    middleOrThirdToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    ringOrFourthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+    littleOrFifthToe:
+      proximal: {x: 0, y: 0, z: 0}
+      intermediate: {x: 0, y: 0, z: 0}
+      distal: {x: 0, y: 0, z: 0}
+  toeBaseBend: 0
+  toeFan: 0
+  digitBendRanges:
+  - {x: -60, y: 0}
+  - {x: -60, y: 30}
+  - {x: -60, y: 30}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  thumbSpreadRange: {x: -60, y: 30}
+  fingerSpreadRanges:
+  - {x: -20, y: 20}
+  - {x: -1, y: 1}
+  - {x: -7.5, y: 7.5}
+  - {x: -20, y: 20}
+  toeBendRanges:
+  - {x: -25, y: 20}
+  - {x: -18, y: 8}
+  - {x: -12, y: 5}
+  toeBaseBendRange: {x: -25, y: 20}
+  digitBendRangesInitialized: 1
+  thumbSpreadRangeInitialized: 1
+  fingerSpreadRangesInitialized: 1
+  toeBendRangesInitialized: 1
+  fingerSpreadRangesVersion: 2
+--- !u!114 &4242970194286890944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21dcc2386d650c4597f3633c75a1f98, type: 3}
+  m_Name: Animation Track
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: -9127900790466069824}
+    m_Duration: 2.8666666666666667
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 4242970194286890944}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: 0.7166666666666681
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Cutscene Engine Example Anim-Pull Lever
+  - m_Version: 1
+    m_Start: 2.1499999999999986
+    m_ClipIn: 0
+    m_Asset: {fileID: 4631283812391198780}
+    m_Duration: 1.5500000000000003
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 4242970194286890944}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0.7166666666666681
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 1
+    m_PreExtrapolationMode: 1
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Idle
+  m_Markers:
+    m_Objects: []
+  m_InfiniteClipPreExtrapolation: 0
+  m_InfiniteClipPostExtrapolation: 0
+  m_InfiniteClipOffsetPosition: {x: 0, y: 0, z: 0}
+  m_InfiniteClipOffsetEulerAngles: {x: 0, y: 0, z: 0}
+  m_InfiniteClipTimeOffset: 0
+  m_InfiniteClipRemoveOffset: 0
+  m_InfiniteClipApplyFootIK: 1
+  mInfiniteClipLoop: 0
+  m_MatchTargetFields: 63
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_AvatarMask: {fileID: 0}
+  m_ApplyAvatarMask: 1
+  m_TrackOffset: 1
+  m_InfiniteClip: {fileID: 0}
+  m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+  m_ApplyOffsets: 0
+--- !u!114 &4609437284294925089
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e772ed2fe63947b282a81e94ed2ffd9a, type: 3}
+  m_Name: Humanoid IK Track
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0.85
+    m_ClipIn: 0
+    m_Asset: {fileID: -7265593357251828177}
+    m_Duration: 2.5666666666666664
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 4609437284294925089}
+    m_EaseInDuration: 0.5
+    m_EaseOutDuration: 0.5
+    m_BlendInDuration: 0.43333333333333346
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: RightHand
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: 5406039622361850051}
+    m_Duration: 1.2833333333333334
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 4609437284294925089}
+    m_EaseInDuration: 0.5
+    m_EaseOutDuration: 0.2
+    m_BlendInDuration: -1
+    m_BlendOutDuration: 0.43333333333333346
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Digit Control
+  m_Markers:
+    m_Objects: []
+  target: 1
+  autoRenameClips: 1
+--- !u!114 &4631283812391198780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
+  m_Name: AnimationPlayableAsset
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationPlayableAsset
+  m_Clip: {fileID: -3100369314251171874, guid: 3cbf7db3fe2853840b0d7565c471f77c, type: 3}
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_UseTrackMatchFields: 1
+  m_MatchTargetFields: 63
+  m_RemoveStartOffset: 1
+  m_ApplyFootIK: 1
+  m_Loop: 0
+  m_Version: 1
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &5406039622361850051
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d0dec8d1694315a518e91e686118e8, type: 3}
+  m_Name: HumanoidIKClip(Clone)(Clone)
+  m_EditorClassIdentifier: CutsceneEngine::CutsceneEngine.HumanoidIKClip
+  anchorTransform:
+    exposedName: 380cba251d8e9fc498022d0f7a981651
+    defaultValue: {fileID: 0}
+  useDirectorTransformAsDefaultAnchor: 1
+  gizmoColor: {r: 1, g: 0.05, b: 0.04, a: 0.78431374}
+  gizmoColorInitialized: 1
+  position: {x: -0.55837107, y: 1.1419609, z: -0.11377111}
+  rotation: {x: 18.414337, y: 174.06657, z: 141.29613}
+  rotationSpace: 1
+  footRotationFrameVersion: 1
+  bendTarget: {x: -0.6504696, y: 1.0265486, z: 0.03708237}
+  bendSpace: 1
+  positionWeight: 0
+  rotationWeight: 0
+  bendWeight: 0
+  digitWeight: 1
+  digitBends:
+    thumbOrBigToe:
+      proximal: {x: -10.199997, y: -6.426481, z: 0}
+      intermediate: {x: 14.700004, y: 0, z: 0}
+      distal: {x: 14.700004, y: 0, z: 0}
+    indexOrSecondToe:
+      proximal: {x: 31.300005, y: 8.800001, z: 0}
+      intermediate: {x: 31.300005, y: 0, z: 0}
+      distal: {x: 31.300005, y: 0, z: 0}
+    middleOrThirdToe:
+      proximal: {x: 31.300005, y: 0.44000006, z: 0}
+      intermediate: {x: 31.300005, y: 0, z: 0}
+      distal: {x: 31.300005, y: 0, z: 0}
+    ringOrFourthToe:
+      proximal: {x: 31.300005, y: 3.3000004, z: 0}
+      intermediate: {x: 31.300005, y: 0, z: 0}
+      distal: {x: 31.300005, y: 0, z: 0}
+    littleOrFifthToe:
+      proximal: {x: 31.300005, y: 8.800001, z: 0}
+      intermediate: {x: 31.300005, y: 0, z: 0}
+      distal: {x: 31.300005, y: 0, z: 0}
+  toeBaseBend: 0
+  toeFan: 0
+  digitBendRanges:
+  - {x: -60, y: 0}
+  - {x: -60, y: 30}
+  - {x: -60, y: 30}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  - {x: -60, y: 50}
+  thumbSpreadRange: {x: -60, y: 30}
+  fingerSpreadRanges:
+  - {x: -20, y: 20}
+  - {x: -1, y: 1}
+  - {x: -7.5, y: 7.5}
+  - {x: -20, y: 20}
+  toeBendRanges:
+  - {x: -25, y: 20}
+  - {x: -18, y: 8}
+  - {x: -12, y: 5}
+  toeBaseBendRange: {x: -25, y: 20}
+  digitBendRangesInitialized: 1
+  thumbSpreadRangeInitialized: 1
+  fingerSpreadRangesInitialized: 1
+  toeBendRangesInitialized: 1
+  fingerSpreadRangesVersion: 2
+--- !u!114 &8924947786244319686
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
+  m_Name: Recorded
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AnimationPlayableAsset
+  m_Clip: {fileID: 1462949915258601972}
+  m_Position: {x: 0.12383172, y: 0.95654297, z: -0.09582354}
+  m_EulerAngles: {x: 0, y: 45.000004, z: 0}
+  m_UseTrackMatchFields: 1
+  m_MatchTargetFields: 63
+  m_RemoveStartOffset: 0
+  m_ApplyFootIK: 1
+  m_Loop: 0
+  m_Version: 1
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}

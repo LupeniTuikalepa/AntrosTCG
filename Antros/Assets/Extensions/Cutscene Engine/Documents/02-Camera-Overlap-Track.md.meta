@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7f0c4c4f80234a22b567ddd2afe10ecf
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Documents/02-Camera-Overlap-Track.md
+  uploadId: 971344

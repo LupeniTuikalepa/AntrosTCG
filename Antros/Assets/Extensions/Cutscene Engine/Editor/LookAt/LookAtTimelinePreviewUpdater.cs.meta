@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: d210f6bf7baeb694f89633bf75b0b569
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/LookAt/LookAtTimelinePreviewUpdater.cs
+  uploadId: 971344

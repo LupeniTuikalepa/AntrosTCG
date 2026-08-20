@@ -1,0 +1,23 @@
+{
+    "name": "CutsceneEngine.Editor.Tests",
+    "rootNamespace": "CutsceneEngineEditor.Tests",
+    "references": [
+        "CutsceneEngine",
+        "CutsceneEngine.Editor",
+        "Unity.Timeline"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

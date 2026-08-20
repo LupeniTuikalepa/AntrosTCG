@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6643175b92b34159b1940ac4e162efa3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/LookAt/LookAtTrackEditor.cs
+  uploadId: 971344
