@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 9c2ef0eac1884ee482d54ed30609b6ab
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/AssemblyInfo.cs
+  uploadId: 971344

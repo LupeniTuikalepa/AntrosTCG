@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 279428d7cb250e045a56116644ee90ae
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Track Examples/Sources/Prefabs/Cutscene Engine
+    Example Character.prefab
+  uploadId: 971344

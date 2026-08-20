@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: ad9193b11c19413baebdeac08988b46b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/HumanoidIK/HumanoidIKGizmoGeometry.cs
+  uploadId: 971344

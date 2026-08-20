@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a5dca3cf7b1d498588a35e46b02cad92
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Documents/16-Humanoid-IK-Track.md
+  uploadId: 971344

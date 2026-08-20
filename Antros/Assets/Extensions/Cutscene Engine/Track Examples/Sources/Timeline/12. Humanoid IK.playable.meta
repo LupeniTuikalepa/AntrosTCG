@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4fcbabb373510ef4ab74ac2277fba583
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Track Examples/Sources/Timeline/12. Humanoid
+    IK.playable
+  uploadId: 971344

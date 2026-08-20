@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: baae25ba9963675488b00e6c54198203
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Track Examples/Sources/Timeline/13. LookAt.playable
+  uploadId: 971344

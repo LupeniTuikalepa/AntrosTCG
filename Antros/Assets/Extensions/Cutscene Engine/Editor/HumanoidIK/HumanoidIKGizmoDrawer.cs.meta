@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: d7121c77c502450483c4dd4ee2713e8e
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/HumanoidIK/HumanoidIKGizmoDrawer.cs
+  uploadId: 971344

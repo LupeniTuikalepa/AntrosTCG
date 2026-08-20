@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6dd550a69822417a8d1dc5d13e78ab5b
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Documents/00-Agent-Quickstart.md
+  uploadId: 971344

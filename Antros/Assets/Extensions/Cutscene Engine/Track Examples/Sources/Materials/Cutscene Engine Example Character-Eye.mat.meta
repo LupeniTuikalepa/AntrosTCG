@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b55959c8ce60bd243bb68ad287f19bd2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Track Examples/Sources/Materials/Cutscene Engine
+    Example Character-Eye.mat
+  uploadId: 971344

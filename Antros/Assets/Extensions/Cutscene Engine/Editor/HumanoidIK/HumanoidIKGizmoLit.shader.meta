@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 9ec6ef06f8d9a02448cff6fc31631865
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/HumanoidIK/HumanoidIKGizmoLit.shader
+  uploadId: 971344

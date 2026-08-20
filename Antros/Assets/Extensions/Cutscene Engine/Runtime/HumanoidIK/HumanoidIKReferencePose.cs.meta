@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5b35105aa1b04046ac8ac6d9d306f153
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Runtime/HumanoidIK/HumanoidIKReferencePose.cs
+  uploadId: 971344

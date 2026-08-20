@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: fa9e7b8da3344b8089e8a70174a24320
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Editor/LookAt/LookAtClipInspector.cs
+  uploadId: 971344

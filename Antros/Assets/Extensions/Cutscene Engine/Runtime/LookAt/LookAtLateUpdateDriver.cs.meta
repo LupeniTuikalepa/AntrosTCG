@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e7d35e794f754d9580e5b43a15e539fc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 9000
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327883
+  packageName: Cutscene Engine
+  packageVersion: 1.7.1
+  assetPath: Assets/Cutscene Engine/Runtime/LookAt/LookAtLateUpdateDriver.cs
+  uploadId: 971344
