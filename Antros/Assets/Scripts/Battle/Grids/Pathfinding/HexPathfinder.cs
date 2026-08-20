@@ -163,6 +163,12 @@ namespace ATCG.Battle.Grids
 
                         map.Record(landing, newCost, new MovementStep(current, traversed.ToArray()));
                         frontier.Add(landing);
+
+                        // Every tile the slide crossed except the landing (the last entry) is a
+                        // redirect cell the player can AIM at: selecting it must behave as if they
+                        // selected this landing. Register those aim proxies.
+                        for (int t = 0; t < traversed.Count - 1; t++)
+                            map.RecordRedirectCell(traversed[t], landing);
                     }
                 }
             }

@@ -57,7 +57,7 @@ namespace ATCG.Battle.CapacitySystem.Core
         public Dictionary<RuntimeLocalBattlePlayer, CapacityDirector> directors;
 
         private readonly CapacityPropertyBag properties = new();
-        private readonly HashSet<string> stepsRun = new();
+        private readonly Dictionary<string, int> stepsRun = new();
         private readonly QteResultAccumulator qteResults = new();
 
         private Dictionary<string, ICapacityStep> stepsByName;
@@ -189,8 +189,8 @@ namespace ATCG.Battle.CapacitySystem.Core
             stepBarrier.Report(stepName);
             await stepBarrier.Await(stepName);
 
-            if (!stepsRun.Add(stepName))
-                return;
+            if (!stepsRun.TryAdd(stepName, 1))
+                stepsRun[stepName]++;
 
             if (stepsByName.TryGetValue(stepName, out ICapacityStep step))
                 RunStepNow(step);
@@ -206,7 +206,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             using HexPatternBuilder pattern = BuildHitPattern(container);
             CapacityTargets targets = ResolveTargets(container, pattern);
 
-            CapacityStepContext ctx = new(this, ReadQtes(), ResolveStepData(step.StepName), targets, pattern);
+            CapacityStepContext ctx = new(this, ReadQtes(), ResolveStepData(step.StepName), targets, pattern, stepsRun[step.StepName]);
             step.RunStep(ctx);
         }
 

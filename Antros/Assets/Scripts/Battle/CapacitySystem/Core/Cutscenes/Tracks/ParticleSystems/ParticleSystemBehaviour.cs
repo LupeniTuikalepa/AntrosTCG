@@ -38,10 +38,14 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Tracks
             allSystems = ParticleSystem.GetComponentsInChildren<ParticleSystem>(true);
 
             // Deterministic scrubbing: without a fixed seed every resimulation reseeds and the
-            // particles flicker differently each frame.
+            // particles flicker differently each frame. The seed can only be set on a stopped
+            // system, so stop+clear first in case it was auto-playing.
             foreach (ParticleSystem system in allSystems)
-                if (system != null)
-                    system.useAutoRandomSeed = false;
+            {
+                if (system == null) continue;
+                system.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                system.useAutoRandomSeed = false;
+            }
 
             if (HandleObjectActivation)
                 ParticleSystem.gameObject.SetActive(true);

@@ -71,7 +71,7 @@ MonoBehaviour:
   materialType: 0
   customMaterial: {fileID: 0}
   pattern: 0
-  primaryColor: {r: 0.3960784, g: 0.8862745, b: 0.4217498, a: 0.5019608}
+  primaryColor: {r: 0.24345462, g: 0.7924528, b: 0.22801706, a: 0.5019608}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   renderQueue: 0
-  occlusion: 0
+  occlusion: 2
   occludedBy: 0
   OccludersRenderingLayer:
     serializedVersion: 0
@@ -119,8 +119,8 @@ MonoBehaviour:
   vertexAnimation: 0
   materialType: 0
   customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
+  pattern: 0
+  primaryColor: {r: 1.0592737, g: 0.8336809, b: 0.14490068, a: 0.5019608}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0
@@ -222,7 +222,7 @@ MonoBehaviour:
   secondaryColor: {r: 0, g: 0, b: 0, a: 0.8}
   texture: {fileID: 0}
   channel: 0
-  frequencyX: 40
+  frequencyX: 60
   frequencyY: 2
   density: 0.5
   rotation: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
   - state: 8
     outlineActive: 0
     outline: {fileID: 132676394345460378}
-    fillActive: 0
+    fillActive: 1
     fill: {fileID: -7622054984929896316}
 --- !u!114 &132676394345460378
 MonoBehaviour:
@@ -396,7 +396,7 @@ MonoBehaviour:
   materialType: 0
   customMaterial: {fileID: 0}
   pattern: 0
-  primaryColor: {r: 0.3960784, g: 0.8862745, b: 0.70129395, a: 0.5019608}
+  primaryColor: {r: 0.3960784, g: 0.7392353, b: 0.8862745, a: 0.5019608}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0

@@ -22,6 +22,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         public  BattleID CastingPlayer => capacityPhase.casterPlayerId;
 
+        public readonly int loop;
         public readonly CastCapacityPhase capacityPhase;
         public readonly CapacityStepData stepData;
         public readonly float effectiveness;
@@ -30,14 +31,14 @@ namespace ATCG.Battle.CapacitySystem.Core
         private readonly CapacityTargets targets;
 
 
-        public CapacityStepContext(CastCapacityPhase capacityPhase, float effectiveness, CapacityStepData stepData,
-            CapacityTargets targets, HexPatternBuilder patternBuilder)
+        public CapacityStepContext(CastCapacityPhase capacityPhase, float effectiveness, CapacityStepData stepData, CapacityTargets targets, HexPatternBuilder patternBuilder, int loop)
         {
             this.capacityPhase = capacityPhase;
             this.effectiveness = effectiveness;
             this.stepData = stepData;
             this.targets = targets;
             this.patternBuilder = patternBuilder;
+            this.loop = loop;
         }
 
 
