@@ -21,7 +21,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Fire
     {
         public void ModifyCastPattern(HuntOfTheSoulData data, ref HexPatternBuilder builder, BattleGrid grid)
         {
-            //enlever les cases invalides
+            //TODO enlever les cases invalides
         }
 
         // Valid default: tags the cell as CELL and every member on it as MEMBER.

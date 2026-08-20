@@ -1,19 +1,21 @@
 ﻿using System;
 using ATCG.Battle.Commands.Infos;
+using ATCG.Databases;
 
 namespace ATCG.Battle.Commands
 {
-    [Serializable]
-    public abstract class CommandSignal<T> : Command<T>, ICommandSignal where T : struct, ICommandInfos
+    public abstract class CommandSignal : Command<NoInfos>, ICommandSignal
     {
-        protected CommandSignal(string source = DEFAULT_SOURCE) : base(source)
-        {
+        public Guid Channel { get; private set; }
 
+        public CommandSignal(Guid channel)
+        {
+            Channel = channel;
+        }
+        
+        protected override void Process(in CommandContext context)
+        {
         }
 
-        protected sealed override void Process(in CommandContext context)
-        {
-
-        }
     }
 }

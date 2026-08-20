@@ -1,7 +1,10 @@
-﻿namespace ATCG.Battle.Commands
+﻿using System;
+using ATCG.Databases;
+
+namespace ATCG.Battle.Commands
 {
-    public interface ICommandSignal
+    public interface ICommandSignal : ICommand
     {
-        
+        Guid Channel { get; }
     }
 }

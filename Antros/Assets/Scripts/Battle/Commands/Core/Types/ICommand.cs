@@ -9,6 +9,7 @@ namespace ATCG.Battle.Commands
         IReadOnlyList<BattleID> Embeds { get; }
         BattleID Parent { get; }
         BattleID ID { get; }
+        string Source { get; }
         void SetParent(ICommand parent);
 
         public void Inject<TCommand>(in CommandContext context)

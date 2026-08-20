@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.GameCommands;
+using ATCG.Battle.Commands.Players;
 using ATCG.Battle.Cutscenes;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.Cutscenes;
@@ -88,7 +89,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
 
             DeployCutscene deployCutscene = heroData.DeployCutscene;
 
-            DeployCardSignal deployCardSignal = new DeployCardSignal(aspect.Card.ID, aspect.Coordinates, BattlePlayer);
+            PlayerCommandSignal deployCardSignal = new PlayerCommandSignal(BattlePlayer, heroData.ID);
 
             if (deployCutscene != null)
             {

@@ -5,16 +5,18 @@ using ATCG.Battle.Players;
 namespace ATCG.Battle.Commands.Players
 {
     [Serializable]
-    public abstract class PlayerCommandSignal<T> : PlayerCommand<T>, ICommandSignal where T : struct, ICommandInfos
+    public sealed class PlayerCommandSignal : PlayerCommand<NoInfos>, ICommandSignal
     {
-        protected PlayerCommandSignal(IBattlePlayer battlePlayer, string source = DEFAULT_SOURCE) : base(battlePlayer, source)
-        {
+        public Guid Channel { get; private set; }
 
+        public PlayerCommandSignal(IBattlePlayer battlePlayer, Guid channel, string source = DEFAULT_SOURCE) : base(battlePlayer, source)
+        {
+            Channel = channel;
         }
 
-        protected sealed override void Process(in CommandContext context)
+        protected override void Process(in CommandContext context)
         {
-
+            
         }
     }
 }
