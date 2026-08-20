@@ -18,12 +18,12 @@ namespace ATCG.Battle
 		[SerializeField] private TMP_Text nameText;
 		private void OnEnable()
 		{
-			this.RegisterListener();
+			this.Register();
 		}
 
 		private void OnDisable()
 		{
-			this.UnregisterListener();
+			this.Unregister();
 		}
 
 

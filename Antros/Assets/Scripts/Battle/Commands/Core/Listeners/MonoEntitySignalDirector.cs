@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace ATCG.Battle.Commands.Listeners
 {
-    public abstract class MonoEntitySignalListener : 
-        MonoBaseSignalListener<EntityCommandSignal>, 
-        IEntitySignalListener
+    public abstract class MonoEntitySignalDirector : 
+        MonoBaseSignalDirector<EntityCommandSignal>, 
+        IEntitySignalDirector
     {
         public Entity Target { get; private set; }
 
@@ -17,7 +17,5 @@ namespace ATCG.Battle.Commands.Listeners
         {
             Target = RuntimeEntity.Address.entity;
         }
-
-        public abstract override void Trigger(CommandContext context, EntityCommandSignal command);
     }
 }

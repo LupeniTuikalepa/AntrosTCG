@@ -85,7 +85,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             stepsByName = DictionaryPool<string, ICapacityStep>.Get();
             properties.Declare(data.PropertyDefinitions);
 
-            this.RegisterListener();
+            this.Register();
 
             CollectDirectors();
             stepBarrier = new StepBarrier(directors.Count);
@@ -243,7 +243,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         protected override Awaitable Dispose(CancellationToken token)
         {
-            this.UnregisterListener();
+            this.Unregister();
 
             foreach ((_, CapacityDirector director) in directors)
                 director.Dispose();

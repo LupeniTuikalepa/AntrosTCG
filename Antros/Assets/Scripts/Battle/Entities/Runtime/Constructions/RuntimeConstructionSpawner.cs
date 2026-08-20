@@ -18,12 +18,12 @@ namespace ATCG.Battle.Entities.Runtime.Constructions
 
         private void OnEnable()
         {
-            this.RegisterListener();
+            this.Register();
         }
 
         private void OnDisable()
         {
-            this.UnregisterListener();
+            this.Unregister();
         }
 
         public async Awaitable Play(CommandDirectorState state, CommandContext context, SpawnConstructionCommand command)

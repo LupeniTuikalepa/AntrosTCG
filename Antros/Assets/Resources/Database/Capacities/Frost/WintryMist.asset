@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WintryMist
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Frost.WintryMistData
   guidText: 06848562-1c7a-4259-8b8e-7410aff7b0fb
+  <Director>k__BackingField: {fileID: 8356977378417627701, guid: f9b4a6111b641de49aab350bffbb6a8d, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: "Br\xFBme Hivernal"
   <Element>k__BackingField: 7
@@ -21,7 +22,7 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 7630467839202951329
-  <CutsceneDirector>k__BackingField: {fileID: 8356977378417627701, guid: f9b4a6111b641de49aab350bffbb6a8d, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Range>k__BackingField: 3
   <Status>k__BackingField: {fileID: 11400000, guid: 4d2f6fb665f44cf47ae99d76458c9ca0, type: 2}

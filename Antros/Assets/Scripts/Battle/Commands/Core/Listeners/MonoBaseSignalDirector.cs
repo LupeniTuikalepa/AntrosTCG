@@ -1,11 +1,12 @@
 ﻿using System;
+using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Entities.Runtime;
 using ATCG.Databases;
 using UnityEngine;
 
 namespace ATCG.Battle.Commands.Listeners
 {
-    public abstract class MonoBaseSignalListener<T> : MonoBehaviour, IBaseSignalListener<T> where T : ICommandSignal
+    public abstract class MonoBaseSignalDirector<T> : MonoBehaviour, IBaseSignalDirector<T> where T : ICommandSignal
     {
         [field: SerializeField]
         public GameDatabaseObject[] Sources { get; private set; }
@@ -27,7 +28,7 @@ namespace ATCG.Battle.Commands.Listeners
         {
             this.Unregister();
         }
-        
-        public abstract void Trigger(CommandContext context, T command);
+
+        public abstract Awaitable Play(CommandDirectorState state, CommandContext context, T command);
     }
 }

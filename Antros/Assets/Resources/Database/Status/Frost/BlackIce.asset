@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e1ddc907529bc047ada1e61b5504455, type: 3}
-  m_Name: BlackIceStatus
-  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Status.FrostStatusData
-  guidText: 96e879b3-e642-4a06-bd08-a90991ae49b8
+  m_Script: {fileID: 11500000, guid: dbd0af49973ec1c4f91003c2a87e4626, type: 3}
+  m_Name: BlackIce
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Status.BlackIceStatusData
+  guidText: 9430bb94-1eab-4e0a-b42f-525f0229dd13
   <Name>k__BackingField: 
-  <Color>k__BackingField: {r: 0.6693218, g: 0.8396226, b: 0.82097304, a: 0}
+  <Color>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
   <Element>k__BackingField: 7
   <RuntimeStatus>k__BackingField: {fileID: 4870117505868571047, guid: 769fc59bdd5567f4d87faab4679400a0, type: 3}
-  <Icon>k__BackingField: {fileID: 21300000, guid: ac8d1d9447e2e454d843da9be86fba06, type: 3}
-  <Duration>k__BackingField: 3
+  <Icon>k__BackingField: {fileID: 0}
+  <Duration>k__BackingField: 0

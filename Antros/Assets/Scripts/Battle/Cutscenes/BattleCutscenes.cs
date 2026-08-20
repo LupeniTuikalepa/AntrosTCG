@@ -58,7 +58,7 @@ namespace ATCG.Battle.Cutscenes
             {
                 qteResults.Clear();
                 collector = new QteResultCollector(qteResults);
-                collector.RegisterListener();
+                collector.Register();
             }
 
             try
@@ -78,7 +78,7 @@ namespace ATCG.Battle.Cutscenes
             }
             finally
             {
-                collector?.UnregisterListener();
+                collector?.Unregister();
             }
         }
 

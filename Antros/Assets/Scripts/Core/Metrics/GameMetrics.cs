@@ -59,6 +59,10 @@ namespace ATCG.Metrics
         public int BasicAttackRange { get; private set; } = 1;
         [field: SerializeField, BoxGroup("Game"), Range(0, 1)]
         public float QTESuccessRange { get; private set; } = 0.25f;
+        
+        [field: SerializeField, BoxGroup("Game"), Range(0, 100)]
+        public int CollisionsDamage { get; private set; } = 3;
+        
         [field: SerializeField, BoxGroup("Game/UI"), Range(0, 10)]
         public int MaxCapacityCountBeforeChooseModal { get; private set; } = 3;
 
