@@ -25,6 +25,6 @@ namespace ATCG.Battle.CapacitySystem.Core
             StepName = stepName;
         }
 
-        public void RunStep(in CapacityStepContext stepContext) => callback?.Invoke(data, stepContext);
+        public void RunStep(in CapacityStepContext ctx) => callback?.Invoke(data, ctx);
     }
 }

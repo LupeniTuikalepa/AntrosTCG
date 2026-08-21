@@ -47,7 +47,6 @@ namespace ATCG.Battle.CapacitySystem.Core
             HasCaster && caster.TryGetComponentRO(out GridMemberComponent gridMember)
                 ? gridMember.coordinates
                 : castPoint;
-
         public readonly BattlePhase battlePhase;
         public readonly CapacityData data;
         public readonly HexCoordinates castPoint;
