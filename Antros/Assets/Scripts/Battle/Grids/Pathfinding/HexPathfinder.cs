@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
@@ -110,8 +111,14 @@ namespace ATCG.Battle.Grids
                     // a tile that is on-grid AND standable for it. An off-grid or occupied target
                     // stops the chain on the last valid tile, so the agent is never left standing on
                     // a blocked tile (and an occupied redirecting tile can never be taken).
-                    if (!grid.TryGetBattleCell(next, out BattleCellAspect nextCell) ||
-                        !IsTraversable(agent, nextCell))
+                    if (!grid.TryGetBattleCell(next, out BattleCellAspect nextCell))
+                    {
+                        traversed.Add(next);
+                        current = next;
+                        break;
+                    }
+                    
+                    if (!IsTraversable(agent, nextCell))
                         break;
 
                     traversed.Add(next);
@@ -155,6 +162,9 @@ namespace ATCG.Battle.Grids
                         traversed.Clear();
                         HexCoordinates landing = ResolveRedirect(agent, grid, current, neighbour, traversed);
 
+                        if (!grid.TryGetBattleCell(landing, out _))
+                            continue;
+                        
                         // ResolveRedirect only ever returns an on-grid, standable tile (it stops the
                         // redirect chain before any blocked tile), so `landing` needs no re-check.
                         int newCost = cost + 1;
