@@ -13,8 +13,9 @@ namespace ATCG.Battle.Entities.Runtime.UI
 
         protected override void Awake()
         {
-            elements = new List<EntityActionUIElement>();
             base.Awake();
+            elements = new List<EntityActionUIElement>();
+            canvasGroup.TryGetComponent<CanvasGroup>(out canvasGroup);
         }
 
         private void Start()

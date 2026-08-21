@@ -187,5 +187,6 @@ namespace ATCG.Cutscenes
             if (notification is StepMarker step)
                 StepReached?.Invoke(step.StepName);
         }
+        
     }
 }

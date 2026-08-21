@@ -1427,26 +1427,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3702169578270022028}
-    - target: {fileID: 470302332610678325, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseLast
-      objectReference: {fileID: 0}
-    - target: {fileID: 470302332610678325, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ATCG.Battle.Entities.Runtime.UI.EntityActionUIPanel, ATCG.Battle
-      objectReference: {fileID: 0}
-    - target: {fileID: 470302332610678325, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 547005165448998724, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: canvasGroup
-      value: 
-      objectReference: {fileID: 5802826978556252023}
-    - target: {fileID: 547005165448998724, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: capaUIPrefab
-      value: 
-      objectReference: {fileID: -3116157418198675440, guid: cb783a749676082408572df641bb3445, type: 3}
     - target: {fileID: 715689232016295750, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2124,18 +2104,6 @@ PrefabInstance:
       value: 506
       objectReference: {fileID: 0}
     - target: {fileID: 8961514943499915480, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.323049
-      objectReference: {fileID: 0}
-    - target: {fileID: 8961514943499915480, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2.323049
-      objectReference: {fileID: 0}
-    - target: {fileID: 8961514943499915480, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2.323049
-      objectReference: {fileID: 0}
-    - target: {fileID: 8961514943499915480, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2226,28 +2194,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3313010875516313538, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5802826978556252023}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
---- !u!1 &4473287186862848327 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3313010875516313538, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}
-  m_PrefabInstance: {fileID: 1436194356295100037}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &5802826978556252023
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4473287186862848327}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!224 &8049007255385355869 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8961514943499915480, guid: f6f81eeae4fbaf54abc731ec26d631bc, type: 3}

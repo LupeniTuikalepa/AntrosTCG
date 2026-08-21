@@ -44,8 +44,11 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         public bool IsAlly(EntityAddress address)
         {
-            if (address.TryGetComponentRO(out BelongsToPlayerComponent otherBelongsToPlayer))
-                return otherBelongsToPlayer.IsAllieOf(CastingPlayer);
+	        if (!Caster.TryGetComponentRO(out BelongsToPlayerComponent casterBelongsToPlayer))
+		        return false;
+	        
+	        if (address.TryGetComponentRO(out BelongsToPlayerComponent targetBelongsToPlayer))
+		        return targetBelongsToPlayer.IsAllieOf(casterBelongsToPlayer.playerId);
 
             return false;
         }

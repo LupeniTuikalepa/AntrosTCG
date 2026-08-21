@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c2986292b8ecdd4d9b57c8cbefde1f4, type: 3}
   m_Name: Step Marker
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.StepMarker
-  m_Time: 1.45
-  stepName: EarthQuake
+  m_Time: 1.5666666666666667
+  stepName: Charging
   id: 8a1f7baa-60c3-4151-8b42-62395223e37f
 --- !u!114 &11400000
 MonoBehaviour:

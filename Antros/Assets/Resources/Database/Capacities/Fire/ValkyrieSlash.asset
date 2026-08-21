@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ValkyrieSlash
   m_EditorClassIdentifier: ATCG.Core::ATCG.ValkyrieSlashData
   guidText: 5b4e1fc0-20c5-4131-8971-a356ae418744
-  <Director>k__BackingField: {fileID: 0}
+  <Director>k__BackingField: {fileID: 7329070708853290921, guid: a18bec9da17eb1e4faa8d5d38e33e46e, type: 3}
   <Cost>k__BackingField: 0
   <Name>k__BackingField: Valkyrie Slash
   <Element>k__BackingField: 1
@@ -25,13 +25,22 @@ MonoBehaviour:
     <Data>k__BackingField:
     - rid: 3278270109278798281
   <Setups>k__BackingField: []
-  <PropertyDefinitions>k__BackingField: []
+  <PropertyDefinitions>k__BackingField:
+  - rid: 3278270272420184185
   <Damage>k__BackingField: 2
   <Range>k__BackingField: 1
   <BerserkDamage>k__BackingField: 4
   <BerserkRange>k__BackingField: 2
-  <SlashStepData>k__BackingField:
-    <StepName>k__BackingField: 
+  <EnnemyQuantitiesApplyStatus>k__BackingField: 1
+  status: {fileID: 11400000, guid: 1391a6f99b072594db135c22d90e8757, type: 2}
+  <InjectBerserkStepData>k__BackingField:
+    <StepName>k__BackingField: InjectBerserk
+    <QTEsCount>k__BackingField: 0
+  <ValkyrieSlashStepData>k__BackingField:
+    <StepName>k__BackingField: ValkyrieSlash
+    <QTEsCount>k__BackingField: 0
+  <NeedRemoveBerserkOrNotStepData>k__BackingField:
+    <StepName>k__BackingField: NeedRemoveBerserkOrNot
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
@@ -45,3 +54,8 @@ MonoBehaviour:
           <X>k__BackingField: 0
           <Y>k__BackingField: 0
         <Distance>k__BackingField: 2
+    - rid: 3278270272420184185
+      type: {class: IntPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
+      data:
+        name: EnnemiesCount
+        isArray: 0

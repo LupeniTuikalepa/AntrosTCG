@@ -122,13 +122,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 8af69799882e4ee0851d88fd32636fe2, type: 3}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ATCG.Battle.Entities.Runtime.UI.EntityActionUIPanel,
+          ATCG.Battle
+        m_MethodName: CloseLast
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -299,7 +300,8 @@ GameObject:
   - component: {fileID: 3418032878229746670}
   - component: {fileID: 1412427840151394443}
   - component: {fileID: 547005165448998724}
-  - component: {fileID: -2918490361605150104}
+  - component: {fileID: 5659317103702169998}
+  - component: {fileID: 4384574607147783240}
   m_Layer: 5
   m_Name: AllCapacitiesUI
   m_TagString: Untagged
@@ -316,7 +318,7 @@ RectTransform:
   m_GameObject: {fileID: 3313010875516313538}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.323049, y: 2.323049, z: 2.323049}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5779427665095139482}
@@ -411,8 +413,21 @@ MonoBehaviour:
       m_Calls: []
   capaUIPrefab: {fileID: -3116157418198675440, guid: cb783a749676082408572df641bb3445, type: 3}
   container: {fileID: 8745779781084055222}
-  canvasGroup: {fileID: -2918490361605150104}
---- !u!225 &-2918490361605150104
+  canvasGroup: {fileID: 4384574607147783240}
+--- !u!114 &5659317103702169998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313010875516313538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8af69799882e4ee0851d88fd32636fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.UI.EntityActionUIPanel
+  canvasGroup: {fileID: 4384574607147783240}
+--- !u!225 &4384574607147783240
 CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -420,7 +435,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3313010875516313538}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -577,7 +592,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 83}
+  m_AnchoredPosition: {x: 0, y: 21}
   m_SizeDelta: {x: 900, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7210637340058004525

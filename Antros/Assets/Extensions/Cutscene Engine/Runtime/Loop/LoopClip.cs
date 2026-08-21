@@ -67,5 +67,25 @@ namespace CutsceneEngine
 
             return playable;
         }
+        
+        public void SetupCutsceneLoop(Cutscene cutscene, int enemyCount)
+        {
+	        var director = cutscene.director;
+	        if (director.playableAsset is TimelineAsset timeline)
+	        {
+		        foreach (var track in timeline.GetOutputTracks())
+		        {
+			        foreach (var clip in track.GetClips())
+			        {
+				        if (clip.asset is CutsceneEngine.LoopClip loopClip)
+				        {
+					        // Définit le nombre de répétitions égal au nombre d'ennemis (minimum 1)
+					        loopClip.escapeMethod = CutsceneEngine.LoopClip.EscapeMethod.LoopCount;
+					        loopClip.targetLoopCount = (ushort)Mathf.Max(1, enemyCount);
+				        }
+			        }
+		        }
+	        }
+        }
     }
 }
