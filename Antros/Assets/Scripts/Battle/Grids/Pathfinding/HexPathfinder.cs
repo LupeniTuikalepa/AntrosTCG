@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ATCG.Battle.Entities.Aspects;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Utility;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Grids
@@ -161,6 +162,9 @@ namespace ATCG.Battle.Grids
                         traversed.Clear();
                         HexCoordinates landing = ResolveRedirect(agent, grid, current, neighbour, traversed);
 
+                        if (!grid.TryGetBattleCell(landing, out _))
+                            continue;
+                        
                         // ResolveRedirect only ever returns an on-grid, standable tile (it stops the
                         // redirect chain before any blocked tile), so `landing` needs no re-check.
                         int newCost = cost + 1;
