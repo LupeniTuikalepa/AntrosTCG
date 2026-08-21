@@ -6,6 +6,8 @@ using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.HexGrids;
+using ATCG.HexGrids.Utility;
+using UnityEngine;
 using UnityEngine.Pool;
 
 namespace ATCG.Battle.Commands.EntityCommands
@@ -44,32 +46,41 @@ namespace ATCG.Battle.Commands.EntityCommands
                 ref GridMemberComponent component = ref targetGridMemberComponentRef.GetValue();
 
                 var from = component.coordinates;
-                var redirectDestination = HexCoordinates.Zero;
-
+                var destination = from + direction;
+                HexCoordinates collisionCell = HexCoordinates.None;
+                
                 for (int i = 0; i < strengthMultiplier; i++)
                 {
-                    var destination = from + direction;
-                    
-                    redirectDestination =
+                    var redirectDestination =
                         HexPathfinder.ResolveRedirect(agent, context.Grid, from, destination, path);
 
-                    path.Remove(redirectDestination);
+                    if (redirectDestination == from)
+                    {
+                        // Bloqué — la collision est sur la case tentée
+                        collisionCell = destination;
+                        break;
+                    }
 
+                    HexCoordinates nextDirection = from.GetNormalizedDirection(redirectDestination).NearestCardinal();
                     from = redirectDestination;
+                    destination = from + nextDirection;
                 }
 
                 var moveCommand = new MoveAlongPathCommand(TargetEntityAddress(context.World), path);
                 Inject(context, moveCommand);
-
-                if (!context.Grid.TryGetBattleCell(redirectDestination, out var redirectDestinationCell))
-                    return;
                 
-                foreach (var member in redirectDestinationCell.GetMembers())
+                // Vérifier collision sur la case qui a bloqué le pushback
+                if (collisionCell.IsValid 
+                    && context.Grid.TryGetBattleCell(collisionCell, out var blockedCell))
                 {
-                    var impactDamageCommand =
-                        new ImpactDamageCommand(
-                            TargetEntityAddress(context.World), member.EntityAddress);
-                    impactDamageCommand.Run(context.battlePhase);
+                    EntityAddress pushbackTarget = TargetEntityAddress(context.World);
+
+                    foreach (var member in blockedCell.GetPhysicalMembers())
+                    {
+                        var impactDamageCommand = 
+                            new ImpactDamageCommand(pushbackTarget, member.EntityAddress);
+                        impactDamageCommand.Run(context.battlePhase);
+                    }
                 }
 
                 infos = new Infos(path.ToArray());
