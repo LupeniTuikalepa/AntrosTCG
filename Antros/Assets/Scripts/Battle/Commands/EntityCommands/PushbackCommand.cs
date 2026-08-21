@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.Infos;
 using ATCG.Battle.Entities;
@@ -16,9 +17,9 @@ namespace ATCG.Battle.Commands.EntityCommands
     {
         public struct Infos : ICommandInfos
         {
-            public IEnumerable<HexCoordinates> Path { get; private set; }
+            public IEnumerable<MovementCoord> Path { get; private set; }
 
-            public Infos(IEnumerable<HexCoordinates> path)
+            public Infos(IEnumerable<MovementCoord> path)
             {
                 Path = path;
             }
@@ -35,7 +36,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
         protected override void Process(in CommandContext context)
         {
-            using (ListPool<HexCoordinates>.Get(out var path))
+            using (ListPool<MovementCoord>.Get(out var path))
             {
                 if (!Target.TryGetComponent<GridMemberComponent>(context.World, out var targetGridMemberComponentRef))
                     return;
@@ -51,24 +52,31 @@ namespace ATCG.Battle.Commands.EntityCommands
                 
                 for (int i = 0; i < strengthMultiplier; i++)
                 {
-                    var redirectDestination =
-                        HexPathfinder.ResolveRedirect(agent, context.Grid, from, destination, path);
+                    var redirectPath =
+                        HexPathfinder.ResolveRedirect(agent, context.Grid, from, destination, AgentMovementType.Push);
 
-                    if (redirectDestination == from)
+                    var movementCoords = redirectPath as MovementCoord[] ?? redirectPath.ToArray();
+                    if (movementCoords.Length > 1)
                     {
-                        collisionCord = destination;
+                        path.AddRange(movementCoords);
                         break;
                     }
 
-                    var nextDirection = 
-                        from.GetNormalizedDirection(redirectDestination).NearestCardinal();
+                    var dest = movementCoords.Last();
+                    path.Add(dest);
                     
-                    from = redirectDestination;
+                    var nextDirection = from.GetNormalizedDirection(dest.destination).NearestCardinal();
+                    from = dest.destination;
                     destination = from + nextDirection;
                 }
 
-                var moveCommand = new MoveAlongPathCommand(TargetEntityAddress(context.World), path);
-                Inject(context, moveCommand);
+                foreach (var movementCoord in path)
+                {
+                    var moveCommand = 
+                        new MoveCommand(TargetEntityAddress(context.World), movementCoord.destination, movementCoord.movementType);
+                    Inject(context, moveCommand);
+                    
+                }
                 
                 if (collisionCord.IsValid 
                     && context.Grid.TryGetBattleCell(collisionCord, out var collisionCell))

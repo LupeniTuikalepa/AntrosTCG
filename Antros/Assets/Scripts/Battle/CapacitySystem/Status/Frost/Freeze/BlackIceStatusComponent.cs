@@ -27,6 +27,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost
                 return false;
                 
             to += direction;
+            agentMovementType = AgentMovementType.Slide;
             return true;
         }
     }
