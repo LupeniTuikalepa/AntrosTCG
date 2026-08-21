@@ -61,9 +61,8 @@ namespace ATCG.Battle.CapacitySystem.Capacities.Frost
                 else if (memberEntityAddress.HasComponent<MovementComponent>())
                 {
                     var direction = ctx.CasterOrigin.GetNormalizedDirection(gridMemberAspect.Coordinates);
-                    var destination = gridMemberAspect.Coordinates + direction * data.PushbackMultiplier;
 
-                    var pushbackCommand = new PushbackCommand(memberEntityAddress, destination);
+                    var pushbackCommand = new PushbackCommand(memberEntityAddress, direction, data.PushbackMultiplier);
                     pushbackCommand.Run(ctx.BattlePhase);
                 }
             }

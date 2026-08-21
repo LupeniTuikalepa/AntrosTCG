@@ -22,11 +22,13 @@ namespace ATCG.Battle.Commands.EntityCommands
             }
         }
 
-        private readonly HexCoordinates destination;
+        private readonly HexCoordinates direction;
+        private readonly int strengthMultiplier;
 
-        public PushbackCommand(EntityAddress address, HexCoordinates destination) : base(address)
+        public PushbackCommand(EntityAddress address, HexCoordinates direction, int strengthMultiplier) : base(address)
         {
-            this.destination = destination;
+            this.direction = direction;
+            this.strengthMultiplier = strengthMultiplier;
         }
 
         protected override void Process(in CommandContext context)
@@ -42,26 +44,34 @@ namespace ATCG.Battle.Commands.EntityCommands
                 ref GridMemberComponent component = ref targetGridMemberComponentRef.GetValue();
 
                 var from = component.coordinates;
+                var redirectDestination = HexCoordinates.Zero;
 
-                //TODO faire en sorte de prendre en compte toutes les cases si on a une strength de 2 ou plus
-                var redirectDestination =
-                    HexPathfinder.ResolveRedirect(agent, context.Grid, from, destination, path);
-                
-                if(!context.Grid.TryGetBattleCell(redirectDestination, out var redirectDestinationCell))
-                    return;
+                for (int i = 0; i < strengthMultiplier; i++)
+                {
+                    var destination = from + direction;
+                    
+                    redirectDestination =
+                        HexPathfinder.ResolveRedirect(agent, context.Grid, from, destination, path);
 
-                path.Remove(redirectDestination);
-                
+                    path.Remove(redirectDestination);
+
+                    from = redirectDestination;
+                }
+
                 var moveCommand = new MoveAlongPathCommand(TargetEntityAddress(context.World), path);
                 Inject(context, moveCommand);
+
+                if (!context.Grid.TryGetBattleCell(redirectDestination, out var redirectDestinationCell))
+                    return;
                 
                 foreach (var member in redirectDestinationCell.GetMembers())
                 {
-                    var impactDamageCommand = 
-                        new ImpactDamageCommand(TargetEntityAddress(context.World), member.EntityAddress);
+                    var impactDamageCommand =
+                        new ImpactDamageCommand(
+                            TargetEntityAddress(context.World), member.EntityAddress);
                     impactDamageCommand.Run(context.battlePhase);
                 }
-                
+
                 infos = new Infos(path.ToArray());
             }
         }
