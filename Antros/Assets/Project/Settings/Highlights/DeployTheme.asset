@@ -21,7 +21,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   renderQueue: 0
-  occlusion: 0
+  occlusion: 2
   occludedBy: 0
   OccludersRenderingLayer:
     serializedVersion: 0
@@ -33,8 +33,8 @@ MonoBehaviour:
   vertexAnimation: 0
   materialType: 0
   customMaterial: {fileID: 0}
-  pattern: 2
-  primaryColor: {r: 0, g: 1, b: 0, a: 1}
+  pattern: 0
+  primaryColor: {r: 1.9056604, g: 0.59895265, b: 0.2067462, a: 0.5019608}
   secondaryColor: {r: 1, g: 0, b: 0, a: 1}
   texture: {fileID: 0}
   channel: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   - state: 8
     outlineActive: 0
     outline: {fileID: 132676394345460378}
-    fillActive: 0
+    fillActive: 1
     fill: {fileID: -7622054984929896316}
 --- !u!114 &132676394345460378
 MonoBehaviour:

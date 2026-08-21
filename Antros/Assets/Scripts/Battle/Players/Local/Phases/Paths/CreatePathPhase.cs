@@ -64,6 +64,9 @@ namespace ATCG.Battle.Players.Local.Phases
 
         private readonly HashSet<HexCoordinates> directRing = new();
         private readonly HashSet<HexCoordinates> reachableRing = new();
+        // Redirect cells: selectable, but they have no destination of their own — aiming at one
+        // resolves to the landing it pushes you to (see ReachableMap.TryResolveTarget).
+        private readonly HashSet<HexCoordinates> redirectRing = new();
 
         public IReadOnlyCollection<HexCoordinates> DirectRing => directRing;
         public IReadOnlyCollection<HexCoordinates> ReachableRing => reachableRing;
@@ -104,6 +107,7 @@ namespace ATCG.Battle.Players.Local.Phases
             ListPool<HexCoordinates>.Release(TemporaryPath);
             directRing.Clear();
             reachableRing.Clear();
+            redirectRing.Clear();
             return base.Dispose(token);
         }
 
@@ -134,11 +138,11 @@ namespace ATCG.Battle.Players.Local.Phases
                     if (!map.HasReachableTiles)
                         break;
 
-                    BuildRings(center, map.Costs);
+                    BuildRings(center, map);
                     currentCenter = center;
                     currentReachable = map;
 
-                    using HexPatternBuilder builder = BuildPattern(center, map.Costs);
+                    using HexPatternBuilder builder = BuildPattern(center, map);
 
                     var selectEntityPhase = new SelectEntityPhase<GridFilter>(LocalBattlePlayer, filter, builder);
                     selectEntityPhase.SetHighlightClassifier(ClassifyMovement);
@@ -159,12 +163,14 @@ namespace ATCG.Battle.Players.Local.Phases
                         continue;
 
                     HexCoordinates goal = gridMember.coordinates;
-                    if (!map.TryGetCost(goal, out int goalCost) || goalCost <= 0)
+                    // A redirect cell resolves to the landing it pushes to; a normal reachable tile
+                    // resolves to itself. Either way `target` is where the unit actually ends up.
+                    if (!map.TryResolveTarget(goal, out HexCoordinates target, out int goalCost) || goalCost <= 0)
                         continue;
 
-                    AppendStepPath(map, goal);
+                    AppendStepPath(map, target);
                     remaining -= goalCost;
-                    center = goal;
+                    center = target;
 
                     OnPathChanged?.Invoke(this);
                 }
@@ -177,6 +183,7 @@ namespace ATCG.Battle.Players.Local.Phases
 
             directRing.Clear();
             reachableRing.Clear();
+            redirectRing.Clear();
             return CurrentPath.ToArray();
         }
 
@@ -189,18 +196,23 @@ namespace ATCG.Battle.Players.Local.Phases
             HexCoordinates coord = gridMember.coordinates;
             if (directRing.Contains(coord))
                 return HighlightState.Preview1;
+            // Redirect cells get their own slot (Preview6) so they read as distinct from plain
+            // reachable / fast-travel tiles.
+            if (redirectRing.Contains(coord))
+                return HighlightState.Preview6;
             if (reachableRing.Contains(coord))
                 return HighlightState.Preview2;
 
             return fallback;
         }
 
-        private void BuildRings(HexCoordinates center, IReadOnlyDictionary<HexCoordinates, int> costSoFar)
+        private void BuildRings(HexCoordinates center, ReachableMap map)
         {
             directRing.Clear();
             reachableRing.Clear();
+            redirectRing.Clear();
 
-            foreach (KeyValuePair<HexCoordinates, int> kv in costSoFar)
+            foreach (KeyValuePair<HexCoordinates, int> kv in map.Costs)
             {
                 if (kv.Key == center)
                     continue;
@@ -210,15 +222,24 @@ namespace ATCG.Battle.Players.Local.Phases
                 else
                     reachableRing.Add(kv.Key);
             }
+
+            // Redirect cells are selectable proxies for their landing (pruned so none overlaps a
+            // real reachable tile).
+            foreach (KeyValuePair<HexCoordinates, HexCoordinates> kv in map.RedirectTargets)
+                redirectRing.Add(kv.Key);
         }
 
-        private HexPatternBuilder BuildPattern(HexCoordinates center, IReadOnlyDictionary<HexCoordinates, int> costSoFar)
+        private HexPatternBuilder BuildPattern(HexCoordinates center, ReachableMap map)
         {
             using (ListPool<HexCoordinates>.Get(out var coords))
             {
-                foreach (KeyValuePair<HexCoordinates, int> kv in costSoFar)
+                foreach (KeyValuePair<HexCoordinates, int> kv in map.Costs)
                     if (kv.Key != center)
                         coords.Add(kv.Key);
+
+                // Redirect cells join the selectable pattern too, so the player can aim at one.
+                foreach (KeyValuePair<HexCoordinates, HexCoordinates> kv in map.RedirectTargets)
+                    coords.Add(kv.Key);
 
                 // The builder copies the coordinates into its own set; the controller is only
                 // used when building from patterns, which we don't do here.
@@ -247,9 +268,14 @@ namespace ATCG.Battle.Players.Local.Phases
             if (!address.TryGetComponentRO(out GridMemberComponent gridMember))
                 return;
 
-            // Full path is center-inclusive; drop the leading center since CurrentPath already
-            // ends there and the renderer draws CurrentPath + TemporaryPath back to back.
-            if (currentReachable.TryGetPathFor(gridMember.coordinates, TemporaryPath) && TemporaryPath.Count > 0)
+            // Aiming at a redirect cell previews the LANDING's path — as if the cursor were on that
+            // landing (the redirect cell has no preview of its own). Full path is center-inclusive;
+            // drop the leading center since CurrentPath already ends there and the renderer draws
+            // CurrentPath + TemporaryPath back to back.
+            TemporaryPath.Clear();
+            if (currentReachable.TryResolveTarget(gridMember.coordinates, out HexCoordinates target, out _)
+                && currentReachable.TryGetPathFor(target, TemporaryPath)
+                && TemporaryPath.Count > 0)
                 TemporaryPath.RemoveAt(0);
 
             OnPathChanged?.Invoke(this);

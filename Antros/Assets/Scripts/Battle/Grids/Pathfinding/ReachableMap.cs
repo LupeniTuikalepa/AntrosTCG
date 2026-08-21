@@ -27,6 +27,9 @@ namespace ATCG.Battle.Grids
         private readonly Dictionary<HexCoordinates, MovementStep> cameFrom;
         // landing tile -> full path, origin inclusive .. tile inclusive, redirect slides included.
         private readonly Dictionary<HexCoordinates, HexCoordinates[]> fullPaths;
+        // redirect/slid-across tile -> the landing it pushes you to. Aiming at one of these behaves
+        // exactly like aiming at that landing; the redirect cell has no destination of its own.
+        private readonly Dictionary<HexCoordinates, HexCoordinates> redirectTargets;
 
         public HexCoordinates Origin { get; }
 
@@ -36,6 +39,7 @@ namespace ATCG.Battle.Grids
             costSoFar = DictionaryPool<HexCoordinates, int>.Get();
             cameFrom = DictionaryPool<HexCoordinates, MovementStep>.Get();
             fullPaths = DictionaryPool<HexCoordinates, HexCoordinates[]>.Get();
+            redirectTargets = DictionaryPool<HexCoordinates, HexCoordinates>.Get();
             costSoFar[origin] = 0;
         }
 
@@ -47,6 +51,17 @@ namespace ATCG.Battle.Grids
         {
             costSoFar[landing] = cost;
             cameFrom[landing] = step;
+        }
+
+        /// <summary>
+        /// Marks <paramref name="cell"/> — a tile a redirect pushed the agent across on the way to
+        /// <paramref name="landing"/> — as an "aim proxy" for that landing. First writer wins (BFS
+        /// order = shortest). Real landing tiles are never proxies; that is enforced in BakePaths.
+        /// </summary>
+        internal void RecordRedirectCell(HexCoordinates cell, HexCoordinates landing)
+        {
+            if (cell != landing && !redirectTargets.ContainsKey(cell))
+                redirectTargets[cell] = landing;
         }
 
         /// <summary>
@@ -68,6 +83,18 @@ namespace ATCG.Battle.Grids
                         fullPaths[tile] = scratch.ToArray();
                 }
             }
+
+            // A tile that is BOTH slid-across and a genuine landing stays a real destination, never a
+            // proxy; and a proxy is only valid if its landing actually baked a path.
+            using (ListPool<HexCoordinates>.Get(out var stale))
+            {
+                foreach (KeyValuePair<HexCoordinates, HexCoordinates> kv in redirectTargets)
+                    if (costSoFar.ContainsKey(kv.Key) || !fullPaths.ContainsKey(kv.Value))
+                        stale.Add(kv.Key);
+
+                foreach (HexCoordinates cell in stale)
+                    redirectTargets.Remove(cell);
+            }
         }
 
         // --- Read surface (every consumer) ------------------------------------------------------
@@ -81,6 +108,34 @@ namespace ATCG.Battle.Grids
         public bool IsReachable(HexCoordinates tile) => tile != Origin && costSoFar.ContainsKey(tile);
 
         public bool TryGetCost(HexCoordinates tile, out int cost) => costSoFar.TryGetValue(tile, out cost);
+
+        /// <summary>A tile a redirect only slides across — selectable, but resolves to its landing.</summary>
+        public bool IsRedirectCell(HexCoordinates tile) => redirectTargets.ContainsKey(tile);
+
+        /// <summary>Redirect "aim proxy" tiles -> their landing. Read-only.</summary>
+        public IReadOnlyDictionary<HexCoordinates, HexCoordinates> RedirectTargets => redirectTargets;
+
+        /// <summary>
+        /// Resolves the tile the player aimed at to the tile they will END UP on, plus its cost. A
+        /// real landing resolves to itself; a redirect cell resolves to the landing it pushes to (as
+        /// if the cursor had been placed on that landing directly). False when the tile is neither a
+        /// reachable landing nor a redirect proxy.
+        /// </summary>
+        public bool TryResolveTarget(HexCoordinates tile, out HexCoordinates target, out int cost)
+        {
+            if (tile != Origin && costSoFar.TryGetValue(tile, out cost))
+            {
+                target = tile;
+                return true;
+            }
+
+            if (redirectTargets.TryGetValue(tile, out target) && costSoFar.TryGetValue(target, out cost))
+                return true;
+
+            target = HexCoordinates.None;
+            cost = 0;
+            return false;
+        }
 
         /// <summary>
         /// Writes the precomputed shortest path to <paramref name="tile"/> — origin inclusive,
@@ -139,6 +194,7 @@ namespace ATCG.Battle.Grids
             DictionaryPool<HexCoordinates, int>.Release(costSoFar);
             DictionaryPool<HexCoordinates, MovementStep>.Release(cameFrom);
             DictionaryPool<HexCoordinates, HexCoordinates[]>.Release(fullPaths);
+            DictionaryPool<HexCoordinates, HexCoordinates>.Release(redirectTargets);
         }
     }
 }

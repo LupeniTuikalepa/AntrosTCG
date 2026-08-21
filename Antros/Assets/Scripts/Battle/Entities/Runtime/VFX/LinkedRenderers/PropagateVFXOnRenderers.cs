@@ -93,11 +93,16 @@ namespace ATCG.Battle.Entities.Runtime.VFX
                 Generate();
 
                 // Reset the clock and fix the seed so resimulations stay deterministic (no
-                // per-frame reseed flicker). SetTime drives the systems from here on.
+                // per-frame reseed flicker). SetTime drives the systems from here on. The seed
+                // can only be set on a stopped system, so stop+clear first (the freshly spawned
+                // instances auto-play otherwise).
                 lastTime = 0d;
                 foreach (var p in particleSystems)
-                    if (p != null)
-                        p.useAutoRandomSeed = false;
+                {
+                    if (p == null) continue;
+                    p.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    p.useAutoRandomSeed = false;
+                }
             }
         }
 
