@@ -110,8 +110,14 @@ namespace ATCG.Battle.Grids
                     // a tile that is on-grid AND standable for it. An off-grid or occupied target
                     // stops the chain on the last valid tile, so the agent is never left standing on
                     // a blocked tile (and an occupied redirecting tile can never be taken).
-                    if (!grid.TryGetBattleCell(next, out BattleCellAspect nextCell) ||
-                        !IsTraversable(agent, nextCell))
+                    if (!grid.TryGetBattleCell(next, out BattleCellAspect nextCell))
+                    {
+                        traversed.Add(next);
+                        current = next;
+                        break;
+                    }
+                    
+                    if (!IsTraversable(agent, nextCell))
                         break;
 
                     traversed.Add(next);

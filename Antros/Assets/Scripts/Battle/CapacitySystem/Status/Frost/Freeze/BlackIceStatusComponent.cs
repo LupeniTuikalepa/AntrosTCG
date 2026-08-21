@@ -1,4 +1,6 @@
-﻿using ATCG.Battle.Entities.Aspects;
+﻿using ATCG.Battle.Commands;
+using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Entities.Aspects;
 using ATCG.Battle.Grids;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids;
@@ -23,7 +25,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Frost
 
             if (direction is { X: 0, Y: 0 })
                 return false;
-
+                
             to += direction;
             return true;
         }

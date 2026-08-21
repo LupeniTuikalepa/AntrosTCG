@@ -47,7 +47,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
                 var from = component.coordinates;
                 var destination = from + direction;
-                HexCoordinates collisionCell = HexCoordinates.None;
+                var collisionCord = HexCoordinates.None;
                 
                 for (int i = 0; i < strengthMultiplier; i++)
                 {
@@ -56,12 +56,13 @@ namespace ATCG.Battle.Commands.EntityCommands
 
                     if (redirectDestination == from)
                     {
-                        // Bloqué — la collision est sur la case tentée
-                        collisionCell = destination;
+                        collisionCord = destination;
                         break;
                     }
 
-                    HexCoordinates nextDirection = from.GetNormalizedDirection(redirectDestination).NearestCardinal();
+                    var nextDirection = 
+                        from.GetNormalizedDirection(redirectDestination).NearestCardinal();
+                    
                     from = redirectDestination;
                     destination = from + nextDirection;
                 }
@@ -69,13 +70,12 @@ namespace ATCG.Battle.Commands.EntityCommands
                 var moveCommand = new MoveAlongPathCommand(TargetEntityAddress(context.World), path);
                 Inject(context, moveCommand);
                 
-                // Vérifier collision sur la case qui a bloqué le pushback
-                if (collisionCell.IsValid 
-                    && context.Grid.TryGetBattleCell(collisionCell, out var blockedCell))
+                if (collisionCord.IsValid 
+                    && context.Grid.TryGetBattleCell(collisionCord, out var collisionCell))
                 {
-                    EntityAddress pushbackTarget = TargetEntityAddress(context.World);
+                    var pushbackTarget = TargetEntityAddress(context.World);
 
-                    foreach (var member in blockedCell.GetPhysicalMembers())
+                    foreach (var member in collisionCell.GetPhysicalMembers())
                     {
                         var impactDamageCommand = 
                             new ImpactDamageCommand(pushbackTarget, member.EntityAddress);

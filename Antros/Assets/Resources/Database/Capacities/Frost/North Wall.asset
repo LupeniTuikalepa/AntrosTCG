@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: North Wall
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Frost.NorthWallData
   guidText: 6ac6ee36-7197-42b4-850c-ea436389c2b2
+  <Director>k__BackingField: {fileID: 1509459207510789216, guid: 7675d12de1ae54a4cb1430c8dfecc36a, type: 3}
   <Cost>k__BackingField: 1
   <Name>k__BackingField: Mur du Nord
   <Element>k__BackingField: 7
   <Description>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 0}
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 7630467977162784896
-  <CutsceneDirector>k__BackingField: {fileID: 1509459207510789216, guid: 7675d12de1ae54a4cb1430c8dfecc36a, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <Size>k__BackingField: 2
   <DeployableData>k__BackingField: {fileID: 11400000, guid: 36a574091bccce54796001dcc563619d, type: 2}
