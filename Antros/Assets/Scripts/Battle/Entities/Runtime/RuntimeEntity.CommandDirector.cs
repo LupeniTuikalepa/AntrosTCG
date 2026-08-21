@@ -5,12 +5,14 @@ using ATCG.Battle.Commands;
 using ATCG.Battle.Commands.Directors;
 using ATCG.Battle.Commands.Entities;
 using ATCG.Battle.Commands.EntityCommands;
+using ATCG.Battle.Grids;
 using ATCG.Battle.Grids.Runtime;
 using ATCG.Battle.PassiveSystem.Core;
 using ATCG.Battle.PassiveSystem.Runtimes;
 using ATCG.Capacities.Data.Status;
 using ATCG.HexGrids.Utility;
 using ATCG.HexGrids;
+using ATCG.Utilities;
 using PrimeTween;
 using UnityEngine;
 
@@ -117,15 +119,27 @@ namespace ATCG.Battle.Entities.Runtime
 			var destination = infos.to;
 
 			var position = RuntimeBattleGrid.GetPositionAt(destination);
-
-			HexOperations.ComputeQuaternion(
-				transform.position,
-				position,
-				out var targetRotation);
-
-			await Tween.Rotation(transform, targetRotation, 0.15f, Ease.InOutQuint);
-			await Tween.Position(transform, position, .15f, Ease.OutCirc);
-
+			
+			switch (command.movementType)
+			{
+				case AgentMovementType.Default:
+				case AgentMovementType.Flight:
+					await LookAtCoord(destination);
+					await Tween.Position(transform, position, .15f, Ease.OutQuad);
+					break;
+				case AgentMovementType.Push:
+				case AgentMovementType.Slide:
+					await Tween.Position(transform, position, .15f, Ease.Linear);
+					break;
+				case AgentMovementType.Teleportation:
+					transform.position = position;
+					break;
+				case AgentMovementType.Jump:
+					await LookAtCoord(destination);
+					await transform.Jump(position, .3f, 1f);
+					break;
+			}
+			
 
 			state.CompleteFollowThrough(this);
 		}

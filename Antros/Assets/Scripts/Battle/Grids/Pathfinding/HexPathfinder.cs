@@ -16,12 +16,23 @@ namespace ATCG.Battle.Grids
     public readonly struct MovementStep
     {
         public readonly HexCoordinates previous;
-        public readonly HexCoordinates[] traversed;
-
-        public MovementStep(HexCoordinates previous, HexCoordinates[] traversed)
+        public readonly MovementCoord[] traversed;
+        public MovementStep(HexCoordinates previous, MovementCoord[] traversed)
         {
             this.previous = previous;
             this.traversed = traversed;
+        }
+    }
+
+    public struct MovementCoord
+    {
+        public readonly HexCoordinates destination;
+        public readonly AgentMovementType movementType;
+
+        public MovementCoord(HexCoordinates destination, AgentMovementType movementType)
+        {
+            this.destination = destination;
+            this.movementType = movementType;
         }
     }
 
@@ -74,46 +85,66 @@ namespace ATCG.Battle.Grids
             return map.TryGetPathToward(goal, path);
         }
 
+        public static IEnumerable<MovementCoord> ResolveRedirect(
+            PathfindingAgentAspect agent, BattleGrid grid,
+            HexCoordinates from, HexCoordinates chosen)
+        {
+            return ResolveRedirect(agent, grid, from, chosen, agent.MovementType);
+        }
+        
+        public static IEnumerable<MovementCoord> ResolveRedirect(
+            PathfindingAgentAspect agent, BattleGrid grid,
+            HexCoordinates from, HexCoordinates chosen, AgentMovementType agentMovementType)
+        {
+            using (ListPool<HexCoordinates>.Get(out var traversed))
+            {
+                return ResolveRedirect(agent, grid, from, chosen, traversed, agentMovementType);
+            }
+        }
+
         /// <summary>
         /// Resolves the redirect chain from stepping off <paramref name="from"/> onto
         /// <paramref name="chosen"/>. Appends every traversed tile (chosen first) to
-        /// <paramref name="traversed"/> and returns the final landing tile. Stops on a cycle
+        /// <paramref name="ignore"/> and returns the final landing tile. Stops on a cycle
         /// or when a redirect would push off-grid (staying on the last valid tile).
         ///
         /// This is the SINGLE place a redirect is ever resolved; every reachability/path query
         /// funnels through here so the rules stay in one spot.
         /// </summary>
-        public static HexCoordinates ResolveRedirect(
+        public static IEnumerable<MovementCoord> ResolveRedirect(
             PathfindingAgentAspect agent, BattleGrid grid,
-            HexCoordinates from, HexCoordinates chosen, List<HexCoordinates> traversed)
+            HexCoordinates from, HexCoordinates chosen, List<HexCoordinates> ignore, AgentMovementType defaultMovementType)
         {
             // The entry tile must itself be on-grid and standable for this agent. If it isn't, no
             // move happens (nothing is appended to `traversed`) and the agent stays on `from`.
             if (!grid.TryGetBattleCell(chosen, out BattleCellAspect chosenCell) ||
                 !IsTraversable(agent, chosenCell))
-                return from;
+            {
+                yield return new MovementCoord(from, defaultMovementType);
+                yield break;
+            }
 
             HexCoordinates previous = from;
-            HexCoordinates current = chosen;
-            traversed.Add(current);
+            MovementCoord current = new MovementCoord(chosen, defaultMovementType);
+            ignore.Add(current.destination);
 
             using (HashSetPool<HexCoordinates>.Get(out var visited))
             {
-                visited.Add(current);
+                visited.Add(current.destination);
 
-                while (grid.TryGetBattleCell(current, out BattleCellAspect cell)
-                       && TryRedirectOnce(agent, cell, previous, current, out HexCoordinates next))
+                while (grid.TryGetBattleCell(current.destination, out BattleCellAspect cell)
+                       && TryRedirectOnce(agent, cell, previous, current.destination, out MovementCoord next))
                 {
-                    if (!visited.Add(next))
+                    if (!visited.Add(next.destination))
                         break; // redirect cycle
 
                     // A redirect — a slide today, a teleport tomorrow — may only place the agent on
                     // a tile that is on-grid AND standable for it. An off-grid or occupied target
                     // stops the chain on the last valid tile, so the agent is never left standing on
                     // a blocked tile (and an occupied redirecting tile can never be taken).
-                    if (!grid.TryGetBattleCell(next, out BattleCellAspect nextCell))
+                    if (!grid.TryGetBattleCell(next.destination, out BattleCellAspect nextCell))
                     {
-                        traversed.Add(next);
+                        ignore.Add(next.destination);
                         current = next;
                         break;
                     }
@@ -121,13 +152,13 @@ namespace ATCG.Battle.Grids
                     if (!IsTraversable(agent, nextCell))
                         break;
 
-                    traversed.Add(next);
-                    previous = current;
+                    ignore.Add(next.destination);
+                    previous = current.destination;
                     current = next;
                 }
             }
 
-            return current;
+            yield return current;
         }
 
         // Unit-cost BFS. Each dequeued tile expands its ring-1 neighbours; every accepted neighbour
@@ -138,9 +169,10 @@ namespace ATCG.Battle.Grids
             ReachableMap map)
         {
             using (ListPool<HexCoordinates>.Get(out var frontier))
-            using (ListPool<HexCoordinates>.Get(out var traversed))
+            using (ListPool<MovementCoord>.Get(out var movementPath))
             {
                 frontier.Add(origin);
+                
                 int head = 0;
 
                 while (head < frontier.Count)
@@ -159,26 +191,31 @@ namespace ATCG.Battle.Grids
                         if (!IsTraversable(agent, neighbourCell))
                             continue;
 
-                        traversed.Clear();
-                        HexCoordinates landing = ResolveRedirect(agent, grid, current, neighbour, traversed);
+                        movementPath.Clear();
+                        
+                        var landings = ResolveRedirect(agent, grid, current, neighbour);
+                        movementPath.AddRange(landings);
 
-                        if (!grid.TryGetBattleCell(landing, out _))
+                        var last = movementPath[^1];
+                        var destination = last.destination;
+                        
+                        if (!grid.TryGetBattleCell(destination, out _))
                             continue;
                         
                         // ResolveRedirect only ever returns an on-grid, standable tile (it stops the
                         // redirect chain before any blocked tile), so `landing` needs no re-check.
                         int newCost = cost + 1;
-                        if (map.TryGetRawCost(landing, out int existing) && existing <= newCost)
+                        if (map.TryGetRawCost(destination, out int existing) && existing <= newCost)
                             continue;
-
-                        map.Record(landing, newCost, new MovementStep(current, traversed.ToArray()));
-                        frontier.Add(landing);
+                        
+                        map.Record(destination, newCost, new MovementStep(current, movementPath.ToArray()));
+                        frontier.Add(destination);
 
                         // Every tile the slide crossed except the landing (the last entry) is a
                         // redirect cell the player can AIM at: selecting it must behave as if they
                         // selected this landing. Register those aim proxies.
-                        for (int t = 0; t < traversed.Count - 1; t++)
-                            map.RecordRedirectCell(traversed[t], landing);
+                        for (int t = 0; t < movementPath.Count - 1; t++)
+                            map.RecordRedirectCell(movementPath[t].destination, destination);
                     }
                 }
             }
@@ -205,9 +242,9 @@ namespace ATCG.Battle.Grids
 
             while (current != origin && cameFrom.TryGetValue(current, out MovementStep step))
             {
-                HexCoordinates[] tiles = step.traversed;
+                MovementCoord[] tiles = step.traversed;
                 for (int i = tiles.Length - 1; i >= 0; i--)
-                    path.Add(tiles[i]);
+                    path.Add(tiles[i].destination);
 
                 current = step.previous;
             }
@@ -231,7 +268,7 @@ namespace ATCG.Battle.Grids
 
         private static bool TryRedirectOnce(
             PathfindingAgentAspect agent, BattleCellAspect redirectCell,
-            HexCoordinates directionOrigin, HexCoordinates to, out HexCoordinates redirected)
+            HexCoordinates directionOrigin, HexCoordinates to, out MovementCoord redirected)
         {
             // PathfindingRedirectionIterator is a struct, and the generated
             // ForeachRedirectStatusComponent takes the iterator as an INTERFACE — passing a struct
@@ -244,7 +281,7 @@ namespace ATCG.Battle.Grids
             iterator.ForeachRedirectStatusComponent();
 
             var resolved = (PathfindingRedirectionIterator)iterator;
-            redirected = resolved.To;
+            redirected = new MovementCoord(resolved.To, resolved.SegmentType);
             return resolved.WasRedirected && resolved.To != to;
         }
     }
