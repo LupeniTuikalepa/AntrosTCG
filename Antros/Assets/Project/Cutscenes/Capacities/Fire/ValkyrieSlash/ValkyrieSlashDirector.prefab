@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1013890624011665935}
   serializedVersion: 2
   m_LocalRotation: {x: -3.072637e-10, y: 0.9965927, z: 0.08248051, w: 0.0000000037125951}
-  m_LocalPosition: {x: 0, y: 1.1, z: 1.26}
+  m_LocalPosition: {x: 0, y: 1.1, z: 1.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -91,11 +91,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 0.33, y: 4, z: 1.52}
+    PositionDamping: {x: 0.33, y: 4.64, z: 1.52}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 1.07, z: 1.26}
+  FollowOffset: {x: 0.42, y: 1.32, z: 1.26}
 --- !u!114 &2355705296048336878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 1.28, z: 0}
+  TargetOffset: {x: 0, y: 1.9, z: 0}
   Damping: {x: 0, y: 0}
   Lookahead:
     Enabled: 0
