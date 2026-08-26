@@ -27,7 +27,7 @@ MonoBehaviour:
   <Damage>k__BackingField: 1
   <PushbackMultiplier>k__BackingField: 1
   <DestructionStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Destruction
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
