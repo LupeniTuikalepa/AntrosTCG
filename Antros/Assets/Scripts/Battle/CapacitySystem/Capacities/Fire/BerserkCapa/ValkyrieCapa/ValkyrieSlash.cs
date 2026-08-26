@@ -43,65 +43,97 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			foreach (var member in battleCell.GetMembers())
 			{
 				EntityAddress address = member.EntityAddress;
-				if(address.HasComponent<HealthComponent>()&& address.IsAlly(castingPlayer))
+				if(address.HasComponent<HealthComponent>()&& !address.IsAlly(castingPlayer))
 					output.Add(address, CapacityTags.MEMBER);
 			}
 		}
 		private partial void ExecuteInjectBerserk(ValkyrieSlashData data, CapacityStepContext ctx)
-		{
-			if (ctx.Targets.Count >= data.EnnemyQuantitiesApplyStatus)
-			{
-				var status = new ApplyStatusCommand(ctx.Caster,data.status);
-				status.Run(ctx.BattlePhase);
-				hasBerserk = true;
-			}
-			else
-			{
-				hasBerserk = false;
-			}
-		}
-		private partial void ExecuteValkyrieSlash(ValkyrieSlashData data, CapacityStepContext ctx)
-		{
+        {
+	        if (ctx.capacityPhase.TryGetProperty("InjectBerserk", out bool alreadyInjected) && alreadyInjected)
+		        return;
+	        ctx.capacityPhase.InjectProperty("InjectBerserk", true);
+
+	        Debug.Log("Une pas deux");
+	        
+            int enemyCount = 0;
+            foreach (var cell in ctx.patternBuilder.GetBattleCells(ctx.BattleGrid))
+            {
+                foreach (var member in cell.GetMembers())
+                {
+                    EntityAddress occupant = member.EntityAddress;
+                    if (occupant.IsValid && occupant != ctx.Caster && occupant.HasComponent<HealthComponent>() && !ctx.IsAlly(occupant))
+                    {
+                        enemyCount++;
+                    }
+                }
+            }
+            ctx.capacityPhase.InjectProperty(ValkyrieSlashData.ENNEMIES_COUNT, enemyCount);
+            if (enemyCount >= data.EnnemyQuantitiesApplyStatus)
+            {
+                var status = new ApplyStatusCommand(ctx.Caster, data.status);
+                status.Run(ctx.BattlePhase);
+                hasBerserk = true;
+            }
+            else
+            {
+                hasBerserk = false;
+            }
+        }
+
+        private partial void ExecuteValkyrieSlash(ValkyrieSlashData data, CapacityStepContext ctx)
+        {
+            using (ListPool<EntityAddress>.Get(out var enemies))
+            {
+                foreach (var cell in ctx.patternBuilder.GetBattleCells(ctx.BattleGrid))
+                {
+                    foreach (var member in cell.GetMembers())
+                    {
+                        EntityAddress occupant = member.EntityAddress;
+                        if (occupant.IsValid && occupant != ctx.Caster && occupant.HasComponent<HealthComponent>() && ctx.IsAlly(occupant))
+                        {
+                            enemies.Add(occupant);
+                        }
+                    }
+                }
+                int currentIndex = ctx.loop - 1;
+                
+                if (currentIndex >= 0 && currentIndex < enemies.Count)
+                {
+                    EntityAddress targetEnemy = enemies[currentIndex];
+                    
+                    if (!ctx.Caster.HasStatus<BerserkStatus>())
+                    {
+                        var damage = new DamageCommand(data.Damage, targetEnemy);
+                        damage.Run(ctx.BattlePhase);
+                    }
+                    else
+                    {
+                        var damage = new DamageCommand(data.BerserkRange, targetEnemy);
+                        damage.Run(ctx.BattlePhase);
+                    }
+                }
+            }
+        }
+
+        private partial void ExecuteNeedRemoveBerserkOrNot(ValkyrieSlashData data, CapacityStepContext ctx)
+        {
+	        if (ctx.capacityPhase.TryGetProperty("NeedRemoveBerserkOrNot", out bool alreadyInjected) && alreadyInjected)
+		        return;
+	        ctx.capacityPhase.InjectProperty("NeedRemoveBerserkOrNot", true);
+	        Debug.Log("Un seul Log pas plus");
 			
-			using (ListPool<EntityAddress>.Get(out var enemies))
-			{
-				foreach (EntityAddress target in ctx.Targets)
-				{
-					if (target.IsValid && ctx.IsAlly(target))
-					{
-						enemies.Add(target);
-					}
-				}
-				ctx.capacityPhase.InjectProperty(ValkyrieSlashData.ENNEMIES_COUNT, enemies.Count);
-				int currentIndex = ctx.loop - 1;
-				count = enemies.Count;
-				if (currentIndex < enemies.Count)
-				{
-					EntityAddress targetEnemy = enemies[currentIndex];
-					if (!ctx.Caster.HasStatus<BerserkStatus>())
-					{
-						var damage = new DamageCommand(data.Damage, targetEnemy);
-						damage.Run(ctx.BattlePhase);
-					}
-					else
-					{
-						var oneDamage = new DamageCommand(data.BerserkRange, targetEnemy);
-						oneDamage.Run(ctx.BattlePhase);
-					}
-				}
-			}
-		}
-		private partial void ExecuteNeedRemoveBerserkOrNot(ValkyrieSlashData data, CapacityStepContext ctx)
-		{
-			if (ctx.Caster.HasStatus<BerserkStatus>())
-			{
-				Debug.Log("ciao");
-				var status = new RemoveStatusCommand(ctx.Caster,data.status);
-				status.Run(ctx.BattlePhase);
-				hasBerserk = false;
-				return;
-			}
-			
-		}
+            if (ctx.Caster.HasStatus<BerserkStatus>())
+            {
+                var status = new RemoveStatusCommand(ctx.Caster, data.status);
+                status.Run(ctx.BattlePhase);
+                hasBerserk = false;
+            }
+            else
+            {
+	            var status = new ApplyStatusCommand(ctx.Caster, data.status);
+	            status.Run(ctx.BattlePhase);
+            }
+        }
+		
 	}
 }

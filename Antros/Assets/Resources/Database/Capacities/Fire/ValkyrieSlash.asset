@@ -31,7 +31,7 @@ MonoBehaviour:
   <Range>k__BackingField: 1
   <BerserkDamage>k__BackingField: 20
   <BerserkRange>k__BackingField: 2
-  <EnnemyQuantitiesApplyStatus>k__BackingField: 3
+  <EnnemyQuantitiesApplyStatus>k__BackingField: 5
   status: {fileID: 11400000, guid: 1391a6f99b072594db135c22d90e8757, type: 2}
   <InjectBerserkStepData>k__BackingField:
     <StepName>k__BackingField: InjectBerserk
