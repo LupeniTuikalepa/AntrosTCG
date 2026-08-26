@@ -156,6 +156,12 @@ namespace ATCG.Battle
             if (bones == null || mesh == null)
                 return LinkedRendererKey.None;
 
+            // Reading per-vertex weights needs a readable mesh; if it isn't, fall back to
+            // unioning every bind bone (coarser, but it must never throw — a throw here would
+            // abort the whole map, and Map() runs while the editor stage opens).
+            if (!mesh.isReadable)
+                return UnionAllBones(bones, boneKeys);
+
             using (HashSetPool<int>.Get(out HashSet<int> used))
             {
                 var bonesPerVertex = mesh.GetBonesPerVertex();
@@ -182,6 +188,17 @@ namespace ATCG.Battle
 
                 return combined;
             }
+        }
+
+        // Fallback for non-readable meshes: union every bind bone's key (over-tags a localized
+        // piece, but never touches vertex data so it can't throw).
+        private static LinkedRendererKey UnionAllBones(Transform[] bones, Dictionary<Transform, LinkedRendererKey> boneKeys)
+        {
+            LinkedRendererKey combined = LinkedRendererKey.None;
+            for (int i = 0; i < bones.Length; i++)
+                if (bones[i] != null && boneKeys.TryGetValue(bones[i], out LinkedRendererKey key))
+                    combined |= key;
+            return combined;
         }
     }
 }

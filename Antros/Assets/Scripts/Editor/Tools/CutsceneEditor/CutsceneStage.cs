@@ -219,9 +219,20 @@ namespace ATCG.Editor.Tools.CutsceneEditor
 
             // Body-part LinkedRenderer keys are auto-assigned by LinkedRendererMapper.Awake at
             // runtime; Awake never fires in the edit-mode preview, so map here — otherwise key-based
-            // VFX (PropagateVFX) find no renderers and spawn nothing.
+            // VFX (PropagateVFX) find no renderers and spawn nothing. Guarded: a mapping failure
+            // must not abort OnOpenStage (that would leave Current unset and break every custom
+            // editor that keys off the active session, e.g. the step-marker dropdown).
             if (sourceAnimator != null)
-                sourceAnimator.GetComponentInParent<LinkedRendererMapper>()?.Map();
+            {
+                try
+                {
+                    sourceAnimator.GetComponentInParent<LinkedRendererMapper>()?.Map();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"[CutsceneStage] LinkedRenderer mapping failed: {e.Message}");
+                }
+            }
 
             previewContext = BuildPreviewContext(sourceRoot, sourceAnimator);
             ReconnectElements();

@@ -91,32 +91,25 @@ namespace ATCG.Battle.Grids
         {
             return ResolveRedirect(agent, grid, from, chosen, agent.MovementType);
         }
-        
-        public static IEnumerable<MovementCoord> ResolveRedirect(
-            PathfindingAgentAspect agent, BattleGrid grid,
-            HexCoordinates from, HexCoordinates chosen, AgentMovementType agentMovementType)
-        {
-            using (ListPool<HexCoordinates>.Get(out var traversed))
-            {
-                return ResolveRedirect(agent, grid, from, chosen, traversed, agentMovementType);
-            }
-        }
 
         /// <summary>
         /// Resolves the redirect chain from stepping off <paramref name="from"/> onto
-        /// <paramref name="chosen"/>. Appends every traversed tile (chosen first) to
-        /// <paramref name="ignore"/> and returns the final landing tile. Stops on a cycle
-        /// or when a redirect would push off-grid (staying on the last valid tile).
+        /// <paramref name="chosen"/> and YIELDS every tile actually traversed, in order: the entry
+        /// tile first, then each tile a redirect slid the agent onto, the landing last. A plain
+        /// (non-redirecting) step yields a single element. Stops on a cycle, on a non-standable
+        /// target (staying on the last valid tile), or off-grid (the off-grid coord is yielded last
+        /// so pushback can react to an edge; movement reachability discards off-grid landings itself).
         ///
-        /// This is the SINGLE place a redirect is ever resolved; every reachability/path query
-        /// funnels through here so the rules stay in one spot.
+        /// This is the SINGLE place a redirect is ever resolved. It yields the WHOLE chain, not just
+        /// the destination, so callers that need the in-between tiles get them: redirect-cell
+        /// selection, path preview, per-tile pushback moves.
         /// </summary>
         public static IEnumerable<MovementCoord> ResolveRedirect(
             PathfindingAgentAspect agent, BattleGrid grid,
-            HexCoordinates from, HexCoordinates chosen, List<HexCoordinates> ignore, AgentMovementType defaultMovementType)
+            HexCoordinates from, HexCoordinates chosen, AgentMovementType defaultMovementType)
         {
             // The entry tile must itself be on-grid and standable for this agent. If it isn't, no
-            // move happens (nothing is appended to `traversed`) and the agent stays on `from`.
+            // move happens and the agent stays on `from`.
             if (!grid.TryGetBattleCell(chosen, out BattleCellAspect chosenCell) ||
                 !IsTraversable(agent, chosenCell))
             {
@@ -126,7 +119,7 @@ namespace ATCG.Battle.Grids
 
             HexCoordinates previous = from;
             MovementCoord current = new MovementCoord(chosen, defaultMovementType);
-            ignore.Add(current.destination);
+            yield return current;
 
             using (HashSetPool<HexCoordinates>.Get(out var visited))
             {
@@ -138,27 +131,25 @@ namespace ATCG.Battle.Grids
                     if (!visited.Add(next.destination))
                         break; // redirect cycle
 
-                    // A redirect — a slide today, a teleport tomorrow — may only place the agent on
-                    // a tile that is on-grid AND standable for it. An off-grid or occupied target
-                    // stops the chain on the last valid tile, so the agent is never left standing on
-                    // a blocked tile (and an occupied redirecting tile can never be taken).
+                    // Off-grid: the slide/push would leave the board. Surface the coord (pushback uses
+                    // it for edge collisions) then stop; movement reachability discards off-grid
+                    // landings itself.
                     if (!grid.TryGetBattleCell(next.destination, out BattleCellAspect nextCell))
                     {
-                        ignore.Add(next.destination);
-                        current = next;
-                        break;
+                        yield return next;
+                        yield break;
                     }
-                    
+
+                    // A non-standable (e.g. occupied) redirect target stops the chain on the last
+                    // valid tile — the agent is never left standing on a blocked tile.
                     if (!IsTraversable(agent, nextCell))
                         break;
 
-                    ignore.Add(next.destination);
                     previous = current.destination;
                     current = next;
+                    yield return current;
                 }
             }
-
-            yield return current;
         }
 
         // Unit-cost BFS. Each dequeued tile expands its ring-1 neighbours; every accepted neighbour
