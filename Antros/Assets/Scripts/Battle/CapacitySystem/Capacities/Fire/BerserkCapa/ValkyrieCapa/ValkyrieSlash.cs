@@ -27,7 +27,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 	public partial struct ValkyrieSlash : ICapacity<ValkyrieSlashData>
 	{
 		private bool hasBerserk;
-		private Cutscene cutscene;
+		private int count;
 		public void GetHitPattern(ValkyrieSlashData data, ref HexPatternBuilder builder, BattleGrid battleGrid,
 			HexCoordinates castPoint, HexCoordinates casterOrigin)
 		{
@@ -49,7 +49,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		}
 		private partial void ExecuteInjectBerserk(ValkyrieSlashData data, CapacityStepContext ctx)
 		{
-			Debug.Log($"Il boucle trop si tu le vois 2 fois");
 			if (ctx.Targets.Count >= data.EnnemyQuantitiesApplyStatus)
 			{
 				var status = new ApplyStatusCommand(ctx.Caster,data.status);
@@ -63,6 +62,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		}
 		private partial void ExecuteValkyrieSlash(ValkyrieSlashData data, CapacityStepContext ctx)
 		{
+			
 			using (ListPool<EntityAddress>.Get(out var enemies))
 			{
 				foreach (EntityAddress target in ctx.Targets)
@@ -72,9 +72,9 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 						enemies.Add(target);
 					}
 				}
-				
-				Debug.Log(enemies.Count);
+				ctx.capacityPhase.InjectProperty(ValkyrieSlashData.ENNEMIES_COUNT, enemies.Count);
 				int currentIndex = ctx.loop - 1;
+				count = enemies.Count;
 				if (currentIndex < enemies.Count)
 				{
 					EntityAddress targetEnemy = enemies[currentIndex];
@@ -88,9 +88,6 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 						var oneDamage = new DamageCommand(data.BerserkRange, targetEnemy);
 						oneDamage.Run(ctx.BattlePhase);
 					}
-					bool hasMoreEnemies = ctx.loop < enemies.Count;
-					//ctx.capacityPhase.Cutscene.EscapeCurrentLoop(hasMoreEnemies);
-
 				}
 			}
 		}
@@ -98,12 +95,13 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		{
 			if (ctx.Caster.HasStatus<BerserkStatus>())
 			{
+				Debug.Log("ciao");
 				var status = new RemoveStatusCommand(ctx.Caster,data.status);
 				status.Run(ctx.BattlePhase);
 				hasBerserk = false;
+				return;
 			}
+			
 		}
-		
-		
 	}
 }
