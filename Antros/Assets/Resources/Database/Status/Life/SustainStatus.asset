@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2050086eb0c24140a1d05b9307f16c8a, type: 3}
+  m_Name: SustainStatus
+  m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Status.Life.SustainStatusData
+  guidText: a1f8525b-c4ca-4f15-ab7e-31f387419526
+  <Name>k__BackingField: Sustain Status
+  <Color>k__BackingField: {r: 0.22530258, g: 0.7830189, b: 0.25732052, a: 1}
+  <Element>k__BackingField: 3
+  <RuntimeStatus>k__BackingField: {fileID: 3841389607961331768, guid: 3a4279d2a65e6944085e0d0be5971a3d, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 93ca01b037cd72848b66c42c979845c9, type: 3}
+  <SustainMultiplier>k__BackingField: 1.5
+  <Duration>k__BackingField: 3

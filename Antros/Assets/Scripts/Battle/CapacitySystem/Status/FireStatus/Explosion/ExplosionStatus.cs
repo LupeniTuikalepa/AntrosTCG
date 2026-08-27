@@ -45,7 +45,7 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 			var totalSecondeDamage = secondDamage + statusInfos.StatusController.RemainingTicks;
 			
 			
-			DamageCommand selfDamage = new DamageCommand(totalDamage, statusInfos.targetAddress, EXPLOSION_SOURCE);
+			DamageCommand selfDamage = new DamageCommand(totalDamage, statusInfos.targetAddress ,EXPLOSION_SOURCE);
 			selfDamage.Run(context.battlePhase);
 
 			if (!statusInfos.targetAddress.TryGetComponentRO(out GridMemberComponent gridMember))

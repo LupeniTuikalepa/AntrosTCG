@@ -10,10 +10,14 @@ namespace ATCG.Battle.Commands.EntityCommands
     public class DamageCommand : EntityCommand<DeltaInRangeInfos<int>>
     {
         public readonly int quantity;
+        public int FinalDamageInfo {get; private set;}
 
-        public DamageCommand(int quantity, EntityAddress address, string source = DEFAULT_SOURCE) : base(address, source)
+        public EntityAddress attacker;
+
+        public DamageCommand(int quantity, EntityAddress address , string source = DEFAULT_SOURCE , EntityAddress attacker = default) : base(address, source)
         {
-            this.quantity = quantity;
+	        this.quantity = quantity;
+	        this.attacker = attacker;
         }
 
         protected override void Process(in CommandContext context)
@@ -29,10 +33,12 @@ namespace ATCG.Battle.Commands.EntityCommands
 	            int defenseValue = Mathf.Max(1, defenseComponent.Defense);
                 float mult = (100f / (100f + defenseValue));
                 finalDamage = GameMaths.Round(Mathf.Max(1, finalDamage * mult));
+                
 
                 Debug.Log($"Damage: from {quantity} to {finalDamage} for a defense of {defenseValue}");
             }
 
+            FinalDamageInfo = finalDamage;
             ref HealthComponent componentHealth = ref healthComponentRef.GetValue();
 
             infos.from = componentHealth.CurrentHealth;

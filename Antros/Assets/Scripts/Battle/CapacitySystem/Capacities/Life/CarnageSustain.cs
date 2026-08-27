@@ -8,23 +8,24 @@ using ATCG.Battle.Entities.Components;
 using ATCG.Battle.Grids;
 using ATCG.Battle.Players;
 using ATCG.Capacities;
+using ATCG.Capacities.Life;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
-using UnityEngine;
 
-namespace ATCG.Battle.CapacitySystem.Capacities
+namespace ATCG.Battle.CapacitySystem.Capacities.Life
 {
-	public partial struct FightMadness : ICapacity<FightMadnessData>
+	public partial struct CarnageSustain : ICapacity<CarnageSustainData>
 	{
-		public void GetHitPattern(FightMadnessData data, ref HexPatternBuilder builder, BattleGrid battleGrid, HexCoordinates castPoint, HexCoordinates casterOrigin)
+		public void GetHitPattern(CarnageSustainData data, ref HexPatternBuilder builder, BattleGrid battleGrid,
+			HexCoordinates castPoint, HexCoordinates casterOrigin)
 		{
 			builder = builder
 				.With(new PointsPattern(castPoint));
-
 		}
 
-		public void GetTargets(FightMadnessData data, BattleCellAspect battleCell, CapacityTargets output, IBattlePlayer castingPlayer)
+		public void GetTargets(CarnageSustainData data, BattleCellAspect battleCell, CapacityTargets output,
+			IBattlePlayer castingPlayer)
 		{
 			foreach (var member in battleCell.GetMembers())
 			{
@@ -34,20 +35,20 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 			}
 		}
 
-		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
-		{ 
-			var statusCommand = new ApplyStatusCommand(ctx.Caster, data.BerserkData);
+		private partial void ExecuteDeploySustance(CarnageSustainData data, CapacityStepContext ctx)
+		{
+			var statusCommand = new ApplyStatusCommand(ctx.Caster, data.Status);
 			statusCommand.Run(ctx.BattlePhase);
 		}
-
-
-		private partial void ExecutePunch(FightMadnessData data, CapacityStepContext ctx)
+		
+		private partial void ExecutePunch(CarnageSustainData data, CapacityStepContext ctx)
 		{
 			foreach (var member in ctx.Targets.WithTags(CapacityTags.MEMBER))
 			{
-				var damage = new DamageCommand( data.PunchDamage, member);
+				var damage = new DamageCommand( data.Damage, member,ctx.Caster.ToString(),ctx.Caster);
 				damage.Run(ctx.BattlePhase);
 			}
 		}
+
 	}
 }

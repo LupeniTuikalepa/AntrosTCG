@@ -28,7 +28,7 @@ namespace ATCG.Battle.Commands.EntityCommands
 
 		protected override void Process(in CommandContext context)
 		{
-			DamageCommand command = new DamageCommand(strength, victim.ToAddress(context.World));
+			DamageCommand command = new DamageCommand( strength, victim.ToAddress(context.World));
 			Inject(in context, command);
 		}
 	}

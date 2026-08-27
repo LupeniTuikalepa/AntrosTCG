@@ -38,8 +38,8 @@ namespace ATCG.Battle.CapacitySystem.Status.Explosion
 				
 				if (Target.HasStatus<ExplosionStatus>(out var statusTag))
 				{
-					var jsp = statusTag.GetValue().data;
-					data = jsp;
+					StatusData dataTag = statusTag.GetValue().data;
+					data = dataTag;
 					if (data.TryGet(out IStatusContainer component))
 					{
 						component.Tick(data,targetEntityAddress, new StatusContext(battlePhase));
