@@ -34,7 +34,7 @@ namespace ATCG.Battle.Cutscenes
             BattlePhase battlePhase,
             EntityAddress source,
             params (string, Action)[] steps)
-            => Play(definition, battlePhase, source, HexCoordinates.None, null, steps);
+            => Play(definition, battlePhase, source, EntityAddress.None, HexCoordinates.None, null, steps);
 
         /// <summary>
         /// Plays <paramref name="definition"/> for the given source entity across every screen and
@@ -44,6 +44,7 @@ namespace ATCG.Battle.Cutscenes
             CutsceneDefinition definition,
             BattlePhase battlePhase,
             EntityAddress source,
+            EntityAddress target,
             HexCoordinates castPoint,
             QteResultAccumulator qteResults,
             params (string, Action)[] steps)
@@ -75,7 +76,7 @@ namespace ATCG.Battle.Cutscenes
                     await new CutscenePlayer().PlayAsync(
                         definition,
                         Screens(battlePhase),
-                        screen => BuildContext(screen, source, castPoint, ownerPlayerId),
+                        screen => BuildContext(screen, source, target, castPoint, ownerPlayerId),
                         stepsDic);
                 }
             }
@@ -101,7 +102,7 @@ namespace ATCG.Battle.Cutscenes
         // Injects the well-known keys the cutscene elements expect for this screen: the screen player,
         // the caster (address + on-screen actor), the cast point, a coordinate solver and a QTE receiver.
         private static ICutsceneContext BuildContext(
-            RuntimeLocalBattlePlayer screen, EntityAddress source, HexCoordinates castPoint, BattleID ownerPlayerId)
+            RuntimeLocalBattlePlayer screen, EntityAddress source, EntityAddress target, HexCoordinates castPoint, BattleID ownerPlayerId)
         {
             CutsceneContext context = new();
             context.With(CutsceneContextKeys.SCREEN_PLAYER, screen);
@@ -111,10 +112,17 @@ namespace ATCG.Battle.Cutscenes
             context.With<IQteResultReceiver>(CutsceneContextKeys.QTE_RECEIVER,
                 new CutsceneQteResultReceiver(screen, ownerPlayerId));
 
-            if (screen.RuntimeEntityManager != null
-                && screen.RuntimeEntityManager.TryGetRuntimeEntity(source, out IRuntimeEntity entity)
-                && entity is ICutsceneActor actor)
-                context.With(CutsceneContextKeys.CASTER, actor);
+            if (screen.RuntimeEntityManager == null)
+                return context;
+
+            if (screen.RuntimeEntityManager.TryGetRuntimeEntity(source, out IRuntimeEntity casterEntity)
+                && casterEntity is ICutsceneActor casterActor)
+                context.With(CutsceneContextKeys.CASTER, casterActor);
+
+            if (target.IsValid
+                && screen.RuntimeEntityManager.TryGetRuntimeEntity(target, out IRuntimeEntity targetEntity)
+                && targetEntity is ICutsceneActor targetActor)
+                context.With(CutsceneContextKeys.TARGET, targetActor);
 
             return context;
         }

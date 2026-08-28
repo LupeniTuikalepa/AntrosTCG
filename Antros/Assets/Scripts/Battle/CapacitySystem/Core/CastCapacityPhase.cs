@@ -61,6 +61,7 @@ namespace ATCG.Battle.CapacitySystem.Core
 
         private Dictionary<string, ICapacityStep> stepsByName;
         private StepBarrier stepBarrier;
+        private EntityAddress primaryTarget;
 
         public CastCapacityPhase(
             BattlePhase battlePhase,
@@ -88,7 +89,23 @@ namespace ATCG.Battle.CapacitySystem.Core
 
             CollectDirectors();
             stepBarrier = new StepBarrier(directors.Count);
+            ResolvePrimaryTarget();
             return base.Initialize(token);
+        }
+
+        private void ResolvePrimaryTarget()
+        {
+            primaryTarget = EntityAddress.None;
+            if (!data.TryGet(out ICapacityContainer container))
+                return;
+
+            using HexPatternBuilder pattern = BuildHitPattern(container);
+            CapacityTargets targets = ResolveTargets(container, pattern);
+            foreach (EntityAddress member in targets.WithTags(CapacityTags.MEMBER))
+            {
+                primaryTarget = member;
+                break;
+            }
         }
 
         protected override async Awaitable ExecuteNoResult(CancellationToken token)
@@ -296,6 +313,12 @@ namespace ATCG.Battle.CapacitySystem.Core
         {
             runtimeEntity = null;
             return HasCaster && player.RuntimeEntityManager.TryGetRuntimeEntity(caster, out runtimeEntity);
+        }
+
+        public bool TryGetRuntimeTarget(RuntimeLocalBattlePlayer player, out IRuntimeEntity runtimeEntity)
+        {
+            runtimeEntity = null;
+            return primaryTarget.IsValid && player.RuntimeEntityManager.TryGetRuntimeEntity(primaryTarget, out runtimeEntity);
         }
     }
 }

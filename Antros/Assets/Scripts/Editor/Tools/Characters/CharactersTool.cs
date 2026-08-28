@@ -597,6 +597,7 @@ namespace ATCG.Editor.Tools.Characters
             view.AddToClassList("cutscene-tab"); // same shell as the cutscenes list
 
             Toolbar bar = new();
+            bar.Add(new ToolbarButton(() => NewCharacterModal.Open(ReloadSkList)) { text = "Create new" });
             bar.Add(new ToolbarButton(ReloadSkList) { text = "Refresh" });
 
             ToolbarSearchField search = new();
@@ -855,6 +856,16 @@ namespace ATCG.Editor.Tools.Characters
             exploreFolder.AddToClassList("characters-settings-field");
             exploreFolder.RegisterValueChangedCallback(e => settings.ExploreFolder = e.newValue as DefaultAsset);
             view.Add(exploreFolder);
+
+            ObjectField characterTemplate = new("Character Template (.sk)")
+            {
+                objectType = typeof(DefaultAsset),
+                value = settings.CharacterTemplate,
+                tooltip = "Personnage .sk dupliqué par « Create new » comme point de départ d'un nouveau perso."
+            };
+            characterTemplate.AddToClassList("characters-settings-field");
+            characterTemplate.RegisterValueChangedCallback(e => settings.CharacterTemplate = e.newValue as DefaultAsset);
+            view.Add(characterTemplate);
 
             Label hint = new(
                 "À l'export, le shader du matériau créé par Synty est remplacé par celui du Base Material, " +

@@ -18,7 +18,12 @@ namespace ATCG.Cutscenes
         public static readonly AutoBindChannel MainCamera =
             AutoBindChannel.Create<CinemachineTrack>("MainCamera");
 
-        public static readonly AutoBindChannel[] All = { HeroAnimator, MainCamera };
+        // Optional: bound to the cutscene's target Animator when it has one (see Cutscene.ResolveBindings).
+        // In the authoring stage the target stand-in is activated only while this track is present.
+        public static readonly AutoBindChannel Target =
+            AutoBindChannel.Create<AnimationTrack>("Target", optional: true);
+
+        public static readonly AutoBindChannel[] All = { HeroAnimator, MainCamera, Target };
 
         public static bool IsAutoBindableTrack(TrackAsset track)
         {
