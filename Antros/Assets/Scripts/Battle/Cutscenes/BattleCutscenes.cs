@@ -10,6 +10,7 @@ using ATCG.Battle.Players;
 using ATCG.Battle.Players.Local;
 using ATCG.Battle.Players.Local.Runtime;
 using ATCG.Cutscenes;
+using ATCG.HexGrids;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -32,7 +33,8 @@ namespace ATCG.Battle.Cutscenes
             CutsceneDefinition definition,
             BattlePhase battlePhase,
             EntityAddress source,
-            params (string, Action)[] steps) => Play(definition, battlePhase, source, null, steps);
+            params (string, Action)[] steps)
+            => Play(definition, battlePhase, source, HexCoordinates.None, null, steps);
 
         /// <summary>
         /// Plays <paramref name="definition"/> for the given source entity across every screen and
@@ -42,7 +44,8 @@ namespace ATCG.Battle.Cutscenes
             CutsceneDefinition definition,
             BattlePhase battlePhase,
             EntityAddress source,
-            QteResultAccumulator qteResults = null,
+            HexCoordinates castPoint,
+            QteResultAccumulator qteResults,
             params (string, Action)[] steps)
         {
             // The QTE owner is the player that owns the acting entity (e.g. the attacker); only that
@@ -72,7 +75,7 @@ namespace ATCG.Battle.Cutscenes
                     await new CutscenePlayer().PlayAsync(
                         definition,
                         Screens(battlePhase),
-                        screen => BuildContext(screen, source, ownerPlayerId),
+                        screen => BuildContext(screen, source, castPoint, ownerPlayerId),
                         stepsDic);
                 }
             }
@@ -95,13 +98,15 @@ namespace ATCG.Battle.Cutscenes
             return screens;
         }
 
-        // Injects the well-known keys the cutscene elements expect for this screen: the screen
-        // player, a coordinate solver, and the source actor (the acting entity's on-screen instance).
+        // Injects the well-known keys the cutscene elements expect for this screen: the screen player,
+        // the caster (address + on-screen actor), the cast point, a coordinate solver and a QTE receiver.
         private static ICutsceneContext BuildContext(
-            RuntimeLocalBattlePlayer screen, EntityAddress source, BattleID ownerPlayerId)
+            RuntimeLocalBattlePlayer screen, EntityAddress source, HexCoordinates castPoint, BattleID ownerPlayerId)
         {
             CutsceneContext context = new();
             context.With(CutsceneContextKeys.SCREEN_PLAYER, screen);
+            context.With(CutsceneContextKeys.CASTER_ADDRESS, source);
+            context.With(CutsceneContextKeys.CAST_POINT, castPoint);
             context.With<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER, new GridCoordinateSolver(screen));
             context.With<IQteResultReceiver>(CutsceneContextKeys.QTE_RECEIVER,
                 new CutsceneQteResultReceiver(screen, ownerPlayerId));

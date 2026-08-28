@@ -2,6 +2,7 @@ using System.Linq;
 using ATCG.Cutscenes;
 using ATCG.Battle.CapacitySystem.Core.Cutscenes;
 using ATCG.Capacities;
+using ATCG.Editor.Tools.CutsceneEditor;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -21,8 +22,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
             VisualElement root = new();
             SerializedProperty stepNameProp = serializedObject.FindProperty("stepName");
 
-            CapacityData capacity = CapacityEditorTool.CurrentlyEdited;
-            string[] declaredSteps = capacity != null ? CapacityEditorTool.GetDeclaredSteps(capacity) : null;
+            // Source the step names from the cutscene open in the authoring stage, so the dropdown works
+            // for any cutscene kind (attacks, deploys, capacities) — all expose DeclaredSteps uniformly.
+            CutsceneDefinition definition = CutsceneStage.Current?.Definition;
+            string[] declaredSteps = definition?.DeclaredSteps.ToArray();
 
             if (declaredSteps == null || declaredSteps.Length == 0)
             {

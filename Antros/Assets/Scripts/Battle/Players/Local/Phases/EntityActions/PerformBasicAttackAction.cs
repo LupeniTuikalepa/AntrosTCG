@@ -68,13 +68,18 @@ namespace ATCG.Battle
 		        .With(new SpiralPattern(radius))
 		        .Without(center);
 
-	        //Si l'entité qui attaque appartient a un joueur, on l'utilise. Sinon, on utilise le joueur qui a lancé l'action d'attaque.
 	        IBattlePlayer entityPlayer = address.TryGetComponentRO(out BelongsToPlayerComponent belongsToPlayerComponent) ?
 		        belongsToPlayerComponent.GetPlayer(battlePhase) :
 		        fromPlayer;
 
 	        var filter = new EnemyFilter(entityPlayer);
-	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(fromPlayer, filter, builder);
+	        EntityAddress[] result = await new SelectEntityPhase<EnemyFilter>(fromPlayer, filter, builder)
+	        {
+		        HighlightTheme = GameMetrics.Current.HighlightSettings != null
+			        ? GameMetrics.Current.HighlightSettings.CastTheme
+			        : null,
+	        };
+
 	        if(result.Length == 0)
 		        return;
 
@@ -99,9 +104,13 @@ namespace ATCG.Battle
 		        {
 			        // QTE effectiveness [0,1] scales the hit; a cutscene with no QTE clips reads back
 			        // 1 (full damage), so non-QTE attacks are unchanged. Tune the mapping as needed.
+			        HexCoordinates castPoint = targets[0].TryGetComponentRO(out GridMemberComponent targetCell)
+				        ? targetCell.coordinates
+				        : center;
+
 			        QteResultAccumulator qteResults = new();
-			        await BattleCutscenes.Play(attackCutscene, battlePhase, address, qteResults,
-					        (AttackCutscene.HIT, () =>
+			        await BattleCutscenes.Play(attackCutscene, battlePhase, address, castPoint, qteResults,
+					        (AttackCutscene.Hit, () =>
 					        {
 						        int scaled = Mathf.Max(0, Mathf.RoundToInt(strength * qteResults.Read()));
 						        for (int i = 0; i < targets.Length; i++)

@@ -74,8 +74,17 @@ public class CapacityDataGenerator : IIncrementalGenerator
             @namespace = type.ContainingNamespace.IsGlobalNamespace
                 ? null
                 : type.ContainingNamespace.ToDisplayString(),
-            steps = stepNames.ToArray()
+            steps = stepNames.ToArray(),
+            isCapacity = DerivesFromCapacityData(type)
         };
+    }
+
+    private static bool DerivesFromCapacityData(INamedTypeSymbol type)
+    {
+        for (INamedTypeSymbol? b = type.BaseType; b != null; b = b.BaseType)
+            if (b.ToDisplayString() == "ATCG.Capacities.CapacityData")
+                return true;
+        return false;
     }
 
     private static void Emit(SourceProductionContext ctx, CapacityDataPartialFileInfos info)
@@ -144,32 +153,38 @@ public class CapacityDataGenerator : IIncrementalGenerator
 
         sb.AppendLine();
 
-        // ordered declared-steps array (drives editor reconciliation)
-        sb.Append(indent).Append("public static readonly string[] DeclaredSteps = { ");
+        // Ordered declared steps — OVERRIDES the CutsceneDefinition base so runtime and editor share
+        // the same ordered list, instead of a separate static member that hides the base property.
+        sb.Append(indent).Append("public override global::System.Collections.Generic.IReadOnlyList<string> DeclaredSteps { get; } = new string[] { ");
         sb.Append(string.Join(", ", ordered.Select(o => identifierByName[o.name])));
         sb.AppendLine(" };");
 
-        sb.AppendLine();
-
-        // serialized per-step fields, filled by the editor tools (ReadOnly).
-        foreach ((string name, string identifier) in ordered)
+        // Data-driven part (per-step StepData fields + MapSteps) is emitted only for capacities.
+        // Other cutscene kinds (attacks, deploys) just get the declared step names above.
+        if (info.isCapacity)
         {
-            sb.Append(indent).AppendLine("[field: global::UnityEngine.SerializeField, global::Sirenix.OdinInspector.BoxGroup(\"Steps\"), global::Sirenix.OdinInspector.ReadOnly]");
-            sb.Append(indent).Append("public global::ATCG.Capacities.CapacityStepData ")
-              .Append(identifier).AppendLine("StepData { get; private set; }");
-        }
+            sb.AppendLine();
 
-        sb.AppendLine();
+            // serialized per-step fields, filled by the editor tools (ReadOnly).
+            foreach ((string name, string identifier) in ordered)
+            {
+                sb.Append(indent).AppendLine("[field: global::UnityEngine.SerializeField, global::Sirenix.OdinInspector.BoxGroup(\"Steps\"), global::Sirenix.OdinInspector.ReadOnly]");
+                sb.Append(indent).Append("public global::ATCG.Capacities.CapacityStepData ")
+                  .Append(identifier).AppendLine("StepData { get; private set; }");
+            }
 
-        // generated mapping: base clears the map then calls MapSteps().
-        sb.Append(indent).AppendLine("protected override void MapSteps(global::System.Collections.Generic.Dictionary<string, global::ATCG.Capacities.CapacityStepData> map)");
-        sb.Append(indent).AppendLine("{");
-        foreach ((string name, string identifier) in ordered)
-        {
-            sb.Append(indent).Append("    map[").Append(identifier).Append("] = ")
-              .Append(identifier).AppendLine("StepData;");
+            sb.AppendLine();
+
+            // generated mapping: base clears the map then calls MapSteps().
+            sb.Append(indent).AppendLine("protected override void MapSteps(global::System.Collections.Generic.Dictionary<string, global::ATCG.Capacities.CapacityStepData> map)");
+            sb.Append(indent).AppendLine("{");
+            foreach ((string name, string identifier) in ordered)
+            {
+                sb.Append(indent).Append("    map[").Append(identifier).Append("] = ")
+                  .Append(identifier).AppendLine("StepData;");
+            }
+            sb.Append(indent).AppendLine("}");
         }
-        sb.Append(indent).AppendLine("}");
 
         sb.Append(typeIndent).AppendLine("}");
 

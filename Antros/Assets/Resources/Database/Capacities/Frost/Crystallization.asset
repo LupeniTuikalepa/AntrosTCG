@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Crystallization
   m_EditorClassIdentifier: ATCG.Core::ATCG.Capacities.Data.Frost.CrystallizationData
   guidText: c1cf450c-839b-4b67-aca5-57a1c17108a9
+  <Director>k__BackingField: {fileID: 2443261415861081152, guid: 1a9a2864db071614c86e74566c40d394, type: 3}
   <Cost>k__BackingField: 0
   <Name>k__BackingField: Crystallization
   <Element>k__BackingField: 7
@@ -21,10 +22,10 @@ MonoBehaviour:
   <CastPatterns>k__BackingField:
     <Data>k__BackingField:
     - rid: 3278269927783137748
-  <CutsceneDirector>k__BackingField: {fileID: 2443261415861081152, guid: 1a9a2864db071614c86e74566c40d394, type: 3}
+  <Setups>k__BackingField: []
   <PropertyDefinitions>k__BackingField: []
   <CrystallizeStepData>k__BackingField:
-    <StepName>k__BackingField: 
+    <StepName>k__BackingField: Crystallize
     <QTEsCount>k__BackingField: 0
   references:
     version: 2
