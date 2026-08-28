@@ -27,7 +27,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 2
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 2
-  <HeroPawnPrefab>k__BackingField: {fileID: 1274713321925212258, guid: ba8b0fe58cdd2594a8483a69c4a74a65, type: 3}
+  <HeroPawnPrefab>k__BackingField: {fileID: 1412071059041453626, guid: 56b490d8dddc6b04c9ddba0cbd558379, type: 3}
   <AttackCutscene>k__BackingField: {fileID: 11400000, guid: e04175470b249f644b813c17ea46920a, type: 2}
   <DeployCutscene>k__BackingField: {fileID: 0}
   references:
