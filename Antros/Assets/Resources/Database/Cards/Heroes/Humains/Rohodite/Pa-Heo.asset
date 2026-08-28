@@ -22,11 +22,12 @@ MonoBehaviour:
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
   <DeployRange>k__BackingField: 1
   <HeroPawnPrefab>k__BackingField: {fileID: 7266778880216832709, guid: 2f520abc01e3fab4096c937605cd0f86, type: 3}
+  <AttackCutscene>k__BackingField: {fileID: 11400000, guid: e04175470b249f644b813c17ea46920a, type: 2}
+  <DeployCutscene>k__BackingField: {fileID: 0}
   references:
     version: 2
     RefIds:

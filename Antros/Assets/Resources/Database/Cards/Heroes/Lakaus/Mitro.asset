@@ -22,24 +22,15 @@ MonoBehaviour:
   <Passives>k__BackingField: []
   <Health>k__BackingField: 15
   <Strength>k__BackingField: 3
-  <Defense>k__BackingField: 3
   <Speed>k__BackingField: 3
   <MovementType>k__BackingField: 0
-  <DeployPatterns>k__BackingField:
-    <Data>k__BackingField:
-    - rid: 6882996213709799456
+  <DeployRange>k__BackingField: 1
+  <HeroPawnPrefab>k__BackingField: {fileID: 0}
+  <AttackCutscene>k__BackingField: {fileID: 11400000, guid: 29dacf9fcaf905448a39ac838ee68909, type: 2}
+  <DeployCutscene>k__BackingField: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 6882996213709799456
-      type: {class: FloodFillPatternData, ns: ATCG.HexGrids.Patterns, asm: ATCG.Core}
-      data:
-        <IsAdditive>k__BackingField: 1
-        <OverridePatternOrigin>k__BackingField: 0
-        <Offset>k__BackingField:
-          <X>k__BackingField: 0
-          <Y>k__BackingField: 0
-        <Distance>k__BackingField: 1
     - rid: 6882996230390284314
       type: {class: DefaultCapacityProvider, ns: ATCG, asm: ATCG.Core}
       data:

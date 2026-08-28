@@ -26,9 +26,9 @@ namespace ATCG.Editor.Tools.CapacityEditor
             public string newName;
         }
 
-        public static string LocateDataScript(CapacityData capacity)
+        public static string LocateDataScript(CutsceneDefinition definition)
         {
-            MonoScript ms = MonoScript.FromScriptableObject(capacity);
+            MonoScript ms = MonoScript.FromScriptableObject(definition);
             return ms != null ? AssetDatabase.GetAssetPath(ms) : null;
         }
 
@@ -44,20 +44,23 @@ namespace ATCG.Editor.Tools.CapacityEditor
             return null;
         }
 
-        public static bool Apply(CapacityData capacity, IReadOnlyList<Edit> edits, IReadOnlyList<string> added,
+        public static bool Apply(CutsceneDefinition definition, IReadOnlyList<Edit> edits, IReadOnlyList<string> added,
             bool commentRemoved, out string error)
         {
             error = null;
 
-            string dataPath = LocateDataScript(capacity);
-            string logicPath = LocateLogicScript(capacity);
-
+            string dataPath = LocateDataScript(definition);
             if (string.IsNullOrEmpty(dataPath))
             {
-                error = "Couldn't locate the capacity's Data script.";
+                error = "Couldn't locate the cutscene's script.";
                 return false;
             }
-            if (string.IsNullOrEmpty(logicPath))
+
+            // The runtime logic script (Execute{Step} methods) only exists for capacities; other
+            // cutscene kinds just declare step names via [WithStep].
+            CapacityData capacity = definition as CapacityData;
+            string logicPath = capacity != null ? LocateLogicScript(capacity) : null;
+            if (capacity != null && string.IsNullOrEmpty(logicPath))
             {
                 error = "Couldn't locate the capacity's runtime logic script.";
                 return false;
@@ -83,9 +86,10 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 if (!finalSteps.Contains(a))
                     finalSteps.Add(a);
 
-            RewriteDataAttributes(dataPath, capacity.GetType().Name, finalSteps);
-            RewriteLogicMethods(logicPath, capacity.GetType().Name, LogicName(capacity), edits, cleanAdded, commentRemoved);
-            UpdateTimelineMarkers(capacity, edits);
+            RewriteDataAttributes(dataPath, definition.GetType().Name, finalSteps);
+            if (capacity != null)
+                RewriteLogicMethods(logicPath, capacity.GetType().Name, LogicName(capacity), edits, cleanAdded, commentRemoved);
+            UpdateTimelineMarkers(definition, edits);
 
             AssetDatabase.Refresh();
             return true;
@@ -93,9 +97,9 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         // ---- Timeline: rename/remove StepMarkers ----------------------------
 
-        private static void UpdateTimelineMarkers(CapacityData capacity, IReadOnlyList<Edit> edits)
+        private static void UpdateTimelineMarkers(CutsceneDefinition definition, IReadOnlyList<Edit> edits)
         {
-            TimelineAsset timeline = capacity.Timeline;
+            TimelineAsset timeline = definition.Timeline;
             if (timeline == null)
                 return;
 

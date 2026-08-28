@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using ATCG.Battle.Cutscenes;
 using ATCG.Battle.Players.Local.Runtime;
 using Helteix.Tools;
+using Helteix.Tools.Phases;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -34,7 +36,7 @@ namespace ATCG.Cutscenes
             if (definition == null || definition.Director == null || screens == null)
                 return;
 
-            List<Cutscene> instances = new();
+            List<(RuntimeLocalBattlePlayer screen, Cutscene cutscene)> instances = new();
             foreach (RuntimeLocalBattlePlayer screen in screens)
             {
                 if (screen == null)
@@ -50,7 +52,7 @@ namespace ATCG.Cutscenes
                     cutscene = instance.AddComponent<Cutscene>();
 
                 cutscene.Configure(contextFactory != null ? contextFactory(screen) : new CutsceneContext());
-                instances.Add(cutscene);
+                instances.Add((screen, cutscene));
             }
 
             if (instances.Count == 0)
@@ -64,14 +66,14 @@ namespace ATCG.Cutscenes
             StepBarrier barrier = new StepBarrier(instances.Count);
             HashSet<string> ran = new();
 
-            foreach (Cutscene cutscene in instances)
+            foreach ((_, Cutscene cutscene) in instances)
                 cutscene.StepReached += stepName =>
                     OnStepReached(stepName, barrier, ran, stepHandlers).ListenForExceptions();
 
             AwaitableCompletionSource allDone = new();
             int remaining = instances.Count;
-            foreach (Cutscene cutscene in instances)
-                PlayOne(cutscene, token, () =>
+            foreach ((RuntimeLocalBattlePlayer screen, Cutscene cutscene) in instances)
+                PlayOne(screen, cutscene, token, () =>
                 {
                     if (--remaining <= 0)
                         allDone.TrySetResult();
@@ -79,7 +81,7 @@ namespace ATCG.Cutscenes
 
             await allDone.Awaitable;
 
-            foreach (Cutscene cutscene in instances)
+            foreach ((_, Cutscene cutscene) in instances)
                 cutscene.Dispose();
         }
 
@@ -117,11 +119,14 @@ namespace ATCG.Cutscenes
                 handler?.Invoke();
         }
 
-        private static async Awaitable PlayOne(Cutscene cutscene, CancellationToken token, Action onDone)
+        // Plays a screen's cutscene inside a per-player HUD phase, so that screen's HUD hides for the
+        // duration and comes back when the cutscene ends.
+        private static async Awaitable PlayOne(
+            RuntimeLocalBattlePlayer screen, Cutscene cutscene, CancellationToken token, Action onDone)
         {
             try
             {
-                await cutscene.Play(token);
+                await new LocalPlayerCutscenePhase(screen.BattlePlayer, cutscene).Run();
             }
             catch (Exception e)
             {

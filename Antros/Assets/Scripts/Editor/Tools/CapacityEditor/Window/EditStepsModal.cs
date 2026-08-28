@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ATCG.Capacities;
+using ATCG.Cutscenes;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -10,9 +10,9 @@ using UnityEngine.UIElements;
 namespace ATCG.Editor.Tools.CapacityEditor
 {
     /// <summary>
-    /// Add / rename / remove a capacity's steps. On validate it rewrites the Data script's [WithStep]
-    /// attributes and the runtime logic's Execute{Step} methods (adds stubs, renames, comments/deletes
-    /// removed ones) via CapacityStepEditor, then a recompile happens.
+    /// Add / rename / remove a cutscene's steps. On validate it rewrites the class's [WithStep]
+    /// attributes via CapacityStepEditor (and, for capacities only, the runtime logic's Execute{Step}
+    /// methods), then a recompile happens.
     /// </summary>
     public sealed class EditStepsModal : EditorWindow
     {
@@ -23,18 +23,18 @@ namespace ATCG.Editor.Tools.CapacityEditor
             public string newName;
         }
 
-        private CapacityData capacity;
+        private CutsceneDefinition definition;
         private readonly List<Row> rows = new();
         private readonly List<string> added = new();
         private bool commentRemoved = true;
 
         private VisualElement addContainer;
 
-        public static void Open(CapacityData capacity)
+        public static void Open(CutsceneDefinition definition)
         {
             EditStepsModal window = CreateInstance<EditStepsModal>();
-            window.capacity = capacity;
-            window.titleContent = new GUIContent($"Edit Steps — {capacity.name}");
+            window.definition = definition;
+            window.titleContent = new GUIContent($"Edit Steps — {definition.name}");
 
             Vector2 size = new Vector2(480, 440);
             window.minSize = new Vector2(420, 360);
@@ -48,7 +48,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
 
         private void CreateGUI()
         {
-            foreach (string s in CapacityEditorTool.GetDeclaredSteps(capacity))
+            foreach (string s in definition.DeclaredSteps)
                 rows.Add(new Row { original = s, action = 0, newName = s });
 
             VisualElement root = rootVisualElement;
@@ -206,7 +206,7 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 newName = (r.newName ?? string.Empty).Trim(),
             }).ToList();
 
-            if (CapacityStepEditor.Apply(capacity, edits, added, commentRemoved, out string message))
+            if (CapacityStepEditor.Apply(definition, edits, added, commentRemoved, out string message))
                 Close();
             else
                 Fail(error, message);

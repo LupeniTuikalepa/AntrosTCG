@@ -1,5 +1,5 @@
 using System;
-using System.Reflection;
+using System.Linq;
 using ATCG.Capacities;
 using ATCG.Editor.Tools.CutsceneEditor;   // CutsceneAuthoring — opens the shared authoring stage
 using ATCG.Editor.Tools.DatabaseBrowser;
@@ -66,17 +66,8 @@ namespace ATCG.Editor.Tools.CapacityEditor
                 CutsceneAuthoring.Open(capacity);
         }
 
-        // Reads the generated `static string[] DeclaredSteps` off the concrete type.
+        // The generated override on the concrete capacity exposes the ordered declared steps.
         public static string[] GetDeclaredSteps(CapacityData capacity)
-        {
-            if (capacity == null)
-                return Array.Empty<string>();
-
-            FieldInfo field = capacity.GetType().GetField(
-                "DeclaredSteps",
-                BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-
-            return field?.GetValue(null) as string[] ?? Array.Empty<string>();
-        }
+            => capacity != null ? capacity.DeclaredSteps.ToArray() : Array.Empty<string>();
     }
 }

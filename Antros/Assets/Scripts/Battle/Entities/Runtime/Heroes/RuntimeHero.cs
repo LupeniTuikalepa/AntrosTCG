@@ -94,7 +94,7 @@ namespace ATCG.Battle.Entities.Runtime.Heroes
             if (deployCutscene != null)
             {
                 await BattleCutscenes.Play(deployCutscene, BattlePhase, aspect.EntityAddress,
-                    (DeployCutscene.DEPLOYED, () =>
+                    (DeployCutscene.Deployed, () =>
                     {
                         deployCardSignal.Run(BattlePhase);
                     }));

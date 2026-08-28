@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32e4c8aecf8f717469f96a18e46844c5, type: 3}
-  m_Name: New Attack Cutscene
+  m_Name: BasicAttackCutscene_Uppercut
   m_EditorClassIdentifier: ATCG.Core::ATCG.Cutscenes.AttackCutscene
-  guidText: ea5235a1-1270-416a-a628-5e595e373e9e
+  guidText: aea6c8ae-8b64-49b7-8e0a-fe943b888069
   <Director>k__BackingField: {fileID: 7156487838412134003, guid: 2f01c13a09a26bb43bab6bb4dd66f667, type: 3}

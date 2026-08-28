@@ -365,10 +365,31 @@ namespace ATCG.Editor.Tools.CutsceneEditor
 
             editionBody.Add(BuildTracksPanel());
 
-            // Capacity-specific authoring (steps / tags / property keys / properties) lives here too,
-            // shown only when the edited cutscene is a capacity.
+            // Steps are shared by every cutscene kind (declared via [WithStep]); this panel lists them
+            // and lets you add / rename / remove from here.
+            editionBody.Add(BuildStepsPanel(selected));
+
+            // Remaining capacity-specific authoring (tags / property keys / properties) shown only when
+            // the edited cutscene is a capacity.
             if (selected is CapacityData capacity)
                 editionBody.Add(BuildCapacityPanels(capacity));
+        }
+
+        private VisualElement BuildStepsPanel(CutsceneDefinition definition)
+        {
+            VisualElement box = new();
+            box.AddToClassList("cutscene-tracks-panel");
+
+            box.Add(Section("Steps"));
+            foreach (string step in definition.DeclaredSteps)
+            {
+                if (definition is CapacityData capacity && capacity.TryGetStep(step, out CapacityStepData data))
+                    box.Add(new Label($"{step} — {data.QTEsCount} QTE(s)"));
+                else
+                    box.Add(new Label(step));
+            }
+            box.Add(new Button(() => EditStepsModal.Open(definition)) { text = "Edit steps" });
+            return box;
         }
 
         private VisualElement BuildCapacityPanels(CapacityData capacity)
@@ -378,14 +399,6 @@ namespace ATCG.Editor.Tools.CutsceneEditor
 
             box.Add(Section("Properties"));
             box.Add(new CapacityPropertyEditor(capacity).Build());
-
-            box.Add(Section("Steps"));
-            foreach (string step in capacity.DeclaredSteps)
-            {
-                capacity.TryGetStep(step, out CapacityStepData data);
-                box.Add(new Label($"{step} — {data.QTEsCount} QTE(s)"));
-            }
-            box.Add(new Button(() => EditStepsModal.Open(capacity)) { text = "Edit steps" });
 
             box.Add(Section("Target tags"));
             List<string> tags = CapacityTagEditor.ReadTags(capacity);
