@@ -11,6 +11,7 @@ using ATCG.Capacities;
 using ATCG.HexGrids;
 using ATCG.HexGrids.Patterns;
 using ATCG.HexGrids.Patterns.Building;
+using UnityEngine;
 
 namespace ATCG.Battle.CapacitySystem.Capacities
 {
@@ -34,7 +35,7 @@ namespace ATCG.Battle.CapacitySystem.Capacities
 		}
 
 		private partial void ExecuteDeployRage(FightMadnessData data, CapacityStepContext ctx)
-		{
+		{ 
 			var statusCommand = new ApplyStatusCommand(ctx.Caster, data.BerserkData);
 			statusCommand.Run(ctx.BattlePhase);
 		}

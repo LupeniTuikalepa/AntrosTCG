@@ -123,7 +123,7 @@ namespace ATCG.Battle.CapacitySystem.Core
                 if (directors.Count == 0)
                 {
                     foreach (ICapacityStep step in stepsByName.Values)
-                        RunStepNow(step);
+                        RunStepNow(step,1);
                     return;
                 }
 
@@ -207,14 +207,20 @@ namespace ATCG.Battle.CapacitySystem.Core
 
             if (!stepsRun.TryAdd(stepName, 1))
                 stepsRun[stepName]++;
+            
+            int totalReports = stepsRun[stepName];
+            if (totalReports % directors.Count != 0)
+	            return;
+
+            int loopIndex = totalReports / directors.Count;
 
             if (stepsByName.TryGetValue(stepName, out ICapacityStep step))
-                RunStepNow(step);
+                RunStepNow(step,loopIndex);
             else
                 Debug.LogError($"[{data.Name}] Step marker '{stepName}' has no matching step in Run.");
         }
 
-        private void RunStepNow(ICapacityStep step)
+        private void RunStepNow(ICapacityStep step,int loopIndex)
         {
             if (!data.TryGet(out ICapacityContainer container))
                 return;
@@ -222,7 +228,7 @@ namespace ATCG.Battle.CapacitySystem.Core
             using HexPatternBuilder pattern = BuildHitPattern(container);
             CapacityTargets targets = ResolveTargets(container, pattern);
 
-            CapacityStepContext ctx = new(this, ReadQtes(), ResolveStepData(step.StepName), targets, pattern, stepsRun[step.StepName]);
+            CapacityStepContext ctx = new(this, ReadQtes(), ResolveStepData(step.StepName), targets, pattern, loopIndex);
             step.RunStep(ctx);
         }
 

@@ -32,5 +32,6 @@ namespace ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops
             int count = context != null && context.TryGetProperty(countProperty, out int value) ? value : 0;
             return index < count;
         }
+        
     }
 }

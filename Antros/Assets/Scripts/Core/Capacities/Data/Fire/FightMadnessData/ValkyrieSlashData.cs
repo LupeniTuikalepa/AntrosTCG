@@ -27,6 +27,8 @@ namespace ATCG
 		[field: SerializeField, BoxGroup("Specific")]
 		public int EnnemyQuantitiesApplyStatus { get; set; } = 1;
 
+		public const string ENNEMIES_COUNT = nameof(ENNEMIES_COUNT);
+
 		[field: SerializeField, BoxGroup("Specific")]
 		public BerserkStatusData status;
 	}

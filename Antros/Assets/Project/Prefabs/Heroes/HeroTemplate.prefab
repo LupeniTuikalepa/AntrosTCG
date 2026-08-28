@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 1173186091470948849}
   - component: {fileID: 7693259140358200842}
   - component: {fileID: 6356839868774708120}
+  - component: {fileID: 1553238084683848318}
   m_Layer: 3
   m_Name: HeroTemplate
   m_TagString: Hero
@@ -255,6 +256,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.Entities.Runtime.Heroes.SetHeroModel
   modelRoot: {fileID: 6901710294249636606}
   animation: {fileID: 4105055546686716808}
+--- !u!114 &1553238084683848318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2771192464520882885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565b654202f193d4dad8c838dd6edd15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ATCG.Battle::ATCG.Battle.CapacitySystem.Core.Cutscenes.Loops.CountLoopCutsceneComponent
+  playableDirector: {fileID: 0}
+  countProperty: 
 --- !u!1 &3627302078991207085
 GameObject:
   m_ObjectHideFlags: 0

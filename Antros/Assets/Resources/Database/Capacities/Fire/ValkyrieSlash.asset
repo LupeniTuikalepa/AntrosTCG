@@ -29,9 +29,9 @@ MonoBehaviour:
   - rid: 3278270272420184185
   <Damage>k__BackingField: 2
   <Range>k__BackingField: 1
-  <BerserkDamage>k__BackingField: 4
+  <BerserkDamage>k__BackingField: 20
   <BerserkRange>k__BackingField: 2
-  <EnnemyQuantitiesApplyStatus>k__BackingField: 1
+  <EnnemyQuantitiesApplyStatus>k__BackingField: 5
   status: {fileID: 11400000, guid: 1391a6f99b072594db135c22d90e8757, type: 2}
   <InjectBerserkStepData>k__BackingField:
     <StepName>k__BackingField: InjectBerserk
@@ -57,5 +57,5 @@ MonoBehaviour:
     - rid: 3278270272420184185
       type: {class: IntPropertyDefinition, ns: ATCG.Capacities.Properties, asm: ATCG.Core}
       data:
-        name: EnnemiesCount
+        name: ENNEMIES_COUNT
         isArray: 0
