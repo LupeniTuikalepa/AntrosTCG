@@ -60,8 +60,8 @@ namespace ATCG.Cutscenes
             ApplyScreenChannel();
 
             // Bind the auto-bindable tracks to live objects: HeroAnimator → caster Animator,
-            // MainCamera → this screen's Cinemachine brain.
-            ResolveBindings(caster);
+            // MainCamera → this screen's Cinemachine brain, Target → target Animator (if any).
+            ResolveBindings(caster, context.GetTarget());
 
             // If the context provides a QTE receiver, host QTE windows for this screen: arbitrate
             // local presses and submit scores (the receiver decides whether to emit a networked
@@ -98,7 +98,7 @@ namespace ATCG.Cutscenes
         }
 
         // Resolves the shared auto-bindable channels to live objects for this play.
-        private void ResolveBindings(ICutsceneActor caster)
+        private void ResolveBindings(ICutsceneActor caster, ICutsceneActor target)
         {
             EnsureDirector();
             if (playableDirector.playableAsset is not TimelineAsset timeline)
@@ -108,6 +108,15 @@ namespace ATCG.Cutscenes
             {
                 if (!CutsceneChannels.IsAutoBindableTrack(track))
                     continue;
+
+                // Target is optional: bind only when the cutscene actually has a target (with an
+                // Animator); no warning otherwise, unlike the required caster/camera channels.
+                if (track.name == CutsceneChannels.Target.trackName)
+                {
+                    if (target?.Animator != null)
+                        playableDirector.SetGenericBinding(track, target.Animator);
+                    continue;
+                }
 
                 Object binding = null;
                 if (track.name == CutsceneChannels.HeroAnimator.trackName)

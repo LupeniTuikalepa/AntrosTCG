@@ -22,6 +22,10 @@ namespace ATCG.Editor.Tools.Characters
         [Tooltip("Folder scanned by the Explore tab for .sk characters. Defaults to Assets/Project/Characters.")]
         private DefaultAsset exploreFolder;
 
+        [SerializeField]
+        [Tooltip("Template .sk character duplicated by 'Create new' as the starting point for a new character.")]
+        private DefaultAsset characterTemplate;
+
         public Material BaseMaterial
         {
             get => baseMaterial;
@@ -32,6 +36,12 @@ namespace ATCG.Editor.Tools.Characters
         {
             get => exploreFolder;
             set { exploreFolder = value; Save(); }
+        }
+
+        public DefaultAsset CharacterTemplate
+        {
+            get => characterTemplate;
+            set { characterTemplate = value; Save(); }
         }
 
         private static CharacterToolSettings cached;

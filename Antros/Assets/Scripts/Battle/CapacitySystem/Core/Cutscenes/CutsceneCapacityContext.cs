@@ -31,6 +31,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
             local.Allow<HexCoordinates>(CutsceneContextKeys.CAST_POINT);
             local.Allow<ICutsceneCoordinateSolver>(CutsceneContextKeys.COORDINATE_SOLVER);
             local.Allow<ICutsceneActor>(CutsceneContextKeys.CASTER);
+            local.Allow<ICutsceneActor>(CutsceneContextKeys.TARGET);
             local.Allow<IQteResultReceiver>(CutsceneContextKeys.QTE_RECEIVER);
 
             local.Set(CutsceneContextKeys.SCREEN_PLAYER, screenPlayer);
@@ -41,6 +42,9 @@ namespace ATCG.Battle.CapacitySystem.Core.Properties
 
             if (phase.TryGetRuntimeCaster(screenPlayer, out IRuntimeEntity caster) && caster is ICutsceneActor actor)
                 local.Set(CutsceneContextKeys.CASTER, actor);
+
+            if (phase.TryGetRuntimeTarget(screenPlayer, out IRuntimeEntity target) && target is ICutsceneActor targetActor)
+                local.Set(CutsceneContextKeys.TARGET, targetActor);
         }
 
         // Local (screen) first, then live-delegate to the phase (global) so values the

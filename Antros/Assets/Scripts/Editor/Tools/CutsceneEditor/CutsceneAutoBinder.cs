@@ -46,7 +46,7 @@ namespace ATCG.Editor.Tools.CutsceneEditor
                     {
                         director.SetGenericBinding(track, reference);
                     }
-                    else
+                    else if (!channel.optional)
                     {
                         Debug.LogWarning(
                             $"[CutsceneEditor] Track '{channel.trackName}' has no usable rig reference. " +
@@ -56,8 +56,43 @@ namespace ATCG.Editor.Tools.CutsceneEditor
                 }
             }
 
+            ToggleOptionalStandIns(timeline, rig);
+
             // Persist the rebound bindings so they survive save/reopen.
             EditorUtility.SetDirty(director);
         }
+
+        // Optional channels (e.g. Target) carry a stand-in that should only appear when the cutscene
+        // actually uses that track: activate the rig object's GameObject iff its track is on the timeline.
+        private static void ToggleOptionalStandIns(TimelineAsset timeline, DebugCutsceneRig rig)
+        {
+            foreach (AutoBindChannel channel in CutsceneChannels.All)
+            {
+                if (!channel.optional)
+                    continue;
+
+                if (!rig.TryGet(channel.trackName, out Object reference))
+                    continue;
+
+                GameObject go = AsGameObject(reference);
+                if (go != null)
+                    go.SetActive(HasTrack(timeline, channel));
+            }
+        }
+
+        private static bool HasTrack(TimelineAsset timeline, AutoBindChannel channel)
+        {
+            foreach (TrackAsset track in timeline.GetOutputTracks())
+                if (track.name == channel.trackName && track.GetType() == channel.trackType)
+                    return true;
+            return false;
+        }
+
+        private static GameObject AsGameObject(Object obj) => obj switch
+        {
+            GameObject go => go,
+            Component component => component.gameObject,
+            _ => null
+        };
     }
 }

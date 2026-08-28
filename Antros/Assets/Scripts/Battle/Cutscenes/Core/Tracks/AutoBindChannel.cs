@@ -15,17 +15,22 @@ namespace ATCG.Cutscenes
         public readonly Type trackType;
         public readonly string displayName;
 
-        public static AutoBindChannel Create<T>(string trackName) where T : TrackAsset
-            => Create<T>(trackName, trackName);
+        // Optional channels don't warn when their track is absent, and their rig object is activated
+        // only while the track IS on the timeline (e.g. Target — a target stand-in shown only when used).
+        public readonly bool optional;
 
-        public static AutoBindChannel Create<T>(string trackName, string displayName) where T : TrackAsset
-            => new AutoBindChannel(trackName, typeof(T), displayName);
+        public static AutoBindChannel Create<T>(string trackName, bool optional = false) where T : TrackAsset
+            => Create<T>(trackName, trackName, optional);
 
-        private AutoBindChannel(string trackName, Type trackType, string displayName)
+        public static AutoBindChannel Create<T>(string trackName, string displayName, bool optional = false) where T : TrackAsset
+            => new AutoBindChannel(trackName, typeof(T), displayName, optional);
+
+        private AutoBindChannel(string trackName, Type trackType, string displayName, bool optional)
         {
             this.trackName = trackName;
             this.trackType = trackType;
             this.displayName = displayName;
+            this.optional = optional;
         }
     }
 }

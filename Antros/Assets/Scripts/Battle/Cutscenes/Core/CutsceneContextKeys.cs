@@ -34,6 +34,12 @@ namespace ATCG.Cutscenes
         public const string CAST_POINT = "CAST_POINT";
 
         /// <summary>
+        /// ATCG.Cutscenes.ICutsceneActor — the cutscene's target actor. Present only when the event has
+        /// one (a basic attack's target, a capacity's primary target); the Target track binds to it.
+        /// </summary>
+        public const string TARGET = "TARGET";
+
+        /// <summary>
         /// ICutsceneCoordinateSolver — hex coordinate -> world position.
         /// </summary>
         public const string COORDINATE_SOLVER = "COORDINATE_SOLVER";
@@ -46,6 +52,9 @@ namespace ATCG.Cutscenes
 
         public static ICutsceneActor GetCaster(this ICutsceneContext ctx) =>
             ctx.TryGetProperty(CASTER, out ICutsceneActor actor) ? actor : null;
+
+        public static ICutsceneActor GetTarget(this ICutsceneContext ctx) =>
+            ctx.TryGetProperty(TARGET, out ICutsceneActor actor) ? actor : null;
 
         public static EntityAddress GetCasterAddress(this ICutsceneContext ctx) =>
             ctx.TryGetProperty(CASTER_ADDRESS, out EntityAddress address) ? address : EntityAddress.None;

@@ -109,7 +109,7 @@ namespace ATCG.Battle
 				        : center;
 
 			        QteResultAccumulator qteResults = new();
-			        await BattleCutscenes.Play(attackCutscene, battlePhase, address, castPoint, qteResults,
+			        await BattleCutscenes.Play(attackCutscene, battlePhase, address, targets[0], castPoint, qteResults,
 					        (AttackCutscene.Hit, () =>
 					        {
 						        int scaled = Mathf.Max(0, Mathf.RoundToInt(strength * qteResults.Read()));

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-Editor::ATCG.Editor.Tools.Characters.CharacterToolSettings
   baseMaterial: {fileID: 2100000, guid: 60a6e3f6d53fc7e4f941c624bed0015f, type: 2}
   exploreFolder: {fileID: 102900000, guid: ddb0eaa368f4e624b843eea0e7228eb1, type: 3}
+  characterTemplate: {fileID: 102900000, guid: 42564bc01e9ebe940a45a2f382084a82, type: 3}
