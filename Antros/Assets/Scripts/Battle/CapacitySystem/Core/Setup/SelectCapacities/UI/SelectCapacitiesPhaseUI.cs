@@ -1,10 +1,12 @@
 using ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa.UI;
 using ATCG.Battle.CapacitySystem.Core.Setup.SelectCapacities;
+using ATCG.Battle.Entities.Runtime.UI;
 using ATCG.Battle.Players.Local.Phases;
 using ATCG.Capacities;
 using ATCG.Utilities;
 using Helteix.Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa
 {
@@ -15,7 +17,7 @@ namespace ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa
 		[SerializeField] private CanvasGroup canvasGroup;
 
 		private SelectCapacitiesPhase current;
-		
+       
 		private void Start()
 		{
 			canvasGroup.Hide(0f);
@@ -27,8 +29,8 @@ namespace ATCG.Battle.CapacitySystem.Core.Setup.CopyCapa
 			base.OnPhaseBegin(phase);
 			current =  phase;
 
-			canvasGroup.Show(.2f);
 			container.ClearChildren();
+			canvasGroup.Show(.2f);
           
 			foreach (CapacityData capacityData in phase.capacities)
 			{
