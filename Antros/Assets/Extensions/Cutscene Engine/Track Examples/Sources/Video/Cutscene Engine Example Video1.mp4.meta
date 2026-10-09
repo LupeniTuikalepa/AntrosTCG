@@ -5,8 +5,7 @@ AssetOrigin:
   productId: 327883
   packageName: Cutscene Engine
   packageVersion: 1.7.1
-  assetPath: Assets/Cutscene Engine/Track Examples/Sources/Video/Cutscene Engine
-    Example Video1.mp4
+  assetPath: Assets/Cutscene Engine/Track Examples/Sources/Video/Cutscene Engine Example Video1.mp4
   uploadId: 971344
 VideoClipImporter:
   externalObjects: {}
