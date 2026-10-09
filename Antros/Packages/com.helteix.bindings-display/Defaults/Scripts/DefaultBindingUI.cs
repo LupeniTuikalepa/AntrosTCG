@@ -99,11 +99,13 @@ namespace Helteix.BindingDisplay.Defaults
             targetHeight = rectTransform.sizeDelta.x;
         }
 
+        float ILayoutElement.maxWidth => targetWidth * .5f;
         float ILayoutElement.minWidth => targetWidth * .5f;
         float ILayoutElement.preferredWidth => targetWidth;
         float ILayoutElement.flexibleWidth => 0;
 
         float ILayoutElement.minHeight => targetHeight * .5f;
+        float ILayoutElement.maxHeight => targetHeight * .5f;
         float ILayoutElement.preferredHeight => targetHeight;
 
         float ILayoutElement.flexibleHeight { get; } = 0;

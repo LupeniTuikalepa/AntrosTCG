@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Synty.SidekickCharacters;
-using Synty.SidekickCharacters.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -636,7 +634,7 @@ namespace ATCG.Editor.Tools.Characters
 
         // Synty's editor initialises asynchronously (async CreateGUI + background data load), so we wait
         // for its runtime + database to exist before applying the character, then reuse its own
-        // LoadSerializedCharacter so the load is identical to using their window.
+        // LoadCharacterFromPath so the load is identical to using their window.
         private void LoadSkWhenReady(ModularCharacterWindow window, string path, int attempt)
         {
             bool ready = GetPrivateField(window, "_sidekickRuntime") != null
@@ -653,31 +651,21 @@ namespace ATCG.Editor.Tools.Characters
                 return;
             }
 
+            // Reuse Synty's own path loader: it records undo, switches to the Parts tab, deserializes,
+            // forces the combine options and applies the character — the whole correct flow, so it
+            // switches even when a character is already being edited in the Sidekick window.
+            MethodInfo load = typeof(ModularCharacterWindow).GetMethod(
+                "LoadCharacterFromPath", BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(string) }, null);
+            if (load == null)
+            {
+                SetStatus("Méthode Synty 'LoadCharacterFromPath' introuvable (pack mis à jour ?).");
+                return;
+            }
+
             try
             {
-                SerializedCharacter character = DeserializeSk(path);
-                if (character == null)
-                {
-                    SetStatus("Impossible de désérialiser ce .sk.");
-                    return;
-                }
-
-                // Mirror the flags LoadCharacter sets around the apply, when those fields still exist.
-                SetPrivateField(window, "_loadingCharacter", true);
-                SetPrivateField(window, "_showAllColourProperties", true);
-
-                MethodInfo load = typeof(ModularCharacterWindow).GetMethod(
-                    "LoadSerializedCharacter", BindingFlags.NonPublic | BindingFlags.Instance);
-                if (load == null)
-                {
-                    SetStatus("Méthode Synty 'LoadSerializedCharacter' introuvable (pack mis à jour ?).");
-                    return;
-                }
-
-                load.Invoke(window, new object[] { character, true });
-                SetPrivateField(window, "_loadingCharacter", false);
-
-                SetStatus($"Chargé « {Path.GetFileNameWithoutExtension(path)} » dans Sidekick — la preview va se mettre à jour.");
+                load.Invoke(window, new object[] { path });
+                SetStatus($"Chargé « {Path.GetFileNameWithoutExtension(path)} » dans Sidekick.");
             }
             catch (Exception e)
             {
@@ -686,35 +674,8 @@ namespace ATCG.Editor.Tools.Characters
             }
         }
 
-        // Deserializes a .sk (Synty's YAML format) into a SerializedCharacter. The YAML deserializer
-        // lives in the VisualScripting package; we reach it by reflection to avoid a compile-time
-        // dependency on that assembly.
-        private static SerializedCharacter DeserializeSk(string path)
-        {
-            string data = Encoding.ASCII.GetString(File.ReadAllBytes(path));
-
-            Type deserializerType = AppDomain.CurrentDomain.GetAssemblies()
-                .Select(a => a.GetType("Unity.VisualScripting.YamlDotNet.Serialization.Deserializer"))
-                .FirstOrDefault(t => t != null);
-            if (deserializerType == null)
-                throw new InvalidOperationException("Désérialiseur YAML (VisualScripting) introuvable.");
-
-            object deserializer = Activator.CreateInstance(deserializerType);
-            MethodInfo deserialize = deserializerType.GetMethods()
-                .First(m => m.Name == "Deserialize"
-                            && m.IsGenericMethodDefinition
-                            && m.GetParameters().Length == 1
-                            && m.GetParameters()[0].ParameterType == typeof(string))
-                .MakeGenericMethod(typeof(SerializedCharacter));
-
-            return (SerializedCharacter)deserialize.Invoke(deserializer, new object[] { data });
-        }
-
         private static object GetPrivateField(object target, string name)
             => target.GetType().GetField(name, BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(target);
-
-        private static void SetPrivateField(object target, string name, object value)
-            => target.GetType().GetField(name, BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(target, value);
 
         private void ReloadSkList()
         {
